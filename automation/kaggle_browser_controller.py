@@ -38,10 +38,10 @@ async def run_kaggle_automation():
     print(f"Target GitHub Repo: {GITHUB_REPO}")
     print("=" * 60)
 
-    # 1. Initialize LLM via OpenRouter (using GPT-4o for robust browser-use vision & tool calling)
+    # 1. Initialize LLM via OpenRouter (using gpt-4o-mini to avoid credit exhaustion)
     llm = ChatOpenRouter(
         api_key=OPENROUTER_API_KEY,
-        model="openai/gpt-4o"
+        model="openai/gpt-4o-mini"
     )
 
     # 2. Configure Browser Profile (Visible window so user can interact / observe)
