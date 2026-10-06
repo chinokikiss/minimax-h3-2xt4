@@ -11,19 +11,24 @@ Automates:
 import os
 import sys
 import asyncio
+from dotenv import load_dotenv
+
+# Ensure UTF-8 output on Windows console to prevent emoji logging crashes
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
+load_dotenv()
+
 from browser_use import Agent
 from browser_use.browser.profile import BrowserProfile
 from browser_use.browser.session import BrowserSession
 from browser_use.llm import ChatOpenRouter
 
-from dotenv import load_dotenv
-
-load_dotenv()
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 EDGE_EXECUTABLE = r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
 USER_DATA_DIR = os.path.expanduser(r"~\.kaggle_browser_profile")
 GITHUB_REPO = "https://github.com/chinokikiss/minimax-h3-2xt4.git"
-
 
 async def run_kaggle_automation():
     print("=" * 60)
@@ -33,10 +38,10 @@ async def run_kaggle_automation():
     print(f"Target GitHub Repo: {GITHUB_REPO}")
     print("=" * 60)
 
-    # 1. Initialize LLM via OpenRouter
+    # 1. Initialize LLM via OpenRouter (using GPT-4o for robust browser-use vision & tool calling)
     llm = ChatOpenRouter(
         api_key=OPENROUTER_API_KEY,
-        model="google/gemini-2.0-flash-001"
+        model="openai/gpt-4o"
     )
 
     # 2. Configure Browser Profile (Visible window so user can interact / observe)
@@ -45,15 +50,16 @@ async def run_kaggle_automation():
         executable_path=EDGE_EXECUTABLE,
         user_data_dir=USER_DATA_DIR,
         headless=False,
+        enable_default_extensions=False,
     )
     browser_session = BrowserSession(browser_profile=profile)
 
     task_prompt = f"""
 1. Navigate to https://www.kaggle.com/code.
 2. Check if the user is already logged in to Kaggle.
-   - If not logged in, pause and inform that login is needed.
+   - If not logged in, stop and ask the user to log in to Kaggle in the opened browser window.
    - If logged in, click "New Notebook" to create a new Python notebook.
-3. In the right-hand settings panel:
+3. In the notebook settings panel on the right:
    - Find 'Accelerator' and change it from 'None' to 'GPU T4 x2' (2x T4 GPUs).
    - Ensure 'Internet' is toggled ON.
 4. In the first code cell of the notebook, insert and execute the following code to clone our repo and start the 2x T4 Text Encoder benchmark:
@@ -74,7 +80,7 @@ async def run_kaggle_automation():
         use_vision=True
     )
 
-    print("\n[AGENT LAUNCH] Executing browser-use agent...")
+    print("\n[AGENT LAUNCH] Executing browser-use agent with GPT-4o...")
     history = await agent.run(max_steps=25)
     print("\n[AGENT COMPLETE] Finished steps:", len(history.history))
     return history
