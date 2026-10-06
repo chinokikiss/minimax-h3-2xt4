@@ -1,114 +1,83 @@
 """
 Kaggle Automation Controller using browser-use
 Automates:
-  1. Opening Kaggle and navigating to Notebooks
-  2. Creating a new notebook with Accelerator: 2x NVIDIA T4 GPUs
-  3. Injecting setup commands (cloning project repo, installing dependencies)
-  4. Downloading models from Comfy-Org/MiniMax-H3 on Hugging Face
-  5. Running Text Encoder TP=2 vs PP=2 benchmarks and saving results
+  1. Opening Kaggle (https://www.kaggle.com/code) in Edge browser (visible window)
+  2. Logging in or using persistent session from ~/.kaggle_browser_profile
+  3. Creating a new notebook with Accelerator: 2x NVIDIA T4 GPUs
+  4. Injecting setup commands (cloning chinokikiss/minimax-h3-2xt4)
+  5. Running Text Encoder TP=2 vs PP=2 benchmarks on Kaggle 2x T4
 """
 
 import os
+import sys
 import asyncio
-from typing import Optional
-from pydantic import BaseModel
 from browser_use import Agent
-from browser_use.browser.browser import Browser, BrowserConfig
-from browser_use.browser.context import BrowserContextConfig
+from browser_use.browser.profile import BrowserProfile
+from browser_use.browser.session import BrowserSession
+from browser_use.llm import ChatOpenRouter
 
-class KaggleAutomationConfig(BaseModel):
-    headless: bool = False
-    kaggle_url: str = "https://www.kaggle.com/code"
-    github_repo_url: str = "https://github.com/your-username/minimax-h3-2xt4.git"
-    huggingface_repo: str = "Comfy-Org/MiniMax-H3"
-    accelerator: str = "GPU T4 x2"
-    user_data_dir: Optional[str] = None
+from dotenv import load_dotenv
 
-class KaggleBrowserController:
-    def __init__(self, config: Optional[KaggleAutomationConfig] = None):
-        self.config = config or KaggleAutomationConfig()
-        browser_config = BrowserConfig(
-            headless=self.config.headless,
-        )
-        self.browser = Browser(config=browser_config)
+load_dotenv()
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
+EDGE_EXECUTABLE = r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
+USER_DATA_DIR = os.path.expanduser(r"~\.kaggle_browser_profile")
+GITHUB_REPO = "https://github.com/chinokikiss/minimax-h3-2xt4.git"
 
-    async def create_agent(self, task_instruction: str, llm=None):
-        """
-        Creates a browser-use Agent to execute the Kaggle task.
-        """
-        agent = Agent(
-            task=task_instruction,
-            llm=llm,
-            browser=self.browser
-        )
-        return agent
 
-    def generate_kaggle_setup_script(self) -> str:
-        """
-        Generates the bash / python bootstrap script to be pasted into the first cell of Kaggle.
-        """
-        return f"""# ==============================================================
-# MiniMax-H3 on 2x T4 Setup Script
-# ==============================================================
-import os, sys, subprocess
+async def run_kaggle_automation():
+    print("=" * 60)
+    print("Starting Kaggle 2x T4 Automation with browser-use")
+    print(f"Browser: Edge ({EDGE_EXECUTABLE})")
+    print(f"Profile Directory: {USER_DATA_DIR}")
+    print(f"Target GitHub Repo: {GITHUB_REPO}")
+    print("=" * 60)
 
-# 1. Verify 2x T4 Environment & Check P2P Status
-import torch
-print(f"CUDA Available: {{torch.cuda.is_available()}}")
-print(f"Device Count: {{torch.cuda.device_count()}}")
-for i in range(torch.cuda.device_count()):
-    print(f"  GPU {{i}}: {{torch.cuda.get_device_name(i)}} - {{torch.cuda.get_device_properties(i).total_memory / 1024**3:.2f}} GB")
+    # 1. Initialize LLM via OpenRouter
+    llm = ChatOpenRouter(
+        api_key=OPENROUTER_API_KEY,
+        model="google/gemini-2.0-flash-001"
+    )
 
-if torch.cuda.device_count() >= 2:
-    can_p2p = torch.cuda.can_device_access_peer(0, 1)
-    print(f"GPU P2P Access (0 <-> 1): {{can_p2p}} (Expected: False on Kaggle)")
-    # Set NCCL environment variables for non-P2P multi-GPU
-    os.environ["NCCL_P2P_DISABLE"] = "1"
-    os.environ["NCCL_IB_DISABLE"] = "1"
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
+    # 2. Configure Browser Profile (Visible window so user can interact / observe)
+    os.makedirs(USER_DATA_DIR, exist_ok=True)
+    profile = BrowserProfile(
+        executable_path=EDGE_EXECUTABLE,
+        user_data_dir=USER_DATA_DIR,
+        headless=False,
+    )
+    browser_session = BrowserSession(browser_profile=profile)
 
-# 2. Clone Upstream ComfyUI & Project Repository
-!git clone https://github.com/Comfy-Org/ComfyUI.git
-!git clone {self.config.github_repo_url} project_repo
+    task_prompt = f"""
+1. Navigate to https://www.kaggle.com/code.
+2. Check if the user is already logged in to Kaggle.
+   - If not logged in, pause and inform that login is needed.
+   - If logged in, click "New Notebook" to create a new Python notebook.
+3. In the right-hand settings panel:
+   - Find 'Accelerator' and change it from 'None' to 'GPU T4 x2' (2x T4 GPUs).
+   - Ensure 'Internet' is toggled ON.
+4. In the first code cell of the notebook, insert and execute the following code to clone our repo and start the 2x T4 Text Encoder benchmark:
 
-# 3. Install Acceleration Packages (comfy_kitchen, sageattention, huggingface_hub, aria2)
-!pip install -q huggingface_hub aria2p
-!apt-get update -qq && apt-get install -qq -y aria2
+```python
+!git clone {GITHUB_REPO} /kaggle/working/minimax_repo
+%cd /kaggle/working/minimax_repo
+!python benchmarks/benchmark_te_performance.py
+```
 
-# 4. Download Required Models from Comfy-Org/MiniMax-H3
-# Model files:
-#   - Text Encoder: qwen3vl_32b_minimax_h3_int8_convrot.safetensors (~27.1 GB)
-#   - Diffusion: minimax_h3_ref2va_pruned_int8_convrot.safetensors (~20.9 GB)
-#   - Video VAE: minimax_h3_video_vae_int8_convrot.safetensors (~2.8 GB)
-#   - Audio VAE: minimax_h3_audio_vae_fp32.safetensors (~605 MB)
-
-os.makedirs("ComfyUI/models/text_encoders", exist_ok=True)
-os.makedirs("ComfyUI/models/diffusion_models", exist_ok=True)
-os.makedirs("ComfyUI/models/vae", exist_ok=True)
-
-print("Starting high-speed aria2c model downloads...")
-!aria2c -x 16 -s 16 -k 10M "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_int8_convrot.safetensors" -d "ComfyUI/models/text_encoders"
-!aria2c -x 16 -s 16 -k 10M "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors" -d "ComfyUI/models/diffusion_models"
-!aria2c -x 16 -s 16 -k 10M "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_int8_convrot.safetensors" -d "ComfyUI/models/vae"
-!aria2c -x 16 -s 16 -k 10M "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors" -d "ComfyUI/models/vae"
-
-print("Setup complete! Ready for module-by-module benchmarking.")
+5. Confirm that the command is running and report the output.
 """
 
-async def run_automation_demo():
-    controller = KaggleBrowserController()
-    task = (
-        "1. Open https://www.kaggle.com/code in the browser.\n"
-        "2. If not logged in, wait or log in.\n"
-        "3. Click 'New Notebook'.\n"
-        "4. In the notebook settings sidebar, under 'Accelerator', select 'GPU T4 x2'.\n"
-        "5. Under 'Internet', ensure Internet is turned 'On'.\n"
-        "6. In the first code cell, paste the setup script and run it."
+    agent = Agent(
+        task=task_prompt,
+        llm=llm,
+        browser_session=browser_session,
+        use_vision=True
     )
-    print("Prepared automation task prompt:")
-    print(task)
-    print("\nSetup script preview:\n")
-    print(controller.generate_kaggle_setup_script()[:400] + "...\n")
+
+    print("\n[AGENT LAUNCH] Executing browser-use agent...")
+    history = await agent.run(max_steps=25)
+    print("\n[AGENT COMPLETE] Finished steps:", len(history.history))
+    return history
 
 if __name__ == "__main__":
-    asyncio.run(run_automation_demo())
+    asyncio.run(run_kaggle_automation())
