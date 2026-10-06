@@ -22,6 +22,12 @@ KERNEL_DIR = Path(__file__).parent / "kaggle_kernel"
 OUTPUT_DIR = Path(__file__).parent / "kaggle_output"
 METADATA_FILE = KERNEL_DIR / "kernel-metadata.json"
 
+# Ensure proxy is set for Kaggle API access
+if "HTTP_PROXY" not in os.environ:
+    os.environ["HTTP_PROXY"] = "http://127.0.0.1:7897"
+if "HTTPS_PROXY" not in os.environ:
+    os.environ["HTTPS_PROXY"] = "http://127.0.0.1:7897"
+
 def log(msg):
     print(msg, flush=True)
 
