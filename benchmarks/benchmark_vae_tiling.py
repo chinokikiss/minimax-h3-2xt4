@@ -139,6 +139,7 @@ def run_vae_benchmark(output_dir: str = "kaggle_output"):
                 "cos_sim": diff_1gpu["cos_sim"],
                 "mae": diff_1gpu["mae"],
             }
+            all_results["video_vae"].append(res_entry_1t)
             tinfo_1g = f"{ts}px ({tiled_1gpu_metrics['num_tiles']})"
             print(f"{wl['name']:<18} | {'1-GPU Tiled':<20} | {tinfo_1g:<12} | {lat_1gpu_tiled:8.1f} ms | {sp_norm_1gpu:.2f}x   | {tiled_1gpu_metrics['peak_vram_dev0_gb']:.2f} GB   | {diff_1gpu['cos_sim']:.5f}")
 
@@ -171,6 +172,7 @@ def run_vae_benchmark(output_dir: str = "kaggle_output"):
                 "cos_sim": diff_2gpu["cos_sim"],
                 "mae": diff_2gpu["mae"],
             }
+            all_results["video_vae"].append(res_entry_2t)
             tinfo_2g = f"{ts}px ({tiled_2gpu_metrics['num_tiles']})"
             print(f"{wl['name']:<18} | {'2-GPU Parallel Tiled':<20} | {tinfo_2g:<12} | {lat_2gpu:8.1f} ms | {speedup_vs_1t:.2f}x   | {tiled_2gpu_metrics['peak_vram_dev0_gb']:.2f} GB   | {diff_2gpu['cos_sim']:.5f}")
 
@@ -349,12 +351,16 @@ def run_vae_benchmark(output_dir: str = "kaggle_output"):
     print("\n" + "=" * 60)
     print("EXECUTIVE SUMMARY (Formatted for VAE_TILE_BENCHMARK.md):")
     print("=" * 60)
-    v_norm_768 = df_video[(df_video["workload"] == "768x768") & (df_video["mode"] == "1-GPU Normal")]["latency_ms"].iloc[0]
-    v_1t_768 = df_video[(df_video["workload"] == "768x768") & (df_video["mode"] == "1-GPU Tiled")]["latency_ms"].iloc[0]
-    v_2t_768 = df_video[(df_video["workload"] == "768x768") & (df_video["mode"] == "2-GPU Parallel Tiled")]["latency_ms"].iloc[0]
-    best_v_sp = v_1t_768 / v_2t_768
+    def get_lat(df, wl, mode):
+        sub = df[(df["workload"] == wl) & (df["mode"] == mode)]
+        return sub["latency_ms"].iloc[0] if not sub.empty else 0.0
 
-    v_norm_str = "OOM (>16 GB)" if (math.isinf(v_norm_768) or v_norm_768 > 1e6) else f"{v_norm_768:8.1f} ms"
+    v_norm_768 = get_lat(df_video, "768x768", "1-GPU Normal")
+    v_1t_768 = get_lat(df_video, "768x768", "1-GPU Tiled")
+    v_2t_768 = get_lat(df_video, "768x768", "2-GPU Parallel Tiled")
+    best_v_sp = (v_1t_768 / v_2t_768) if v_2t_768 > 0 else 1.0
+
+    v_norm_str = "OOM (>16 GB)" if (math.isinf(v_norm_768) or v_norm_768 > 1e6 or v_norm_768 == 0.0) else f"{v_norm_768:8.1f} ms"
     print("Video VAE (768x768):")
     print(f"1 GPU normal:         {v_norm_str}")
     print(f"1 GPU tiled:          {v_1t_768:8.1f} ms")
@@ -362,10 +368,10 @@ def run_vae_benchmark(output_dir: str = "kaggle_output"):
     print(f"best speedup:         {best_v_sp:.2f}x")
     print()
 
-    a_norm_10s = df_audio[(df_audio["workload"] == "10s Audio (400 frames)") & (df_audio["mode"] == "1-GPU Normal")]["latency_ms"].iloc[0]
-    a_1t_10s = df_audio[(df_audio["workload"] == "10s Audio (400 frames)") & (df_audio["mode"] == "1-GPU Tiled")]["latency_ms"].iloc[0]
-    a_2cp_10s = df_audio[(df_audio["workload"] == "10s Audio (400 frames)") & (df_audio["mode"] == "2-GPU Channel Parallel")]["latency_ms"].iloc[0]
-    best_a_sp = a_norm_10s / a_2cp_10s
+    a_norm_10s = get_lat(df_audio, "10s Audio (400 frames)", "1-GPU Normal")
+    a_1t_10s = get_lat(df_audio, "10s Audio (400 frames)", "1-GPU Tiled")
+    a_2cp_10s = get_lat(df_audio, "10s Audio (400 frames)", "2-GPU Channel Parallel")
+    best_a_sp = (a_norm_10s / a_2cp_10s) if a_2cp_10s > 0 else 1.0
 
     print("Audio VAE (10s):")
     print(f"1 GPU normal:         {a_norm_10s:8.1f} ms")
