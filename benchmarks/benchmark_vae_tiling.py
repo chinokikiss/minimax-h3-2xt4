@@ -139,8 +139,8 @@ def run_vae_benchmark(output_dir: str = "kaggle_output"):
                 "cos_sim": diff_1gpu["cos_sim"],
                 "mae": diff_1gpu["mae"],
             }
-            all_results["video_vae"].append(res_entry_1t)
-            print(f"{wl['name']:<18} | {'1-GPU Tiled':<20} | {f'{ts}px ({tiled_1gpu_metrics[\"num_tiles\"]})':<12} | {lat_1gpu_tiled:8.1f} ms | {f'{sp_norm_1gpu:.2f}x':<8} | {tiled_1gpu_metrics['peak_vram_dev0_gb']:.2f} GB   | {diff_1gpu['cos_sim']:.5f}")
+            tinfo_1g = f"{ts}px ({tiled_1gpu_metrics['num_tiles']})"
+            print(f"{wl['name']:<18} | {'1-GPU Tiled':<20} | {tinfo_1g:<12} | {lat_1gpu_tiled:8.1f} ms | {sp_norm_1gpu:.2f}x   | {tiled_1gpu_metrics['peak_vram_dev0_gb']:.2f} GB   | {diff_1gpu['cos_sim']:.5f}")
 
             # 3. 2-GPU Parallel Tiled Decode
             tiled_2gpu_out, tiled_2gpu_metrics = video_decoder.decode_tiled_multi(z, tile_size=ts, tile_overlap_min=ov)
@@ -170,8 +170,8 @@ def run_vae_benchmark(output_dir: str = "kaggle_output"):
                 "cos_sim": diff_2gpu["cos_sim"],
                 "mae": diff_2gpu["mae"],
             }
-            all_results["video_vae"].append(res_entry_2t)
-            print(f"{wl['name']:<18} | {'2-GPU Parallel Tiled':<20} | {f'{ts}px ({tiled_2gpu_metrics[\"num_tiles\"]})':<12} | {lat_2gpu:8.1f} ms | {f'{speedup_vs_1t:.2f}x':<8} | {tiled_2gpu_metrics['peak_vram_dev0_gb']:.2f} GB   | {diff_2gpu['cos_sim']:.5f}")
+            tinfo_2g = f"{ts}px ({tiled_2gpu_metrics['num_tiles']})"
+            print(f"{wl['name']:<18} | {'2-GPU Parallel Tiled':<20} | {tinfo_2g:<12} | {lat_2gpu:8.1f} ms | {speedup_vs_1t:.2f}x   | {tiled_2gpu_metrics['peak_vram_dev0_gb']:.2f} GB   | {diff_2gpu['cos_sim']:.5f}")
 
         print("-" * 105)
 
