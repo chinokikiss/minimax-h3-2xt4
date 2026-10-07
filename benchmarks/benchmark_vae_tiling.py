@@ -144,6 +144,7 @@ def run_vae_benchmark(output_dir: str = "kaggle_output"):
 
             # 3. 2-GPU Parallel Tiled Decode
             tiled_2gpu_out, tiled_2gpu_metrics = video_decoder.decode_tiled_multi(z, tile_size=ts, tile_overlap_min=ov)
+            lat_2gpu = tiled_2gpu_metrics["latency_ms"]
             ref_target = ref_out if ref_out is not None else tiled_1gpu_out
             diff_2gpu = compute_numerical_diff(tiled_2gpu_out, ref_target)
             speedup_vs_1t = lat_1gpu_tiled / lat_2gpu
@@ -353,8 +354,9 @@ def run_vae_benchmark(output_dir: str = "kaggle_output"):
     v_2t_768 = df_video[(df_video["workload"] == "768x768") & (df_video["mode"] == "2-GPU Parallel Tiled")]["latency_ms"].iloc[0]
     best_v_sp = v_1t_768 / v_2t_768
 
+    v_norm_str = "OOM (>16 GB)" if (math.isinf(v_norm_768) or v_norm_768 > 1e6) else f"{v_norm_768:8.1f} ms"
     print("Video VAE (768x768):")
-    print(f"1 GPU normal:         {v_norm_768:8.1f} ms")
+    print(f"1 GPU normal:         {v_norm_str}")
     print(f"1 GPU tiled:          {v_1t_768:8.1f} ms")
     print(f"2 GPU tiled:          {v_2t_768:8.1f} ms")
     print(f"best speedup:         {best_v_sp:.2f}x")
