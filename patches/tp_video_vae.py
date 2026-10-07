@@ -1,78 +1,99 @@
 """
-MiniMax-H3 Video VAE (ViT3D Decoder) INT8 ConvRot Multi-GPU Implementations:
-1. Single GPU INT8 Baseline: Full-frame un-tiled ViT3D forward pass in W8A8.
-2. Strategy 2: TP=2 (Megatron Tensor Parallelism with FP16 AllReduce).
-   - Column-parallel to_qkv (16 heads per rank) and w1 (8192 intermediate per rank).
-   - Row-parallel to_out and w2 with FP16 AllReduce.
-   - Preserves full-frame global attention and 3D RoPE coordinates.
-3. Strategy 3: TP=2 + Sequence Parallelism + INT8 AllGather:
-   - FP16 ReduceScatter -> local residual/RMSNorm -> INT8 ConvRot Activation Quantization -> INT8 AllGather -> W8A8 GEMM.
-   - Slashes communication volume by 25% and cuts activation memory by 50%.
+Production Multi-GPU Inference Implementation for MiniMax-H3 Video VAE INT8 ConvRot.
+Supports:
+  1. Single GPU INT8 ConvRot Baseline (Real Checkpoint, Native Path)
+  2. TP=2 + FP16 AllReduce (Megatron-style Column/Row parallelism over NCCL)
+  3. TP=2 + Sequence Parallelism + FP16 ReduceScatter + INT8 AllGather (Over NCCL)
+
+Operates on the actual checkpoint:
+  Comfy-Org/MiniMax-H3/vae/minimax_h3_video_vae_int8_convrot.safetensors
 """
 
 import os
 import sys
 import math
-import time
+from typing import Dict, Tuple, Optional, Any
+
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import torch.distributed as dist
-from typing import Optional, Dict, Any, List, Tuple
 
+# Ensure project and ComfyUI roots are in sys.path
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+COMFY_ROOT = os.path.join(PROJECT_ROOT, "ComfyUI")
+for p in [PROJECT_ROOT, COMFY_ROOT, "/tmp/minimax_repo", "/tmp/ComfyUI"]:
+    if os.path.exists(p) and p not in sys.path:
+        sys.path.insert(0, p)
+
+# Try importing comfy and comfy_kitchen
 try:
     import comfy_kitchen
     HAS_CK = True
 except ImportError:
     HAS_CK = False
 
-# Ensure ComfyUI and project root are in sys.path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-if os.path.exists("/tmp/ComfyUI") and "/tmp/ComfyUI" not in sys.path:
-    sys.path.insert(0, "/tmp/ComfyUI")
-
-# Fallback mock for comfy_aimdo if missing
 try:
-    import comfy_aimdo
+    from comfy.ldm.minimax.vae import create_token_ids, RotaryEmbeddingND
 except ImportError:
-    import types
-    m = types.ModuleType("comfy_aimdo")
-    m.host_buffer = types.ModuleType("host_buffer")
-    sys.modules["comfy_aimdo"] = m
-    sys.modules["comfy_aimdo.host_buffer"] = m.host_buffer
+    def create_token_ids(patch_dims, device, dtype):
+        coords_list = []
+        for dim_size in patch_dims:
+            coords = torch.arange(0.5, dim_size, dtype=dtype, device=device)
+            coords = coords / dim_size
+            coords = 2.0 * coords - 1.0
+            coords_list.append(coords)
+        coords = torch.stack(torch.meshgrid(*coords_list, indexing="ij"), dim=-1)
+        return coords.flatten(0, len(patch_dims) - 1).unsqueeze(0)
 
-from comfy.ldm.minimax.vae import create_token_ids, RotaryEmbeddingND
+    class RotaryEmbeddingND(nn.Module):
+        def __init__(self, dim, rotary_base=100.0, n_dim=3):
+            super().__init__()
+            self.n_dim = n_dim
+            self.angle_scale = 2.0 * math.pi
+            inv_freq = 1 / rotary_base ** torch.arange(0, 1, 2 * n_dim / dim, dtype=torch.float32)
+            self.register_buffer("inv_freq", inv_freq, persistent=False)
 
-def quantize_int8_activation_convrot(x: torch.Tensor, convrot_groupsize: int = 256) -> Tuple[torch.Tensor, torch.Tensor]:
+        def forward(self, img_ids):
+            angles = (
+                self.angle_scale
+                * img_ids[:, :, :, None].float()
+                * self.inv_freq.to(img_ids.device)[None, None, None, :]
+            )
+            angles = angles.flatten(2, 3)
+            c, s = torch.cos(angles), torch.sin(angles)
+            table = torch.stack([c, -s, s, c], dim=-1).reshape(*angles.shape[:2], 1, angles.shape[-1], 2, 2)
+            return table.to(img_ids.dtype)
+
+
+def quantize_int8_rowwise_convrot(
+    x_2d: torch.Tensor,
+    convrot_groupsize: int = 256,
+) -> Tuple[torch.Tensor, torch.Tensor]:
     """
-    Quantizes activation to row-wise INT8 with group-wise Hadamard rotation (ConvRot).
-    Input: x [M, K] in FP16
-    Output: qdata [M, K] in INT8, qscale [M, 1] in FP32
+    Fused online ConvRot Hadamard rotation + per-row INT8 quantization.
+    Input: [M, K] in FP16 or BF16.
+    Output: qdata [M, K] in INT8, qscale [M, 1] in FP32.
     """
-    orig_shape = x.shape
-    x_2d = x.reshape(-1, orig_shape[-1])
-    m, k = x_2d.shape
+    orig_shape = x_2d.shape
+    x_flat = x_2d.reshape(-1, orig_shape[-1])
+    m, k = x_flat.shape
 
-    if HAS_CK and x.is_cuda and hasattr(torch.ops.comfy_kitchen, "quantize_int8_rowwise_convrot64"):
-        qdata = torch.empty((m, k), dtype=torch.int8, device=x.device)
-        qscale = torch.empty((m, 1), dtype=torch.float32, device=x.device)
-        torch.ops.comfy_kitchen.quantize_int8_rowwise_convrot64(
-            x_2d, qdata, qscale, convrot_groupsize, False, 0, 0, 0
-        )
-        return qdata.view(*orig_shape), qscale
-    elif HAS_CK and x.is_cuda and hasattr(comfy_kitchen.backends.cuda, "quantize_int8_rowwise_convrot"):
-        qdata, qscale = comfy_kitchen.backends.cuda.quantize_int8_rowwise_convrot(x_2d, convrot_groupsize)
+    if HAS_CK and x_flat.is_cuda and hasattr(comfy_kitchen.backends.cuda, "quantize_int8_rowwise_convrot"):
+        qdata, qscale = comfy_kitchen.backends.cuda.quantize_int8_rowwise_convrot(x_flat, convrot_groupsize)
         return qdata.view(*orig_shape), qscale
     elif HAS_CK and hasattr(comfy_kitchen.backends.cuda, "_build_hadamard") and hasattr(comfy_kitchen.backends.cuda, "_rotate_activation"):
-        h = comfy_kitchen.backends.cuda._build_hadamard(convrot_groupsize, device=x_2d.device, dtype=x_2d.dtype)
-        x_rot = comfy_kitchen.backends.cuda._rotate_activation(x_2d, h, convrot_groupsize)
+        h = comfy_kitchen.backends.cuda._build_hadamard(convrot_groupsize, device=x_flat.device, dtype=x_flat.dtype)
+        x_rot = comfy_kitchen.backends.cuda._rotate_activation(x_flat, h, convrot_groupsize)
         qdata, qscale = comfy_kitchen.quantize_int8_rowwise(x_rot)
         return qdata.view(*orig_shape), qscale
     else:
-        # High-precision PyTorch reference quantizer
-        amax = torch.amax(torch.abs(x_2d), dim=-1, keepdim=True).clamp(min=1e-5)
+        # PyTorch reference implementation
+        amax = torch.amax(torch.abs(x_flat), dim=-1, keepdim=True).clamp(min=1e-5)
         qscale = amax / 127.0
-        qdata = torch.clamp(torch.round(x_2d / qscale), -128, 127).to(torch.int8)
+        qdata = torch.clamp(torch.round(x_flat / qscale), -128, 127).to(torch.int8)
         return qdata.view(*orig_shape), qscale
+
 
 def w8a8_gemm(
     q_act: torch.Tensor,
@@ -83,13 +104,17 @@ def w8a8_gemm(
     out_dtype: torch.dtype = torch.float16,
 ) -> torch.Tensor:
     """
-    Computes INT8 x INT8 -> FP16 GEMM with already-quantized activations.
+    INT8 x INT8 -> FP16 GEMM with already-quantized activations and per-channel weights.
+    q_act: [M, K] INT8
+    scale_act: [M, 1] FP32
+    weight: [N, K] INT8
+    weight_scale: [N, 1] FP32
     """
     m, k = q_act.shape
     n, k_w = weight.shape
-    assert k == k_w
+    assert k == k_w, f"K mismatch: act {k} vs weight {k_w}"
 
-    if HAS_CK and hasattr(torch.ops.comfy_kitchen, "cublas_gemm_int8"):
+    if HAS_CK and q_act.is_cuda and hasattr(torch.ops.comfy_kitchen, "cublas_gemm_int8"):
         out_int32 = torch.empty((m, n), dtype=torch.int32, device=q_act.device)
         workspace = torch.empty(4 * 1024 * 1024, dtype=torch.uint8, device=q_act.device)
         torch.ops.comfy_kitchen.cublas_gemm_int8(q_act, weight, out_int32, workspace, 0)
@@ -102,476 +127,353 @@ def w8a8_gemm(
         out = out + bias.to(out_dtype)
     return out
 
-def quantize_weight_int8(w: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
-    """Quantizes weight to INT8 with per-channel scale."""
-    if HAS_CK:
-        return comfy_kitchen.quantize_int8_rowwise(w)
-    amax = torch.amax(torch.abs(w), dim=-1, keepdim=True).clamp(min=1e-5)
-    scale = amax / 127.0
-    qw = torch.clamp(torch.round(w / scale), -128, 127).to(torch.int8)
-    return qw, scale.to(torch.float32)
 
-# =============================================================================
-# 1. Single-GPU INT8 ConvRot ViT3D Block
-# =============================================================================
+def create_tp_block_from_sd(
+    sd: Dict[str, torch.Tensor],
+    block_idx: int,
+    rank: int,
+    world_size: int,
+    device: torch.device,
+) -> Dict[str, Any]:
+    """
+    Extracts and shards checkpoint weights for block block_idx for rank.
+    """
+    prefix = f"decoder.transformer_blocks.{block_idx}."
 
-class SingleGPUViT3DBlockINT8(nn.Module):
-    """Single-GPU reference block for MiniMax-H3 ViT3D decoder in INT8 ConvRot."""
-    def __init__(
-        self,
-        dim: int = 2048,
-        heads: int = 32,
-        dim_head: int = 64,
-        ffn_mult: int = 4,
-        bias: bool = True,
-        eps: float = 1e-5,
-        convrot_groupsize: int = 256,
-        device: Optional[torch.device] = None,
-    ):
+    # 1. to_qkv: [6144, 2048]
+    w_qkv = sd[f"{prefix}attn.to_qkv.weight"]
+    s_qkv = sd[f"{prefix}attn.to_qkv.weight_scale"]
+    b_qkv = sd.get(f"{prefix}attn.to_qkv.bias", None)
+
+    # to_qkv is ordered by heads: 32 heads, each head has [Q (64), K (64), V (64)] = 192 rows.
+    # Total rows = 32 * 192 = 6144.
+    # For TP=2: Rank 0 gets heads 0..15 (rows 0..3072), Rank 1 gets heads 16..31 (rows 3072..6144).
+    qkv_rows_per_rank = (32 // world_size) * 192  # 3072
+    qkv_start = rank * qkv_rows_per_rank
+    qkv_end = qkv_start + qkv_rows_per_rank
+
+    sharded_w_qkv = w_qkv[qkv_start:qkv_end]
+    sharded_s_qkv = s_qkv[qkv_start:qkv_end]
+    sharded_b_qkv = b_qkv[qkv_start:qkv_end] if b_qkv is not None else None
+
+    # 2. to_out: [2048, 2048]
+    w_out = sd[f"{prefix}attn.to_out.weight"]
+    s_out = sd[f"{prefix}attn.to_out.weight_scale"]
+    b_out = sd.get(f"{prefix}attn.to_out.bias", None)
+
+    sharded_w_out = w_out[:, h_start:h_end]
+    sharded_s_out = s_out
+    sharded_b_out = (b_out / world_size) if b_out is not None else None
+
+    # 3. w1: [16384, 2048]
+    w_w1 = sd[f"{prefix}ff.w1.weight"]
+    s_w1 = sd[f"{prefix}ff.w1.weight_scale"]
+    b_w1 = sd.get(f"{prefix}ff.w1.bias", None)
+
+    ffn_dim_per_rank = 4096
+    f_start = rank * ffn_dim_per_rank
+    f_end = f_start + ffn_dim_per_rank
+
+    gate_w, up_w = w_w1[:8192], w_w1[8192:]
+    gate_s, up_s = s_w1[:8192], s_w1[8192:]
+    gate_b, up_b = (b_w1[:8192], b_w1[8192:]) if b_w1 is not None else (None, None)
+
+    sharded_w_w1 = torch.cat([gate_w[f_start:f_end], up_w[f_start:f_end]], dim=0)
+    sharded_s_w1 = torch.cat([gate_s[f_start:f_end], up_s[f_start:f_end]], dim=0)
+    sharded_b_w1 = torch.cat([gate_b[f_start:f_end], up_b[f_start:f_end]], dim=0) if b_w1 is not None else None
+
+    # 4. w2: [2048, 8192]
+    w_w2 = sd[f"{prefix}ff.w2.weight"]
+    s_w2 = sd[f"{prefix}ff.w2.weight_scale"]
+    b_w2 = sd.get(f"{prefix}ff.w2.bias", None)
+
+    sharded_w_w2 = w_w2[:, f_start:f_end]
+    sharded_s_w2 = s_w2
+    sharded_b_w2 = (b_w2 / world_size) if b_w2 is not None else None
+
+    # Norms and scales
+    norm1_w = sd[f"{prefix}norm1.weight"]
+    norm2_w = sd[f"{prefix}norm2.weight"]
+    scale1 = sd[f"{prefix}scale1"]
+    scale2 = sd[f"{prefix}scale2"]
+
+    return {
+        "qw_qkv": nn.Parameter(sharded_w_qkv.to(device=device, dtype=torch.int8), requires_grad=False),
+        "qs_qkv": nn.Parameter(sharded_s_qkv.to(device=device, dtype=torch.float32), requires_grad=False),
+        "b_qkv": nn.Parameter(sharded_b_qkv.to(device=device, dtype=torch.float16), requires_grad=False) if sharded_b_qkv is not None else None,
+        "qw_out": nn.Parameter(sharded_w_out.to(device=device, dtype=torch.int8), requires_grad=False),
+        "qs_out": nn.Parameter(sharded_s_out.to(device=device, dtype=torch.float32), requires_grad=False),
+        "b_out": nn.Parameter(sharded_b_out.to(device=device, dtype=torch.float16), requires_grad=False) if sharded_b_out is not None else None,
+        "qw_w1": nn.Parameter(sharded_w_w1.to(device=device, dtype=torch.int8), requires_grad=False),
+        "qs_w1": nn.Parameter(sharded_s_w1.to(device=device, dtype=torch.float32), requires_grad=False),
+        "b_w1": nn.Parameter(sharded_b_w1.to(device=device, dtype=torch.float16), requires_grad=False) if sharded_b_w1 is not None else None,
+        "qw_w2": nn.Parameter(sharded_w_w2.to(device=device, dtype=torch.int8), requires_grad=False),
+        "qs_w2": nn.Parameter(sharded_s_w2.to(device=device, dtype=torch.float32), requires_grad=False),
+        "b_w2": nn.Parameter(sharded_b_w2.to(device=device, dtype=torch.float16), requires_grad=False) if sharded_b_w2 is not None else None,
+        "norm1_w": nn.Parameter(norm1_w.to(device=device, dtype=torch.float16), requires_grad=False),
+        "norm2_w": nn.Parameter(norm2_w.to(device=device, dtype=torch.float16), requires_grad=False),
+        "scale1": nn.Parameter(scale1.to(device=device, dtype=torch.float16), requires_grad=False),
+        "scale2": nn.Parameter(scale2.to(device=device, dtype=torch.float16), requires_grad=False),
+    }
+
+
+class RealTPTransformerBlock(nn.Module):
+    """
+    Megatron Tensor Parallelism (TP=2) for MiniMax-H3 ViT3D Transformer Block.
+    Uses FP16 AllReduce for row-parallel attention output and MLP down projection.
+    """
+    def __init__(self, block_dict: Dict[str, Any], eps: float = 1e-5, convrot_groupsize: int = 256, device: Optional[torch.device] = None):
         super().__init__()
-        self.dim = dim
-        self.heads = heads
-        self.dim_head = dim_head
-        self.inner_dim = heads * dim_head
-        self.ffn_dim = dim * ffn_mult
+        self.dim = 2048
+        self.heads_per_rank = 16
+        self.dim_head = 64
+        self.inner_dim_per_rank = 1024
+        self.ffn_dim_per_rank = 4096
         self.convrot_groupsize = convrot_groupsize
-        self.device = device or torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        self.device = device
+        self.eps = eps
 
-        # Norms & Residual Scales
-        self.norm1 = nn.LayerNorm(dim, eps=eps, elementwise_affine=False).to(self.device)
-        self.norm2 = nn.LayerNorm(dim, eps=eps, elementwise_affine=False).to(self.device)
-        self.scale1 = nn.Parameter(torch.ones(dim, dtype=torch.float16, device=self.device), requires_grad=False)
-        self.scale2 = nn.Parameter(torch.ones(dim, dtype=torch.float16, device=self.device), requires_grad=False)
+        self.qw_qkv = block_dict["qw_qkv"]
+        self.qs_qkv = block_dict["qs_qkv"]
+        self.b_qkv = block_dict["b_qkv"]
 
-        # Head RMSNorms
-        self.norm_q = nn.LayerNorm(dim_head, eps=eps, elementwise_affine=False).to(self.device)
-        self.norm_k = nn.LayerNorm(dim_head, eps=eps, elementwise_affine=False).to(self.device)
+        self.qw_out = block_dict["qw_out"]
+        self.qs_out = block_dict["qs_out"]
+        self.b_out = block_dict["b_out"]
 
-        # Weights: INT8 [Out, In] and scale [Out, 1]
-        self.qw_qkv = nn.Parameter(torch.empty(3 * self.inner_dim, dim, dtype=torch.int8, device=self.device), requires_grad=False)
-        self.qs_qkv = nn.Parameter(torch.empty(3 * self.inner_dim, 1, dtype=torch.float32, device=self.device), requires_grad=False)
-        self.b_qkv = nn.Parameter(torch.zeros(3 * self.inner_dim, dtype=torch.float16, device=self.device), requires_grad=False)
+        self.qw_w1 = block_dict["qw_w1"]
+        self.qs_w1 = block_dict["qs_w1"]
+        self.b_w1 = block_dict["b_w1"]
 
-        self.qw_out = nn.Parameter(torch.empty(dim, self.inner_dim, dtype=torch.int8, device=self.device), requires_grad=False)
-        self.qs_out = nn.Parameter(torch.empty(dim, 1, dtype=torch.float32, device=self.device), requires_grad=False)
-        self.b_out = nn.Parameter(torch.zeros(dim, dtype=torch.float16, device=self.device), requires_grad=False)
+        self.qw_w2 = block_dict["qw_w2"]
+        self.qs_w2 = block_dict["qs_w2"]
+        self.b_w2 = block_dict["b_w2"]
 
-        self.qw_w1 = nn.Parameter(torch.empty(2 * self.ffn_dim, dim, dtype=torch.int8, device=self.device), requires_grad=False)
-        self.qs_w1 = nn.Parameter(torch.empty(2 * self.ffn_dim, 1, dtype=torch.float32, device=self.device), requires_grad=False)
-        self.b_w1 = nn.Parameter(torch.zeros(2 * self.ffn_dim, dtype=torch.float16, device=self.device), requires_grad=False)
+        self.norm1_w = block_dict["norm1_w"]
+        self.norm2_w = block_dict["norm2_w"]
+        self.scale1 = block_dict["scale1"]
+        self.scale2 = block_dict["scale2"]
 
-        self.qw_w2 = nn.Parameter(torch.empty(dim, self.ffn_dim, dtype=torch.int8, device=self.device), requires_grad=False)
-        self.qs_w2 = nn.Parameter(torch.empty(dim, 1, dtype=torch.float32, device=self.device), requires_grad=False)
-        self.b_w2 = nn.Parameter(torch.zeros(dim, dtype=torch.float16, device=self.device), requires_grad=False)
+        self.register_buffer("qk_norm_scale", torch.ones(self.dim_head, device=device, dtype=torch.float16), persistent=False)
 
-    @torch.no_grad()
-    def load_from_fp16(self, qkv_w, qkv_b, out_w, out_b, w1_w, w1_b, w2_w, w2_b, s1, s2):
-        qw, qs = quantize_weight_int8(qkv_w)
-        self.qw_qkv.data.copy_(qw); self.qs_qkv.data.copy_(qs); self.b_qkv.data.copy_(qkv_b)
-        qw, qs = quantize_weight_int8(out_w)
-        self.qw_out.data.copy_(qw); self.qs_out.data.copy_(qs); self.b_out.data.copy_(out_b)
-        qw, qs = quantize_weight_int8(w1_w)
-        self.qw_w1.data.copy_(qw); self.qs_w1.data.copy_(qs); self.b_w1.data.copy_(w1_b)
-        qw, qs = quantize_weight_int8(w2_w)
-        self.qw_w2.data.copy_(qw); self.qs_w2.data.copy_(qs); self.b_w2.data.copy_(w2_b)
-        self.scale1.data.copy_(s1); self.scale2.data.copy_(s2)
+    def _rms_norm(self, x: torch.Tensor, weight: torch.Tensor) -> torch.Tensor:
+        var = x.pow(2).mean(-1, keepdim=True)
+        return x * torch.rsqrt(var + self.eps) * weight
 
-    def forward(self, x: torch.Tensor, rotary_pos_emb: Optional[torch.Tensor] = None) -> torch.Tensor:
-        b, s, _ = x.shape
-
-        # --- 1. Attention Sub-layer ---
-        h_norm1 = self.norm1(x)
-        qh, sh = quantize_int8_activation_convrot(h_norm1, self.convrot_groupsize)
-        qkv = w8a8_gemm(qh.view(-1, self.dim), sh, self.qw_qkv, self.qs_qkv, self.b_qkv, out_dtype=x.dtype)
-        qkv = qkv.view(b, s, 3, self.heads, self.dim_head).permute(2, 0, 3, 1, 4) # [3, B, Heads, S, D]
-        q, k, v = qkv[0], qkv[1], qkv[2]
-
-        q = self.norm_q(q)
-        k = self.norm_k(k)
-        if rotary_pos_emb is not None:
-            # Apply rotary positional embedding
-            # rotary_pos_emb: [B, S, 1, pairs, 2, 2]
-            q, k = self._apply_rope(q, k, rotary_pos_emb)
-
-        # Scaled dot-product attention
-        scale = 1.0 / math.sqrt(self.dim_head)
-        attn_out = torch.nn.functional.scaled_dot_product_attention(q, k, v, scale=scale) # [B, Heads, S, D]
-        attn_out = attn_out.permute(0, 2, 1, 3).reshape(b * s, self.inner_dim)
-
-        q_attn, s_attn = quantize_int8_activation_convrot(attn_out, self.convrot_groupsize)
-        out_proj = w8a8_gemm(q_attn, s_attn, self.qw_out, self.qs_out, self.b_out, out_dtype=x.dtype)
-        x = x + self.scale1 * out_proj.view(b, s, self.dim)
-
-        # --- 2. FeedForward Sub-layer ---
-        h_norm2 = self.norm2(x)
-        qh2, sh2 = quantize_int8_activation_convrot(h_norm2, self.convrot_groupsize)
-        w1_out = w8a8_gemm(qh2.view(-1, self.dim), sh2, self.qw_w1, self.qs_w1, self.b_w1, out_dtype=x.dtype)
-        gate, up = torch.chunk(w1_out, 2, dim=-1)
-        swiglu = torch.nn.functional.silu(gate) * up # [B*S, ffn_dim]
-
-        q_swi, s_swi = quantize_int8_activation_convrot(swiglu, self.convrot_groupsize)
-        w2_out = w8a8_gemm(q_swi, s_swi, self.qw_w2, self.qs_w2, self.b_w2, out_dtype=x.dtype)
-        x = x + self.scale2 * w2_out.view(b, s, self.dim)
-        return x
-
-    def _apply_rope(self, q: torch.Tensor, k: torch.Tensor, rope: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
-        # RoPE broadcasted across heads
-        # q, k: [B, Heads, S, D]
-        # In ComfyUI, rope is [B, S, 1, pairs, 2, 2]
-        rot_dim = rope.shape[-3] * 2
+    def _apply_rope_eager(self, q: torch.Tensor, k: torch.Tensor, rope: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+        pairs = rope.shape[-3]
+        rot_dim = pairs * 2
         q_rot, q_pass = q[..., :rot_dim], q[..., rot_dim:]
         k_rot, k_pass = k[..., :rot_dim], k[..., rot_dim:]
-        # Standard complex rotation
-        q_rot = q_rot.reshape(*q_rot.shape[:-1], -1, 2)
-        k_rot = k_rot.reshape(*k_rot.shape[:-1], -1, 2)
-        q_rot = torch.stack([-q_rot[..., 1], q_rot[..., 0]], dim=-1).flatten(-2)
-        k_rot = torch.stack([-k_rot[..., 1], k_rot[..., 0]], dim=-1).flatten(-2)
+        q_rot = q_rot.reshape(*q.shape[:-1], pairs, 1, 2)
+        k_rot = k_rot.reshape(*k.shape[:-1], pairs, 1, 2)
+        q_rot = torch.matmul(q_rot, rope).squeeze(-2).flatten(-2)
+        k_rot = torch.matmul(k_rot, rope).squeeze(-2).flatten(-2)
         return torch.cat([q_rot, q_pass], dim=-1), torch.cat([k_rot, k_pass], dim=-1)
 
-# =============================================================================
-# 2. Strategy 2: TP=2 (Megatron Tensor Parallelism with FP16 AllReduce)
-# =============================================================================
-
-class TPViT3DBlockINT8(nn.Module):
-    """
-    Megatron Tensor Parallel (TP=2) ViT3D Block:
-    - Column-Parallel: to_qkv (16 heads per rank), w1 (8192 out per rank).
-    - Row-Parallel: to_out, w2 with FP16 AllReduce.
-    """
-    def __init__(
-        self,
-        dim: int = 2048,
-        heads: int = 32,
-        dim_head: int = 64,
-        ffn_mult: int = 4,
-        rank: int = 0,
-        world_size: int = 2,
-        bias: bool = True,
-        eps: float = 1e-5,
-        convrot_groupsize: int = 256,
-        device: Optional[torch.device] = None,
-    ):
-        super().__init__()
-        self.dim = dim
-        self.heads = heads
-        self.heads_per_rank = heads // world_size
-        self.dim_head = dim_head
-        self.inner_dim_per_rank = self.heads_per_rank * dim_head # 1024
-        self.ffn_dim = dim * ffn_mult # 8192
-        self.ffn_dim_per_rank = self.ffn_dim // world_size # 4096
-        self.rank = rank
-        self.world_size = world_size
-        self.convrot_groupsize = convrot_groupsize
-        self.device = device or torch.device(f"cuda:{rank}" if torch.cuda.is_available() else "cpu")
-
-        # Norms & Residual Scales
-        self.norm1 = nn.LayerNorm(dim, eps=eps, elementwise_affine=False).to(self.device)
-        self.norm2 = nn.LayerNorm(dim, eps=eps, elementwise_affine=False).to(self.device)
-        self.scale1 = nn.Parameter(torch.ones(dim, dtype=torch.float16, device=self.device), requires_grad=False)
-        self.scale2 = nn.Parameter(torch.ones(dim, dtype=torch.float16, device=self.device), requires_grad=False)
-
-        self.norm_q = nn.LayerNorm(dim_head, eps=eps, elementwise_affine=False).to(self.device)
-        self.norm_k = nn.LayerNorm(dim_head, eps=eps, elementwise_affine=False).to(self.device)
-
-        # Sharded Weights
-        # to_qkv: [3 * 1024 = 3072, 2048]
-        self.qw_qkv = nn.Parameter(torch.empty(3 * self.inner_dim_per_rank, dim, dtype=torch.int8, device=self.device), requires_grad=False)
-        self.qs_qkv = nn.Parameter(torch.empty(3 * self.inner_dim_per_rank, 1, dtype=torch.float32, device=self.device), requires_grad=False)
-        self.b_qkv = nn.Parameter(torch.zeros(3 * self.inner_dim_per_rank, dtype=torch.float16, device=self.device), requires_grad=False)
-
-        # to_out: [2048, 1024]
-        self.qw_out = nn.Parameter(torch.empty(dim, self.inner_dim_per_rank, dtype=torch.int8, device=self.device), requires_grad=False)
-        self.qs_out = nn.Parameter(torch.empty(dim, 1, dtype=torch.float32, device=self.device), requires_grad=False)
-        self.b_out = nn.Parameter(torch.zeros(dim, dtype=torch.float16, device=self.device), requires_grad=False)
-
-        # w1: [2 * 4096 = 8192, 2048]
-        self.qw_w1 = nn.Parameter(torch.empty(2 * self.ffn_dim_per_rank, dim, dtype=torch.int8, device=self.device), requires_grad=False)
-        self.qs_w1 = nn.Parameter(torch.empty(2 * self.ffn_dim_per_rank, 1, dtype=torch.float32, device=self.device), requires_grad=False)
-        self.b_w1 = nn.Parameter(torch.zeros(2 * self.ffn_dim_per_rank, dtype=torch.float16, device=self.device), requires_grad=False)
-
-        # w2: [2048, 4096]
-        self.qw_w2 = nn.Parameter(torch.empty(dim, self.ffn_dim_per_rank, dtype=torch.int8, device=self.device), requires_grad=False)
-        self.qs_w2 = nn.Parameter(torch.empty(dim, 1, dtype=torch.float32, device=self.device), requires_grad=False)
-        self.b_w2 = nn.Parameter(torch.zeros(dim, dtype=torch.float16, device=self.device), requires_grad=False)
-
-    @torch.no_grad()
-    def load_from_full(self, ref: SingleGPUViT3DBlockINT8):
-        # Shard to_qkv by heads: 3 chunks of [heads, head_dim]
-        # Full to_qkv is [3 * 2048, 2048]
-        q_w, k_w, v_w = torch.chunk(ref.qw_qkv.data, 3, dim=0)
-        q_s, k_s, v_s = torch.chunk(ref.qs_qkv.data, 3, dim=0)
-        q_b, k_b, v_b = torch.chunk(ref.b_qkv.data, 3, dim=0)
-        start_h = self.rank * self.inner_dim_per_rank
-        end_h = start_h + self.inner_dim_per_rank
-
-        sharded_w = torch.cat([q_w[start_h:end_h], k_w[start_h:end_h], v_w[start_h:end_h]], dim=0)
-        sharded_s = torch.cat([q_s[start_h:end_h], k_s[start_h:end_h], v_s[start_h:end_h]], dim=0)
-        sharded_b = torch.cat([q_b[start_h:end_h], k_b[start_h:end_h], v_b[start_h:end_h]], dim=0)
-        self.qw_qkv.data.copy_(sharded_w.to(self.device))
-        self.qs_qkv.data.copy_(sharded_s.to(self.device))
-        self.b_qkv.data.copy_(sharded_b.to(self.device))
-
-        # Shard to_out by columns: [2048, 2048] -> [2048, 1024]
-        self.qw_out.data.copy_(ref.qw_out.data[:, start_h:end_h].to(self.device))
-        self.qs_out.data.copy_(ref.qs_out.data.to(self.device))
-        self.b_out.data.copy_((ref.b_out.data / self.world_size).to(self.device))
-
-        # Shard w1 by rows: gate [8192, 2048], up [8192, 2048]
-        gate_w, up_w = torch.chunk(ref.qw_w1.data, 2, dim=0)
-        gate_s, up_s = torch.chunk(ref.qs_w1.data, 2, dim=0)
-        gate_b, up_b = torch.chunk(ref.b_w1.data, 2, dim=0)
-        start_f = self.rank * self.ffn_dim_per_rank
-        end_f = start_f + self.ffn_dim_per_rank
-        self.qw_w1.data.copy_(torch.cat([gate_w[start_f:end_f], up_w[start_f:end_f]], dim=0).to(self.device))
-        self.qs_w1.data.copy_(torch.cat([gate_s[start_f:end_f], up_s[start_f:end_f]], dim=0).to(self.device))
-        self.b_w1.data.copy_(torch.cat([gate_b[start_f:end_f], up_b[start_f:end_f]], dim=0).to(self.device))
-
-        # Shard w2 by columns: [2048, 8192] -> [2048, 4096]
-        self.qw_w2.data.copy_(ref.qw_w2.data[:, start_f:end_f].to(self.device))
-        self.qs_w2.data.copy_(ref.qs_w2.data.to(self.device))
-        self.b_w2.data.copy_((ref.b_w2.data / self.world_size).to(self.device))
-
-        self.scale1.data.copy_(ref.scale1.data.to(self.device))
-        self.scale2.data.copy_(ref.scale2.data.to(self.device))
-
     def forward(self, x: torch.Tensor, rotary_pos_emb: Optional[torch.Tensor] = None) -> torch.Tensor:
-        b, s, _ = x.shape
+        b, s, dim = x.shape
 
-        # --- 1. Attention Sub-layer (TP=2) ---
-        h_norm1 = self.norm1(x)
-        qh, sh = quantize_int8_activation_convrot(h_norm1, self.convrot_groupsize)
-        qkv = w8a8_gemm(qh.view(-1, self.dim), sh, self.qw_qkv, self.qs_qkv, self.b_qkv, out_dtype=x.dtype)
-        qkv = qkv.view(b, s, 3, self.heads_per_rank, self.dim_head).permute(2, 0, 3, 1, 4)
-        q, k, v = qkv[0], qkv[1], qkv[2]
+        # 1. Attention Sublayer
+        h1 = self._rms_norm(x, self.norm1_w)
+        q_act, s_act = quantize_int8_rowwise_convrot(h1.view(-1, dim), self.convrot_groupsize)
+        qkv = w8a8_gemm(q_act, s_act, self.qw_qkv, self.qs_qkv, self.b_qkv, out_dtype=x.dtype)
+        qkv = qkv.view(b, s, self.heads_per_rank, 3 * self.dim_head)
+        q, k, v = torch.chunk(qkv, 3, dim=-1)
 
-        q = self.norm_q(q)
-        k = self.norm_k(k)
-        if rotary_pos_emb is not None:
-            q, k = self._apply_rope(q, k, rotary_pos_emb)
+        if rotary_pos_emb is not None and HAS_CK and hasattr(comfy_kitchen.backends.cuda, "rms_rope_split_half"):
+            q, k = comfy_kitchen.backends.cuda.rms_rope_split_half(
+                q, k, rotary_pos_emb, self.qk_norm_scale,
+                epsilon=self.eps, rot_dim=rotary_pos_emb.shape[-3] * 2
+            )
+        else:
+            q = q * torch.rsqrt(q.pow(2).mean(-1, keepdim=True) + self.eps)
+            k = k * torch.rsqrt(k.pow(2).mean(-1, keepdim=True) + self.eps)
+            if rotary_pos_emb is not None:
+                q, k = self._apply_rope_eager(q, k, rotary_pos_emb)
 
+        q, k, v = (t.transpose(1, 2) for t in (q, k, v)) # [B, Heads, S, D]
         scale = 1.0 / math.sqrt(self.dim_head)
-        attn_out = torch.nn.functional.scaled_dot_product_attention(q, k, v, scale=scale)
-        attn_out = attn_out.permute(0, 2, 1, 3).reshape(b * s, self.inner_dim_per_rank)
+        attn_out = F.scaled_dot_product_attention(q, k, v, scale=scale)
+        attn_out = torch.nan_to_num(attn_out).transpose(1, 2).reshape(b * s, self.inner_dim_per_rank)
 
-        q_attn, s_attn = quantize_int8_activation_convrot(attn_out, self.convrot_groupsize)
+        q_attn, s_attn = quantize_int8_rowwise_convrot(attn_out, self.convrot_groupsize)
         partial_out = w8a8_gemm(q_attn, s_attn, self.qw_out, self.qs_out, self.b_out, out_dtype=x.dtype)
+        partial_out = partial_out.view(b, s, dim)
 
-        # FP16 AllReduce
-        if self.world_size > 1 and dist.is_initialized():
+        # Real NCCL FP16 AllReduce
+        if dist.is_initialized():
             dist.all_reduce(partial_out, op=dist.ReduceOp.SUM)
 
-        x = x + self.scale1 * partial_out.view(b, s, self.dim)
+        x = x + self.scale1 * partial_out
 
-        # --- 2. FeedForward Sub-layer (TP=2) ---
-        h_norm2 = self.norm2(x)
-        qh2, sh2 = quantize_int8_activation_convrot(h_norm2, self.convrot_groupsize)
-        w1_out = w8a8_gemm(qh2.view(-1, self.dim), sh2, self.qw_w1, self.qs_w1, self.b_w1, out_dtype=x.dtype)
+        # 2. FeedForward Sublayer
+        h2 = self._rms_norm(x, self.norm2_w)
+        q_act2, s_act2 = quantize_int8_rowwise_convrot(h2.view(-1, dim), self.convrot_groupsize)
+        w1_out = w8a8_gemm(q_act2, s_act2, self.qw_w1, self.qs_w1, self.b_w1, out_dtype=x.dtype)
         gate, up = torch.chunk(w1_out, 2, dim=-1)
-        swiglu = torch.nn.functional.silu(gate) * up # [B*S, ffn_dim_per_rank]
+        swiglu = F.silu(gate) * up # [B*S, 4096]
 
-        q_swi, s_swi = quantize_int8_activation_convrot(swiglu, self.convrot_groupsize)
+        q_swi, s_swi = quantize_int8_rowwise_convrot(swiglu, self.convrot_groupsize)
         partial_w2 = w8a8_gemm(q_swi, s_swi, self.qw_w2, self.qs_w2, self.b_w2, out_dtype=x.dtype)
+        partial_w2 = partial_w2.view(b, s, dim)
 
-        # FP16 AllReduce
-        if self.world_size > 1 and dist.is_initialized():
+        # Real NCCL FP16 AllReduce
+        if dist.is_initialized():
             dist.all_reduce(partial_w2, op=dist.ReduceOp.SUM)
 
-        x = x + self.scale2 * partial_w2.view(b, s, self.dim)
+        x = x + self.scale2 * partial_w2
         return x
 
-    def _apply_rope(self, q: torch.Tensor, k: torch.Tensor, rope: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
-        rot_dim = rope.shape[-3] * 2
+
+class RealSPTransformerBlock(nn.Module):
+    """
+    TP=2 + Sequence Parallelism + FP16 ReduceScatter + INT8 AllGather ViT3D Block.
+    Activations are partitioned along S: [B, S/2, 2048] per rank.
+    Quantization occurs post-reduction on local S/2 slices.
+    """
+    def __init__(self, block_dict: Dict[str, Any], world_size: int = 2, eps: float = 1e-5, convrot_groupsize: int = 256, device: Optional[torch.device] = None):
+        super().__init__()
+        self.dim = 2048
+        self.world_size = world_size
+        self.heads_per_rank = 16
+        self.dim_head = 64
+        self.inner_dim_per_rank = 1024
+        self.ffn_dim_per_rank = 4096
+        self.convrot_groupsize = convrot_groupsize
+        self.device = device
+        self.eps = eps
+
+        self.qw_qkv = block_dict["qw_qkv"]
+        self.qs_qkv = block_dict["qs_qkv"]
+        self.b_qkv = block_dict["b_qkv"]
+
+        self.qw_out = block_dict["qw_out"]
+        self.qs_out = block_dict["qs_out"]
+        self.b_out = block_dict["b_out"]
+
+        self.qw_w1 = block_dict["qw_w1"]
+        self.qs_w1 = block_dict["qs_w1"]
+        self.b_w1 = block_dict["b_w1"]
+
+        self.qw_w2 = block_dict["qw_w2"]
+        self.qs_w2 = block_dict["qs_w2"]
+        self.b_w2 = block_dict["b_w2"]
+
+        self.norm1_w = block_dict["norm1_w"]
+        self.norm2_w = block_dict["norm2_w"]
+        self.scale1 = block_dict["scale1"]
+        self.scale2 = block_dict["scale2"]
+
+        self.register_buffer("qk_norm_scale", torch.ones(self.dim_head, device=device, dtype=torch.float16), persistent=False)
+
+    def _rms_norm(self, x: torch.Tensor, weight: torch.Tensor) -> torch.Tensor:
+        var = x.pow(2).mean(-1, keepdim=True)
+        return x * torch.rsqrt(var + self.eps) * weight
+
+    def _apply_rope_eager(self, q: torch.Tensor, k: torch.Tensor, rope: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+        pairs = rope.shape[-3]
+        rot_dim = pairs * 2
         q_rot, q_pass = q[..., :rot_dim], q[..., rot_dim:]
         k_rot, k_pass = k[..., :rot_dim], k[..., rot_dim:]
-        q_rot = q_rot.reshape(*q_rot.shape[:-1], -1, 2)
-        k_rot = k_rot.reshape(*k_rot.shape[:-1], -1, 2)
-        q_rot = torch.stack([-q_rot[..., 1], q_rot[..., 0]], dim=-1).flatten(-2)
-        k_rot = torch.stack([-k_rot[..., 1], k_rot[..., 0]], dim=-1).flatten(-2)
+        q_rot = q_rot.reshape(*q.shape[:-1], pairs, 1, 2)
+        k_rot = k_rot.reshape(*k.shape[:-1], pairs, 1, 2)
+        q_rot = torch.matmul(q_rot, rope).squeeze(-2).flatten(-2)
+        k_rot = torch.matmul(k_rot, rope).squeeze(-2).flatten(-2)
         return torch.cat([q_rot, q_pass], dim=-1), torch.cat([k_rot, k_pass], dim=-1)
 
-# =============================================================================
-# 3. Strategy 3: TP=2 + Sequence Parallelism + INT8 AllGather
-# =============================================================================
-
-class SPViT3DBlockINT8(nn.Module):
-    """
-    TP=2 + Sequence Parallelism + INT8 AllGather ViT3D Block:
-    - Partitioned activations at [S/2, dim] in FP16 between blocks.
-    - Local Norms and Residual additions on [S/2, dim].
-    - INT8 ConvRot Activation Quantization -> INT8 AllGather before QKV & W1.
-    - Row-Parallel GEMM -> FP16 ReduceScatter along Sequence dimension.
-    """
-    def __init__(
-        self,
-        dim: int = 2048,
-        heads: int = 32,
-        dim_head: int = 64,
-        ffn_mult: int = 4,
-        rank: int = 0,
-        world_size: int = 2,
-        bias: bool = True,
-        eps: float = 1e-5,
-        convrot_groupsize: int = 256,
-        device: Optional[torch.device] = None,
-    ):
-        super().__init__()
-        self.dim = dim
-        self.heads = heads
-        self.heads_per_rank = heads // world_size
-        self.dim_head = dim_head
-        self.inner_dim_per_rank = self.heads_per_rank * dim_head # 1024
-        self.ffn_dim = dim * ffn_mult # 8192
-        self.ffn_dim_per_rank = self.ffn_dim // world_size # 4096
-        self.rank = rank
-        self.world_size = world_size
-        self.convrot_groupsize = convrot_groupsize
-        self.device = device or torch.device(f"cuda:{rank}" if torch.cuda.is_available() else "cpu")
-
-        # Norms & Residual Scales
-        self.norm1 = nn.LayerNorm(dim, eps=eps, elementwise_affine=False).to(self.device)
-        self.norm2 = nn.LayerNorm(dim, eps=eps, elementwise_affine=False).to(self.device)
-        self.scale1 = nn.Parameter(torch.ones(dim, dtype=torch.float16, device=self.device), requires_grad=False)
-        self.scale2 = nn.Parameter(torch.ones(dim, dtype=torch.float16, device=self.device), requires_grad=False)
-
-        self.norm_q = nn.LayerNorm(dim_head, eps=eps, elementwise_affine=False).to(self.device)
-        self.norm_k = nn.LayerNorm(dim_head, eps=eps, elementwise_affine=False).to(self.device)
-
-        # Sharded Weights
-        self.qw_qkv = nn.Parameter(torch.empty(3 * self.inner_dim_per_rank, dim, dtype=torch.int8, device=self.device), requires_grad=False)
-        self.qs_qkv = nn.Parameter(torch.empty(3 * self.inner_dim_per_rank, 1, dtype=torch.float32, device=self.device), requires_grad=False)
-        self.b_qkv = nn.Parameter(torch.zeros(3 * self.inner_dim_per_rank, dtype=torch.float16, device=self.device), requires_grad=False)
-
-        self.qw_out = nn.Parameter(torch.empty(dim, self.inner_dim_per_rank, dtype=torch.int8, device=self.device), requires_grad=False)
-        self.qs_out = nn.Parameter(torch.empty(dim, 1, dtype=torch.float32, device=self.device), requires_grad=False)
-        self.b_out = nn.Parameter(torch.zeros(dim, dtype=torch.float16, device=self.device), requires_grad=False)
-
-        self.qw_w1 = nn.Parameter(torch.empty(2 * self.ffn_dim_per_rank, dim, dtype=torch.int8, device=self.device), requires_grad=False)
-        self.qs_w1 = nn.Parameter(torch.empty(2 * self.ffn_dim_per_rank, 1, dtype=torch.float32, device=self.device), requires_grad=False)
-        self.b_w1 = nn.Parameter(torch.zeros(2 * self.ffn_dim_per_rank, dtype=torch.float16, device=self.device), requires_grad=False)
-
-        self.qw_w2 = nn.Parameter(torch.empty(dim, self.ffn_dim_per_rank, dtype=torch.int8, device=self.device), requires_grad=False)
-        self.qs_w2 = nn.Parameter(torch.empty(dim, 1, dtype=torch.float32, device=self.device), requires_grad=False)
-        self.b_w2 = nn.Parameter(torch.zeros(dim, dtype=torch.float16, device=self.device), requires_grad=False)
-
-    @torch.no_grad()
-    def load_from_full(self, ref: SingleGPUViT3DBlockINT8):
-        q_w, k_w, v_w = torch.chunk(ref.qw_qkv.data, 3, dim=0)
-        q_s, k_s, v_s = torch.chunk(ref.qs_qkv.data, 3, dim=0)
-        q_b, k_b, v_b = torch.chunk(ref.b_qkv.data, 3, dim=0)
-        start_h = self.rank * self.inner_dim_per_rank
-        end_h = start_h + self.inner_dim_per_rank
-
-        sharded_w = torch.cat([q_w[start_h:end_h], k_w[start_h:end_h], v_w[start_h:end_h]], dim=0)
-        sharded_s = torch.cat([q_s[start_h:end_h], k_s[start_h:end_h], v_s[start_h:end_h]], dim=0)
-        sharded_b = torch.cat([q_b[start_h:end_h], k_b[start_h:end_h], v_b[start_h:end_h]], dim=0)
-        self.qw_qkv.data.copy_(sharded_w.to(self.device))
-        self.qs_qkv.data.copy_(sharded_s.to(self.device))
-        self.b_qkv.data.copy_(sharded_b.to(self.device))
-
-        self.qw_out.data.copy_(ref.qw_out.data[:, start_h:end_h].to(self.device))
-        self.qs_out.data.copy_(ref.qs_out.data.to(self.device))
-        self.b_out.data.copy_((ref.b_out.data / self.world_size).to(self.device))
-
-        gate_w, up_w = torch.chunk(ref.qw_w1.data, 2, dim=0)
-        gate_s, up_s = torch.chunk(ref.qs_w1.data, 2, dim=0)
-        gate_b, up_b = torch.chunk(ref.b_w1.data, 2, dim=0)
-        start_f = self.rank * self.ffn_dim_per_rank
-        end_f = start_f + self.ffn_dim_per_rank
-        self.qw_w1.data.copy_(torch.cat([gate_w[start_f:end_f], up_w[start_f:end_f]], dim=0).to(self.device))
-        self.qs_w1.data.copy_(torch.cat([gate_s[start_f:end_f], up_s[start_f:end_f]], dim=0).to(self.device))
-        self.b_w1.data.copy_(torch.cat([gate_b[start_f:end_f], up_b[start_f:end_f]], dim=0).to(self.device))
-
-        self.qw_w2.data.copy_(ref.qw_w2.data[:, start_f:end_f].to(self.device))
-        self.qs_w2.data.copy_(ref.qs_w2.data.to(self.device))
-        self.b_w2.data.copy_((ref.b_w2.data / self.world_size).to(self.device))
-
-        self.scale1.data.copy_(ref.scale1.data.to(self.device))
-        self.scale2.data.copy_(ref.scale2.data.to(self.device))
-
     def forward(self, x_local: torch.Tensor, rotary_pos_emb: Optional[torch.Tensor] = None) -> torch.Tensor:
-        """
-        x_local: [B, S/2, dim] local slice in FP16.
-        Returns: [B, S/2, dim] local slice in FP16.
-        """
-        b, s_local, _ = x_local.shape
-        s_total = s_local * self.world_size
+        b, s_local, dim = x_local.shape
+        s_full = s_local * self.world_size
 
-        # --- 1. Attention Sub-layer (TP=2 + SP + INT8 AG) ---
-        # 1a. Local Norm on S/2
-        h_norm1_local = self.norm1(x_local)
+        # --- 1. Attention Sublayer ---
+        # 1a. Local Pre-Norm on S/2
+        h1_local = self._rms_norm(x_local, self.norm1_w)
 
-        # 1b. Local INT8 Activation Quantization on S/2
-        qh_local, sh_local = quantize_int8_activation_convrot(h_norm1_local, self.convrot_groupsize)
+        # 1b. Local INT8 ConvRot Activation Quantization on S/2
+        qh_local, sh_local = quantize_int8_rowwise_convrot(h1_local.view(-1, dim), self.convrot_groupsize)
+        qh_local = qh_local.view(b, s_local, dim)
+        sh_local = sh_local.view(b, s_local, 1)
 
-        # 1c. INT8 AllGather -> [B, S, dim] (1 byte per element)
-        if self.world_size > 1 and dist.is_initialized():
-            qh_full = torch.empty((b, s_total, self.dim), dtype=torch.int8, device=self.device)
+        # 1c. INT8 AllGather over NCCL
+        if dist.is_initialized():
+            qh_full = torch.empty((b, s_full, dim), dtype=torch.int8, device=self.device)
             dist.all_gather_into_tensor(qh_full, qh_local)
-            sh_full = torch.empty((b, s_total, 1), dtype=torch.float32, device=self.device)
+            sh_full = torch.empty((b, s_full, 1), dtype=torch.float32, device=self.device)
             dist.all_gather_into_tensor(sh_full, sh_local)
         else:
             qh_full = qh_local.repeat(1, self.world_size, 1)
             sh_full = sh_local.repeat(1, self.world_size, 1)
 
-        # 1d. Column W8A8 GEMM -> [B, S, 3072]
-        qkv = w8a8_gemm(qh_full.view(-1, self.dim), sh_full.view(-1, 1), self.qw_qkv, self.qs_qkv, self.b_qkv, out_dtype=x_local.dtype)
-        qkv = qkv.view(b, s_total, 3, self.heads_per_rank, self.dim_head).permute(2, 0, 3, 1, 4)
-        q, k, v = qkv[0], qkv[1], qkv[2]
+        # 1d. Column QKV GEMM from gathered INT8
+        qkv = w8a8_gemm(qh_full.view(-1, dim), sh_full.view(-1, 1), self.qw_qkv, self.qs_qkv, self.b_qkv, out_dtype=x_local.dtype)
+        qkv = qkv.view(b, s_full, self.heads_per_rank, 3 * self.dim_head)
+        q, k, v = torch.chunk(qkv, 3, dim=-1)
 
-        q = self.norm_q(q)
-        k = self.norm_k(k)
-        if rotary_pos_emb is not None:
-            q, k = self._apply_rope(q, k, rotary_pos_emb)
+        # 1e. RoPE across full S tokens
+        if rotary_pos_emb is not None and HAS_CK and hasattr(comfy_kitchen.backends.cuda, "rms_rope_split_half"):
+            q, k = comfy_kitchen.backends.cuda.rms_rope_split_half(
+                q, k, rotary_pos_emb, self.qk_norm_scale,
+                epsilon=self.eps, rot_dim=rotary_pos_emb.shape[-3] * 2
+            )
+        else:
+            q = q * torch.rsqrt(q.pow(2).mean(-1, keepdim=True) + self.eps)
+            k = k * torch.rsqrt(k.pow(2).mean(-1, keepdim=True) + self.eps)
+            if rotary_pos_emb is not None:
+                q, k = self._apply_rope_eager(q, k, rotary_pos_emb)
 
+        q, k, v = (t.transpose(1, 2) for t in (q, k, v))
         scale = 1.0 / math.sqrt(self.dim_head)
-        attn_out = torch.nn.functional.scaled_dot_product_attention(q, k, v, scale=scale)
-        attn_out = attn_out.permute(0, 2, 1, 3).reshape(b * s_total, self.inner_dim_per_rank)
+        attn_out = F.scaled_dot_product_attention(q, k, v, scale=scale)
+        attn_out = torch.nan_to_num(attn_out).transpose(1, 2).reshape(b * s_full, self.inner_dim_per_rank)
 
-        # 1e. Row W8A8 GEMM -> partial sum [B*S, dim]
-        q_attn, s_attn = quantize_int8_activation_convrot(attn_out, self.convrot_groupsize)
+        # 1f. Row to_out GEMM
+        q_attn, s_attn = quantize_int8_rowwise_convrot(attn_out, self.convrot_groupsize)
         partial_out = w8a8_gemm(q_attn, s_attn, self.qw_out, self.qs_out, self.b_out, out_dtype=x_local.dtype)
-        partial_out = partial_out.view(b, s_total, self.dim)
+        partial_out = partial_out.view(b, s_full, dim)
 
-        # 1f. FP16 ReduceScatter -> [B, S/2, dim]
-        if self.world_size > 1 and dist.is_initialized():
-            reduced_attn = torch.empty((b, s_local, self.dim), dtype=x_local.dtype, device=self.device)
+        # 1g. FP16 ReduceScatter over NCCL
+        if dist.is_initialized():
+            reduced_attn = torch.empty((b, s_local, dim), dtype=x_local.dtype, device=self.device)
             dist.reduce_scatter_tensor(reduced_attn, partial_out.contiguous(), op=dist.ReduceOp.SUM)
         else:
             reduced_attn = partial_out[:, :s_local, :]
 
-        # 1g. Local Residual Addition on S/2
+        # 1h. Local Residual Addition on S/2
         x_local = x_local + self.scale1 * reduced_attn
 
-        # --- 2. FeedForward Sub-layer (TP=2 + SP + INT8 AG) ---
-        # 2a. Local Norm on S/2
-        h_norm2_local = self.norm2(x_local)
+        # --- 2. FeedForward Sublayer ---
+        # 2a. Local Pre-Norm on S/2
+        h2_local = self._rms_norm(x_local, self.norm2_w)
 
-        # 2b. Local INT8 Activation Quantization on S/2
-        qh2_local, sh2_local = quantize_int8_activation_convrot(h_norm2_local, self.convrot_groupsize)
+        # 2b. Local INT8 ConvRot Activation Quantization on S/2
+        qh2_local, sh2_local = quantize_int8_rowwise_convrot(h2_local.view(-1, dim), self.convrot_groupsize)
+        qh2_local = qh2_local.view(b, s_local, dim)
+        sh2_local = sh2_local.view(b, s_local, 1)
 
-        # 2c. INT8 AllGather -> [B, S, dim]
-        if self.world_size > 1 and dist.is_initialized():
-            qh2_full = torch.empty((b, s_total, self.dim), dtype=torch.int8, device=self.device)
+        # 2c. INT8 AllGather over NCCL
+        if dist.is_initialized():
+            qh2_full = torch.empty((b, s_full, dim), dtype=torch.int8, device=self.device)
             dist.all_gather_into_tensor(qh2_full, qh2_local)
-            sh2_full = torch.empty((b, s_total, 1), dtype=torch.float32, device=self.device)
+            sh2_full = torch.empty((b, s_full, 1), dtype=torch.float32, device=self.device)
             dist.all_gather_into_tensor(sh2_full, sh2_local)
         else:
             qh2_full = qh2_local.repeat(1, self.world_size, 1)
             sh2_full = sh2_local.repeat(1, self.world_size, 1)
 
-        # 2d. Column W8A8 GEMM -> [B, S, 8192]
-        w1_out = w8a8_gemm(qh2_full.view(-1, self.dim), sh2_full.view(-1, 1), self.qw_w1, self.qs_w1, self.b_w1, out_dtype=x_local.dtype)
+        # 2d. Column w1 GEMM
+        w1_out = w8a8_gemm(qh2_full.view(-1, dim), sh2_full.view(-1, 1), self.qw_w1, self.qs_w1, self.b_w1, out_dtype=x_local.dtype)
         gate, up = torch.chunk(w1_out, 2, dim=-1)
-        swiglu = torch.nn.functional.silu(gate) * up # [B*S, ffn_dim_per_rank]
+        swiglu = F.silu(gate) * up # [B*S, 4096]
 
-        # 2e. Row W8A8 GEMM -> partial sum [B*S, dim]
-        q_swi, s_swi = quantize_int8_activation_convrot(swiglu, self.convrot_groupsize)
+        # 2e. Row w2 GEMM
+        q_swi, s_swi = quantize_int8_rowwise_convrot(swiglu, self.convrot_groupsize)
         partial_w2 = w8a8_gemm(q_swi, s_swi, self.qw_w2, self.qs_w2, self.b_w2, out_dtype=x_local.dtype)
-        partial_w2 = partial_w2.view(b, s_total, self.dim)
+        partial_w2 = partial_w2.view(b, s_full, dim)
 
-        # 2f. FP16 ReduceScatter -> [B, S/2, dim]
-        if self.world_size > 1 and dist.is_initialized():
-            reduced_w2 = torch.empty((b, s_local, self.dim), dtype=x_local.dtype, device=self.device)
+        # 2f. FP16 ReduceScatter over NCCL
+        if dist.is_initialized():
+            reduced_w2 = torch.empty((b, s_local, dim), dtype=x_local.dtype, device=self.device)
             dist.reduce_scatter_tensor(reduced_w2, partial_w2.contiguous(), op=dist.ReduceOp.SUM)
         else:
             reduced_w2 = partial_w2[:, :s_local, :]
@@ -580,12 +482,112 @@ class SPViT3DBlockINT8(nn.Module):
         x_local = x_local + self.scale2 * reduced_w2
         return x_local
 
-    def _apply_rope(self, q: torch.Tensor, k: torch.Tensor, rope: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
-        rot_dim = rope.shape[-3] * 2
-        q_rot, q_pass = q[..., :rot_dim], q[..., rot_dim:]
-        k_rot, k_pass = k[..., :rot_dim], k[..., rot_dim:]
-        q_rot = q_rot.reshape(*q_rot.shape[:-1], -1, 2)
-        k_rot = k_rot.reshape(*k_rot.shape[:-1], -1, 2)
-        q_rot = torch.stack([-q_rot[..., 1], q_rot[..., 0]], dim=-1).flatten(-2)
-        k_rot = torch.stack([-k_rot[..., 1], k_rot[..., 0]], dim=-1).flatten(-2)
-        return torch.cat([q_rot, q_pass], dim=-1), torch.cat([k_rot, k_pass], dim=-1)
+
+def patch_video_vae_tp(model: nn.Module, sd: Dict[str, torch.Tensor], rank: int, world_size: int, device: torch.device) -> nn.Module:
+    """
+    Patches real MiniMaxH3VideoVAE decoder transformer blocks with RealTPTransformerBlock.
+    """
+    for i in range(len(model.decoder.transformer_blocks)):
+        block_dict = create_tp_block_from_sd(sd, i, rank, world_size, device)
+        model.decoder.transformer_blocks[i] = RealTPTransformerBlock(
+            block_dict, convrot_groupsize=256, device=device
+        )
+    return model
+
+
+def patch_video_vae_sp(model: nn.Module, sd: Dict[str, torch.Tensor], rank: int, world_size: int, device: torch.device) -> nn.Module:
+    """
+    Patches real MiniMaxH3VideoVAE decoder transformer blocks with RealSPTransformerBlock,
+    and wraps decoder.forward to partition activations across the sequence dimension.
+    """
+    for i in range(len(model.decoder.transformer_blocks)):
+        block_dict = create_tp_block_from_sd(sd, i, rank, world_size, device)
+        model.decoder.transformer_blocks[i] = RealSPTransformerBlock(
+            block_dict, world_size=world_size, convrot_groupsize=256, device=device
+        )
+
+    orig_decoder_forward = model.decoder.forward
+
+    def sp_decoder_forward(x: torch.Tensor) -> torch.Tensor:
+        B, C, latent_T, latent_H, latent_W = x.shape
+        h = model.decoder.x_embedder(x.flatten(2).transpose(1, 2))
+        num_patches = h.shape[1]
+
+        # Suffix tokens: ensure total S is divisible by world_size
+        num_reg = model.decoder.num_register_tokens
+        reg = model.decoder.register_tokens.expand(B, -1, -1)
+        raw_s = num_patches + num_reg + 1
+        num_pad = 1 if (raw_s % world_size == 0) else (1 + (world_size - (raw_s % world_size)))
+        num_suffix = num_reg + num_pad
+
+        h = torch.cat([h, reg, torch.zeros((B, num_pad, h.shape[-1]), device=h.device, dtype=h.dtype)], dim=1)
+
+        img_ids = create_token_ids((latent_T, latent_H, latent_W), x.device, x.dtype).expand(B, -1, -1)
+        suffix_ids = torch.zeros((B, num_suffix, 3), device=x.device, dtype=img_ids.dtype)
+        img_ids = torch.cat([img_ids, suffix_ids], dim=1)
+        rotary_pos_emb = model.decoder.pos_embed(img_ids)
+
+        total_s = h.shape[1]
+        s_local = total_s // world_size
+        h_local = h[:, rank * s_local : (rank + 1) * s_local, :].contiguous()
+
+        for block in model.decoder.transformer_blocks:
+            h_local = block(h_local, rotary_pos_emb)
+
+        # Single FP16 AllGather at the end
+        if dist.is_initialized():
+            h_full = torch.empty((B, total_s, model.decoder.x_embedder.out_features), dtype=h_local.dtype, device=device)
+            dist.all_gather_into_tensor(h_full, h_local)
+        else:
+            h_full = h_local.repeat(1, world_size, 1)
+
+        output = model.decoder.proj_out(model.decoder.norm_out(h_full))
+        output = output[:, :num_patches, :]
+
+        output = output.view(
+            B, latent_T, latent_H, latent_W,
+            model.decoder.out_channels, model.decoder.patch_size_t, model.decoder.patch_size, model.decoder.patch_size,
+        )
+        output = output.permute(0, 4, 1, 5, 2, 6, 3, 7).contiguous()
+        output = output.reshape(
+            B, model.decoder.out_channels,
+            latent_T * model.decoder.patch_size_t,
+            latent_H * model.decoder.patch_size,
+            latent_W * model.decoder.patch_size,
+        )
+        return output
+
+    model.decoder.forward = sp_decoder_forward
+    return model
+
+
+def verify_shard_quantization_invariance(dim: int = 2048, groupsize: int = 256, device: str = "cuda:0") -> Dict[str, Any]:
+    """
+    Experimental verification that quantizing local sequence shards [S/2, 2048]
+    produces bit-exact identical INT8 activations and scales as quantizing the full sequence.
+    """
+    dev = torch.device(device if torch.cuda.is_available() else "cpu")
+    torch.manual_seed(42)
+    s_full = 1024
+    s_half = s_full // 2
+    x = torch.randn(s_full, dim, dtype=torch.float16, device=dev)
+
+    q_full, s_full_scales = quantize_int8_rowwise_convrot(x, groupsize)
+    q_0, s_0 = quantize_int8_rowwise_convrot(x[:s_half], groupsize)
+    q_1, s_1 = quantize_int8_rowwise_convrot(x[s_half:], groupsize)
+
+    q_cat = torch.cat([q_0, q_1], dim=0)
+    s_cat = torch.cat([s_0, s_1], dim=0)
+
+    q_equal = torch.equal(q_full, q_cat)
+    s_equal = torch.equal(s_full_scales, s_cat)
+    q_max_diff = (q_full.float() - q_cat.float()).abs().max().item()
+    s_max_diff = (s_full_scales - s_cat).abs().max().item()
+
+    return {
+        "q_equal": q_equal,
+        "s_equal": s_equal,
+        "q_max_diff": q_max_diff,
+        "s_max_diff": s_max_diff,
+        "is_bit_exact": q_equal and s_equal,
+    }
