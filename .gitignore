@@ -33,3 +33,5 @@ ComfyUI/
 .idea/
 .DS_Store
 Thumbs.db
+*.log
+parsed_kaggle_output.txt
