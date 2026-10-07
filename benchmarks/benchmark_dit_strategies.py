@@ -89,7 +89,7 @@ def compute_numerical_similarity(pred: torch.Tensor, ref: torch.Tensor) -> Tuple
 
     return l2_err.item(), cos_sim
 
-def benchmark_dit_suite():
+def benchmark_dit_suite(output_dir: str = "kaggle_output"):
     print("=" * 75)
     print("MiniMax-H3 Ref2VA Pruned DiT (50 Blocks) Multi-GPU Benchmark Suite")
     print(f"Hardware: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU'}")
@@ -271,6 +271,41 @@ def benchmark_dit_suite():
     csv_path = os.path.join(output_dir, "dit_benchmark_results.csv")
     df.to_csv(csv_path, index=False)
     print(f"\nSaved benchmark metrics to {csv_path}")
+
+    try:
+        import matplotlib.pyplot as plt
+        fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+        for strat, color, marker in zip(["PP=2", "TP=2 (FP16 AR)", "TP=2+SP+INT8 AG"], ["forestgreen", "crimson", "royalblue"], ["o", "s", "^"]):
+            sub = df[df["strategy"] == strat]
+            axes[0].plot(sub["seq_len"], sub["turbo_8step_s"], marker=marker, label=strat, color=color, linewidth=2.5)
+            axes[1].plot(sub["seq_len"], sub["comm_overhead_pct"], marker=marker, label=strat, color=color, linewidth=2.5)
+            axes[2].plot(sub["seq_len"], sub["peak_vram_gb"], marker=marker, label=strat, color=color, linewidth=2.5)
+
+        axes[0].set_title("8-Step Turbo Video Latency (s)", fontweight="bold")
+        axes[0].set_xlabel("Sequence Length (Tokens)")
+        axes[0].set_ylabel("Total Latency (Seconds)")
+        axes[0].grid(True, linestyle="--", alpha=0.6)
+        axes[0].legend()
+
+        axes[1].set_title("PCIe Communication Overhead (%)", fontweight="bold")
+        axes[1].set_xlabel("Sequence Length (Tokens)")
+        axes[1].set_ylabel("Comm Overhead (% of Step)")
+        axes[1].grid(True, linestyle="--", alpha=0.6)
+        axes[1].legend()
+
+        axes[2].set_title("Peak VRAM Footprint per GPU (GB)", fontweight="bold")
+        axes[2].set_xlabel("Sequence Length (Tokens)")
+        axes[2].set_ylabel("Peak VRAM (GB)")
+        axes[2].grid(True, linestyle="--", alpha=0.6)
+        axes[2].legend()
+
+        plt.tight_layout()
+        plot_path = os.path.join(output_dir, "dit_benchmark_comparison.png")
+        plt.savefig(plot_path, dpi=300)
+        plt.close()
+        print(f"Saved benchmark comparison plot to {plot_path}")
+    except Exception as e:
+        print(f"[PLOT ERROR] {e}")
 
     return df
 
