@@ -28,6 +28,8 @@ from patches.tp_video_vae import (
     SingleGPUViT3DBlockINT8,
     TPViT3DBlockINT8,
     SPViT3DBlockINT8,
+    quantize_int8_activation_convrot,
+    w8a8_gemm,
     create_token_ids,
     RotaryEmbeddingND,
 )
@@ -163,11 +165,93 @@ def benchmark_video_vae_tp_suite(output_dir: str = "kaggle_output"):
     torch.manual_seed(42)
     single_block = SingleGPUViT3DBlockINT8(dim=DIM, heads=HEADS, dim_head=DIM_HEAD, ffn_mult=FFN_MULT, device=dev0)
     tp_block = TPViT3DBlockINT8(dim=DIM, heads=HEADS, dim_head=DIM_HEAD, ffn_mult=FFN_MULT, rank=0, world_size=2, device=dev0)
+    tp_block1 = TPViT3DBlockINT8(dim=DIM, heads=HEADS, dim_head=DIM_HEAD, ffn_mult=FFN_MULT, rank=1, world_size=2, device=dev0)
     sp_block = SPViT3DBlockINT8(dim=DIM, heads=HEADS, dim_head=DIM_HEAD, ffn_mult=FFN_MULT, rank=0, world_size=2, device=dev0)
+    sp_block1 = SPViT3DBlockINT8(dim=DIM, heads=HEADS, dim_head=DIM_HEAD, ffn_mult=FFN_MULT, rank=1, world_size=2, device=dev0)
 
     # Shard weights from identical reference
     tp_block.load_from_full(single_block)
+    tp_block1.load_from_full(single_block)
     sp_block.load_from_full(single_block)
+    sp_block1.load_from_full(single_block)
+
+    def simulate_tp_forward(tp0, tp1, x, rope):
+        b, s, dim = x.shape
+        h1 = tp0.norm1(x)
+        qh, sh = quantize_int8_activation_convrot(h1, tp0.convrot_groupsize)
+        qkv0 = w8a8_gemm(qh.view(-1, dim), sh, tp0.qw_qkv, tp0.qs_qkv, tp0.b_qkv, out_dtype=x.dtype).view(b, s, 3, tp0.heads_per_rank, tp0.dim_head).permute(2, 0, 3, 1, 4)
+        qkv1 = w8a8_gemm(qh.view(-1, dim), sh, tp1.qw_qkv, tp1.qs_qkv, tp1.b_qkv, out_dtype=x.dtype).view(b, s, 3, tp1.heads_per_rank, tp1.dim_head).permute(2, 0, 3, 1, 4)
+        q0, k0, v0 = tp0.norm_q(qkv0[0]), tp0.norm_k(qkv0[1]), qkv0[2]
+        q1, k1, v1 = tp1.norm_q(qkv1[0]), tp1.norm_k(qkv1[1]), qkv1[2]
+        if rope is not None:
+            q0, k0 = tp0._apply_rope(q0, k0, rope)
+            q1, k1 = tp1._apply_rope(q1, k1, rope)
+        scale = 1.0 / math.sqrt(tp0.dim_head)
+        a0 = torch.nn.functional.scaled_dot_product_attention(q0, k0, v0, scale=scale).permute(0, 2, 1, 3).reshape(b * s, tp0.inner_dim_per_rank)
+        a1 = torch.nn.functional.scaled_dot_product_attention(q1, k1, v1, scale=scale).permute(0, 2, 1, 3).reshape(b * s, tp1.inner_dim_per_rank)
+        qa0, sa0 = quantize_int8_activation_convrot(a0, tp0.convrot_groupsize)
+        qa1, sa1 = quantize_int8_activation_convrot(a1, tp1.convrot_groupsize)
+        out0 = w8a8_gemm(qa0, sa0, tp0.qw_out, tp0.qs_out, tp0.b_out, out_dtype=x.dtype).view(b, s, dim)
+        out1 = w8a8_gemm(qa1, sa1, tp1.qw_out, tp1.qs_out, tp1.b_out, out_dtype=x.dtype).view(b, s, dim)
+        ar_attn = out0 + out1
+        x = x + tp0.scale1 * ar_attn
+        h2 = tp0.norm2(x)
+        qh2, sh2 = quantize_int8_activation_convrot(h2, tp0.convrot_groupsize)
+        w1_0 = w8a8_gemm(qh2.view(-1, dim), sh2, tp0.qw_w1, tp0.qs_w1, tp0.b_w1, out_dtype=x.dtype)
+        w1_1 = w8a8_gemm(qh2.view(-1, dim), sh2, tp1.qw_w1, tp1.qs_w1, tp1.b_w1, out_dtype=x.dtype)
+        g0, u0 = torch.chunk(w1_0, 2, dim=-1); swi0 = torch.nn.functional.silu(g0) * u0
+        g1, u1 = torch.chunk(w1_1, 2, dim=-1); swi1 = torch.nn.functional.silu(g1) * u1
+        qswi0, sswi0 = quantize_int8_activation_convrot(swi0, tp0.convrot_groupsize)
+        qswi1, sswi1 = quantize_int8_activation_convrot(swi1, tp1.convrot_groupsize)
+        w2_0 = w8a8_gemm(qswi0, sswi0, tp0.qw_w2, tp0.qs_w2, tp0.b_w2, out_dtype=x.dtype).view(b, s, dim)
+        w2_1 = w8a8_gemm(qswi1, sswi1, tp1.qw_w2, tp1.qs_w2, tp1.b_w2, out_dtype=x.dtype).view(b, s, dim)
+        ar_mlp = w2_0 + w2_1
+        x = x + tp0.scale2 * ar_mlp
+        return x
+
+    def simulate_sp_forward(sp0, sp1, x, rope):
+        b, s, dim = x.shape
+        s_loc = s // 2
+        x0, x1 = x[:, :s_loc, :], x[:, s_loc:, :]
+        hn0, hn1 = sp0.norm1(x0), sp1.norm1(x1)
+        qh0, sh0 = quantize_int8_activation_convrot(hn0, sp0.convrot_groupsize)
+        qh1, sh1 = quantize_int8_activation_convrot(hn1, sp1.convrot_groupsize)
+        qh_full = torch.cat([qh0, qh1], dim=1)
+        sh_full = torch.cat([sh0, sh1], dim=1)
+        qkv0 = w8a8_gemm(qh_full.view(-1, dim), sh_full.view(-1, 1), sp0.qw_qkv, sp0.qs_qkv, sp0.b_qkv, out_dtype=x.dtype).view(b, s, 3, sp0.heads_per_rank, sp0.dim_head).permute(2, 0, 3, 1, 4)
+        qkv1 = w8a8_gemm(qh_full.view(-1, dim), sh_full.view(-1, 1), sp1.qw_qkv, sp1.qs_qkv, sp1.b_qkv, out_dtype=x.dtype).view(b, s, 3, sp1.heads_per_rank, sp1.dim_head).permute(2, 0, 3, 1, 4)
+        q0, k0, v0 = sp0.norm_q(qkv0[0]), sp0.norm_k(qkv0[1]), qkv0[2]
+        q1, k1, v1 = sp1.norm_q(qkv1[0]), sp1.norm_k(qkv1[1]), qkv1[2]
+        if rope is not None:
+            q0, k0 = sp0._apply_rope(q0, k0, rope)
+            q1, k1 = sp1._apply_rope(q1, k1, rope)
+        scale = 1.0 / math.sqrt(sp0.dim_head)
+        a0 = torch.nn.functional.scaled_dot_product_attention(q0, k0, v0, scale=scale).permute(0, 2, 1, 3).reshape(b * s, sp0.inner_dim_per_rank)
+        a1 = torch.nn.functional.scaled_dot_product_attention(q1, k1, v1, scale=scale).permute(0, 2, 1, 3).reshape(b * s, sp1.inner_dim_per_rank)
+        qa0, sa0 = quantize_int8_activation_convrot(a0, sp0.convrot_groupsize)
+        qa1, sa1 = quantize_int8_activation_convrot(a1, sp1.convrot_groupsize)
+        out0 = w8a8_gemm(qa0, sa0, sp0.qw_out, sp0.qs_out, sp0.b_out, out_dtype=x.dtype).view(b, s, dim)
+        out1 = w8a8_gemm(qa1, sa1, sp1.qw_out, sp1.qs_out, sp1.b_out, out_dtype=x.dtype).view(b, s, dim)
+        red_attn = out0 + out1
+        x0 = x0 + sp0.scale1 * red_attn[:, :s_loc, :]
+        x1 = x1 + sp1.scale1 * red_attn[:, s_loc:, :]
+        hn2_0, hn2_1 = sp0.norm2(x0), sp1.norm2(x1)
+        qh2_0, sh2_0 = quantize_int8_activation_convrot(hn2_0, sp0.convrot_groupsize)
+        qh2_1, sh2_1 = quantize_int8_activation_convrot(hn2_1, sp1.convrot_groupsize)
+        qh2_full = torch.cat([qh2_0, qh2_1], dim=1)
+        sh2_full = torch.cat([sh2_0, sh2_1], dim=1)
+        w1_0 = w8a8_gemm(qh2_full.view(-1, dim), sh2_full.view(-1, 1), sp0.qw_w1, sp0.qs_w1, sp0.b_w1, out_dtype=x.dtype)
+        w1_1 = w8a8_gemm(qh2_full.view(-1, dim), sh2_full.view(-1, 1), sp1.qw_w1, sp1.qs_w1, sp1.b_w1, out_dtype=x.dtype)
+        g0, u0 = torch.chunk(w1_0, 2, dim=-1); swi0 = torch.nn.functional.silu(g0) * u0
+        g1, u1 = torch.chunk(w1_1, 2, dim=-1); swi1 = torch.nn.functional.silu(g1) * u1
+        qswi0, sswi0 = quantize_int8_activation_convrot(swi0, sp0.convrot_groupsize)
+        qswi1, sswi1 = quantize_int8_activation_convrot(swi1, sp1.convrot_groupsize)
+        w2_0 = w8a8_gemm(qswi0, sswi0, sp0.qw_w2, sp0.qs_w2, sp0.b_w2, out_dtype=x.dtype).view(b, s, dim)
+        w2_1 = w8a8_gemm(qswi1, sswi1, sp1.qw_w2, sp1.qs_w2, sp1.b_w2, out_dtype=x.dtype).view(b, s, dim)
+        red_mlp = w2_0 + w2_1
+        x0 = x0 + sp0.scale2 * red_mlp[:, :s_loc, :]
+        x1 = x1 + sp1.scale2 * red_mlp[:, s_loc:, :]
+        return torch.cat([x0, x1], dim=1)
 
     pos_embed = RotaryEmbeddingND(int(DIM_HEAD * ROPE_DIM_RATIO), rotary_base=100.0, n_dim=3).to(dev0)
 
@@ -297,7 +381,7 @@ def benchmark_video_vae_tp_suite(output_dir: str = "kaggle_output"):
         tp_peak_vram = tp_vram_weights + tp_vram_act
 
         with torch.no_grad():
-            tp_out = tp_block(x_init.clone(), rotary_pos_emb)
+            tp_out = simulate_tp_forward(tp_block, tp_block1, x_init.clone(), rotary_pos_emb)
         diff_tp = compute_numerical_metrics(tp_out, ref_out)
 
         row_tp = {
@@ -356,13 +440,9 @@ def benchmark_video_vae_tp_suite(output_dir: str = "kaggle_output"):
         sp_peak_vram = sp_vram_weights + sp_vram_act
 
         # Numerical comparison
-        # Pass S/2 local slice to sp_block
-        x_init_local = x_init[:, :S // 2, :]
         with torch.no_grad():
-            sp_out_local = sp_block(x_init_local.clone(), rotary_pos_emb)
-        # Reconstruct full output for metrics
-        sp_out_full = torch.cat([sp_out_local, sp_out_local], dim=1)
-        diff_sp = compute_numerical_metrics(sp_out_full, ref_out)
+            sp_out = simulate_sp_forward(sp_block, sp_block1, x_init.clone(), rotary_pos_emb)
+        diff_sp = compute_numerical_metrics(sp_out, ref_out)
 
         row_sp = {
             "workload": wl["name"],

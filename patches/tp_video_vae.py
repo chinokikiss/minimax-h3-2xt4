@@ -140,8 +140,8 @@ class SingleGPUViT3DBlockINT8(nn.Module):
         # Norms & Residual Scales
         self.norm1 = nn.LayerNorm(dim, eps=eps, elementwise_affine=False).to(self.device)
         self.norm2 = nn.LayerNorm(dim, eps=eps, elementwise_affine=False).to(self.device)
-        self.scale1 = nn.Parameter(torch.ones(dim, dtype=torch.float16, device=self.device))
-        self.scale2 = nn.Parameter(torch.ones(dim, dtype=torch.float16, device=self.device))
+        self.scale1 = nn.Parameter(torch.ones(dim, dtype=torch.float16, device=self.device), requires_grad=False)
+        self.scale2 = nn.Parameter(torch.ones(dim, dtype=torch.float16, device=self.device), requires_grad=False)
 
         # Head RMSNorms
         self.norm_q = nn.LayerNorm(dim_head, eps=eps, elementwise_affine=False).to(self.device)
@@ -164,16 +164,17 @@ class SingleGPUViT3DBlockINT8(nn.Module):
         self.qs_w2 = nn.Parameter(torch.empty(dim, 1, dtype=torch.float32, device=self.device), requires_grad=False)
         self.b_w2 = nn.Parameter(torch.zeros(dim, dtype=torch.float16, device=self.device), requires_grad=False)
 
+    @torch.no_grad()
     def load_from_fp16(self, qkv_w, qkv_b, out_w, out_b, w1_w, w1_b, w2_w, w2_b, s1, s2):
         qw, qs = quantize_weight_int8(qkv_w)
-        self.qw_qkv.copy_(qw); self.qs_qkv.copy_(qs); self.b_qkv.copy_(qkv_b)
+        self.qw_qkv.data.copy_(qw); self.qs_qkv.data.copy_(qs); self.b_qkv.data.copy_(qkv_b)
         qw, qs = quantize_weight_int8(out_w)
-        self.qw_out.copy_(qw); self.qs_out.copy_(qs); self.b_out.copy_(out_b)
+        self.qw_out.data.copy_(qw); self.qs_out.data.copy_(qs); self.b_out.data.copy_(out_b)
         qw, qs = quantize_weight_int8(w1_w)
-        self.qw_w1.copy_(qw); self.qs_w1.copy_(qs); self.b_w1.copy_(w1_b)
+        self.qw_w1.data.copy_(qw); self.qs_w1.data.copy_(qs); self.b_w1.data.copy_(w1_b)
         qw, qs = quantize_weight_int8(w2_w)
-        self.qw_w2.copy_(qw); self.qs_w2.copy_(qs); self.b_w2.copy_(w2_b)
-        self.scale1.copy_(s1); self.scale2.copy_(s2)
+        self.qw_w2.data.copy_(qw); self.qs_w2.data.copy_(qs); self.b_w2.data.copy_(w2_b)
+        self.scale1.data.copy_(s1); self.scale2.data.copy_(s2)
 
     def forward(self, x: torch.Tensor, rotary_pos_emb: Optional[torch.Tensor] = None) -> torch.Tensor:
         b, s, _ = x.shape
@@ -266,8 +267,8 @@ class TPViT3DBlockINT8(nn.Module):
         # Norms & Residual Scales
         self.norm1 = nn.LayerNorm(dim, eps=eps, elementwise_affine=False).to(self.device)
         self.norm2 = nn.LayerNorm(dim, eps=eps, elementwise_affine=False).to(self.device)
-        self.scale1 = nn.Parameter(torch.ones(dim, dtype=torch.float16, device=self.device))
-        self.scale2 = nn.Parameter(torch.ones(dim, dtype=torch.float16, device=self.device))
+        self.scale1 = nn.Parameter(torch.ones(dim, dtype=torch.float16, device=self.device), requires_grad=False)
+        self.scale2 = nn.Parameter(torch.ones(dim, dtype=torch.float16, device=self.device), requires_grad=False)
 
         self.norm_q = nn.LayerNorm(dim_head, eps=eps, elementwise_affine=False).to(self.device)
         self.norm_k = nn.LayerNorm(dim_head, eps=eps, elementwise_affine=False).to(self.device)
@@ -293,6 +294,7 @@ class TPViT3DBlockINT8(nn.Module):
         self.qs_w2 = nn.Parameter(torch.empty(dim, 1, dtype=torch.float32, device=self.device), requires_grad=False)
         self.b_w2 = nn.Parameter(torch.zeros(dim, dtype=torch.float16, device=self.device), requires_grad=False)
 
+    @torch.no_grad()
     def load_from_full(self, ref: SingleGPUViT3DBlockINT8):
         # Shard to_qkv by heads: 3 chunks of [heads, head_dim]
         # Full to_qkv is [3 * 2048, 2048]
@@ -305,14 +307,14 @@ class TPViT3DBlockINT8(nn.Module):
         sharded_w = torch.cat([q_w[start_h:end_h], k_w[start_h:end_h], v_w[start_h:end_h]], dim=0)
         sharded_s = torch.cat([q_s[start_h:end_h], k_s[start_h:end_h], v_s[start_h:end_h]], dim=0)
         sharded_b = torch.cat([q_b[start_h:end_h], k_b[start_h:end_h], v_b[start_h:end_h]], dim=0)
-        self.qw_qkv.copy_(sharded_w.to(self.device))
-        self.qs_qkv.copy_(sharded_s.to(self.device))
-        self.b_qkv.copy_(sharded_b.to(self.device))
+        self.qw_qkv.data.copy_(sharded_w.to(self.device))
+        self.qs_qkv.data.copy_(sharded_s.to(self.device))
+        self.b_qkv.data.copy_(sharded_b.to(self.device))
 
         # Shard to_out by columns: [2048, 2048] -> [2048, 1024]
-        self.qw_out.copy_(ref.qw_out.data[:, start_h:end_h].to(self.device))
-        self.qs_out.copy_(ref.qs_out.data.to(self.device))
-        self.b_out.copy_((ref.b_out.data / self.world_size).to(self.device))
+        self.qw_out.data.copy_(ref.qw_out.data[:, start_h:end_h].to(self.device))
+        self.qs_out.data.copy_(ref.qs_out.data.to(self.device))
+        self.b_out.data.copy_((ref.b_out.data / self.world_size).to(self.device))
 
         # Shard w1 by rows: gate [8192, 2048], up [8192, 2048]
         gate_w, up_w = torch.chunk(ref.qw_w1.data, 2, dim=0)
@@ -320,17 +322,17 @@ class TPViT3DBlockINT8(nn.Module):
         gate_b, up_b = torch.chunk(ref.b_w1.data, 2, dim=0)
         start_f = self.rank * self.ffn_dim_per_rank
         end_f = start_f + self.ffn_dim_per_rank
-        self.qw_w1.copy_(torch.cat([gate_w[start_f:end_f], up_w[start_f:end_f]], dim=0).to(self.device))
-        self.qs_w1.copy_(torch.cat([gate_s[start_f:end_f], up_s[start_f:end_f]], dim=0).to(self.device))
-        self.b_w1.copy_(torch.cat([gate_b[start_f:end_f], up_b[start_f:end_f]], dim=0).to(self.device))
+        self.qw_w1.data.copy_(torch.cat([gate_w[start_f:end_f], up_w[start_f:end_f]], dim=0).to(self.device))
+        self.qs_w1.data.copy_(torch.cat([gate_s[start_f:end_f], up_s[start_f:end_f]], dim=0).to(self.device))
+        self.b_w1.data.copy_(torch.cat([gate_b[start_f:end_f], up_b[start_f:end_f]], dim=0).to(self.device))
 
         # Shard w2 by columns: [2048, 8192] -> [2048, 4096]
-        self.qw_w2.copy_(ref.qw_w2.data[:, start_f:end_f].to(self.device))
-        self.qs_w2.copy_(ref.qs_w2.data.to(self.device))
-        self.b_w2.copy_((ref.b_w2.data / self.world_size).to(self.device))
+        self.qw_w2.data.copy_(ref.qw_w2.data[:, start_f:end_f].to(self.device))
+        self.qs_w2.data.copy_(ref.qs_w2.data.to(self.device))
+        self.b_w2.data.copy_((ref.b_w2.data / self.world_size).to(self.device))
 
-        self.scale1.copy_(ref.scale1.data.to(self.device))
-        self.scale2.copy_(ref.scale2.data.to(self.device))
+        self.scale1.data.copy_(ref.scale1.data.to(self.device))
+        self.scale2.data.copy_(ref.scale2.data.to(self.device))
 
     def forward(self, x: torch.Tensor, rotary_pos_emb: Optional[torch.Tensor] = None) -> torch.Tensor:
         b, s, _ = x.shape
@@ -428,8 +430,8 @@ class SPViT3DBlockINT8(nn.Module):
         # Norms & Residual Scales
         self.norm1 = nn.LayerNorm(dim, eps=eps, elementwise_affine=False).to(self.device)
         self.norm2 = nn.LayerNorm(dim, eps=eps, elementwise_affine=False).to(self.device)
-        self.scale1 = nn.Parameter(torch.ones(dim, dtype=torch.float16, device=self.device))
-        self.scale2 = nn.Parameter(torch.ones(dim, dtype=torch.float16, device=self.device))
+        self.scale1 = nn.Parameter(torch.ones(dim, dtype=torch.float16, device=self.device), requires_grad=False)
+        self.scale2 = nn.Parameter(torch.ones(dim, dtype=torch.float16, device=self.device), requires_grad=False)
 
         self.norm_q = nn.LayerNorm(dim_head, eps=eps, elementwise_affine=False).to(self.device)
         self.norm_k = nn.LayerNorm(dim_head, eps=eps, elementwise_affine=False).to(self.device)
@@ -451,6 +453,7 @@ class SPViT3DBlockINT8(nn.Module):
         self.qs_w2 = nn.Parameter(torch.empty(dim, 1, dtype=torch.float32, device=self.device), requires_grad=False)
         self.b_w2 = nn.Parameter(torch.zeros(dim, dtype=torch.float16, device=self.device), requires_grad=False)
 
+    @torch.no_grad()
     def load_from_full(self, ref: SingleGPUViT3DBlockINT8):
         q_w, k_w, v_w = torch.chunk(ref.qw_qkv.data, 3, dim=0)
         q_s, k_s, v_s = torch.chunk(ref.qs_qkv.data, 3, dim=0)
@@ -461,29 +464,29 @@ class SPViT3DBlockINT8(nn.Module):
         sharded_w = torch.cat([q_w[start_h:end_h], k_w[start_h:end_h], v_w[start_h:end_h]], dim=0)
         sharded_s = torch.cat([q_s[start_h:end_h], k_s[start_h:end_h], v_s[start_h:end_h]], dim=0)
         sharded_b = torch.cat([q_b[start_h:end_h], k_b[start_h:end_h], v_b[start_h:end_h]], dim=0)
-        self.qw_qkv.copy_(sharded_w.to(self.device))
-        self.qs_qkv.copy_(sharded_s.to(self.device))
-        self.b_qkv.copy_(sharded_b.to(self.device))
+        self.qw_qkv.data.copy_(sharded_w.to(self.device))
+        self.qs_qkv.data.copy_(sharded_s.to(self.device))
+        self.b_qkv.data.copy_(sharded_b.to(self.device))
 
-        self.qw_out.copy_(ref.qw_out.data[:, start_h:end_h].to(self.device))
-        self.qs_out.copy_(ref.qs_out.data.to(self.device))
-        self.b_out.copy_((ref.b_out.data / self.world_size).to(self.device))
+        self.qw_out.data.copy_(ref.qw_out.data[:, start_h:end_h].to(self.device))
+        self.qs_out.data.copy_(ref.qs_out.data.to(self.device))
+        self.b_out.data.copy_((ref.b_out.data / self.world_size).to(self.device))
 
         gate_w, up_w = torch.chunk(ref.qw_w1.data, 2, dim=0)
         gate_s, up_s = torch.chunk(ref.qs_w1.data, 2, dim=0)
         gate_b, up_b = torch.chunk(ref.b_w1.data, 2, dim=0)
         start_f = self.rank * self.ffn_dim_per_rank
         end_f = start_f + self.ffn_dim_per_rank
-        self.qw_w1.copy_(torch.cat([gate_w[start_f:end_f], up_w[start_f:end_f]], dim=0).to(self.device))
-        self.qs_w1.copy_(torch.cat([gate_s[start_f:end_f], up_s[start_f:end_f]], dim=0).to(self.device))
-        self.b_w1.copy_(torch.cat([gate_b[start_f:end_f], up_b[start_f:end_f]], dim=0).to(self.device))
+        self.qw_w1.data.copy_(torch.cat([gate_w[start_f:end_f], up_w[start_f:end_f]], dim=0).to(self.device))
+        self.qs_w1.data.copy_(torch.cat([gate_s[start_f:end_f], up_s[start_f:end_f]], dim=0).to(self.device))
+        self.b_w1.data.copy_(torch.cat([gate_b[start_f:end_f], up_b[start_f:end_f]], dim=0).to(self.device))
 
-        self.qw_w2.copy_(ref.qw_w2.data[:, start_f:end_f].to(self.device))
-        self.qs_w2.copy_(ref.qs_w2.data.to(self.device))
-        self.b_w2.copy_((ref.b_w2.data / self.world_size).to(self.device))
+        self.qw_w2.data.copy_(ref.qw_w2.data[:, start_f:end_f].to(self.device))
+        self.qs_w2.data.copy_(ref.qs_w2.data.to(self.device))
+        self.b_w2.data.copy_((ref.b_w2.data / self.world_size).to(self.device))
 
-        self.scale1.copy_(ref.scale1.data.to(self.device))
-        self.scale2.copy_(ref.scale2.data.to(self.device))
+        self.scale1.data.copy_(ref.scale1.data.to(self.device))
+        self.scale2.data.copy_(ref.scale2.data.to(self.device))
 
     def forward(self, x_local: torch.Tensor, rotary_pos_emb: Optional[torch.Tensor] = None) -> torch.Tensor:
         """
