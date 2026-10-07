@@ -262,16 +262,18 @@ def benchmark_dit_suite():
             torch.cuda.empty_cache()
 
     # Save benchmark results to JSON and CSV
-    os.makedirs("kaggle_output", exist_ok=True)
-    with open("kaggle_output/dit_benchmark_results.json", "w", encoding="utf-8") as f:
+    os.makedirs(output_dir, exist_ok=True)
+    with open(os.path.join(output_dir, "dit_benchmark_results.json"), "w", encoding="utf-8") as f:
         json.dump(benchmark_data, f, indent=2)
 
     import pandas as pd
     df = pd.DataFrame(benchmark_data)
-    df.to_csv("kaggle_output/dit_benchmark_results.csv", index=False)
-    print("\nSaved benchmark metrics to kaggle_output/dit_benchmark_results.csv")
+    csv_path = os.path.join(output_dir, "dit_benchmark_results.csv")
+    df.to_csv(csv_path, index=False)
+    print(f"\nSaved benchmark metrics to {csv_path}")
 
     return df
 
 if __name__ == "__main__":
-    benchmark_dit_suite()
+    out_dir = sys.argv[1] if len(sys.argv) > 1 else "kaggle_output"
+    benchmark_dit_suite(out_dir)

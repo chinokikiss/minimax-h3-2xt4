@@ -31,20 +31,24 @@ def quantize_int8_activation_convrot(x: torch.Tensor, convrot_groupsize: int = 2
     Output: qdata [M, K] in INT8, qscale [M, 1] in FP32
     """
     orig_shape = x.shape
-    x_2d = x.view(-1, orig_shape[-1])
+    x_2d = x.reshape(-1, orig_shape[-1])
     m, k = x_2d.shape
 
-    if HAS_CK and hasattr(torch.ops.comfy_kitchen, "quantize_int8_rowwise_convrot64"):
+    if HAS_CK and x.is_cuda and hasattr(torch.ops.comfy_kitchen, "quantize_int8_rowwise_convrot64"):
         qdata = torch.empty((m, k), dtype=torch.int8, device=x.device)
         qscale = torch.empty((m, 1), dtype=torch.float32, device=x.device)
-        # Call comfy_kitchen fused quantizer
         torch.ops.comfy_kitchen.quantize_int8_rowwise_convrot64(
             x_2d, qdata, qscale, convrot_groupsize, False, 0, 0, 0
         )
         return qdata.view(*orig_shape), qscale
-    elif HAS_CK and hasattr(comfy_kitchen, "quantize_int8_rowwise"):
-        # Builtin row-wise quantizer
-        qdata, qscale = comfy_kitchen.quantize_int8_rowwise(x_2d)
+    elif HAS_CK and x.is_cuda and hasattr(comfy_kitchen.backends.cuda, "quantize_int8_rowwise_convrot"):
+        qdata, qscale = comfy_kitchen.backends.cuda.quantize_int8_rowwise_convrot(x_2d, convrot_groupsize)
+        return qdata.view(*orig_shape), qscale
+    elif HAS_CK and hasattr(comfy_kitchen.backends.cuda, "_build_hadamard") and hasattr(comfy_kitchen.backends.cuda, "_rotate_activation"):
+        # Fallback preserving exact Hadamard ConvRot semantics
+        h = comfy_kitchen.backends.cuda._build_hadamard(convrot_groupsize, device=x_2d.device, dtype=x_2d.dtype)
+        x_rot = comfy_kitchen.backends.cuda._rotate_activation(x_2d, h, convrot_groupsize)
+        qdata, qscale = comfy_kitchen.quantize_int8_rowwise(x_rot)
         return qdata.view(*orig_shape), qscale
     else:
         # High-precision PyTorch reference quantizer

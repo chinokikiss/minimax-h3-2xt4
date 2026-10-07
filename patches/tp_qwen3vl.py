@@ -120,8 +120,8 @@ class TPTransformerBlockINT8(nn.Module):
     """
     Tensor Parallel Transformer block for Qwen3-VL-32B:
     Attention:
-      - Q: ColumnParallel (32 heads / rank)
-      - K: ColumnParallel (4 heads / rank)
+      - Q: ColumnParallel (32 heads / rank) + Q-Norm (RMSNorm)
+      - K: ColumnParallel (4 heads / rank) + K-Norm (RMSNorm)
       - V: ColumnParallel (4 heads / rank)
       - O: RowParallel + AllReduce
     MLP:
@@ -129,7 +129,7 @@ class TPTransformerBlockINT8(nn.Module):
       - Up: ColumnParallel (12800 / rank)
       - Down: RowParallel + AllReduce
     """
-    def __init__(self, hidden_size=5120, intermediate_size=25600, num_heads=64, num_kv_heads=8, head_dim=128, rank=0, world_size=2):
+    def __init__(self, hidden_size=5120, intermediate_size=25600, num_heads=64, num_kv_heads=8, head_dim=128, rank=0, world_size=2, device=None):
         super().__init__()
         self.hidden_size = hidden_size
         self.rank = rank
@@ -137,17 +137,33 @@ class TPTransformerBlockINT8(nn.Module):
         self.num_heads_per_rank = num_heads // world_size
         self.num_kv_heads_per_rank = num_kv_heads // world_size
         self.head_dim = head_dim
+        self.device = device or torch.device(f"cuda:{rank}" if torch.cuda.is_available() else "cpu")
 
-        self.input_layernorm = nn.LayerNorm(hidden_size, eps=1e-6)
+        self.input_layernorm = nn.RMSNorm(hidden_size, eps=1e-6).to(device=self.device, dtype=torch.float16)
         self.q_proj = ColumnParallelLinearINT8(hidden_size, num_heads * head_dim, rank, world_size)
         self.k_proj = ColumnParallelLinearINT8(hidden_size, num_kv_heads * head_dim, rank, world_size)
         self.v_proj = ColumnParallelLinearINT8(hidden_size, num_kv_heads * head_dim, rank, world_size)
+        self.q_norm = nn.RMSNorm(head_dim, eps=1e-6).to(device=self.device, dtype=torch.float16)
+        self.k_norm = nn.RMSNorm(head_dim, eps=1e-6).to(device=self.device, dtype=torch.float16)
         self.o_proj = RowParallelLinearINT8(num_heads * head_dim, hidden_size, rank, world_size)
 
-        self.post_attention_layernorm = nn.LayerNorm(hidden_size, eps=1e-6)
+        self.post_attention_layernorm = nn.RMSNorm(hidden_size, eps=1e-6).to(device=self.device, dtype=torch.float16)
         self.gate_proj = ColumnParallelLinearINT8(hidden_size, intermediate_size, rank, world_size)
         self.up_proj = ColumnParallelLinearINT8(hidden_size, intermediate_size, rank, world_size)
         self.down_proj = RowParallelLinearINT8(intermediate_size, hidden_size, rank, world_size)
+
+    def load_from_full_block(self, full_block):
+        self.input_layernorm.load_state_dict(full_block.input_layernorm.state_dict())
+        self.post_attention_layernorm.load_state_dict(full_block.post_attention_layernorm.state_dict())
+        self.q_norm.load_state_dict(full_block.q_norm.state_dict())
+        self.k_norm.load_state_dict(full_block.k_norm.state_dict())
+        self.q_proj.load_shard_from_full(full_block.q_proj.weight, full_block.q_proj.weight_scale)
+        self.k_proj.load_shard_from_full(full_block.k_proj.weight, full_block.k_proj.weight_scale)
+        self.v_proj.load_shard_from_full(full_block.v_proj.weight, full_block.v_proj.weight_scale)
+        self.o_proj.load_shard_from_full(full_block.o_proj.weight, full_block.o_proj.weight_scale)
+        self.gate_proj.load_shard_from_full(full_block.gate_proj.weight, full_block.gate_proj.weight_scale)
+        self.up_proj.load_shard_from_full(full_block.up_proj.weight, full_block.up_proj.weight_scale)
+        self.down_proj.load_shard_from_full(full_block.down_proj.weight, full_block.down_proj.weight_scale)
 
     def forward(self, x, attention_mask=None, freqs_cis=None):
         # 1. Self Attention
@@ -159,12 +175,25 @@ class TPTransformerBlockINT8(nn.Module):
         v = self.v_proj(normed_x) # [B, S, 4 * 128 = 512]
 
         B, S, _ = q.shape
-        q = q.view(B, S, self.num_heads_per_rank, self.head_dim).transpose(1, 2)
-        k = k.view(B, S, self.num_kv_heads_per_rank, self.head_dim).transpose(1, 2)
-        v = v.view(B, S, self.num_kv_heads_per_rank, self.head_dim).transpose(1, 2)
+        q = q.view(B, S, self.num_heads_per_rank, self.head_dim)
+        k = k.view(B, S, self.num_kv_heads_per_rank, self.head_dim)
+        v = v.view(B, S, self.num_kv_heads_per_rank, self.head_dim)
+
+        q = self.q_norm(q).transpose(1, 2)
+        k = self.k_norm(k).transpose(1, 2)
+        v = v.transpose(1, 2)
+
+        # GQA head repeating
+        if self.num_heads_per_rank != self.num_kv_heads_per_rank:
+            ratio = self.num_heads_per_rank // self.num_kv_heads_per_rank
+            k = k.repeat_interleave(ratio, dim=1)
+            v = v.repeat_interleave(ratio, dim=1)
 
         # GQA local attention
-        attn_out = comfy_kitchen.flash_attention(q, k, v) if hasattr(comfy_kitchen, "flash_attention") else torch.nn.functional.scaled_dot_product_attention(q, k, v, is_causal=True)
+        if callable(getattr(comfy_kitchen, "flash_attention", None)):
+            attn_out = comfy_kitchen.flash_attention(q, k, v)
+        else:
+            attn_out = torch.nn.functional.scaled_dot_product_attention(q, k, v, is_causal=False)
         attn_out = attn_out.transpose(1, 2).contiguous().view(B, S, -1)
 
         # RowParallel O projection + AllReduce 1
@@ -184,3 +213,4 @@ class TPTransformerBlockINT8(nn.Module):
         x = residual + mlp_out
 
         return x
+
