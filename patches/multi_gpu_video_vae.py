@@ -23,6 +23,16 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(
 if os.path.exists("/tmp/ComfyUI") and "/tmp/ComfyUI" not in sys.path:
     sys.path.insert(0, "/tmp/ComfyUI")
 
+# Fallback mock for comfy_aimdo if missing
+try:
+    import comfy_aimdo
+except ImportError:
+    import types
+    m = types.ModuleType("comfy_aimdo")
+    m.host_buffer = types.ModuleType("host_buffer")
+    sys.modules["comfy_aimdo"] = m
+    sys.modules["comfy_aimdo.host_buffer"] = m.host_buffer
+
 from comfy.ldm.minimax.vae import MiniMaxH3VideoVAE
 
 class MultiGPUVideoVAEDecoder:
