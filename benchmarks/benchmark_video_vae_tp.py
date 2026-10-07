@@ -282,6 +282,8 @@ def _tp_worker(rank: int, world_size: int, ckpt_path: str, workloads: List[Dict[
 
         times.sort()
         median_ms = times[len(times) // 2]
+        p95_ms = times[int(len(times) * 0.95)]
+        peak_vram_gb = torch.cuda.max_memory_allocated(device) / (1024**3)
         vram_tensor = torch.tensor([peak_vram_gb], device=device)
         vram_list = [torch.zeros(1, device=device) for _ in range(world_size)]
         dist.all_gather(vram_list, vram_tensor)
@@ -341,6 +343,8 @@ def _sp_worker(rank: int, world_size: int, ckpt_path: str, workloads: List[Dict[
 
         times.sort()
         median_ms = times[len(times) // 2]
+        p95_ms = times[int(len(times) * 0.95)]
+        peak_vram_gb = torch.cuda.max_memory_allocated(device) / (1024**3)
         vram_tensor = torch.tensor([peak_vram_gb], device=device)
         vram_list = [torch.zeros(1, device=device) for _ in range(world_size)]
         dist.all_gather(vram_list, vram_tensor)
