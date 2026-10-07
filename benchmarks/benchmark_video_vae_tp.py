@@ -282,15 +282,17 @@ def _tp_worker(rank: int, world_size: int, ckpt_path: str, workloads: List[Dict[
 
         times.sort()
         median_ms = times[len(times) // 2]
-        p95_ms = times[int(len(times) * 0.95)]
-        peak_vram_gb = torch.cuda.max_memory_allocated(device) / (1024**3)
+        vram_tensor = torch.tensor([peak_vram_gb], device=device)
+        vram_list = [torch.zeros(1, device=device) for _ in range(world_size)]
+        dist.all_gather(vram_list, vram_tensor)
 
         if rank == 0:
             torch.save(out.cpu(), f"/tmp/tp_output_{name}.pt")
             results[name] = {
                 "median_ms": median_ms,
                 "p95_ms": p95_ms,
-                "peak_vram_gb": peak_vram_gb,
+                "peak_vram_dev0_gb": vram_list[0].item(),
+                "peak_vram_dev1_gb": vram_list[1].item(),
             }
 
     if rank == 0:
@@ -339,15 +341,17 @@ def _sp_worker(rank: int, world_size: int, ckpt_path: str, workloads: List[Dict[
 
         times.sort()
         median_ms = times[len(times) // 2]
-        p95_ms = times[int(len(times) * 0.95)]
-        peak_vram_gb = torch.cuda.max_memory_allocated(device) / (1024**3)
+        vram_tensor = torch.tensor([peak_vram_gb], device=device)
+        vram_list = [torch.zeros(1, device=device) for _ in range(world_size)]
+        dist.all_gather(vram_list, vram_tensor)
 
         if rank == 0:
             torch.save(out.cpu(), f"/tmp/sp_output_{name}.pt")
             results[name] = {
                 "median_ms": median_ms,
                 "p95_ms": p95_ms,
-                "peak_vram_gb": peak_vram_gb,
+                "peak_vram_dev0_gb": vram_list[0].item(),
+                "peak_vram_dev1_gb": vram_list[1].item(),
             }
 
     if rank == 0:
@@ -533,9 +537,8 @@ def benchmark_video_vae_tp_suite(output_dir: str = "kaggle_output") -> Dict[str,
             "p95_ms": round(tp_res["p95_ms"], 2),
             "speedup": tp_speedup,
             "comm_lat_ms": tp_comm_lat_ms,
-            "comm_volume_mb": round(tp_comm_vol_mb, 2),
-            "peak_vram_dev0_gb": round(tp_res["peak_vram_gb"], 2),
-            "peak_vram_dev1_gb": round(tp_res["peak_vram_gb"], 2),
+            "peak_vram_dev0_gb": round(tp_res.get("peak_vram_dev0_gb", tp_res.get("peak_vram_gb", 0.0)), 2),
+            "peak_vram_dev1_gb": round(tp_res.get("peak_vram_dev1_gb", tp_res.get("peak_vram_gb", 0.0)), 2),
             "rel_l2": round(tp_metrics["rel_l2"], 6),
             "cos_sim": round(tp_metrics["cos_sim"], 6),
             "max_abs": round(tp_metrics["max_abs"], 6),
@@ -564,8 +567,8 @@ def benchmark_video_vae_tp_suite(output_dir: str = "kaggle_output") -> Dict[str,
             "speedup": sp_speedup,
             "comm_lat_ms": sp_comm_lat_ms,
             "comm_volume_mb": round(sp_comm_vol_mb, 2),
-            "peak_vram_dev0_gb": round(sp_res["peak_vram_gb"], 2),
-            "peak_vram_dev1_gb": round(sp_res["peak_vram_gb"], 2),
+            "peak_vram_dev0_gb": round(sp_res.get("peak_vram_dev0_gb", sp_res.get("peak_vram_gb", 0.0)), 2),
+            "peak_vram_dev1_gb": round(sp_res.get("peak_vram_dev1_gb", sp_res.get("peak_vram_gb", 0.0)), 2),
             "rel_l2": round(sp_metrics["rel_l2"], 6),
             "cos_sim": round(sp_metrics["cos_sim"], 6),
             "max_abs": round(sp_metrics["max_abs"], 6),

@@ -161,6 +161,10 @@ def create_tp_block_from_sd(
     s_out = sd[f"{prefix}attn.to_out.weight_scale"]
     b_out = sd.get(f"{prefix}attn.to_out.bias", None)
 
+    inner_dim_per_rank = 1024
+    h_start = rank * inner_dim_per_rank
+    h_end = h_start + inner_dim_per_rank
+
     sharded_w_out = w_out[:, h_start:h_end]
     sharded_s_out = s_out
     sharded_b_out = (b_out / world_size) if b_out is not None else None
