@@ -32,6 +32,15 @@ Profiling/capture tools such as `causal_trace.py`, `cpu_causal_trace.py`,
 explicitly. `MINIMAX_H3_PROFILE_DETAILS=1` enables bounded detail metrics only;
 it does not start a profiler or dump tensors.
 
+`te_compression_local.py` is a RAM-only lossless codec benchmark on real
+production-loaded TP2 TE tensors. It uses a separate `--deps` directory with
+`requirements-te-compression.txt`; it never installs packages into the active
+runtime. `build_te_compression_codecs.ps1` compiles unchanged upstream ZigZag
+and FSE library files for its C ABI. See the
+[compression report](../docs/reports/TE_COMPRESSION_LOCAL_20261020.md) for
+the results and the ZipNN INT8 blocker. No SSD or full-pipeline speedup is
+implied by its decode throughput.
+
 Historical builders/analysis scripts preserve earlier experiments. Their input
 artifacts may be local-only. Do not submit an old notebook or run its setup as a
 current deployment recipe. The frozen Kaggle setup requires a CPU-prepared Linux

@@ -1,0 +1,819 @@
+{
+  "numerical": {
+    "before": {
+      "rank_cases": 4,
+      "payload_changed": 0,
+      "scale_rows_changed": 0,
+      "max_output_abs": 0.0,
+      "max_output_rel_l2": 0.0,
+      "min_output_cosine": 1.0,
+      "all_bytes_exact": true
+    },
+    "lifetime": {
+      "rank_cases": 4,
+      "payload_changed": 0,
+      "scale_rows_changed": 0,
+      "max_output_abs": 0.0,
+      "max_output_rel_l2": 0.0,
+      "min_output_cosine": 1.0,
+      "all_bytes_exact": true
+    },
+    "owned": {
+      "rank_cases": 4,
+      "payload_changed": 0,
+      "scale_rows_changed": 0,
+      "max_output_abs": 0.0,
+      "max_output_rel_l2": 0.0,
+      "min_output_cosine": 1.0,
+      "all_bytes_exact": true
+    }
+  },
+  "comparisons": [
+    {
+      "stack": "multi",
+      "rows": 32768,
+      "scope": "fc2",
+      "variant": "before",
+      "timing": {
+        "wall_ms": {
+          "median": 427.4245685000153,
+          "minimum": 425.4933299999948,
+          "maximum": 439.14220400006343,
+          "count": 14,
+          "round_medians": [
+            426.63259299996525,
+            427.6789569998982
+          ]
+        },
+        "gpu_ms": {
+          "median": 427.3406982421875,
+          "minimum": 425.3941345214844,
+          "maximum": 439.04229736328125,
+          "count": 14,
+          "round_medians": [
+            426.5223083496094,
+            427.5768127441406
+          ]
+        }
+      },
+      "memory": [
+        {
+          "entry_mib": 2785.54833984375,
+          "temporary_mib": 3808.25,
+          "peak_allocated_mib": 6593.79833984375,
+          "peak_reserved_mib": 6606.0
+        },
+        {
+          "entry_mib": 2785.54833984375,
+          "temporary_mib": 3808.25,
+          "peak_allocated_mib": 6593.79833984375,
+          "peak_reserved_mib": 6606.0
+        }
+      ],
+      "wall_reduction_percent": 0.0
+    },
+    {
+      "stack": "multi",
+      "rows": 32768,
+      "scope": "fc2",
+      "variant": "lifetime",
+      "timing": {
+        "wall_ms": {
+          "median": 427.1383374999971,
+          "minimum": 425.3835370000161,
+          "maximum": 436.62928399999146,
+          "count": 14,
+          "round_medians": [
+            427.2496969999793,
+            426.58523099999
+          ]
+        },
+        "gpu_ms": {
+          "median": 427.0466003417969,
+          "minimum": 425.2811584472656,
+          "maximum": 436.54571533203125,
+          "count": 14,
+          "round_medians": [
+            427.1507568359375,
+            426.4978332519531
+          ]
+        }
+      },
+      "memory": [
+        {
+          "entry_mib": 2785.54833984375,
+          "temporary_mib": 3584.0,
+          "peak_allocated_mib": 6369.54833984375,
+          "peak_reserved_mib": 6382.0
+        },
+        {
+          "entry_mib": 2785.54833984375,
+          "temporary_mib": 3584.0,
+          "peak_allocated_mib": 6369.54833984375,
+          "peak_reserved_mib": 6382.0
+        }
+      ],
+      "wall_reduction_percent": 0.06696643597786656
+    },
+    {
+      "stack": "multi",
+      "rows": 32768,
+      "scope": "fc2",
+      "variant": "owned",
+      "timing": {
+        "wall_ms": {
+          "median": 405.86792700000274,
+          "minimum": 404.0873899999724,
+          "maximum": 408.9188269999795,
+          "count": 14,
+          "round_medians": [
+            405.8141209999917,
+            406.6629440000611
+          ]
+        },
+        "gpu_ms": {
+          "median": 405.7765655517578,
+          "minimum": 403.9843444824219,
+          "maximum": 408.8343505859375,
+          "count": 14,
+          "round_medians": [
+            405.7293701171875,
+            406.56610107421875
+          ]
+        }
+      },
+      "memory": [
+        {
+          "entry_mib": 2785.54833984375,
+          "temporary_mib": 1792.0,
+          "peak_allocated_mib": 4577.54833984375,
+          "peak_reserved_mib": 4590.0
+        },
+        {
+          "entry_mib": 2785.54833984375,
+          "temporary_mib": 1792.0,
+          "peak_allocated_mib": 4577.54833984375,
+          "peak_reserved_mib": 4590.0
+        }
+      ],
+      "wall_reduction_percent": 5.043379133694281
+    },
+    {
+      "stack": "multi",
+      "rows": 32768,
+      "scope": "ffn",
+      "variant": "before",
+      "timing": {
+        "wall_ms": {
+          "median": 797.8855559999829,
+          "minimum": 770.4719490000116,
+          "maximum": 812.4853479999956,
+          "count": 14,
+          "round_medians": [
+            785.8833290000007,
+            811.0044930000413
+          ]
+        },
+        "gpu_ms": {
+          "median": 797.7890014648438,
+          "minimum": 770.3825073242188,
+          "maximum": 812.387939453125,
+          "count": 14,
+          "round_medians": [
+            785.7872924804688,
+            810.9302368164062
+          ]
+        }
+      },
+      "memory": [
+        {
+          "entry_mib": 2785.54833984375,
+          "temporary_mib": 5600.25,
+          "peak_allocated_mib": 8385.79833984375,
+          "peak_reserved_mib": 9014.0
+        },
+        {
+          "entry_mib": 2785.54833984375,
+          "temporary_mib": 5600.25,
+          "peak_allocated_mib": 8385.79833984375,
+          "peak_reserved_mib": 9014.0
+        }
+      ],
+      "wall_reduction_percent": 0.0
+    },
+    {
+      "stack": "multi",
+      "rows": 32768,
+      "scope": "ffn",
+      "variant": "lifetime",
+      "timing": {
+        "wall_ms": {
+          "median": 804.0835245000153,
+          "minimum": 790.9587390000752,
+          "maximum": 816.8066230000477,
+          "count": 14,
+          "round_medians": [
+            810.8895259999827,
+            793.9584189999778
+          ]
+        },
+        "gpu_ms": {
+          "median": 803.9996337890625,
+          "minimum": 790.85205078125,
+          "maximum": 816.7068481445312,
+          "count": 14,
+          "round_medians": [
+            810.7949829101562,
+            793.8783569335938
+          ]
+        }
+      },
+      "memory": [
+        {
+          "entry_mib": 2785.54833984375,
+          "temporary_mib": 5376.0,
+          "peak_allocated_mib": 8161.54833984375,
+          "peak_reserved_mib": 9014.0
+        },
+        {
+          "entry_mib": 2785.54833984375,
+          "temporary_mib": 5376.0,
+          "peak_allocated_mib": 8161.54833984375,
+          "peak_reserved_mib": 9014.0
+        }
+      ],
+      "wall_reduction_percent": -0.776799185475241
+    },
+    {
+      "stack": "multi",
+      "rows": 32768,
+      "scope": "ffn",
+      "variant": "owned",
+      "timing": {
+        "wall_ms": {
+          "median": 781.6328890000079,
+          "minimum": 768.2685409999976,
+          "maximum": 796.5839999999957,
+          "count": 14,
+          "round_medians": [
+            790.2967229999831,
+            770.3041629999916
+          ]
+        },
+        "gpu_ms": {
+          "median": 781.53759765625,
+          "minimum": 768.1780395507812,
+          "maximum": 796.498779296875,
+          "count": 14,
+          "round_medians": [
+            790.2021484375,
+            770.2144775390625
+          ]
+        }
+      },
+      "memory": [
+        {
+          "entry_mib": 2785.54833984375,
+          "temporary_mib": 3752.125,
+          "peak_allocated_mib": 6537.67333984375,
+          "peak_reserved_mib": 8118.0
+        },
+        {
+          "entry_mib": 2785.54833984375,
+          "temporary_mib": 3752.125,
+          "peak_allocated_mib": 6537.67333984375,
+          "peak_reserved_mib": 8118.0
+        }
+      ],
+      "wall_reduction_percent": 2.036967191316763
+    },
+    {
+      "stack": "multi",
+      "rows": 32768,
+      "scope": "quant",
+      "variant": "before",
+      "timing": {
+        "wall_ms": {
+          "median": 84.83557199997449,
+          "minimum": 82.72860699997864,
+          "maximum": 86.90434599998298,
+          "count": 14,
+          "round_medians": [
+            82.86799499995823,
+            86.5020960000038
+          ]
+        },
+        "gpu_ms": {
+          "median": 84.75503921508789,
+          "minimum": 82.67257690429688,
+          "maximum": 86.85266876220703,
+          "count": 14,
+          "round_medians": [
+            82.78291320800781,
+            86.4521255493164
+          ]
+        }
+      },
+      "memory": [
+        {
+          "entry_mib": 2785.54833984375,
+          "temporary_mib": 3808.25,
+          "peak_allocated_mib": 6593.79833984375,
+          "peak_reserved_mib": 6606.0
+        },
+        {
+          "entry_mib": 2785.54833984375,
+          "temporary_mib": 3808.25,
+          "peak_allocated_mib": 6593.79833984375,
+          "peak_reserved_mib": 6606.0
+        }
+      ],
+      "wall_reduction_percent": 0.0
+    },
+    {
+      "stack": "multi",
+      "rows": 32768,
+      "scope": "quant",
+      "variant": "lifetime",
+      "timing": {
+        "wall_ms": {
+          "median": 86.3665365000088,
+          "minimum": 84.91174599998885,
+          "maximum": 87.8348769999775,
+          "count": 14,
+          "round_medians": [
+            85.47290100000282,
+            87.21079000008558
+          ]
+        },
+        "gpu_ms": {
+          "median": 86.3113899230957,
+          "minimum": 84.84864044189453,
+          "maximum": 87.77526092529297,
+          "count": 14,
+          "round_medians": [
+            85.41458892822266,
+            87.12601470947266
+          ]
+        }
+      },
+      "memory": [
+        {
+          "entry_mib": 2785.54833984375,
+          "temporary_mib": 3584.0,
+          "peak_allocated_mib": 6369.54833984375,
+          "peak_reserved_mib": 6382.0
+        },
+        {
+          "entry_mib": 2785.54833984375,
+          "temporary_mib": 3584.0,
+          "peak_allocated_mib": 6369.54833984375,
+          "peak_reserved_mib": 6382.0
+        }
+      ],
+      "wall_reduction_percent": -1.8046256587210596
+    },
+    {
+      "stack": "multi",
+      "rows": 32768,
+      "scope": "quant",
+      "variant": "owned",
+      "timing": {
+        "wall_ms": {
+          "median": 57.55718400001797,
+          "minimum": 56.97940300001392,
+          "maximum": 58.51015500002177,
+          "count": 14,
+          "round_medians": [
+            57.32903099999476,
+            58.293607000052816
+          ]
+        },
+        "gpu_ms": {
+          "median": 57.48904037475586,
+          "minimum": 56.92204666137695,
+          "maximum": 58.4334716796875,
+          "count": 14,
+          "round_medians": [
+            57.27052688598633,
+            58.23484802246094
+          ]
+        }
+      },
+      "memory": [
+        {
+          "entry_mib": 2785.54833984375,
+          "temporary_mib": 1792.0,
+          "peak_allocated_mib": 4577.54833984375,
+          "peak_reserved_mib": 4590.0
+        },
+        {
+          "entry_mib": 2785.54833984375,
+          "temporary_mib": 1792.0,
+          "peak_allocated_mib": 4577.54833984375,
+          "peak_reserved_mib": 4590.0
+        }
+      ],
+      "wall_reduction_percent": 32.154422203889574
+    },
+    {
+      "stack": "none",
+      "rows": 32768,
+      "scope": "fc2",
+      "variant": "before",
+      "timing": {
+        "wall_ms": {
+          "median": 302.18004199997495,
+          "minimum": 294.1001720000145,
+          "maximum": 308.9986109999927,
+          "count": 14,
+          "round_medians": [
+            296.1358539999992,
+            306.6622430000052
+          ]
+        },
+        "gpu_ms": {
+          "median": 302.0924530029297,
+          "minimum": 294.03546142578125,
+          "maximum": 308.9135437011719,
+          "count": 14,
+          "round_medians": [
+            296.0480651855469,
+            306.56103515625
+          ]
+        }
+      },
+      "memory": [
+        {
+          "entry_mib": 2665.00146484375,
+          "temporary_mib": 3808.25,
+          "peak_allocated_mib": 6473.25146484375,
+          "peak_reserved_mib": 6482.0
+        },
+        {
+          "entry_mib": 2665.00146484375,
+          "temporary_mib": 3808.25,
+          "peak_allocated_mib": 6473.25146484375,
+          "peak_reserved_mib": 6482.0
+        }
+      ],
+      "wall_reduction_percent": 0.0
+    },
+    {
+      "stack": "none",
+      "rows": 32768,
+      "scope": "fc2",
+      "variant": "lifetime",
+      "timing": {
+        "wall_ms": {
+          "median": 302.20541600002093,
+          "minimum": 297.4323739999818,
+          "maximum": 305.7006359999832,
+          "count": 14,
+          "round_medians": [
+            297.8493159999971,
+            303.34952000004023
+          ]
+        },
+        "gpu_ms": {
+          "median": 302.09910583496094,
+          "minimum": 297.344482421875,
+          "maximum": 305.62274169921875,
+          "count": 14,
+          "round_medians": [
+            297.7542419433594,
+            303.2655029296875
+          ]
+        }
+      },
+      "memory": [
+        {
+          "entry_mib": 2665.00146484375,
+          "temporary_mib": 3584.0,
+          "peak_allocated_mib": 6249.00146484375,
+          "peak_reserved_mib": 6258.0
+        },
+        {
+          "entry_mib": 2665.00146484375,
+          "temporary_mib": 3584.0,
+          "peak_allocated_mib": 6249.00146484375,
+          "peak_reserved_mib": 6258.0
+        }
+      ],
+      "wall_reduction_percent": -0.008396980779412644
+    },
+    {
+      "stack": "none",
+      "rows": 32768,
+      "scope": "fc2",
+      "variant": "owned",
+      "timing": {
+        "wall_ms": {
+          "median": 279.21795900002166,
+          "minimum": 273.44353600000204,
+          "maximum": 282.23873100000674,
+          "count": 14,
+          "round_medians": [
+            276.0579419999658,
+            280.6026800000154
+          ]
+        },
+        "gpu_ms": {
+          "median": 279.13319396972656,
+          "minimum": 273.3608093261719,
+          "maximum": 282.1573486328125,
+          "count": 14,
+          "round_medians": [
+            275.9741516113281,
+            280.5119323730469
+          ]
+        }
+      },
+      "memory": [
+        {
+          "entry_mib": 2665.00146484375,
+          "temporary_mib": 1792.0,
+          "peak_allocated_mib": 4457.00146484375,
+          "peak_reserved_mib": 4466.0
+        },
+        {
+          "entry_mib": 2665.00146484375,
+          "temporary_mib": 1792.0,
+          "peak_allocated_mib": 4457.00146484375,
+          "peak_reserved_mib": 4466.0
+        }
+      ],
+      "wall_reduction_percent": 7.598808593704276
+    },
+    {
+      "stack": "none",
+      "rows": 32768,
+      "scope": "ffn",
+      "variant": "before",
+      "timing": {
+        "wall_ms": {
+          "median": 470.03272500001003,
+          "minimum": 451.7994839999915,
+          "maximum": 484.7584299999994,
+          "count": 14,
+          "round_medians": [
+            456.31440800002565,
+            481.4466139999922
+          ]
+        },
+        "gpu_ms": {
+          "median": 469.93780517578125,
+          "minimum": 451.7049560546875,
+          "maximum": 484.6440124511719,
+          "count": 14,
+          "round_medians": [
+            456.2309265136719,
+            481.3493957519531
+          ]
+        }
+      },
+      "memory": [
+        {
+          "entry_mib": 2665.00146484375,
+          "temporary_mib": 5600.25,
+          "peak_allocated_mib": 8265.25146484375,
+          "peak_reserved_mib": 8890.0
+        },
+        {
+          "entry_mib": 2665.00146484375,
+          "temporary_mib": 5600.25,
+          "peak_allocated_mib": 8265.25146484375,
+          "peak_reserved_mib": 8890.0
+        }
+      ],
+      "wall_reduction_percent": 0.0
+    },
+    {
+      "stack": "none",
+      "rows": 32768,
+      "scope": "ffn",
+      "variant": "lifetime",
+      "timing": {
+        "wall_ms": {
+          "median": 466.98467799998866,
+          "minimum": 458.252874999971,
+          "maximum": 479.6077009999635,
+          "count": 14,
+          "round_medians": [
+            459.4567199999915,
+            478.205249000041
+          ]
+        },
+        "gpu_ms": {
+          "median": 466.8727111816406,
+          "minimum": 458.1560363769531,
+          "maximum": 479.5017395019531,
+          "count": 14,
+          "round_medians": [
+            459.3459167480469,
+            478.0829772949219
+          ]
+        }
+      },
+      "memory": [
+        {
+          "entry_mib": 2665.00146484375,
+          "temporary_mib": 5376.0,
+          "peak_allocated_mib": 8041.00146484375,
+          "peak_reserved_mib": 8890.0
+        },
+        {
+          "entry_mib": 2665.00146484375,
+          "temporary_mib": 5376.0,
+          "peak_allocated_mib": 8041.00146484375,
+          "peak_reserved_mib": 8890.0
+        }
+      ],
+      "wall_reduction_percent": 0.6484754864719888
+    },
+    {
+      "stack": "none",
+      "rows": 32768,
+      "scope": "ffn",
+      "variant": "owned",
+      "timing": {
+        "wall_ms": {
+          "median": 438.84772250001447,
+          "minimum": 432.46576500001765,
+          "maximum": 447.56540700001324,
+          "count": 14,
+          "round_medians": [
+            434.36078099995257,
+            442.58890300000076
+          ]
+        },
+        "gpu_ms": {
+          "median": 438.75502014160156,
+          "minimum": 432.3704528808594,
+          "maximum": 447.4681091308594,
+          "count": 14,
+          "round_medians": [
+            434.2635803222656,
+            442.49700927734375
+          ]
+        }
+      },
+      "memory": [
+        {
+          "entry_mib": 2665.00146484375,
+          "temporary_mib": 3752.125,
+          "peak_allocated_mib": 6417.12646484375,
+          "peak_reserved_mib": 7098.0
+        },
+        {
+          "entry_mib": 2665.00146484375,
+          "temporary_mib": 3752.125,
+          "peak_allocated_mib": 6417.12646484375,
+          "peak_reserved_mib": 7098.0
+        }
+      ],
+      "wall_reduction_percent": 6.634644960091851
+    },
+    {
+      "stack": "none",
+      "rows": 32768,
+      "scope": "quant",
+      "variant": "before",
+      "timing": {
+        "wall_ms": {
+          "median": 78.76875000002315,
+          "minimum": 75.09572999998682,
+          "maximum": 82.09085800001503,
+          "count": 14,
+          "round_medians": [
+            75.96025700001974,
+            81.56793899996728
+          ]
+        },
+        "gpu_ms": {
+          "median": 78.71201705932617,
+          "minimum": 75.04608154296875,
+          "maximum": 82.04108428955078,
+          "count": 14,
+          "round_medians": [
+            75.88861083984375,
+            81.49852752685547
+          ]
+        }
+      },
+      "memory": [
+        {
+          "entry_mib": 2665.00146484375,
+          "temporary_mib": 3808.25,
+          "peak_allocated_mib": 6473.25146484375,
+          "peak_reserved_mib": 6482.0
+        },
+        {
+          "entry_mib": 2665.00146484375,
+          "temporary_mib": 3808.25,
+          "peak_allocated_mib": 6473.25146484375,
+          "peak_reserved_mib": 6482.0
+        }
+      ],
+      "wall_reduction_percent": 0.0
+    },
+    {
+      "stack": "none",
+      "rows": 32768,
+      "scope": "quant",
+      "variant": "lifetime",
+      "timing": {
+        "wall_ms": {
+          "median": 78.57700499997122,
+          "minimum": 76.56541899996228,
+          "maximum": 80.41404499999771,
+          "count": 14,
+          "round_medians": [
+            76.8078810000361,
+            80.21782899999153
+          ]
+        },
+        "gpu_ms": {
+          "median": 78.51892852783203,
+          "minimum": 76.50975799560547,
+          "maximum": 80.35763549804688,
+          "count": 14,
+          "round_medians": [
+            76.75100708007812,
+            80.16246032714844
+          ]
+        }
+      },
+      "memory": [
+        {
+          "entry_mib": 2665.00146484375,
+          "temporary_mib": 3584.0,
+          "peak_allocated_mib": 6249.00146484375,
+          "peak_reserved_mib": 6258.0
+        },
+        {
+          "entry_mib": 2665.00146484375,
+          "temporary_mib": 3584.0,
+          "peak_allocated_mib": 6249.00146484375,
+          "peak_reserved_mib": 6258.0
+        }
+      ],
+      "wall_reduction_percent": 0.24342775536220218
+    },
+    {
+      "stack": "none",
+      "rows": 32768,
+      "scope": "quant",
+      "variant": "owned",
+      "timing": {
+        "wall_ms": {
+          "median": 49.63406750002264,
+          "minimum": 48.76804599996376,
+          "maximum": 50.50492300000542,
+          "count": 14,
+          "round_medians": [
+            49.2891569999756,
+            50.01087200002985
+          ]
+        },
+        "gpu_ms": {
+          "median": 49.583791732788086,
+          "minimum": 48.7163200378418,
+          "maximum": 50.45654296875,
+          "count": 14,
+          "round_medians": [
+            49.22819137573242,
+            49.94761657714844
+          ]
+        }
+      },
+      "memory": [
+        {
+          "entry_mib": 2665.00146484375,
+          "temporary_mib": 1792.0,
+          "peak_allocated_mib": 4457.00146484375,
+          "peak_reserved_mib": 4466.0
+        },
+        {
+          "entry_mib": 2665.00146484375,
+          "temporary_mib": 1792.0,
+          "peak_allocated_mib": 4457.00146484375,
+          "peak_reserved_mib": 4466.0
+        }
+      ],
+      "wall_reduction_percent": 36.987615647057936
+    }
+  ],
+  "source_matches": {
+    "patches/tilelang_swiglu_pad.py": true,
+    "patches/tilelang_row_quant.py": true,
+    "patches/optimized_tp.py": true,
+    "patches/h3_lora.py": true,
+    "benchmarks/fc2_quant_memory.py": true,
+    "benchmarks/fc2_quant_candidates.py": true,
+    "patches/h3_operator_policy.py": true,
+    "semantic_results/fc2_quant_memory/baseline/tilelang_swiglu_pad.py": true
+  },
+  "scope": "Real block0 FC1/FC2 projections with seeded inputs; no complete generation claim",
+  "owned_scope": "Explicit opt-in owned_fp32 production quantizer; reduced FP32 GEMM M can change rounding; no universal byte guarantee"
+}

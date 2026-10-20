@@ -127,7 +127,7 @@ def main():
         source_identity_gates=sum(j.get('source_identity_gate',False) for j in result['jobs']),
         fresh_process_output_checks=sum(len(j.get('fresh_process_identity',[])) for j in result['jobs']),
         measured_event_samples=sum(c['API']['repeats'] for j in result['jobs'] for run in ('screen','repeat') for r in j['raw'][run] for c in r['cases'] if c.get('API')))
-    (ROOT/'TP2_P2_RESULTS.json').write_text(json.dumps(result,indent=2))
+    (ROOT/'docs/data/TP2_P2_RESULTS.json').write_text(json.dumps(result,indent=2))
     lines=['| Job | Version | Site | Variant | Round | Slower rank API ms | Reduction % | Peak allocated MiB | Relative RMSE % |', '|---|---|---|---|---|---:|---:|---:|---:|']
     for r in result['comparisons']:
         mem=f"{r['max_peak_allocated_bytes']/2**20:.1f}" if 'max_peak_allocated_bytes' in r else '—'

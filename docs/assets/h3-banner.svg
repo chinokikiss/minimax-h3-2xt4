@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="260" viewBox="0 0 1200 260" role="img" aria-labelledby="title desc">
+  <title id="title">MiniMax-H3 - TP2 inference for two NVIDIA T4 GPUs</title>
+  <desc id="desc">INT8 operators, bounded weight residency, and Native ComfyUI integration.</desc>
+  <rect width="1200" height="260" rx="18" fill="#142b40"/>
+  <path d="M610 0V260M0 219H1200" stroke="#284357" stroke-width="1"/>
+  <rect x="48" y="36" width="62" height="5" rx="2" fill="#53d0c1"/>
+  <g font-family="Segoe UI,Arial,sans-serif">
+    <text x="48" y="104" font-size="47" font-weight="700" fill="#ffffff">MiniMax-H3</text>
+    <text x="50" y="144" font-size="21" fill="#d1e0e9">TP2 inference for two NVIDIA T4 GPUs</text>
+    <text x="50" y="180" font-size="15" fill="#91b3c6">INT8 operators | bounded weight residency</text>
+    <text x="50" y="244" font-size="12" letter-spacing="1.5" fill="#53d0c1">SOURCE-AUDITED IMPLEMENTATION</text>
+    <text x="650" y="53" font-size="12" letter-spacing="1.4" fill="#91b3c6">NATIVE COMFYUI PIPELINE</text>
+    <g fill="#e7f3f1">
+      <rect x="650" y="78" width="150" height="96" rx="10"/>
+      <rect x="818" y="78" width="150" height="96" rx="10"/>
+      <rect x="986" y="78" width="150" height="96" rx="10"/>
+    </g>
+    <g fill="#142b40" text-anchor="middle">
+      <text x="725" y="116" font-size="20" font-weight="700">TE</text>
+      <text x="893" y="116" font-size="20" font-weight="700">DiT</text>
+      <text x="1061" y="116" font-size="20" font-weight="700">VAE</text>
+      <text x="725" y="145" font-size="13">Group32 dense</text>
+      <text x="893" y="145" font-size="13">Kitchen INT8</text>
+      <text x="1061" y="145" font-size="13">Query / channel</text>
+    </g>
+    <path d="M801 126H815M969 126H983" stroke="#53d0c1" stroke-width="2"/>
+    <text x="650" y="244" font-size="12" letter-spacing="1.5" fill="#53d0c1">SM75 / TP2 / PINNED RUNTIME</text>
+  </g>
+</svg>

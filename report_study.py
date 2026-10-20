@@ -77,8 +77,8 @@ def main():
         'Throughput cohorts execute the same M independent batch-1 requests for Native, TP and PP. TE true-batch-2 latency is shown separately from PP microbatch-1 execution and is not used as its speedup baseline. Full TE is text-only prefill, without vision/KV decoding; full DiT uses synthetic text conditioning and one audiovisual denoising step without reference conditions or denoise masks. The results do not validate arbitrary multimodal payloads, generation quality or end-to-end sampling.','',
         'Allocated/reserved peaks, resident allocation and peak temporary increments are in the measured JSON. Kernel duration sums, memcpy times, launches and per-device kernel-free gaps are in the trace analysis. Those gaps are activity-timeline evidence, not SM occupancy; NCCL busy kernels can include waiting. Bootstrap intervals describe within-session samples, not independent allocation uncertainty.','']
     if not final:report+=['The final TE/DiT recommendations remain pending physical optimized/full-model results. Baseline evidence supports replacing the measured overhead, not claiming an optimization speedup.','']
-    (ROOT/'TE_DIT_STUDY_REPORT.md').write_text('\n'.join(report),encoding='utf-8')
-    print(ROOT/'TE_DIT_STUDY_REPORT.md')
+    (ROOT/'docs/reports/TE_DIT_STUDY_REPORT.md').write_text('\n'.join(report),encoding='utf-8')
+    print(ROOT/'docs/reports/TE_DIT_STUDY_REPORT.md')
 
 
 if __name__=='__main__':main()

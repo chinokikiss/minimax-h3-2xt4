@@ -7,7 +7,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 ROOT=Path(__file__).resolve().parents[1];out=Path('D:/attention_eval/tp2_p2_20261018')
-data=json.loads((ROOT/'TP2_P2_RESULTS.json').read_text())
+data=json.loads((ROOT/'docs/data/TP2_P2_RESULTS.json').read_text())
 fig,axes=plt.subplots(2,2,figsize=(12,8),gridspec_kw={'height_ratios':[2,1]},layout='constrained')
 methods=['int32','fp16','fp16_fused','int8_gather','int8_gather_fused'];labels=['INT32','FP16','FP16 fused','INT8','INT8 fused'];colors=['#555555','#2886bd','#2886bd','#d47b13','#d47b13']
 for col,site in enumerate(['communication/o_l25_s9','communication/fc2_l0_s0']):

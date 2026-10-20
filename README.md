@@ -1,87 +1,69 @@
-# MiniMax-H3 on two NVIDIA T4 GPUs
+<p align="center">
+  <img src="docs/assets/h3-banner.svg" alt="MiniMax-H3 - TP2 inference for two NVIDIA T4 GPUs" width="100%">
+</p>
 
-Persistent TP2 workers for MiniMax-H3, with Native ComfyUI conditioning,
-sampling and public VAE planning. Runtime code, numerical references, profiling
-and historical experiments have separate entry points. Full-pipeline speedups
-must not be inferred from operator measurements.
+<p align="center">
+  <a href="docs/guides/MiniMax_H3_TP2_Optimization_Technical_Guide.pdf"><b>Technical guide (PDF)</b></a> &nbsp; / &nbsp;
+  <a href="docs/README.md">Documentation</a> &nbsp; / &nbsp;
+  <a href="docs/guides/H3_LEGACY_RUNTIME.md">Setup</a> &nbsp; / &nbsp;
+  <a href="docs/reports/H3_PIPELINE_REVIEW.md">Validation status</a>
+</p>
 
-## Preserved runtime
+MiniMax-H3 Ref2VA inference with persistent tensor-parallel workers, INT8 operators,
+bounded weight residency, and parallel VAE decoding. Native ComfyUI retains
+conditioning, sampling, and public VAE planning.
 
-- ComfyUI: local `ComfyUI` checkout at `d49e888586dd8ae012c0667b33466b815fee07f7`, with the validated attention interface.
-- Local Python: `C:\ProgramData\miniconda3\envs\comfyui\python.exe`.
-- Exact package snapshot: [runtime/local_conda.json](runtime/local_conda.json).
-- Models: `D:\minimaxH3`, configured by `h3_legacy_model_paths.yaml`.
-- No upstream code updates or implicit package substitutions during setup.
+> **Deployment status:** the validated local source and dependency versions are
+> frozen. The matching Linux/T4 stack still requires explicit platform/ABI
+> qualification. Historical T4 operator results are documented separately;
+> they are not a full-pipeline speedup claim.
+
+## Start here
+
+| Resource | What you will find |
+|---|---|
+| [30-page technical guide](docs/guides/MiniMax_H3_TP2_Optimization_Technical_Guide.pdf) | Architecture diagrams, numerical contracts, memory charts, and implementation details |
+| [Runtime setup](docs/guides/H3_LEGACY_RUNTIME.md) | Pinned ComfyUI, conda environment, launch commands, and platform limits |
+| [Operator configuration](docs/guides/H3_OPERATOR_INTEGRATION.md) | Backend choices, workflow integration, and qualification scope |
+| [Loading and LoRA](docs/guides/H3_LOADING_STAGES.md) | Layer-parallel baking, staged VAEs, and idle preloading |
+| [All documentation](docs/README.md) | Current guides, experiment reports, design notes, and historical records |
+
+## Local preview
+
+Run from the repository root with the existing `comfyui` conda environment:
 
 ```powershell
 .\launch_h3_legacy.cmd --preview --check
 .\launch_h3_legacy.cmd --preview
 ```
 
-The preview starts the selected ComfyUI on a one-GPU host; executing TP2 requires
-two matching GPUs and NCCL. Node/API isolation is available with `--isolated-ui`
-for smoke tests. Dynamic VRAM is disabled because workers own the weight window.
-The selected checkout uses its own plugin and user directories.
+The preview supports a single-GPU host. Physical TP2 execution requires two
+matching CUDA GPUs and NCCL. Keep the pinned attention API and package versions;
+see the [frozen runtime record](runtime/README.md).
 
-**Kaggle status:** the Windows conda snapshot is preserved, but its Linux/T4
-stack is not yet qualified. Linux-only CUDA/NCCL/Triton dependencies require an
-explicit platform lock and ABI validation. The historical TileLang 0.1.15 gate
-is retained; it does not qualify the snapshot's TileLang 0.1.13. Setup blocks on
-these differences. See [runtime setup and limits](H3_LEGACY_RUNTIME.md).
+## Current defaults
 
-## Operator defaults
+| Component | Selection |
+|---|---|
+| TE / DiT / Token Refiner | TileLang Group32 dense / Kitchen INT8 / Native SDPA |
+| Row projections | TileLang packed, global row scales, native INT32 SUM |
+| DiT FC2 | Owned FP32 rotation with fused SwiGLU preparation |
+| Video / Audio VAE | Aligned query parallelism with Kitchen INT8 / FP32 channel parallelism |
+| LoRA | Online, with Selective B for qualified FC1 shapes; offline baking optional |
 
-| Component | Default | Optional choices |
-|---|---|---|
-| TE attention | TileLang Group32 dense | Native |
-| DiT attention | Kitchen INT8 | TileLang dense, dropping, scalar pooling; Native |
-| Token Refiner | Native SDPA | Native projections, norms and RoPE retained |
-| Video VAE | Kitchen INT8, aligned query partitioning | Native decode fallback |
-| Row projections | TileLang packed, native INT32 SUM | Native; approximate scaled FP16 SUM |
-| SwiGLU | Fused padding | Disable fusion |
-| LoRA B GEMM | Selective B for qualified FC1 geometry | Full B for other sites |
-| Audio VAE | FP32 stereo channel parallel | Native; small rounding differences are expected |
+Sparse dropping/scalar pooling, scaled FP16 transport, adaptive lookahead, and
+idle residency are explicit options. Numerical differences and Native fallbacks
+are explained in the [technical guide](docs/guides/MiniMax_H3_TP2_Optimization_Technical_Guide.pdf).
 
-LoRA loading defaults to online; offline baking is optional and assigns whole
-layers to up to two GPU workers. Reference VAEs load encoders first and decoders
-at output time. Idle residency optionally preloads encoders and TE weights.
-See [operator integration](H3_OPERATOR_INTEGRATION.md),
-[enhancements](H3_OPERATOR_ENHANCEMENTS.md), and [loading stages](H3_LOADING_STAGES.md).
+## Repository map
 
-## Code boundaries
+| Directory | Purpose |
+|---|---|
+| [`patches/`](patches/) | Runtime, operators, loaders, and residency control |
+| [`custom_nodes/`](custom_nodes/) · [`workflows/`](workflows/) | ComfyUI integration and workflow graphs |
+| [`benchmarks/`](benchmarks/README.md) | Explicit tests, profiling, and operator experiments |
+| [`runtime/`](runtime/README.md) | Frozen source/dependency identity |
+| [`docs/`](docs/README.md) | PDF guide, current documentation, reports, and plans |
 
-- `custom_nodes/minimax_h3_tp2`: ComfyUI node schema and session selection.
-- `patches/comfy_tp_runtime.py`: worker protocol, phase transitions and ownership.
-- `patches/comfy_tp_models.py`: Native TE/DiT model construction.
-- `patches/comfy_sampler.py`, `staged_vae.py`: Native sampler/VAE adapters.
-- `patches/parallel_vae.py`, `audio_channel_decode.py`: active VAE rank execution.
-- `patches/h3_operator_policy.py`, `tilelang_*.py`: operator dispatch and kernels.
-- `patches/runtime_diagnostics.py`, `diagnostic_metrics.py`: explicit snapshots and bounded counters.
-- `patches/reference_loaders.py`, `offline_lora_reference.py`: explicit numerical qualification references.
-- `benchmarks/`: tests, profilers, captures and experiment analysis; never imported by runtime code.
-
-Legacy PP/SP and tiled decoder interfaces remain for compatibility and historical
-experiments. They are not selected by the TP2 loader. The production audio path
-does not import the old tiled-decoder manager. Profiler/tensor-capture scripts
-run explicitly; normal inference does not start them.
-
-## Validation and experiment entry points
-
-Use the frozen conda interpreter for local checks. The focused regression suite
-is documented in [benchmarks/README.md](benchmarks/README.md). Tiny trained VAE
-and operator checks are component previews, not full H3 generation or physical
-T4/NCCL performance qualification.
-
-The active builders are `build_h3_operator_integration_job.py` and
-`build_ref2va_e2e_job.py`; use `--validate-only` to inspect generated code without
-running or submitting it. New jobs require a frozen runtime dataset with a
-CPU-prepared Linux wheelhouse. GPU jobs install verified wheels offline and do
-not resolve/download dependencies. Older builders/notebooks must not be
-submitted directly with their historical setup.
-
-[Pipeline review](H3_PIPELINE_REVIEW.md) records cleanup, checks and remaining
-blockers. [Provenance audit](H3_RUNTIME_PROVENANCE_AUDIT.md) distinguishes source
-selection from changes to the user's original ComfyUI directory.
-[Historical overview](HISTORICAL_README.md) retains earlier reports and caveats.
-Generated datasets, traces, submissions and private upload capabilities stay
-local and are excluded from Git; no model weights are published.
+Models, private upload capabilities, and large traces stay outside the published
+source. See [artifact retention](docs/guides/ARTIFACT_RETENTION.md).

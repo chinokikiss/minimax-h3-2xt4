@@ -78,7 +78,7 @@ def analyze(folder):
             "routes = make_routes(p, 'sol', tau=1.0)",
             'out, lse = execute(p, routes, pooled=True, int8_pv=False)', '```', '',
             f'Raw evidence directory: `{folder.resolve()}`. The source hashes in results.json must match the local operator and benchmark for this report generator to accept the run.', '']
-    report=ROOT/'TILELANG_T4_ATTENTION_RESULTS.md'
+    report=ROOT/'docs/reports/TILELANG_T4_ATTENTION_RESULTS.md'
     report.write_text('\n'.join(lines),encoding='utf-8')
     print(json.dumps(summary,indent=2));print(report)
 

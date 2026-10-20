@@ -67,3 +67,7 @@ kaggle_te_io_storage/pipeline.ipynb
 /bench_assets/
 /runtime/frozen_kaggle_setup.py
 .pytest_cache/
+
+# Local document-authoring intermediates; published PDF lives in docs/guides.
+/output/
+/tmp/

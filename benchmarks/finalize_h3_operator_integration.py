@@ -25,7 +25,7 @@ paths=['patches/h3_operator_policy.py','patches/h3_operator_dependencies.py','pa
     'custom_nodes/minimax_h3_tp2/__init__.py','build_comfy_tp2_workflow.py','build_h3_operator_integration_job.py',
     'benchmarks/test_h3_operator_integration.py','benchmarks/test_h3_pipeline_wiring.py',
     'benchmarks/archive_h3_operator_integration.py','benchmarks/finalize_h3_operator_integration.py',
-    'requirements-tp2-operators.txt','H3_OPERATOR_INTEGRATION.md','workflows/video_minimax_h3_r2v_tp2_operators.json']
+    'requirements-tp2-operators.txt','docs/guides/H3_OPERATOR_INTEGRATION.md','workflows/video_minimax_h3_r2v_tp2_operators.json']
 hashes={}
 for name in paths:
     path=ROOT/name
@@ -46,9 +46,9 @@ result['local_environment']=dict(torch=version('torch'),comfy_kitchen=version('c
 result['final_checks']=dict(syntax='pass',workflow_copy='identical',node_junction='pass',
     source_and_runtime_provider_gate='pass',full_H3_generation='not_run',end_to_end_performance='unmeasured')
 (evidence/'integration_results.json').write_text(json.dumps(result,indent=2))
-(ROOT/'H3_OPERATOR_INTEGRATION_RESULTS.json').write_text(json.dumps(result,indent=2))
+(ROOT/'docs/data/H3_OPERATOR_INTEGRATION_RESULTS.json').write_text(json.dumps(result,indent=2))
 manifest=[]
-for p in [ROOT/'H3_OPERATOR_INTEGRATION_RESULTS.json',*[ROOT/n for n in paths]]:
+for p in [ROOT/'docs/data/H3_OPERATOR_INTEGRATION_RESULTS.json',*[ROOT/n for n in paths]]:
     manifest.append(dict(path=str(p),bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest()))
 (evidence/'deliverable_manifest.json').write_text(json.dumps(manifest,indent=2))
 print('H3_INTEGRATION_FINAL_PASS',len(paths),'source/artifact checks;',sum(len(r['records']) for r in result['ranks']),

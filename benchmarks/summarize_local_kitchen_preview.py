@@ -68,7 +68,7 @@ def main():
         '', 'Representative for real tensor distribution, TP2 partition sizes/strides, operand contracts and local implementation screening. Not representative of T4 instruction mapping, occupancy, cache/memory behavior, relative kernel ranking, dual-GPU concurrency or NCCL/PCIe cost. The T4 job remains the authority for deployment decisions; its last status in this turn was QUEUED.',
         '', 'Next on T4: confirm fused preparation first; retain the small scheduling matrix to measure actual SM75 behavior. Keep existing sparse drop/scalar semantics and numerical contracts unchanged. No production switch is justified by this local preview alone.',
         '', '## Artifacts','',f'- Screen: `{source}`',f'- Confirmation/graph ablation: `{graph_source}`',f'- Adaptations/CUDA sources: `{source.parent}`',f'- Runner: `{ROOT / "benchmarks/local_kitchen_preview.py"}`']
-    report=ROOT/'LOCAL_KITCHEN_GROUP32_PREVIEW.md';report.write_text('\n'.join(lines)+'\n',encoding='utf-8')
+    report=ROOT/'docs/reports/LOCAL_KITCHEN_GROUP32_PREVIEW.md';report.write_text('\n'.join(lines)+'\n',encoding='utf-8')
     metadata=dict(screen_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),confirmation_sha256=hashlib.sha256(graph_source.read_bytes()).hexdigest(),
         submitted_sources_unchanged=unchanged,adaptation_audit=adaptation_audit,confirmation=confirmation,group32_cases=len(group),completed_cases=len(screen['cases']))
     (BASE/'local_preview_summary.json').write_text(json.dumps(metadata,indent=2))

@@ -1,0 +1,8 @@
+# Install with --target into a benchmark-only directory and --no-deps.
+# Uses the existing conda numpy==1.26.4 and pinned runtime dependencies.
+zstandard==0.25.0
+blosc2==4.14.1
+ndindex==1.10.1
+msgpack==1.1.2
+numexpr==2.14.1
+threadpoolctl==3.6.0

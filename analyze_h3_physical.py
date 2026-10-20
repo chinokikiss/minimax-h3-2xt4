@@ -9,7 +9,7 @@ import statistics
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('directory',type=Path)
-    p.add_argument('--report',type=Path,default=Path('H3_PHYSICAL_INT8_LORA_RESULTS.md'));args=p.parse_args()
+    p.add_argument('--report',type=Path,default=Path('docs/reports/H3_PHYSICAL_INT8_LORA_RESULTS.md'));args=p.parse_args()
     paths=list(args.directory.rglob('results.json'))
     if len(paths)!=1:raise ValueError('Expected exactly one version-bound physical results file')
     result=json.loads(paths[0].read_text())
