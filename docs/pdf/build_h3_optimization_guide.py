@@ -78,6 +78,23 @@ SOURCES=[
  ('S37','docs/data/H3_PIPELINE_REVIEW_RESULTS.json','Recorded pipeline review checks and source closure'),
  ('S38','docs/reports/TP2_P2_OPTIMIZATION_REPORT.md','Historical profiling, scalar workspace and transport caveats'),
  ('S39','docs/reports/H3_RUNTIME_PROVENANCE_AUDIT.md','Local source provenance and Linux qualification limits'),
+ ('S40','docs/reports/REF2VA_T4_RESULTS.md','Historical Native GEMM, fixed transport and scalemax attribution'),
+ ('S41','docs/reports/TP2_ROW_FUSION_RESULTS.md','External-max, strided-read and packed-row staged ablations'),
+ ('S42','docs/reports/ONLINE_LORA_NATIVE_ORDER_REPAIR.md','Controlled adapter rounding causes and Native-order repair'),
+ ('S43','docs/reports/ONLINE_LORA_BYTE_EXACT_OPTIMIZATION.md','Single-buffer gather and owned-delta lifetime qualification'),
+ ('S44','docs/reports/ROW_PARTIAL_MEMORY.md','Current Row Partial staging, bounds and retired choices'),
+ ('S45','docs/reports/LOADING_OPTIMIZATION.md','Rank ranges, CPU scheduling and decode-start startup prefetch'),
+ ('S46','patches/host_memory_pressure.py','Read-only cgroup-v2 pressure inputs and fallback availability'),
+ ('S47','docs/reports/TE_RESIDENCY_P01_RESULTS.md','Historical lifecycle/pressure ablations and limited TE gains'),
+ ('S48','docs/reports/TE_IDLE_RESIDENCY_RESULTS.md','Idle benchmark versus integrated prompt-start boundary'),
+ ('S49','docs/reports/TP2_KITCHEN_GROUP32_V2_RESULTS.md','Unpromoted cast/pad, scale staging and finite-output candidates'),
+ ('S50','docs/reports/TP2_OPERATOR_PASS2.md','Attention preparation, direct stores and NCCL channel evidence'),
+ ('S51','docs/reports/H3_DOCUMENTATION_COVERAGE_AUDIT.md','Current integration coverage and historical experiment reconciliation'),
+ ('S52','docs/data/h3_documentation_coverage_20261020.json','Machine-readable feature/source and experiment-family coverage'),
+ ('S53','patches/tilelang_grouped_fused.py','Sparse fused quantizer and rounded preparation boundaries'),
+ ('S54','docs/reports/TP2_OPERATOR_RESULTS.md','Early TP2 operator screen and limited Video microchain scope'),
+ ('S55','docs/reports/TE_IO_ABLATION_RESULTS.md','Storage controls: validated bytes without a promoted I/O winner'),
+ ('S56','docs/reports/TE_COMPRESSION_LOCAL_20261020.md','CPU codec experiment, not an integrated loader stage'),
 ]
 SOURCE_MAP={s[0]:s for s in SOURCES}
 pages=[]
@@ -100,7 +117,8 @@ page('ORIENTATION','How to read this guide','A source-first explanation of what 
   ['Linear operators and LoRA - pp. 11-17','Why global scales and INT32 SUM? Where are buffers removed?'],
   ['Loading and VAEs - pp. 18-25','How do disk, CPU, GPU windows and decode stages cooperate?'],
   ['Preservation and validation - pp. 26-28','Which evidence applies? How should the system be operated?'],
-  ['Source catalogue - pp. 29-30','Where can each mechanism and measurement be checked?']],[.45,.55]),
+  ['Integration audit - pp. 29-37','Which supporting optimizations and historical decisions matter?'],
+  ['Source catalogue - pp. 38-40','Where can each mechanism and measurement be checked?']],[.45,.55]),
  H2('Three distinct meanings of correctness'),
  P('<b>Same-method conformance</b> means an optimized implementation matches its own numerical reference. <b>Native equivalence</b> means it matches the selected original operator at a defined boundary. <b>Generation quality</b> means trajectories, content, temporal structure and audio remain acceptable. Passing one does not imply the others.'),
  Q('Reading the figures','Teal marks a current default or active work. Amber marks an optional approximation or policy. Grey marks Native behavior, preserved control flow or inactive storage. Diagrams are explanatory schematics unless a chart explicitly names a measurement.'),
@@ -366,13 +384,114 @@ page('26 / OPERATIONS','Operate, inspect and change one boundary at a time','Use
  ['No sparse speedup','Preparation/routing/summary costs and complete-API timings; never only omitted-block count.'],
  ['Quality drift','Selected approximation: sparse mode, FP16 SUM, Row Partial or offline requantization. Hold inputs/noise fixed.']],[.39,.61]),
  P('Runtime code is under patches/ and the custom node. Read-only stats snapshots and bounded counters are separate from explicit profilers/captures in benchmarks/. Native reference loaders are lazy qualification paths. Legacy PP/SP/tiled interfaces remain compatible but are not selected by this TP2 loader.'),
- Q('Not integrated by this document','TE compression codecs, experimental attention INT8 PV, packed-INT8 transport and broad auto-tuning are not enabled. No H3 inference, dependency setup job, new profiler capture or Git publication was performed to produce this guide.'),refs='S01-S03, S28, S33-S39')
+ Q('Not integrated by this document','TE compression codecs, experimental attention INT8 PV, packed-INT8 transport and broad auto-tuning are not enabled. This documentation revision executes no H3 inference, dependency setup job or new profiler capture.'),refs='S01-S03, S28, S33-S39')
 
 # Two dedicated source pages keep references legible and make the PDF auditable.
-page('REFERENCE / 1','Implementation source catalogue','Paths are relative to the root on the cover. The PDF embeds a JSON manifest with source hashes.',
- ('sources',SOURCES[:20]),refs='Current source audit: 2026-10-20')
-page('REFERENCE / 2','Evidence and lifecycle source catalogue','Read code for current selection; read version-bound results for measurement scope.',
- ('sources',SOURCES[20:]),refs='Current source audit: 2026-10-20')
+page('27 / GEMM DISPATCH','Use the Turing GEMM storage contract','The integrated base row GEMM avoids the historical transposed-weight and row-padding work.',
+ D('native_gemm',155),
+ P('Every physical worker installs optimized_tp.enable(scalemax, native_int32) before model execution. This replaces parallel_int8.int_mm with the pinned Kitchen CUDA cuBLAS INT8 entry point. It consumes contiguous [M,K] INT8 activations and [N,K] INT8 weights, writes [M,N] INT32, and uses the current CUDA stream and the backend workspace.'),
+ P('The older torch._int_mm helper padded M to a multiple of 32 and constructed a contiguous transposed weight on every call. The active helper avoids those two temporaries when the inputs already have the required layout. Its contiguous() calls can still copy noncontiguous inputs; this is not a general claim that all GEMM preparation is free.'),
+ T(['Projection boundary','Retained implementation'],[
+ ['Base row O / down / FC2','Kitchen CUDA INT8 GEMM -> Native INT32 SUM -> Native CUDA dequantization.'],
+ ['Base column Q/K/V / QKV / FC1','Native Kitchen int8_linear, with complete input rows and component-aware output ownership.'],
+ ['Native quantizer fallback','Keep width/shared-memory guards. A fused route may still require complete rows; fixed equal-width gathering avoids length exchanges and scalar synchronization. Otherwise retain the rotated-matmul route.'],
+ ['Native epilogue','Use the CUDA dequantizer with its bias/cast rounding. Eager multiply/add replacements are not assumed equivalent.']],[.32,.68]),
+ Q('Evidence and scope','The historical full-model study attributed TE S512 per-block INT8 GEMM intervals of 8.128 -> 3.882 ms and removal of feature AllGather in the scalemax path. These are diagnostic kernel sums from an older source/stack, not a speed estimate for today\'s complete pipeline.'),refs='S06, S07, S12, S16, S17, S40')
+
+page('28 / ROW PREPARATION','Packed rows combine three accepted changes','External global maxima, strided reads and ownership packing are distinct from SwiGLU fusion.',
+ D('row_stages',165),
+ T(['Stage','Buffer / work removed'],[
+ ['External-max quantization','Consume the already AllReduced maximum directly; omit the sentinel group, concatenation, redundant row-maximum scan and final INT8 slice copy.'],
+ ['Strided owned-slice maximum','Read the owned columns directly from full rotation storage; avoid an owned contiguous FP32 copy and eager abs tensor.'],
+ ['Packed padding','Write owned values plus positive zeros in one pass before the unchanged full-width rotation.'],
+ ['SwiGLU and owned-FC2 successors','Fuse activation into packing; eligible owned_fp32 FC2 then removes the global-width rotation buffers entirely.']],[.34,.66]),
+ P('These are live stages in tilelang_row_quant and the SwiGLU wrapper, not just names from an experiment. The shared maximum still crosses ranks before quantization; the maximum kernel alone does not fuse that collective with the quantizer. Full-width fallback geometry remains where the owned-FC2 guard does not apply.'),
+ P('A controlled fast-division versus rounded-division probe changed 13,382 INT8 elements per rank at constructed half-integer boundaries. The active row quantizer keeps Kitchen\'s fast division, reciprocal-127 multiplication, 1e-30 floor and nearby rounding. Numerically more accurate division would change the selected method.'),
+ Q('Do not conflate two meanings of packed','Packed preparation describes tensor ownership and eliminated copies. INT8-packed SUM transport is a separate rejected/nonselected approximation; the default still communicates INT32 accumulators.'),refs='S01, S12, S13, S16, S17, S41')
+
+page('29 / ATTENTION PREPARATION','Which Kitchen-inspired ideas are actually live?','Prepared operands and direct output stores matter independently of the QK/PV arithmetic.',
+ T(['Current path','Active implementation detail'],[
+ ['TE Group32','BQ32 masked kernel; shared KV-head mapping; fused stride-aware Q/K/V quantize/cast/pad preparation; direct token-major output.'],
+ ['Optional DiT dense','BQ64, 128 threads, FullRow warp policy, Q-only reuse; eager K-centering reduction followed by the fused preparation kernel.'],
+ ['Optional drop / scalar','BQ64 with fused Q/K quantizers and finite-centroid tau0 shortcut; direct BND store. Drop does not prepare unused V centroids.'],
+ ['Geometry cache','Bounded LRU caches reuse immutable counts/dummy buffers and compiled specializations; CUDA stream identity protects asynchronously initialized geometry.'],
+ ['Output boundary','Write BND in the requested dtype directly, while explicitly preserving the intermediate FP16 output rounding.']],[.28,.72]),
+ P('Q-only reuse retains query operands/scales across the key-leaf loop without caching every K group. Direct BND avoids the separate transpose/reshape-copy and dtype-conversion path at the integration boundary. Such savings do not change the leaf64 softmax order or turn FP16 PV into INT8 PV.'),
+ Q('A supported kernel option is not the runtime selection','The module still contains register-scale, staged-K-scale, castpad centering, full-QK cache and alternate warp/thread options. Current callers do not enable them merely because the module was imported. In particular, TE uses the dedicated masked kernel, not the old unmasked TE screen winner.'),
+ P('Kitchen remains the actual DiT/Video default. The historical Video Group32 cast/pad winner was still about 1.60x the matched Kitchen API latency. Its 9.45% improvement over another Group32 implementation does not justify replacing Kitchen or claiming an integrated Video gain.'),refs='S01, S08-S11, S49, S50, S53')
+
+page('30 / LORA STORAGE','Save LoRA traffic without reordering arithmetic','The Native-ordered default also contains storage and lifetime optimizations.',
+ D('lora_storage',160),
+ P('For row LoRA, local SwiGLU runs before communication. Gathering the activated local features sends half as many values as gathering packed gate/up, while keeping the full Native A GEMM input. One all_gather_into_tensor receive buffer replaces a tensor-list gather plus concatenation. Rank-major receive storage is reordered into contiguous Native feature order before A; this conversion may allocate.'),
+ P('Where full B remains required, component-aware strided views select owned QKV or gate/up rows. Scaling is applied after B and addition follows adapter source order. Unused rows need no scale/add writes. The owned view and full delta are deleted before the next adapter\'s B GEMM so a view cannot prolong an entire preceding output allocation.'),
+ T(['Accuracy repair','Why it remains a contract'],[
+ ['Do not pre-scale B','Moving strength before GEMM changes floating-point evaluation.'],
+ ['Do not concatenate A','Combining adapter ranks can change GEMM rounding; Concat A is retired and rejected.'],
+ ['Default gathers before A','Partial-A FP32 SUM changes grouping; only explicit Row Partial permits it.'],
+ ['Selective B is a separate guard','Only the accepted FC1 geometry replaces full B; other targets retain Native B dimensions.']],[.34,.66]),
+ Q('Historical memory failure matters','A rejected candidate retained the preceding full B through an owned view and reached 2244 MiB in the recorded multi-adapter case. The lifetime fix removed that extra overlap. Old streamed-mode timing/memory numbers do not describe the current removed streamed mode.'),refs='S18, S42-S44, S33')
+
+page('31 / STARTUP WEIGHTS','Stream the front end and auxiliary modules too','A transformer-only window misses large vision, embedding and refiner allocations.',
+ D('startup',175),
+ P('TE startup has a separate bounded CPU cache for two groups: vision first, then embedding/metadata. Each can be admitted without first constructing all 50 decoder blocks. Raw checkpoint tensors transfer their host reservations into Native model construction; extra embedding-construction storage is admitted explicitly.'),
+ P('StagedVision keeps the canonical vision module on CPU and copies it only for the actual vision call. Its finally block synchronizes the current stream and releases the temporary GPU module, including Native cached FP32 projections, before the text decoder window starts. This is an intentional phase fence, not fully overlapped vision/TE execution.'),
+ P('DiT rank 0 owns condition projection, text refinement and video/audio patch projection. Rank 1 uses weightless placeholders and receives exact broadcast outputs. These auxiliary modules remain canonical on CPU; WeightSpecs lease them through the same GPU window. resident_backing=True prevents their existing CPU tensors being charged as another full construction.'),
+ T(['When','Admitted auxiliary work'],[
+ ['Before denoising','Native text refinement once, unless context is already hidden width 5376.'],
+ ['Each denoiser call','Native input projections, using the selected packing adapter; broadcast packed/projection output.'],
+ ['On release','Restore temporary bindings, break bound-method cycles, then release backing reservations.']],[.28,.72]),
+ Q('Preserve the API branch','Both _embed_and_pack and inline-projection adapters remain for existing qualified callers. The pinned local API determines the active branch. This document does not migrate either source or wrappers.'),refs='S03-S05, S20, S22, S45')
+
+page('32 / CROSS-PHASE REUSE','Use known next work to hide preparation','CPU prefetch, GPU residency and queue-idle speculation have different start boundaries.',
+ D('cross_phase',185),
+ T(['Boundary','Current behavior and default'],[
+ ['TE completes','cross_model_cpu=True can queue upcoming DiT CPU blocks; no speculative DiT CUDA allocation.'],
+ ['DiT evaluations','Retain eligible weights across actual model calls under capacity and next-use guards; this is separate from the two-group H2D horizon.'],
+ ['Public decode starts','cross_request_te=True queues model-invariant TE startup/vision CPU groups. With prefetch_lifecycle=True, also request decode_te_blocks (default 2) TE CPU blocks.'],
+ ['Decode completes','Without lifecycle mode, queue TE block preparation once startup work is no longer pending.'],
+ ['Queue becomes idle','Optional parent encoder preload, then bounded worker TE GPU preload. Cancel at the integrated prompt-start boundary.']],[.29,.71]),
+ P('MiniMaxH3TP2Loader maps idle_residency to prefetch_lifecycle. Thus both are False in its ordinary defaults; programmatic callers can enable lifecycle scheduling independently. cross_request_te and cross_model_cpu remain True in RuntimeConfig. These controls must not be described as one always-enabled preloader.'),
+ Q('P0/P1 labels are overloaded','The older loading plan calls direct rank loading P0 and independent CPU preparation P1. Later residency ablations call reuse-aware lifecycle P0 and pressure-aware admission P1. Use the explicit flags and source snapshot instead of transferring a P0/P1 result between experiments.'),refs='S02, S03, S20, S22, S23, S45, S47, S48')
+
+page('33 / HOST ADMISSION','Preserve useful CPU weights under pressure','Deadline scheduling and cgroup policy supplement the byte budgets; they are not unbounded caches.',
+ T(['Mechanism','Current contract'],[
+ ['Preparation scheduling','One CPU preparation worker per cache, foreground priority at module boundaries, predicted next-use deadlines, independent pin/H2D stages.'],
+ ['Lifecycle option','reuse_aware follows prefetch_lifecycle. Upcoming entries and reload cost guide eviction; speculative far-future work cannot evict a nearer wanted entry.'],
+ ['Cgroup policy, optional','memory_pressure_aware=False by default. Linux cgroup-v2 observations account for nonfile usage, file-cache floor, pending preparation and PSI pressure.'],
+ ['Pressure admission','With the option on, speculative file-cache floor is 6 GiB; foreground protects up to 2 GiB. Shared reserve remains 3 GiB. There are at most two preparation leases across ranks.'],
+ ['No available cgroup metrics','Retain managed byte limits and system available-RAM checks. Do not fabricate Linux pressure data on Windows.']],[.30,.70]),
+ P('CPU cache borrowing distinguishes an immutable prepared module from pin staging. Existing canonical auxiliary backing has already been charged. Speculative cancellation returns reservations only after real readers/copies no longer own the corresponding memory. Counters expose outcomes without retaining tensor payloads.'),
+ Q('Why this is not a solved I/O bottleneck','The historical lifecycle/pressure study still approached 30 GiB cgroup usage and millions of refaults. Its TE gains did not reproduce as a large stable reduction. Later 22 storage controls verified 2,008 byte-correct block loads but promoted no new I/O algorithm. A file-cache floor cannot protect specific checkpoint pages.'),refs='S03, S20, S22, S23, S46, S47, S55')
+
+page('34 / EVIDENCE BRIDGE','Measure a change against its own baseline','These retained results explain integration decisions; they are not additive pipeline gains.',
+ T(['Historical physical experiment','Observed result','Boundary / limitation'],[
+ ['Packed row preparation, same-round repeat','O: 33.760 -> 30.209 ms; FC2: 54.943 -> 47.612 ms','Complete API CUDA medians; synthetic current TP2 MNK; before newer SwiGLU/owned-FC2 defaults.'],
+ ['Packed FC2 Systems trace','17 -> 10 launches/call','Removed buffer/max/quantizer work; INT32 SUM still about 19.162 ms in that separate capture.'],
+ ['Four NCCL channels','O: 35.154 -> 32.760 ms; FC2: 53.953 -> 51.630 ms','One allocation; fixed communicator setting; automatic protocol and no P2P retained.'],
+ ['Native-order LoRA storage','S8192 default FFN about 4.4-4.5% lower median','Previous correct implementation comparator; historical stack, adapter fixture and source.'],
+ ['Standalone idle pilot, 15 s gap','Reference+TE: 98.685 -> 81.108 s','Not a ComfyUI estimate: the pilot continued speculation into reference encoding after next request start.']],[.32,.30,.38]),
+ P('The row-fusion diagnostic retains rotation, GEMM, SUM and Native dequantization. Kernel averages come from separate observed calls and cannot be added to the warmed medians. The FC2 charts earlier in this guide are newer scoped memory studies, not another factor to multiply by these percentages.'),
+ Q('Version and quality gate','Every row above predates at least part of the present combined source/stack. Matched operator byte gates support that experiment\'s implementation comparison. They do not establish current full-depth quality, near-capacity admission, queued concurrency, p95 latency or Linux qualification of the frozen local dependencies.'),refs='S29, S30-S32, S40, S41, S43, S48, S50')
+
+page('35 / COVERAGE AUDIT','Do not promote experiments by name alone','The companion coverage matrix ties integrated features to live dispatch and records exclusions.',
+ T(['Retained experiment family','Current disposition'],[
+ ['INT8 PV / alternate thread mappings','Attention investigation only; current integrated TileLang PV remains FP16.'],
+ ['Packed-INT8 SUM / FP32 partial SUM','Not the default row transport. Scaled FP16 is the separately integrated explicit option.'],
+ ['Register/staged scales, castpad center, finite epilogue','Available experimental kernels, not automatically selected by current callers; Video stays Kitchen.'],
+ ['Concat A / streamed SwiGLU','Retired and rejected. Current optional Row Partial is distinct.'],
+ ['Cropped slabs / video TP/SP / temporal audio','Historical experiments or compatibility tools; current loader chooses aligned video queries and FP32 audio channels.'],
+ ['Preadv / mmap / descriptor advice / more workers','Storage-study candidates, not the production positional-read implementation.'],
+ ['ZSTD / Blosc2 / ZipNN / ZigZag-FSE','Separate CPU codec study, not active checkpoint decompression.'],
+ ['Latest API / unpinned Linux setup','Not an optimization to apply; preserve the validated checkout and exact package contract.']],[.40,.60]),
+ P('The coverage audit searches published documentation, benchmark/build sources and retained repository/external experiment records, then checks the current source call chain. Oversized raw traces, binaries and third-party dependency trees are outside this static text audit. A benchmark winner is treated as integrated only when the loader/runtime dispatch selects it.'),
+ Q('Audit deliverables','docs/reports/H3_DOCUMENTATION_COVERAGE_AUDIT.md explains the omissions and decisions. docs/data/h3_documentation_coverage_20261020.json maps features, implementation symbols, source hashes, document coverage and scanned experiment families. No new model, GPU or profiler experiment was run.'),refs='S01-S03, S39, S44, S49, S51, S52, S55, S56')
+
+for start in range(0,len(SOURCES),20):
+    page(f'REFERENCE / {start//20+1}','Implementation and evidence catalogue',
+         'Paths are relative to the root on the cover. Embedded hashes identify the actual source bytes.',
+         ('sources',SOURCES[start:start+20]),refs='Current source audit: 2026-10-20')
+
+TOTAL_PAGES=len(pages)+1
 
 
 def para(c,text,x,y,width,style='body'):
@@ -398,7 +517,33 @@ def label(c,text,x,y,size=9,color=MUTED):
 
 def diagram(c,kind,height):
     w=CW;h=height
-    if kind=='architecture':
+    if kind=='native_gemm':
+        for x,title,body in [(0,'INT8 X / W','Contiguous [M,K] / [N,K]'),(175,'Kitchen CUDA GEMM','Current stream + workspace'),(350,'INT32 partial','SUM before dequantize')]:
+            box(c,x,73,157,67,title,body)
+        line(c,157,106,175,106);line(c,332,106,350,106)
+        box(c,0,4,w,48,'Avoid the old per-call layout work','No M padding or transposed-weight temporary for already qualified contiguous inputs.',LIGHT)
+    elif kind=='row_stages':
+        for i,(title,body) in enumerate([('Pack','Own values + zeros'),('Rotate','Native FP32 geometry'),('MAX','Strided read + global MAX'),('Quantize','External shared scale')]):
+            box(c,i*132,68,111,84,title,body)
+            if i<3:line(c,i*132+111,110,(i+1)*132,110)
+        box(c,0,2,w,48,'Remove staging work around the same row arithmetic','No sentinel, concatenation, owned FP32 slice or eager abs temporary.',LIGHT)
+    elif kind=='lora_storage':
+        for x,title,body in [(0,'Local SwiGLU','Gate/up -> owned activation'),(175,'One receive buffer','Gather, then restore features'),(350,'Native A then B','Adapter order + post-B scale')]:
+            box(c,x,78,157,69,title,body)
+        line(c,157,112,175,112);line(c,332,112,350,112)
+        box(c,0,4,w,53,'Owned delta view -> scale/add -> delete view + delta','Do not retain one adapter\'s full B output into the next adapter.',LIGHT)
+    elif kind=='startup':
+        box(c,0,100,242,65,'TE startup CPU groups','Vision first; embedding + metadata next',LIGHT)
+        box(c,265,100,242,65,'DiT rank 0 canonical CPU','Refiner + condition / input projections',LIGHT)
+        box(c,0,9,242,65,'Temporary vision GPU module','Run vision -> stream fence -> release')
+        box(c,265,9,242,65,'GPU-window auxiliary leases','Refine once; project per denoiser call')
+        line(c,121,100,121,74);line(c,386,100,386,74)
+    elif kind=='cross_phase':
+        for i,(title,body) in enumerate([('TE','Queue known DiT CPU work'),('Denoise','Reuse eligible DiT weights'),('Decode','Queue invariant TE startup'),('Queue idle','Optional encoder + TE GPU')]):
+            box(c,i*132,79,111,94,title,body,LIGHT if i==2 else PALE)
+            if i<3:line(c,i*132+111,126,(i+1)*132,126)
+        box(c,0,4,w,53,'Preparation, H2D and execution are separately admitted','Next-prompt contents are never guessed; prompt start cancels idle speculation.',LIGHT)
+    elif kind=='architecture':
         box(c,0,h-73,w,65,'ComfyUI parent','Native reference encoding, conditioning, sampler and public VAE planner',LIGHT)
         for x,title in [(0,'Rank 0 / GPU 0'),(266,'Rank 1 / GPU 1')]:
             box(c,x,40,241,91,title,'TE / DiT rank shards<br/>Bounded weight window + CPU cache<br/>Decoder replica when admitted')
@@ -592,7 +737,7 @@ cv.showOutline()
 def footer(num,refs=''):
     cv.setStrokeColor(colors.HexColor(RULE));cv.setLineWidth(.6);cv.line(L,43,W-R,43)
     label(cv,'H3 / TP2 IMPLEMENTATION GUIDE  |  20 OCT 2026',L,28,7.4)
-    cv.setFont('Semi',8);cv.drawRightString(W-R,28,f'{num:02d} / 30')
+    cv.setFont('Semi',8);cv.drawRightString(W-R,28,f'{num:02d} / {TOTAL_PAGES}')
     if refs:label(cv,'Source: '+refs,L,53,7.3)
 
 # Cover.
@@ -607,7 +752,7 @@ for i,(title,body) in enumerate([('TE','Group32 dense'),('DiT','Kitchen INT8'),(
     x=L+i*173;box(cv,x,318,161,72,title,body,PALE)
 label(cv,'CURRENT SOURCE, NOT A BLENDED BENCHMARK CLAIM',L,280,10,'#53D0C1')
 pp=Paragraph('Default INT32 SUM. Owned FP32 FC2 rotation. Optional sparse attention and scaled FP16 transport. Native conditioning, sampling and public VAE planning.',ParagraphStyle('cover2',parent=STYLES['body'],textColor=colors.HexColor('#D1E0E9'),fontSize=10.4,leading=15));_,hh=pp.wrap(CW,100);pp.drawOn(cv,L,259-hh)
-label(cv,'AUDITED 20 OCTOBER 2026  |  30 PAGES',L,170,10,'#FFFFFF')
+label(cv,f'AUDITED 20 OCTOBER 2026  |  {TOTAL_PAGES} PAGES',L,170,10,'#FFFFFF')
 label(cv,'Pinned ComfyUI: d49e888586dd8ae012c0667b33466b815fee07f7',L,145,8.4,'#B9D1DF')
 label(cv,'Repository: 2xT4 minimax h3',L,124,9,'#B9D1DF')
 label(cv,str(ROOT).replace('\\','/'),L,105,7.4,'#B9D1DF')
@@ -656,14 +801,14 @@ for num,pag in enumerate(pages,2):
         if y<70:raise ValueError(f'Page {num} overflow after {kind}, bottom={y:.1f}: {pag["title"]}')
     footer(num,pag['refs']);cv.showPage()
 
-assert len(pages)+1==30,len(pages)+1
+assert len(pages)+1==TOTAL_PAGES
 cv.save()
 source_manifest=[]
 for sid,rel,desc in SOURCES:
     path=ROOT/rel
     if not path.is_file():raise FileNotFoundError(path)
     raw=path.read_bytes();source_manifest.append(dict(id=sid,path=str(path),description=desc,sha256=hashlib.sha256(raw).hexdigest(),lines=len(raw.splitlines())))
-manifest=dict(date='2026-10-20',repository=str(ROOT),git_head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),pdf=str(PDF),pages=30,sources=source_manifest,chart_boundary='Historical physical dual-T4, S8192 two-entry LoRA stack, FFN scopes; no full pipeline claim',charts={v:dict(temporary_mib=measured(v,'memory'),wall_ms=measured(v,'latency')) for v in ['before','lifetime','owned']})
+manifest=dict(date='2026-10-20',repository=str(ROOT),git_head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),pdf=str(PDF),pages=TOTAL_PAGES,sources=source_manifest,chart_boundary='Historical physical dual-T4, S8192 two-entry LoRA stack, FFN scopes; no full pipeline claim',charts={v:dict(temporary_mib=measured(v,'memory'),wall_ms=measured(v,'latency')) for v in ['before','lifetime','owned']})
 (OUT/'h3_optimization_guide_source_manifest.json').write_text(json.dumps(manifest,indent=2),encoding='utf8')
 (OUT/'h3_optimization_guide_layout.json').write_text(json.dumps(layout,indent=2),encoding='utf8')
 from pypdf import PdfReader, PdfWriter
@@ -674,4 +819,4 @@ writer.root_object[NameObject('/Lang')]=TextStringObject('en-US')
 temporary=PDF.with_suffix('.tmp.pdf')
 with temporary.open('wb') as stream:writer.write(stream)
 temporary.replace(PDF)
-print(json.dumps(dict(pdf=str(PDF),pages=30,bytes=PDF.stat().st_size,minimum_body_bottom=min(x['bottom'] for x in layout)),indent=2))
+print(json.dumps(dict(pdf=str(PDF),pages=TOTAL_PAGES,bytes=PDF.stat().st_size,minimum_body_bottom=min(x['bottom'] for x in layout)),indent=2))

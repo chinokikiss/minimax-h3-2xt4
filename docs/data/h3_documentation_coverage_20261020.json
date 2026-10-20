@@ -1,0 +1,2929 @@
+{
+  "date": "2026-10-20",
+  "baseline_commit": "3efe13f3ffb489b46310ea614bdd4a6c975a1500",
+  "audit_type": "static documentation/source/experiment coverage; no hardware experiment",
+  "scan": {
+    "repository_experiment_source": 377,
+    "published_documentation": 98,
+    "over_2_mib_not_read": 82,
+    "runtime_source": 56,
+    "retained_repository_experiment": 1468,
+    "retained_external_experiment": 1490
+  },
+  "scanned_files": 3489,
+  "scope_limit": "UTF-8 text/source/compact records <=2 MiB; binaries, raw profiler trees, third-party dependency trees excluded. Repeated snapshots count as files, not independent experiments. Missing external artifacts cannot be reconstructed from their report references.",
+  "local_inventory_sha256": "53fa276d26e648e3b310905aba7b1a069e3bf8f877fa3f79d6cfe4188622bc63",
+  "features": [
+    {
+      "id": "TP2",
+      "title": "Component-aware row/column ownership",
+      "source": "patches/rank_local_int8.py",
+      "source_anchor": "plan",
+      "source_line": 37,
+      "source_sha256": "d6fd8040d6bb22b3b19fbb678101ac8cb489451011ad749de0f529cf86615183",
+      "pdf_pages": "4",
+      "current_status": "default",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "GEMM",
+      "title": "Native Turing cuBLAS INT8 row dispatch",
+      "source": "patches/optimized_tp.py",
+      "source_anchor": "native_int_mm",
+      "source_line": 35,
+      "source_sha256": "b6e5d21573a86e0b2e445dad233fe96a377cebf35a61ee083294ea3f81922a1a",
+      "pdf_pages": "29",
+      "current_status": "default",
+      "documentation_revision": "added"
+    },
+    {
+      "id": "COLUMN",
+      "title": "Kitchen INT8 column projections",
+      "source": "patches/tp_dit.py",
+      "source_anchor": "run_int8_linear_forward",
+      "source_line": 20,
+      "source_sha256": "19ad0a249d332e40ee2f8010af931d184eacbc7c844abc7725d5fff3190dbf56",
+      "pdf_pages": "29",
+      "current_status": "default",
+      "documentation_revision": "expanded"
+    },
+    {
+      "id": "GATHER",
+      "title": "Fixed-size fallback feature gather",
+      "source": "patches/optimized_tp.py",
+      "source_anchor": "fixed_gather",
+      "source_line": 26,
+      "source_sha256": "b6e5d21573a86e0b2e445dad233fe96a377cebf35a61ee083294ea3f81922a1a",
+      "pdf_pages": "11,29",
+      "current_status": "fallback",
+      "documentation_revision": "expanded"
+    },
+    {
+      "id": "DEQUANT",
+      "title": "Native CUDA dequantizer/bias/cast order",
+      "source": "patches/parallel_int8.py",
+      "source_anchor": "dequantize",
+      "source_line": 53,
+      "source_sha256": "4a291e3e2c069c3324dc7879b3747ab74520b6903723187896ffcb879ed6d538",
+      "pdf_pages": "11,29",
+      "current_status": "default",
+      "documentation_revision": "expanded"
+    },
+    {
+      "id": "SCALEMAX",
+      "title": "Shared full-row MAX before quantization",
+      "source": "patches/optimized_tp.py",
+      "source_anchor": "global_row_quantize",
+      "source_line": 54,
+      "source_sha256": "b6e5d21573a86e0b2e445dad233fe96a377cebf35a61ee083294ea3f81922a1a",
+      "pdf_pages": "11",
+      "current_status": "default",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "EXTERNALMAX",
+      "title": "Quantize directly with external global max",
+      "source": "patches/tilelang_row_quant.py",
+      "source_anchor": "quantizer",
+      "source_line": 6,
+      "source_sha256": "8d702f3dff380bbdb91bbb1c1a3f2b9d579dfa630a626088fe89ba340cc2b2dd",
+      "pdf_pages": "30",
+      "current_status": "default",
+      "documentation_revision": "added"
+    },
+    {
+      "id": "STRIDEDMAX",
+      "title": "Direct owned-slice maximum and reads",
+      "source": "patches/tilelang_row_quant.py",
+      "source_anchor": "maximum_kernel",
+      "source_line": 49,
+      "source_sha256": "8d702f3dff380bbdb91bbb1c1a3f2b9d579dfa630a626088fe89ba340cc2b2dd",
+      "pdf_pages": "30",
+      "current_status": "default",
+      "documentation_revision": "added"
+    },
+    {
+      "id": "PACK",
+      "title": "Pack ownership and positive-zero padding",
+      "source": "patches/tilelang_row_quant.py",
+      "source_anchor": "packing_kernel",
+      "source_line": 65,
+      "source_sha256": "8d702f3dff380bbdb91bbb1c1a3f2b9d579dfa630a626088fe89ba340cc2b2dd",
+      "pdf_pages": "30",
+      "current_status": "default",
+      "documentation_revision": "expanded"
+    },
+    {
+      "id": "SWIGLU",
+      "title": "Separate/packed SwiGLU plus padding fusion",
+      "source": "patches/tilelang_swiglu_pad.py",
+      "source_anchor": "swiglu_pad",
+      "source_line": 37,
+      "source_sha256": "9d9f292350cbf4d0e63f6d611c647bb09d4e9fcc521f840519746df776c1d70e",
+      "pdf_pages": "12",
+      "current_status": "default",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "OWNED",
+      "title": "Eligible owned-FP32 FC2 rotation",
+      "source": "patches/tilelang_swiglu_pad.py",
+      "source_anchor": "owned_fp32",
+      "source_line": 105,
+      "source_sha256": "9d9f292350cbf4d0e63f6d611c647bb09d4e9fcc521f840519746df776c1d70e",
+      "pdf_pages": "13-14",
+      "current_status": "default",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "INT32",
+      "title": "INT32 SUM before dequantization",
+      "source": "patches/optimized_tp.py",
+      "source_anchor": "projected_reduce",
+      "source_line": 18,
+      "source_sha256": "b6e5d21573a86e0b2e445dad233fe96a377cebf35a61ee083294ea3f81922a1a",
+      "pdf_pages": "11",
+      "current_status": "default",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "FP16SUM",
+      "title": "Power-of-two scaled FP16 SUM and fused epilogue",
+      "source": "patches/tilelang_transport_p2.py",
+      "source_anchor": "row_linear",
+      "source_line": 105,
+      "source_sha256": "cfbccff73476b49b37140d0929ef696fd1509491432cdc45c89bbd2f09d6430c",
+      "pdf_pages": "15",
+      "current_status": "optional_approximation",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "TEATTN",
+      "title": "Masked Group32 TE with compact GQA",
+      "source": "patches/tilelang_group32_masked.py",
+      "source_anchor": "attention",
+      "source_line": 87,
+      "source_sha256": "75aefd9f8e3516249f4b04b220fe97885577e01eccce4ede75b64460b2aba140",
+      "pdf_pages": "6-7",
+      "current_status": "default",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "DENSE",
+      "title": "Optional DiT Group32 QK / FP16 PV",
+      "source": "patches/h3_operator_policy.py",
+      "source_anchor": "tilelang_dense",
+      "source_line": 21,
+      "source_sha256": "bb27ad1264e4e7a8c3660c81d1c74cbe4ff3b09894a43c6686b9d6dcf0581c71",
+      "pdf_pages": "8,31",
+      "current_status": "optional_approximation",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "KITCHEN",
+      "title": "DiT default Kitchen attention",
+      "source": "patches/h3_operator_policy.py",
+      "source_anchor": "dit_attention",
+      "source_line": 12,
+      "source_sha256": "bb27ad1264e4e7a8c3660c81d1c74cbe4ff3b09894a43c6686b9d6dcf0581c71",
+      "pdf_pages": "5,8",
+      "current_status": "default",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "REFINER",
+      "title": "Token Refiner Native SDPA and retained norm/RoPE",
+      "source": "patches/h3_operator_policy.py",
+      "source_anchor": "NativeRefinerAttention",
+      "source_line": 128,
+      "source_sha256": "bb27ad1264e4e7a8c3660c81d1c74cbe4ff3b09894a43c6686b9d6dcf0581c71",
+      "pdf_pages": "8",
+      "current_status": "default",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "PREP",
+      "title": "Fused stride-aware attention preparation",
+      "source": "patches/tilelang_grouped_tp_kitchen_v2.py",
+      "source_anchor": "fused_quantizer",
+      "source_line": 16,
+      "source_sha256": "1a665316b9d11d29846ad1f37a66607d610566104f729557d6b53b9a0f594904",
+      "pdf_pages": "31",
+      "current_status": "selected_paths",
+      "documentation_revision": "expanded"
+    },
+    {
+      "id": "GEOMETRY",
+      "title": "Bounded per-stream immutable geometry cache",
+      "source": "patches/tilelang_grouped_tp_optimized.py",
+      "source_anchor": "_geometry_cached",
+      "source_line": 31,
+      "source_sha256": "ee0b48a87d44b313f110bdf3d58a75a1e00bf5f37b0ca2be02f4b9a9fa971d1f",
+      "pdf_pages": "31",
+      "current_status": "selected_paths",
+      "documentation_revision": "added"
+    },
+    {
+      "id": "BND",
+      "title": "Direct BND/dtype stores with FP16 rounding boundary",
+      "source": "patches/tilelang_group32_masked.py",
+      "source_anchor": "execute_prepared",
+      "source_line": 77,
+      "source_sha256": "75aefd9f8e3516249f4b04b220fe97885577e01eccce4ede75b64460b2aba140",
+      "pdf_pages": "31",
+      "current_status": "selected_paths",
+      "documentation_revision": "expanded"
+    },
+    {
+      "id": "QCACHE",
+      "title": "Current BQ64 / Q-only reuse / FullRow dense selection",
+      "source": "patches/h3_operator_policy.py",
+      "source_anchor": "cache='q'",
+      "source_line": 82,
+      "source_sha256": "bb27ad1264e4e7a8c3660c81d1c74cbe4ff3b09894a43c6686b9d6dcf0581c71",
+      "pdf_pages": "8,31",
+      "current_status": "optional_dense",
+      "documentation_revision": "expanded"
+    },
+    {
+      "id": "PRUNE",
+      "title": "Mode-specific sparse preparation and tau0 shortcut",
+      "source": "patches/tilelang_grouped_tp_optimized.py",
+      "source_anchor": "fast_tau0",
+      "source_line": 88,
+      "source_sha256": "ee0b48a87d44b313f110bdf3d58a75a1e00bf5f37b0ca2be02f4b9a9fa971d1f",
+      "pdf_pages": "9-10,31",
+      "current_status": "optional_sparse",
+      "documentation_revision": "expanded"
+    },
+    {
+      "id": "PREFIX",
+      "title": "PackedLayout-derived protected dense prefix",
+      "source": "patches/h3_operator_policy.py",
+      "source_anchor": "packed_prefix",
+      "source_line": 58,
+      "source_sha256": "bb27ad1264e4e7a8c3660c81d1c74cbe4ff3b09894a43c6686b9d6dcf0581c71",
+      "pdf_pages": "9",
+      "current_status": "optional_sparse",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "DROP",
+      "title": "Sparse dropping",
+      "source": "patches/h3_operator_policy.py",
+      "source_anchor": "tilelang_drop",
+      "source_line": 21,
+      "source_sha256": "bb27ad1264e4e7a8c3660c81d1c74cbe4ff3b09894a43c6686b9d6dcf0581c71",
+      "pdf_pages": "9-10",
+      "current_status": "optional_approximation",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "SCALAR",
+      "title": "Scalar pooling with omitted-score workspace cap",
+      "source": "patches/h3_operator_policy.py",
+      "source_anchor": "scalar_score_workspace_mib",
+      "source_line": 16,
+      "source_sha256": "bb27ad1264e4e7a8c3660c81d1c74cbe4ff3b09894a43c6686b9d6dcf0581c71",
+      "pdf_pages": "10",
+      "current_status": "optional_approximation",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "NCCL",
+      "title": "Four channels, no P2P, automatic protocol",
+      "source": "patches/comfy_tp_runtime.py",
+      "source_anchor": "NCCL_MIN_NCHANNELS",
+      "source_line": 578,
+      "source_sha256": "87059db1a3eef703be060df5a3047c828246084ce1308b8329757dc3c41f4837",
+      "pdf_pages": "3,36",
+      "current_status": "default",
+      "documentation_revision": "expanded"
+    },
+    {
+      "id": "NATIVEORDER",
+      "title": "Native adapter order, full A, post-B scaling",
+      "source": "patches/h3_lora.py",
+      "source_anchor": "NativeAlignedLoRA",
+      "source_line": 56,
+      "source_sha256": "8d2cace24b470348dcdf3123d7e05a92c618d3569108510adcb5bff684ea862d",
+      "pdf_pages": "16,32",
+      "current_status": "default",
+      "documentation_revision": "expanded"
+    },
+    {
+      "id": "LORASTORE",
+      "title": "One-buffer activated-input gather and owned-delta lifetimes",
+      "source": "patches/h3_lora.py",
+      "source_anchor": "all_gather_into_tensor",
+      "source_line": 84,
+      "source_sha256": "8d2cace24b470348dcdf3123d7e05a92c618d3569108510adcb5bff684ea862d",
+      "pdf_pages": "32",
+      "current_status": "default",
+      "documentation_revision": "added"
+    },
+    {
+      "id": "SELECTB",
+      "title": "Guarded selected-B FC1 loading/GEMM",
+      "source": "patches/h3_lora.py",
+      "source_anchor": "selective_rows",
+      "source_line": 205,
+      "source_sha256": "8d2cace24b470348dcdf3123d7e05a92c618d3569108510adcb5bff684ea862d",
+      "pdf_pages": "16",
+      "current_status": "default_if_eligible",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "ROWPARTIAL",
+      "title": "Bounded hidden staging for optional Row Partial",
+      "source": "patches/h3_lora.py",
+      "source_anchor": "HIDDEN_STAGE_BYTES",
+      "source_line": 98,
+      "source_sha256": "8d2cace24b470348dcdf3123d7e05a92c618d3569108510adcb5bff684ea862d",
+      "pdf_pages": "16,32",
+      "current_status": "optional_approximation",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "BAKE",
+      "title": "Whole-layer up-to-two-GPU offline LoRA baking",
+      "source": "patches/offline_lora.py",
+      "source_anchor": "cached_bake",
+      "source_line": 193,
+      "source_sha256": "dc31dc7764caa78d4cee295f56482109ae0ea0d07cc5a10147ffa4277b690c8a",
+      "pdf_pages": "17",
+      "current_status": "optional_requantization",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "READ",
+      "title": "Positional tensor range reads and fallback",
+      "source": "patches/windowed_tp.py",
+      "source_anchor": "read_tensor",
+      "source_line": 40,
+      "source_sha256": "3301c4eaf04a39891dc6f2031dd84e90e34479e01ea27a38847894f4304080e1",
+      "pdf_pages": "18",
+      "current_status": "default_platform_guarded",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "SHARDS",
+      "title": "Verified optional rank-local safetensors exports",
+      "source": "patches/rank_local_int8.py",
+      "source_anchor": "load_offline_block",
+      "source_line": 146,
+      "source_sha256": "d6fd8040d6bb22b3b19fbb678101ac8cb489451011ad749de0f529cf86615183",
+      "pdf_pages": "18",
+      "current_status": "optional",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "STARTUP",
+      "title": "Separate vision/embedding startup CPU groups",
+      "source": "patches/comfy_tp_runtime.py",
+      "source_anchor": "startup_specs",
+      "source_line": 133,
+      "source_sha256": "87059db1a3eef703be060df5a3047c828246084ce1308b8329757dc3c41f4837",
+      "pdf_pages": "33",
+      "current_status": "default",
+      "documentation_revision": "added"
+    },
+    {
+      "id": "VISION",
+      "title": "On-demand vision GPU copy and phase fence",
+      "source": "patches/comfy_tp_models.py",
+      "source_anchor": "StagedVision",
+      "source_line": 53,
+      "source_sha256": "b2e20c8bb55e4b4c667147e94ac5294d21d12eef319dd63b2527c61aa1f2a2de",
+      "pdf_pages": "33",
+      "current_status": "default",
+      "documentation_revision": "added"
+    },
+    {
+      "id": "AUX",
+      "title": "Rank-zero leased refiner/input projections and broadcasts",
+      "source": "patches/windowed_tp.py",
+      "source_anchor": "DiTPreprocessing",
+      "source_line": 211,
+      "source_sha256": "3301c4eaf04a39891dc6f2031dd84e90e34479e01ea27a38847894f4304080e1",
+      "pdf_pages": "33",
+      "current_status": "default",
+      "documentation_revision": "added"
+    },
+    {
+      "id": "HOST",
+      "title": "Process-shared host budget/cache/pin ownership",
+      "source": "patches/host_weight_cache.py",
+      "source_anchor": "HostBudget",
+      "source_line": 25,
+      "source_sha256": "cbc88510897162e95f21b2e2db019c5507331e4854d0443f6f0cda4f38f1181a",
+      "pdf_pages": "19,35",
+      "current_status": "default",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "WINDOW",
+      "title": "Event-owned bounded H2D residency and use leases",
+      "source": "patches/weight_residency.py",
+      "source_anchor": "ResidencyWindow",
+      "source_line": 164,
+      "source_sha256": "8421a6ab4f64ebd5a9957d2734beed14f765ba6691eb9c1a6232ce64b2eacb04",
+      "pdf_pages": "19-20",
+      "current_status": "default",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "RETAIN",
+      "title": "Retain DiT groups across actual evaluations",
+      "source": "patches/comfy_tp_runtime.py",
+      "source_anchor": "retain_keys",
+      "source_line": 416,
+      "source_sha256": "87059db1a3eef703be060df5a3047c828246084ce1308b8329757dc3c41f4837",
+      "pdf_pages": "34",
+      "current_status": "default_when_admitted",
+      "documentation_revision": "expanded"
+    },
+    {
+      "id": "CROSSMODEL",
+      "title": "TE-complete DiT CPU preparation",
+      "source": "patches/comfy_tp_runtime.py",
+      "source_anchor": "cross_model_cpu",
+      "source_line": 50,
+      "source_sha256": "87059db1a3eef703be060df5a3047c828246084ce1308b8329757dc3c41f4837",
+      "pdf_pages": "34",
+      "current_status": "default",
+      "documentation_revision": "added"
+    },
+    {
+      "id": "DECODEPREFETCH",
+      "title": "Decode-start TE startup and lifecycle prefix prefetch",
+      "source": "patches/comfy_tp_runtime.py",
+      "source_anchor": "decode_te_blocks",
+      "source_line": 53,
+      "source_sha256": "87059db1a3eef703be060df5a3047c828246084ce1308b8329757dc3c41f4837",
+      "pdf_pages": "34",
+      "current_status": "mixed_defaults",
+      "documentation_revision": "added"
+    },
+    {
+      "id": "REUSE",
+      "title": "Reuse-aware CPU deadlines and eviction",
+      "source": "patches/host_weight_cache.py",
+      "source_anchor": "reuse_aware",
+      "source_line": 133,
+      "source_sha256": "cbc88510897162e95f21b2e2db019c5507331e4854d0443f6f0cda4f38f1181a",
+      "pdf_pages": "34-35",
+      "current_status": "optional_lifecycle",
+      "documentation_revision": "added"
+    },
+    {
+      "id": "PRESSURE",
+      "title": "Optional cgroup/PSI file-cache admission",
+      "source": "patches/host_memory_pressure.py",
+      "source_anchor": "CgroupMemory",
+      "source_line": 23,
+      "source_sha256": "61b8cb395490a1e8d149e2e3ba4abd72d2ba64b73846c6823ab1b8d63b9b07f0",
+      "pdf_pages": "35",
+      "current_status": "optional",
+      "documentation_revision": "added"
+    },
+    {
+      "id": "ADAPT",
+      "title": "Optional one/two-group VRAM adaptive lookahead",
+      "source": "patches/weight_residency.py",
+      "source_anchor": "_adapt_gpu_lookahead",
+      "source_line": 491,
+      "source_sha256": "8421a6ab4f64ebd5a9957d2734beed14f765ba6691eb9c1a6232ce64b2eacb04",
+      "pdf_pages": "19",
+      "current_status": "optional",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "DEL",
+      "title": "Attention/MLP caller lifetime repair",
+      "source": "patches/tp_qwen3vl.py",
+      "source_anchor": "del normed_x, q, k, v, attn_out",
+      "source_line": 232,
+      "source_sha256": "b5078bf066e91fe7d5dab25f636eb8ac544eb6c4338cce5d168937a629325e23",
+      "pdf_pages": "7,20",
+      "current_status": "default",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "STAGEVAE",
+      "title": "Encoder-first / decoder-at-output VAE staging",
+      "source": "patches/staged_vae.py",
+      "source_anchor": "StagedVAE",
+      "source_line": 98,
+      "source_sha256": "ab4764b09ee83b32a7fa47f87c912cd4a6ea4dfeb5a31df190a1fbb609267398",
+      "pdf_pages": "21",
+      "current_status": "default_for_recognized_checkpoints",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "VIDEO",
+      "title": "Global-KV aligned video query parallelism",
+      "source": "patches/parallel_vae.py",
+      "source_anchor": "AlignedVideoDecode",
+      "source_line": 120,
+      "source_sha256": "fc09f45264f1b0c903f3a641064d456e43bd7405650c0438d7925badbaddb24e",
+      "pdf_pages": "22-23",
+      "current_status": "auto_with_native_fallback",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "AUDIO",
+      "title": "FP32 stereo channel-parallel audio",
+      "source": "patches/audio_channel_decode.py",
+      "source_anchor": "channel_decode",
+      "source_line": 8,
+      "source_sha256": "df43be56d14421d946f277989198725fe3f37471ae7c63d93664dc673d5a26d2",
+      "pdf_pages": "24",
+      "current_status": "auto_accepted_rounding_difference",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "IDLE",
+      "title": "Idle parent VAE encoders then worker TE prefix",
+      "source": "patches/comfy_tp_runtime.py",
+      "source_anchor": "_preload_idle_vaes",
+      "source_line": 675,
+      "source_sha256": "87059db1a3eef703be060df5a3047c828246084ce1308b8329757dc3c41f4837",
+      "pdf_pages": "25,34",
+      "current_status": "optional",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "LIFECYCLE",
+      "title": "Prompt compatibility, cancellation and pressure ownership",
+      "source": "patches/comfy_idle_lifecycle.py",
+      "source_anchor": "PromptBridge",
+      "source_line": 29,
+      "source_sha256": "342253c4b4d41ec32ed7cbb316e44ea2d047eae1d0ed66a9bb21ce4a37a1e789",
+      "pdf_pages": "25,34-35",
+      "current_status": "optional_idle",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "SERVICE",
+      "title": "Persistent serial TP session, Native sampler and diagnostics separation",
+      "source": "patches/comfy_sampler.py",
+      "source_anchor": "RemoteDenoiser",
+      "source_line": 55,
+      "source_sha256": "1ff26ec380269f667bd8d6133ed8d8061aa8e0808d8b932450c2d2db8cf34c03",
+      "pdf_pages": "3,27-28",
+      "current_status": "default",
+      "documentation_revision": "covered"
+    },
+    {
+      "id": "NATIVEFUSE",
+      "title": "Retained Kitchen RMSNorm/RoPE and Native mixed precision",
+      "source": "patches/tp_dit.py",
+      "source_anchor": "rms_rope_split_half",
+      "source_line": 253,
+      "source_sha256": "19ad0a249d332e40ee2f8010af931d184eacbc7c844abc7725d5fff3190dbf56",
+      "pdf_pages": "8,29,31",
+      "current_status": "default",
+      "documentation_revision": "expanded"
+    }
+  ],
+  "exclusions": [
+    {
+      "family": "INT8 PV / alternate attention mapping",
+      "status": "benchmark_only",
+      "reason": "Current integrated TileLang attention uses FP16 PV."
+    },
+    {
+      "family": "Packed INT8 SUM and retired FP32 partial SUM",
+      "status": "not_default",
+      "reason": "Native INT32 is default; scaled FP16 has its own explicit backend."
+    },
+    {
+      "family": "Concat A and streamed SwiGLU",
+      "status": "retired",
+      "reason": "Rejected by current UI/runtime; Row Partial is a separate optional approximation."
+    },
+    {
+      "family": "Register/staged scales, castpad center, full QK cache, finite-output epilogue",
+      "status": "unselected_kernel_options",
+      "reason": "Current live callers retain their specified flags; Video remains Kitchen."
+    },
+    {
+      "family": "Cropped slabs / video TP-SP / temporal audio",
+      "status": "historical_or_compatibility",
+      "reason": "Current integration selects global-KV query and FP32 channel paths."
+    },
+    {
+      "family": "Preadv / mmap / descriptor advice / additional workers",
+      "status": "storage_study_only",
+      "reason": "Current read_tensor uses positional pread with seek/readinto fallback."
+    },
+    {
+      "family": "ZSTD / Blosc2 / ZipNN / ZigZag-FSE",
+      "status": "CPU_benchmark_only",
+      "reason": "No production decompression integration."
+    },
+    {
+      "family": "SM120 previews / historical Linux dependencies",
+      "status": "scoped_evidence_only",
+      "reason": "Do not qualify current frozen conda Linux stack or claim T4 speed."
+    }
+  ],
+  "documents": [
+    {
+      "path": "docs/archive/HISTORICAL_README.md",
+      "sha256": "53ad24f4f8e0d2fed48b6e26f9018b2c84cf19cd6421241b68c5ac069237be3a",
+      "role": "historical_record",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "lora",
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/archive/KAGGLE_P012_RECOVERY.md",
+      "sha256": "f6dc8733ae1a2af3f8cce23e571ef71fd23ed63948574a1789dd9f803ff44562",
+      "role": "historical_record",
+      "topics": [
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/archive/KAGGLE_SPAWN_AND_SHARD_SCALES.md",
+      "sha256": "c8bc9d322a71aabf46b422df76db39c2ce1998754270fcaa9016b3e95b926f1a",
+      "role": "historical_record",
+      "topics": [
+        "row_gemm",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/archive/MANUAL_NATIVE_TIMEOUT.md",
+      "sha256": "b0fad3279b035b20223e45686304ef00e0aeea845513576b9e4d7d4b8f882199",
+      "role": "historical_record",
+      "topics": [
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/design/IDLE_RESIDENCY_DESIGN.md",
+      "sha256": "3f95b1488621335f02a7cf8882509a7ee5e6a8019759dcf48aca84caea2fac8d",
+      "role": "design_not_automatic_integration",
+      "topics": [
+        "lora",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/design/INT8_SPARSE_ATTENTION_SM75_DESIGNS.md",
+      "sha256": "bd5fc5a71cbc0ae0ba04bc91b70b80329dc84a43a1109681d106481ef96eaa44",
+      "role": "design_not_automatic_integration",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "residency_io",
+        "runtime",
+        "compression"
+      ]
+    },
+    {
+      "path": "docs/design/INTEGRATION_PLAN.md",
+      "sha256": "c60db0323945234c3babaf0fc5b1862247e267fee6c1b4beea8562d3d20b34f7",
+      "role": "design_not_automatic_integration",
+      "topics": [
+        "row_gemm",
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/design/OPERATOR_OPTIMIZATION_PLAN.md",
+      "sha256": "f618466f9601ba38f2d9d414e33a8b4a71b682e5f34f48b1bc234c3fec3990c0",
+      "role": "design_not_automatic_integration",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/design/QUALITY_FIRST_T4_EXPERIMENT_PLAN.md",
+      "sha256": "46dd228c34df726c4678b2ad37ba2001a2550c241d933b783b10bb17effe7832",
+      "role": "design_not_automatic_integration",
+      "topics": [
+        "attention",
+        "lora",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/design/REF2VA_BENCHMARK_PLAN.md",
+      "sha256": "c747bbe06c201c7887514e8c7e0567c50a3c3e0ef2b4b9cb265794a3d3876a9f",
+      "role": "design_not_automatic_integration",
+      "topics": [
+        "residency_io"
+      ]
+    },
+    {
+      "path": "docs/design/SLAB_EXPERIMENT_PLAN.md",
+      "sha256": "36829935078ae576a7436548809adf176cffc024edb1fade83f669aff2c82194",
+      "role": "design_not_automatic_integration",
+      "topics": [
+        "row_gemm",
+        "lora",
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/design/TE_RESIDENCY_P01.md",
+      "sha256": "35f45d766a8ea7cf47afb4fcd4e05fc389831683a32d18a595d8a32e3ffcec54",
+      "role": "design_not_automatic_integration",
+      "topics": [
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/design/TP2_GROUP32_KITCHEN_DESIGN.md",
+      "sha256": "75cc2aacd41935e64375000349d233b9c74ae537dc9bdec5441abc32467c56bd",
+      "role": "design_not_automatic_integration",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime",
+        "compression"
+      ]
+    },
+    {
+      "path": "docs/design/VAE_KV_PROFILE_PLAN.md",
+      "sha256": "efa6fcd827a576abdcd88bd22e2f948979c219015ec30365459eba25b9f36fc2",
+      "role": "design_not_automatic_integration",
+      "topics": [
+        "row_gemm",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/guides/ARTIFACT_RETENTION.md",
+      "sha256": "c49c6c5fa978440ce7adc6f5dff26faa24bdd4091aec80a639da36af017d6f1a",
+      "role": "current_reference_with_scoped_evidence",
+      "topics": [
+        "residency_io",
+        "compression"
+      ]
+    },
+    {
+      "path": "docs/guides/COMFYUI_SAMPLER_INTEGRATION.md",
+      "sha256": "b9d2d4667f4c247ea6befba5796def3fbab6e8d046377472e702a22771825ecb",
+      "role": "current_reference_with_scoped_evidence",
+      "topics": [
+        "row_gemm",
+        "lora",
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/guides/H3_LEGACY_RUNTIME.md",
+      "sha256": "054fe6860d4338147e8aa9c326e7fd041c7a0a30048acc5aae9fa7236dfa36c7",
+      "role": "current_reference_with_scoped_evidence",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/guides/H3_LOADING_STAGES.md",
+      "sha256": "24c35ecd7d1981995071d9f0a20749c32087f91c5a16fb65e13b37a9da85cbd3",
+      "role": "current_reference_with_scoped_evidence",
+      "topics": [
+        "lora",
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/guides/H3_OPERATOR_ENHANCEMENTS.md",
+      "sha256": "87fcf7d12f2b717ac131f80f8b0ef534fe5d160db8c880c70aeb2b39038952d0",
+      "role": "current_reference_with_scoped_evidence",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "lora",
+        "residency_io",
+        "runtime",
+        "compression"
+      ]
+    },
+    {
+      "path": "docs/guides/H3_OPERATOR_INTEGRATION.md",
+      "sha256": "a7006ac9b4b176eaaa07015b0320bfb10f9df18b5388bf305a9258684daa9de3",
+      "role": "current_reference_with_scoped_evidence",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "lora",
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/guides/OFFLINE_CHECKPOINT_PUBLICATION.md",
+      "sha256": "2355a6af8a2f3132c9e6c036a431059bce8d2960cca077cac77d6ed2a4e59b32",
+      "role": "current_reference_with_scoped_evidence",
+      "topics": [
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/guides/PARALLEL_VAE_INTEGRATION.md",
+      "sha256": "f6d8ec732e0defb9763b26f6e4c3bafe4e55e8ac7599ca56f6f46ae2bdb7adc1",
+      "role": "current_reference_with_scoped_evidence",
+      "topics": [
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/2-Slab Video VAE.md",
+      "sha256": "ee5dd5d6b556d17c4f0f9db15b9b5f637341ab4bbde61b0ab1e6bb9ec4b65464",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "vae"
+      ]
+    },
+    {
+      "path": "docs/reports/ATTENTION_BOTTLENECK_REPORT.md",
+      "sha256": "b3827a686c65085afeb6292a04ac4c86ac65b2eecaad198a7ca7609caf135013",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/ATTENTION_T4_COMPATIBILITY.md",
+      "sha256": "e2ca2a142452ae7dcd0f9b6d241561ce321ae9248b62f3e2dd362e3ed29e193a",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention"
+      ]
+    },
+    {
+      "path": "docs/reports/AUDIO_CHANNEL_ERROR_DIAGNOSIS.md",
+      "sha256": "740a2fa93386c9de9f4ed6988cfbd12cd3265ea3ad7e661a21519af051c9493b",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "lora",
+        "residency_io",
+        "vae"
+      ]
+    },
+    {
+      "path": "docs/reports/BENCHMARK_REPORT.md",
+      "sha256": "12eca2e1e0e09fe24524ec35fb50baa75b9df521746fe15b49f523d22e1cfa5f",
+      "role": "version_bound_experiment_or_review",
+      "topics": []
+    },
+    {
+      "path": "docs/reports/CAUSAL_PROFILING.md",
+      "sha256": "55a615c31ff7a2f460c78cdb808b63fb5df0e3f542679c38eee612051b3f631b",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/CAUSAL_T4_RESULTS.md",
+      "sha256": "22bba824f0c20c6da195ed4fc373eb238693148bdc8125811eb421f27ca29f24",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/CPU_CRITICAL_PATH_AUDIT.md",
+      "sha256": "7ce07195d745b9e9ea71cd4838c24996b0f374277fd5e18c64440e73f8b8cd0b",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/DIT_TEMPORARY_TENSOR_LIFETIMES.md",
+      "sha256": "501020bbfcb37793843b16a9f831162b150bbffabd0cb9f078b6aa7208fd3719",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "lora"
+      ]
+    },
+    {
+      "path": "docs/reports/FC2_QUANTIZER_MEMORY.md",
+      "sha256": "80f7c0b98099d94af522251f27e143adede02134fcd607fe84eab2a6df434ea0",
+      "role": "current_reference_with_scoped_evidence",
+      "topics": [
+        "row_gemm",
+        "lora",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/FINAL_PARETO_REPORT.md",
+      "sha256": "9dbf7f4e31beea8f93006949da804e72d12c948e19557da4bf6dfb08fcb261a3",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/GENERATION_QUALITY_REPORT.md",
+      "sha256": "e7f30d56fbeb156d915f78056f4257ff0cfb19f4f35610b2efa58dda6aa85f10",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/GROUP32_OPTIMIZATION_REPORT.md",
+      "sha256": "b3e6a4427e610993ed0d6c866bc58300bd1c890f1be72953ae2718cc256b2d5a",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime",
+        "compression"
+      ]
+    },
+    {
+      "path": "docs/reports/H3_INT8_SWIGLU_LORA.md",
+      "sha256": "9085351746bdf4920def9b369a03e055b0884184ef4a5f9960a06e64e98dfc9c",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "row_gemm",
+        "lora",
+        "residency_io"
+      ]
+    },
+    {
+      "path": "docs/reports/H3_PHYSICAL_INT8_LORA_RESULTS.md",
+      "sha256": "7d3e3f46cfc7763b122e763053ae3037779fa4d0ecc70d325774a4e2ac412e97",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "row_gemm",
+        "lora",
+        "residency_io"
+      ]
+    },
+    {
+      "path": "docs/reports/H3_PIPELINE_REVIEW.md",
+      "sha256": "052a439927da6532e5240bc23625be233493007cb3051c701554a59f42254846",
+      "role": "current_reference_with_scoped_evidence",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "lora",
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/H3_RUNTIME_PROVENANCE_AUDIT.md",
+      "sha256": "e99179c520dee9a0d940cf784f11c73b7fc1304830e244b1c44efd9cd5d4f715",
+      "role": "current_reference_with_scoped_evidence",
+      "topics": [
+        "lora",
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/HOST_CACHE_IMPLEMENTATION.md",
+      "sha256": "5ee2d0f70e21bb426d337345e26927443582700d6369eaf88ee0cbb325e58e22",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/L1_OFFLINE_MEMORY_PROFILE.md",
+      "sha256": "95788b32cba8289845956223164e6dd04e4eef42e41a996a55b1665db21304d4",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "lora",
+        "residency_io"
+      ]
+    },
+    {
+      "path": "docs/reports/LOADING_OPTIMIZATION.md",
+      "sha256": "799250cc61dacf6df269e03a6c5ff6a967e33400a1de16aa06c789276c25cba5",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/LOCAL_KITCHEN_GROUP32_PREVIEW.md",
+      "sha256": "7eada13514bdc4ac5bcc287a417acd894df3fe42172386c728d53478e1e9a00e",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/ONLINE_LORA_BYTE_EXACT_OPTIMIZATION.md",
+      "sha256": "22fafa8cf9dd235524e86c366851955423d65ebca55377d88973b9dc2e302554",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "row_gemm",
+        "lora",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/ONLINE_LORA_NATIVE_ORDER_REPAIR.md",
+      "sha256": "c17bde8f566a07637f71f02f43287b556a808e67a532b70b83393fc4f37fcf2c",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "row_gemm",
+        "lora",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/ONLINE_LORA_OPTIONS.md",
+      "sha256": "93d7509863a34af076619e519fdec4f9d04dd03836825c531eaa4175a1f82894",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "row_gemm",
+        "lora",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/P012_T4_RESULTS.md",
+      "sha256": "3ab87c1b8c3889498f4b59a172977989e1a550feb5168e5f94765debdfedcab5",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/PIPELINE_GPU_MEMORY_PEAK.md",
+      "sha256": "71e836818cc501fefd329a67771ebd7587aa47f2d6e900a03f957859f3f8bf60",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "lora",
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/PIPELINE_RESIDENCY_AUDIT.md",
+      "sha256": "d25bbefb6dd0f75b0134799ecee24f02718953a3304bd799ebc7528afd318a34",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "lora",
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/REF2VA_E2E_20261019.md",
+      "sha256": "7378b51a4c3aa4dc5e98ef51ac4e3bd6c9b524293798c11b41988198a4a4356e",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "lora",
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/REF2VA_E2E_T4_RESULTS.md",
+      "sha256": "577623a4e7199e83f29e7159e51fdcee7b9bc504de8ca29fcdd073a1f9d7c67a",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "lora",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/REF2VA_T4_RESULTS.md",
+      "sha256": "244ee289c2128c0a96f6cead5e311bba1672dabfd8ba4fd7ba70d3b1b166fc00",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "row_gemm",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/REPAIRED_T4_REPORT.md",
+      "sha256": "09496837640d47f48a0e458d47abc60985d040e61c4b67ef266d7cc8459d8451",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "lora",
+        "residency_io"
+      ]
+    },
+    {
+      "path": "docs/reports/RESIDENCY_IMPLEMENTATION.md",
+      "sha256": "9b9f7eb47741d5d6539e7d0d82be14b79a7b0879335c000cd0bd3cfc85056e1f",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "row_gemm",
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/RETEST_REPORT.md",
+      "sha256": "ca8ba6407b494b2ce44434ce7edcc72bf881b9a123b67d10fda8a53a7886ea8a",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "row_gemm",
+        "residency_io",
+        "vae",
+        "runtime",
+        "compression"
+      ]
+    },
+    {
+      "path": "docs/reports/ROW_PARTIAL_MEMORY.md",
+      "sha256": "f6897ad1f1c575d4c4dd3e643732844c4f855109ed3e0125b689645cf3107a97",
+      "role": "current_reference_with_scoped_evidence",
+      "topics": [
+        "lora",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/SELECTIVE_B_FEASIBILITY.md",
+      "sha256": "9afc059af382cab51570476952291a03382316e06ef0c3cf460b32c185a1d051",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "row_gemm",
+        "lora",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/SEMANTIC_VALIDATION.md",
+      "sha256": "3662a88106578fb6c39fa211bf929a094dc6aac4fc761ddc0d4e4a7dd49b42c8",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "row_gemm",
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/SLAB_KV_DIAGNOSIS.md",
+      "sha256": "65488576234cebcc79ff64c89ca21d0c9f99c588791ee8945ac6d031b155eb44",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "row_gemm",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/SWIGLU_PADDING_FUSION.md",
+      "sha256": "7f1e456ac4209fb125e84bee94f0e4f2da77949004fa950a6556281df2242158",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/TEXT_ENCODER_SP_INT8_REPORT.md",
+      "sha256": "c8aa626cc1552eae90c89de2ef81a96519204c856987ce817b128d3520bd5de2",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "vae"
+      ]
+    },
+    {
+      "path": "docs/reports/TE_CAUSAL_PROFILE.md",
+      "sha256": "05b3898159081b1b8e2c1bfd1e3806c822e2be767d541a184f8cd56ff0074b90",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/TE_COMPRESSION_LOCAL_20261020.md",
+      "sha256": "78cffaf4f92b19a45cbb77f986aa60c6443048715afc472172ad920bee13d736",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "row_gemm",
+        "residency_io",
+        "runtime",
+        "compression"
+      ]
+    },
+    {
+      "path": "docs/reports/TE_CRITICAL_PATH.md",
+      "sha256": "11ce303f5f1233fb7b8e740868711248c74af05b995d008a11159686c152083c",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/TE_DIT_STUDY_REPORT.md",
+      "sha256": "a046e76db24a9b9f30e28f8fc1c7a1191409948c1c708c99769f560fa8371225",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "row_gemm",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/TE_FILE_READ_CAUSALITY.md",
+      "sha256": "fbaebe131998f2e7979dc91f01fdf96352592c93ac61ec32479ad904117f4e5b",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/TE_IDLE_RESIDENCY_RESULTS.md",
+      "sha256": "080f1c0ba1ba4a8fa661b6be2d5641c7267838677723a5325d1a53f776ce92a4",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/TE_IO_ABLATION_RESULTS.md",
+      "sha256": "b0ffbba97e2030a088765feb02c9a496c9cd1c82a7eaf1414175019622909182",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/TE_IO_CAUSAL_AUDIT.md",
+      "sha256": "15cbb6c15c9a45574bab69e1e079886a3c5d270a81042632592540718f635aa8",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "residency_io",
+        "runtime",
+        "compression"
+      ]
+    },
+    {
+      "path": "docs/reports/TE_RESIDENCY_OPTIMIZATION.md",
+      "sha256": "f032b936621759cdd4e5c5cf8001275d6067ef70a4d1bbc3e6559cf1960d763f",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "residency_io",
+        "runtime",
+        "compression"
+      ]
+    },
+    {
+      "path": "docs/reports/TE_RESIDENCY_P01_RESULTS.md",
+      "sha256": "5a14d4f8566967a6df127f41ecb1a3fe3cbaf89e97f342a87037afc031cbb175",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/TILELANG_T4_ATTENTION_RESULTS.md",
+      "sha256": "af4949a97151ce63d24b422ab4620be0a67301536ab36ea72001626780b03040",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "row_gemm"
+      ]
+    },
+    {
+      "path": "docs/reports/TP2_ATTENTION_TRANSPORT_TRADEOFFS.md",
+      "sha256": "61559e57821032c31239303c8c69869e72c7786f8d4f00b20d6da79eabbcf64a",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/TP2_KITCHEN_GROUP32_RESULTS.md",
+      "sha256": "1738b465d6f3a55a4a1f4e6de4355d161358f4c8c20e160a40d4ae5178feace1",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "runtime",
+        "compression"
+      ]
+    },
+    {
+      "path": "docs/reports/TP2_KITCHEN_GROUP32_V2_RESULTS.md",
+      "sha256": "cb0972301e4920349cfafd7b7cacf557d368f053a89743d29c6717b6f9282338",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/TP2_OFFLINE_OPTIMIZATION.md",
+      "sha256": "eed8bb543e09292453892842c087eec1e7eb3cce1591849a03b3a824305712d0",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/TP2_OPERATOR_OPTIMIZATION.md",
+      "sha256": "c699e8584ba6905eed11f170f4fdc67471dbfeb002e0f68fd559bc91db1b5453",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime",
+        "compression"
+      ]
+    },
+    {
+      "path": "docs/reports/TP2_OPERATOR_PASS2.md",
+      "sha256": "5fb8537fe2eee817acb234d0622a2d0f3a2c0de08cb413c2422f6d9efdc35ddf",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/TP2_OPERATOR_RESULTS.md",
+      "sha256": "79544a5c22624aec5f65985559eaf6ec89e0f6792474b92e8e0ed80fb6d80110",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/TP2_P2_OPTIMIZATION_REPORT.md",
+      "sha256": "f55688e82fd80cb8308a5ecb3fa6914ab1fe3a4c5ef734fe69a1c08106ceb916",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "residency_io",
+        "runtime",
+        "compression"
+      ]
+    },
+    {
+      "path": "docs/reports/TP2_ROW_FUSION_RESULTS.md",
+      "sha256": "4ca906faf1b8e2bc9eddd112e82a060c30eced7118d5135d49db42e7ce07c0dc",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime",
+        "compression"
+      ]
+    },
+    {
+      "path": "docs/reports/VAE_KV_T4_RESULTS.md",
+      "sha256": "a2cb09b3cf2e0b6b7a6435becc000f2984e6772c2f9245883fab5df80e54d5c8",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "attention",
+        "row_gemm",
+        "residency_io",
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/VAE_TILE_BENCHMARK.md",
+      "sha256": "fe0014459ab483fcb3d97868ebb70661e1f9cb1bc13ef0e6978757244d063b9b",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "vae"
+      ]
+    },
+    {
+      "path": "docs/reports/VIDEO_VAE_QUERY_FALLBACK_CHECK.md",
+      "sha256": "1145cbfbb344948db8ef17b42fe023d45ff11906efad18ecf97445c5a0682c8f",
+      "role": "current_reference_with_scoped_evidence",
+      "topics": [
+        "vae",
+        "runtime"
+      ]
+    },
+    {
+      "path": "docs/reports/VIDEO_VAE_TP_BENCHMARK.md",
+      "sha256": "f0dece634e0199625052cf9a963422cf48034e19560523758409f43d631312f6",
+      "role": "version_bound_experiment_or_review",
+      "topics": [
+        "residency_io",
+        "vae"
+      ]
+    }
+  ],
+  "experiment_families": [
+    {
+      "scope": "repository_experiment_source",
+      "family": "benchmarks",
+      "files": 282,
+      "bytes": 1758327,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "repository_experiment_source",
+      "family": "root_builders_and_analysis",
+      "files": 95,
+      "bytes": 636435,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_external_experiment",
+      "family": "h3_conda_runtime_20261019",
+      "files": 17,
+      "bytes": 503748,
+      "topics": [
+        "attention",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_external_experiment",
+      "family": "h3_legacy_runtime_20261019",
+      "files": 12,
+      "bytes": 36257,
+      "topics": [
+        "attention",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_external_experiment",
+      "family": "h3_loading_stages_20261019",
+      "files": 5,
+      "bytes": 7591,
+      "topics": [
+        "attention",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_external_experiment",
+      "family": "h3_operator_enhancements_20261019",
+      "files": 5,
+      "bytes": 7848,
+      "topics": [
+        "attention",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_external_experiment",
+      "family": "h3_operator_integration_20261018",
+      "files": 110,
+      "bytes": 1906408,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_external_experiment",
+      "family": "h3_pipeline_review_20261020",
+      "files": 13,
+      "bytes": 33133,
+      "topics": [
+        "attention",
+        "lora",
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_external_experiment",
+      "family": "operator_optimization_20261016",
+      "files": 9,
+      "bytes": 305756,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_external_experiment",
+      "family": "operator_optimization_tp2_20261016",
+      "files": 104,
+      "bytes": 1694187,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_external_experiment",
+      "family": "operator_optimization_tp2_20261017",
+      "files": 182,
+      "bytes": 2394768,
+      "topics": [
+        "attention",
+        "compression",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_external_experiment",
+      "family": "operator_optimization_tp2_20261018",
+      "files": 115,
+      "bytes": 1333245,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_external_experiment",
+      "family": "quality_constrained_20261015",
+      "files": 255,
+      "bytes": 20069282,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_external_experiment",
+      "family": "quality_first_20261014",
+      "files": 139,
+      "bytes": 1870588,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_external_experiment",
+      "family": "tp2_p2_20261018",
+      "files": 521,
+      "bytes": 8830634,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_external_experiment",
+      "family": "video_query_fallback_20261019",
+      "files": 3,
+      "bytes": 4888,
+      "topics": [
+        "residency_io",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_causal_audit",
+      "files": 4,
+      "bytes": 827684,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_causal_audit_output",
+      "files": 11,
+      "bytes": 1109811,
+      "topics": [
+        "residency_io",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_causal_resume_output",
+      "files": 18,
+      "bytes": 44785,
+      "topics": [
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_comfy_sampler",
+      "files": 2,
+      "bytes": 164160,
+      "topics": [
+        "compression",
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_comfy_sampler_output",
+      "files": 3,
+      "bytes": 52361,
+      "topics": [
+        "residency_io",
+        "row_gemm",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_cpu_audit",
+      "files": 3,
+      "bytes": 839437,
+      "topics": [
+        "compression",
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_cpu_audit_output",
+      "files": 4,
+      "bytes": 3638,
+      "topics": []
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_direct_loading_audit",
+      "files": 4,
+      "bytes": 2325182,
+      "topics": [
+        "compression",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-attention-grouped-study",
+      "files": 2,
+      "bytes": 72052,
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-attention-native-full-shapes",
+      "files": 2,
+      "bytes": 90664,
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-attention-p0-matrix",
+      "files": 2,
+      "bytes": 64699,
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-attention-quality-challenge",
+      "files": 4,
+      "bytes": 113682,
+      "topics": [
+        "attention",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-attention-sol-fused-study",
+      "files": 2,
+      "bytes": 74646,
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-fc2-quant-memory",
+      "files": 2,
+      "bytes": 289254,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-native-order-lora-repair",
+      "files": 3,
+      "bytes": 285496,
+      "topics": [
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-native-order-lora-storage",
+      "files": 3,
+      "bytes": 299635,
+      "topics": [
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-optional-a-schemes",
+      "files": 3,
+      "bytes": 361291,
+      "topics": [
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-optional-int8-lora",
+      "files": 3,
+      "bytes": 216334,
+      "topics": [
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-quality-first-generation",
+      "files": 3,
+      "bytes": 70638,
+      "topics": [
+        "attention",
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-quality-first-t4-pooling",
+      "files": 2,
+      "bytes": 74312,
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-quality-first-t4-quantization",
+      "files": 2,
+      "bytes": 79779,
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-row-partial-memory",
+      "files": 3,
+      "bytes": 372623,
+      "topics": [
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-selective-b-feasibility",
+      "files": 3,
+      "bytes": 331057,
+      "topics": [
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-tp2-attention-repair",
+      "files": 2,
+      "bytes": 184554,
+      "topics": [
+        "attention",
+        "compression",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-tp2-kitchen-group32",
+      "files": 2,
+      "bytes": 98775,
+      "topics": [
+        "attention",
+        "compression",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-tp2-kitchen-group32-retry",
+      "files": 2,
+      "bytes": 98787,
+      "topics": [
+        "attention",
+        "compression",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-tp2-kitchen-group32-v2",
+      "files": 2,
+      "bytes": 128186,
+      "topics": [
+        "attention",
+        "compression",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-tp2-operator-integration",
+      "files": 2,
+      "bytes": 509491,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-tp2-operator-optimize",
+      "files": 2,
+      "bytes": 144431,
+      "topics": [
+        "attention",
+        "compression",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-tp2-operator-screen",
+      "files": 2,
+      "bytes": 112489,
+      "topics": [
+        "attention",
+        "compression",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-tp2-p2-attention",
+      "files": 2,
+      "bytes": 212910,
+      "topics": [
+        "attention",
+        "compression",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-tp2-p2-counter-probe",
+      "files": 2,
+      "bytes": 2725,
+      "topics": []
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-tp2-p2-restoration",
+      "files": 2,
+      "bytes": 213166,
+      "topics": [
+        "attention",
+        "compression",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-tp2-p2-scalar-profile",
+      "files": 2,
+      "bytes": 213453,
+      "topics": [
+        "attention",
+        "compression",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-tp2-p2-transport",
+      "files": 2,
+      "bytes": 215346,
+      "topics": [
+        "attention",
+        "compression",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-tp2-p2-transport-confirm",
+      "files": 2,
+      "bytes": 223253,
+      "topics": [
+        "attention",
+        "compression",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-tp2-row-fusion",
+      "files": 2,
+      "bytes": 46081,
+      "topics": [
+        "attention",
+        "compression",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-tp2-swiglu-padding",
+      "files": 2,
+      "bytes": 61435,
+      "topics": [
+        "attention",
+        "compression",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-tp2-tradeoffs",
+      "files": 2,
+      "bytes": 185025,
+      "topics": [
+        "attention",
+        "compression",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_h3-tp2-video-microchain",
+      "files": 2,
+      "bytes": 181873,
+      "topics": [
+        "attention",
+        "compression",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_host_cache",
+      "files": 2,
+      "bytes": 89330,
+      "topics": [
+        "compression",
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_host_cache_output",
+      "files": 8,
+      "bytes": 78241,
+      "topics": [
+        "residency_io",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_idle_residency",
+      "files": 4,
+      "bytes": 939576,
+      "topics": [
+        "attention",
+        "compression",
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_idle_residency_output",
+      "files": 5,
+      "bytes": 7759,
+      "topics": [
+        "residency_io",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_idle_residency_v2_output",
+      "files": 16,
+      "bytes": 24261,
+      "topics": [
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_kernel",
+      "files": 2,
+      "bytes": 9354,
+      "topics": [
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_l1_offline_memory",
+      "files": 4,
+      "bytes": 211586,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_loading_audit",
+      "files": 2,
+      "bytes": 790242,
+      "topics": [
+        "compression",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_loading_audit_output",
+      "files": 2,
+      "bytes": 782,
+      "topics": []
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_loading_audit_v2_output",
+      "files": 1,
+      "bytes": 474,
+      "topics": []
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_manual_resume",
+      "files": 3,
+      "bytes": 42764,
+      "topics": [
+        "compression",
+        "residency_io"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_native_audit_reference",
+      "files": 3,
+      "bytes": 1011987,
+      "topics": [
+        "residency_io",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_native_reference_transport",
+      "files": 4,
+      "bytes": 1016354,
+      "topics": [
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_offline_checkpoint_job",
+      "files": 3,
+      "bytes": 772924,
+      "topics": [
+        "compression",
+        "lora",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_offline_checkpoint_output",
+      "files": 1,
+      "bytes": 383,
+      "topics": []
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_offline_checkpoint_v4_output",
+      "files": 1,
+      "bytes": 383,
+      "topics": []
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_output",
+      "files": 4,
+      "bytes": 28717,
+      "topics": [
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_p012_repaired_v1_output",
+      "files": 13,
+      "bytes": 1126768,
+      "topics": [
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_p012_restart_v1_output",
+      "files": 1,
+      "bytes": 153,
+      "topics": []
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_p012_spawn_repaired_v2_output",
+      "files": 21,
+      "bytes": 2044679,
+      "topics": [
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_p012_v3_output",
+      "files": 1,
+      "bytes": 151,
+      "topics": []
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_pipeline_audit",
+      "files": 2,
+      "bytes": 333652,
+      "topics": [
+        "attention",
+        "compression",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_pipeline_audit_output",
+      "files": 27,
+      "bytes": 6799606,
+      "topics": [
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_real_t4_attention",
+      "files": 2,
+      "bytes": 73572,
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_real_t4_improvements",
+      "files": 2,
+      "bytes": 59762,
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_real_t4_replay_gate",
+      "files": 1,
+      "bytes": 381,
+      "topics": []
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_real_t4_replay_gate_dataset",
+      "files": 2,
+      "bytes": 43859,
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_real_t4_replay_gate_small",
+      "files": 2,
+      "bytes": 1913751,
+      "topics": [
+        "attention",
+        "compression",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_real_t4_replay_gate_sparse_failure",
+      "files": 2,
+      "bytes": 44260,
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_real_t4_replay_gate_tiny",
+      "files": 2,
+      "bytes": 877823,
+      "topics": [
+        "attention",
+        "compression",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_real_t4_scalar_pool",
+      "files": 2,
+      "bytes": 51156,
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_ref2va_e2e",
+      "files": 8,
+      "bytes": 397080,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_repaired",
+      "files": 3,
+      "bytes": 810599,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_repaired_output",
+      "files": 13,
+      "bytes": 228101,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_residency_p01",
+      "files": 3,
+      "bytes": 880065,
+      "topics": [
+        "compression",
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_residency_p01_output",
+      "files": 2,
+      "bytes": 36187,
+      "topics": [
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_retest",
+      "files": 2,
+      "bytes": 68042,
+      "topics": [
+        "compression",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_retest_cu130",
+      "files": 2,
+      "bytes": 71830,
+      "topics": [
+        "compression",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_retest_dit",
+      "files": 2,
+      "bytes": 68798,
+      "topics": [
+        "compression",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_retest_fp32_pp",
+      "files": 2,
+      "bytes": 72803,
+      "topics": [
+        "compression",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_retest_output",
+      "files": 120,
+      "bytes": 1672050,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_retest_profile",
+      "files": 2,
+      "bytes": 70995,
+      "topics": [
+        "compression",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_slab",
+      "files": 2,
+      "bytes": 102198,
+      "topics": [
+        "compression",
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_study",
+      "files": 2,
+      "bytes": 88453,
+      "topics": [
+        "compression",
+        "residency_io",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_study_output",
+      "files": 201,
+      "bytes": 3211778,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_t4_profiler_probe",
+      "files": 2,
+      "bytes": 6845,
+      "topics": []
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_te_causal_profile",
+      "files": 3,
+      "bytes": 891253,
+      "topics": [
+        "compression",
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_te_causal_profile_output",
+      "files": 7,
+      "bytes": 1092193,
+      "topics": [
+        "compression",
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_te_critical_path",
+      "files": 3,
+      "bytes": 857068,
+      "topics": [
+        "attention",
+        "compression",
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_te_critical_path_output",
+      "files": 12,
+      "bytes": 14863,
+      "topics": [
+        "residency_io",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_te_io_audit",
+      "files": 3,
+      "bytes": 879513,
+      "topics": [
+        "attention",
+        "compression",
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_te_io_output",
+      "files": 12,
+      "bytes": 1651145,
+      "topics": [
+        "compression",
+        "residency_io",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_te_io_storage",
+      "files": 3,
+      "bytes": 309334,
+      "topics": [
+        "compression",
+        "lora",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_te_io_storage_output",
+      "files": 7,
+      "bytes": 1691522,
+      "topics": [
+        "compression",
+        "residency_io",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_tilelang_t4_attention",
+      "files": 2,
+      "bytes": 28355,
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_tilelang_t4_smoke",
+      "files": 2,
+      "bytes": 3375,
+      "topics": [
+        "row_gemm"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_tilelang_t4_te_gate",
+      "files": 2,
+      "bytes": 21620,
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_vae_kv_profile",
+      "files": 4,
+      "bytes": 717371,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "kaggle_vae_kv_profile_output",
+      "files": 89,
+      "bytes": 814763,
+      "topics": [
+        "attention",
+        "residency_io",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "notebooks",
+      "files": 2,
+      "bytes": 26239,
+      "topics": []
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "semantic_results",
+      "files": 634,
+      "bytes": 27598971,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "slab_results",
+      "files": 30,
+      "bytes": 742911,
+      "topics": [
+        "attention",
+        "compression",
+        "lora",
+        "residency_io",
+        "row_gemm",
+        "runtime",
+        "vae"
+      ]
+    },
+    {
+      "scope": "retained_repository_experiment",
+      "family": "tilelang_t4_results",
+      "files": 20,
+      "bytes": 303924,
+      "topics": [
+        "attention",
+        "row_gemm",
+        "runtime"
+      ]
+    }
+  ]
+}

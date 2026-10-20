@@ -2,7 +2,7 @@
 
 [Documentation index](../README.md)
 
-Read the [illustrated technical guide](MiniMax_H3_TP2_Optimization_Technical_Guide.pdf) first. The setup guide and runtime policy define current source/version selection; historical measurements retain their original scope.
+Read the [40-page illustrated technical guide](MiniMax_H3_TP2_Optimization_Technical_Guide.pdf) first. The setup guide and runtime policy define current source/version selection; historical measurements retain their original scope. The [coverage audit](../reports/H3_DOCUMENTATION_COVERAGE_AUDIT.md) maps current integration to the retained experiments.
 
 | Guide | Purpose |
 |---|---|

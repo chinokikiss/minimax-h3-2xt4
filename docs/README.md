@@ -2,7 +2,7 @@
 
 [Repository home](../README.md) / Documentation
 
-Start with the **[30-page technical guide](guides/MiniMax_H3_TP2_Optimization_Technical_Guide.pdf)**
+Start with the **[40-page technical guide](guides/MiniMax_H3_TP2_Optimization_Technical_Guide.pdf)**
 for an illustrated explanation of the integrated H3 pipeline. It covers operator
 contracts, TP2 ownership, fusion, LoRA, memory residency, and staged parallel VAEs.
 The PDF includes bookmarks and an embedded source-hash manifest.
@@ -19,6 +19,7 @@ The PDF includes bookmarks and an embedded source-hash manifest.
 | [Sampler integration](guides/COMFYUI_SAMPLER_INTEGRATION.md) | Native conditioning/sampling interfaces and the scoped sampler gates |
 | [Pipeline review](reports/H3_PIPELINE_REVIEW.md) | Current code boundaries, cleanup, regression evidence, remaining blockers |
 | [Runtime provenance audit](reports/H3_RUNTIME_PROVENANCE_AUDIT.md) | Which source/dependency versions were selected and preserved |
+| [Documentation coverage audit](reports/H3_DOCUMENTATION_COVERAGE_AUDIT.md) | 52 implementation items checked against 85 documents and retained experiment families; omissions and historical status reconciled |
 
 ## Explore by topic
 

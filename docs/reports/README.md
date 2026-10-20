@@ -5,6 +5,8 @@
 Measurements are version-bound. Read each report's hardware, software, shapes,
 numerical reference, and timing boundary before comparing results.
 Current feature selection is described in the [technical guide](../guides/MiniMax_H3_TP2_Optimization_Technical_Guide.pdf).
+The [documentation coverage audit](H3_DOCUMENTATION_COVERAGE_AUDIT.md) reconciles
+the live source with historical experiment statuses and records the latest additions.
 
 ## Attention and numerical methods
 
