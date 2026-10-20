@@ -1,0 +1,97 @@
+{
+  "scope": "Active pipeline review and local component regression only. No full H3 generation, new T4 performance qualification or Kaggle GPU run.",
+  "base_commit": "f87b9682684d96675c1455b771e3db63b34418ee",
+  "packages": {
+    "torch": "2.12.1+cu132",
+    "tilelang": "0.1.13",
+    "comfy-kitchen": "0.2.37"
+  },
+  "hardware": "NVIDIA GeForce RTX 5060 Ti",
+  "capability": [
+    12,
+    0
+  ],
+  "unit_tests": 56,
+  "cpu_spawn_shared_budget": "pass",
+  "startup": "pass; normal node availability retained; existing UI package warnings preserved",
+  "wiring_records": 4,
+  "operator_records": 7,
+  "video_query_bit_exact": true,
+  "video_kitchen_calls": {
+    "native": 36,
+    "parallel": 72
+  },
+  "trained_staged_vae": [
+    {
+      "kind": "video",
+      "encode": "bitwise_pass",
+      "decode": "bitwise_pass"
+    },
+    {
+      "kind": "audio",
+      "encode": "bitwise_pass",
+      "decode": "bitwise_pass"
+    }
+  ],
+  "runtime_import_boundary": {
+    "active_modules": [
+      "patches.audio_channel_decode",
+      "patches.comfy_idle_lifecycle",
+      "patches.comfy_sampler",
+      "patches.comfy_tp_models",
+      "patches.comfy_tp_runtime",
+      "patches.diagnostic_metrics",
+      "patches.h3_lora",
+      "patches.h3_operator_dependencies",
+      "patches.h3_operator_policy",
+      "patches.host_memory_pressure",
+      "patches.host_weight_cache",
+      "patches.legacy_runtime",
+      "patches.offline_lora",
+      "patches.offline_lora_reference",
+      "patches.optimized_tp",
+      "patches.parallel_int8",
+      "patches.parallel_vae",
+      "patches.rank_local_int8",
+      "patches.reference_loaders",
+      "patches.runtime_diagnostics",
+      "patches.staged_vae",
+      "patches.tilelang_attention_p2",
+      "patches.tilelang_dense_preparation",
+      "patches.tilelang_group32_masked",
+      "patches.tilelang_grouped_fused",
+      "patches.tilelang_grouped_qk",
+      "patches.tilelang_grouped_tp",
+      "patches.tilelang_grouped_tp_kitchen_v2",
+      "patches.tilelang_grouped_tp_optimized",
+      "patches.tilelang_row_quant",
+      "patches.tilelang_sparse_attention",
+      "patches.tilelang_swiglu_pad",
+      "patches.tilelang_transport_p2",
+      "patches.tilelang_transport_tradeoffs",
+      "patches.tp_dit",
+      "patches.tp_qwen3vl",
+      "patches.weight_residency",
+      "patches.windowed_tp"
+    ],
+    "forbidden_imports": [],
+    "historical_audio_manager_reachable": false
+  },
+  "credentials_scan": "No findings in the curated publication set; generated data/capabilities excluded",
+  "frozen_comfy_revision": "d49e888586dd8ae012c0667b33466b815fee07f7",
+  "source_sha256_normalized": {
+    "patches/comfy_tp_runtime.py": "c1e876e9d7edc553c17a9a19d6358ad491e02b0b17829ee61670bba2538e9511",
+    "patches/comfy_tp_models.py": "d6038b90579d80db31ebf7cb3bfcf8395e281c9b86cb9535daa321f48387ddfe",
+    "patches/runtime_diagnostics.py": "e4fe392efe89ab8be6b7ce30b95e7f712c87ed0f998682309af2d601369bfecc",
+    "patches/audio_channel_decode.py": "f8710f3c03a81f641e777b529222d231b3294a34352d224096d34eed451e018c",
+    "patches/parallel_vae.py": "44f63dffb8e313c9a7cb9b02840551e10780e67a9e47af3e9f46c83382d01d27",
+    "patches/reference_loaders.py": "eca18244c47c0c9422f03c362f13ec4f907f6707e6af5b9e47908c6e44ea5756",
+    "patches/windowed_tp.py": "6767655861375bdea712d689bdad1e07a212762837304b12c9f6d5c8fe8dc125",
+    "patches/comfy_sampler.py": "dbcf7bbe0c0904abb64059872bedb844fc2c0ec60dded523bc009200f4df2b6d",
+    "patches/optimized_tp.py": "ba7923b7b9145879ab910608389be82bf259e7f87c39f1f5dba853ed25fec651",
+    "custom_nodes/minimax_h3_tp2/__init__.py": "50ab0bd5d745adb2d04b231f19835ae2c68a7cebc2cd0693c7cc01f1c4196f52",
+    "launch_h3_legacy.py": "ba78d125784b0037d1a0e60f9c3861297b2661ebff7d955dd1add1ad9de5da23"
+  },
+  "remaining_blocker": "The Windows package snapshot is not a qualified Linux/T4 stack. Explicit Linux platform lock and ABI qualification are still required.",
+  "local_evidence": "D:\\attention_eval\\h3_pipeline_review_20261020"
+}

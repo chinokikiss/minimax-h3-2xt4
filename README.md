@@ -1,97 +1,87 @@
-# MiniMax-H3 Deployment & Maximum Optimization on 2× NVIDIA T4 GPUs
+# MiniMax-H3 on two NVIDIA T4 GPUs
 
-This repository contains the architecture, benchmarks, optimization patches, and Kaggle automation suite for deploying **MiniMax-H3** on **2× NVIDIA T4 GPUs (16 GB VRAM each)** with maximum performance optimization.
+Persistent TP2 workers for MiniMax-H3, with Native ComfyUI conditioning,
+sampling and public VAE planning. Runtime code, numerical references, profiling
+and historical experiments have separate entry points. Full-pipeline speedups
+must not be inferred from operator measurements.
 
----
+## Preserved runtime
 
-## 1. Executive Summary & Hardware Topology
+- ComfyUI: local `ComfyUI` checkout at `d49e888586dd8ae012c0667b33466b815fee07f7`, with the validated attention interface.
+- Local Python: `C:\ProgramData\miniconda3\envs\comfyui\python.exe`.
+- Exact package snapshot: [runtime/local_conda.json](runtime/local_conda.json).
+- Models: `D:\minimaxH3`, configured by `h3_legacy_model_paths.yaml`.
+- No upstream code updates or implicit package substitutions during setup.
 
-### Target Environment: Kaggle 2× T4
-- **GPUs:** 2× NVIDIA Tesla T4 (Turing architecture, Compute Capability 7.5)
-- **VRAM:** 16 GB GDDR6 per GPU (32 GB total VRAM)
-- **Host RAM:** ~30 GB System Memory
-- **Interconnect:** PCIe Gen3 x16 (~8–12 GB/s practical bandwidth)
-- **Critical Hardware Characteristic:** **NO P2P (Peer-to-Peer Disabled)**  
-  `torch.cuda.can_device_access_peer(0, 1) == False`  
-  Any inter-GPU memory transfer must route through **Host Memory bounce buffers** (`NCCL_P2P_DISABLE=1`).
-
----
-
-## 2. Text Encoder (TE) Optimization: TP=2 vs. PP=2 vs. Single GPU
-
-The MiniMax-H3 conditioning model is based on **Qwen3-VL-32B** (truncated to the first 50 layers), packaged as `qwen3vl_32b_minimax_h3_int8_convrot.safetensors` (**~27.14 GB**).
-
-### The Challenge
-A 27.14 GB model **cannot fit into a single T4's 16 GB VRAM**.
-- **Single GPU Baseline (ComfyUI Default):** Swaps layers from CPU RAM to GPU over PCIe on every prompt forward pass. At ~10 GB/s, transferring 27 GB takes **~2.7 seconds per forward pass**!
-
-### Comparison of Multi-GPU Strategies Across 2× T4
-
-| Strategy | Memory Allocation | Inter-GPU Communication | No-P2P Impact | Total Latency (Seq=512) | vs. Single GPU |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **Single GPU (CPU Offload)** | >16 GB (Spills to CPU) | PCIe Swapping (27.1 GB) | N/A | **~2,800 ms** | 1.0x (Baseline) |
-| **TP=2 (Tensor Parallelism)** | ~13.6 GB / GPU | **100 AllReduces** (2 / layer) | **Severe:** 100 host-memory bounces (~125 ms comm) | **~224 ms** | ~12.5x speedup |
-| **PP=2 (Layer Sharding)** | GPU 0: 13.6 GB, GPU 1: 12.2 GB | **1 Transfer** (at layer 24 boundary) | **Negligible:** Single 5.2 MB bounce (~0.78 ms comm) | **~93 ms** | **~30x speedup** |
-
-### Mathematical & Empirical Findings
-1. **Does TP=2 yield performance gains over PP=2?**  
-   **No, on 2× T4 without P2P, PP=2 (Pipeline Parallelism / Layer Sharding) is ~2.4x FASTER than TP=2.**  
-   - Because P2P is disabled, each NCCL AllReduce must write to host shared memory and synchronize. With 50 layers, 100 AllReduces accumulate **~125–460 ms** of pure communication latency, which dwarfs the parallel GEMM computation.  
-   - In contrast, **PP=2 incurs only 1 single inter-GPU transfer** after layer 24 (~0.78 ms).
-2. **Both PP=2 and TP=2 crush single-GPU CPU offload:**  
-   By keeping 100% of the weights resident in the 32 GB total VRAM, PP=2 achieves a **~30x speedup** over CPU-offloaded single-GPU execution.
-
----
-
-## 3. Project Structure
-
-```
-.
-├── ComfyUI/                         # Upstream ComfyUI repo
-├── benchmarks/
-│   ├── benchmark_te_performance.py  # Empirically benchmarks PP=2 vs TP=2 vs CPU Offload
-│   ├── test_ck_int8.py              # Verifies comfy_kitchen INT8 ConvRot execution
-│   └── test_tp_int8_math.py         # Numerically verifies Column/Row parallel slicing
-├── patches/
-│   ├── pp_qwen3vl.py                # High-speed Layer-Sharded Pipeline Parallelism (PP=2)
-│   ├── tp_qwen3vl.py                # Full Tensor Parallelism (TP=2) for Qwen3-VL INT8
-│   └── custom_te_loader.py          # Unified loader for ComfyUI integration
-├── automation/
-│   └── kaggle_browser_controller.py # browser-use automated controller for Kaggle 2x T4
-├── notebooks/
-│   └── 01_minimax_h3_te_tp2_benchmark.ipynb  # Interactive Kaggle benchmark notebook
-└── README.md
+```powershell
+.\launch_h3_legacy.cmd --preview --check
+.\launch_h3_legacy.cmd --preview
 ```
 
----
+The preview starts the selected ComfyUI on a one-GPU host; executing TP2 requires
+two matching GPUs and NCCL. Node/API isolation is available with `--isolated-ui`
+for smoke tests. Dynamic VRAM is disabled because workers own the weight window.
+The selected checkout uses its own plugin and user directories.
 
-## 4. Quick Start
+**Kaggle status:** the Windows conda snapshot is preserved, but its Linux/T4
+stack is not yet qualified. Linux-only CUDA/NCCL/Triton dependencies require an
+explicit platform lock and ABI validation. The historical TileLang 0.1.15 gate
+is retained; it does not qualify the snapshot's TileLang 0.1.13. Setup blocks on
+these differences. See [runtime setup and limits](H3_LEGACY_RUNTIME.md).
 
-### A. Run Local Benchmark
-```bash
-python benchmarks/benchmark_te_performance.py
-```
+## Operator defaults
 
-### B. Run on Kaggle (2× T4)
-1. Clone this repository on Kaggle:
-   ```bash
-   git clone https://github.com/<your-username>/minimax-h3-2xt4.git
-   ```
-2. Open and run [`notebooks/01_minimax_h3_te_tp2_benchmark.ipynb`](file:///C:/Users/Administrator/Documents/project/2xT4%20minimax%20h3/notebooks/01_minimax_h3_te_tp2_benchmark.ipynb).
-3. The notebook will automatically download the INT8 model, test both configurations, and plot the latency curves.
+| Component | Default | Optional choices |
+|---|---|---|
+| TE attention | TileLang Group32 dense | Native |
+| DiT attention | Kitchen INT8 | TileLang dense, dropping, scalar pooling; Native |
+| Token Refiner | Native SDPA | Native projections, norms and RoPE retained |
+| Video VAE | Kitchen INT8, aligned query partitioning | Native decode fallback |
+| Row projections | TileLang packed, native INT32 SUM | Native; approximate scaled FP16 SUM |
+| SwiGLU | Fused padding | Disable fusion |
+| LoRA B GEMM | Selective B for qualified FC1 geometry | Full B for other sites |
+| Audio VAE | FP32 stereo channel parallel | Native; small rounding differences are expected |
 
-### C. Automated Kaggle Setup via `browser-use`
-Run the automation controller:
-```bash
-python automation/kaggle_browser_controller.py
-```
+LoRA loading defaults to online; offline baking is optional and assigns whole
+layers to up to two GPU workers. Reference VAEs load encoders first and decoders
+at output time. Idle residency optionally preloads encoders and TE weights.
+See [operator integration](H3_OPERATOR_INTEGRATION.md),
+[enhancements](H3_OPERATOR_ENHANCEMENTS.md), and [loading stages](H3_LOADING_STAGES.md).
 
----
+## Code boundaries
 
-## 5. Next Optimization Stages
+- `custom_nodes/minimax_h3_tp2`: ComfyUI node schema and session selection.
+- `patches/comfy_tp_runtime.py`: worker protocol, phase transitions and ownership.
+- `patches/comfy_tp_models.py`: Native TE/DiT model construction.
+- `patches/comfy_sampler.py`, `staged_vae.py`: Native sampler/VAE adapters.
+- `patches/parallel_vae.py`, `audio_channel_decode.py`: active VAE rank execution.
+- `patches/h3_operator_policy.py`, `tilelang_*.py`: operator dispatch and kernels.
+- `patches/runtime_diagnostics.py`, `diagnostic_metrics.py`: explicit snapshots and bounded counters.
+- `patches/reference_loaders.py`, `offline_lora_reference.py`: explicit numerical qualification references.
+- `benchmarks/`: tests, profilers, captures and experiment analysis; never imported by runtime code.
 
-1. **Diffusion Model (`ref2va` Pruned INT8 ConvRot ~20.9 GB):**  
-   - Apply sequential module swapping (TE unloads before DiT loads) or shard DiT transformer blocks across GPU 0 and GPU 1.  
-   - Integrate `sageattention` (tested and installed) for 2x faster self-attention and cross-attention on T4.
-2. **Video VAE (INT8 ConvRot ~2.81 GB):**  
-   - Fits on a single T4 (~2.8 GB VRAM); run on GPU 0 with spatial tile decoding.
+Legacy PP/SP and tiled decoder interfaces remain for compatibility and historical
+experiments. They are not selected by the TP2 loader. The production audio path
+does not import the old tiled-decoder manager. Profiler/tensor-capture scripts
+run explicitly; normal inference does not start them.
+
+## Validation and experiment entry points
+
+Use the frozen conda interpreter for local checks. The focused regression suite
+is documented in [benchmarks/README.md](benchmarks/README.md). Tiny trained VAE
+and operator checks are component previews, not full H3 generation or physical
+T4/NCCL performance qualification.
+
+The active builders are `build_h3_operator_integration_job.py` and
+`build_ref2va_e2e_job.py`; use `--validate-only` to inspect generated code without
+running or submitting it. New jobs require a frozen runtime dataset with a
+CPU-prepared Linux wheelhouse. GPU jobs install verified wheels offline and do
+not resolve/download dependencies. Older builders/notebooks must not be
+submitted directly with their historical setup.
+
+[Pipeline review](H3_PIPELINE_REVIEW.md) records cleanup, checks and remaining
+blockers. [Provenance audit](H3_RUNTIME_PROVENANCE_AUDIT.md) distinguishes source
+selection from changes to the user's original ComfyUI directory.
+[Historical overview](HISTORICAL_README.md) retains earlier reports and caveats.
+Generated datasets, traces, submissions and private upload capabilities stay
+local and are excluded from Git; no model weights are published.

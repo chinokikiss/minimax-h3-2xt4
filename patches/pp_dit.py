@@ -53,10 +53,11 @@ class PipelineParallelDiT(nn.Module):
         rope_dev0 = rope_freqs.to(self.dev0, non_blocking=True) if rope_freqs is not None else None
 
         for block in self.blocks_stage0:
-            x_dev0 = block(
+            with torch.cuda.device(self.dev0):
+                x_dev0 = block(
                 x_dev0,
                 t_emb=t_emb_dev0,
-                mod_segments=mod_segments,
+                mod_segments=[(a, b, row.to(self.dev0) if isinstance(row, torch.Tensor) else row) for a,b,row in mod_segments],
                 rope_freqs=rope_dev0,
                 transformer_options=transformer_options,
             )
@@ -69,17 +70,19 @@ class PipelineParallelDiT(nn.Module):
 
         # --- Stage 1: GPU 1 (Blocks 25..49) ---
         for block in self.blocks_stage1:
-            x_dev1 = block(
+            with torch.cuda.device(self.dev1):
+                x_dev1 = block(
                 x_dev1,
                 t_emb=t_emb_dev1,
-                mod_segments=mod_segments,
+                mod_segments=[(a, b, row.to(self.dev1) if isinstance(row, torch.Tensor) else row) for a,b,row in mod_segments],
                 rope_freqs=rope_dev1,
                 transformer_options=transformer_options,
             )
 
-        if self.final_norm is not None:
-            x_dev1 = self.final_norm(x_dev1)
-        if self.final_layer is not None:
-            x_dev1 = self.final_layer(x_dev1)
+        with torch.cuda.device(self.dev1):
+            if self.final_norm is not None:
+                x_dev1 = self.final_norm(x_dev1)
+            if self.final_layer is not None:
+                x_dev1 = self.final_layer(x_dev1)
 
         return x_dev1

@@ -1,0 +1,4 @@
+# Historical T4 qualification stack, not the current conda environment install recipe.
+# Preserve runtime/local_conda.json; version differences require operator qualification.
+comfy-kitchen==0.2.37
+tilelang==0.1.15

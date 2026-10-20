@@ -1,0 +1,6 @@
+minimax_h3:
+  base_path: D:/minimaxH3
+  vae: .
+  text_encoders: .
+  diffusion_models: .
+  loras: loras

@@ -12,6 +12,8 @@ __pycache__/
 *$py.class
 *.so
 .venv/
+.retest-deps/
+repaired_fixtures/
 env/
 venv/
 .env
@@ -35,3 +37,33 @@ ComfyUI/
 Thumbs.db
 *.log
 parsed_kaggle_output.txt
+
+# Temporary private output download capabilities
+kaggle_native_reference_transport/reference_links.json
+
+# Expiring object-scoped upload capabilities; never commit or publish publicly.
+kaggle_offline_checkpoint_job/upload_ticket.json
+kaggle_offline_checkpoint_job/offline_checkpoint.ipynb
+kaggle_direct_loading_audit/offline_download_ticket.json
+kaggle_direct_loading_audit/native_reference_download_ticket.json
+kaggle_direct_loading_audit/pipeline_audit.ipynb
+kaggle_causal_audit/causal_audit.ipynb
+kaggle_causal_audit/resume_reference_ticket.json
+kaggle_cpu_audit/cpu_audit.ipynb
+kaggle_te_critical_path/te_critical_path.ipynb
+kaggle_te_io_audit/te_io_audit.ipynb
+kaggle_residency_p01/residency_p01.ipynb
+kaggle_te_causal_profile/pipeline.ipynb
+kaggle_idle_residency/pipeline.ipynb
+kaggle_te_io_storage/pipeline.ipynb
+
+# Generated experiment submissions, downloaded traces, and private capabilities.
+# Keep historical local artifacts; publish reviewed Python sources/docs instead.
+/kaggle_*/
+/semantic_results/*
+!/semantic_results/pipeline_checkpoint_identity.json
+/slab_results/
+/tilelang_t4_results/
+/bench_assets/
+/runtime/frozen_kaggle_setup.py
+.pytest_cache/

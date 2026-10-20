@@ -3,36 +3,23 @@ Megatron-style Tensor Parallelism (TP=2) for MiniMax-H3 Ref2VA Pruned INT8 ConvR
 Features:
   - ColumnParallelLinearINT8: qkv_proj (28 heads per rank), fc1 (14336 intermediate per rank)
   - RowParallelLinearINT8: out_proj (3584 in -> 5376 out), fc2 (7168 in -> 5376 out)
-  - FP16 AllReduce after out_proj and fc2 (2 AllReduces per block, 100 AllReduces total for 50 blocks)
+  - Gather complete activation rows, then INT32 AllReduce before dequantization
   - Replicated AdaLN projection and RMSNorms executed locally without communication
   - Preserves exact INT8 ConvRot Hadamard block-orthogonal quantization semantics
 """
 
+from patches.parallel_int8 import row_linear, packed_rows
 import math
 import torch
 import torch.nn as nn
 import torch.distributed as dist
 from typing import Optional, Dict, Any, List
 
-try:
-    import comfy_kitchen
-    HAS_CK = True
-except ImportError:
-    HAS_CK = False
+import comfy_kitchen
 
 def run_int8_linear_forward(x, weight, weight_scale, convrot=True, convrot_groupsize=256, out_dtype=torch.float16):
-    """
-    Executes INT8 ConvRot linear projection with comfy_kitchen or fallback.
-    """
-    if HAS_CK:
-        return comfy_kitchen.int8_linear(
-            x, weight, weight_scale, None, out_dtype,
-            convrot=convrot, convrot_groupsize=convrot_groupsize
-        )
-    else:
-        # Fallback: dequantize on the fly
-        w_f16 = weight.to(out_dtype) * weight_scale.to(out_dtype)
-        return torch.nn.functional.linear(x, w_f16)
+    return comfy_kitchen.int8_linear(x, weight, weight_scale, None, out_dtype,
+        convrot=convrot, convrot_groupsize=convrot_groupsize)
 
 class ColumnParallelLinearINT8(nn.Module):
     """
@@ -51,9 +38,11 @@ class ColumnParallelLinearINT8(nn.Module):
         convrot: bool = True,
         convrot_groupsize: int = 256,
         device: Optional[torch.device] = None,
+        components: int = 1,
     ):
         super().__init__()
         assert out_features % world_size == 0
+        self.components = components
         self.in_features = in_features
         self.out_features_per_rank = out_features // world_size
         self.rank = rank
@@ -72,10 +61,9 @@ class ColumnParallelLinearINT8(nn.Module):
         )
 
     def load_shard_from_full(self, full_weight: torch.Tensor, full_scale: torch.Tensor):
-        start = self.rank * self.out_features_per_rank
-        end = start + self.out_features_per_rank
-        self.weight.data.copy_(full_weight[start:end, :].to(self.device))
-        self.weight_scale.data.copy_(full_scale[start:end, :].to(self.device))
+        w, scale = packed_rows(full_weight, full_scale, self.rank, self.world_size, self.components)
+        self.weight.data.copy_(w)
+        self.weight_scale.data.copy_(scale)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         orig_shape = x.shape
@@ -85,7 +73,9 @@ class ColumnParallelLinearINT8(nn.Module):
             convrot=self.convrot, convrot_groupsize=self.convrot_groupsize,
             out_dtype=x.dtype
         )
-        return out.view(*orig_shape[:-1], self.out_features_per_rank)
+        out=out.view(*orig_shape[:-1], self.out_features_per_rank)
+        adapter=getattr(self,'lora_adapter',None)
+        return adapter.add_to(x,out) if adapter is not None else out
 
 class RowParallelLinearINT8(nn.Module):
     """
@@ -130,20 +120,13 @@ class RowParallelLinearINT8(nn.Module):
         self.weight.data.copy_(full_weight[:, start:end].to(self.device))
         self.weight_scale.data.copy_(full_scale.to(self.device))
 
-    def forward(self, x: torch.Tensor, reduce_sum: bool = True) -> torch.Tensor:
-        orig_shape = x.shape
-        x_2d = x.view(-1, self.in_features_per_rank)
-        out = run_int8_linear_forward(
-            x_2d, self.weight, self.weight_scale,
-            convrot=self.convrot, convrot_groupsize=self.convrot_groupsize,
-            out_dtype=x.dtype
-        )
-        out = out.view(*orig_shape[:-1], self.out_features)
-
-        if reduce_sum and self.world_size > 1 and dist.is_initialized():
-            dist.all_reduce(out, op=dist.ReduceOp.SUM)
-
-        return out
+    def forward(self, x: torch.Tensor, reduce_sum: bool = True, input_act=None) -> torch.Tensor:
+        if not reduce_sum and self.world_size > 1:
+            raise ValueError("Quantization-preserving projection requires reduction")
+        from patches.h3_operator_policy import row_linear as dispatch_row
+        out=dispatch_row(self,x,row_linear,dist,input_act)
+        adapter=getattr(self,'lora_adapter',None)
+        return adapter.add_to(x,out,comm=dist if self.world_size>1 else None,input_act=input_act) if adapter is not None else out
 
 class TPDiTBlockINT8(nn.Module):
     """
@@ -159,8 +142,9 @@ class TPDiTBlockINT8(nn.Module):
         t_dim: int = 8,
         rank: int = 0,
         world_size: int = 2,
-        eps: float = 1e-6,
-        qk_eps: float = 1e-6,
+        eps: float = 1e-5,
+        qk_eps: float = 1e-5,
+        device=None, dtype=torch.float32, apply_silu=False,
     ):
         super().__init__()
         self.hidden = hidden
@@ -170,21 +154,23 @@ class TPDiTBlockINT8(nn.Module):
         self.world_size = world_size
         self.heads_per_rank = heads // world_size
         self.inner_per_rank = self.heads_per_rank * head_dim
-        self.device = torch.device(f"cuda:{rank}")
+        self.device = torch.device(device or f"cuda:{rank}")
+        self.apply_silu = apply_silu
 
         # Replicated modules (local compute, no communication)
-        self.norm1 = nn.RMSNorm(hidden, eps=eps).to(device=self.device, dtype=torch.float16)
-        self.norm2 = nn.RMSNorm(hidden, eps=eps).to(device=self.device, dtype=torch.float16)
-        self.q_norm = nn.RMSNorm(head_dim, eps=qk_eps).to(device=self.device, dtype=torch.float16)
-        self.k_norm = nn.RMSNorm(head_dim, eps=qk_eps).to(device=self.device, dtype=torch.float16)
+        self.norm1 = nn.RMSNorm(hidden, eps=eps).to(device=self.device, dtype=dtype)
+        self.norm2 = nn.RMSNorm(hidden, eps=eps).to(device=self.device, dtype=dtype)
+        self.q_norm = nn.RMSNorm(head_dim, eps=qk_eps).to(device=self.device, dtype=dtype)
+        self.k_norm = nn.RMSNorm(head_dim, eps=qk_eps).to(device=self.device, dtype=dtype)
 
         # Adaln projection: [t_dim -> 6 * 3 * hidden] = [8 -> 96768] (tiny, replicated)
-        self.adaln_proj = nn.Linear(t_dim, 6 * 3 * hidden, bias=True).to(device=self.device, dtype=torch.float16)
+        self.adaln_proj = nn.Linear(t_dim, 6 * 3 * hidden, bias=True).to(device=self.device, dtype=dtype)
 
         # Attention: ColumnParallel QKV + RowParallel Out
         self.qkv_proj = ColumnParallelLinearINT8(
             in_features=hidden,
             out_features=heads * head_dim * 3,
+            components=3,
             rank=rank,
             world_size=world_size,
             device=self.device,
@@ -201,6 +187,7 @@ class TPDiTBlockINT8(nn.Module):
         self.fc1 = ColumnParallelLinearINT8(
             in_features=hidden,
             out_features=ffn * 2,
+            components=2,
             rank=rank,
             world_size=world_size,
             device=self.device,
@@ -215,15 +202,14 @@ class TPDiTBlockINT8(nn.Module):
 
     def load_from_full_block(self, full_block):
         """Loads and shards weights from full-sized reference block."""
-        self.norm1.load_state_dict(full_block.norm1.state_dict())
-        self.norm2.load_state_dict(full_block.norm2.state_dict())
-        self.q_norm.load_state_dict(full_block.q_norm.state_dict())
-        self.k_norm.load_state_dict(full_block.k_norm.state_dict())
-        self.adaln_proj.load_state_dict(full_block.adaln_proj.state_dict())
-        self.qkv_proj.load_shard_from_full(full_block.qkv_proj.weight, full_block.qkv_proj.weight_scale)
-        self.out_proj.load_shard_from_full(full_block.out_proj.weight, full_block.out_proj.weight_scale)
-        self.fc1.load_shard_from_full(full_block.fc1.weight, full_block.fc1.weight_scale)
-        self.fc2.load_shard_from_full(full_block.fc2.weight, full_block.fc2.weight_scale)
+        sd = full_block.state_dict()
+        for name in ['norm1', 'norm2', 'q_norm', 'k_norm']:
+            key = name if name.startswith('norm') else 'attn.' + name
+            getattr(self, name).load_state_dict({'weight': sd[key + '.weight']})
+        self.adaln_proj.load_state_dict({'weight': sd['adaln_proj.linear.weight'], 'bias': sd['adaln_proj.linear.bias']})
+        self.apply_silu = full_block.adaln_proj.apply_silu
+        for name, key in {'qkv_proj': 'attn.qkv_proj', 'out_proj': 'attn.out_proj', 'fc1': 'mlp.fc1', 'fc2': 'mlp.fc2'}.items():
+            getattr(self, name).load_shard_from_full(sd[key + '.weight'], sd[key + '.weight_scale'])
 
     def _mod_row(self, vecs, row, dtype):
         return vecs[row].to(dtype)
@@ -247,7 +233,7 @@ class TPDiTBlockINT8(nn.Module):
         transformer_options: Dict[str, Any] = {},
     ) -> torch.Tensor:
         # 1. Modulation parameters
-        adaln_out = self.adaln_proj(nn.functional.silu(t_emb))
+        adaln_out = self.adaln_proj(nn.functional.silu(t_emb) if self.apply_silu else t_emb)
         adaln_out = adaln_out.view(-1, 6 * self.hidden)
         shift_msa, scale_msa, gate_msa, shift_mlp, scale_mlp, gate_mlp = adaln_out.chunk(6, dim=-1)
 
@@ -263,31 +249,41 @@ class TPDiTBlockINT8(nn.Module):
         k = k.view(S, self.heads_per_rank, self.head_dim)
         v = v.view(S, self.heads_per_rank, self.head_dim)
 
-        q = self.q_norm(q)
-        k = self.k_norm(k)
+        if rope_freqs is not None:
+            q, k = comfy_kitchen.rms_rope_split_half(q[None], k[None], rope_freqs,
+                self.q_norm.weight, self.k_norm.weight, epsilon=self.q_norm.eps,
+                rot_dim=rope_freqs.shape[-3] * 2)
+            q, k = q[0], k[0]
+        else:
+            q, k = self.q_norm(q), self.k_norm(k)
 
         # Local Attention
         q_heads = q.transpose(0, 1).unsqueeze(0) # [1, heads_per_rank, S, head_dim]
         k_heads = k.transpose(0, 1).unsqueeze(0)
         v_heads = v.transpose(0, 1).unsqueeze(0)
 
-        attn_out = nn.functional.scaled_dot_product_attention(q_heads, k_heads, v_heads)
-        attn_out = attn_out.squeeze(0).transpose(0, 1).contiguous().view(S, self.inner_per_rank)
+        from patches.h3_operator_policy import dit_attention
+        attn_out = dit_attention(self,q_heads,k_heads,v_heads,transformer_options)
+        attn_out = attn_out.reshape(S,self.inner_per_rank)
 
-        # RowParallel Out + AllReduce #1 (SUM, FP16)
+        # RowParallel Out + AllReduce #1 (native INT32 SUM by default)
         attn_out = self.out_proj(attn_out, reduce_sum=True)
         x = self._mod_gate(x, gate_msa, attn_out, mod_segments)
+        # These attention tensors have no further consumers in inference.
+        # Keeping their views alive through the MLP needlessly overlaps both
+        # stages' large buffers, especially for two logical ranks on one GPU.
+        del normed_x, h, qkv, q, k, v, q_heads, k_heads, v_heads, attn_out
 
         # 3. MLP Block (SwiGLU)
         normed_x2 = self.norm2(x)
         h2 = self._mod_scale_shift(normed_x2, shift_mlp, scale_mlp, mod_segments)
 
         fc1_out = self.fc1(h2) # [S, 2 * ffn_per_rank]
-        gate, up = fc1_out.chunk(2, dim=-1)
-        mlp_act = nn.functional.silu(gate) * up
+        del normed_x2, h2
+        mlp_act = fc1_out
 
-        # RowParallel FC2 + AllReduce #2 (SUM, FP16)
-        mlp_out = self.fc2(mlp_act, reduce_sum=True)
+        # RowParallel FC2 + AllReduce #2 (native INT32 SUM by default)
+        mlp_out = self.fc2(mlp_act,input_act="swiglu")
         x = self._mod_gate(x, gate_mlp, mlp_out, mod_segments)
 
         return x

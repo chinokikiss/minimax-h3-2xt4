@@ -107,8 +107,13 @@ class MultiGPUVideoVAEDecoder:
 
     def split_tiles(self, input_len: int, tile_size: Optional[int] = None, overlap_min: Optional[int] = None) -> Tuple[List[int], List[int], List[int]]:
         """Splits dimension into overlapping tiles according to ComfyUI's VAE formula."""
-        ts = tile_size or self.tile_size
-        ov_min = overlap_min or self.tile_overlap_min
+        ts = self.tile_size if tile_size is None else tile_size
+        ov_min = self.tile_overlap_min if overlap_min is None else overlap_min
+        if (type(ts) is not int or type(ov_min) is not int or type(input_len) is not int
+                or ts <= 0 or input_len <= 0 or not 0 < ov_min < ts
+                or ts % self.vae_ratio or ov_min % self.vae_ratio
+                or input_len % self.vae_ratio):
+            raise ValueError("Video tiles require positive latent-aligned sizes and 0 < overlap < tile_size")
 
         if ts >= input_len:
             return [0], [input_len], []
@@ -189,8 +194,8 @@ class MultiGPUVideoVAEDecoder:
         """
         Executes reference spatial tiled decode sequentially on GPU 0.
         """
-        ts = tile_size or self.tile_size
-        ov = tile_overlap_min or self.tile_overlap_min
+        ts = self.tile_size if tile_size is None else tile_size
+        ov = self.tile_overlap_min if tile_overlap_min is None else tile_overlap_min
 
         z_dev = z.to(device=self.dev0, dtype=self.dtype)
         height, width = z_dev.shape[-2] * self.vae_ratio, z_dev.shape[-1] * self.vae_ratio
@@ -288,8 +293,8 @@ class MultiGPUVideoVAEDecoder:
         if not self.is_multi_gpu:
             return self.decode_tiled_single(z, tile_size, tile_overlap_min)
 
-        ts = tile_size or self.tile_size
-        ov = tile_overlap_min or self.tile_overlap_min
+        ts = self.tile_size if tile_size is None else tile_size
+        ov = self.tile_overlap_min if tile_overlap_min is None else tile_overlap_min
 
         z_dev0 = z.to(device=self.dev0, dtype=self.dtype)
         height, width = z_dev0.shape[-2] * self.vae_ratio, z_dev0.shape[-1] * self.vae_ratio

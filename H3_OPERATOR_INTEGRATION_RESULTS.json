@@ -1,0 +1,388 @@
+{
+  "status": "pass",
+  "provider": {
+    "kernel": "chinokiki9/h3-tp2-operator-integration",
+    "version": 1,
+    "notebook_sha256": "679ff8980c76e1ee3a45625192ca2f6219c487aad7243e0bd27f6627cc6dc181",
+    "docker_image": "gcr.io/kaggle-private-byod/python@sha256:2757e0c7d1e0a9cb43da657b97e223c321a98f5014bdf64f44f2f6b083ad2b2f",
+    "machine_shape": "NvidiaTeslaT4",
+    "datasets": []
+  },
+  "provider_status": "KernelWorkerStatus.COMPLETE",
+  "source_identity_gate": true,
+  "tested_sources": {
+    "patches/comfy_idle_lifecycle.py": "aba0c02e83a3787d176f3b6983b5ac6cfa14647ca3225ee418dfed4fec438cee",
+    "patches/comfy_sampler.py": "9ddbd4ea2403d3257c0cdc69e9841739138bc9e93ca80bca5890336492c485e9",
+    "patches/comfy_tp_runtime.py": "94718548e62dd60caa58ba7497b4cbbf5e0ca0ad91574b6e4dbea94706625982",
+    "patches/custom_te_loader.py": "0f447d28eb48e3bb0cbbde6e2b9c67a617a8230f5e18a9489616597cad2771d3",
+    "patches/diagnostic_metrics.py": "f58e4312e45d8e3b5ac938d98fe8b0b411e21f0c894967b7361968617516cb9e",
+    "patches/h3_lora.py": "1e1ac849d2d8e4c9f4e60c1e3d8a83ca283ef800cced79da2b1d48a68e1417fd",
+    "patches/h3_operator_policy.py": "29ef7b73641238390511698a59125b7078926063a854208c3c28f4c9a8a547b2",
+    "patches/host_memory_pressure.py": "61b8cb395490a1e8d149e2e3ba4abd72d2ba64b73846c6823ab1b8d63b9b07f0",
+    "patches/host_weight_cache.py": "cbc88510897162e95f21b2e2db019c5507331e4854d0443f6f0cda4f38f1181a",
+    "patches/multi_gpu_audio_vae.py": "1e9038a857b99618669e509855f9852e3a3cebbf46d39b2d8c76568cc9736c31",
+    "patches/multi_gpu_video_vae.py": "eff4376b8be541fb70546b4e8fe36870368f6b9656766d0a27e43b16d234ea01",
+    "patches/optimized_tp.py": "1a321701680bd87699ca7ccbc63bc00b925dbe4a3834347ebfc27a72457f705c",
+    "patches/parallel_int8.py": "06e0b1d21ecc59d7a78b8165cc2b07dd9e2e9ca84cc1215ba232264a76350ae0",
+    "patches/parallel_vae.py": "bd3b9e98d5aa8ca260baa37ba89fd02d33d90fa09b555b393d87ebcc39cadd6a",
+    "patches/pp_dit.py": "f4811777f48af80cbf99bfabaa76568db0d9524c7709d2e3262a84070ced4bb2",
+    "patches/pp_qwen3vl.py": "6cd5cfb52bab3596453d426a2989aa1883132e00478abf6d534625ae2b66c3b7",
+    "patches/quantized_collectives.py": "a5c56bb13b1fe5daf598365b0470c2a2c6b7d5b0f242061eb40f641d262e2233",
+    "patches/rank_local_int8.py": "d6fd8040d6bb22b3b19fbb678101ac8cb489451011ad749de0f529cf86615183",
+    "patches/slab_video_vae.py": "8025557c091ef07f2cf81b4d8498e0b586e575bf27871f902b5e3893b353a59f",
+    "patches/sp_int8_dit.py": "b7087098ce885acd360415f410658e49385a58bf7e41359703fbdc62df714f04",
+    "patches/sp_int8_qwen3vl.py": "0d7343d9ddbc082bf21aca6dd07aa2680d08d9b7dc096d8a6a5cd3b60734b52a",
+    "patches/te_loading.py": "5db9c3083dca5ed9c242d6019d2ebaee37a536784c8f70f7a887c603548ce829",
+    "patches/tilelang_attention_p2.py": "30fe3d321358f3ad835a55fe30ece86c860d95728670e92e939b7a92345eb42d",
+    "patches/tilelang_attention_tradeoffs.py": "921dfa555224b8747ef513e0476360e75b2ab39e9567ecc8150fac9f0dbe2867",
+    "patches/tilelang_dense_preparation.py": "a65370e1002de13b72a0b3c90d6f0b1e0fd2337b508babb829cfd744d6129ffe",
+    "patches/tilelang_group32_masked.py": "75aefd9f8e3516249f4b04b220fe97885577e01eccce4ede75b64460b2aba140",
+    "patches/tilelang_grouped_fused.py": "fdda215620c2cd0957c0890ad86de6a97b9a3ac00c386870f9af7f599fe2a6ba",
+    "patches/tilelang_grouped_qk.py": "0fca9d7e2c06382293de73970d41dd39ab004b464ba22472164a68f85c3f4dbf",
+    "patches/tilelang_grouped_tp.py": "067bede9be733f465769773689cb7c2031d56bfd1dd59939c4d42ea7cadffdb0",
+    "patches/tilelang_grouped_tp_kitchen.py": "48c61c83812d561f773c7e0843f16ac981dc4b6166e4f7110e77206d7f9df772",
+    "patches/tilelang_grouped_tp_kitchen_v2.py": "82bdd3c674b47ba0baa08b55f818fb43b7b4fa7f78718b3cc4f12f1e7df1c1fe",
+    "patches/tilelang_grouped_tp_optimized.py": "ee0b48a87d44b313f110bdf3d58a75a1e00bf5f37b0ca2be02f4b9a9fa971d1f",
+    "patches/tilelang_row_quant.py": "8d702f3dff380bbdb91bbb1c1a3f2b9d579dfa630a626088fe89ba340cc2b2dd",
+    "patches/tilelang_sage_preparation.py": "ebe5ccbc18db031b98926051e44d802f7d70ff333d03daa13518b1be7d9a2346",
+    "patches/tilelang_sage_qk.py": "f78151941b8e0890df21bd2ffd11ac6abaff17c4dbcc0a6af1c59614900a3f2a",
+    "patches/tilelang_scalar_pool.py": "54cd0d284044069bda847dca35c5e6471d2111c7d3c1d38e82825ddc37a4bdca",
+    "patches/tilelang_sol_drop_fused.py": "26a192bc6876cd0245c6993d8712696ec1b1ed22dbd163a6c9946f05772b3398",
+    "patches/tilelang_sparse_attention.py": "f783effba120825ab161f658e6fd4e0f22c0c143c1da980c36879073298867c3",
+    "patches/tilelang_swiglu_pad.py": "5c8ed308946ef7f30bdaa71b96e545e7bf4985cc4f1d32f92ccb940290898673",
+    "patches/tilelang_transport_p2.py": "cd52800d7e90d14d72db47e70772bbd66eafea6de041fb9584c7fdc62b8d845e",
+    "patches/tilelang_transport_tradeoffs.py": "94a653a562a74ab45800025e094e0644a7de0de073107ce5e7a2896695053e26",
+    "patches/tp_dit.py": "a2aeeed230572209aea158bd8c8cbbccbfd548bc13ad4634da70731be35c77e6",
+    "patches/tp_qwen3vl.py": "99898a5b9d53f4fc2462eb82c6e6a258afabb0a83b8ea4456c2f02828904c6f2",
+    "patches/tp_video_vae.py": "cf4689e9b77fdb3f1ac8b16d46e62da6a54ab28453430e12b6446fec636256c4",
+    "patches/weight_residency.py": "9a890a164b6196230ad120f232ad122b69c8f28187e601d5e7b3b50cb3c6306f",
+    "patches/windowed_tp.py": "cd7e8a3faa5721ce56bd98ea4d2ababbbaf8980fbf931e06ddcbd31c1906223b",
+    "custom_nodes/minimax_h3_tp2/__init__.py": "4ddea9fa57d3477f6ab6015a5ffbbe354a2b00894dee24a49e334bc2d8122cfd",
+    "benchmarks/test_h3_operator_integration.py": "2d00ebbce97110d7144839822502e01c12e9961a5c89fae0cdaed3e0504b642e"
+  },
+  "final_checkout_identical_to_target_snapshot": [
+    "patches/comfy_idle_lifecycle.py",
+    "patches/comfy_sampler.py",
+    "patches/custom_te_loader.py",
+    "patches/diagnostic_metrics.py",
+    "patches/h3_lora.py",
+    "patches/h3_operator_policy.py",
+    "patches/host_memory_pressure.py",
+    "patches/host_weight_cache.py",
+    "patches/multi_gpu_audio_vae.py",
+    "patches/multi_gpu_video_vae.py",
+    "patches/optimized_tp.py",
+    "patches/parallel_int8.py",
+    "patches/parallel_vae.py",
+    "patches/pp_dit.py",
+    "patches/pp_qwen3vl.py",
+    "patches/quantized_collectives.py",
+    "patches/rank_local_int8.py",
+    "patches/slab_video_vae.py",
+    "patches/sp_int8_dit.py",
+    "patches/sp_int8_qwen3vl.py",
+    "patches/te_loading.py",
+    "patches/tilelang_attention_p2.py",
+    "patches/tilelang_attention_tradeoffs.py",
+    "patches/tilelang_dense_preparation.py",
+    "patches/tilelang_group32_masked.py",
+    "patches/tilelang_grouped_fused.py",
+    "patches/tilelang_grouped_qk.py",
+    "patches/tilelang_grouped_tp.py",
+    "patches/tilelang_grouped_tp_kitchen.py",
+    "patches/tilelang_grouped_tp_kitchen_v2.py",
+    "patches/tilelang_grouped_tp_optimized.py",
+    "patches/tilelang_row_quant.py",
+    "patches/tilelang_sage_preparation.py",
+    "patches/tilelang_sage_qk.py",
+    "patches/tilelang_scalar_pool.py",
+    "patches/tilelang_sol_drop_fused.py",
+    "patches/tilelang_sparse_attention.py",
+    "patches/tilelang_swiglu_pad.py",
+    "patches/tilelang_transport_p2.py",
+    "patches/tilelang_transport_tradeoffs.py",
+    "patches/tp_dit.py",
+    "patches/tp_qwen3vl.py",
+    "patches/tp_video_vae.py",
+    "patches/weight_residency.py",
+    "custom_nodes/minimax_h3_tp2/__init__.py"
+  ],
+  "post_target_snapshot_changes": [
+    "patches/comfy_tp_runtime.py",
+    "patches/windowed_tp.py",
+    "benchmarks/test_h3_operator_integration.py"
+  ],
+  "ranks": [
+    {
+      "scope": "Operator arithmetic/integration gates; no full-pipeline speed/quality qualification",
+      "torch": "2.11.0+cu130",
+      "hardware": "Tesla T4",
+      "records": [
+        {
+          "name": "config_layout_cache_dispatch_residency_UI",
+          "status": "pass"
+        },
+        {
+          "name": "selective_B_both_owners_stack_scale_order_and_bytes",
+          "device": "cpu",
+          "status": "pass"
+        },
+        {
+          "name": "persistent_audio_channel_ownership_and_join",
+          "status": "pass"
+        },
+        {
+          "name": "selective_B_both_owners_stack_scale_order_and_bytes",
+          "device": "cuda:0",
+          "status": "pass"
+        },
+        {
+          "name": "masked_GQA_0",
+          "status": "pass",
+          "max_abs": 6.103515625e-05
+        },
+        {
+          "name": "masked_GQA_1",
+          "status": "pass",
+          "max_abs": 6.103515625e-05
+        },
+        {
+          "name": "masked_GQA_2",
+          "status": "pass",
+          "max_abs": 0.000244140625
+        },
+        {
+          "name": "SM75_fused_TE_and_real_sparse_dispatch",
+          "status": "pass"
+        },
+        {
+          "name": "actual_NCCL_packed_row_7168",
+          "rank": 0,
+          "status": "bitwise_pass"
+        },
+        {
+          "name": "actual_NCCL_packed_row_12800",
+          "rank": 0,
+          "status": "bitwise_pass"
+        }
+      ]
+    },
+    {
+      "scope": "Operator arithmetic/integration gates; no full-pipeline speed/quality qualification",
+      "torch": "2.11.0+cu130",
+      "hardware": "Tesla T4",
+      "records": [
+        {
+          "name": "config_layout_cache_dispatch_residency_UI",
+          "status": "pass"
+        },
+        {
+          "name": "selective_B_both_owners_stack_scale_order_and_bytes",
+          "device": "cpu",
+          "status": "pass"
+        },
+        {
+          "name": "persistent_audio_channel_ownership_and_join",
+          "status": "pass"
+        },
+        {
+          "name": "selective_B_both_owners_stack_scale_order_and_bytes",
+          "device": "cuda:1",
+          "status": "pass"
+        },
+        {
+          "name": "masked_GQA_0",
+          "status": "pass",
+          "max_abs": 6.103515625e-05
+        },
+        {
+          "name": "masked_GQA_1",
+          "status": "pass",
+          "max_abs": 6.103515625e-05
+        },
+        {
+          "name": "masked_GQA_2",
+          "status": "pass",
+          "max_abs": 0.000244140625
+        },
+        {
+          "name": "SM75_fused_TE_and_real_sparse_dispatch",
+          "status": "pass"
+        },
+        {
+          "name": "actual_NCCL_packed_row_7168",
+          "rank": 1,
+          "status": "bitwise_pass"
+        },
+        {
+          "name": "actual_NCCL_packed_row_12800",
+          "rank": 1,
+          "status": "bitwise_pass"
+        }
+      ]
+    }
+  ],
+  "runtime": {
+    "status": "complete",
+    "scope": "Operator integration gates on two physical T4s. No H3 checkpoint, full generation or performance benchmark.",
+    "commands": [
+      {
+        "name": "dependencies",
+        "exit_code": 0,
+        "seconds": 12.747744334000004
+      },
+      {
+        "name": "runtime",
+        "exit_code": 0,
+        "seconds": 122.32235732000004
+      },
+      {
+        "name": "gates",
+        "exit_code": 0,
+        "seconds": 90.50902027200004
+      }
+    ],
+    "compiler": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Fri_Feb_21_20:23:50_PST_2025\nCuda compilation tools, release 12.8, V12.8.93\nBuild cuda_12.8.r12.8/compiler.35583870_0\n",
+    "hardware": [
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ]
+      },
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ]
+      }
+    ],
+    "torch": "2.11.0+cu130"
+  },
+  "scope": "Operator integration gates only. Dependency preflight, current ComfyUI inline projection compatibility and final CPU/UI/local GPU checks were added afterward and are recorded separately; no full H3 pipeline acceptance or performance measurement.",
+  "local_gates": {
+    "scope": "Operator arithmetic/integration gates; no full-pipeline speed/quality qualification",
+    "torch": "2.12.1+cu132",
+    "comfy_kitchen": "0.2.37",
+    "tilelang": "0.1.13",
+    "hardware": "NVIDIA GeForce RTX 5060 Ti",
+    "records": [
+      {
+        "name": "config_layout_cache_dispatch_residency_UI",
+        "status": "pass"
+      },
+      {
+        "name": "selective_B_both_owners_stack_scale_order_and_bytes",
+        "device": "cpu",
+        "status": "pass"
+      },
+      {
+        "name": "persistent_audio_channel_ownership_and_join",
+        "status": "pass"
+      },
+      {
+        "name": "selective_B_both_owners_stack_scale_order_and_bytes",
+        "device": "cuda:0",
+        "status": "pass"
+      },
+      {
+        "name": "masked_GQA_0",
+        "status": "pass",
+        "max_abs": 6.103515625e-05
+      },
+      {
+        "name": "masked_GQA_1",
+        "status": "pass",
+        "max_abs": 6.103515625e-05
+      },
+      {
+        "name": "masked_GQA_2",
+        "status": "pass",
+        "max_abs": 0.0001220703125
+      }
+    ]
+  },
+  "local_pipeline_wiring": {
+    "scope": "Tiny seeded blocks on one SM120 GPU, two logical owners. No full pipeline or target performance claim.",
+    "torch": "2.12.1+cu132",
+    "comfy_kitchen": "0.2.37",
+    "tilelang": "0.1.13",
+    "hardware": "NVIDIA GeForce RTX 5060 Ti",
+    "native_model_source": "C:\\Users\\Administrator\\Documents\\project\\ComfyUI-master\\comfy\\ldm\\minimax\\model.py",
+    "native_model_sha256": "0d5edcf32b4b98d704eaa51de60ed71f507d0c7d9845947f566647dc76fb8dfe",
+    "records": [
+      {
+        "name": "DiT_Kitchen_and_row_call_sites",
+        "status": "pass"
+      },
+      {
+        "name": "TE_Group32_GQA_mask_row_parts_call_sites",
+        "status": "pass",
+        "explicit_SM120_preview": true
+      },
+      {
+        "name": "Native_refiner_Kitchen_wrapper_after_residency_copy",
+        "status": "pass"
+      },
+      {
+        "name": "Current_ComfyUI_inline_projection_bridge_Native_zero_block_forward",
+        "status": "bitwise_pass"
+      }
+    ]
+  },
+  "default_operator_policy": {
+    "te_attention": "tilelang_group32",
+    "dit_attention": "kitchen",
+    "row_linear_backend": "tilelang_packed",
+    "swiglu_padding": true,
+    "selective_b": true,
+    "scalar_score_workspace_mib": 96
+  },
+  "fixed_defaults": {
+    "video_attention": "kitchen",
+    "audio": "channel_parallel",
+    "transport": "native_int32"
+  },
+  "final_source_sha256": {
+    "patches/h3_operator_policy.py": "29ef7b73641238390511698a59125b7078926063a854208c3c28f4c9a8a547b2",
+    "patches/h3_operator_dependencies.py": "1001d8fcc2ea552572181e4b8a01c9c46d2aae7bafc89ec2454caad4eef96f00",
+    "patches/tilelang_group32_masked.py": "75aefd9f8e3516249f4b04b220fe97885577e01eccce4ede75b64460b2aba140",
+    "patches/comfy_tp_runtime.py": "9d72f7e2f26e6a3af914cddcbc44b00b772a77eca2975b93bd9ecc2b8fb1fe6a",
+    "patches/windowed_tp.py": "3d546d3a00605947bc28f333dd4963ad653bbdbaf9b9cfada6257da79d893314",
+    "patches/tp_qwen3vl.py": "6d17b54e2dfdddfb418b0daff4cd5ce6830550ec27d6f33411580b9c6bb3826d",
+    "patches/tp_dit.py": "ffbffe8c33be17024d864691d376eeabcd749c7f73eccafac3c783ff13895252",
+    "patches/h3_lora.py": "8d2cace24b470348dcdf3123d7e05a92c618d3569108510adcb5bff684ea862d",
+    "patches/multi_gpu_audio_vae.py": "1e9038a857b99618669e509855f9852e3a3cebbf46d39b2d8c76568cc9736c31",
+    "patches/parallel_vae.py": "bd3b9e98d5aa8ca260baa37ba89fd02d33d90fa09b555b393d87ebcc39cadd6a",
+    "patches/tilelang_row_quant.py": "8d702f3dff380bbdb91bbb1c1a3f2b9d579dfa630a626088fe89ba340cc2b2dd",
+    "patches/tilelang_swiglu_pad.py": "5c8ed308946ef7f30bdaa71b96e545e7bf4985cc4f1d32f92ccb940290898673",
+    "patches/tilelang_attention_p2.py": "9e451dfd5961b02f68707bb63a7cbfdfd74383ffb27d2fc7169ad1406764737c",
+    "custom_nodes/minimax_h3_tp2/__init__.py": "0b88f6455bb1863f920dae3e1cfe09520235dd287ae517a61e140815ae7b53ff",
+    "build_comfy_tp2_workflow.py": "7b32eba2732a95a5dc29c8c1dfb0a07923de6f38adad9fdb5e1e96dc03fcb08b",
+    "build_h3_operator_integration_job.py": "8b794bb6a724dcb36955a3a0866f2583b6bd9854831679df61eb5f315d9b6778",
+    "benchmarks/test_h3_operator_integration.py": "494dc090684613d65bcc14cea48a67a81d8dd51f724718d2e7351d34f96a248f",
+    "benchmarks/test_h3_pipeline_wiring.py": "2a46be7cc7538037d6d6909ce43b519647bf1366dab9c9c374f39650aee9e9e2",
+    "benchmarks/archive_h3_operator_integration.py": "e7a043427ba5e6e1c8498acdb25f35a5b0c029ff0ff6a275ba2688da05c52f82",
+    "benchmarks/finalize_h3_operator_integration.py": "c2f4157b81e074dcabb62d1d9f9e10125013c0553b42d5a2de075d3a28747c42",
+    "requirements-tp2-operators.txt": "9e879fe77d7cbd17524cbc365503a0c0b19fff0faecb1b881e4227ff5c9e8b30",
+    "H3_OPERATOR_INTEGRATION.md": "171c97ccbd5e973cd3b7f7f20e3f988c75f3d9186fecc6bdf6b9739566a425cb",
+    "workflows/video_minimax_h3_r2v_tp2_operators.json": "a48d4eb1f8c2d59396db0eba1d05f932994a83db0a11deb7dc659dff74b001e0"
+  },
+  "deployed_workflow": "C:\\Users\\Administrator\\Documents\\project\\ComfyUI-master\\user\\default\\workflows\\video_minimax_h3_r2v_tp2_operators.json",
+  "deployed_node": "C:\\Users\\Administrator\\Documents\\project\\ComfyUI-master\\custom_nodes\\minimax_h3_tp2",
+  "local_environment": {
+    "torch": "2.12.1+cu132",
+    "comfy_kitchen": "0.2.37",
+    "tilelang": "0.1.13"
+  },
+  "final_checks": {
+    "syntax": "pass",
+    "workflow_copy": "identical",
+    "node_junction": "pass",
+    "source_and_runtime_provider_gate": "pass",
+    "full_H3_generation": "not_run",
+    "end_to_end_performance": "unmeasured"
+  }
+}

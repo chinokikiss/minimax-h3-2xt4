@@ -3,11 +3,12 @@ Multi-GPU Tile & Channel Parallel Decoder for MiniMax-H3 Audio VAE on 2x NVIDIA 
 Supports:
   1. Single-GPU Normal Decode (full non-tiled forward pass)
   2. Single-GPU Tiled Decode (sequential temporal tiles on 1 GPU with cross-fade)
-  3. 2-GPU Channel-Parallel Decode (Left on GPU 0, Right on GPU 1, concurrent, 0% overlap overhead, 0.000000 error)
+  3. 2-GPU Channel-Parallel Decode (Left on GPU 0, Right on GPU 1; numerical equivalence requires validation)
   4. 2-GPU Temporal-Parallel Tiled Decode (temporal chunks distributed across GPU 0 and GPU 1, decoded concurrently)
   5. 2-GPU Hybrid (Channel + Temporal) Parallel Decode
 """
 
+from __future__ import annotations
 import os
 import sys
 import time
@@ -17,23 +18,16 @@ import threading
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from typing import Dict, List, Tuple, Optional, Any
+from typing import Dict, List, Tuple, Optional, Any, TYPE_CHECKING
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "ComfyUI"))
-if os.path.exists("/tmp/ComfyUI") and "/tmp/ComfyUI" not in sys.path:
-    sys.path.insert(0, "/tmp/ComfyUI")
+if TYPE_CHECKING:
+    from comfy.ldm.minimax.audio_vae import MiniMaxH3AudioVAE
 
-# Fallback mock for comfy_aimdo if missing
-try:
-    import comfy_aimdo
-except ImportError:
-    import types
-    m = types.ModuleType("comfy_aimdo")
-    m.host_buffer = types.ModuleType("host_buffer")
-    sys.modules["comfy_aimdo"] = m
-    sys.modules["comfy_aimdo.host_buffer"] = m.host_buffer
 
-from comfy.ldm.minimax.audio_vae import MiniMaxH3AudioVAE
+# Historical callers keep the same function object without loading the old
+# benchmark manager in the production pipeline.
+from patches.audio_channel_decode import channel_decode
+
 
 class MultiGPUAudioVAEDecoder:
     """
@@ -61,6 +55,7 @@ class MultiGPUAudioVAEDecoder:
             else:
                 self.vae_dev1 = self.vae_dev0
         else:
+            from comfy.ldm.minimax.audio_vae import MiniMaxH3AudioVAE
             self.vae_dev0 = MiniMaxH3AudioVAE().to(device=self.dev0, dtype=self.dtype)
             self._init_weights(self.vae_dev0)
             if self.is_multi_gpu:
@@ -132,6 +127,8 @@ class MultiGPUAudioVAEDecoder:
         """
         Sequential temporal tiled decode on GPU 0 with linear cross-fade blending.
         """
+        if type(chunk_size) is not int or type(overlap_frames) is not int or not 0 < overlap_frames < chunk_size:
+            raise ValueError("Audio tiles require 0 < overlap_frames < chunk_size; zero-overlap stitching is unsupported")
         z_dev = z.to(device=self.dev0, dtype=self.dtype)
         B, C, S, T = z_dev.shape
         ov_samples = overlap_frames * self.samples_per_latent
@@ -206,10 +203,9 @@ class MultiGPUAudioVAEDecoder:
     def decode_channel_parallel(self, z: torch.Tensor) -> Tuple[torch.Tensor, Dict[str, Any]]:
         """
         Decodes Left channel on GPU 0 and Right channel on GPU 1 concurrently.
-        Because Left and Right are independent in BigVGAN, this has:
-        - 0% Overlap Overhead
-        - 0.000000 Numerical Error vs Normal Decode
-        - Maximum linear parallelism
+        Left and right are mathematically independent, but changing the decoder
+        batch shape can change floating-point accumulation. Validate numerical
+        error against normal decode; exact equality is not guaranteed.
         """
         if not self.is_multi_gpu:
             return self.decode_normal(z)
@@ -306,6 +302,8 @@ class MultiGPUAudioVAEDecoder:
         """
         Distributes temporal chunks across GPU 0 and GPU 1, decoded concurrently.
         """
+        if type(chunk_size) is not int or type(overlap_frames) is not int or not 0 < overlap_frames < chunk_size:
+            raise ValueError("Audio tiles require 0 < overlap_frames < chunk_size; zero-overlap stitching is unsupported")
         if not self.is_multi_gpu:
             return self.decode_tiled_single(z, chunk_size, overlap_frames)
 

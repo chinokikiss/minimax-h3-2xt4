@@ -1,0 +1,3 @@
+# Preserve the user's conda versions. No upstream requirements or implicit upgrades.
+# Kaggle uses frozen_kaggle_setup.py for resolver/hash preflight before installation.
+-r runtime/requirements-local-conda.txt
