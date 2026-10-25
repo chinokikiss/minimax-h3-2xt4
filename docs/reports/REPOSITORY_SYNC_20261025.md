@@ -6,6 +6,11 @@ experiment tools and reports to `main`, including the completed
 remains pending review. The layout change itself is CPU-qualified; it does not
 claim a new GPU performance result.
 
+Publication and cleanup completed: **16 remote branches and12 local branches
+deleted; only `main` remains**. All16 original heads are verified on GitHub as
+archive tags. The runtime/layout delivery commit is `e2cea4a`; this follow-up
+records the completed cleanup.
+
 ## Layout
 
 All95 former root Python scripts now live under `tools/`:

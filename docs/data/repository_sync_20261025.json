@@ -1,6 +1,6 @@
 {
   "date": "2026-10-25",
-  "status": "main_sync_prepared_branch_cleanup_pending",
+  "status": "main_synced_only_main_branch_remains",
   "base_main_commit": "4c31422a2ad1c4f98928f04a86d79aec0effa033",
   "script_moves": {
     "date": "2026-10-25",
@@ -244,5 +244,26 @@
     "full_pipeline_runs": 0
   },
   "archive_policy": "Preserve original commits and immutable source archive URLs using archive tags; no archive bytes rewritten.",
-  "updated_utc": "2026-10-25T01:31:05.414939+00:00"
+  "updated_utc": "2026-10-25T01:33:49.070829+00:00",
+  "runtime_sync_commit": "e2cea4a294d20e309ff644b99769c21f72b34c6d",
+  "branch_cleanup": {
+    "main": "e2cea4a294d20e309ff644b99769c21f72b34c6d",
+    "remote_deleted": 16,
+    "local_deleted": 12,
+    "remaining_remote_branches": [
+      "main"
+    ],
+    "remaining_local_branches": [
+      "main"
+    ],
+    "archived_tags": 16,
+    "immutable_commits_retained": true,
+    "completed_utc": "2026-10-25T01:33:23.766894+00:00"
+  },
+  "staged_source_audit": {
+    "staged_changed_files": 365,
+    "secret_findings": 0,
+    "root_python_files": 0,
+    "dependency_locks_unchanged": true
+  }
 }
