@@ -92,17 +92,37 @@ def load_component(reader,kind,stage,cancel=None):
     if set(missing)-allowed or unexpected:raise ValueError(f'Incomplete H3 {kind} {stage}: {missing}, {unexpected}')
     del state
     model=model.to(dtype=torch.float16 if kind=='video' else torch.float32).eval().requires_grad_(False)
+    if kind=='video':
+        from patches.h3_tensor_flow import prepare_video,policy_for
+        prepare_video(model,policy_for(reader))
+    return model
+
+
+def video_planning_template(reader):
+    """Architecture and tiny normalization buffers; never learned payloads."""
+    from comfy.ldm.minimax.vae import MiniMaxH3VideoVAE,LATENTS_MEAN,LATENTS_STD,IMAGENET_MEAN,IMAGENET_STD
+    import comfy.ops
+    with torch.device('meta'):
+        ops=comfy.ops.mixed_precision_ops({'mixed_ops':True},torch.float16)
+        model=MiniMaxH3VideoVAE(operations=ops)
+    for name,values in (('latents_mean',LATENTS_MEAN),('latents_std',LATENTS_STD),
+                        ('pixel_mean',IMAGENET_MEAN),('pixel_std',IMAGENET_STD)):
+        value=reader.read_tensor(name) if name in reader.header else torch.tensor(values)
+        if name.startswith('pixel_'):value=value.view(1,3,1,1,1)
+        setattr(model,name,value.to(device='cpu',dtype=torch.float16))
     return model
 
 
 class StagedVAE:
-    """One active H3 component. Encoding/tiling/planning stay in Native VAE."""
+    """Demand-load one H3 component; Native still owns encode/decode planning."""
     def __init__(self,path,service):
         self.reader=CheckpointReader(path);self.kind=checkpoint_kind(self.reader)
+        from patches.h3_tensor_flow import TensorFlowPolicy
+        self.reader.tensor_flow=getattr(service.config,'tensor_flow',TensorFlowPolicy())
         if self.kind is None:raise ValueError('Staged loader requires a Native H3 VAE checkpoint')
         self.service=service;self.lock=threading.RLock();self.stage=None;self.reservation=0
         self.vae=native_shell(self.reader,self.kind)
-        self.events=[];self._ensure('encode')
+        self.events=[];self.encoder_used=False
         service.register_staged_vae(self)
 
     def __getattr__(self,name):return getattr(self.vae,name)
@@ -117,6 +137,14 @@ class StagedVAE:
     def check_identity(self):
         stat=self.reader.path.stat()
         if (stat.st_size,stat.st_mtime_ns)!=self.reader.signature:raise RuntimeError('VAE checkpoint changed; reload its loader node')
+
+    def model_size(self):
+        return 0 if self.stage is None else self.vae.model_size()
+
+    def throw_exception_if_invalid(self):
+        # A recognized, unchanged lazy checkpoint is valid without weight storage.
+        # Full component/state validation still runs at the first actual use.
+        self.check_identity()
 
     def _release(self):
         if self.stage is None:return
@@ -165,12 +193,23 @@ class StagedVAE:
         if hasattr(self.service,'idle_vae_cancel'):self.service.idle_vae_cancel.set()
         with self.service.lock,self.lock:self._ensure('decode')
 
+    def prepare_remote_decode(self):
+        if self.kind!='video':raise ValueError('Remote decode is video-only')
+        if hasattr(self.service,'idle_vae_cancel'):self.service.idle_vae_cancel.set()
+        with self.service.lock,self.lock:
+            self.check_identity()
+            self._release()
+            return video_planning_template(self.reader)
+
     def _run(self,stage,method,*args,**kwargs):
         if hasattr(self.service,'idle_vae_cancel'):self.service.idle_vae_cancel.set()
         with self.service.lock,self.lock:
-            self._ensure(stage)
+            if not (stage=='decode' and self.__dict__.get('remote_decode_active',False)):
+                self._ensure(stage)
             from patches.comfy_idle_lifecycle import preserve_te
-            with preserve_te(self.service):return getattr(self.vae,method)(*args,**kwargs)
+            with preserve_te(self.service):output=getattr(self.vae,method)(*args,**kwargs)
+            if stage=='encode':self.encoder_used=True
+            return output
 
     def encode(self,*args,**kwargs):return self._run('encode','encode',*args,**kwargs)
     def encode_tiled(self,*args,**kwargs):return self._run('encode','encode_tiled',*args,**kwargs)

@@ -9,8 +9,44 @@ ComfyUI's workflows directory; original and Native fallback workflows remain.
 
 ## Offline LoRA
 
-Set **`MiniMaxH3TP2Loader.lora_mode=offline`**, connect the existing LoRA stack,
-and select the original diffusion checkpoint. `online` remains the default.
+**`MiniMaxH3TP2Loader.lora_mode=offline` is now the default.** Connect the existing
+LoRA stack and prefer a TP2 JSON descriptor for long sequences: affected blocks
+are merged in the bounded CPU host cache, without a complete baked checkpoint
+or online bypass. This reduces online activation pressure but retains the
+known CPU merge cost. Long-sequence online testing is cancelled.
+
+For fitting short/medium requests, explicit `online` keeps the floating LoRA
+bypass, with RowParallel A partial SUM and guarded FC1/QKV owned B enabled.
+
+### Persist a TP2 bake before inference
+
+The [0.5MP Turbo experiment](../reports/H3_L1_TURBO_05MP_E2E_20261024.md) adds a
+separate bake-once path for pre-sliced weights:
+
+```powershell
+python -m patches.tp2_disk_bake --base path/to/dit_bundle.json --lora path/to/turbo.safetensors 1.0 --output path/to/baked_tp2 --devices cuda:0 cuda:1
+```
+
+This reconstructs each affected full-width matrix, performs the Native FP32
+merge and independent verification once, then writes both INT8 owner shards
+and any Token Refiner replacements to disk. It publishes `dit_baked.json`
+atomically after complete verification. Use that descriptor as the diffusion
+model input with an **empty LoRA stack**. It retains the original base
+descriptor/index and auxiliary provenance; keep those metadata/auxiliary
+files at their recorded relative paths. Original DiT block payloads are not
+needed for subsequent baked reads. A nonempty adapter stack on the baked reader
+is rejected to prevent applying the adapter twice.
+
+The disk reader has no CPU merge workspace and does not rebake evicted layers.
+Recipe/source/weight hashes protect cache reuse. GPU acceptance for the real
+Turbo workload is tracked in the experiment report; CPU fixture equivalence is
+not a completed T4 generation claim. This explicit disk path is separate from
+the loader's existing bounded RAM-merge path for an unbaked TP2 descriptor.
+
+### Ordinary checkpoint converter
+
+The whole-checkpoint converter below applies only to ordinary safetensors
+offline input, not the bounded TP2 bundle path.
 
 On the first use, the loader releases the previous TP service before baking.
 Whole DiT/refiner layers are balanced across `cuda:0` and `cuda:1` by matrix
@@ -51,13 +87,32 @@ python benchmarks/merge_h3_lora.py --base D:/minimaxH3/MiniMax_H3_Ref2VA_pruned_
 checks each merged matrix/scale against the ordinary ordered A/B formula.
 Compilation/loading/copy/baking cost is one-time work, not inference latency.
 
+### Offline LoRA with a TP2 bundle
+
+An explicit `h3-tp2-bundle-reader-v1` JSON descriptor can replace the monolithic
+DiT checkpoint path. With `lora_mode=offline`, the loader prepares adapters from
+the immutable base shards and a compact Native auxiliary checkpoint. It merges
+and requantizes one full-width matrix on CPU, then selects the owned TP2 slice.
+Prepared blocks use the existing bounded host cache. There is no complete
+merged checkpoint, persistent per-LoRA weight cache or online adapter bypass.
+
+CPU baking can differ from the legacy GPU baker in both INT8 codes and scales.
+This optional path therefore needs its own matched controls; it does not inherit
+the old GPU-baked checkpoint's numerical or generation qualification. Ordinary
+safetensors loading and the existing GPU bake remain unchanged. The
+[bundle and profiling experiment](../reports/BUNDLE_SCALAR_WORKER_PROFILE_20261023.md)
+records trained contract checks, exact source delivery and T4 validation status.
+
 ## VAE weights by stage
 
 `MiniMaxH3ParallelVAELoader` now recognizes Native H3 video/audio checkpoints
 and returns a staged VAE. Unsupported VAE types retain the ordinary loader.
 No additional stage switch is needed.
 
-At node load, only encoder weights and shared latent normalization are read.
+As of 2026-10-22, node construction reads **metadata only**. Encoder weights and
+shared latent normalization load at the first actual reference `encode()` call;
+an image-only request does not load the Audio VAE encoder. A decoder-only VAE
+can go directly from its lazy shell to decoder loading, with no encoder read.
 Native metadata and public encode/decode/tiling planners are retained through a
 meta-device shell. The inactive half has no CPU/GPU parameter storage. At first
 decode, the encoder patcher/storage/host lease is released before decoder reads
@@ -80,23 +135,30 @@ restored to ones, including when query-parallel admission falls back to Native.
 
 CPU component construction/backing uses the TP service's shared host budget.
 Stage teardown, service close/abort and VAE node eviction return that lease.
-Normal Native model management owns parent GPU transfers/offload. Worker VAE
+Normal Native model management owns parent GPU transfers/offload. Video worker
 decode remains decoder-only and retains its existing collective admission.
+Audio uses only the parent Native single-GPU FP32 decoder; its staged
+encoder/decoder ownership remains, with no audio worker replicas or collectives.
 
 The current local `ComfyUI-master` has changed Video VAE attention to a different
 API from the qualified query-partition implementation. `auto` therefore falls
 back to Native public video decode with a recorded reason on that source,
 instead of raising an import/signature error. The pinned, qualified attention
 API retains query-parallel decode. This change does not claim qualification of
-a new attention/partitioning algorithm. Audio channel-parallel selection remains.
+a new attention/partitioning algorithm. As of 2026-10-21, audio channel
+parallelism is removed; both `auto` and `native` use Native single-GPU audio.
 The follow-up [query fallback check](../reports/VIDEO_VAE_QUERY_FALLBACK_CHECK.md) records
 the exact compatibility gates and observed Native attention calls.
 
 ## Idle residency
 
-With **`idle_residency=True`**, successful queue-idle completion now preloads
-the registered VAE encoders, then starts the existing partial TE preload on both
-workers. Encoders execute in the parent on the ordinary Native VAE device,
+With **`idle_residency=True`**, successful queue-idle completion preloads only
+the graph-required reference encoders, then a bounded TE prefix. Decoder-only
+VAE links do not select encoders. Without a graph, only previously used encoders
+are selected automatically. The implementation details and reference-type
+matrix are in the [demand-loading follow-up](../reports/H3_ROW_PARTIAL_REFERENCE_LOADING_20261022.md).
+
+Selected encoders execute in the parent on the ordinary Native VAE device,
 normally GPU 0; they are not duplicated on both TP ranks. Their allocation is
 visible to the workers' driver-memory admission guards.
 

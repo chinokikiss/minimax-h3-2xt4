@@ -1,7 +1,11 @@
 # Row Partial: retained option and memory lifetime audit
 
-Current inference keeps the Native exact path as default and exposes only
+At the historical measurement date, inference kept the Native exact path as default and exposed only
 `lora_row_partial_reduce` as an approximate LoRA option, disabled by default.
+As of 2026-10-22, the combined FP16-fix/fused-stored/scaled-transport pipeline
+defaults to Row A partial reduction with FP32 hidden SUM; explicit False keeps
+the Native input gather. See the [current integration follow-up](H3_ROW_PARTIAL_REFERENCE_LOADING_20261022.md).
+The measurements below retain their original sources and configuration.
 Concat A is deprecated: removed from the UI, and legacy True values are
 rejected by the loader/runtime/store. False legacy arguments remain compatible.
 Streamed SwiGLU remains removed.

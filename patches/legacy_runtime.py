@@ -31,7 +31,7 @@ def validate_source(root):
         if actual!=expected:mismatch.append(name)
     if mismatch:
         raise RuntimeError('H3 TP2 uses the local ComfyUI '+COMFY_REVISION+'. Source mismatch: '+', '.join(mismatch)+
-            '. Launch with launch_h3_legacy.py; do not mix ComfyUI-master modules into this runtime.')
+            '. Launch with python -m tools.runtime.launch_h3_legacy; do not mix ComfyUI-master modules into this runtime.')
     return str(root)
 
 
@@ -43,7 +43,7 @@ def validate_imported_source():
         module=sys.modules.get(name.removesuffix('.py').replace('/','.'))
         loaded=getattr(module,'__file__',None)
         if loaded and Path(loaded).resolve()!=root/name:
-            raise RuntimeError('Mixed ComfyUI modules: '+str(loaded)+'. Restart with launch_h3_legacy.py.')
+            raise RuntimeError('Mixed ComfyUI modules: '+str(loaded)+'. Restart with python -m tools.runtime.launch_h3_legacy.')
     return str(root)
 
 

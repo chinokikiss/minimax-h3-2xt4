@@ -15,9 +15,8 @@ LEGACY_MM=original.int_mm
 LEGACY_ROW=original.row_linear
 
 
-def projected_reduce(q,scale,weight,weight_scale,comm,world_size,dtype,bias,mode,rows=256):
+def projected_reduce(q,scale,weight,weight_scale,comm,dtype,bias):
     """The Native INT32 accumulator is the only retained reduction."""
-    if mode!='native_int32':raise ValueError('Only Native INT32 reduction is retained')
     partial=original.int_mm(q,weight)
     comm.all_reduce(partial,op=comm.ReduceOp.SUM)
     return original.dequantize(partial,scale,weight_scale,dtype,bias)
@@ -76,6 +75,7 @@ def global_row_quantize(x,comm,world_size,groupsize,input_act):
         del full_rotation
     else:
         rotated=backend._rotate_activation(flat,h,groupsize)
+        del flat
     maximum=rotated.abs().amax(-1,keepdim=True).float()
     comm.all_reduce(maximum,op=comm.ReduceOp.MAX)
     # Same native row-wise CUDA quantizer, global scale, rounding and clamping.
@@ -83,6 +83,7 @@ def global_row_quantize(x,comm,world_size,groupsize,input_act):
     sentinel=torch.zeros((rotated.shape[0],groupsize),device=rotated.device,dtype=rotated.dtype)
     sentinel[:,0:1].copy_(maximum)
     q,scale=backend.quantize_int8_rowwise(torch.cat([rotated,sentinel],-1))
+    del rotated,sentinel,maximum
     return q[:,:local_width].contiguous(),scale
 
 
@@ -93,19 +94,20 @@ def row_linear(x,weight,weight_scale,comm,world_size,groupsize=256,input_act=Non
     if world_size==1 or not fallback:
         return LEGACY_ROW(x,weight,weight_scale,comm,world_size,groupsize,input_act,bias,residual,residual_scale)
     q,scale=global_row_quantize(x,comm,world_size,groupsize,input_act)
-    out=projected_reduce(q,scale,weight,weight_scale,comm,world_size,x.dtype,bias,'native_int32').reshape(*x.shape[:-1],weight.shape[0])
+    out=projected_reduce(q,scale,weight,weight_scale,comm,x.dtype,bias).reshape(*x.shape[:-1],weight.shape[0])
     if residual is not None:out=torch.addcmul(residual,out.to(x.dtype),residual_scale)
     return out.to(x.dtype)
 
 
 def enable(mode='scalemax',swiglu_reduction='native_int32'):
-    if mode not in ('scalemax','fixed'):raise ValueError('Unknown TP quantization mode')
+    # Retain constant arguments for older benchmark callers, not as runtime knobs.
+    if mode!='scalemax':raise ValueError('Only scalemax quantization is retained')
     if swiglu_reduction!='native_int32':raise ValueError('FP32/INT8 reduction was retired after physical qualification; use native_int32')
     import patches.tp_qwen3vl as te
     import patches.tp_dit as dit
     original.gather=fixed_gather
     original.int_mm=native_int_mm
-    te.row_linear=dit.row_linear=row_linear if mode=='scalemax' else LEGACY_ROW
+    te.row_linear=dit.row_linear=row_linear
 
 
 def disable():

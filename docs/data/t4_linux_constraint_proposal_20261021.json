@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "status": "proposal_only_not_applied",
+  "base_constraints_sha256": "5a94152799828ea794a0f84ddd925df76967a89692b24a13f3ee16b3b254f573",
+  "scope": "Four Linux-only CUDA constraint exceptions; original Windows snapshot and 94 locked H3 package versions remain unchanged. New Linux dependency closure still requires exact resolution, wheel hashing, CPU import/ABI validation, and actual SM75 qualification.",
+  "changes": [
+    {
+      "package": "nvidia-cublas",
+      "frozen_version": "13.6.0.2",
+      "proposed_linux_version": "13.4.0.1",
+      "linux_required": "==13.4.0.1.*",
+      "publisher_metadata_url": "https://pypi.org/pypi/nvidia-cublas/13.4.0.1/json",
+      "wheels": [
+        {
+          "filename": "nvidia_cublas-13.4.0.1-py3-none-manylinux_2_27_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/3d/ec/c9b2998aebe3149dee2769e501257e048c8701de51263925f4dff76ddedc/nvidia_cublas-13.4.0.1-py3-none-manylinux_2_27_x86_64.whl",
+          "sha256": "53bf22e2ccbf644db74b6cc21cea7f5efb1a52aa64515438b430abbd05af4106"
+        }
+      ]
+    },
+    {
+      "package": "nvidia-cuda-nvrtc",
+      "frozen_version": "13.3.33",
+      "proposed_linux_version": "13.2.78",
+      "linux_required": "==13.2.78.*",
+      "publisher_metadata_url": "https://pypi.org/pypi/nvidia-cuda-nvrtc/13.2.78/json",
+      "wheels": [
+        {
+          "filename": "nvidia_cuda_nvrtc-13.2.78-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/5f/96/237b40b171e06eb65905375c4ad5c96f78c2f861ac6e8ae7f650d95e1dfd/nvidia_cuda_nvrtc-13.2.78-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl",
+          "sha256": "a9049031da08cbedd0c20e3470e5a978dc330af0e0326b3b05774718c665dc3e"
+        }
+      ]
+    },
+    {
+      "package": "nvidia-cuda-runtime",
+      "frozen_version": "13.3.29",
+      "proposed_linux_version": "13.2.75",
+      "linux_required": "==13.2.75.*",
+      "publisher_metadata_url": "https://pypi.org/pypi/nvidia-cuda-runtime/13.2.75/json",
+      "wheels": [
+        {
+          "filename": "nvidia_cuda_runtime-13.2.75-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/dc/74/f1493b0774c6eaf0234512bb650e1ab90ce8f61fecf0b4aaf1fb416f571e/nvidia_cuda_runtime-13.2.75-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+          "sha256": "72bf454902da594e0b833cadeddc8b7100ce1c7cf7ed9023943931be1aa913b7"
+        }
+      ]
+    },
+    {
+      "package": "nvidia-curand",
+      "frozen_version": "10.4.3.29",
+      "proposed_linux_version": "10.4.2.55",
+      "linux_required": "==10.4.2.55.*",
+      "publisher_metadata_url": "https://pypi.org/pypi/nvidia-curand/10.4.2.55/json",
+      "wheels": [
+        {
+          "filename": "nvidia_curand-10.4.2.55-py3-none-manylinux_2_27_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/f4/bc/f02a1d180d288e49b1a4548698b59755e9c485ee39c041fdeaf4d2cc2117/nvidia_curand-10.4.2.55-py3-none-manylinux_2_27_x86_64.whl",
+          "sha256": "b4080cab49d4939f8e46b2c195c76c698d2289835c36ede558836daa40000e70"
+        }
+      ]
+    }
+  ]
+}

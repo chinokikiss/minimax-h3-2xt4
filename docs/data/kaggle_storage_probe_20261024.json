@@ -1,0 +1,1698 @@
+{
+  "status": "complete",
+  "date": "2026-10-24",
+  "timezone": "Asia/Shanghai",
+  "kernel": "pamcks/h3-kaggle-storage-read-probe-2026-10-24",
+  "version": 2,
+  "kernel_url": "https://www.kaggle.com/code/pamcks/h3-kaggle-storage-read-probe-2026-10-24",
+  "source_binding_verified": true,
+  "final_collection_count": 1,
+  "prior_attempt": {
+    "version": 1,
+    "status": "source_setup_failed_before_benchmark",
+    "outputs_preserved": true
+  },
+  "status_polling": false,
+  "final_collection_transport": {
+    "status": "collected",
+    "kernel": "pamcks/h3-kaggle-storage-read-probe-2026-10-24/2",
+    "collection_kind": "Resume the same final artifact collection after TLS failure before any response/artifact; no resubmission or state polling",
+    "started_utc": "2026-10-24T08:24:57.907991+00:00",
+    "status_polling": false,
+    "returncode": 0,
+    "files": 62,
+    "completed_utc": "2026-10-24T08:25:55.127515+00:00",
+    "benchmark_status": "complete",
+    "benchmark_seconds": 144.52831415199998,
+    "source_binding_verified": true,
+    "requested_paths": [
+      "/kaggle/input",
+      "/kaggle/working",
+      "/kaggle/temp",
+      "/tmp"
+    ]
+  },
+  "initial_collection_transport": {
+    "status": "final_results_unavailable",
+    "kernel": "pamcks/h3-kaggle-storage-read-probe-2026-10-24/2",
+    "started_utc": "2026-10-24T08:24:12.619911+00:00",
+    "status_polling": false,
+    "returncode": 1,
+    "files": 0,
+    "completed_utc": "2026-10-24T08:24:15.943184+00:00"
+  },
+  "artifact_version_binding": "CLI output request does not forward the parsed version; no later submission exists and returned driver/source hashes match version 2",
+  "source_binding": {
+    "publication": {
+      "file": "645ef141804c67cf6d012387d87cfeada2760db2c4b93809d6a8ee0b7bd1f2be.tar.gz",
+      "sha256": "645ef141804c67cf6d012387d87cfeada2760db2c4b93809d6a8ee0b7bd1f2be",
+      "bytes": 17605389,
+      "capsule_sha256": "df0d8fe5c5ebf6c9ed78edd4a42bacca94c87c6aa4e51b92f82d59846f373b1a",
+      "source_files": 327,
+      "core_pins": 78,
+      "kaggle_mounts": 0,
+      "repository": "chinokikiss/minimax-h3-2xt4",
+      "branch": "codex/bundle-scalar-explicit-20261024-645ef141",
+      "commit": "f9d8588556ed271e825a6938b27d01aa39436c10",
+      "path": "runtime/kaggle_artifacts/645ef141804c67cf6d012387d87cfeada2760db2c4b93809d6a8ee0b7bd1f2be.tar.gz",
+      "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/f9d8588556ed271e825a6938b27d01aa39436c10/runtime/kaggle_artifacts/645ef141804c67cf6d012387d87cfeada2760db2c4b93809d6a8ee0b7bd1f2be.tar.gz",
+      "published": true,
+      "working_tree_and_index_changed": false,
+      "local_cpu_tests": 70
+    },
+    "benchmark_sha256": "675bf5771ad937fa97a5cfa91a68e7038782c37412adb5a90472f6d7344c7721",
+    "tests_sha256": "b9bb0a9b95934e9f7a0c2e3371d79b767a2faedd564275b6a96889034e0c4c29",
+    "script_sha256": "d02b712e3eccaddeb858b08d2add2d2ffe510216eb49bb74db55f924ddc6c133",
+    "dataset_sources": [
+      "cdeotte/melanoma-512x512"
+    ],
+    "dataset_scope": "Public large binary files as filesystem I/O proxy; no H3 weights/activations",
+    "cpu_only": true,
+    "stdlib_only": true,
+    "core_libraries_not_loaded": true,
+    "internal_budget_seconds": 450,
+    "benchmark_budget_seconds": 340,
+    "source": "Fresh benchmark; no historical notebook setup",
+    "first_pass_is_not_physically_cold": true
+  },
+  "preflight": {
+    "status": "storage_stdlib_ready",
+    "scope": "Frozen-source identity and stdlib-only CPU probe; no H3/core operator execution or ABI qualification",
+    "source_publication": {
+      "file": "645ef141804c67cf6d012387d87cfeada2760db2c4b93809d6a8ee0b7bd1f2be.tar.gz",
+      "sha256": "645ef141804c67cf6d012387d87cfeada2760db2c4b93809d6a8ee0b7bd1f2be",
+      "bytes": 17605389,
+      "capsule_sha256": "df0d8fe5c5ebf6c9ed78edd4a42bacca94c87c6aa4e51b92f82d59846f373b1a",
+      "source_files": 327,
+      "core_pins": 78,
+      "kaggle_mounts": 0,
+      "repository": "chinokikiss/minimax-h3-2xt4",
+      "branch": "codex/bundle-scalar-explicit-20261024-645ef141",
+      "commit": "f9d8588556ed271e825a6938b27d01aa39436c10",
+      "path": "runtime/kaggle_artifacts/645ef141804c67cf6d012387d87cfeada2760db2c4b93809d6a8ee0b7bd1f2be.tar.gz",
+      "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/f9d8588556ed271e825a6938b27d01aa39436c10/runtime/kaggle_artifacts/645ef141804c67cf6d012387d87cfeada2760db2c4b93809d6a8ee0b7bd1f2be.tar.gz",
+      "published": true,
+      "working_tree_and_index_changed": false,
+      "local_cpu_tests": 70
+    },
+    "probe_hashes": {
+      "kaggle_storage_probe.py": "675bf5771ad937fa97a5cfa91a68e7038782c37412adb5a90472f6d7344c7721",
+      "test_kaggle_storage_probe.py": "b9bb0a9b95934e9f7a0c2e3371d79b767a2faedd564275b6a96889034e0c4c29"
+    },
+    "package_installation": false,
+    "frozen_source_archive_sha256": "97cb93348993c7ff9a1390680ca4509d2880712707ae5bb249a1f4b2e8a92ebc",
+    "frozen_source": "passed",
+    "core_pin_manifest": "preserved_uninstalled_not_used",
+    "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]",
+    "cpu_tests": "4 passed",
+    "seconds": 4.350266232999985,
+    "benchmark_exit_code": 0
+  },
+  "benchmark_seconds": 144.52831415199998,
+  "corpus": {
+    "eligible_files": 32,
+    "selected_files": 17,
+    "selected_bytes": 2147483648,
+    "requested_bytes": 2147483648
+  },
+  "inventory": {
+    "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]",
+    "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+    "cpu_count": 4,
+    "paths": [
+      {
+        "path": "/",
+        "exists": true,
+        "total_bytes": 8758385086464,
+        "used_bytes": 7632297926656,
+        "free_bytes": 1126070382592,
+        "st_dev": 53,
+        "mount": {
+          "mount_point": "/",
+          "major_minor": "0:53",
+          "root": "/",
+          "mount_options": "rw,relatime",
+          "filesystem": "overlay",
+          "source": "overlay",
+          "super_options": [
+            "rw,lowerdir=l/FBQQ3FEYJQQGFHXIWEJ6JGHGLB:l/6AL4PMT5SCZRQHUEN44I4XFQGV:l/C7DC7EZIEDC4AQPZUBNU4A7OCF:l/6TODL66AI4TG4Q2LCG7Y63Z4F6:l/7COPCFYO5Z5VQM6BBG2B2EF4HL:l/ATXRZOVQHTY4ULUE343YTE3R45:l/APDENJD67NCPYZ5MS3LQUUEP4G:l/4FJCPTZ4VH2Q6PV75CTO35MKOF:l/KLOKYCNMESZJVQELTVFZBBR7GD:l/HHMGLGTDHEVZCG5LTKMAYVNOB4:l/TVE4I33UXFPRWGXAA7GARXR2YN:l/XXDG25X5Q552U7G5YGBIDXLM4K:l/COH4VY6W4ZDDCP5FOWLIRQDCWV:l/BBQ2DA7L3JQLOQELAPUX6ADBIZ:l/OSW26Q7VGRXCU6VHS3XSWXFGC2:l/3OR46T6MGOGVJBPPUIPGUWQYCK:l/DTH2DIXHTEVVLGBNDXFAZJOLOU:l/LNZXTGD6MZ7WS3PQW5ZY7HR6A3:l/743SPCBK7NTRNP23YKEN7KCHKI:l/R76JLPMLJB2LB7QEU2KIKAHSPF:l/RWDFJR65U3EJT2CNHI4VKET5PD:l/KOUSIGFNH3AYNRED54EMYOBGFB:l/4N3LGN4QIFD242VONRSPCTHFHC:l/IMTXAT3JH7EPS6SJLAIQ2B5473:l/FSQVFJMNB3U7PYXCILOZRPOVYL:l/ZCFHRONUNVKK2OTJPJCD3GJIHZ:l/ORCH7G3T4H3BIKD7W2A7PWPMVZ:l/G5262CV7BFEIAIXKAAH3FWNXQX:l/S5KEEPDISA73WDUYUEC6LPF562:l/RPQFHKM47C2PRJT75TXJR22VNG:l/PFUSAEIIDDMG5PRJKKRMCNVMVQ:l/FK5FJXY6OVIQRVKKKSHAR5TDUG:l/L23OCEZ6DO7KBST6JPCZH36GIB:l/FKFS4RQXRS6GOMSDTCFEH63GS3:l/UPDQAU4MINGZDXEXGH7ASQRRPU:l/RAJDNXOKSWJWHT6N73OXAJ5BV3:l/BWAZ4X2I3RQCTY6LFMQ2AFW7ND:l/YLFZYI22FMQKAULMZPL2TIOZSK:l/EDEZM6KVRLAC3DSNZMTD6PDONC:l/J4ILIWXAX4YW4NUO4ZW6RQUGFW:l/HLWQSLS4BEDAHW2DWHTY4XLGPV:l/LUHHQ4J2Z53H3JFEP32RPPRBRR:l/MQO57U2OHPTYK52JM4D2O2QRYB:l/SUYA3RIBGUVV3Q4YASGGEMMGGA:l/MVFLROV4KUZ7GLTBCHTTTRKD7T:l/YHKDFSJ2CE6JASLAX4KUHEAU4W:l/AZR2DLAWXPEEQIIPTW4SY764QD:l/B4K2QISSRLHCCXXS4MIN27ZLRD:l/TSSCYM7HOEQN254FZJUY3357EX:l/XQMLPXEI7BYHKIU4DZF57DGMHL:l/MKJHIUQRZABDUOLZ73H4N2HXTN:l/H5WM35MGSEXKK6IUUY2HK57DAU:l/IOLSRJ4EPEKARZEI7RRNIVZT6Q:l/MYFLBWJ5NR6E23JDSXCWVVF6YK:l/FM43XYAXWYNL2JGCBNEHMVPJQK:l/DF765ENDH3POBF3RM4VVT2W7I3:l/NSXT5ZQXAASLNOGTN47BBXMOZC:l/HEWDW5KFTJEYUERHYUMWEHIEYF:l/6SKRHN2Q42AXOF4GXJ7PRSI6OF:l/UNNZBMGCI5U3B75NRFHROQ5QI3:l/DIHXKAHCNDHW6QO7KRUEEYDGJE:l/DNHSHJXKGKKRJIXYL2OBFEXLPE:l/M5OLAKB67UZ47TRLYSFXAF5RAN:l/LSLI62WDH3ZNZHP33NECYY6KSK:l/LHQLYQ6US5CJIUNBIJB4MRISBX:l/HRI6LFYPB63UK66NH7VQZTCUP4:l/VDZPGLYFJ3LPPWBRM4O226G6LL:l/ACNBVXW437AEGKIM7T6JXV7AQJ:l/JHDOR4QD6TS2TXTYBWJXEKERR5:l/DJ4FT42B2UQA6YW7NR3PIHAXRS:l/OJKU7CP6OJFFPUJCEVA2QZJYOE:l/I3RLD6UZDEAHT5YQY6HAFLF7AO:l/Q2BIXBLPHCV3LBUOIXXHIFVAWP:l/XYW7INVZWGRDTN7XNCNWBLM6OG:l/MKS3X3TBACL7GS6GO6TXUBK6S6:l/GGUPQGTJJBWOJWTO7OGS6NE225:l/QNMCZ3ZJE5VYCZFWURGH2HY2Z4:l/ON7I3RMVVYOFW2WBV6VVDYNRZW:l/Q27ILM6NCNHH4TFS2DHWTOG4HQ:l/SKLZM7YXU2MLUEHRN6FWX6WSUJ,upperdir=4a0783f3cb1ff95a1f1ed045f3d740856e047beab999fcf8876f21ca4d6e236c/diff,workdir=4a0783f3cb1ff95a1f1ed045f3d740856e047beab999fcf8876f21ca4d6e236c/work"
+          ]
+        }
+      },
+      {
+        "path": "/kaggle/input",
+        "exists": true,
+        "total_bytes": 20957446144,
+        "used_bytes": 270336,
+        "free_bytes": 20940398592,
+        "st_dev": 1794,
+        "mount": {
+          "mount_point": "/kaggle/input",
+          "major_minor": "7:2",
+          "root": "/kaggle/input",
+          "mount_options": "ro,relatime",
+          "filesystem": "ext4",
+          "source": "/dev/loop2",
+          "super_options": [
+            "rw"
+          ]
+        }
+      },
+      {
+        "path": "/kaggle/working",
+        "exists": true,
+        "total_bytes": 20957446144,
+        "used_bytes": 270336,
+        "free_bytes": 20940398592,
+        "st_dev": 1794,
+        "mount": {
+          "mount_point": "/kaggle/working",
+          "major_minor": "7:2",
+          "root": "/kaggle/working",
+          "mount_options": "rw,relatime",
+          "filesystem": "ext4",
+          "source": "/dev/loop2",
+          "super_options": [
+            "rw"
+          ]
+        }
+      },
+      {
+        "path": "/kaggle/temp",
+        "exists": true,
+        "total_bytes": 8758385086464,
+        "used_bytes": 7632297926656,
+        "free_bytes": 1126070382592,
+        "st_dev": 53,
+        "mount": {
+          "mount_point": "/",
+          "major_minor": "0:53",
+          "root": "/",
+          "mount_options": "rw,relatime",
+          "filesystem": "overlay",
+          "source": "overlay",
+          "super_options": [
+            "rw,lowerdir=l/FBQQ3FEYJQQGFHXIWEJ6JGHGLB:l/6AL4PMT5SCZRQHUEN44I4XFQGV:l/C7DC7EZIEDC4AQPZUBNU4A7OCF:l/6TODL66AI4TG4Q2LCG7Y63Z4F6:l/7COPCFYO5Z5VQM6BBG2B2EF4HL:l/ATXRZOVQHTY4ULUE343YTE3R45:l/APDENJD67NCPYZ5MS3LQUUEP4G:l/4FJCPTZ4VH2Q6PV75CTO35MKOF:l/KLOKYCNMESZJVQELTVFZBBR7GD:l/HHMGLGTDHEVZCG5LTKMAYVNOB4:l/TVE4I33UXFPRWGXAA7GARXR2YN:l/XXDG25X5Q552U7G5YGBIDXLM4K:l/COH4VY6W4ZDDCP5FOWLIRQDCWV:l/BBQ2DA7L3JQLOQELAPUX6ADBIZ:l/OSW26Q7VGRXCU6VHS3XSWXFGC2:l/3OR46T6MGOGVJBPPUIPGUWQYCK:l/DTH2DIXHTEVVLGBNDXFAZJOLOU:l/LNZXTGD6MZ7WS3PQW5ZY7HR6A3:l/743SPCBK7NTRNP23YKEN7KCHKI:l/R76JLPMLJB2LB7QEU2KIKAHSPF:l/RWDFJR65U3EJT2CNHI4VKET5PD:l/KOUSIGFNH3AYNRED54EMYOBGFB:l/4N3LGN4QIFD242VONRSPCTHFHC:l/IMTXAT3JH7EPS6SJLAIQ2B5473:l/FSQVFJMNB3U7PYXCILOZRPOVYL:l/ZCFHRONUNVKK2OTJPJCD3GJIHZ:l/ORCH7G3T4H3BIKD7W2A7PWPMVZ:l/G5262CV7BFEIAIXKAAH3FWNXQX:l/S5KEEPDISA73WDUYUEC6LPF562:l/RPQFHKM47C2PRJT75TXJR22VNG:l/PFUSAEIIDDMG5PRJKKRMCNVMVQ:l/FK5FJXY6OVIQRVKKKSHAR5TDUG:l/L23OCEZ6DO7KBST6JPCZH36GIB:l/FKFS4RQXRS6GOMSDTCFEH63GS3:l/UPDQAU4MINGZDXEXGH7ASQRRPU:l/RAJDNXOKSWJWHT6N73OXAJ5BV3:l/BWAZ4X2I3RQCTY6LFMQ2AFW7ND:l/YLFZYI22FMQKAULMZPL2TIOZSK:l/EDEZM6KVRLAC3DSNZMTD6PDONC:l/J4ILIWXAX4YW4NUO4ZW6RQUGFW:l/HLWQSLS4BEDAHW2DWHTY4XLGPV:l/LUHHQ4J2Z53H3JFEP32RPPRBRR:l/MQO57U2OHPTYK52JM4D2O2QRYB:l/SUYA3RIBGUVV3Q4YASGGEMMGGA:l/MVFLROV4KUZ7GLTBCHTTTRKD7T:l/YHKDFSJ2CE6JASLAX4KUHEAU4W:l/AZR2DLAWXPEEQIIPTW4SY764QD:l/B4K2QISSRLHCCXXS4MIN27ZLRD:l/TSSCYM7HOEQN254FZJUY3357EX:l/XQMLPXEI7BYHKIU4DZF57DGMHL:l/MKJHIUQRZABDUOLZ73H4N2HXTN:l/H5WM35MGSEXKK6IUUY2HK57DAU:l/IOLSRJ4EPEKARZEI7RRNIVZT6Q:l/MYFLBWJ5NR6E23JDSXCWVVF6YK:l/FM43XYAXWYNL2JGCBNEHMVPJQK:l/DF765ENDH3POBF3RM4VVT2W7I3:l/NSXT5ZQXAASLNOGTN47BBXMOZC:l/HEWDW5KFTJEYUERHYUMWEHIEYF:l/6SKRHN2Q42AXOF4GXJ7PRSI6OF:l/UNNZBMGCI5U3B75NRFHROQ5QI3:l/DIHXKAHCNDHW6QO7KRUEEYDGJE:l/DNHSHJXKGKKRJIXYL2OBFEXLPE:l/M5OLAKB67UZ47TRLYSFXAF5RAN:l/LSLI62WDH3ZNZHP33NECYY6KSK:l/LHQLYQ6US5CJIUNBIJB4MRISBX:l/HRI6LFYPB63UK66NH7VQZTCUP4:l/VDZPGLYFJ3LPPWBRM4O226G6LL:l/ACNBVXW437AEGKIM7T6JXV7AQJ:l/JHDOR4QD6TS2TXTYBWJXEKERR5:l/DJ4FT42B2UQA6YW7NR3PIHAXRS:l/OJKU7CP6OJFFPUJCEVA2QZJYOE:l/I3RLD6UZDEAHT5YQY6HAFLF7AO:l/Q2BIXBLPHCV3LBUOIXXHIFVAWP:l/XYW7INVZWGRDTN7XNCNWBLM6OG:l/MKS3X3TBACL7GS6GO6TXUBK6S6:l/GGUPQGTJJBWOJWTO7OGS6NE225:l/QNMCZ3ZJE5VYCZFWURGH2HY2Z4:l/ON7I3RMVVYOFW2WBV6VVDYNRZW:l/Q27ILM6NCNHH4TFS2DHWTOG4HQ:l/SKLZM7YXU2MLUEHRN6FWX6WSUJ,upperdir=4a0783f3cb1ff95a1f1ed045f3d740856e047beab999fcf8876f21ca4d6e236c/diff,workdir=4a0783f3cb1ff95a1f1ed045f3d740856e047beab999fcf8876f21ca4d6e236c/work"
+          ]
+        }
+      },
+      {
+        "path": "/tmp",
+        "exists": true,
+        "total_bytes": 8758385086464,
+        "used_bytes": 7632297926656,
+        "free_bytes": 1126070382592,
+        "st_dev": 53,
+        "mount": {
+          "mount_point": "/",
+          "major_minor": "0:53",
+          "root": "/",
+          "mount_options": "rw,relatime",
+          "filesystem": "overlay",
+          "source": "overlay",
+          "super_options": [
+            "rw,lowerdir=l/FBQQ3FEYJQQGFHXIWEJ6JGHGLB:l/6AL4PMT5SCZRQHUEN44I4XFQGV:l/C7DC7EZIEDC4AQPZUBNU4A7OCF:l/6TODL66AI4TG4Q2LCG7Y63Z4F6:l/7COPCFYO5Z5VQM6BBG2B2EF4HL:l/ATXRZOVQHTY4ULUE343YTE3R45:l/APDENJD67NCPYZ5MS3LQUUEP4G:l/4FJCPTZ4VH2Q6PV75CTO35MKOF:l/KLOKYCNMESZJVQELTVFZBBR7GD:l/HHMGLGTDHEVZCG5LTKMAYVNOB4:l/TVE4I33UXFPRWGXAA7GARXR2YN:l/XXDG25X5Q552U7G5YGBIDXLM4K:l/COH4VY6W4ZDDCP5FOWLIRQDCWV:l/BBQ2DA7L3JQLOQELAPUX6ADBIZ:l/OSW26Q7VGRXCU6VHS3XSWXFGC2:l/3OR46T6MGOGVJBPPUIPGUWQYCK:l/DTH2DIXHTEVVLGBNDXFAZJOLOU:l/LNZXTGD6MZ7WS3PQW5ZY7HR6A3:l/743SPCBK7NTRNP23YKEN7KCHKI:l/R76JLPMLJB2LB7QEU2KIKAHSPF:l/RWDFJR65U3EJT2CNHI4VKET5PD:l/KOUSIGFNH3AYNRED54EMYOBGFB:l/4N3LGN4QIFD242VONRSPCTHFHC:l/IMTXAT3JH7EPS6SJLAIQ2B5473:l/FSQVFJMNB3U7PYXCILOZRPOVYL:l/ZCFHRONUNVKK2OTJPJCD3GJIHZ:l/ORCH7G3T4H3BIKD7W2A7PWPMVZ:l/G5262CV7BFEIAIXKAAH3FWNXQX:l/S5KEEPDISA73WDUYUEC6LPF562:l/RPQFHKM47C2PRJT75TXJR22VNG:l/PFUSAEIIDDMG5PRJKKRMCNVMVQ:l/FK5FJXY6OVIQRVKKKSHAR5TDUG:l/L23OCEZ6DO7KBST6JPCZH36GIB:l/FKFS4RQXRS6GOMSDTCFEH63GS3:l/UPDQAU4MINGZDXEXGH7ASQRRPU:l/RAJDNXOKSWJWHT6N73OXAJ5BV3:l/BWAZ4X2I3RQCTY6LFMQ2AFW7ND:l/YLFZYI22FMQKAULMZPL2TIOZSK:l/EDEZM6KVRLAC3DSNZMTD6PDONC:l/J4ILIWXAX4YW4NUO4ZW6RQUGFW:l/HLWQSLS4BEDAHW2DWHTY4XLGPV:l/LUHHQ4J2Z53H3JFEP32RPPRBRR:l/MQO57U2OHPTYK52JM4D2O2QRYB:l/SUYA3RIBGUVV3Q4YASGGEMMGGA:l/MVFLROV4KUZ7GLTBCHTTTRKD7T:l/YHKDFSJ2CE6JASLAX4KUHEAU4W:l/AZR2DLAWXPEEQIIPTW4SY764QD:l/B4K2QISSRLHCCXXS4MIN27ZLRD:l/TSSCYM7HOEQN254FZJUY3357EX:l/XQMLPXEI7BYHKIU4DZF57DGMHL:l/MKJHIUQRZABDUOLZ73H4N2HXTN:l/H5WM35MGSEXKK6IUUY2HK57DAU:l/IOLSRJ4EPEKARZEI7RRNIVZT6Q:l/MYFLBWJ5NR6E23JDSXCWVVF6YK:l/FM43XYAXWYNL2JGCBNEHMVPJQK:l/DF765ENDH3POBF3RM4VVT2W7I3:l/NSXT5ZQXAASLNOGTN47BBXMOZC:l/HEWDW5KFTJEYUERHYUMWEHIEYF:l/6SKRHN2Q42AXOF4GXJ7PRSI6OF:l/UNNZBMGCI5U3B75NRFHROQ5QI3:l/DIHXKAHCNDHW6QO7KRUEEYDGJE:l/DNHSHJXKGKKRJIXYL2OBFEXLPE:l/M5OLAKB67UZ47TRLYSFXAF5RAN:l/LSLI62WDH3ZNZHP33NECYY6KSK:l/LHQLYQ6US5CJIUNBIJB4MRISBX:l/HRI6LFYPB63UK66NH7VQZTCUP4:l/VDZPGLYFJ3LPPWBRM4O226G6LL:l/ACNBVXW437AEGKIM7T6JXV7AQJ:l/JHDOR4QD6TS2TXTYBWJXEKERR5:l/DJ4FT42B2UQA6YW7NR3PIHAXRS:l/OJKU7CP6OJFFPUJCEVA2QZJYOE:l/I3RLD6UZDEAHT5YQY6HAFLF7AO:l/Q2BIXBLPHCV3LBUOIXXHIFVAWP:l/XYW7INVZWGRDTN7XNCNWBLM6OG:l/MKS3X3TBACL7GS6GO6TXUBK6S6:l/GGUPQGTJJBWOJWTO7OGS6NE225:l/QNMCZ3ZJE5VYCZFWURGH2HY2Z4:l/ON7I3RMVVYOFW2WBV6VVDYNRZW:l/Q27ILM6NCNHH4TFS2DHWTOG4HQ:l/SKLZM7YXU2MLUEHRN6FWX6WSUJ,upperdir=4a0783f3cb1ff95a1f1ed045f3d740856e047beab999fcf8876f21ca4d6e236c/diff,workdir=4a0783f3cb1ff95a1f1ed045f3d740856e047beab999fcf8876f21ca4d6e236c/work"
+          ]
+        }
+      },
+      {
+        "path": "/dev/shm",
+        "exists": true,
+        "total_bytes": 15032385536,
+        "used_bytes": 0,
+        "free_bytes": 15032385536,
+        "st_dev": 75,
+        "mount": {
+          "mount_point": "/dev/shm",
+          "major_minor": "0:75",
+          "root": "/",
+          "mount_options": "rw,nosuid,nodev,noexec,relatime",
+          "filesystem": "tmpfs",
+          "source": "shm",
+          "super_options": [
+            "rw,size=14680064k"
+          ]
+        }
+      }
+    ],
+    "commands": {
+      "df": {
+        "exit_code": 0,
+        "stdout": "Filesystem                                                            Type         1B-blocks           Used     Available Use% Mounted on\noverlay                                                               overlay  8758385086464  7632297926656 1126070382592  88% /\ntmpfs                                                                 tmpfs         67108864              0      67108864   0% /dev\nshm                                                                   tmpfs      15032385536              0   15032385536   0% /dev/shm\n/dev/loop2                                                            ext4       20957446144         270336   20940398592   1% /kaggle/src\n192.168.14.2:/data/kagglesdsdata/datasets/688719/1322552/dmcx3v0k8nhn nfs     27487790694400 19896590139392 7591200555008  73% /kaggle/input/datasets/cdeotte/melanoma-512x512\n/dev/mapper/snap                                                      ext4     8758385086464  7632297926656 1126070382592  88% /etc/hosts\ntmpfs                                                                 tmpfs             4096              0          4096   0% /proc/acpi\n",
+        "stderr": ""
+      },
+      "lsblk": {
+        "exit_code": 0,
+        "stdout": "NAME             SIZE TYPE ROTA RO FSTYPE MOUNTPOINTS\nloop0      1073741824 loop    0  0        \nloop1    103079215104 loop    0  0        \nloop2     21474836480 loop    0  0        /etc/secrets/kaggle\n                                          /kaggle/working\n                                          /kaggle/input\n                                          /kaggle/lib\n                                          /kaggle/huggingface\n                                          /kaggle/nbdev\n                                          /kaggle/src\nsda      137438953472 disk    0  0        \n\u251c\u2500sda1   132915379712 part    0  0        \n\u251c\u2500sda2       33554432 part    0  0        \n\u251c\u2500sda3     2147483648 part    0  0        \n\u251c\u2500sda4       33554432 part    0  0        \n\u251c\u2500sda5     2147483648 part    0  0        \n\u251c\u2500sda6            512 part    0  0        \n\u251c\u2500sda7            512 part    0  0        \n\u251c\u2500sda8       16777216 part    0  0        \n\u251c\u2500sda9            512 part    0  0        \n\u251c\u2500sda10           512 part    0  0        \n\u251c\u2500sda11       8388608 part    0  0        \n\u2514\u2500sda12      67108864 part    0  0        \nsdb     8796093022208 disk    0  1        \n",
+        "stderr": ""
+      }
+    },
+    "packages": {
+      "torch": "2.11.0+cpu",
+      "numpy": "2.1.3",
+      "torchvision": "0.26.0+cpu",
+      "torchaudio": "2.11.0+cpu",
+      "comfy-kitchen": null,
+      "tilelang": null,
+      "kaggle": "2.0.2"
+    },
+    "mountinfo": "727 679 0:53 / / rw,relatime master:394 - overlay overlay rw,lowerdir=l/FBQQ3FEYJQQGFHXIWEJ6JGHGLB:l/6AL4PMT5SCZRQHUEN44I4XFQGV:l/C7DC7EZIEDC4AQPZUBNU4A7OCF:l/6TODL66AI4TG4Q2LCG7Y63Z4F6:l/7COPCFYO5Z5VQM6BBG2B2EF4HL:l/ATXRZOVQHTY4ULUE343YTE3R45:l/APDENJD67NCPYZ5MS3LQUUEP4G:l/4FJCPTZ4VH2Q6PV75CTO35MKOF:l/KLOKYCNMESZJVQELTVFZBBR7GD:l/HHMGLGTDHEVZCG5LTKMAYVNOB4:l/TVE4I33UXFPRWGXAA7GARXR2YN:l/XXDG25X5Q552U7G5YGBIDXLM4K:l/COH4VY6W4ZDDCP5FOWLIRQDCWV:l/BBQ2DA7L3JQLOQELAPUX6ADBIZ:l/OSW26Q7VGRXCU6VHS3XSWXFGC2:l/3OR46T6MGOGVJBPPUIPGUWQYCK:l/DTH2DIXHTEVVLGBNDXFAZJOLOU:l/LNZXTGD6MZ7WS3PQW5ZY7HR6A3:l/743SPCBK7NTRNP23YKEN7KCHKI:l/R76JLPMLJB2LB7QEU2KIKAHSPF:l/RWDFJR65U3EJT2CNHI4VKET5PD:l/KOUSIGFNH3AYNRED54EMYOBGFB:l/4N3LGN4QIFD242VONRSPCTHFHC:l/IMTXAT3JH7EPS6SJLAIQ2B5473:l/FSQVFJMNB3U7PYXCILOZRPOVYL:l/ZCFHRONUNVKK2OTJPJCD3GJIHZ:l/ORCH7G3T4H3BIKD7W2A7PWPMVZ:l/G5262CV7BFEIAIXKAAH3FWNXQX:l/S5KEEPDISA73WDUYUEC6LPF562:l/RPQFHKM47C2PRJT75TXJR22VNG:l/PFUSAEIIDDMG5PRJKKRMCNVMVQ:l/FK5FJXY6OVIQRVKKKSHAR5TDUG:l/L23OCEZ6DO7KBST6JPCZH36GIB:l/FKFS4RQXRS6GOMSDTCFEH63GS3:l/UPDQAU4MINGZDXEXGH7ASQRRPU:l/RAJDNXOKSWJWHT6N73OXAJ5BV3:l/BWAZ4X2I3RQCTY6LFMQ2AFW7ND:l/YLFZYI22FMQKAULMZPL2TIOZSK:l/EDEZM6KVRLAC3DSNZMTD6PDONC:l/J4ILIWXAX4YW4NUO4ZW6RQUGFW:l/HLWQSLS4BEDAHW2DWHTY4XLGPV:l/LUHHQ4J2Z53H3JFEP32RPPRBRR:l/MQO57U2OHPTYK52JM4D2O2QRYB:l/SUYA3RIBGUVV3Q4YASGGEMMGGA:l/MVFLROV4KUZ7GLTBCHTTTRKD7T:l/YHKDFSJ2CE6JASLAX4KUHEAU4W:l/AZR2DLAWXPEEQIIPTW4SY764QD:l/B4K2QISSRLHCCXXS4MIN27ZLRD:l/TSSCYM7HOEQN254FZJUY3357EX:l/XQMLPXEI7BYHKIU4DZF57DGMHL:l/MKJHIUQRZABDUOLZ73H4N2HXTN:l/H5WM35MGSEXKK6IUUY2HK57DAU:l/IOLSRJ4EPEKARZEI7RRNIVZT6Q:l/MYFLBWJ5NR6E23JDSXCWVVF6YK:l/FM43XYAXWYNL2JGCBNEHMVPJQK:l/DF765ENDH3POBF3RM4VVT2W7I3:l/NSXT5ZQXAASLNOGTN47BBXMOZC:l/HEWDW5KFTJEYUERHYUMWEHIEYF:l/6SKRHN2Q42AXOF4GXJ7PRSI6OF:l/UNNZBMGCI5U3B75NRFHROQ5QI3:l/DIHXKAHCNDHW6QO7KRUEEYDGJE:l/DNHSHJXKGKKRJIXYL2OBFEXLPE:l/M5OLAKB67UZ47TRLYSFXAF5RAN:l/LSLI62WDH3ZNZHP33NECYY6KSK:l/LHQLYQ6US5CJIUNBIJB4MRISBX:l/HRI6LFYPB63UK66NH7VQZTCUP4:l/VDZPGLYFJ3LPPWBRM4O226G6LL:l/ACNBVXW437AEGKIM7T6JXV7AQJ:l/JHDOR4QD6TS2TXTYBWJXEKERR5:l/DJ4FT42B2UQA6YW7NR3PIHAXRS:l/OJKU7CP6OJFFPUJCEVA2QZJYOE:l/I3RLD6UZDEAHT5YQY6HAFLF7AO:l/Q2BIXBLPHCV3LBUOIXXHIFVAWP:l/XYW7INVZWGRDTN7XNCNWBLM6OG:l/MKS3X3TBACL7GS6GO6TXUBK6S6:l/GGUPQGTJJBWOJWTO7OGS6NE225:l/QNMCZ3ZJE5VYCZFWURGH2HY2Z4:l/ON7I3RMVVYOFW2WBV6VVDYNRZW:l/Q27ILM6NCNHH4TFS2DHWTOG4HQ:l/SKLZM7YXU2MLUEHRN6FWX6WSUJ,upperdir=4a0783f3cb1ff95a1f1ed045f3d740856e047beab999fcf8876f21ca4d6e236c/diff,workdir=4a0783f3cb1ff95a1f1ed045f3d740856e047beab999fcf8876f21ca4d6e236c/work\n729 727 0:71 / /proc rw,nosuid,nodev,noexec,relatime - proc proc rw\n730 727 0:72 / /dev rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n731 730 0:73 / /dev/pts rw,nosuid,noexec,relatime - devpts devpts rw,gid=5,mode=620,ptmxmode=666\n732 727 0:74 / /sys ro,nosuid,nodev,noexec,relatime - sysfs sysfs ro\n733 732 0:28 / /sys/fs/cgroup ro,nosuid,nodev,noexec,relatime - cgroup2 cgroup rw,nsdelegate,memory_recursiveprot\n734 730 0:69 / /dev/mqueue rw,nosuid,nodev,noexec,relatime - mqueue mqueue rw\n735 730 0:75 / /dev/shm rw,nosuid,nodev,noexec,relatime - tmpfs shm rw,size=14680064k\n736 727 7:2 /kaggle/src /kaggle/src ro,relatime master:381 - ext4 /dev/loop2 rw\n737 727 7:2 /kaggle/nbdev /kaggle/nbdev rw,relatime master:381 - ext4 /dev/loop2 rw\n738 727 7:2 /kaggle/huggingface /kaggle/huggingface rw,relatime master:381 - ext4 /dev/loop2 rw\n739 727 7:2 /kaggle/lib /kaggle/lib ro,relatime master:381 - ext4 /dev/loop2 rw\n740 727 7:2 /kaggle/input /kaggle/input ro,relatime master:381 - ext4 /dev/loop2 rw\n741 740 0:52 / /kaggle/input/datasets/cdeotte/melanoma-512x512 ro,relatime master:374 - nfs 192.168.14.2:/data/kagglesdsdata/datasets/688719/1322552/dmcx3v0k8nhn ro,vers=3,rsize=524288,wsize=524288,namlen=255,hard,nolock,fatal_neterrors=none,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=192.168.14.2,mountvers=3,mountport=2050,mountproto=tcp,local_lock=all,addr=192.168.14.2\n742 727 7:2 /kaggle/working /kaggle/working rw,relatime master:381 - ext4 /dev/loop2 rw\n743 727 253:2 /containers/8a579a4bfbeb3bd9a3cdde8523417771cbc004a1e758986be91ab3120ec12cad/resolv.conf /etc/resolv.conf rw,relatime - ext4 /dev/mapper/snap rw,discard\n744 727 253:2 /containers/8a579a4bfbeb3bd9a3cdde8523417771cbc004a1e758986be91ab3120ec12cad/hostname /etc/hostname rw,relatime - ext4 /dev/mapper/snap rw,discard\n745 727 253:2 /containers/8a579a4bfbeb3bd9a3cdde8523417771cbc004a1e758986be91ab3120ec12cad/hosts /etc/hosts rw,relatime - ext4 /dev/mapper/snap rw,discard\n746 727 7:2 /etc/secrets/kaggle /etc/secrets/kaggle ro,relatime master:381 - ext4 /dev/loop2 rw\n680 729 0:71 /bus /proc/bus ro,nosuid,nodev,noexec,relatime - proc proc rw\n681 729 0:71 /fs /proc/fs ro,nosuid,nodev,noexec,relatime - proc proc rw\n682 729 0:71 /irq /proc/irq ro,nosuid,nodev,noexec,relatime - proc proc rw\n683 729 0:71 /sys /proc/sys ro,nosuid,nodev,noexec,relatime - proc proc rw\n684 729 0:71 /sysrq-trigger /proc/sysrq-trigger ro,nosuid,nodev,noexec,relatime - proc proc rw\n685 729 0:76 / /proc/acpi ro,relatime - tmpfs tmpfs ro,size=4k,nr_inodes=1\n686 729 0:72 /null /proc/interrupts rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n687 729 0:72 /null /proc/kcore rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n688 729 0:72 /null /proc/keys rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n689 729 0:76 / /proc/scsi ro,relatime - tmpfs tmpfs ro,size=4k,nr_inodes=1\n690 729 0:72 /null /proc/timer_list rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n691 732 0:76 / /sys/firmware ro,relatime - tmpfs tmpfs ro,size=4k,nr_inodes=1\n",
+    "meminfo": "MemTotal:       32869288 kB\nMemFree:        27923300 kB\nMemAvailable:   31838020 kB\nBuffers:          770220 kB\nCached:          3362976 kB\nSwapCached:            0 kB\nActive:           978324 kB\nInactive:        3444208 kB\nActive(anon):        796 kB\nInactive(anon):   289880 kB\nActive(file):     977528 kB\nInactive(file):  3154328 kB\nUnevictable:           0 kB\nMlocked:               0 kB\nSwapTotal:             0 kB\nSwapFree:              0 kB\nZswap:                 0 kB\nZswapped:              0 kB\nDirty:             84032 kB\nWriteback:             0 kB\nAnonPages:        289572 kB\nMapped:           247328 kB\nShmem:              1224 kB\nKReclaimable:     248960 kB\nSlab:             304496 kB\nSReclaimable:     248960 kB\nSUnreclaim:        55536 kB\nKernelStack:        5376 kB\nPageTables:         6088 kB\nSecPageTables:         0 kB\nNFS_Unstable:          0 kB\nBounce:                0 kB\nWritebackTmp:          0 kB\nCommitLimit:    16434644 kB\nCommitted_AS:    2106164 kB\nVmallocTotal:   34359738367 kB\nVmallocUsed:       13792 kB\nVmallocChunk:          0 kB\nPercpu:             2032 kB\nHardwareCorrupted:     0 kB\nAnonHugePages:         0 kB\nShmemHugePages:        0 kB\nShmemPmdMapped:        0 kB\nFileHugePages:         0 kB\nFilePmdMapped:         0 kB\nCmaTotal:              0 kB\nCmaFree:               0 kB\nUnaccepted:            0 kB\nBalloon:               0 kB\nHugePages_Total:       0\nHugePages_Free:        0\nHugePages_Rsvd:        0\nHugePages_Surp:        0\nHugepagesize:       2048 kB\nHugetlb:               0 kB\nDirectMap4k:       99100 kB\nDirectMap2M:     8286208 kB\nDirectMap1G:    27262976 kB\n",
+    "cgroup": "0::/\n",
+    "memory_max": "32212254720\n",
+    "cpu_max": "400000 100000\n",
+    "caveat": "Filesystem capacity can differ from Kaggle saved-output quota; exposed block devices do not prove physical hardware."
+  },
+  "mounted_corpus_filesystems": [
+    {
+      "path": "/kaggle/input/datasets/cdeotte/melanoma-512x512",
+      "mount": {
+        "mount_point": "/kaggle/input/datasets/cdeotte/melanoma-512x512",
+        "major_minor": "0:52",
+        "root": "/",
+        "mount_options": "ro,relatime",
+        "filesystem": "nfs",
+        "source": "192.168.14.2:/data/kagglesdsdata/datasets/688719/1322552/dmcx3v0k8nhn",
+        "super_options": [
+          "ro,vers=3,rsize=524288,wsize=524288,namlen=255,hard,nolock,fatal_neterrors=none,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=192.168.14.2,mountvers=3,mountport=2050,mountproto=tcp,local_lock=all,addr=192.168.14.2"
+        ]
+      },
+      "capacity": {
+        "total_bytes": 27487790694400,
+        "used_bytes": 19896590139392,
+        "free_bytes": 7591200555008
+      },
+      "capacity_scope": "Backing filesystem figures, not a private storage allocation"
+    }
+  ],
+  "comparisons": [
+    {
+      "path": "/kaggle/input",
+      "skipped": null,
+      "phases": [
+        {
+          "label": "first_pass",
+          "mode": "sequential",
+          "workers": 1,
+          "bytes": 2147483648,
+          "expected_bytes": 2147483648,
+          "complete": true,
+          "seconds": 9.866107290000002,
+          "mib_per_second": 207.57933598348285,
+          "operations": 265,
+          "operations_per_second": 26.85963087676902,
+          "latency_ms": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "cpu_seconds": 0.632005618,
+          "advice": null,
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 0,
+            "resident_fraction": 0.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 2147483746,
+            "wchar": 0,
+            "syscr": 267,
+            "syscw": 0,
+            "read_bytes": 2148429824,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "immediate_reread",
+          "mode": "sequential",
+          "workers": 1,
+          "bytes": 2147483648,
+          "expected_bytes": 2147483648,
+          "complete": true,
+          "seconds": 0.39676367600000617,
+          "mib_per_second": 5161.762842423025,
+          "operations": 265,
+          "operations_per_second": 667.903883418995,
+          "latency_ms": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "cpu_seconds": 0.388539103,
+          "advice": null,
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 2147483746,
+            "wchar": 0,
+            "syscr": 267,
+            "syscw": 0,
+            "read_bytes": 0,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "dontneed_hint",
+          "mode": "sequential",
+          "workers": 1,
+          "bytes": 2147483648,
+          "expected_bytes": 2147483648,
+          "complete": true,
+          "seconds": 10.353457634999984,
+          "mib_per_second": 197.80831411109583,
+          "operations": 265,
+          "operations_per_second": 25.595314081758005,
+          "latency_ms": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "cpu_seconds": 0.650281093,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 35,
+            "resident_fraction": 6.675592888014069e-05,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 2147483746,
+            "wchar": 0,
+            "syscr": 267,
+            "syscw": 0,
+            "read_bytes": 2147381248,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "two_readers_hint",
+          "mode": "sequential",
+          "workers": 2,
+          "bytes": 2147483648,
+          "expected_bytes": 2147483648,
+          "complete": true,
+          "seconds": 6.175242085999969,
+          "mib_per_second": 331.64691707278445,
+          "operations": 265,
+          "operations_per_second": 42.913297375140566,
+          "latency_ms": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "cpu_seconds": 0.6723675969999999,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 35,
+            "resident_fraction": 6.675592888014069e-05,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 2147483746,
+            "wchar": 0,
+            "syscr": 267,
+            "syscw": 0,
+            "read_bytes": 2147381248,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "random_4k_hint",
+          "mode": "random_4k",
+          "workers": 1,
+          "bytes": 33554432,
+          "expected_bytes": 33554432,
+          "complete": true,
+          "seconds": 13.476670301000013,
+          "mib_per_second": 2.374473759859325,
+          "operations": 8192,
+          "operations_per_second": 607.8652825239872,
+          "latency_ms": {
+            "p50": 1.191669,
+            "p95": 3.460797,
+            "p99": 11.86477
+          },
+          "cpu_seconds": 0.483124875,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 35,
+            "resident_fraction": 6.675592888014069e-05,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 8143,
+            "resident_fraction": 0.01553124368202816,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 33554530,
+            "wchar": 0,
+            "syscr": 8194,
+            "syscw": 0,
+            "read_bytes": 33210368,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "strided_12800_hint",
+          "mode": "strided_12800",
+          "workers": 1,
+          "bytes": 104857600,
+          "expected_bytes": 104857600,
+          "complete": true,
+          "seconds": 1.7575526019999756,
+          "mib_per_second": 56.89730133038794,
+          "operations": 8192,
+          "operations_per_second": 4661.02692498538,
+          "latency_ms": {
+            "p50": 0.004216,
+            "p95": 1.757017,
+            "p99": 2.213845
+          },
+          "cpu_seconds": 0.129318656,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 35,
+            "resident_fraction": 6.675592888014069e-05,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 51299,
+            "resident_fraction": 0.09784321130349534,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 104857698,
+            "wchar": 0,
+            "syscr": 8194,
+            "syscw": 0,
+            "read_bytes": 209977344,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "two_readers_strided_hint",
+          "mode": "strided_12800",
+          "workers": 2,
+          "bytes": 104857600,
+          "expected_bytes": 104857600,
+          "complete": true,
+          "seconds": 5.368686529999991,
+          "mib_per_second": 18.626529867446028,
+          "operations": 8192,
+          "operations_per_second": 1525.8853267411785,
+          "latency_ms": {
+            "p50": 1.273377,
+            "p95": 1.673852,
+            "p99": 2.218915
+          },
+          "cpu_seconds": 0.4288637940000001,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 35,
+            "resident_fraction": 6.675592888014069e-05,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 32863,
+            "resident_fraction": 0.06268000259394467,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 104857698,
+            "wchar": 0,
+            "syscr": 8194,
+            "syscw": 0,
+            "read_bytes": 134463488,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        }
+      ],
+      "copy_and_hash": null,
+      "copied_bytes_verified": null
+    },
+    {
+      "path": "/kaggle/working",
+      "skipped": null,
+      "phases": [
+        {
+          "label": "first_pass",
+          "mode": "sequential",
+          "workers": 1,
+          "bytes": 2147483648,
+          "expected_bytes": 2147483648,
+          "complete": true,
+          "seconds": 0.3903948980000109,
+          "mib_per_second": 5245.970197079631,
+          "operations": 265,
+          "operations_per_second": 678.7998546025891,
+          "latency_ms": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "cpu_seconds": 0.38938351000000004,
+          "advice": null,
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 2147483746,
+            "wchar": 0,
+            "syscr": 267,
+            "syscw": 0,
+            "read_bytes": 0,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "immediate_reread",
+          "mode": "sequential",
+          "workers": 1,
+          "bytes": 2147483648,
+          "expected_bytes": 2147483648,
+          "complete": true,
+          "seconds": 0.397794336000004,
+          "mib_per_second": 5148.389040913793,
+          "operations": 265,
+          "operations_per_second": 666.1733866416773,
+          "latency_ms": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "cpu_seconds": 0.39691041499999996,
+          "advice": null,
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 2147483746,
+            "wchar": 0,
+            "syscr": 267,
+            "syscw": 0,
+            "read_bytes": 0,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "dontneed_hint",
+          "mode": "sequential",
+          "workers": 1,
+          "bytes": 2147483648,
+          "expected_bytes": 2147483648,
+          "complete": true,
+          "seconds": 0.5510652379999783,
+          "mib_per_second": 3716.4383792978074,
+          "operations": 265,
+          "operations_per_second": 480.8868020087495,
+          "latency_ms": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "cpu_seconds": 0.466043008,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 0,
+            "resident_fraction": 0.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 2147483746,
+            "wchar": 0,
+            "syscr": 267,
+            "syscw": 0,
+            "read_bytes": 2147524608,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "two_readers_hint",
+          "mode": "sequential",
+          "workers": 2,
+          "bytes": 2147483648,
+          "expected_bytes": 2147483648,
+          "complete": true,
+          "seconds": 0.5028537770000412,
+          "mib_per_second": 4072.754533570566,
+          "operations": 265,
+          "operations_per_second": 526.9921637676757,
+          "latency_ms": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "cpu_seconds": 0.624245728,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 0,
+            "resident_fraction": 0.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 2147483746,
+            "wchar": 0,
+            "syscr": 267,
+            "syscw": 0,
+            "read_bytes": 2147524608,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "random_4k_hint",
+          "mode": "random_4k",
+          "workers": 1,
+          "bytes": 33554432,
+          "expected_bytes": 33554432,
+          "complete": true,
+          "seconds": 0.22662460099996906,
+          "mib_per_second": 141.20267552067028,
+          "operations": 8192,
+          "operations_per_second": 36147.88493329159,
+          "latency_ms": {
+            "p50": 0.024464,
+            "p95": 0.03638,
+            "p99": 0.052444
+          },
+          "cpu_seconds": 0.14076220799999997,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 0,
+            "resident_fraction": 0.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 8111,
+            "resident_fraction": 0.015470209689909174,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 33554530,
+            "wchar": 0,
+            "syscr": 8194,
+            "syscw": 0,
+            "read_bytes": 33222656,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "strided_12800_hint",
+          "mode": "strided_12800",
+          "workers": 1,
+          "bytes": 104857600,
+          "expected_bytes": 104857600,
+          "complete": true,
+          "seconds": 0.06276233099998763,
+          "mib_per_second": 1593.3123962527732,
+          "operations": 8192,
+          "operations_per_second": 130524.15150102718,
+          "latency_ms": {
+            "p50": 0.004001,
+            "p95": 0.015257,
+            "p99": 0.028475
+          },
+          "cpu_seconds": 0.06722505200000004,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 0,
+            "resident_fraction": 0.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 51264,
+            "resident_fraction": 0.0977764553746152,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 104857698,
+            "wchar": 0,
+            "syscr": 8194,
+            "syscw": 0,
+            "read_bytes": 209977344,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "two_readers_strided_hint",
+          "mode": "strided_12800",
+          "workers": 2,
+          "bytes": 104857600,
+          "expected_bytes": 104857600,
+          "complete": true,
+          "seconds": 0.19840731300001835,
+          "mib_per_second": 504.01368018118745,
+          "operations": 8192,
+          "operations_per_second": 41288.80068044287,
+          "latency_ms": {
+            "p50": 0.044619,
+            "p95": 0.05932,
+            "p99": 0.077088
+          },
+          "cpu_seconds": 0.22192561800000002,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 0,
+            "resident_fraction": 0.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 32779,
+            "resident_fraction": 0.06251978836463233,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 104857698,
+            "wchar": 0,
+            "syscr": 8194,
+            "syscw": 0,
+            "read_bytes": 134262784,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        }
+      ],
+      "copy_and_hash": {
+        "seconds": 23.760879104999958,
+        "bytes": 2147483648,
+        "scope": "Preparation includes source reads, SHA256, writes and fsync; not raw write bandwidth"
+      },
+      "copied_bytes_verified": true
+    },
+    {
+      "path": "/kaggle/temp",
+      "skipped": null,
+      "phases": [
+        {
+          "label": "first_pass",
+          "mode": "sequential",
+          "workers": 1,
+          "bytes": 2147483648,
+          "expected_bytes": 2147483648,
+          "complete": true,
+          "seconds": 0.4061897969999677,
+          "mib_per_second": 5041.977950027541,
+          "operations": 265,
+          "operations_per_second": 652.4043734166495,
+          "latency_ms": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "cpu_seconds": 0.40582740599999995,
+          "advice": null,
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 2147483746,
+            "wchar": 0,
+            "syscr": 267,
+            "syscw": 0,
+            "read_bytes": 0,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "immediate_reread",
+          "mode": "sequential",
+          "workers": 1,
+          "bytes": 2147483648,
+          "expected_bytes": 2147483648,
+          "complete": true,
+          "seconds": 0.40138012199997775,
+          "mib_per_second": 5102.395180397383,
+          "operations": 265,
+          "operations_per_second": 660.2220326197786,
+          "latency_ms": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "cpu_seconds": 0.401263143,
+          "advice": null,
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 2147483746,
+            "wchar": 0,
+            "syscr": 267,
+            "syscw": 0,
+            "read_bytes": 0,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "dontneed_hint",
+          "mode": "sequential",
+          "workers": 1,
+          "bytes": 2147483648,
+          "expected_bytes": 2147483648,
+          "complete": true,
+          "seconds": 0.592073403000029,
+          "mib_per_second": 3459.0305688835338,
+          "operations": 265,
+          "operations_per_second": 447.5796390401057,
+          "latency_ms": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "cpu_seconds": 0.549831851,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 0,
+            "resident_fraction": 0.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 2147483746,
+            "wchar": 0,
+            "syscr": 267,
+            "syscw": 0,
+            "read_bytes": 2147524608,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "two_readers_hint",
+          "mode": "sequential",
+          "workers": 2,
+          "bytes": 2147483648,
+          "expected_bytes": 2147483648,
+          "complete": true,
+          "seconds": 0.4828572920000056,
+          "mib_per_second": 4241.418808271775,
+          "operations": 265,
+          "operations_per_second": 548.8163985312599,
+          "latency_ms": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "cpu_seconds": 0.7626985850000001,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 0,
+            "resident_fraction": 0.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 2147483746,
+            "wchar": 0,
+            "syscr": 267,
+            "syscw": 0,
+            "read_bytes": 2147524608,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "random_4k_hint",
+          "mode": "random_4k",
+          "workers": 1,
+          "bytes": 33554432,
+          "expected_bytes": 33554432,
+          "complete": true,
+          "seconds": 0.2481750809999994,
+          "mib_per_second": 128.9412291961741,
+          "operations": 8192,
+          "operations_per_second": 33008.95467422057,
+          "latency_ms": {
+            "p50": 0.025034,
+            "p95": 0.042153,
+            "p99": 0.073602
+          },
+          "cpu_seconds": 0.15796870600000001,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 0,
+            "resident_fraction": 0.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 8111,
+            "resident_fraction": 0.015470209689909174,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 33554530,
+            "wchar": 0,
+            "syscr": 8194,
+            "syscw": 0,
+            "read_bytes": 33222656,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "strided_12800_hint",
+          "mode": "strided_12800",
+          "workers": 1,
+          "bytes": 104857600,
+          "expected_bytes": 104857600,
+          "complete": true,
+          "seconds": 0.06637988900001801,
+          "mib_per_second": 1506.4803738971734,
+          "operations": 8192,
+          "operations_per_second": 123410.87222965644,
+          "latency_ms": {
+            "p50": 0.003359,
+            "p95": 0.023245,
+            "p99": 0.037892
+          },
+          "cpu_seconds": 0.06451669999999998,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 0,
+            "resident_fraction": 0.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 51264,
+            "resident_fraction": 0.0977764553746152,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 104857698,
+            "wchar": 0,
+            "syscr": 8194,
+            "syscw": 0,
+            "read_bytes": 209977344,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "two_readers_strided_hint",
+          "mode": "strided_12800",
+          "workers": 2,
+          "bytes": 104857600,
+          "expected_bytes": 104857600,
+          "complete": true,
+          "seconds": 0.22841154300004973,
+          "mib_per_second": 437.8062451947896,
+          "operations": 8192,
+          "operations_per_second": 35865.08760635716,
+          "latency_ms": {
+            "p50": 0.051596,
+            "p95": 0.07198,
+            "p99": 0.096059
+          },
+          "cpu_seconds": 0.26819222900000006,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 0,
+            "resident_fraction": 0.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 33015,
+            "resident_fraction": 0.06296991405650985,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 104857698,
+            "wchar": 0,
+            "syscr": 8194,
+            "syscw": 0,
+            "read_bytes": 135229440,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        }
+      ],
+      "copy_and_hash": {
+        "seconds": 16.368058425000015,
+        "bytes": 2147483648,
+        "scope": "Preparation includes source reads, SHA256, writes and fsync; not raw write bandwidth"
+      },
+      "copied_bytes_verified": true
+    },
+    {
+      "path": "/tmp",
+      "skipped": null,
+      "phases": [
+        {
+          "label": "first_pass",
+          "mode": "sequential",
+          "workers": 1,
+          "bytes": 2147483648,
+          "expected_bytes": 2147483648,
+          "complete": true,
+          "seconds": 0.388903436000021,
+          "mib_per_second": 5266.088726456738,
+          "operations": 265,
+          "operations_per_second": 681.4030822807791,
+          "latency_ms": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "cpu_seconds": 0.38837192099999995,
+          "advice": null,
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 2147483746,
+            "wchar": 0,
+            "syscr": 267,
+            "syscw": 0,
+            "read_bytes": 0,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "immediate_reread",
+          "mode": "sequential",
+          "workers": 1,
+          "bytes": 2147483648,
+          "expected_bytes": 2147483648,
+          "complete": true,
+          "seconds": 0.37746269000001575,
+          "mib_per_second": 5425.70180909778,
+          "operations": 265,
+          "operations_per_second": 702.0561422904842,
+          "latency_ms": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "cpu_seconds": 0.377676938,
+          "advice": null,
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 2147483746,
+            "wchar": 0,
+            "syscr": 267,
+            "syscw": 0,
+            "read_bytes": 0,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "dontneed_hint",
+          "mode": "sequential",
+          "workers": 1,
+          "bytes": 2147483648,
+          "expected_bytes": 2147483648,
+          "complete": true,
+          "seconds": 0.5819941969999718,
+          "mib_per_second": 3518.9354302103106,
+          "operations": 265,
+          "operations_per_second": 455.3310004910802,
+          "latency_ms": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "cpu_seconds": 0.54822542,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 0,
+            "resident_fraction": 0.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 2147483746,
+            "wchar": 0,
+            "syscr": 267,
+            "syscw": 0,
+            "read_bytes": 2147524608,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "two_readers_hint",
+          "mode": "sequential",
+          "workers": 2,
+          "bytes": 2147483648,
+          "expected_bytes": 2147483648,
+          "complete": true,
+          "seconds": 0.49385154199995895,
+          "mib_per_second": 4146.995252269902,
+          "operations": 265,
+          "operations_per_second": 536.5985067634394,
+          "latency_ms": {
+            "p50": null,
+            "p95": null,
+            "p99": null
+          },
+          "cpu_seconds": 0.771368116,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 0,
+            "resident_fraction": 0.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 524298,
+            "resident_fraction": 1.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 2147483746,
+            "wchar": 0,
+            "syscr": 267,
+            "syscw": 0,
+            "read_bytes": 2147524608,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "random_4k_hint",
+          "mode": "random_4k",
+          "workers": 1,
+          "bytes": 33554432,
+          "expected_bytes": 33554432,
+          "complete": true,
+          "seconds": 0.306907754000008,
+          "mib_per_second": 104.26585703011975,
+          "operations": 8192,
+          "operations_per_second": 26692.059399710655,
+          "latency_ms": {
+            "p50": 0.033965,
+            "p95": 0.047111,
+            "p99": 0.070154
+          },
+          "cpu_seconds": 0.202612388,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 0,
+            "resident_fraction": 0.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 8111,
+            "resident_fraction": 0.015470209689909174,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 33554530,
+            "wchar": 0,
+            "syscr": 8194,
+            "syscw": 0,
+            "read_bytes": 33222656,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "strided_12800_hint",
+          "mode": "strided_12800",
+          "workers": 1,
+          "bytes": 104857600,
+          "expected_bytes": 104857600,
+          "complete": true,
+          "seconds": 0.07228356799998892,
+          "mib_per_second": 1383.4402861797764,
+          "operations": 8192,
+          "operations_per_second": 113331.42824384729,
+          "latency_ms": {
+            "p50": 0.004269,
+            "p95": 0.021449,
+            "p99": 0.039981
+          },
+          "cpu_seconds": 0.07466267600000001,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 0,
+            "resident_fraction": 0.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 51264,
+            "resident_fraction": 0.0977764553746152,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 104857698,
+            "wchar": 0,
+            "syscr": 8194,
+            "syscw": 0,
+            "read_bytes": 209977344,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        },
+        {
+          "label": "two_readers_strided_hint",
+          "mode": "strided_12800",
+          "workers": 2,
+          "bytes": 104857600,
+          "expected_bytes": 104857600,
+          "complete": true,
+          "seconds": 0.2321936330000085,
+          "mib_per_second": 430.67503061118106,
+          "operations": 8192,
+          "operations_per_second": 35280.89850766795,
+          "latency_ms": {
+            "p50": 0.050097,
+            "p95": 0.075748,
+            "p99": 0.120496
+          },
+          "cpu_seconds": 0.267357706,
+          "advice": {
+            "available": true,
+            "accepted_files": 17,
+            "errors": [],
+            "guarantee": "Advisory only"
+          },
+          "cache_before": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 0,
+            "resident_fraction": 0.0,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "cache_after": {
+            "available": true,
+            "pages": 524298,
+            "resident_pages": 32772,
+            "resident_fraction": 0.0625064371788563,
+            "errors": [],
+            "scope": "Observed inode page residency only; no claim about lower-layer caches"
+          },
+          "proc_io_delta": {
+            "rchar": 104857698,
+            "wchar": 0,
+            "syscr": 8194,
+            "syscw": 0,
+            "read_bytes": 134234112,
+            "write_bytes": 0,
+            "cancelled_write_bytes": 0
+          },
+          "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification."
+        }
+      ],
+      "copy_and_hash": {
+        "seconds": 16.29517670399997,
+        "bytes": 2147483648,
+        "scope": "Preparation includes source reads, SHA256, writes and fsync; not raw write bandwidth"
+      },
+      "copied_bytes_verified": true
+    }
+  ],
+  "evidence_root": "D:\\attention_eval\\kaggle_storage_probe_20261024",
+  "warning": "First pass and DONTNEED hints do not establish physically cold storage. Kernel, filesystem, host and remote caches can remain warm. This is CPU filesystem I/O, not H3 load latency or GPU-instance qualification.",
+  "methodology": "One allocation; one first pass and one immediate reread per path, plus DONTNEED-hinted sequential/concurrent/range probes; no physically-cold or repeated-session claim",
+  "source_file_sha256": "3670d1af49346c2056aa9caa37da1eaca239ecb6c67499e7141dabe0d2637099"
+}

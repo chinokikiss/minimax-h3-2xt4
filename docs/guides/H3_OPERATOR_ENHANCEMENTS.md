@@ -1,10 +1,30 @@
 # TP2 operator enhancements — 2026-10-19
 
-All five requested changes are integrated. The loader still defaults to
-`row_linear_backend='tilelang_packed'` and `swiglu_reduction='native_int32'`.
-TE Group32, DiT Kitchen (with optional dropping/scalar pooling), Video Kitchen,
-Selective B and audio decode selections are unchanged. The intentional attention
-change is the Token Refiner: it now always uses native PyTorch SDPA.
+Current 2026-10-24 defaults/cleanup: [configuration review](../reports/H3_CONFIGURATION_REVIEW_20261024.md).
+Actual T4 byte/timing gates support the direct DiT column route and guarded
+short/medium online QKV B. Offline LoRA, lifecycle/pressure admission and adaptive
+lookahead are now loader defaults. Full-row column reads, the SwiGLU-disable
+path and redundant single-value controls were removed. Saved widgets migrate
+by name; the implementation history below is superseded where noted.
+
+Earlier 2026-10-24 [performance review follow-up](../reports/H3_REVIEW_OPTIMIZATIONS_20261024.md)
+adds one-destination column outputs, shared TE eager preparation, metadata-only
+Video remote planning, immutable-proof reuse and unused-reply elimination.
+introduced column/QKV candidates and bounded column reads. The later T4
+recovery and cleanup above supersede their pending status and widget layout.
+
+Update 2026-10-21: Audio VAE parallelism has since been removed. Audio always
+uses Native single-GPU FP32 decoding; the audio selection statement below
+describes the original enhancement integration date.
+
+Current update 2026-10-22: the loader defaults to FP16-fix,
+`fc2_quantizer='fused_stored'` and `row_linear_backend='tilelang_scaled_fp16'`.
+Native INT32 SUM remains the fixed base/fallback contract; policy
+selects the scaled codec above it. Prior packed/owned-FP32 choices remain
+selectable. The [promotion follow-up](../reports/H3_FP16_FUSED_DEFAULT_20261022.md)
+describes FP32 preparation, LoRA-before-store order, 0.1.13 core qualification
+and remaining end-to-end limits. The five enhancements below retain their
+historical integration scope where explicitly dated.
 
 ## Configuration
 
@@ -14,14 +34,14 @@ from patches.h3_operator_policy import H3OperatorPolicy
 
 config = RuntimeConfig(
     te_path, dit_path,
-    adaptive_lookahead=True,  # optional, defaults to False
+    adaptive_lookahead=True,  # default; bounded to GPU depth 1–2
     operators=H3OperatorPolicy(row_linear_backend='tilelang_scaled_fp16'),
 )
 ```
 
-Both options are exposed in `MiniMaxH3TP2Loader`. Existing Python argument
-positions and saved widget positions are preserved; the adaptive flag is
-appended. Changing either selection recreates the persistent worker service.
+Both options are exposed in `MiniMaxH3TP2Loader`. Legacy saved widgets migrate
+by name through the browser extension. Changing either selection recreates
+the persistent worker service.
 The linked ComfyUI node uses this repository directly. Restart ComfyUI to reload
 the Python changes. The generated `video_minimax_h3_r2v_tp2_operators.json`
 workflow has been updated in the repository and ComfyUI's workflows directory;
@@ -38,8 +58,8 @@ its new options retain the defaults above. Native/source workflows are untouched
   existing packed backend uses them. Native fused ConvRot sites retain their
   full-gather/native quantizer, replacing only transport and epilogue. Unsupported
   device/dtype/world-size/scale geometry falls back to native INT32 SUM with a
-  warning. `swiglu_reduction` remains `native_int32`; the new backend is an
-  independent, explicit opt-in, not a change to the old reduction switch.
+  warning. Native INT32 fallback SUM is hard-coded; the scaled backend remains
+  a policy selection, now the default.
 - **TE lifetimes:** attention buffers are deleted after residual addition,
   before MLP allocation. The temporary SDPA capability object is also released.
   Eager SwiGLU activation is deleted after projection; normalized/gate/up buffers
@@ -54,7 +74,7 @@ its new options retain the defaults above. Native/source workflows are untouched
   most 8 MiB. This avoids file cursor mutation, not the bytes copy or OS page
   cache; it is not `O_DIRECT`. Windows normally uses the fallback.
 - **Adaptive residency:** both fresh and idle-reused windows honor
-  `RuntimeConfig.adaptive_lookahead=False`. When enabled, GPU depth is 1 or 2
+  `RuntimeConfig.adaptive_lookahead=True`. When enabled, GPU depth is 1 or 2
   distinct upcoming weight groups, based on driver free memory plus reusable
   allocator memory, reserve and configured weight budget. Admission rechecks
   the limits before each copy. Existing resident groups need no second copy.

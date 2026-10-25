@@ -17,14 +17,15 @@ attention remain intact. Models remain under `D:\minimaxH3`.
 ## Default local execution
 
 ```powershell
-& C:\ProgramData\miniconda3\envs\comfyui\python.exe setup_h3_legacy.py
-& C:\ProgramData\miniconda3\envs\comfyui\python.exe launch_h3_legacy.py --preview --check
-& C:\ProgramData\miniconda3\envs\comfyui\python.exe launch_h3_legacy.py --preview
+& C:\ProgramData\miniconda3\envs\comfyui\python.exe -m tools.runtime.setup_h3_legacy
+& C:\ProgramData\miniconda3\envs\comfyui\python.exe -m tools.runtime.launch_h3_legacy --preview --check
+& C:\ProgramData\miniconda3\envs\comfyui\python.exe -m tools.runtime.launch_h3_legacy --preview
 # Equivalent launcher using that exact interpreter:
 .\launch_h3_legacy.cmd --preview
 ```
 
-`setup_h3_legacy.py` only verifies the environment; it installs nothing and
+[`tools/runtime/setup_h3_legacy.py`](../../tools/runtime/setup_h3_legacy.py)
+only verifies the environment; it installs nothing and
 creates no venv. `--preview` permits local UI/checks on the single 5060 Ti.
 Physical TP2 still requires two GPUs, NCCL, the compiler, and operator ABI
 qualification. Local previews do not establish T4 correctness or performance.
@@ -52,10 +53,22 @@ not a claim that every optional addon in the conda environment is qualified.
 
 ## Kaggle preparation
 
+**Current authorized exception (2026-10-21):** Kaggle may use its native Torch
+and matching platform packages. Core libraries retain their validated pins,
+especially Kitchen 0.2.37 and TileLang 0.1.13, and the frozen ComfyUI source keeps
+the legacy attention API. The local conda lock remains unchanged. CPU wheel
+preparation/import gates passed; CUDA/T4 qualification is a separate bounded
+component batch. See [the current report](../reports/T4_NATIVE_TORCH_VALIDATION_20261021.md)
+and [the profile contract](../../runtime/README.md).
+
+The instructions below describe the original strict Windows-snapshot-to-Linux
+profile and its historical blockers. They are retained for reproducibility,
+not used to override the user's native-Torch exception.
+
 The bundle at `D:\attention_eval\h3_conda_runtime_20261019` contains the frozen
 source archive, hashes of 1,260 tracked source files, exact requirements,
 constraints, and the standalone setup helper. No model weights are included.
-`freeze_h3_runtime.py` refuses to overwrite a baseline whose source or package
+`python -m tools.runtime.freeze_h3_runtime` refuses to overwrite a baseline whose source or package
 versions have drifted. Re-running it preserves the existing source archive.
 Upload only its `kaggle_bundle` subfolder, which contains five runtime files.
 The source archive has a `.bin` suffix there to prevent automatic unpacking by
@@ -86,7 +99,7 @@ while using GPU quota. Wheel versions, inventory, hashes and manifest identity
 are checked before installation. Linux environment preparation and T4 operator
 qualification are separate steps.
 
-**Remote status:** this corrected bundle has not been uploaded or submitted as
+**Historical remote status before 2026-10-21:** this corrected bundle had not been uploaded or submitted as
 a new Kaggle job. Linux wheel preparation remains unverified. Historical T4
 Torch 2.11 / TileLang 0.1.15 results do not qualify the current conda stack on
 Linux. The pipeline's historical operator ABI gate still blocks an unqualified

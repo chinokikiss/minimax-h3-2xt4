@@ -6,7 +6,7 @@ from pathlib import Path
 import sys
 
 import qualify_causal_audit as original
-from patches.te_loading import install
+from benchmarks.historical_te_loading import install
 
 
 def main():
@@ -50,7 +50,7 @@ def main():
     folder=root/'semantic_results/te_loading_qualification'/name
     result=json.loads((folder/f'adaptive_auto_{capture}_qualification.json').read_text())
     result.update(mode=args.mode,physical=False,scope='Compact trained Native full request; scheduling/loader equivalence, not physical performance',
-        candidate_sha256=hashlib.sha256((root/'patches/te_loading.py').read_bytes()).hexdigest(),
+        candidate_sha256=hashlib.sha256((root/'benchmarks/historical_te_loading.py').read_bytes()).hexdigest(),
         observer_sha256=hashlib.sha256((root/'benchmarks/te_pipeline_ablation.py').read_bytes()).hexdigest(),
         io_source_sha256={name:hashlib.sha256((root/name).read_bytes()).hexdigest() for name in
             ('benchmarks/te_io_pipeline.py','benchmarks/te_io_telemetry.py')} if args.io else {})

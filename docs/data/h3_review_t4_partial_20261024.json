@@ -1,0 +1,783 @@
+{
+  "status": "partial_operator_results_harness_oom",
+  "prior_kernel": "pamcks/h3-review-operators-t4-20261024",
+  "prior_version": 1,
+  "source_capsule_sha256": "e56aeebd92c6a2884e1442290fff89eedb59d9ea617ef2ef0627fd469c4057d2",
+  "collected_files_verified": 25,
+  "hardware": {
+    "devices": [
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "3f5b2d1d-659c-27fe-82cd-a85a37f2af82",
+        "total_bytes": 15636037632
+      },
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "d50401e7-1526-8bac-6a28-cd0197dba7b9",
+        "total_bytes": 15636037632
+      }
+    ],
+    "packages": {
+      "aiohappyeyeballs": "2.6.1",
+      "aiohttp": "3.13.3",
+      "aiosignal": "1.4.0",
+      "alembic": "1.18.4",
+      "annotated-doc": "0.0.4",
+      "annotated-types": "0.7.0",
+      "anyio": "4.10.0",
+      "apache-tvm-ffi": "0.1.12",
+      "attrs": "25.3.0",
+      "av": "18.1.0",
+      "blake3": "1.0.8",
+      "certifi": "2025.8.3",
+      "charset-normalizer": "3.4.3",
+      "click": "8.2.1",
+      "cloudpickle": "3.1.2",
+      "colorama": "0.4.6",
+      "comfy-aimdo": "0.5.5",
+      "comfy-angle": "0.1.0",
+      "comfy-kitchen": "0.2.37",
+      "einops": "0.8.2",
+      "filelock": "3.29.0",
+      "frozenlist": "1.7.0",
+      "fsspec": "2026.3.0",
+      "greenlet": "3.2.4",
+      "h11": "0.16.0",
+      "hf-xet": "1.4.3",
+      "httpcore": "1.0.9",
+      "httpx": "0.28.1",
+      "huggingface-hub": "1.12.0",
+      "idna": "3.10",
+      "jinja2": "3.1.6",
+      "kornia": "0.8.3",
+      "kornia-rs": "0.1.14",
+      "mako": "1.3.12",
+      "markdown-it-py": "4.0.0",
+      "markupsafe": "3.0.2",
+      "mdurl": "0.1.2",
+      "ml-dtypes": "0.5.4",
+      "mpmath": "1.3.0",
+      "multidict": "6.6.4",
+      "networkx": "3.6.1",
+      "nvidia-ml-py": "13.610.43",
+      "packaging": "25.0",
+      "pillow": "11.3.0",
+      "propcache": "0.3.2",
+      "psutil": "7.2.2",
+      "pydantic": "2.11.7",
+      "pydantic-core": "2.33.2",
+      "pydantic-settings": "2.12.0",
+      "pygments": "2.19.2",
+      "pyopengl": "3.1.10",
+      "python-dotenv": "1.2.1",
+      "pyyaml": "6.0.2",
+      "regex": "2026.2.28",
+      "requests": "2.32.5",
+      "rich": "14.3.2",
+      "safetensors": "0.8.0",
+      "scipy": "1.17.1",
+      "sentencepiece": "0.2.1",
+      "shellingham": "1.5.4",
+      "simpleeval": "1.0.7",
+      "sniffio": "1.3.1",
+      "spandrel": "0.4.2",
+      "sqlalchemy": "2.0.48",
+      "sympy": "1.14.0",
+      "tilelang": "0.1.13",
+      "tokenizers": "0.22.2",
+      "torch-c-dlpack-ext": "0.1.5",
+      "torchsde": "0.2.6",
+      "tqdm": "4.67.1",
+      "trampoline": "0.1.2",
+      "transformers": "5.9.0",
+      "typer": "0.24.2",
+      "typing-extensions": "4.14.1",
+      "typing-inspection": "0.4.1",
+      "urllib3": "2.5.0",
+      "yarl": "1.20.1",
+      "z3-solver": "4.15.4.0",
+      "torch": "2.11.0+cu128",
+      "torchvision": "0.26.0+cu128",
+      "torchaudio": "2.11.0+cu128",
+      "numpy": "2.1.3"
+    },
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "compiler": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Fri_Feb_21_20:23:50_PST_2025\nCuda compilation tools, release 12.8, V12.8.93\nBuild cuda_12.8.r12.8/compiler.35583870_0\n"
+  },
+  "assets": {
+    "repository": "cnmds/minimax-h3-tp2-int8-561a6211",
+    "revision": "d3e6a4b131056d2c626a01acf6ba48123a885783",
+    "objects": [
+      {
+        "file": "dit.block00.rank0.safetensors",
+        "bytes": 196348128,
+        "sha256": "b2a368d96e29cf42f572003519985910c18b91059f02a33812fc1c622e51c980",
+        "seconds": 3.625527704000035
+      },
+      {
+        "file": "dit.block00.rank1.safetensors",
+        "bytes": 196348128,
+        "sha256": "5bb1240c133cd836c88dcc6a8c5ab3ba34171e6098329fc55145e06ee54a6e27",
+        "seconds": 3.630337898999983
+      },
+      {
+        "file": "te.block00.rank0.safetensors",
+        "bytes": 243980376,
+        "sha256": "04da20061804a5ab8a09a1c721cfe485b02964af1c3489914b78249238ec5b28",
+        "seconds": 3.8513789339999676
+      },
+      {
+        "file": "te.block00.rank1.safetensors",
+        "bytes": 243980376,
+        "sha256": "0d7be5a51d9dde49b428abb457b2c8af977c19d7c52e67a5d79861863f7f03df",
+        "seconds": 3.8891193790000216
+      }
+    ],
+    "seconds": 7.520914742999992,
+    "activation_distribution": "Seeded shape fixture, not captured H3 activations",
+    "lora_factors": "Seeded rank128, not a trained adapter",
+    "persistent_baked_weight_bytes": 0
+  },
+  "complete_cases_per_rank": 10,
+  "incomplete_cases": [
+    {
+      "label": "qkv_lora",
+      "rows": 51220,
+      "status": "incomplete"
+    }
+  ],
+  "completed": [
+    {
+      "label": "column/qkv_proj",
+      "rows": 261,
+      "status": "complete",
+      "backends": {
+        "old": {
+          "slower_aligned_rank_median_ms": 8.087519645690918,
+          "samples_ms": [
+            10.415871620178223,
+            10.3887357711792,
+            8.005311965942383,
+            8.087519645690918,
+            8.083680152893066
+          ],
+          "per_rank_median_ms": [
+            5.7033281326293945,
+            8.00761604309082
+          ],
+          "max_incremental_peak_bytes": 74401792,
+          "byte_exact_on_both_owners": true
+        },
+        "preallocated": {
+          "slower_aligned_rank_median_ms": 8.022944450378418,
+          "samples_ms": [
+            10.3089599609375,
+            10.373120307922363,
+            7.944191932678223,
+            8.003583908081055,
+            8.022944450378418
+          ],
+          "per_rank_median_ms": [
+            5.691391944885254,
+            8.003583908081055
+          ],
+          "max_incremental_peak_bytes": 74401792,
+          "byte_exact_on_both_owners": true
+        },
+        "tilelang_exact": {
+          "slower_aligned_rank_median_ms": 7.684095859527588,
+          "samples_ms": [
+            9.995200157165527,
+            9.992447853088379,
+            7.684095859527588,
+            7.657279968261719,
+            7.647456169128418
+          ],
+          "per_rank_median_ms": [
+            5.3572797775268555,
+            7.684095859527588
+          ],
+          "max_incremental_peak_bytes": 74401792,
+          "byte_exact_on_both_owners": true
+        },
+        "cuda_int8_tilelang": {
+          "slower_aligned_rank_median_ms": 1.5544639825820923,
+          "samples_ms": [
+            1.826848030090332,
+            1.8147519826889038,
+            1.5219199657440186,
+            1.5544639825820923,
+            1.5118720531463623
+          ],
+          "per_rank_median_ms": [
+            1.334879994392395,
+            1.5118720531463623
+          ],
+          "max_incremental_peak_bytes": 16839168,
+          "byte_exact_on_both_owners": true
+        }
+      }
+    },
+    {
+      "label": "column/qkv_proj",
+      "rows": 4096,
+      "status": "complete",
+      "backends": {
+        "old": {
+          "slower_aligned_rank_median_ms": 41.883583068847656,
+          "samples_ms": [
+            43.98291015625,
+            42.77046585083008,
+            41.57241439819336,
+            41.49715042114258,
+            41.883583068847656
+          ],
+          "per_rank_median_ms": [
+            40.01216125488281,
+            41.883583068847656
+          ],
+          "max_incremental_peak_bytes": 792739840,
+          "byte_exact_on_both_owners": true
+        },
+        "preallocated": {
+          "slower_aligned_rank_median_ms": 41.2407341003418,
+          "samples_ms": [
+            40.515872955322266,
+            42.920352935791016,
+            40.176353454589844,
+            42.7256965637207,
+            41.2407341003418
+          ],
+          "per_rank_median_ms": [
+            38.84444808959961,
+            41.2407341003418
+          ],
+          "max_incremental_peak_bytes": 616579072,
+          "byte_exact_on_both_owners": true
+        },
+        "tilelang_exact": {
+          "slower_aligned_rank_median_ms": 36.374977111816406,
+          "samples_ms": [
+            35.12793731689453,
+            37.173248291015625,
+            35.94160079956055,
+            39.55712127685547,
+            36.374977111816406
+          ],
+          "per_rank_median_ms": [
+            32.841312408447266,
+            36.374977111816406
+          ],
+          "max_incremental_peak_bytes": 264257536,
+          "byte_exact_on_both_owners": true
+        },
+        "cuda_int8_tilelang": {
+          "slower_aligned_rank_median_ms": 14.927871704101562,
+          "samples_ms": [
+            14.000639915466309,
+            13.639936447143555,
+            14.970463752746582,
+            14.935680389404297,
+            14.927871704101562
+          ],
+          "per_rank_median_ms": [
+            13.910016059875488,
+            14.927871704101562
+          ],
+          "max_incremental_peak_bytes": 264257536,
+          "byte_exact_on_both_owners": true
+        }
+      }
+    },
+    {
+      "label": "column/qkv_proj",
+      "rows": 51220,
+      "status": "complete",
+      "backends": {
+        "old": {
+          "slower_aligned_rank_median_ms": 533.2889404296875,
+          "samples_ms": [
+            535.1419067382812,
+            528.980224609375,
+            528.7606811523438,
+            534.7872924804688,
+            533.2889404296875
+          ],
+          "per_rank_median_ms": [
+            482.6503601074219,
+            533.2889404296875
+          ],
+          "max_incremental_peak_bytes": 4083202560,
+          "byte_exact_on_both_owners": true
+        },
+        "preallocated": {
+          "slower_aligned_rank_median_ms": 520.6918334960938,
+          "samples_ms": [
+            514.2877807617188,
+            524.4945678710938,
+            520.6918334960938,
+            531.0625610351562,
+            518.9058837890625
+          ],
+          "per_rank_median_ms": [
+            475.76617431640625,
+            520.6918334960938
+          ],
+          "max_incremental_peak_bytes": 3842572800,
+          "byte_exact_on_both_owners": true
+        },
+        "tilelang_exact": {
+          "slower_aligned_rank_median_ms": 466.790771484375,
+          "samples_ms": [
+            462.31591796875,
+            476.9385986328125,
+            466.790771484375,
+            481.31329345703125,
+            463.8377685546875
+          ],
+          "per_rank_median_ms": [
+            423.6676940917969,
+            466.790771484375
+          ],
+          "max_incremental_peak_bytes": 3305746944,
+          "byte_exact_on_both_owners": true
+        },
+        "cuda_int8_tilelang": {
+          "slower_aligned_rank_median_ms": 232.46060180664062,
+          "samples_ms": [
+            229.62002563476562,
+            232.46060180664062,
+            231.8768310546875,
+            235.98867797851562,
+            237.6826934814453
+          ],
+          "per_rank_median_ms": [
+            208.35548400878906,
+            232.46060180664062
+          ],
+          "max_incremental_peak_bytes": 3304509952,
+          "byte_exact_on_both_owners": true
+        }
+      }
+    },
+    {
+      "label": "column/fc1",
+      "rows": 261,
+      "status": "complete",
+      "backends": {
+        "old": {
+          "slower_aligned_rank_median_ms": 13.500320434570312,
+          "samples_ms": [
+            13.500320434570312,
+            13.50598430633545,
+            13.582304000854492,
+            7.510015964508057,
+            7.499551773071289
+          ],
+          "per_rank_median_ms": [
+            13.500320434570312,
+            7.763584136962891
+          ],
+          "max_incremental_peak_bytes": 97470464,
+          "byte_exact_on_both_owners": true
+        },
+        "preallocated": {
+          "slower_aligned_rank_median_ms": 13.467935562133789,
+          "samples_ms": [
+            13.467935562133789,
+            13.495840072631836,
+            13.47590446472168,
+            7.655871868133545,
+            7.761439800262451
+          ],
+          "per_rank_median_ms": [
+            13.467935562133789,
+            7.761439800262451
+          ],
+          "max_incremental_peak_bytes": 97470464,
+          "byte_exact_on_both_owners": true
+        },
+        "tilelang_exact": {
+          "slower_aligned_rank_median_ms": 12.612832069396973,
+          "samples_ms": [
+            13.033439636230469,
+            13.027327537536621,
+            12.612832069396973,
+            7.288320064544678,
+            7.357408046722412
+          ],
+          "per_rank_median_ms": [
+            12.612832069396973,
+            7.357408046722412
+          ],
+          "max_incremental_peak_bytes": 97470464,
+          "byte_exact_on_both_owners": true
+        },
+        "cuda_int8_tilelang": {
+          "slower_aligned_rank_median_ms": 1.5598399639129639,
+          "samples_ms": [
+            2.256704092025757,
+            2.2931199073791504,
+            1.5598399639129639,
+            1.5457279682159424,
+            1.5462080240249634
+          ],
+          "per_rank_median_ms": [
+            1.5598399639129639,
+            1.5462080240249634
+          ],
+          "max_incremental_peak_bytes": 22451712,
+          "byte_exact_on_both_owners": true
+        }
+      }
+    },
+    {
+      "label": "column/fc1",
+      "rows": 4096,
+      "status": "complete",
+      "backends": {
+        "old": {
+          "slower_aligned_rank_median_ms": 56.868927001953125,
+          "samples_ms": [
+            60.23990249633789,
+            57.546016693115234,
+            56.868927001953125,
+            56.59651184082031,
+            56.72371292114258
+          ],
+          "per_rank_median_ms": [
+            51.54102325439453,
+            56.868927001953125
+          ],
+          "max_incremental_peak_bytes": 1056980992,
+          "byte_exact_on_both_owners": true
+        },
+        "preallocated": {
+          "slower_aligned_rank_median_ms": 56.47564697265625,
+          "samples_ms": [
+            55.752960205078125,
+            58.6080322265625,
+            55.63555145263672,
+            57.230751037597656,
+            56.47564697265625
+          ],
+          "per_rank_median_ms": [
+            51.25523376464844,
+            56.47564697265625
+          ],
+          "max_incremental_peak_bytes": 822099968,
+          "byte_exact_on_both_owners": true
+        },
+        "tilelang_exact": {
+          "slower_aligned_rank_median_ms": 50.05286407470703,
+          "samples_ms": [
+            49.597312927246094,
+            47.99311828613281,
+            50.29206466674805,
+            50.05286407470703,
+            51.134464263916016
+          ],
+          "per_rank_median_ms": [
+            45.07107162475586,
+            50.05286407470703
+          ],
+          "max_incremental_peak_bytes": 352337920,
+          "byte_exact_on_both_owners": true
+        },
+        "cuda_int8_tilelang": {
+          "slower_aligned_rank_median_ms": 19.577632904052734,
+          "samples_ms": [
+            18.808799743652344,
+            18.26076889038086,
+            20.19683265686035,
+            19.855424880981445,
+            19.577632904052734
+          ],
+          "per_rank_median_ms": [
+            18.200576782226562,
+            19.577632904052734
+          ],
+          "max_incremental_peak_bytes": 352337920,
+          "byte_exact_on_both_owners": true
+        }
+      }
+    },
+    {
+      "label": "column/fc1",
+      "rows": 51220,
+      "status": "complete",
+      "backends": {
+        "old": {
+          "slower_aligned_rank_median_ms": 742.5637817382812,
+          "samples_ms": [
+            742.5637817382812,
+            741.8726196289062,
+            741.939208984375,
+            755.9830932617188,
+            757.0328979492188
+          ],
+          "per_rank_median_ms": [
+            669.5853881835938,
+            742.5637817382812
+          ],
+          "max_incremental_peak_bytes": 5165556224,
+          "byte_exact_on_both_owners": true
+        },
+        "preallocated": {
+          "slower_aligned_rank_median_ms": 736.2332763671875,
+          "samples_ms": [
+            715.9138793945312,
+            736.1375732421875,
+            736.2332763671875,
+            744.8209838867188,
+            749.9049072265625
+          ],
+          "per_rank_median_ms": [
+            653.4715576171875,
+            736.2332763671875
+          ],
+          "max_incremental_peak_bytes": 4943749632,
+          "byte_exact_on_both_owners": true
+        },
+        "tilelang_exact": {
+          "slower_aligned_rank_median_ms": 668.2152099609375,
+          "samples_ms": [
+            644.0734252929688,
+            668.2152099609375,
+            666.0641479492188,
+            681.9579467773438,
+            686.1168212890625
+          ],
+          "per_rank_median_ms": [
+            579.0103759765625,
+            668.2152099609375
+          ],
+          "max_incremental_peak_bytes": 4406895104,
+          "byte_exact_on_both_owners": true
+        },
+        "cuda_int8_tilelang": {
+          "slower_aligned_rank_median_ms": 338.2579650878906,
+          "samples_ms": [
+            324.14996337890625,
+            338.94195556640625,
+            333.0149230957031,
+            348.4078063964844,
+            338.2579650878906
+          ],
+          "per_rank_median_ms": [
+            285.5916442871094,
+            338.2579650878906
+          ],
+          "max_incremental_peak_bytes": 4406895104,
+          "byte_exact_on_both_owners": true
+        }
+      }
+    },
+    {
+      "label": "te/qkv",
+      "rows": 1182,
+      "status": "complete",
+      "backends": {
+        "independent": {
+          "slower_aligned_rank_median_ms": 9.625951766967773,
+          "samples_ms": [
+            9.662336349487305,
+            9.633824348449707,
+            9.625951766967773,
+            9.232383728027344,
+            9.223808288574219
+          ],
+          "per_rank_median_ms": [
+            8.596320152282715,
+            9.625951766967773
+          ],
+          "max_incremental_peak_bytes": 106606592,
+          "byte_exact_on_both_owners": true
+        },
+        "shared": {
+          "slower_aligned_rank_median_ms": 7.618559837341309,
+          "samples_ms": [
+            7.757887840270996,
+            7.6445441246032715,
+            7.618559837341309,
+            7.273439884185791,
+            7.284063816070557
+          ],
+          "per_rank_median_ms": [
+            6.652512073516846,
+            7.618559837341309
+          ],
+          "max_incremental_peak_bytes": 74657792,
+          "byte_exact_on_both_owners": true
+        }
+      }
+    },
+    {
+      "label": "te/gate_up",
+      "rows": 1182,
+      "status": "complete",
+      "backends": {
+        "independent": {
+          "slower_aligned_rank_median_ms": 38.553470611572266,
+          "samples_ms": [
+            39.625953674316406,
+            34.63238525390625,
+            33.883872985839844,
+            38.553470611572266,
+            38.55696105957031
+          ],
+          "per_rank_median_ms": [
+            32.15411376953125,
+            38.553470611572266
+          ],
+          "max_incremental_peak_bytes": 322736128,
+          "byte_exact_on_both_owners": true
+        },
+        "shared": {
+          "slower_aligned_rank_median_ms": 36.5777587890625,
+          "samples_ms": [
+            37.54191970825195,
+            35.637184143066406,
+            35.3504638671875,
+            37.42911911010742,
+            36.5777587890625
+          ],
+          "per_rank_median_ms": [
+            30.719615936279297,
+            36.5777587890625
+          ],
+          "max_incremental_peak_bytes": 249815040,
+          "byte_exact_on_both_owners": true
+        }
+      }
+    },
+    {
+      "label": "qkv_lora",
+      "rows": 261,
+      "status": "complete",
+      "backends": {
+        "full": {
+          "slower_aligned_rank_median_ms": 1.7009600400924683,
+          "samples_ms": [
+            1.6522239446640015,
+            1.6975040435791016,
+            1.7009600400924683,
+            1.7121280431747437,
+            1.7260799407958984
+          ],
+          "per_rank_median_ms": [
+            1.647968053817749,
+            1.7009600400924683
+          ],
+          "max_incremental_peak_bytes": 45652480,
+          "byte_exact_on_both_owners": true
+        },
+        "owned": {
+          "slower_aligned_rank_median_ms": 1.3742079734802246,
+          "samples_ms": [
+            1.3721599578857422,
+            1.3742079734802246,
+            1.3754559755325317,
+            1.3723200559616089,
+            1.3884799480438232
+          ],
+          "per_rank_median_ms": [
+            1.3372160196304321,
+            1.3742079734802246
+          ],
+          "max_incremental_peak_bytes": 33808896,
+          "byte_exact_on_both_owners": true
+        }
+      }
+    },
+    {
+      "label": "qkv_lora",
+      "rows": 4096,
+      "status": "complete",
+      "backends": {
+        "full": {
+          "slower_aligned_rank_median_ms": 27.147552490234375,
+          "samples_ms": [
+            27.147552490234375,
+            26.2574405670166,
+            27.308063507080078,
+            26.216415405273438,
+            27.750656127929688
+          ],
+          "per_rank_median_ms": [
+            24.55251121520996,
+            27.147552490234375
+          ],
+          "max_incremental_peak_bytes": 706740224,
+          "byte_exact_on_both_owners": true
+        },
+        "owned": {
+          "slower_aligned_rank_median_ms": 20.841888427734375,
+          "samples_ms": [
+            20.891616821289062,
+            20.561887741088867,
+            20.841888427734375,
+            20.494367599487305,
+            21.06572723388672
+          ],
+          "per_rank_median_ms": [
+            19.558080673217773,
+            20.841888427734375
+          ],
+          "max_incremental_peak_bytes": 530579456,
+          "byte_exact_on_both_owners": true
+        }
+      }
+    }
+  ],
+  "epilogue": [
+    {
+      "scalar": true,
+      "dtype": "torch.float16",
+      "byte_exact": true
+    },
+    {
+      "scalar": true,
+      "dtype": "torch.float32",
+      "byte_exact": true
+    },
+    {
+      "scalar": false,
+      "dtype": "torch.float16",
+      "byte_exact": true
+    },
+    {
+      "scalar": false,
+      "dtype": "torch.float32",
+      "byte_exact": true
+    }
+  ],
+  "all_completed_outputs_byte_exact": true,
+  "measured_sample_pairs": 160,
+  "failure": {
+    "site": "QKV full-B LoRA correctness/warm-up repeat at M51220",
+    "requested_bytes_gib": 4.1,
+    "gpu_oracle_bytes": 1101434880,
+    "observations": "The first full-B output completed; repeating it with that output retained on GPU OOMed on both owners. Allocator fragmentation may also contribute; no exclusive mechanism claim.",
+    "rank_errors": [
+      "Traceback (most recent call last):\n  File \"/kaggle/temp/h3_light_source/benchmarks/run_review_t4.py\", line 277, in worker\n    compare_case('qkv_lora',dict(full=lambda:full.add_to(x,base.clone()),owned=lambda:selected.add_to(x,base.clone())),\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        'full',dict(rows=count,lora_rank=128,adapters=2,fp32_compute=True,base_clone_included=True))\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/kaggle/temp/h3_light_source/benchmarks/run_review_t4.py\", line 180, in compare_case\n    started=time.monotonic();output=fn();torch.cuda.synchronize()\n                                    ~~^^\n  File \"/kaggle/temp/h3_light_source/benchmarks/run_review_t4.py\", line 277, in <lambda>\n    compare_case('qkv_lora',dict(full=lambda:full.add_to(x,base.clone()),owned=lambda:selected.add_to(x,base.clone())),\n                                             ~~~~~~~~~~~^^^^^^^^^^^^^^^^\n  File \"/kaggle/temp/h3_light_source/patches/h3_lora.py\", line 72, in add_to\n    value=self.add_to(x.float(),out.float(),comm,input_act)\n  File \"/kaggle/temp/h3_light_source/patches/h3_lora.py\", line 95, in add_to\n    delta=F.linear(hidden,term.up.to(dtype=x.dtype));del hidden\ntorch.OutOfMemoryError: CUDA out of memory. Tried to allocate 4.10 GiB. GPU 0 has a total capacity of 14.56 GiB of which 3.41 GiB is free. Including non-PyTorch memory, this process has 11.15 GiB memory in use. Of the allocated memory 7.43 GiB is allocated by PyTorch, and 3.59 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)\n",
+      "Traceback (most recent call last):\n  File \"/kaggle/temp/h3_light_source/benchmarks/run_review_t4.py\", line 277, in worker\n    compare_case('qkv_lora',dict(full=lambda:full.add_to(x,base.clone()),owned=lambda:selected.add_to(x,base.clone())),\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        'full',dict(rows=count,lora_rank=128,adapters=2,fp32_compute=True,base_clone_included=True))\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/kaggle/temp/h3_light_source/benchmarks/run_review_t4.py\", line 180, in compare_case\n    started=time.monotonic();output=fn();torch.cuda.synchronize()\n                                    ~~^^\n  File \"/kaggle/temp/h3_light_source/benchmarks/run_review_t4.py\", line 277, in <lambda>\n    compare_case('qkv_lora',dict(full=lambda:full.add_to(x,base.clone()),owned=lambda:selected.add_to(x,base.clone())),\n                                             ~~~~~~~~~~~^^^^^^^^^^^^^^^^\n  File \"/kaggle/temp/h3_light_source/patches/h3_lora.py\", line 72, in add_to\n    value=self.add_to(x.float(),out.float(),comm,input_act)\n  File \"/kaggle/temp/h3_light_source/patches/h3_lora.py\", line 95, in add_to\n    delta=F.linear(hidden,term.up.to(dtype=x.dtype));del hidden\ntorch.OutOfMemoryError: CUDA out of memory. Tried to allocate 4.10 GiB. GPU 1 has a total capacity of 14.56 GiB of which 3.41 GiB is free. Including non-PyTorch memory, this process has 11.15 GiB memory in use. Of the allocated memory 7.43 GiB is allocated by PyTorch, and 3.59 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)\n"
+    ]
+  },
+  "profiling": {
+    "status": "not_started",
+    "reason": "Worker exception occurred before the profile stage"
+  },
+  "qualification": "Seeded operator fixtures with trained base shards; no full-H3 or generation acceptance",
+  "retry_scope": "Only M51220 QKV LoRA timing and previously unstarted complete profile replay",
+  "production_source_changes": false
+}

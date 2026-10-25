@@ -1,8 +1,9 @@
-"""Opt-in SM75 scaled FP16 transport + native no-bias FP32 dequantization.
+"""SM75 scaled FP16 transport + native no-bias FP32 dequantization.
 
 The immutable codecs specify INT32 reconstruction before two FP32 products.
 Current TP2 O/FC2 sites have vector weight scales and no bias. INT32 SUM
-remains the default; these entry points must be selected explicitly.
+remains the explicit exact-reduction alternative and unsupported-path fallback.
+The operator policy promotes FP16 storage to FP32 preparation before this API.
 """
 from functools import lru_cache
 import logging
@@ -102,10 +103,9 @@ def _finish_row(q,scale,shape,weight,weight_scale,comm):
     return out.reshape(*shape[:-1],weight.shape[0])
 
 
-def row_linear(x,weight,weight_scale,comm,world_size,groupsize=256,input_act=None,*,swiglu_padding=True):
+def row_linear(x,weight,weight_scale,comm,world_size,groupsize=256,input_act=None):
     """Keep packed quantization/GEMM, replacing only SUM transport and epilogue."""
-    from patches import tilelang_row_quant as row,tilelang_swiglu_pad as swiglu,optimized_tp,parallel_int8 as original
-    prepare=swiglu if swiglu_padding else row
+    from patches import tilelang_swiglu_pad as prepare,optimized_tp,parallel_int8 as original
     if not _supported(x,weight,weight_scale,world_size,groupsize,input_act):
         return prepare.row_linear(x,weight,weight_scale,comm,world_size,groupsize,input_act,variant='packed')
     width=x.shape[-1]//(2 if input_act=='swiglu' else 1)
@@ -122,7 +122,18 @@ def row_linear(x,weight,weight_scale,comm,world_size,groupsize=256,input_act=Non
         quantized,scale=original.quantize(full,groupsize,input_act=input_act)
         q=quantized[:,start:start+length].contiguous()
         del full,quantized
-    return _finish_row(q,scale,x.shape,weight,weight_scale,comm)
+    # Keep ownership here: passing q to _finish_row left this frame retaining
+    # the codes through transport/epilogue despite the helper's del q.
+    from patches.tilelang_row_quant import label
+    shape=x.shape;local_k=q.shape[-1]
+    del x
+    with label('int8_gemm'):partial=original.int_mm(q,weight)
+    del q
+    with label('scaled_fp16_encode'):payload=encode(partial,'fp16',local_k)
+    del partial
+    with label('scaled_fp16_sum'):payload=collect(payload,'fp16',comm)
+    with label('scaled_fp16_fused_epilogue'):out=finish(payload,scale,weight_scale,'fp16',local_k)
+    return out.reshape(*shape[:-1],weight.shape[0])
 
 
 def row_linear_parts(gate,up,weight,weight_scale,comm,world_size,groupsize=256):

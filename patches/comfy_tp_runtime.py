@@ -9,6 +9,7 @@ from __future__ import annotations
 import atexit
 import copy
 import gc
+import math
 from dataclasses import dataclass,field
 from pathlib import Path
 from datetime import timedelta
@@ -29,6 +30,7 @@ from patches.comfy_tp_models import native_te, native_dit, StagedVision, CPUStar
 from patches.weight_residency import ResidencyWindow, WeightSpec, copy_module, module_bytes
 from patches.windowed_tp import CheckpointReader, tp_specs, attach_window, DiTPreprocessing
 from patches.h3_operator_policy import H3OperatorPolicy
+from patches.h3_tensor_flow import TensorFlowPolicy
 
 
 @dataclass(frozen=True)
@@ -40,16 +42,16 @@ class RuntimeConfig:
     pinned_bytes: int = 6 * GiB
     cache_bytes: int = 3 * GiB
     host_bytes: int = 16 * GiB
-    reserve_bytes: int = GiB
-    timeout_seconds: int = 300
+    reserve_bytes: int = 9 * GiB
+    timeout_seconds: int = 1500
     te_weight_bytes: int | None = None
     cpu_lookahead: int = 16
     gpu_lookahead: int = 2
     cross_request_te: bool = True
     rank_checkpoint_dir: str | None = None
     cross_model_cpu: bool = True
-    prefetch_lifecycle: bool = False
-    memory_pressure_aware: bool = False
+    prefetch_lifecycle: bool = True
+    memory_pressure_aware: bool = True
     decode_te_blocks: int = 2
     idle_residency: bool = False
     idle_weight_bytes: int = 4*GiB
@@ -57,20 +59,21 @@ class RuntimeConfig:
     idle_delay_seconds: float = .25
     lora_stack: tuple = ()
     lora_signature: tuple = field(init=False,default=())
-    lora_row_partial_reduce: bool = False
-    lora_concat_a: bool = False
-    tp_quantization: str = 'scalemax'
-    swiglu_reduction: str = 'native_int32'
+    lora_row_partial_reduce: bool = True
     operators: H3OperatorPolicy = field(default_factory=H3OperatorPolicy)
-    adaptive_lookahead: bool = False
+    adaptive_lookahead: bool = True
+    tensor_flow: TensorFlowPolicy = field(default_factory=lambda: TensorFlowPolicy('fp16'))
+    # Decode has no DiT activation window; do not inherit its sampling reserve.
+    video_decode_reserve_bytes: int = 2 * GiB
+    bundle_offline_lora: bool = False
+    lora_selective_qkv_b: bool = True
 
     def __post_init__(self):
+        if not isinstance(self.tensor_flow,TensorFlowPolicy):raise ValueError('TensorFlowPolicy required')
+        if self.tensor_flow.mode=='bf16_reference':raise ValueError('BF16 reference is a local component test mode, not a T4 deployment mode')
         if not isinstance(self.operators,H3OperatorPolicy):raise ValueError('H3OperatorPolicy required')
         object.__setattr__(self,'lora_signature',tuple((str(Path(p).resolve()),Path(p).stat().st_size,
             Path(p).stat().st_mtime_ns) for p,_ in self.lora_stack))
-        if self.lora_concat_a:raise ValueError('Concat A is deprecated; disable lora_concat_a')
-        if self.tp_quantization != 'scalemax':raise ValueError('Unknown TP quantization mode')
-        if self.swiglu_reduction!='native_int32':raise ValueError('Only Native INT32 reduction is retained')
         if not 1 <= self.layers <= 50:
             raise ValueError('Expected 1–50 trained layers')
         if min(self.weight_bytes, self.pinned_bytes, self.cache_bytes, self.host_bytes) <= 0:
@@ -85,6 +88,10 @@ class RuntimeConfig:
             raise ValueError('Invalid idle residency bounds')
         if self.idle_residency and not self.prefetch_lifecycle:
             raise ValueError('Idle residency requires P0 lifecycle')
+        if self.video_decode_reserve_bytes < 0:
+            raise ValueError('Video decode reserve must be nonnegative')
+        if self.timeout_seconds <= 0 or self.reserve_bytes < 0:
+            raise ValueError('Positive command timeout and nonnegative DiT reserve required')
 
 
 def packet(value, device):
@@ -110,15 +117,29 @@ def packet(value, device):
     raise TypeError(f'Unsupported worker payload: {type(value).__name__}; custom patches require qualification')
 
 
+def worker_reply(result, rank, command):
+    """Only rank 0 and explicit diagnostics own a returned CPU payload."""
+    if rank != 0 and command not in ('stats', 'idle_stats'):
+        return None
+    return packet(result, 'cpu')
+
+
 class RankRuntime:
     def __init__(self, config, rank, device, comm, budget):
         self.config, self.rank, self.device, self.comm = config, rank, torch.device(device), comm
-        self.readers = {'te': CheckpointReader(config.te_path), 'dit': CheckpointReader(config.dit_path)}
-        for reader in self.readers.values():reader.operator_policy=config.operators
-        if config.lora_stack:
+        from patches.tp2_bundle import open_checkpoint,BundleReader
+        self.readers = {'te': open_checkpoint(config.te_path), 'dit': open_checkpoint(config.dit_path)}
+        for reader in self.readers.values():
+            reader.operator_policy=config.operators
+            reader.tensor_flow=config.tensor_flow
+        if config.bundle_offline_lora:
+            if not isinstance(self.readers['dit'],BundleReader):raise ValueError('Bundle offline LoRA requires a TP2 descriptor')
+            self.readers['dit'].set_offline_lora(config.lora_stack)
+        elif config.lora_stack:
             from patches.h3_lora import H3LoRAStore
             self.readers['dit'].lora_store=H3LoRAStore(config.lora_stack,self.readers['dit'],
-                row_partial=config.lora_row_partial_reduce,selective_b=config.operators.selective_b)
+                row_partial=config.lora_row_partial_reduce,selective_b=True,
+                selective_qkv_b=config.lora_selective_qkv_b)
         if config.rank_checkpoint_dir:
             for reader in self.readers.values():
                 reader.rank_checkpoint_dir = config.rank_checkpoint_dir
@@ -160,6 +181,7 @@ class RankRuntime:
 
     def _check_idle_identity(self):
         reader=self.readers['te']
+        if hasattr(reader,'check'):reader.check()
         stat=reader.path.stat()
         if (stat.st_size,stat.st_mtime_ns)!=reader.signature:
             raise RuntimeError('TE checkpoint changed; reload the TP2 session before reuse')
@@ -232,16 +254,21 @@ class RankRuntime:
         self.vae_numeric_flags = None
 
     def _prepare_vae(self, path, kind, activation_bytes, numeric_options=None):
+        if kind != 'video':
+            return {'accepted':False, 'reason':'Parallel VAE decoding is video-only; Audio VAE uses Native single-GPU decoding'}
         from patches.parallel_vae import checkpoint_plan, load_decode_weights
         if self.sample_active:
             raise RuntimeError('VAE preparation arrived during sampling')
         self._drop_vae()
         reader, names, reservation = checkpoint_plan(path, kind)
+        reader.tensor_flow=self.config.tensor_flow
         payload = (reservation - 256 * 2**20) // 2
-        # Parent Native VAE is already loaded. Leave room for global KV,
-        # transport scratch and public output/normalization allocations.
-        free, _ = torch.cuda.mem_get_info(self.device)
-        ready = free >= payload + 2 * int(activation_bytes) + self.config.reserve_bytes
+        # Parent owns only Native planning/normalization. The activation allowance
+        # still covers global KV, transport scratch and public output allocations.
+        free, total = torch.cuda.mem_get_info(self.device)
+        required = payload + 2 * int(activation_bytes) + self.config.video_decode_reserve_bytes
+        gpu_ready = free >= required
+        ready = gpu_ready
         admitted = False
         if ready:
             admitted = self.cache.reserve_staging(reservation)
@@ -249,15 +276,25 @@ class RankRuntime:
                 self.startup_cache.relieve_pressure(reservation) if self.config.prefetch_lifecycle else self.startup_cache.trim()
                 admitted = self.cache.reserve_staging(reservation)
             ready = admitted
+        admission = dict(rank=self.rank, free_bytes=free, total_bytes=total,
+            weight_bytes=payload, activation_estimate_bytes=int(activation_bytes),
+            activation_allowance_bytes=2*int(activation_bytes),
+            reserve_bytes=self.config.video_decode_reserve_bytes, required_free_bytes=required,
+            staging_bytes=reservation, gpu_accepted=gpu_ready,
+            host_accepted=admitted if gpu_ready else None)
+        if gpu_ready and not admitted:
+            admission['host_budget'] = self.cache.budget.snapshot()
         status = torch.tensor(int(ready), device=self.device, dtype=torch.int32)
         self.comm.all_reduce(status, op=self.comm.ReduceOp.MIN)
         if not status.item():
             if admitted:
                 self.cache.budget.finish_staging(reservation)
                 self.cache.budget.release(reservation)
+            reason = ('VRAM admission' if not gpu_ready else
+                      'Host RAM admission' if not admitted else 'Admission declined on another rank')
             self.events.append(dict(phase='vae_prepare', kind=kind, accepted=False,
-                                    reason='RAM/VRAM admission', monotonic=time.monotonic()))
-            return {'accepted':False, 'reason':'RAM/VRAM admission declined on a rank'}
+                reason=reason, admission=admission, monotonic=time.monotonic()))
+            return {'accepted':False, 'reason':f'{reason} (rank {self.rank})', 'admission':admission}
         error = None
         try:
             options = numeric_options or {}
@@ -280,11 +317,14 @@ class RankRuntime:
         self.comm.all_reduce(status, op=self.comm.ReduceOp.MIN)
         if not status.item():
             self._drop_vae()
-            return {'accepted':False, 'reason':error or 'VAE unavailable on the other rank'}
+            reason=error or 'VAE unavailable on the other rank'
+            self.events.append(dict(phase='vae_prepare',kind=kind,accepted=False,
+                reason=reason,admission=admission,monotonic=time.monotonic()))
+            return {'accepted':False, 'reason':reason, 'admission':admission}
         self.vae_kind = kind
         self.events.append(dict(phase='vae_prepare',kind=kind,accepted=True,
-                                checkpoint=reader.identity,monotonic=time.monotonic()))
-        return {'accepted':True, 'kind':kind}
+                                checkpoint=reader.identity,admission=admission,monotonic=time.monotonic()))
+        return {'accepted':True, 'kind':kind, 'admission':admission}
 
     def _drop_model(self):
         if self.window is not None:
@@ -323,7 +363,7 @@ class RankRuntime:
             exclude += ('condition_proj.','token_refiner.','video_patch_proj.','audio_patch_proj.')
         aux_bytes = sum(v['data_offsets'][1]-v['data_offsets'][0] for k,v in reader.header.items()
             if k != '__metadata__' and not k.startswith(exclude)) + 32*2**20
-        store=getattr(reader,'lora_store',None)
+        store=getattr(reader,'lora_store',None) or getattr(reader,'offline_store',None)
         if kind=='dit' and self.rank==0 and store is not None:
             aux_bytes+=store.prefix_bytes('token_refiner.')
         # Native CPU construction + checkpoint state + copy can coexist. The
@@ -333,6 +373,12 @@ class RankRuntime:
         # copy. Initial embedding + full checkpoint fit below 2x aux. DiT
         # expands FP16 refiner weights into FP32, requiring the 3x bound.
         reservation = 0 if kind == 'te' else 3*aux_bytes
+        if kind=='dit' and hasattr(reader,'workspace_bytes'):
+            # Refiner LoRA is merged before construction in the same CPU path.
+            active=getattr(reader,'offline_targets',())
+            global_work=max((math.prod(reader.header[t+'.weight']['shape'])*32
+                for t in active if t.startswith('token_refiner.')),default=0)
+            reservation+=global_work
         deadline = time.monotonic() + self.config.timeout_seconds
         while reservation and not self.cache.budget.acquire(reservation,staging=True):
             self.cache.relieve_pressure(reservation) if self.config.prefetch_lifecycle else self.cache.trim()
@@ -381,7 +427,7 @@ class RankRuntime:
             else:
                 self.model = native_dit(reader, self.rank)
                 self.preprocessing = DiTPreprocessing(self.model, self.rank, self.device, self.comm,
-                    (reader.identity,store.identity if store is not None else None,'native-int8-f32-scalemax',self.config.operators))
+                    (reader.identity,store.identity if store is not None else None,'native-int8-scalemax',self.config.operators,self.config.tensor_flow))
                 specs += self.preprocessing.specs()
                 # Keep canonical preprocessing on CPU; moving the outer shell
                 # wholesale would resurrect duplicate refiner/projection weights.
@@ -432,7 +478,9 @@ class RankRuntime:
             raise
 
     def dispatch(self, command, args=(), kwargs=None):
-        store=getattr(self.readers['dit'],'lora_store',None)
+        if command == 'audio_channels':
+            raise RuntimeError('Audio VAE parallel decoding has been removed; use Native single-GPU decoding')
+        store=getattr(self.readers['dit'],'lora_store',None) or getattr(self.readers['dit'],'offline_store',None)
         if store is not None and command not in ('close','stats','idle_stop','idle_release'):store.check()
         kwargs = kwargs or {}
         with torch.cuda.device(self.device), torch.inference_mode():
@@ -517,17 +565,14 @@ class RankRuntime:
                 self.sample_active = False
             elif command == 'vae_prepare':
                 return self._prepare_vae(*args, **kwargs)
-            elif command in ('video_pixels', 'audio_channels'):
-                from patches.parallel_vae import AlignedVideoDecode, channel_decode
-                expected = 'video' if command == 'video_pixels' else 'audio'
-                if self.sample_active or self.vae_model is None or self.vae_kind != expected:
+            elif command == 'video_pixels':
+                from patches.parallel_vae import AlignedVideoDecode
+                if self.sample_active or self.vae_model is None or self.vae_kind != 'video':
                     raise RuntimeError('Parallel VAE decode requires its prepared stage')
                 z = packet(args[0], self.device)
-                if command == 'video_pixels':
-                    if z.ndim != 5 or z.shape[1] != 24 or z.dtype != torch.float16:
-                        raise ValueError('Aligned video requires FP16 [B,24,T,H,W] raw latents')
-                    return AlignedVideoDecode(self.vae_model, z, self.comm, self.rank).run()
-                return channel_decode(self.vae_model, z, self.comm, self.rank)
+                if z.ndim != 5 or z.shape[1] != 24 or z.dtype != torch.float16:
+                    raise ValueError('Aligned video requires FP16 [B,24,T,H,W] raw latents')
+                return AlignedVideoDecode(self.vae_model, z, self.comm, self.rank).run()
             elif command == 'vae_release':
                 self._drop_vae()
             elif command == 'decode_start':
@@ -583,7 +628,7 @@ def _worker(rank, config, budget, port, connection):
         if torch.cuda.get_device_capability(rank)==(7,5):
             from patches.h3_operator_dependencies import configure_compiler
             configure_compiler(config.operators)
-        enable(config.tp_quantization,swiglu_reduction=config.swiglu_reduction)
+        enable()
         store = dist.TCPStore('127.0.0.1', port, 3, False,
             timedelta(seconds=config.timeout_seconds))
         dist.init_process_group('nccl', store=store, rank=rank,
@@ -596,9 +641,9 @@ def _worker(rank, config, budget, port, connection):
                     with torch.cuda.device(rank),torch.inference_mode():runtime.idle_tick()
             sequence, command, args, kwargs = connection.recv()
             result = runtime.dispatch(command, args, kwargs)
-            result = packet(result, 'cpu')
+            result = worker_reply(result, rank, command)
             if not command.startswith('idle_'):torch.cuda.synchronize(rank)
-            connection.send((sequence, result if rank == 0 or command in ('stats','idle_stats') else None))
+            connection.send((sequence, result))
             if command == 'close':
                 break
     except BaseException:
@@ -685,12 +730,12 @@ class PhysicalTPService:
 
     def _idle_vaes(self):
         names=getattr(self,'idle_vae_names',None)
-        return [v for v in getattr(self,'staged_vaes',()) if names is None or v.reader.path.name in names]
+        return [v for v in getattr(self,'staged_vaes',())
+                if (getattr(v,'encoder_used',False) if names is None else v.reader.path.name in names)]
 
     def configure_idle_vaes(self,prompt):
-        names=[n.get('inputs',{}).get('vae_name') for n in prompt.values()
-               if n.get('class_type')=='MiniMaxH3ParallelVAELoader']
-        self.idle_vae_names={Path(n).name for n in names if isinstance(n,str)}
+        from patches.h3_reference_plan import encoder_names
+        self.idle_vae_names=encoder_names(prompt)
         for vae in tuple(getattr(self,'staged_vaes',())):
             if vae.reader.path.name not in self.idle_vae_names:vae.release()
 

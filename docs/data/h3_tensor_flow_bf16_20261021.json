@@ -1,0 +1,2002 @@
+{
+  "scope": "Local SM120 BF16 numerical component evidence. Logical TP2 only. No full H3, T4 performance, NCCL or generation-quality qualification.",
+  "environment": {
+    "hardware": "NVIDIA GeForce RTX 5060 Ti",
+    "capability": [
+      12,
+      0
+    ],
+    "torch": "2.12.1+cu132",
+    "runtime_lock_sha256": "e3a07afb8cb79e6f45c9c0118debc4bd4008c022d2652e0891273dac2db07aa3"
+  },
+  "runtime": "Frozen conda comfyui / pinned ComfyUI d49e888",
+  "decisions": {
+    "legacy_default_preserved": true,
+    "fp16_opt_in": true,
+    "residual_divisor": 64,
+    "vision_divisor": 1,
+    "video_divisor": 1,
+    "audio_vae": "unchanged FP32",
+    "whole_trajectory_qualified": false,
+    "t4_qualified": false
+  },
+  "status": "bounded_component_gates_passed; production_accuracy_unqualified",
+  "case_count": 32,
+  "records": [
+    {
+      "file": "dit_7895.json",
+      "sha256": "35359b0ceda8c053ecb25f525d577b27fd3a6e51447300e2c78a43cf0c7dbb31",
+      "configuration": {
+        "mode": "dit",
+        "tokens": 0,
+        "layer": 0,
+        "exponent": 6,
+        "lora": null
+      },
+      "distribution": {
+        "source": "D:\\attention_eval\\fp16_residual_fix_20261020\\first_block.pt",
+        "sha256": "ecec1dd4cb1146f9511dd023db2ceb1092290947c6f11593fc3bdbcc340f37bb",
+        "provenance": {
+          "kind": "current pinned Native first-block reconstruction from retained real conditioning/reference/noise",
+          "seed": 20261013,
+          "width": 512,
+          "height": 512,
+          "frames": 90,
+          "sigma": 1.0,
+          "source_files": {
+            "conditioning.pt": "73318db2a3a79b556471d7539bcfca80f27b5d342cce7771e68888d8faa2b535",
+            "initial_noise.pt": "274fc8cfbbd30a2bc645827840855fbcad2b33dba31dcf3a4683a37d06d46668",
+            "sigmas.pt": "ead2c539765f0874647f27e4cc4623b8710f110cb3b693f5f639a5c7c4784e11"
+          },
+          "scope": "Native front-end operators and text refiner only; zero main DiT blocks, no TE/VAE/generation"
+        },
+        "shape": [
+          7895,
+          5376
+        ],
+        "layer": 0,
+        "caveat": "Real first-block input reconstruction; other layer indices are stress tests, not their native trajectories."
+      },
+      "cases": [
+        {
+          "flow": "bf16_reference",
+          "exponent": 0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 110080.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 1260,
+            "zeros": 0
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.008264943770476055,
+            "max_abs": 1024.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.bfloat16",
+            "cast_nonzero_to_zero": 0,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.bfloat16",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 113.5,
+            "above_fp16": 0,
+            "subnormal_fp16": 1677,
+            "zeros": 0
+          },
+          "vs_native_kitchen_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.009984793819426152,
+            "max_abs": 1024.0
+          },
+          "sdpa_attention_ablation_vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.009143692144020832,
+            "max_abs": 1536.0
+          },
+          "native_bf16_norm_modulation_residual_rounding_ablation": {
+            "nonfinite": 0,
+            "relative_l2": 0.007887079766113723,
+            "max_abs": 1024.0
+          },
+          "native_bf16_rounding_ablation_vs_matched_kitchen": {
+            "nonfinite": 0,
+            "relative_l2": 0.00798802135774243,
+            "max_abs": 1024.0
+          },
+          "storage_cast_events": 84,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        },
+        {
+          "flow": "fp16",
+          "exponent": 0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 42443520,
+            "nonfinite": 1,
+            "maximum": 56864.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 1231,
+            "zeros": 1
+          },
+          "vs_native_bf16": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.float16",
+            "cast_nonzero_to_zero": 2,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.float16",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 113.5,
+            "above_fp16": 0,
+            "subnormal_fp16": 1678,
+            "zeros": 2
+          },
+          "vs_native_kitchen_bf16": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "sdpa_attention_ablation_vs_native_bf16": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "vs_runtime_bf16_with_same_fp32_islands": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "storage_cast_events": 84,
+          "max_single_cast_nonzero_to_zero": 19,
+          "max_single_cast_finite_to_nonfinite": 1,
+          "observed_nonfinite": true
+        },
+        {
+          "flow": "fp16",
+          "exponent": 4,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 110592.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 1202,
+            "zeros": 5
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.006917184227652179,
+            "max_abs": 704.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.float16",
+            "cast_nonzero_to_zero": 12,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.float16",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 7.09375,
+            "above_fp16": 0,
+            "subnormal_fp16": 26122,
+            "zeros": 12
+          },
+          "vs_native_kitchen_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.007265684186750991,
+            "max_abs": 768.0
+          },
+          "sdpa_attention_ablation_vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.006787858692248733,
+            "max_abs": 768.0
+          },
+          "vs_runtime_bf16_with_same_fp32_islands": {
+            "nonfinite": 0,
+            "relative_l2": 0.007642496719907918,
+            "max_abs": 768.0
+          },
+          "storage_cast_events": 84,
+          "max_single_cast_nonzero_to_zero": 21,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        },
+        {
+          "flow": "fp16",
+          "exponent": 6,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 110592.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 1127,
+            "zeros": 39
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.006883892245387616,
+            "max_abs": 672.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.float16",
+            "cast_nonzero_to_zero": 42,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.float16",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 1.7734375,
+            "above_fp16": 0,
+            "subnormal_fp16": 104709,
+            "zeros": 42
+          },
+          "vs_native_kitchen_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.00734854974724453,
+            "max_abs": 768.0
+          },
+          "sdpa_attention_ablation_vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.006705922636466453,
+            "max_abs": 672.0
+          },
+          "vs_runtime_bf16_with_same_fp32_islands": {
+            "nonfinite": 0,
+            "relative_l2": 0.007672607508121474,
+            "max_abs": 768.0
+          },
+          "storage_cast_events": 84,
+          "max_single_cast_nonzero_to_zero": 39,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        }
+      ],
+      "bf16_reference_operators": {
+        "adaln_proj.linear": "torch.float32",
+        "norm1": "torch.bfloat16",
+        "attn.qkv_proj": "torch.bfloat16",
+        "attn.out_proj": "torch.bfloat16",
+        "norm2": "torch.bfloat16",
+        "mlp.fc1": "torch.bfloat16"
+      },
+      "matched_kitchen_bf16_vs_native": {
+        "nonfinite": 0,
+        "relative_l2": 0.007758864988015998,
+        "max_abs": 1024.0
+      }
+    },
+    {
+      "file": "dit_layer24_stress.json",
+      "sha256": "cc73b2a01cd1b868c736e6fcda3d091f3baf715f4c389735c0c2e62ace0d28df",
+      "configuration": {
+        "mode": "dit",
+        "tokens": 513,
+        "layer": 24,
+        "exponent": 6,
+        "lora": null
+      },
+      "distribution": {
+        "source": "D:\\attention_eval\\fp16_residual_fix_20261020\\first_block.pt",
+        "sha256": "ecec1dd4cb1146f9511dd023db2ceb1092290947c6f11593fc3bdbcc340f37bb",
+        "provenance": {
+          "kind": "current pinned Native first-block reconstruction from retained real conditioning/reference/noise",
+          "seed": 20261013,
+          "width": 512,
+          "height": 512,
+          "frames": 90,
+          "sigma": 1.0,
+          "source_files": {
+            "conditioning.pt": "73318db2a3a79b556471d7539bcfca80f27b5d342cce7771e68888d8faa2b535",
+            "initial_noise.pt": "274fc8cfbbd30a2bc645827840855fbcad2b33dba31dcf3a4683a37d06d46668",
+            "sigmas.pt": "ead2c539765f0874647f27e4cc4623b8710f110cb3b693f5f639a5c7c4784e11"
+          },
+          "scope": "Native front-end operators and text refiner only; zero main DiT blocks, no TE/VAE/generation"
+        },
+        "shape": [
+          513,
+          5376
+        ],
+        "layer": 24,
+        "caveat": "Real first-block input reconstruction; other layer indices are stress tests, not their native trajectories."
+      },
+      "cases": [
+        {
+          "flow": "bf16_reference",
+          "exponent": 0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 32000.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 6,
+            "zeros": 0
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.045822835071021174,
+            "max_abs": 1664.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.bfloat16",
+            "cast_nonzero_to_zero": 0,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.bfloat16",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 95.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 102,
+            "zeros": 0
+          },
+          "vs_native_kitchen_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.04778877980070623,
+            "max_abs": 1200.0
+          },
+          "sdpa_attention_ablation_vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.038390452038004834,
+            "max_abs": 1280.0
+          },
+          "native_bf16_norm_modulation_residual_rounding_ablation": {
+            "nonfinite": 0,
+            "relative_l2": 0.03390559761083415,
+            "max_abs": 848.0
+          },
+          "native_bf16_rounding_ablation_vs_matched_kitchen": {
+            "nonfinite": 0,
+            "relative_l2": 0.029611142597726223,
+            "max_abs": 672.0
+          },
+          "storage_cast_events": 84,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        },
+        {
+          "flow": "fp16",
+          "exponent": 0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 31760.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 11,
+            "zeros": 0
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.04668915174301021,
+            "max_abs": 1424.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.float16",
+            "cast_nonzero_to_zero": 1,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.float16",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 95.1875,
+            "above_fp16": 0,
+            "subnormal_fp16": 101,
+            "zeros": 1
+          },
+          "vs_native_kitchen_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.0490444574885641,
+            "max_abs": 1030.0
+          },
+          "sdpa_attention_ablation_vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.03923728148095392,
+            "max_abs": 1296.0
+          },
+          "vs_runtime_bf16_with_same_fp32_islands": {
+            "nonfinite": 0,
+            "relative_l2": 0.04593482699352799,
+            "max_abs": 1136.0
+          },
+          "storage_cast_events": 84,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        },
+        {
+          "flow": "fp16",
+          "exponent": 4,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 31760.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 11,
+            "zeros": 0
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.04668915174301072,
+            "max_abs": 1424.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.float16",
+            "cast_nonzero_to_zero": 2,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.float16",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 5.94921875,
+            "above_fp16": 0,
+            "subnormal_fp16": 1676,
+            "zeros": 2
+          },
+          "vs_native_kitchen_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.04904445748856451,
+            "max_abs": 1030.0
+          },
+          "sdpa_attention_ablation_vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.039237281480955,
+            "max_abs": 1296.0
+          },
+          "vs_runtime_bf16_with_same_fp32_islands": {
+            "nonfinite": 0,
+            "relative_l2": 0.04593482699352849,
+            "max_abs": 1136.0
+          },
+          "storage_cast_events": 84,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        },
+        {
+          "flow": "fp16",
+          "exponent": 6,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 31936.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 7,
+            "zeros": 0
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.04665897479839661,
+            "max_abs": 1600.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.float16",
+            "cast_nonzero_to_zero": 2,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.float16",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 1.4873046875,
+            "above_fp16": 0,
+            "subnormal_fp16": 6803,
+            "zeros": 2
+          },
+          "vs_native_kitchen_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.04898445383147569,
+            "max_abs": 964.0
+          },
+          "sdpa_attention_ablation_vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.03931159355457038,
+            "max_abs": 1264.0
+          },
+          "vs_runtime_bf16_with_same_fp32_islands": {
+            "nonfinite": 0,
+            "relative_l2": 0.04594976407142054,
+            "max_abs": 1248.0
+          },
+          "storage_cast_events": 84,
+          "max_single_cast_nonzero_to_zero": 1,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        }
+      ],
+      "bf16_reference_operators": {
+        "adaln_proj.linear": "torch.float32",
+        "norm1": "torch.bfloat16",
+        "attn.qkv_proj": "torch.bfloat16",
+        "attn.out_proj": "torch.bfloat16",
+        "norm2": "torch.bfloat16",
+        "mlp.fc1": "torch.bfloat16"
+      },
+      "matched_kitchen_bf16_vs_native": {
+        "nonfinite": 0,
+        "relative_l2": 0.032646992261560495,
+        "max_abs": 1024.0
+      }
+    },
+    {
+      "file": "dit_layer49_stress.json",
+      "sha256": "ac547a2223869daebf45b3ac3a9e45f6d954aa972093e13cfdc3747e7123fd36",
+      "configuration": {
+        "mode": "dit",
+        "tokens": 513,
+        "layer": 49,
+        "exponent": 6,
+        "lora": null
+      },
+      "distribution": {
+        "source": "D:\\attention_eval\\fp16_residual_fix_20261020\\first_block.pt",
+        "sha256": "ecec1dd4cb1146f9511dd023db2ceb1092290947c6f11593fc3bdbcc340f37bb",
+        "provenance": {
+          "kind": "current pinned Native first-block reconstruction from retained real conditioning/reference/noise",
+          "seed": 20261013,
+          "width": 512,
+          "height": 512,
+          "frames": 90,
+          "sigma": 1.0,
+          "source_files": {
+            "conditioning.pt": "73318db2a3a79b556471d7539bcfca80f27b5d342cce7771e68888d8faa2b535",
+            "initial_noise.pt": "274fc8cfbbd30a2bc645827840855fbcad2b33dba31dcf3a4683a37d06d46668",
+            "sigmas.pt": "ead2c539765f0874647f27e4cc4623b8710f110cb3b693f5f639a5c7c4784e11"
+          },
+          "scope": "Native front-end operators and text refiner only; zero main DiT blocks, no TE/VAE/generation"
+        },
+        "shape": [
+          513,
+          5376
+        ],
+        "layer": 49,
+        "caveat": "Real first-block input reconstruction; other layer indices are stress tests, not their native trajectories."
+      },
+      "cases": [
+        {
+          "flow": "bf16_reference",
+          "exponent": 0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 978944.0,
+            "above_fp16": 18481,
+            "subnormal_fp16": 1,
+            "zeros": 0
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.03095671888185029,
+            "max_abs": 65536.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.bfloat16",
+            "cast_nonzero_to_zero": 0,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.bfloat16",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 95.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 102,
+            "zeros": 0
+          },
+          "vs_native_kitchen_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.032647178343236986,
+            "max_abs": 81920.0
+          },
+          "sdpa_attention_ablation_vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.0299199763744441,
+            "max_abs": 61440.0
+          },
+          "native_bf16_norm_modulation_residual_rounding_ablation": {
+            "nonfinite": 0,
+            "relative_l2": 0.022480502511511957,
+            "max_abs": 32768.0
+          },
+          "native_bf16_rounding_ablation_vs_matched_kitchen": {
+            "nonfinite": 0,
+            "relative_l2": 0.021631266957065402,
+            "max_abs": 36864.0
+          },
+          "storage_cast_events": 84,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        },
+        {
+          "flow": "fp16",
+          "exponent": 0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 37900,
+            "maximum": 65504.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 1,
+            "zeros": 0
+          },
+          "vs_native_bf16": {
+            "nonfinite": 37900,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "rank_equal": false,
+          "repeat_equal": false,
+          "input_cast": {
+            "storage_dtype": "torch.float16",
+            "cast_nonzero_to_zero": 1,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.float16",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 95.1875,
+            "above_fp16": 0,
+            "subnormal_fp16": 101,
+            "zeros": 1
+          },
+          "vs_native_kitchen_bf16": {
+            "nonfinite": 37900,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "sdpa_attention_ablation_vs_native_bf16": {
+            "nonfinite": 37921,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "vs_runtime_bf16_with_same_fp32_islands": {
+            "nonfinite": 37900,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "storage_cast_events": 84,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 2310,
+          "observed_nonfinite": true
+        },
+        {
+          "flow": "fp16",
+          "exponent": 4,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 1,
+            "maximum": 881664.0,
+            "above_fp16": 18152,
+            "subnormal_fp16": 1,
+            "zeros": 0
+          },
+          "vs_native_bf16": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.float16",
+            "cast_nonzero_to_zero": 2,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.float16",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 5.94921875,
+            "above_fp16": 0,
+            "subnormal_fp16": 1676,
+            "zeros": 2
+          },
+          "vs_native_kitchen_bf16": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "sdpa_attention_ablation_vs_native_bf16": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "vs_runtime_bf16_with_same_fp32_islands": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "storage_cast_events": 84,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": true
+        },
+        {
+          "flow": "fp16",
+          "exponent": 6,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 964096.0,
+            "above_fp16": 18156,
+            "subnormal_fp16": 1,
+            "zeros": 0
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.02815599872503331,
+            "max_abs": 44032.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.float16",
+            "cast_nonzero_to_zero": 2,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.float16",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 1.4873046875,
+            "above_fp16": 0,
+            "subnormal_fp16": 6803,
+            "zeros": 2
+          },
+          "vs_native_kitchen_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.029385290867837928,
+            "max_abs": 48128.0
+          },
+          "sdpa_attention_ablation_vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.02638663537603297,
+            "max_abs": 38144.0
+          },
+          "vs_runtime_bf16_with_same_fp32_islands": {
+            "nonfinite": 0,
+            "relative_l2": 0.0294359708171664,
+            "max_abs": 59648.0
+          },
+          "storage_cast_events": 84,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        }
+      ],
+      "bf16_reference_operators": {
+        "adaln_proj.linear": "torch.float32",
+        "norm1": "torch.bfloat16",
+        "attn.qkv_proj": "torch.bfloat16",
+        "attn.out_proj": "torch.bfloat16",
+        "norm2": "torch.bfloat16",
+        "mlp.fc1": "torch.bfloat16"
+      },
+      "matched_kitchen_bf16_vs_native": {
+        "nonfinite": 0,
+        "relative_l2": 0.014156692849309899,
+        "max_abs": 16384.0
+      }
+    },
+    {
+      "file": "te_layer0.json",
+      "sha256": "7559c01261515211c2ff3afbfa21db472cefec38f089154e349549c6eb500b0f",
+      "configuration": {
+        "mode": "te",
+        "tokens": 257,
+        "layer": 0,
+        "exponent": 6,
+        "lora": null
+      },
+      "distribution": {
+        "source": "Seeded synthetic TE inputs; no real TE input/trajectory claim",
+        "shape": [
+          1,
+          257,
+          5120
+        ],
+        "layer": 0
+      },
+      "cases": [
+        {
+          "flow": "bf16_reference",
+          "exponent": 0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 5.625,
+            "above_fp16": 0,
+            "subnormal_fp16": 4,
+            "zeros": 190
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.0,
+            "max_abs": 0.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.bfloat16",
+            "cast_nonzero_to_zero": 0,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.bfloat16",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 1.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 77,
+            "zeros": 0
+          },
+          "storage_cast_events": 12,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        },
+        {
+          "flow": "fp16",
+          "exponent": 0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 5.58984375,
+            "above_fp16": 0,
+            "subnormal_fp16": 40,
+            "zeros": 26
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.0032842727369768216,
+            "max_abs": 0.05078125
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.float16",
+            "cast_nonzero_to_zero": 0,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.float16",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 1.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 77,
+            "zeros": 0
+          },
+          "vs_runtime_bf16_with_same_fp32_islands": {
+            "nonfinite": 0,
+            "relative_l2": 0.0032842727369768216,
+            "max_abs": 0.05078125
+          },
+          "storage_cast_events": 12,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        },
+        {
+          "flow": "fp16",
+          "exponent": 4,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 5.58984375,
+            "above_fp16": 0,
+            "subnormal_fp16": 42,
+            "zeros": 23
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.00328360727908844,
+            "max_abs": 0.05078125
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.float16",
+            "cast_nonzero_to_zero": 0,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.float16",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 0.0625,
+            "above_fp16": 0,
+            "subnormal_fp16": 1281,
+            "zeros": 0
+          },
+          "vs_runtime_bf16_with_same_fp32_islands": {
+            "nonfinite": 0,
+            "relative_l2": 0.00328360727908844,
+            "max_abs": 0.05078125
+          },
+          "storage_cast_events": 12,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        },
+        {
+          "flow": "fp16",
+          "exponent": 6,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 5.58984375,
+            "above_fp16": 0,
+            "subnormal_fp16": 43,
+            "zeros": 29
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.003285889289599316,
+            "max_abs": 0.05078125
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.float16",
+            "cast_nonzero_to_zero": 5,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.float16",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 0.015625,
+            "above_fp16": 0,
+            "subnormal_fp16": 5146,
+            "zeros": 5
+          },
+          "vs_runtime_bf16_with_same_fp32_islands": {
+            "nonfinite": 0,
+            "relative_l2": 0.003285889289599316,
+            "max_abs": 0.05078125
+          },
+          "storage_cast_events": 12,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        }
+      ],
+      "bf16_reference_operators": {
+        "input_layernorm": "torch.bfloat16",
+        "self_attn.q_proj": "torch.bfloat16",
+        "self_attn.k_proj": "torch.bfloat16",
+        "self_attn.v_proj": "torch.bfloat16",
+        "self_attn.q_norm": "torch.bfloat16",
+        "self_attn.k_norm": "torch.bfloat16",
+        "self_attn.o_proj": "torch.bfloat16",
+        "post_attention_layernorm": "torch.bfloat16",
+        "mlp.gate_proj": "torch.bfloat16",
+        "mlp.up_proj": "torch.bfloat16",
+        "mlp.down_proj": "torch.bfloat16"
+      },
+      "matched_kitchen_bf16_vs_native": null
+    },
+    {
+      "file": "te_layer49_stress.json",
+      "sha256": "795d9a0d56dca0879d33c7037f8306e54d9726e6ca30e1606fed49c3dbc082af",
+      "configuration": {
+        "mode": "te",
+        "tokens": 257,
+        "layer": 49,
+        "exponent": 6,
+        "lora": null
+      },
+      "distribution": {
+        "source": "Seeded synthetic TE inputs; no real TE input/trajectory claim",
+        "shape": [
+          1,
+          257,
+          5120
+        ],
+        "layer": 49
+      },
+      "cases": [
+        {
+          "flow": "bf16_reference",
+          "exponent": 0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 50.25,
+            "above_fp16": 0,
+            "subnormal_fp16": 0,
+            "zeros": 788
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.0,
+            "max_abs": 0.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.bfloat16",
+            "cast_nonzero_to_zero": 0,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.bfloat16",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 1.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 77,
+            "zeros": 0
+          },
+          "storage_cast_events": 12,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        },
+        {
+          "flow": "fp16",
+          "exponent": 0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 50.21875,
+            "above_fp16": 0,
+            "subnormal_fp16": 0,
+            "zeros": 103
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.03937207274553859,
+            "max_abs": 1.25
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.float16",
+            "cast_nonzero_to_zero": 0,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.float16",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 1.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 77,
+            "zeros": 0
+          },
+          "vs_runtime_bf16_with_same_fp32_islands": {
+            "nonfinite": 0,
+            "relative_l2": 0.03937207274553859,
+            "max_abs": 1.25
+          },
+          "storage_cast_events": 12,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        },
+        {
+          "flow": "fp16",
+          "exponent": 4,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 50.21875,
+            "above_fp16": 0,
+            "subnormal_fp16": 1,
+            "zeros": 94
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.03937336889002397,
+            "max_abs": 1.25
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.float16",
+            "cast_nonzero_to_zero": 0,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.float16",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 0.0625,
+            "above_fp16": 0,
+            "subnormal_fp16": 1281,
+            "zeros": 0
+          },
+          "vs_runtime_bf16_with_same_fp32_islands": {
+            "nonfinite": 0,
+            "relative_l2": 0.03937336889002397,
+            "max_abs": 1.25
+          },
+          "storage_cast_events": 12,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        },
+        {
+          "flow": "fp16",
+          "exponent": 6,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 50.21875,
+            "above_fp16": 0,
+            "subnormal_fp16": 1,
+            "zeros": 97
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.03936643675264199,
+            "max_abs": 1.203125
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.float16",
+            "cast_nonzero_to_zero": 5,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.float16",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 0.015625,
+            "above_fp16": 0,
+            "subnormal_fp16": 5146,
+            "zeros": 5
+          },
+          "vs_runtime_bf16_with_same_fp32_islands": {
+            "nonfinite": 0,
+            "relative_l2": 0.03936643675264199,
+            "max_abs": 1.203125
+          },
+          "storage_cast_events": 12,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        }
+      ],
+      "bf16_reference_operators": {
+        "input_layernorm": "torch.bfloat16",
+        "self_attn.q_proj": "torch.bfloat16",
+        "self_attn.k_proj": "torch.bfloat16",
+        "self_attn.v_proj": "torch.bfloat16",
+        "self_attn.q_norm": "torch.bfloat16",
+        "self_attn.k_norm": "torch.bfloat16",
+        "self_attn.o_proj": "torch.bfloat16",
+        "post_attention_layernorm": "torch.bfloat16",
+        "mlp.gate_proj": "torch.bfloat16",
+        "mlp.up_proj": "torch.bfloat16",
+        "mlp.down_proj": "torch.bfloat16"
+      },
+      "matched_kitchen_bf16_vs_native": null
+    },
+    {
+      "file": "dit_lora_513_v2.json",
+      "sha256": "0e7d495f9bb4e1200ec98e9865628850af11e54de82e28253caab0eb05d149e5",
+      "configuration": {
+        "mode": "dit",
+        "tokens": 513,
+        "layer": 0,
+        "exponent": 6,
+        "lora": "D:\\minimaxH3\\loras\\dmad_minimax_h3_4step_full_critic_comfyui.safetensors"
+      },
+      "distribution": {
+        "source": "D:\\attention_eval\\fp16_residual_fix_20261020\\first_block.pt",
+        "sha256": "ecec1dd4cb1146f9511dd023db2ceb1092290947c6f11593fc3bdbcc340f37bb",
+        "provenance": {
+          "kind": "current pinned Native first-block reconstruction from retained real conditioning/reference/noise",
+          "seed": 20261013,
+          "width": 512,
+          "height": 512,
+          "frames": 90,
+          "sigma": 1.0,
+          "source_files": {
+            "conditioning.pt": "73318db2a3a79b556471d7539bcfca80f27b5d342cce7771e68888d8faa2b535",
+            "initial_noise.pt": "274fc8cfbbd30a2bc645827840855fbcad2b33dba31dcf3a4683a37d06d46668",
+            "sigmas.pt": "ead2c539765f0874647f27e4cc4623b8710f110cb3b693f5f639a5c7c4784e11"
+          },
+          "scope": "Native front-end operators and text refiner only; zero main DiT blocks, no TE/VAE/generation"
+        },
+        "shape": [
+          513,
+          5376
+        ],
+        "layer": 0,
+        "caveat": "Real first-block input reconstruction; other layer indices are stress tests, not their native trajectories."
+      },
+      "cases": [
+        {
+          "flow": "bf16_reference",
+          "exponent": 0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 87552.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 72,
+            "zeros": 0
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.012878693816934112,
+            "max_abs": 1536.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.bfloat16",
+            "cast_nonzero_to_zero": 0,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.bfloat16",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 95.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 102,
+            "zeros": 0
+          },
+          "vs_native_kitchen_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.017394209619224874,
+            "max_abs": 2048.0
+          },
+          "sdpa_attention_ablation_vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.004793332855705073,
+            "max_abs": 256.0
+          },
+          "native_bf16_norm_modulation_residual_rounding_ablation": {
+            "nonfinite": 0,
+            "relative_l2": 0.010085487986794575,
+            "max_abs": 1024.0
+          },
+          "native_bf16_rounding_ablation_vs_matched_kitchen": {
+            "nonfinite": 0,
+            "relative_l2": 0.012667372152864427,
+            "max_abs": 1536.0
+          },
+          "storage_cast_events": 84,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        },
+        {
+          "flow": "fp16",
+          "exponent": 0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 1,
+            "maximum": 42208.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 78,
+            "zeros": 0
+          },
+          "vs_native_bf16": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.float16",
+            "cast_nonzero_to_zero": 1,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.float16",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 95.1875,
+            "above_fp16": 0,
+            "subnormal_fp16": 101,
+            "zeros": 1
+          },
+          "vs_native_kitchen_bf16": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "sdpa_attention_ablation_vs_native_bf16": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "vs_runtime_bf16_with_same_fp32_islands": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "storage_cast_events": 84,
+          "max_single_cast_nonzero_to_zero": 1,
+          "max_single_cast_finite_to_nonfinite": 1,
+          "observed_nonfinite": true
+        },
+        {
+          "flow": "fp16",
+          "exponent": 4,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 87936.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 76,
+            "zeros": 0
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.01022112217154882,
+            "max_abs": 1152.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.float16",
+            "cast_nonzero_to_zero": 2,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.float16",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 5.94921875,
+            "above_fp16": 0,
+            "subnormal_fp16": 1676,
+            "zeros": 2
+          },
+          "vs_native_kitchen_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.014297743622555783,
+            "max_abs": 1664.0
+          },
+          "sdpa_attention_ablation_vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.007995952868733159,
+            "max_abs": 704.0
+          },
+          "vs_runtime_bf16_with_same_fp32_islands": {
+            "nonfinite": 0,
+            "relative_l2": 0.006462711043234885,
+            "max_abs": 384.0
+          },
+          "storage_cast_events": 84,
+          "max_single_cast_nonzero_to_zero": 1,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        },
+        {
+          "flow": "fp16",
+          "exponent": 6,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 87936.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 71,
+            "zeros": 3
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.010221122860201373,
+            "max_abs": 1152.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "input_cast": {
+            "storage_dtype": "torch.float16",
+            "cast_nonzero_to_zero": 2,
+            "cast_finite_to_nonfinite": 0,
+            "dtype": "torch.float16",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 1.4873046875,
+            "above_fp16": 0,
+            "subnormal_fp16": 6803,
+            "zeros": 2
+          },
+          "vs_native_kitchen_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.014297743536519443,
+            "max_abs": 1664.0
+          },
+          "sdpa_attention_ablation_vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.007995967407055058,
+            "max_abs": 704.0
+          },
+          "vs_runtime_bf16_with_same_fp32_islands": {
+            "nonfinite": 0,
+            "relative_l2": 0.006462706195103414,
+            "max_abs": 384.0
+          },
+          "storage_cast_events": 84,
+          "max_single_cast_nonzero_to_zero": 2,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        }
+      ],
+      "bf16_reference_operators": {
+        "adaln_proj.linear": "torch.float32",
+        "norm1": "torch.bfloat16",
+        "attn.qkv_proj.base": "torch.bfloat16",
+        "attn.out_proj.base": "torch.bfloat16",
+        "norm2": "torch.bfloat16",
+        "mlp.fc1": "torch.bfloat16"
+      },
+      "matched_kitchen_bf16_vs_native": {
+        "nonfinite": 0,
+        "relative_l2": 0.008855695998026276,
+        "max_abs": 768.0
+      }
+    },
+    {
+      "file": "frontend.json",
+      "sha256": "0f93d430ac7081ba094f4c119151de1026a9be331707e8fb5d47f88b9c2c38f6",
+      "configuration": {
+        "mode": "frontend",
+        "tokens": 513,
+        "layer": 0,
+        "exponent": 6,
+        "lora": null
+      },
+      "distribution": {
+        "source": "D:\\attention_eval\\quality_constrained_20261015\\quality_challenge_v1\\generation_screen\\challenge_inputs_seed20261013\\conditioning.pt",
+        "sha256": "73318db2a3a79b556471d7539bcfca80f27b5d342cce7771e68888d8faa2b535",
+        "shape": [
+          1,
+          417,
+          5120
+        ]
+      },
+      "cases": [
+        {
+          "stage": "condition_proj_and_native_sdpa_refiner",
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.007244346034811279,
+            "max_abs": 1.125
+          },
+          "output": {
+            "dtype": "torch.float16",
+            "elements": 2241792,
+            "nonfinite": 0,
+            "maximum": 113.5625,
+            "above_fp16": 0,
+            "subnormal_fp16": 1,
+            "zeros": 549
+          },
+          "storage_dtype": "torch.float16",
+          "storage_cast_events": 9,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        },
+        {
+          "stage": "all_modality_packing",
+          "storage_dtype": "torch.float16",
+          "shape": [
+            7895,
+            5376
+          ],
+          "output": {
+            "dtype": "torch.float16",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 1.7744140625,
+            "above_fp16": 0,
+            "subnormal_fp16": 104292,
+            "zeros": 605
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.002834281407355952,
+            "max_abs": 1.125
+          },
+          "storage_cast_events": 0,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        }
+      ],
+      "bf16_reference_operators": {
+        "blocks.0.norm1": "torch.bfloat16",
+        "blocks.0.attn.base.qkv_proj": "torch.bfloat16",
+        "blocks.0.attn.base.q_norm": "torch.bfloat16",
+        "blocks.0.attn.base.k_norm": "torch.bfloat16",
+        "blocks.0.attn.base.out_proj": "torch.bfloat16",
+        "blocks.0.norm2": "torch.bfloat16",
+        "blocks.0.mlp.fc1": "torch.bfloat16",
+        "blocks.0.mlp.fc2": "torch.bfloat16",
+        "blocks.1.norm1": "torch.bfloat16",
+        "blocks.1.attn.base.qkv_proj": "torch.bfloat16",
+        "blocks.1.attn.base.q_norm": "torch.bfloat16",
+        "blocks.1.attn.base.k_norm": "torch.bfloat16",
+        "blocks.1.attn.base.out_proj": "torch.bfloat16",
+        "blocks.1.norm2": "torch.bfloat16",
+        "blocks.1.mlp.fc1": "torch.bfloat16",
+        "blocks.1.mlp.fc2": "torch.bfloat16",
+        "final_norm": "torch.bfloat16"
+      },
+      "matched_kitchen_bf16_vs_native": null
+    },
+    {
+      "file": "runtime.json",
+      "sha256": "4d1fd554f52c93ff1d35d112b81de3bb74d270a0b8f914022eff77e70cd8a9a2",
+      "configuration": {
+        "mode": "runtime",
+        "tokens": 513,
+        "layer": 0,
+        "exponent": 6,
+        "lora": null
+      },
+      "distribution": null,
+      "cases": [
+        {
+          "stage": "actual_preprocessing_leases_and_broadcasts",
+          "refined_dtype": "torch.float16",
+          "packed_dtype": "torch.float16",
+          "refined_rank_exact": true,
+          "packed_rank_exact": true,
+          "output": {
+            "dtype": "torch.float16",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 1.7744140625,
+            "above_fp16": 0,
+            "subnormal_fp16": 104292,
+            "zeros": 605
+          },
+          "collective_steps_released": true,
+          "storage_cast_events": 0,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        }
+      ],
+      "bf16_reference_operators": {},
+      "matched_kitchen_bf16_vs_native": null
+    },
+    {
+      "file": "vision.json",
+      "sha256": "3d64a2338022057a860a870cfffd790ee34c83b1057a5e86f6488b7979f9e7ec",
+      "configuration": {
+        "mode": "vision",
+        "tokens": 513,
+        "layer": 0,
+        "exponent": 6,
+        "lora": null
+      },
+      "distribution": {
+        "image": "C:\\Users\\Administrator\\Documents\\project\\2xT4 minimax h3\\bench_assets\\tokyo_neon.jpg",
+        "sha256": "7685f872c6ff36df72412cb551c3b6eb44bcb8d5a624ce2adf83f8bc2f302193",
+        "max_pixels": 65536,
+        "grid": [
+          [
+            1,
+            12,
+            18
+          ]
+        ],
+        "caveat": "Native Tokyo image preprocessing at bounded resolution; not the full reference workload."
+      },
+      "cases": [
+        {
+          "stage": "default_fp16_trained_27_block_vision_and_all_deepstack_mergers",
+          "vs_native_bf16": [
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.033019158172359786,
+              "max_abs": 0.796875
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.01168066380753148,
+              "max_abs": 0.11962890625
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.01859417181736029,
+              "max_abs": 0.3203125
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.026261221843916757,
+              "max_abs": 0.26953125
+            }
+          ],
+          "storage_cast_events": 0,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        },
+        {
+          "stage": "optional_c16_vision_fold",
+          "vs_native_bf16": [
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.033389333097733634,
+              "max_abs": 0.8125
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.011743685722516052,
+              "max_abs": 0.12353515625
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.018599445704993008,
+              "max_abs": 0.314453125
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.026232598194873807,
+              "max_abs": 0.2734375
+            }
+          ],
+          "vs_unscaled_fp16": [
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.0035035445601050035,
+              "max_abs": 0.0859375
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.0011664549293533364,
+              "max_abs": 0.0078125
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.0019301961672169288,
+              "max_abs": 0.01458740234375
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.002929560272024229,
+              "max_abs": 0.015625
+            }
+          ],
+          "storage_cast_events": 58,
+          "max_single_cast_nonzero_to_zero": 2,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        }
+      ],
+      "bf16_reference_operators": {
+        "patch_embed.proj": "torch.bfloat16",
+        "pos_embed": "torch.bfloat16",
+        "rotary_pos_emb": "torch.float32",
+        "blocks.0.norm1": "torch.bfloat16",
+        "blocks.0.attn.qkv": "torch.bfloat16",
+        "blocks.0.attn.proj": "torch.bfloat16",
+        "blocks.0.norm2": "torch.bfloat16",
+        "blocks.0.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.0.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.1.norm1": "torch.bfloat16",
+        "blocks.1.attn.qkv": "torch.bfloat16",
+        "blocks.1.attn.proj": "torch.bfloat16",
+        "blocks.1.norm2": "torch.bfloat16",
+        "blocks.1.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.1.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.2.norm1": "torch.bfloat16",
+        "blocks.2.attn.qkv": "torch.bfloat16",
+        "blocks.2.attn.proj": "torch.bfloat16",
+        "blocks.2.norm2": "torch.bfloat16",
+        "blocks.2.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.2.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.3.norm1": "torch.bfloat16",
+        "blocks.3.attn.qkv": "torch.bfloat16",
+        "blocks.3.attn.proj": "torch.bfloat16",
+        "blocks.3.norm2": "torch.bfloat16",
+        "blocks.3.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.3.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.4.norm1": "torch.bfloat16",
+        "blocks.4.attn.qkv": "torch.bfloat16",
+        "blocks.4.attn.proj": "torch.bfloat16",
+        "blocks.4.norm2": "torch.bfloat16",
+        "blocks.4.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.4.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.5.norm1": "torch.bfloat16",
+        "blocks.5.attn.qkv": "torch.bfloat16",
+        "blocks.5.attn.proj": "torch.bfloat16",
+        "blocks.5.norm2": "torch.bfloat16",
+        "blocks.5.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.5.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.6.norm1": "torch.bfloat16",
+        "blocks.6.attn.qkv": "torch.bfloat16",
+        "blocks.6.attn.proj": "torch.bfloat16",
+        "blocks.6.norm2": "torch.bfloat16",
+        "blocks.6.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.6.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.7.norm1": "torch.bfloat16",
+        "blocks.7.attn.qkv": "torch.bfloat16",
+        "blocks.7.attn.proj": "torch.bfloat16",
+        "blocks.7.norm2": "torch.bfloat16",
+        "blocks.7.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.7.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.8.norm1": "torch.bfloat16",
+        "blocks.8.attn.qkv": "torch.bfloat16",
+        "blocks.8.attn.proj": "torch.bfloat16",
+        "blocks.8.norm2": "torch.bfloat16",
+        "blocks.8.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.8.mlp.linear_fc2": "torch.bfloat16",
+        "deepstack_merger_list.0.norm": "torch.bfloat16",
+        "deepstack_merger_list.0.linear_fc1": "torch.bfloat16",
+        "deepstack_merger_list.0.linear_fc2": "torch.bfloat16",
+        "blocks.9.norm1": "torch.bfloat16",
+        "blocks.9.attn.qkv": "torch.bfloat16",
+        "blocks.9.attn.proj": "torch.bfloat16",
+        "blocks.9.norm2": "torch.bfloat16",
+        "blocks.9.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.9.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.10.norm1": "torch.bfloat16",
+        "blocks.10.attn.qkv": "torch.bfloat16",
+        "blocks.10.attn.proj": "torch.bfloat16",
+        "blocks.10.norm2": "torch.bfloat16",
+        "blocks.10.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.10.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.11.norm1": "torch.bfloat16",
+        "blocks.11.attn.qkv": "torch.bfloat16",
+        "blocks.11.attn.proj": "torch.bfloat16",
+        "blocks.11.norm2": "torch.bfloat16",
+        "blocks.11.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.11.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.12.norm1": "torch.bfloat16",
+        "blocks.12.attn.qkv": "torch.bfloat16",
+        "blocks.12.attn.proj": "torch.bfloat16",
+        "blocks.12.norm2": "torch.bfloat16",
+        "blocks.12.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.12.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.13.norm1": "torch.bfloat16",
+        "blocks.13.attn.qkv": "torch.bfloat16",
+        "blocks.13.attn.proj": "torch.bfloat16",
+        "blocks.13.norm2": "torch.bfloat16",
+        "blocks.13.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.13.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.14.norm1": "torch.bfloat16",
+        "blocks.14.attn.qkv": "torch.bfloat16",
+        "blocks.14.attn.proj": "torch.bfloat16",
+        "blocks.14.norm2": "torch.bfloat16",
+        "blocks.14.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.14.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.15.norm1": "torch.bfloat16",
+        "blocks.15.attn.qkv": "torch.bfloat16",
+        "blocks.15.attn.proj": "torch.bfloat16",
+        "blocks.15.norm2": "torch.bfloat16",
+        "blocks.15.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.15.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.16.norm1": "torch.bfloat16",
+        "blocks.16.attn.qkv": "torch.bfloat16",
+        "blocks.16.attn.proj": "torch.bfloat16",
+        "blocks.16.norm2": "torch.bfloat16",
+        "blocks.16.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.16.mlp.linear_fc2": "torch.bfloat16",
+        "deepstack_merger_list.1.norm": "torch.bfloat16",
+        "deepstack_merger_list.1.linear_fc1": "torch.bfloat16",
+        "deepstack_merger_list.1.linear_fc2": "torch.bfloat16",
+        "blocks.17.norm1": "torch.bfloat16",
+        "blocks.17.attn.qkv": "torch.bfloat16",
+        "blocks.17.attn.proj": "torch.bfloat16",
+        "blocks.17.norm2": "torch.bfloat16",
+        "blocks.17.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.17.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.18.norm1": "torch.bfloat16",
+        "blocks.18.attn.qkv": "torch.bfloat16",
+        "blocks.18.attn.proj": "torch.bfloat16",
+        "blocks.18.norm2": "torch.bfloat16",
+        "blocks.18.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.18.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.19.norm1": "torch.bfloat16",
+        "blocks.19.attn.qkv": "torch.bfloat16",
+        "blocks.19.attn.proj": "torch.bfloat16",
+        "blocks.19.norm2": "torch.bfloat16",
+        "blocks.19.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.19.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.20.norm1": "torch.bfloat16",
+        "blocks.20.attn.qkv": "torch.bfloat16",
+        "blocks.20.attn.proj": "torch.bfloat16",
+        "blocks.20.norm2": "torch.bfloat16",
+        "blocks.20.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.20.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.21.norm1": "torch.bfloat16",
+        "blocks.21.attn.qkv": "torch.bfloat16",
+        "blocks.21.attn.proj": "torch.bfloat16",
+        "blocks.21.norm2": "torch.bfloat16",
+        "blocks.21.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.21.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.22.norm1": "torch.bfloat16",
+        "blocks.22.attn.qkv": "torch.bfloat16",
+        "blocks.22.attn.proj": "torch.bfloat16",
+        "blocks.22.norm2": "torch.bfloat16",
+        "blocks.22.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.22.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.23.norm1": "torch.bfloat16",
+        "blocks.23.attn.qkv": "torch.bfloat16",
+        "blocks.23.attn.proj": "torch.bfloat16",
+        "blocks.23.norm2": "torch.bfloat16",
+        "blocks.23.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.23.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.24.norm1": "torch.bfloat16",
+        "blocks.24.attn.qkv": "torch.bfloat16",
+        "blocks.24.attn.proj": "torch.bfloat16",
+        "blocks.24.norm2": "torch.bfloat16",
+        "blocks.24.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.24.mlp.linear_fc2": "torch.bfloat16",
+        "deepstack_merger_list.2.norm": "torch.bfloat16",
+        "deepstack_merger_list.2.linear_fc1": "torch.bfloat16",
+        "deepstack_merger_list.2.linear_fc2": "torch.bfloat16",
+        "blocks.25.norm1": "torch.bfloat16",
+        "blocks.25.attn.qkv": "torch.bfloat16",
+        "blocks.25.attn.proj": "torch.bfloat16",
+        "blocks.25.norm2": "torch.bfloat16",
+        "blocks.25.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.25.mlp.linear_fc2": "torch.bfloat16",
+        "blocks.26.norm1": "torch.bfloat16",
+        "blocks.26.attn.qkv": "torch.bfloat16",
+        "blocks.26.attn.proj": "torch.bfloat16",
+        "blocks.26.norm2": "torch.bfloat16",
+        "blocks.26.mlp.linear_fc1": "torch.bfloat16",
+        "blocks.26.mlp.linear_fc2": "torch.bfloat16",
+        "merger.norm": "torch.bfloat16",
+        "merger.linear_fc1": "torch.bfloat16",
+        "merger.linear_fc2": "torch.bfloat16"
+      },
+      "matched_kitchen_bf16_vs_native": null
+    },
+    {
+      "file": "video_reference_direct.json",
+      "sha256": "d715fd374410c45bc31064fef84f5b7f269b61320959b305d51fc190bcd67ec4",
+      "configuration": {
+        "mode": "video",
+        "tokens": 513,
+        "layer": 0,
+        "exponent": 6,
+        "lora": null
+      },
+      "distribution": null,
+      "cases": [
+        {
+          "stage": "default_fp16_decoder",
+          "native_fp16_exact": true,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 49152,
+            "nonfinite": 0,
+            "maximum": 2.568359375,
+            "above_fp16": 0,
+            "subnormal_fp16": 1,
+            "zeros": 0
+          },
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.018671070881016546,
+            "max_abs": 0.12255859375
+          },
+          "storage_cast_events": 0,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        },
+        {
+          "stage": "optional_c16_trained_36_block_decoder",
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.017913592198195126,
+            "max_abs": 0.155059814453125
+          },
+          "output": {
+            "dtype": "torch.float16",
+            "elements": 49152,
+            "nonfinite": 0,
+            "maximum": 2.55859375,
+            "above_fp16": 0,
+            "subnormal_fp16": 2,
+            "zeros": 0
+          },
+          "vs_unscaled_native_fp16": {
+            "nonfinite": 0,
+            "relative_l2": 0.015038676525133672,
+            "max_abs": 0.0986328125
+          },
+          "unscaled_fp16_vs_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.018671070881016546,
+            "max_abs": 0.12255859375
+          },
+          "query_tokens": 261,
+          "query_parallel_exact": true,
+          "query_rank1_none": true,
+          "storage_cast_events": 1,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        },
+        {
+          "stage": "trained_video_encoder",
+          "vs_native_bf16": {
+            "nonfinite": 0,
+            "relative_l2": 0.0027742548326898223,
+            "max_abs": 0.04296875
+          },
+          "output": {
+            "dtype": "torch.float16",
+            "elements": 192,
+            "nonfinite": 0,
+            "maximum": 7.90625,
+            "above_fp16": 0,
+            "subnormal_fp16": 0,
+            "zeros": 0
+          },
+          "caveat": "Existing FP16 encoder; synthetic pixels. Candidate freshly reloads original checkpoint after BF16 baseline.",
+          "storage_cast_events": 0,
+          "max_single_cast_nonzero_to_zero": 0,
+          "max_single_cast_finite_to_nonfinite": 0,
+          "observed_nonfinite": false
+        }
+      ],
+      "bf16_reference_operators": {
+        "x_embedder": "torch.bfloat16",
+        "pos_embed": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_0": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_1": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_2": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_3": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_4": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_5": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_6": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_7": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_8": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_9": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_10": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_11": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_12": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_13": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_14": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_15": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_16": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_17": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_18": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_19": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_20": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_21": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_22": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_23": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_24": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_25": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_26": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_27": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_28": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_29": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_30": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_31": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_32": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_33": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_34": "torch.bfloat16",
+        "__int8_attention_before_sanitizer_35": "torch.bfloat16",
+        "norm_out": "torch.bfloat16",
+        "proj_out": "torch.bfloat16"
+      },
+      "matched_kitchen_bf16_vs_native": null
+    }
+  ],
+  "reference_correction": "Historical BF16 pairwise distances, not ground-truth error. Use h3_native_fp32_flow_20261021.json."
+}

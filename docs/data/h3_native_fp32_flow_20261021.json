@@ -1,0 +1,1377 @@
+{
+  "schema": "native-fp32-flow-summary-v1",
+  "reference": "Existing legacy FP32 activation flow with current INT8 operators and mixed-precision islands retained",
+  "bf16_role": "candidate",
+  "fp16_role": "candidate",
+  "excluded": "Forced dense-FP32 study; BF16-as-truth historical comparisons",
+  "environment": {
+    "hardware": "NVIDIA GeForce RTX 5060 Ti",
+    "capability": [
+      12,
+      0
+    ],
+    "torch": "2.12.1+cu132",
+    "runtime_lock_sha256": "e3a07afb8cb79e6f45c9c0118debc4bd4008c022d2652e0891273dac2db07aa3",
+    "tf32_matmul": false,
+    "tf32_cudnn": true
+  },
+  "case_count": 38,
+  "records": [
+    {
+      "file": "dit_513.json",
+      "sha256": "0d6d9a740ee1c7a909ae24e1619289ce474961b4d3f25ad9bd1a4910dde3794d",
+      "configuration": {
+        "mode": "dit",
+        "tokens": 513,
+        "layer": 0,
+        "checkpoint": "D:\\minimaxH3\\MiniMax_H3_Ref2VA_pruned_int8_convrot.safetensors",
+        "lora": null
+      },
+      "distribution": {
+        "source": "D:\\attention_eval\\fp16_residual_fix_20261020\\first_block.pt",
+        "sha256": "ecec1dd4cb1146f9511dd023db2ceb1092290947c6f11593fc3bdbcc340f37bb",
+        "provenance": {
+          "kind": "current pinned Native first-block reconstruction from retained real conditioning/reference/noise",
+          "seed": 20261013,
+          "width": 512,
+          "height": 512,
+          "frames": 90,
+          "sigma": 1.0,
+          "source_files": {
+            "conditioning.pt": "73318db2a3a79b556471d7539bcfca80f27b5d342cce7771e68888d8faa2b535",
+            "initial_noise.pt": "274fc8cfbbd30a2bc645827840855fbcad2b33dba31dcf3a4683a37d06d46668",
+            "sigmas.pt": "ead2c539765f0874647f27e4cc4623b8710f110cb3b693f5f639a5c7c4784e11"
+          },
+          "scope": "Native front-end operators and text refiner only; zero main DiT blocks, no TE/VAE/generation"
+        },
+        "shape": [
+          513,
+          5376
+        ],
+        "layer": 0,
+        "caveat": "Retained first-block input. Other layers reuse it as a stress probe, not their actual trajectory."
+      },
+      "operator_policy": {
+        "te_attention": "tilelang_group32",
+        "dit_attention": "kitchen",
+        "row_linear_backend": "tilelang_packed",
+        "swiglu_padding": true,
+        "selective_b": true,
+        "scalar_score_workspace_mib": 96,
+        "fc2_quantizer": "owned_fp32"
+      },
+      "cases": [
+        {
+          "name": "native_fp32_flow",
+          "role": "reference",
+          "stored_dtype": "torch.float32",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 89314.015625,
+            "above_fp16": 1,
+            "subnormal_fp16": 59,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.0,
+            "max_abs": 0.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float32": 12
+          }
+        },
+        {
+          "name": "bf16_flow",
+          "role": "candidate",
+          "stored_dtype": "torch.bfloat16",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 88576.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 81,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.007302337785914758,
+            "max_abs": 738.015625
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.bfloat16": 12
+          }
+        },
+        {
+          "name": "fp16_unscaled",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 1,
+            "maximum": 42784.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 73,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 12
+          }
+        },
+        {
+          "name": "fp16_fold_c16",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 16.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 89280.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 73,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.0026218271608758276,
+            "max_abs": 75.53515625
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 12
+          }
+        },
+        {
+          "name": "fp16_fold_c64",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 64.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 89280.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 70,
+            "zeros": 2
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.0026218321438260354,
+            "max_abs": 75.53515625
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 12
+          }
+        }
+      ]
+    },
+    {
+      "file": "dit_7895.json",
+      "sha256": "847a2cce7f9db67ed4e37525d1b8957a544b1c2a0fb502c9ab4d61a7be6d59d8",
+      "configuration": {
+        "mode": "dit",
+        "tokens": 0,
+        "layer": 0,
+        "checkpoint": "D:\\minimaxH3\\MiniMax_H3_Ref2VA_pruned_int8_convrot.safetensors",
+        "lora": null
+      },
+      "distribution": {
+        "source": "D:\\attention_eval\\fp16_residual_fix_20261020\\first_block.pt",
+        "sha256": "ecec1dd4cb1146f9511dd023db2ceb1092290947c6f11593fc3bdbcc340f37bb",
+        "provenance": {
+          "kind": "current pinned Native first-block reconstruction from retained real conditioning/reference/noise",
+          "seed": 20261013,
+          "width": 512,
+          "height": 512,
+          "frames": 90,
+          "sigma": 1.0,
+          "source_files": {
+            "conditioning.pt": "73318db2a3a79b556471d7539bcfca80f27b5d342cce7771e68888d8faa2b535",
+            "initial_noise.pt": "274fc8cfbbd30a2bc645827840855fbcad2b33dba31dcf3a4683a37d06d46668",
+            "sigmas.pt": "ead2c539765f0874647f27e4cc4623b8710f110cb3b693f5f639a5c7c4784e11"
+          },
+          "scope": "Native front-end operators and text refiner only; zero main DiT blocks, no TE/VAE/generation"
+        },
+        "shape": [
+          7895,
+          5376
+        ],
+        "layer": 0,
+        "caveat": "Retained first-block input. Other layers reuse it as a stress probe, not their actual trajectory."
+      },
+      "operator_policy": {
+        "te_attention": "tilelang_group32",
+        "dit_attention": "kitchen",
+        "row_linear_backend": "tilelang_packed",
+        "swiglu_padding": true,
+        "selective_b": true,
+        "scalar_score_workspace_mib": 96,
+        "fc2_quantizer": "owned_fp32"
+      },
+      "cases": [
+        {
+          "name": "native_fp32_flow",
+          "role": "reference",
+          "stored_dtype": "torch.float32",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 110585.6640625,
+            "above_fp16": 1,
+            "subnormal_fp16": 1249,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.0,
+            "max_abs": 0.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float32": 12
+          }
+        },
+        {
+          "name": "bf16_flow",
+          "role": "candidate",
+          "stored_dtype": "torch.bfloat16",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 110080.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 1260,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.007610882792251686,
+            "max_abs": 724.265625
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.bfloat16": 12
+          }
+        },
+        {
+          "name": "fp16_unscaled",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 42443520,
+            "nonfinite": 1,
+            "maximum": 56864.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 1231,
+            "zeros": 1
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 12
+          }
+        },
+        {
+          "name": "fp16_fold_c16",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 16.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 110592.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 1202,
+            "zeros": 5
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.0026790733177162246,
+            "max_abs": 115.75
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 12
+          }
+        },
+        {
+          "name": "fp16_fold_c64",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 64.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 110592.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 1127,
+            "zeros": 39
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.002653456251253307,
+            "max_abs": 134.95703125
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 12
+          }
+        }
+      ]
+    },
+    {
+      "file": "dit_layer24_stress.json",
+      "sha256": "a0890b0ea4bdc78f2d76f52654603794c3bd794c5b6e963bf190450777c91bfc",
+      "configuration": {
+        "mode": "dit",
+        "tokens": 513,
+        "layer": 24,
+        "checkpoint": "D:\\minimaxH3\\MiniMax_H3_Ref2VA_pruned_int8_convrot.safetensors",
+        "lora": null
+      },
+      "distribution": {
+        "source": "D:\\attention_eval\\fp16_residual_fix_20261020\\first_block.pt",
+        "sha256": "ecec1dd4cb1146f9511dd023db2ceb1092290947c6f11593fc3bdbcc340f37bb",
+        "provenance": {
+          "kind": "current pinned Native first-block reconstruction from retained real conditioning/reference/noise",
+          "seed": 20261013,
+          "width": 512,
+          "height": 512,
+          "frames": 90,
+          "sigma": 1.0,
+          "source_files": {
+            "conditioning.pt": "73318db2a3a79b556471d7539bcfca80f27b5d342cce7771e68888d8faa2b535",
+            "initial_noise.pt": "274fc8cfbbd30a2bc645827840855fbcad2b33dba31dcf3a4683a37d06d46668",
+            "sigmas.pt": "ead2c539765f0874647f27e4cc4623b8710f110cb3b693f5f639a5c7c4784e11"
+          },
+          "scope": "Native front-end operators and text refiner only; zero main DiT blocks, no TE/VAE/generation"
+        },
+        "shape": [
+          513,
+          5376
+        ],
+        "layer": 24,
+        "caveat": "Retained first-block input. Other layers reuse it as a stress probe, not their actual trajectory."
+      },
+      "operator_policy": {
+        "te_attention": "tilelang_group32",
+        "dit_attention": "kitchen",
+        "row_linear_backend": "tilelang_packed",
+        "swiglu_padding": true,
+        "selective_b": true,
+        "scalar_score_workspace_mib": 96,
+        "fc2_quantizer": "owned_fp32"
+      },
+      "cases": [
+        {
+          "name": "native_fp32_flow",
+          "role": "reference",
+          "stored_dtype": "torch.float32",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 32042.986328125,
+            "above_fp16": 0,
+            "subnormal_fp16": 9,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.0,
+            "max_abs": 0.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float32": 12
+          }
+        },
+        {
+          "name": "bf16_flow",
+          "role": "candidate",
+          "stored_dtype": "torch.bfloat16",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 32000.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 6,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.04668908035460205,
+            "max_abs": 1412.14453125
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.bfloat16": 12
+          }
+        },
+        {
+          "name": "fp16_unscaled",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 31760.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 11,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.03219620438651911,
+            "max_abs": 926.0813598632812
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 12
+          }
+        },
+        {
+          "name": "fp16_fold_c16",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 16.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 31760.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 11,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.032196204386519135,
+            "max_abs": 926.0813598632812
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 12
+          }
+        },
+        {
+          "name": "fp16_fold_c64",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 64.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 31936.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 7,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.03198786299124318,
+            "max_abs": 825.0813598632812
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 12
+          }
+        }
+      ]
+    },
+    {
+      "file": "dit_layer49_stress.json",
+      "sha256": "6de41c1dafb036147c80987312125a529683f0f6902a97b71364785afa3f9942",
+      "configuration": {
+        "mode": "dit",
+        "tokens": 513,
+        "layer": 49,
+        "checkpoint": "D:\\minimaxH3\\MiniMax_H3_Ref2VA_pruned_int8_convrot.safetensors",
+        "lora": null
+      },
+      "distribution": {
+        "source": "D:\\attention_eval\\fp16_residual_fix_20261020\\first_block.pt",
+        "sha256": "ecec1dd4cb1146f9511dd023db2ceb1092290947c6f11593fc3bdbcc340f37bb",
+        "provenance": {
+          "kind": "current pinned Native first-block reconstruction from retained real conditioning/reference/noise",
+          "seed": 20261013,
+          "width": 512,
+          "height": 512,
+          "frames": 90,
+          "sigma": 1.0,
+          "source_files": {
+            "conditioning.pt": "73318db2a3a79b556471d7539bcfca80f27b5d342cce7771e68888d8faa2b535",
+            "initial_noise.pt": "274fc8cfbbd30a2bc645827840855fbcad2b33dba31dcf3a4683a37d06d46668",
+            "sigmas.pt": "ead2c539765f0874647f27e4cc4623b8710f110cb3b693f5f639a5c7c4784e11"
+          },
+          "scope": "Native front-end operators and text refiner only; zero main DiT blocks, no TE/VAE/generation"
+        },
+        "shape": [
+          513,
+          5376
+        ],
+        "layer": 49,
+        "caveat": "Retained first-block input. Other layers reuse it as a stress probe, not their actual trajectory."
+      },
+      "operator_policy": {
+        "te_attention": "tilelang_group32",
+        "dit_attention": "kitchen",
+        "row_linear_backend": "tilelang_packed",
+        "swiglu_padding": true,
+        "selective_b": true,
+        "scalar_score_workspace_mib": 96,
+        "fc2_quantizer": "owned_fp32"
+      },
+      "cases": [
+        {
+          "name": "native_fp32_flow",
+          "role": "reference",
+          "stored_dtype": "torch.float32",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 978109.4375,
+            "above_fp16": 18369,
+            "subnormal_fp16": 1,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.0,
+            "max_abs": 0.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float32": 12
+          }
+        },
+        {
+          "name": "bf16_flow",
+          "role": "candidate",
+          "stored_dtype": "torch.bfloat16",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 978944.0,
+            "above_fp16": 18481,
+            "subnormal_fp16": 1,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.02851269692847208,
+            "max_abs": 60807.28125
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.bfloat16": 12
+          }
+        },
+        {
+          "name": "fp16_unscaled",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 37900,
+            "maximum": 65504.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 1,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 37900,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "rank_equal": false,
+          "repeat_equal": false,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 12
+          }
+        },
+        {
+          "name": "fp16_fold_c16",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 16.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 1,
+            "maximum": 881664.0,
+            "above_fp16": 18152,
+            "subnormal_fp16": 1,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 12
+          }
+        },
+        {
+          "name": "fp16_fold_c64",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 64.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 964096.0,
+            "above_fp16": 18156,
+            "subnormal_fp16": 1,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.016702511330876753,
+            "max_abs": 50756.375
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 12
+          }
+        }
+      ]
+    },
+    {
+      "file": "te_layer0.json",
+      "sha256": "d34a7775170d272498e7b467d802ab92fb40a9deef0ce749900afd8a04fcd64e",
+      "configuration": {
+        "mode": "te",
+        "tokens": 257,
+        "layer": 0,
+        "checkpoint": "D:\\minimaxH3\\qwen3vl_32b_minimax_h3_int8_convrot.safetensors",
+        "lora": null
+      },
+      "distribution": {
+        "source": "Seeded synthetic, half-rounded TE input; not a real TE activation capture",
+        "seed": 20261021,
+        "shape": [
+          1,
+          257,
+          5120
+        ],
+        "layer": 0
+      },
+      "operator_policy": {
+        "te_attention": "tilelang_group32",
+        "dit_attention": "kitchen",
+        "row_linear_backend": "tilelang_packed",
+        "swiglu_padding": true,
+        "selective_b": true,
+        "scalar_score_workspace_mib": 96,
+        "fc2_quantizer": "owned_fp32"
+      },
+      "cases": [
+        {
+          "name": "native_fp32_flow",
+          "role": "reference",
+          "stored_dtype": "torch.float32",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 5.591848850250244,
+            "above_fp16": 0,
+            "subnormal_fp16": 83,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.0,
+            "max_abs": 0.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float32": 30
+          }
+        },
+        {
+          "name": "bf16_flow",
+          "role": "candidate",
+          "stored_dtype": "torch.bfloat16",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 5.625,
+            "above_fp16": 0,
+            "subnormal_fp16": 4,
+            "zeros": 190
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.0032888596768496318,
+            "max_abs": 0.05387449264526367
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.bfloat16": 30
+          }
+        },
+        {
+          "name": "fp16_unscaled",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 5.58984375,
+            "above_fp16": 0,
+            "subnormal_fp16": 40,
+            "zeros": 26
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.0010647489992912293,
+            "max_abs": 0.01383209228515625
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 30
+          }
+        },
+        {
+          "name": "fp16_fold_c16",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 16.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 5.58984375,
+            "above_fp16": 0,
+            "subnormal_fp16": 42,
+            "zeros": 23
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.001064116854620319,
+            "max_abs": 0.012082576751708984
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 30
+          }
+        },
+        {
+          "name": "fp16_fold_c64",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 64.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 5.58984375,
+            "above_fp16": 0,
+            "subnormal_fp16": 43,
+            "zeros": 29
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.0010647128725931377,
+            "max_abs": 0.01024627685546875
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 30
+          }
+        }
+      ]
+    },
+    {
+      "file": "te_layer49_stress.json",
+      "sha256": "94ceb9bcebcd9a8fa56a94bac9b556fb3e4c5c1ed5c6bbb2fba284f89c4c06c2",
+      "configuration": {
+        "mode": "te",
+        "tokens": 257,
+        "layer": 49,
+        "checkpoint": "D:\\minimaxH3\\qwen3vl_32b_minimax_h3_int8_convrot.safetensors",
+        "lora": null
+      },
+      "distribution": {
+        "source": "Seeded synthetic, half-rounded TE input; not a real TE activation capture",
+        "seed": 20261021,
+        "shape": [
+          1,
+          257,
+          5120
+        ],
+        "layer": 49
+      },
+      "operator_policy": {
+        "te_attention": "tilelang_group32",
+        "dit_attention": "kitchen",
+        "row_linear_backend": "tilelang_packed",
+        "swiglu_padding": true,
+        "selective_b": true,
+        "scalar_score_workspace_mib": 96,
+        "fc2_quantizer": "owned_fp32"
+      },
+      "cases": [
+        {
+          "name": "native_fp32_flow",
+          "role": "reference",
+          "stored_dtype": "torch.float32",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 50.3372917175293,
+            "above_fp16": 0,
+            "subnormal_fp16": 21,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.0,
+            "max_abs": 0.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float32": 30
+          }
+        },
+        {
+          "name": "bf16_flow",
+          "role": "candidate",
+          "stored_dtype": "torch.bfloat16",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 50.25,
+            "above_fp16": 0,
+            "subnormal_fp16": 0,
+            "zeros": 788
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.03990530515085006,
+            "max_abs": 1.0955123901367188
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.bfloat16": 30
+          }
+        },
+        {
+          "name": "fp16_unscaled",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 50.21875,
+            "above_fp16": 0,
+            "subnormal_fp16": 0,
+            "zeros": 103
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.024692641206266172,
+            "max_abs": 0.9098567962646484
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 30
+          }
+        },
+        {
+          "name": "fp16_fold_c16",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 16.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 50.21875,
+            "above_fp16": 0,
+            "subnormal_fp16": 1,
+            "zeros": 94
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.024691963292830046,
+            "max_abs": 0.9098567962646484
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 30
+          }
+        },
+        {
+          "name": "fp16_fold_c64",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 64.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 50.21875,
+            "above_fp16": 0,
+            "subnormal_fp16": 1,
+            "zeros": 97
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.024684978993017193,
+            "max_abs": 0.8069992065429688
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 30
+          }
+        }
+      ]
+    },
+    {
+      "file": "dit_lora_513.json",
+      "sha256": "3bce32e534de0ca98e8348f1e36c4423f27ac5e76be53eec51985da60d304616",
+      "configuration": {
+        "mode": "dit",
+        "tokens": 513,
+        "layer": 0,
+        "checkpoint": "D:\\minimaxH3\\MiniMax_H3_Ref2VA_pruned_int8_convrot.safetensors",
+        "lora": "D:\\minimaxH3\\loras\\dmad_minimax_h3_4step_full_critic_comfyui.safetensors"
+      },
+      "distribution": {
+        "source": "D:\\attention_eval\\fp16_residual_fix_20261020\\first_block.pt",
+        "sha256": "ecec1dd4cb1146f9511dd023db2ceb1092290947c6f11593fc3bdbcc340f37bb",
+        "provenance": {
+          "kind": "current pinned Native first-block reconstruction from retained real conditioning/reference/noise",
+          "seed": 20261013,
+          "width": 512,
+          "height": 512,
+          "frames": 90,
+          "sigma": 1.0,
+          "source_files": {
+            "conditioning.pt": "73318db2a3a79b556471d7539bcfca80f27b5d342cce7771e68888d8faa2b535",
+            "initial_noise.pt": "274fc8cfbbd30a2bc645827840855fbcad2b33dba31dcf3a4683a37d06d46668",
+            "sigmas.pt": "ead2c539765f0874647f27e4cc4623b8710f110cb3b693f5f639a5c7c4784e11"
+          },
+          "scope": "Native front-end operators and text refiner only; zero main DiT blocks, no TE/VAE/generation"
+        },
+        "shape": [
+          513,
+          5376
+        ],
+        "layer": 0,
+        "caveat": "Retained first-block input. Other layers reuse it as a stress probe, not their actual trajectory."
+      },
+      "operator_policy": {
+        "te_attention": "tilelang_group32",
+        "dit_attention": "kitchen",
+        "row_linear_backend": "tilelang_packed",
+        "swiglu_padding": true,
+        "selective_b": true,
+        "scalar_score_workspace_mib": 96,
+        "fc2_quantizer": "owned_fp32"
+      },
+      "cases": [
+        {
+          "name": "native_fp32_flow",
+          "role": "reference",
+          "stored_dtype": "torch.float32",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 88103.921875,
+            "above_fp16": 1,
+            "subnormal_fp16": 65,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.0,
+            "max_abs": 0.0
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float32": 12
+          }
+        },
+        {
+          "name": "bf16_flow",
+          "role": "candidate",
+          "stored_dtype": "torch.bfloat16",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 87552.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 72,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.0073946308970030536,
+            "max_abs": 551.921875
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.bfloat16": 12
+          }
+        },
+        {
+          "name": "fp16_unscaled",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 1.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 1,
+            "maximum": 42208.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 78,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 12
+          }
+        },
+        {
+          "name": "fp16_fold_c16",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 16.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 87936.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 76,
+            "zeros": 0
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.002865512500912548,
+            "max_abs": 167.921875
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 12
+          }
+        },
+        {
+          "name": "fp16_fold_c64",
+          "role": "candidate",
+          "stored_dtype": "torch.float16",
+          "divisor": 64.0,
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 87936.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 71,
+            "zeros": 3
+          },
+          "vs_native_fp32_flow": {
+            "nonfinite": 0,
+            "relative_l2": 0.0028655208999761833,
+            "max_abs": 167.921875
+          },
+          "rank_equal": true,
+          "repeat_equal": true,
+          "int8_weight_bytes_equal": true,
+          "int8_linear_calls": {
+            "torch.float16": 12
+          }
+        }
+      ]
+    },
+    {
+      "file": "frontend_native_components.json",
+      "sha256": "d8ddaab17523b6608cf7f4a6bec01a7435b5d4ced2c4eaaf6a13fd8b481a77d6",
+      "configuration": {
+        "mode": "frontend",
+        "tokens": 513,
+        "layer": 0,
+        "checkpoint": "D:\\minimaxH3\\MiniMax_H3_Ref2VA_pruned_int8_convrot.safetensors",
+        "lora": null
+      },
+      "distribution": {
+        "source": "D:\\attention_eval\\quality_constrained_20261015\\quality_challenge_v1\\generation_screen\\challenge_inputs_seed20261013\\conditioning.pt",
+        "sha256": "73318db2a3a79b556471d7539bcfca80f27b5d342cce7771e68888d8faa2b535",
+        "caveat": "Common retained conditioning/noise/reference; no fresh complete TE or denoising trajectory."
+      },
+      "operator_policy": null,
+      "cases": [
+        {
+          "name": "native_fp32_flow",
+          "role": "reference",
+          "output": [
+            {
+              "dtype": "torch.float32",
+              "elements": 2241792,
+              "nonfinite": 0,
+              "maximum": 113.51849365234375,
+              "above_fp16": 0,
+              "subnormal_fp16": 76,
+              "zeros": 0
+            },
+            {
+              "dtype": "torch.float32",
+              "elements": 42443520,
+              "nonfinite": 0,
+              "maximum": 113.51849365234375,
+              "above_fp16": 0,
+              "subnormal_fp16": 1682,
+              "zeros": 0
+            }
+          ],
+          "vs_native_fp32_flow": [
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.0,
+              "max_abs": 0.0
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.0,
+              "max_abs": 0.0
+            }
+          ],
+          "int8_linear_calls": {},
+          "native_frontend_dense_weights": true,
+          "boundaries": [
+            "refined_context",
+            "packed_input"
+          ]
+        },
+        {
+          "name": "bf16_flow",
+          "role": "candidate",
+          "output": [
+            {
+              "dtype": "torch.bfloat16",
+              "elements": 2241792,
+              "nonfinite": 0,
+              "maximum": 113.0,
+              "above_fp16": 0,
+              "subnormal_fp16": 0,
+              "zeros": 4067
+            },
+            {
+              "dtype": "torch.float32",
+              "elements": 42443520,
+              "nonfinite": 0,
+              "maximum": 113.0,
+              "above_fp16": 0,
+              "subnormal_fp16": 1589,
+              "zeros": 4067
+            }
+          ],
+          "vs_native_fp32_flow": [
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.007192623951701778,
+              "max_abs": 1.1857452392578125
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.0028059247228790977,
+              "max_abs": 1.1857452392578125
+            }
+          ],
+          "int8_linear_calls": {},
+          "native_frontend_dense_weights": true,
+          "boundaries": [
+            "refined_context",
+            "packed_input"
+          ]
+        },
+        {
+          "name": "fp16_fold_c64",
+          "role": "candidate",
+          "output": [
+            {
+              "dtype": "torch.float16",
+              "elements": 2241792,
+              "nonfinite": 0,
+              "maximum": 113.5625,
+              "above_fp16": 0,
+              "subnormal_fp16": 1,
+              "zeros": 549
+            },
+            {
+              "dtype": "torch.float32",
+              "elements": 42443520,
+              "nonfinite": 0,
+              "maximum": 113.5625,
+              "above_fp16": 0,
+              "subnormal_fp16": 1429,
+              "zeros": 605
+            }
+          ],
+          "vs_native_fp32_flow": [
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.0009007859061018981,
+              "max_abs": 0.15851593017578125
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.00035124298254828723,
+              "max_abs": 0.15851593017578125
+            }
+          ],
+          "int8_linear_calls": {},
+          "native_frontend_dense_weights": true,
+          "boundaries": [
+            "refined_context",
+            "packed_input"
+          ]
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Local SM120 with logical TP2, not physical T4/NCCL or kernel performance qualification.",
+    "SM75-only TE Group32, packed rows and fused SwiGLU use existing native fallbacks locally.",
+    "DiT input reconstructs retained first block; late layers reuse it as stress probes. TE inputs are synthetic.",
+    "Vision/Video retain Native FP16; Audio retains Native FP32. No all-FP32 conversion.",
+    "No full H3, denoising trajectory, video/audio quality or production acceptance evidence."
+  ]
+}

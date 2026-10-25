@@ -573,9 +573,9 @@
       },
       "widgets_values": [
         "minimax_h3_audio_vae_fp32_clean.safetensors",
-        "auto"
+        "native"
       ],
-      "title": "MiniMax H3 parallel VAE (Native public plan)"
+      "title": "MiniMax H3 native audio VAE"
     },
     {
       "id": 127,
@@ -625,7 +625,8 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "MiniMaxH3TP2Loader"
+        "Node name for S&R": "MiniMaxH3TP2Loader",
+        "h3_configuration_version": 2
       },
       "widgets_values": [
         "D:/minimaxH3/qwen3vl_32b_minimax_h3_int8_convrot.safetensors",
@@ -633,18 +634,27 @@
         6.0,
         3.0,
         false,
-        "scalemax",
         4.0,
-        false,
+        true,
         "tilelang_group32",
         "kitchen",
-        "tilelang_packed",
-        true,
-        true,
+        "tilelang_scaled_fp16",
         96,
-        false,
-        "owned_fp32",
-        "online"
+        true,
+        "fused_stored",
+        "offline",
+        "fp16",
+        6,
+        0,
+        0,
+        2.0,
+        true,
+        true,
+        9.0,
+        1500,
+        "",
+        true,
+        "cuda_int8_tilelang"
       ],
       "title": "MiniMax H3 TP2 — integrated operators"
     },
@@ -1623,17 +1633,36 @@
     "VHS_latentpreviewrate": 0,
     "VHS_MetadataImage": true,
     "VHS_KeepIntermediate": true,
-    "minimax_tp2_note": "Separate INT8 TP2 variant. Requires two physical CUDA GPUs and linked custom node. TE: TileLang Group32 dense; DiT: Kitchen INT8 by default, optional TileLang drop/scalar/dense; Video attention: Kitchen INT8. Packed row-linear/SwiGLU padding on SM75 FP32 fallback rotation; Selective B for qualified FC1 rank128 LoRA. Native INT32 reduction retained. Default video decode: Native-aligned query partitioning inside the Native public plan. Default audio decode: FP32 Channel Parallel, with small batch-dependent rounding error; set either VAE decode_mode to native for fallback. Original workflow preserved. H3 VAE weights load encoder-only for references and decoder-only for outputs; idle residency also preloads encoders. Optional offline LoRA uses layer-parallel baking. Component timings do not establish an integrated pipeline speedup.",
+    "minimax_tp2_note": "2026-10-24 defaults: FP16-fix /64, TE Group32, Kitchen DiT/Video, fused_stored + scaled FP16 row SUM, direct INT8 + TileLang aligned SM75 DiT columns. Offline LoRA by default: prefer bounded TP2 bundle merges for long sequences; safetensors input creates a baked checkpoint. Short/medium online remains optional with guarded owned FC1/QKV B. Lifecycle/host pressure/adaptive lookahead enabled; idle off. Single-GPU native audio. Attention alternatives preserved; no E2E speedup claim.",
     "minimax_h3_operators": {
       "te_attention": "tilelang_group32",
       "dit_attention": "kitchen",
       "video_attention": "kitchen",
-      "row_linear_backend": "tilelang_packed",
-      "swiglu_padding": true,
-      "selective_b": true,
+      "row_linear_backend": "tilelang_scaled_fp16",
       "scalar_score_workspace_mib": 96,
-      "reduction": "native_int32"
-    }
+      "reduction": "scaled_fp16",
+      "fc2_quantizer": "fused_stored",
+      "tensor_flow": "fp16",
+      "residual_exponent": 6,
+      "fallback_reduction": "native_int32",
+      "lora_row_partial_reduce": true,
+      "lora_hidden_sum": "fp32",
+      "vae_encoder_loading": "reference_demand",
+      "column_linear_backend": "cuda_int8_tilelang",
+      "lora_mode": "offline",
+      "lora_selective_qkv_b": true,
+      "adaptive_lookahead": true,
+      "prefetch_lifecycle": true,
+      "memory_pressure_aware": true
+    },
+    "minimax_h3_tensor_flow": {
+      "mode": "fp16",
+      "residual_exponent": 6,
+      "vision_residual_exponent": 0,
+      "video_residual_exponent": 0,
+      "audio_vae": "unchanged FP32"
+    },
+    "minimax_h3_audio_decode": "native_single_gpu"
   },
   "version": 0.4
 }

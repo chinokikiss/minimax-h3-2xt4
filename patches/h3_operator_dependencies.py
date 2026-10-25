@@ -2,18 +2,23 @@
 from importlib.metadata import PackageNotFoundError,version
 
 
+def _uses_tilelang(policy):
+    return (policy.te_attention=='tilelang_group32' or policy.dit_attention.startswith('tilelang_')
+            or policy.row_linear_backend.startswith('tilelang_')
+            or getattr(policy,'column_linear_backend','preallocated')!='preallocated')
+
+
 def validate_dependencies(policy,*,t4):
     packages={'comfy-kitchen':'0.2.37'}
-    tilelang=(policy.te_attention=='tilelang_group32' or policy.dit_attention.startswith('tilelang_')
-              or policy.row_linear_backend.startswith('tilelang_'))
-    if t4 and tilelang:packages['tilelang']='0.1.15'
+    tilelang=_uses_tilelang(policy)
+    if t4 and tilelang:packages['tilelang']='0.1.13'
     for package,expected in packages.items():
         try:actual=version(package)
         except PackageNotFoundError:actual='missing'
         if actual!=expected:
             raise RuntimeError(f'H3 TP2 requires {package}=={expected}; found {actual}. '
-                'This is the historical operator ABI qualification gate. Preserve the frozen environment; '
-                'qualify its differing versions at operator level before TP2 execution instead of changing packages.')
+                'This is the preserved core ABI, exercised by the 2026-10-22 physical T4 operator batch. '
+                'Preserve the environment instead of changing packages to bypass this gate.')
 
 
 def configure_compiler(policy):
@@ -22,8 +27,7 @@ def configure_compiler(policy):
     from pathlib import Path
     import shutil
     import subprocess
-    if not (policy.te_attention=='tilelang_group32' or policy.dit_attention.startswith('tilelang_')
-            or policy.row_linear_backend.startswith('tilelang_')):return
+    if not _uses_tilelang(policy):return
     compiler=os.environ.get('CUDACXX') or shutil.which('nvcc')
     if not compiler:raise RuntimeError('SM75 TileLang operators require CUDA 12.8 nvcc; set CUDACXX')
     path=Path(compiler).resolve()

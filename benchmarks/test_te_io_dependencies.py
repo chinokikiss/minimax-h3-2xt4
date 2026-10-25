@@ -3,7 +3,7 @@ from pathlib import Path
 import sys
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
-from analyze_te_io_dependencies import dependencies
+from tools.experiments.analyze_te_io_dependencies import dependencies
 
 
 def read(a,b):

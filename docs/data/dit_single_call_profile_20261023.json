@@ -1,0 +1,626 @@
+{
+  "status": "dual_t4_v1_complete_partial_profiler_coverage",
+  "date": "2026-10-23",
+  "scope": "One DiT denoiser call, not a complete four-step trajectory; 50 blocks/rank; current production defaults",
+  "target": {
+    "gpus": 2,
+    "architecture": "SM75",
+    "sequence_tokens": 51220,
+    "local_query_shape": [
+      1,
+      28,
+      51220,
+      128
+    ],
+    "video_shape": [
+      1,
+      24,
+      107,
+      32,
+      56
+    ],
+    "audio_shape": [
+      1,
+      32,
+      2,
+      603
+    ],
+    "text_shape": [
+      1,
+      1182,
+      5120
+    ]
+  },
+  "operators": {
+    "dit_attention": "kitchen",
+    "tensor_flow": "fp16",
+    "fc2_quantizer": "fused_stored",
+    "row_linear_backend": "tilelang_scaled_fp16",
+    "offline_lora": true,
+    "online_lora": false
+  },
+  "full_pipeline": false,
+  "decoders": false,
+  "operator_warmup": "One trained block, exact major operator shapes; outside the one-NFE timing",
+  "real_input_preparation": "TE and reference Video encoder once, outside profiled process; no returned activation payload",
+  "publication": {
+    "file": "6128e10d8919b0036589bcf7e36a82bc284665336562ad500ae80a74787b2f47.tar.gz",
+    "sha256": "6128e10d8919b0036589bcf7e36a82bc284665336562ad500ae80a74787b2f47",
+    "bytes": 17286883,
+    "capsule_sha256": "fc8e621c0e34e7e3dd09e3cba596685a4dda7c5994021d1dc99c81c3fc6cb596",
+    "source_files": 115,
+    "core_pins": 78,
+    "kaggle_mounts": 0,
+    "repository": "chinokikiss/minimax-h3-2xt4",
+    "branch": "codex/dit-single-profile-20261023-6128e10d",
+    "commit": "41a900987933a375802b7386f5728ca3815160f3",
+    "path": "runtime/kaggle_artifacts/6128e10d8919b0036589bcf7e36a82bc284665336562ad500ae80a74787b2f47.tar.gz",
+    "published": true,
+    "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/41a900987933a375802b7386f5728ca3815160f3/runtime/kaggle_artifacts/6128e10d8919b0036589bcf7e36a82bc284665336562ad500ae80a74787b2f47.tar.gz",
+    "working_tree_and_index_changed": false
+  },
+  "cpu_submission": {
+    "kernel": "pamcks/h3-dit-profile-cpu",
+    "submitted_utc": "2026-10-23T11:28:57.694613+00:00",
+    "returncode": 0,
+    "response": "Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.4), please consider upgrading to the latest version (2.2.5)\nKernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/pamcks/h3-dit-profile-cpu\n",
+    "notebook_sha256": "2f046d742054e6acd7410839b42c4b8d4e37010ed32c935457da06c095e8195f",
+    "source_binding": {
+      "mode": "cpu",
+      "publication": {
+        "file": "6128e10d8919b0036589bcf7e36a82bc284665336562ad500ae80a74787b2f47.tar.gz",
+        "sha256": "6128e10d8919b0036589bcf7e36a82bc284665336562ad500ae80a74787b2f47",
+        "bytes": 17286883,
+        "capsule_sha256": "fc8e621c0e34e7e3dd09e3cba596685a4dda7c5994021d1dc99c81c3fc6cb596",
+        "source_files": 115,
+        "core_pins": 78,
+        "kaggle_mounts": 0,
+        "repository": "chinokikiss/minimax-h3-2xt4",
+        "branch": "codex/dit-single-profile-20261023-6128e10d",
+        "commit": "41a900987933a375802b7386f5728ca3815160f3",
+        "path": "runtime/kaggle_artifacts/6128e10d8919b0036589bcf7e36a82bc284665336562ad500ae80a74787b2f47.tar.gz",
+        "published": true,
+        "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/41a900987933a375802b7386f5728ca3815160f3/runtime/kaggle_artifacts/6128e10d8919b0036589bcf7e36a82bc284665336562ad500ae80a74787b2f47.tar.gz",
+        "working_tree_and_index_changed": false
+      },
+      "qualification_sha256": null,
+      "kaggle_dataset_sources": [],
+      "kaggle_kernel_sources": [],
+      "temporary_private_auth": false,
+      "profile_hashes": {},
+      "setup_budget": 240,
+      "execution_budget": null,
+      "dit_lifetimes": false,
+      "profile_qualification_sha256": null
+    },
+    "final_collection_count": 1,
+    "earliest_final_collection_seconds": 360,
+    "status_polling": false
+  },
+  "cpu_qualification": {
+    "status": "cpu_ready",
+    "seconds": 107.75787037499998,
+    "tests": 48,
+    "receipt_sha256": "84b136ebbf9bd7c71cf9b283accc53531e42e3bb98a777b4eae624af1a5cb718",
+    "api": {
+      "torch": "2.11.0+cpu",
+      "cuda": null,
+      "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]",
+      "kitchen": "0.2.37",
+      "tilelang": "0.1.13",
+      "legacy_video_api": {
+        "signature": "(self, x, rotary_pos_emb, pre_norm, residual, residual_scale)",
+        "source": "/kaggle/temp/h3_light_source/ComfyUI/comfy/ldm/minimax/vae.py",
+        "gpu_available_on_cpu_host": false,
+        "qualification": "CPU signature/import check only; GPU availability is checked by the actual T4 operator gate"
+      },
+      "attention_signature": "(q: 'torch.Tensor', k: 'torch.Tensor', v: 'torch.Tensor', *, scale: 'float | None' = None, attn_mask: 'torch.Tensor | None' = None) -> 'torch.Tensor'",
+      "linear_signature": "(x: torch.Tensor, weight: torch.Tensor, weight_scale: torch.Tensor, bias: torch.Tensor | None = None, out_dtype: torch.dtype | None = None, convrot: bool = False, convrot_groupsize: int = 256, input_act: str | None = None, input_act_weight: torch.Tensor | None = None, input_act_eps: float = 0.0, residual: torch.Tensor | None = None, residual_scale: torch.Tensor | None = None) -> torch.Tensor",
+      "cuda_arch_flags": null,
+      "core_imports": "passed",
+      "tf32_default": false
+    },
+    "tools": {
+      "nsys": {
+        "path": null,
+        "available": false
+      },
+      "ncu": {
+        "path": null,
+        "available": false
+      }
+    }
+  },
+  "gpu_submission": {
+    "kernel": "pamcks/h3-dit-single-profile",
+    "submitted_utc": "2026-10-23T11:36:14.046611+00:00",
+    "returncode": 0,
+    "response": "Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.4), please consider upgrading to the latest version (2.2.5)\nKernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/pamcks/h3-dit-single-profile\n",
+    "notebook_sha256": "2e884ce9e570221573e7c88480ab577ee358f27ca617e41b4d0741e191f49fa7",
+    "source_binding": {
+      "mode": "dit-profile",
+      "publication": {
+        "file": "6128e10d8919b0036589bcf7e36a82bc284665336562ad500ae80a74787b2f47.tar.gz",
+        "sha256": "6128e10d8919b0036589bcf7e36a82bc284665336562ad500ae80a74787b2f47",
+        "bytes": 17286883,
+        "capsule_sha256": "fc8e621c0e34e7e3dd09e3cba596685a4dda7c5994021d1dc99c81c3fc6cb596",
+        "source_files": 115,
+        "core_pins": 78,
+        "kaggle_mounts": 0,
+        "repository": "chinokikiss/minimax-h3-2xt4",
+        "branch": "codex/dit-single-profile-20261023-6128e10d",
+        "commit": "41a900987933a375802b7386f5728ca3815160f3",
+        "path": "runtime/kaggle_artifacts/6128e10d8919b0036589bcf7e36a82bc284665336562ad500ae80a74787b2f47.tar.gz",
+        "published": true,
+        "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/41a900987933a375802b7386f5728ca3815160f3/runtime/kaggle_artifacts/6128e10d8919b0036589bcf7e36a82bc284665336562ad500ae80a74787b2f47.tar.gz",
+        "working_tree_and_index_changed": false
+      },
+      "qualification_sha256": "84b136ebbf9bd7c71cf9b283accc53531e42e3bb98a777b4eae624af1a5cb718",
+      "kaggle_dataset_sources": [],
+      "kaggle_kernel_sources": [],
+      "temporary_private_auth": false,
+      "profile_hashes": {},
+      "setup_budget": 240,
+      "execution_budget": 2400,
+      "dit_lifetimes": false,
+      "profile_qualification_sha256": null
+    },
+    "final_collection_count": 0,
+    "earliest_final_collection_seconds": 2760,
+    "final_collection_not_before_utc": "2026-10-23T12:22:14.046611+00:00",
+    "status_polling": false,
+    "experiment_kind": "dit_single",
+    "result_relative": "light_execution/dit_single/dit_profile/result.json",
+    "expected_prior_inputs": {
+      "conditioning": {
+        "shape": [
+          1,
+          1182,
+          5120
+        ],
+        "dtype": "torch.float32",
+        "sha256": "f5a4015826a2620b1539811908a03e8d2e2bfd8cff6bb242fd7c9087ace07288",
+        "finite": true
+      },
+      "noise_0": {
+        "shape": [
+          1,
+          24,
+          107,
+          32,
+          56
+        ],
+        "dtype": "torch.float32",
+        "sha256": "feca61da604df6ef74cd167c6bbb92882ea7f56d710578374c6ecdc8ffc8d1e5",
+        "finite": true
+      },
+      "noise_1": {
+        "shape": [
+          1,
+          32,
+          2,
+          603
+        ],
+        "dtype": "torch.float32",
+        "sha256": "20a5834541d74571d9dcf6400133069bc3b907632c6fda494a753a9353312caf",
+        "finite": true
+      }
+    },
+    "scope": "One DiT denoiser call; current defaults; untimed real conditioning preparation; no decoders or complete trajectory"
+  },
+  "collector_launch": {
+    "hidden": true,
+    "pid": 22884,
+    "launched_utc": "2026-10-23T11:37:10.9343391Z",
+    "purpose": "One final artifact collection then local CPU-only analysis",
+    "status_polling": false,
+    "stopped_utc": "2026-10-23T11:42:12.8579674Z",
+    "status": "stopped_before_collection"
+  },
+  "collector_status": {
+    "status": "collected",
+    "completed_utc": "2026-10-23T12:15:22.111226+00:00",
+    "files": 36,
+    "artifact_collection_attempts": 2,
+    "transfer_resume_authorized": true,
+    "source_binding_verified": true,
+    "sqlite_integrity_verified": true,
+    "status_polling": false,
+    "live_log_requests": 0,
+    "experiment": {
+      "status": "complete",
+      "calls_by_rank": [
+        1,
+        1
+      ],
+      "profiling_status": "partial_worker_cuda_trace_missing"
+    },
+    "prior_input_hash_matches": {
+      "conditioning": true,
+      "noise_0": true,
+      "noise_1": true
+    }
+  },
+  "collector_code": {
+    "collector_sha256": "614e629256175469fa87e7934aecb02a95adfa54d9190822c0b5ac7ff0151f13",
+    "analyzer_sha256": "874d70ddbdd37363427d2c3c71412fe9378c8bb88574bc0f021701dace78bb26",
+    "post_collection_analysis": "CPU-only; no further Kaggle calls"
+  },
+  "local_tests": {
+    "passed": true,
+    "tests": 48,
+    "failures": 0,
+    "errors": 0,
+    "source": "D:\\attention_eval\\dit_single_profile_20261023\\isolated_cpu_v3"
+  },
+  "local_attribution_tests": 2,
+  "raw_evidence_root": "D:\\attention_eval\\dit_single_profile_20261023",
+  "report_sha256": "91c391abacf384d3aa98e3cdb56ed6b8f8b6595026ff1b6b6b1216f9c4938573",
+  "profiling_limitations": [
+    "One instrumented NFE; not repeated steady-state measurements",
+    "Nested CUDA-event intervals include stream waits and host gaps; no exclusive kernel attribution",
+    "Worker NVTX scopes exist but worker CUPTI kernels are absent; parent-only kernel CSVs are invalid for DiT breakdown",
+    "NVML sampled utilization is not SM occupancy or Tensor Core utilization",
+    "No Nsight Compute hardware counters; no supported memory-stall/occupancy/bandwidth conclusions",
+    "No full trajectory, decoder execution, or generation-quality comparison"
+  ],
+  "kaggle_status_polling": false,
+  "actual_t4_execution_verified": true,
+  "collection_policy": "manual_after_user_completion_notice",
+  "automatic_collection_cancelled": true,
+  "final_results": {
+    "status": "complete_with_partial_profiler_coverage",
+    "actual_t4_execution_verified": true,
+    "artifact_count": 36,
+    "downloaded_source_binding_verified": true,
+    "compressed_sqlite_integrity_verified": true,
+    "sqlite_uncompressed_sha256": "a9036ba6bb365bb03028fc19310adeed58b4696bc5f029c167123c3820eabff6",
+    "prior_input_hash_matches": {
+      "conditioning": true,
+      "noise_0": true,
+      "noise_1": true
+    },
+    "outputs_finite": true,
+    "hardware": {
+      "devices": [
+        {
+          "name": "Tesla T4",
+          "capability": [
+            7,
+            5
+          ],
+          "uuid": "4ec49fbf-fb6d-c7f6-5e73-61bc35bbb94c"
+        },
+        {
+          "name": "Tesla T4",
+          "capability": [
+            7,
+            5
+          ],
+          "uuid": "fb8389a8-040c-e4b7-2581-5893ad89fae7"
+        }
+      ],
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "kitchen": "0.2.37",
+      "tilelang": "0.1.13"
+    },
+    "ranks": [
+      {
+        "rank": 0,
+        "calls": 1,
+        "backends": {
+          "kitchen/int8_attention": 50,
+          "current/scaled_fp16_epilogue": 100,
+          "current/fused_swiglu_quant": 50
+        },
+        "host_enqueue_seconds": 154.604111549,
+        "cuda_command_elapsed_seconds": 161.014578125,
+        "peak_allocated_gib": 10.174921035766602,
+        "peak_reserved_gib": 13.876953125,
+        "operator_warmup": {
+          "seconds": 36.87778600599995,
+          "scope": "One trained block, exact operator shapes; zero full DiT warmup calls"
+        },
+        "phases": {
+          "block_compute": {
+            "count": 51,
+            "host_seconds": 121.96020824799997,
+            "thread_cpu_seconds": 117.34778560800001,
+            "stream_elapsed_seconds": 160.4004602355957
+          },
+          "weight_acquire_and_block": {
+            "count": 51,
+            "host_seconds": 154.08546196600003,
+            "thread_cpu_seconds": 145.56194173500003,
+            "stream_elapsed_seconds": 160.82936495971677
+          },
+          "norm/modulate": {
+            "count": 100,
+            "host_seconds": 50.69346392300001,
+            "thread_cpu_seconds": 49.303614563000004,
+            "stream_elapsed_seconds": 4.710463291168215
+          },
+          "column/ConvRot": {
+            "count": 100,
+            "host_seconds": 2.3991812340000003,
+            "thread_cpu_seconds": 2.3453058989999995,
+            "stream_elapsed_seconds": 0.6540071043968205
+          },
+          "column/quantize": {
+            "count": 100,
+            "host_seconds": 5.325726375,
+            "thread_cpu_seconds": 5.288135694999999,
+            "stream_elapsed_seconds": 3.0154625644683843
+          },
+          "column/INT8_GEMM": {
+            "count": 100,
+            "host_seconds": 7.210092091,
+            "thread_cpu_seconds": 6.057363669000001,
+            "stream_elapsed_seconds": 54.019545928955054
+          },
+          "QKV/column": {
+            "count": 50,
+            "host_seconds": 2.481605795,
+            "thread_cpu_seconds": 1.7513331280000002,
+            "stream_elapsed_seconds": 29.033603820800796
+          },
+          "attention/QK_norm_RoPE": {
+            "count": 50,
+            "host_seconds": 0.7244538729999997,
+            "thread_cpu_seconds": 0.6442680019999998,
+            "stream_elapsed_seconds": 3.320526649475097
+          },
+          "attention/Kitchen_fused_QK_softmax_PV": {
+            "count": 50,
+            "host_seconds": 0.06361021199999999,
+            "thread_cpu_seconds": 0.055913942999999994,
+            "stream_elapsed_seconds": 49.75185791015627
+          },
+          "row/INT8_GEMM": {
+            "count": 100,
+            "host_seconds": 0.21207640400000002,
+            "thread_cpu_seconds": 0.1977460629999999,
+            "stream_elapsed_seconds": 9.11086374092102
+          },
+          "transport/encode": {
+            "count": 100,
+            "host_seconds": 0.024569311,
+            "thread_cpu_seconds": 0.019189179999999997,
+            "stream_elapsed_seconds": 0.6535952329635621
+          },
+          "transport/SUM": {
+            "count": 100,
+            "host_seconds": 0.03721194399999999,
+            "thread_cpu_seconds": 0.03577367400000001,
+            "stream_elapsed_seconds": 12.679374259948728
+          },
+          "transport/fused_epilogue": {
+            "count": 100,
+            "host_seconds": 0.810859311,
+            "thread_cpu_seconds": 0.7638460339999998,
+            "stream_elapsed_seconds": 0.7841155524253848
+          },
+          "O/row": {
+            "count": 50,
+            "host_seconds": 2.419116079999999,
+            "thread_cpu_seconds": 1.9484387709999997,
+            "stream_elapsed_seconds": 13.435756317138676
+          },
+          "residual/gated_add": {
+            "count": 100,
+            "host_seconds": 46.629841833,
+            "thread_cpu_seconds": 45.936325513999996,
+            "stream_elapsed_seconds": 4.0433154525756825
+          },
+          "FC1/column": {
+            "count": 50,
+            "host_seconds": 16.004774226000002,
+            "thread_cpu_seconds": 15.083367045999998,
+            "stream_elapsed_seconds": 38.40762670898438
+          },
+          "FC2/SwiGLU_ConvRot_quantize": {
+            "count": 50,
+            "host_seconds": 0.8242638999999997,
+            "thread_cpu_seconds": 0.808969943,
+            "stream_elapsed_seconds": 2.2211386909484863
+          },
+          "FC2/row": {
+            "count": 50,
+            "host_seconds": 1.7594649219999998,
+            "thread_cpu_seconds": 1.7371849430000001,
+            "stream_elapsed_seconds": 16.119325012207025
+          }
+        },
+        "nvml_samples": 316,
+        "nvml_sampled_mean_gpu_utilization": 99.68987341772151
+      },
+      {
+        "rank": 1,
+        "calls": 1,
+        "backends": {
+          "kitchen/int8_attention": 50,
+          "current/scaled_fp16_epilogue": 100,
+          "current/fused_swiglu_quant": 50
+        },
+        "host_enqueue_seconds": 154.61478661,
+        "cuda_command_elapsed_seconds": 161.015984375,
+        "peak_allocated_gib": 10.509822845458984,
+        "peak_reserved_gib": 14.283203125,
+        "operator_warmup": {
+          "seconds": 46.64598799400005,
+          "scope": "One trained block, exact operator shapes; zero full DiT warmup calls"
+        },
+        "phases": {
+          "norm/modulate": {
+            "count": 100,
+            "host_seconds": 58.799267912999994,
+            "thread_cpu_seconds": 56.994442206,
+            "stream_elapsed_seconds": 4.736228401184078
+          },
+          "column/ConvRot": {
+            "count": 100,
+            "host_seconds": 1.6245366760000002,
+            "thread_cpu_seconds": 1.5384120360000002,
+            "stream_elapsed_seconds": 0.623165599822998
+          },
+          "column/quantize": {
+            "count": 100,
+            "host_seconds": 6.491583776999999,
+            "thread_cpu_seconds": 6.425672585999999,
+            "stream_elapsed_seconds": 2.9038337326049803
+          },
+          "column/INT8_GEMM": {
+            "count": 100,
+            "host_seconds": 4.363319160999998,
+            "thread_cpu_seconds": 3.6633437779999998,
+            "stream_elapsed_seconds": 47.924137512207025
+          },
+          "QKV/column": {
+            "count": 50,
+            "host_seconds": 2.4091426530000004,
+            "thread_cpu_seconds": 1.9094471119999998,
+            "stream_elapsed_seconds": 26.370500061035152
+          },
+          "attention/QK_norm_RoPE": {
+            "count": 50,
+            "host_seconds": 0.836920976,
+            "thread_cpu_seconds": 0.666929798,
+            "stream_elapsed_seconds": 3.1934724006652835
+          },
+          "attention/Kitchen_fused_QK_softmax_PV": {
+            "count": 50,
+            "host_seconds": 0.06832887399999997,
+            "thread_cpu_seconds": 0.05399409300000001,
+            "stream_elapsed_seconds": 47.264122863769536
+          },
+          "row/INT8_GEMM": {
+            "count": 100,
+            "host_seconds": 0.21018783400000005,
+            "thread_cpu_seconds": 0.2075434,
+            "stream_elapsed_seconds": 5.6205289211273195
+          },
+          "transport/encode": {
+            "count": 100,
+            "host_seconds": 0.017923896999999998,
+            "thread_cpu_seconds": 0.016975743000000005,
+            "stream_elapsed_seconds": 0.6585574736595152
+          },
+          "transport/SUM": {
+            "count": 100,
+            "host_seconds": 0.03579321900000001,
+            "thread_cpu_seconds": 0.033410694,
+            "stream_elapsed_seconds": 16.161925041198735
+          },
+          "transport/fused_epilogue": {
+            "count": 100,
+            "host_seconds": 0.8329885630000002,
+            "thread_cpu_seconds": 0.7861989259999997,
+            "stream_elapsed_seconds": 0.7848989152908326
+          },
+          "O/row": {
+            "count": 50,
+            "host_seconds": 2.3223657309999997,
+            "thread_cpu_seconds": 2.016441046,
+            "stream_elapsed_seconds": 18.629135894775388
+          },
+          "residual/gated_add": {
+            "count": 100,
+            "host_seconds": 44.550426326000014,
+            "thread_cpu_seconds": 43.81106485599999,
+            "stream_elapsed_seconds": 4.058308460235594
+          },
+          "FC1/column": {
+            "count": 50,
+            "host_seconds": 13.615738883000002,
+            "thread_cpu_seconds": 13.039916052000002,
+            "stream_elapsed_seconds": 34.654868041992195
+          },
+          "FC2/SwiGLU_ConvRot_quantize": {
+            "count": 50,
+            "host_seconds": 0.862216232,
+            "thread_cpu_seconds": 0.8454650539999999,
+            "stream_elapsed_seconds": 5.951091159820557
+          },
+          "FC2/row": {
+            "count": 50,
+            "host_seconds": 1.8437093199999999,
+            "thread_cpu_seconds": 1.823655231,
+            "stream_elapsed_seconds": 19.847699981689455
+          },
+          "block_compute": {
+            "count": 50,
+            "host_seconds": 125.37290569299998,
+            "thread_cpu_seconds": 121.10947356600002,
+            "stream_elapsed_seconds": 159.97569262695313
+          },
+          "weight_acquire_and_block": {
+            "count": 50,
+            "host_seconds": 153.74303515399998,
+            "thread_cpu_seconds": 142.89671024100002,
+            "stream_elapsed_seconds": 160.52299999999997
+          }
+        },
+        "nvml_samples": 316,
+        "nvml_sampled_mean_gpu_utilization": 99.53164556962025
+      }
+    ],
+    "denoise_service_seconds": 161.094195454,
+    "sample_wrapper_seconds": 167.281708015,
+    "nsight_coverage": {
+      "worker_ranges": [
+        {
+          "label": "denoise/nfe1/rank1",
+          "global_pid": 281489187012608,
+          "pid": 847,
+          "nvtx_host_seconds": 154.614188272,
+          "cuda_kernel_count": 0
+        },
+        {
+          "label": "denoise/nfe1/rank0",
+          "global_pid": 281489170235392,
+          "pid": 846,
+          "nvtx_host_seconds": 154.603488139,
+          "cuda_kernel_count": 0
+        }
+      ],
+      "total_kernels_in_report": 44,
+      "matched_denoise_kernels": 0,
+      "driver_warnings": [
+        {
+          "timestamp": 1970101734,
+          "timestampType": 1,
+          "source": 1,
+          "severity": 2,
+          "text": "Installed CUDA driver version (13.0) is not supported by this build of Nsight Systems. CUDA trace will be collected using libraries for driver version 12.8",
+          "globalPid": 281488750804992
+        },
+        {
+          "timestamp": 27166522723,
+          "timestampType": 1,
+          "source": 1,
+          "severity": 2,
+          "text": "Installed CUDA driver version (13.0) is not supported by this build of Nsight Systems. CUDA trace will be collected using libraries for driver version 12.8",
+          "globalPid": 281489187012608
+        },
+        {
+          "timestamp": 27174996224,
+          "timestampType": 1,
+          "source": 1,
+          "severity": 2,
+          "text": "Installed CUDA driver version (13.0) is not supported by this build of Nsight Systems. CUDA trace will be collected using libraries for driver version 12.8",
+          "globalPid": 281489170235392
+        }
+      ]
+    },
+    "nsight_compute_permission_denied": true,
+    "limitations": [
+      "One instrumented NFE; not repeated steady-state measurements",
+      "Nested CUDA-event intervals include stream waits and host gaps; no exclusive kernel attribution",
+      "Worker NVTX scopes exist but worker CUPTI kernels are absent; parent-only kernel CSVs are invalid for DiT breakdown",
+      "NVML sampled utilization is not SM occupancy or Tensor Core utilization",
+      "No Nsight Compute hardware counters; no supported memory-stall/occupancy/bandwidth conclusions",
+      "No full trajectory, decoder execution, or generation-quality comparison"
+    ]
+  }
+}

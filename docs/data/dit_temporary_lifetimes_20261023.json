@@ -1,0 +1,1098 @@
+{
+  "date": "2026-10-23",
+  "status": "physical_t4_lifetime_validation_passed",
+  "scope": "Lifetime scheduling across DiT; no new quantization, fusion, GEMM geometry or generation",
+  "frozen_dependencies_unchanged": true,
+  "original_comfyui_unchanged": true,
+  "changed_production": [
+    "patches/tp_dit.py",
+    "patches/h3_operator_policy.py",
+    "patches/tilelang_row_quant.py",
+    "patches/tilelang_transport_p2.py",
+    "patches/tilelang_swiglu_quant.py",
+    "patches/parallel_int8.py",
+    "patches/optimized_tp.py",
+    "patches/dit_column_linear.py"
+  ],
+  "baseline_source_hashes": {
+    "patches/tp_dit.py": "4eee17f2eac8e0d2769c19bb1d94799dfa9f6d131355adc0a58366b59ea89dbe",
+    "patches/h3_operator_policy.py": "5a0568cecbb6015e80843a2318acad88968ce9cec9fffdb5101e37a7f84b2157",
+    "patches/tilelang_row_quant.py": "8d702f3dff380bbdb91bbb1c1a3f2b9d579dfa630a626088fe89ba340cc2b2dd",
+    "patches/tilelang_transport_p2.py": "0829702fa4d72ecd0cab4d4c746894048b6da6c5bbe6febbcadc46e3854b024e",
+    "patches/tilelang_swiglu_quant.py": "6cc0db5336ab1d4c65c11ce1bcba7823f836457e19569fff573f1c1cd74df703",
+    "patches/parallel_int8.py": "4a291e3e2c069c3324dc7879b3747ab74520b6903723187896ffcb879ed6d538",
+    "patches/optimized_tp.py": "b6e5d21573a86e0b2e445dad233fe96a377cebf35a61ee083294ea3f81922a1a"
+  },
+  "local_columns": {
+    "status": "passed",
+    "device": {
+      "name": "NVIDIA GeForce RTX 5060 Ti",
+      "capability": [
+        12,
+        0
+      ]
+    },
+    "torch": "2.12.1+cu132",
+    "cuda": "13.2",
+    "kitchen": "0.2.37",
+    "tilelang": "0.1.13",
+    "t4_qualified": false,
+    "scope": "Operator-only trained base weights, seeded inputs; not real captured activations or E2E",
+    "changes": "Lifetimes only; full GEMM, scale loop and final cat retained",
+    "rows": 51220,
+    "operators": {
+      "FC1": {
+        "shape": [
+          51220,
+          5376,
+          14336
+        ],
+        "weight_sha256": "c4bdee3bf27a2172a4501bef2209c3f8bce197599bfd0e3c1d8170b3726c4294",
+        "baseline": {
+          "first_call_seconds": 0.3372229000005973,
+          "warmups": 2,
+          "samples_ms": [
+            139.8565999998027,
+            140.3206000004502,
+            140.16059999994468
+          ],
+          "median_ms": 140.16059999994468,
+          "peak_increment_bytes": [
+            7208199680,
+            7208199680,
+            7208199680
+          ]
+        },
+        "lifetime": {
+          "first_call_seconds": 0.1862492000000202,
+          "warmups": 2,
+          "samples_ms": [
+            140.16300000002957,
+            139.8033999994368,
+            139.78380000025936
+          ],
+          "median_ms": 139.8033999994368,
+          "peak_increment_bytes": [
+            5165580800,
+            5165580800,
+            5165580800
+          ]
+        },
+        "unequal_storage_values": 0,
+        "nonfinite_values": 0
+      },
+      "QKV": {
+        "shape": [
+          51220,
+          5376,
+          10752
+        ],
+        "weight_sha256": "57906d791362225af58363d6905997a14f39ff672ff7e07fe86e2cc19cddfb2d",
+        "baseline": {
+          "first_call_seconds": 0.15723809999963123,
+          "warmups": 2,
+          "samples_ms": [
+            110.32169999998587,
+            110.26419999961945,
+            110.427399999935
+          ],
+          "median_ms": 110.32169999998587,
+          "peak_increment_bytes": [
+            5345314304,
+            5345314304,
+            5345314304
+          ]
+        },
+        "lifetime": {
+          "first_call_seconds": 0.14691900000070746,
+          "warmups": 2,
+          "samples_ms": [
+            110.93979999986914,
+            110.30399999981455,
+            110.25340000014694
+          ],
+          "median_ms": 110.30399999981455,
+          "peak_increment_bytes": [
+            4083247616,
+            4083247616,
+            4083247616
+          ]
+        },
+        "unequal_storage_values": 0,
+        "nonfinite_values": 0
+      }
+    },
+    "source_sha256": "f57d0a557c75bf9d14af577e843de85e724942cebda9697d2f4981a6e997e53d"
+  },
+  "local_cpu_tests_passed": 50,
+  "kaggle_status_polling": false,
+  "publication": {
+    "file": "8dd12eb1a024ab517e35b3ecf8453c37343a5e049121b29a85c7b75ffb8eaa5e.tar.gz",
+    "sha256": "8dd12eb1a024ab517e35b3ecf8453c37343a5e049121b29a85c7b75ffb8eaa5e",
+    "bytes": 12896104,
+    "capsule_sha256": "c2bf6f40d68ca864ae2fd89945e11326be0bc4fadbe23c0872c6d94d0c33345d",
+    "source_files": 105,
+    "core_pins": 78,
+    "kaggle_mounts": 0,
+    "repository": "chinokikiss/minimax-h3-2xt4",
+    "branch": "codex/dit-lifetimes-20261023-8dd12eb1",
+    "commit": "0e3545b4e7283598b0a77fd9ba2e4d47e6d5f900",
+    "path": "runtime/kaggle_artifacts/8dd12eb1a024ab517e35b3ecf8453c37343a5e049121b29a85c7b75ffb8eaa5e.tar.gz",
+    "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/0e3545b4e7283598b0a77fd9ba2e4d47e6d5f900/runtime/kaggle_artifacts/8dd12eb1a024ab517e35b3ecf8453c37343a5e049121b29a85c7b75ffb8eaa5e.tar.gz",
+    "published": true,
+    "working_tree_and_index_changed": false
+  },
+  "cpu_submission": {
+    "kernel": "pamcks/h3-dit-memory-cpu",
+    "submitted_utc": "2026-10-23T03:50:40.896871+00:00",
+    "returncode": 0,
+    "response": "Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.4), please consider upgrading to the latest version (2.2.5)\nKernel version 3 successfully pushed.  Please check progress at https://www.kaggle.com/code/pamcks/h3-dit-memory-cpu\n",
+    "notebook_sha256": "669f6231169965172b8e3b237576d01134ead6fba4457f2d33c8bb8ec7bb4090",
+    "source_binding": {
+      "mode": "cpu",
+      "publication": {
+        "file": "8dd12eb1a024ab517e35b3ecf8453c37343a5e049121b29a85c7b75ffb8eaa5e.tar.gz",
+        "sha256": "8dd12eb1a024ab517e35b3ecf8453c37343a5e049121b29a85c7b75ffb8eaa5e",
+        "bytes": 12896104,
+        "capsule_sha256": "c2bf6f40d68ca864ae2fd89945e11326be0bc4fadbe23c0872c6d94d0c33345d",
+        "source_files": 105,
+        "core_pins": 78,
+        "kaggle_mounts": 0,
+        "repository": "chinokikiss/minimax-h3-2xt4",
+        "branch": "codex/dit-lifetimes-20261023-8dd12eb1",
+        "commit": "0e3545b4e7283598b0a77fd9ba2e4d47e6d5f900",
+        "path": "runtime/kaggle_artifacts/8dd12eb1a024ab517e35b3ecf8453c37343a5e049121b29a85c7b75ffb8eaa5e.tar.gz",
+        "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/0e3545b4e7283598b0a77fd9ba2e4d47e6d5f900/runtime/kaggle_artifacts/8dd12eb1a024ab517e35b3ecf8453c37343a5e049121b29a85c7b75ffb8eaa5e.tar.gz",
+        "published": true,
+        "working_tree_and_index_changed": false
+      },
+      "qualification_sha256": null,
+      "kaggle_dataset_sources": [],
+      "kaggle_kernel_sources": [],
+      "temporary_private_auth": false,
+      "profile_hashes": {
+        "run_dit_memory_51220.py": "fbe41fc920371891418b2fba9553af7b840f228c7e0c5187686204e20ab339fe",
+        "dit_memory_lines.py": "dbfd8231a60709cdb8a4f4b1117ff4d5b61ed54d4f01c508effd22438dcb67f5",
+        "analyze_gpu_memory_overhead.py": "2a6c487efe1d4e908119ebaf3a6c03c7d42611a710d90672ae180fe01bb9e8cf"
+      },
+      "setup_budget": 240,
+      "execution_budget": null,
+      "dit_lifetimes": false,
+      "profile_qualification_sha256": null
+    },
+    "final_collection_count": 1
+  },
+  "t4_completed": true,
+  "cpu_gate": {
+    "status": "cpu_ready",
+    "tests": 31,
+    "profiler_checks": 3,
+    "seconds": 102.349983345
+  },
+  "gpu_submission": {
+    "kernel": "pamcks/h3-dit-memory-51220",
+    "submitted_utc": "2026-10-23T03:58:46.350906+00:00",
+    "returncode": 0,
+    "response": "Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.4), please consider upgrading to the latest version (2.2.5)\nKernel version 2 successfully pushed.  Please check progress at https://www.kaggle.com/code/pamcks/h3-dit-memory-51220\n",
+    "notebook_sha256": "92a4d950764a76dee21b86ac4fa574116a037ab76f02cd88d3bed10e22a773e0",
+    "source_binding": {
+      "mode": "dit-memory",
+      "publication": {
+        "file": "8dd12eb1a024ab517e35b3ecf8453c37343a5e049121b29a85c7b75ffb8eaa5e.tar.gz",
+        "sha256": "8dd12eb1a024ab517e35b3ecf8453c37343a5e049121b29a85c7b75ffb8eaa5e",
+        "bytes": 12896104,
+        "capsule_sha256": "c2bf6f40d68ca864ae2fd89945e11326be0bc4fadbe23c0872c6d94d0c33345d",
+        "source_files": 105,
+        "core_pins": 78,
+        "kaggle_mounts": 0,
+        "repository": "chinokikiss/minimax-h3-2xt4",
+        "branch": "codex/dit-lifetimes-20261023-8dd12eb1",
+        "commit": "0e3545b4e7283598b0a77fd9ba2e4d47e6d5f900",
+        "path": "runtime/kaggle_artifacts/8dd12eb1a024ab517e35b3ecf8453c37343a5e049121b29a85c7b75ffb8eaa5e.tar.gz",
+        "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/0e3545b4e7283598b0a77fd9ba2e4d47e6d5f900/runtime/kaggle_artifacts/8dd12eb1a024ab517e35b3ecf8453c37343a5e049121b29a85c7b75ffb8eaa5e.tar.gz",
+        "published": true,
+        "working_tree_and_index_changed": false
+      },
+      "qualification_sha256": "41335e8d9adb4a7b04ef92ce40631660c0b294c787636217a95d3673c6cb4f99",
+      "kaggle_dataset_sources": [],
+      "kaggle_kernel_sources": [],
+      "temporary_private_auth": false,
+      "profile_hashes": {
+        "run_dit_memory_51220.py": "fbe41fc920371891418b2fba9553af7b840f228c7e0c5187686204e20ab339fe",
+        "dit_memory_lines.py": "dbfd8231a60709cdb8a4f4b1117ff4d5b61ed54d4f01c508effd22438dcb67f5",
+        "analyze_gpu_memory_overhead.py": "2a6c487efe1d4e908119ebaf3a6c03c7d42611a710d90672ae180fe01bb9e8cf"
+      },
+      "setup_budget": 240,
+      "execution_budget": 900,
+      "dit_lifetimes": true,
+      "profile_qualification_sha256": "75967711f4f38e597c6aedc856dee6473f612b6ab755d1f15008d5e9735c90f5"
+    },
+    "final_collection_count": 1,
+    "earliest_final_collection_seconds": 1200,
+    "status_polling": false
+  },
+  "candidate_source_sha256": {
+    "patches/tp_dit.py": "1ff273d8bb20a7ac5d93cb6fe610962109692b7be55a65128e91a6d50a2e4ccd",
+    "patches/h3_operator_policy.py": "ad5e52b83bf18b9a1c68f5da5fa65b63b6eaced6dd3d396d1c402d7f9678582d",
+    "patches/tilelang_row_quant.py": "ff1bb4f853c1e1131c3a4f2e029a1facf27ad0b284adef776a2a1af073fefd09",
+    "patches/tilelang_transport_p2.py": "c8932149d1493479e839fbd0c4afbe20422fcb416be3572f937b912855e3a9f9",
+    "patches/tilelang_swiglu_quant.py": "d8a55c60949b881fc5b2d6f3c9bc9fdf025675fbb2498f9ee9dd38e6679cc265",
+    "patches/parallel_int8.py": "5895ffb189f200f6d9f3b1cd097f07a97789b37927eb63fe1d7f8f7d10234f1e",
+    "patches/optimized_tp.py": "b671394fa99be023c049f93d125402c5492e4f057c229d385ef55da794eb4550",
+    "patches/dit_column_linear.py": "437741a15f536925563453eb7463c472a297f3f2c8c7983deed1bd78f1125ebf"
+  },
+  "baseline_analysis_verified": true,
+  "small_cuda_gate": {
+    "scope": "Small block / nondefault stream local CUDA gates, not deployment memory evidence",
+    "device": "NVIDIA GeForce RTX 5060 Ti",
+    "capability": [
+      12,
+      0
+    ],
+    "cases": [
+      {
+        "mode": "legacy",
+        "online_lora": false,
+        "rows": 33,
+        "unequal_values": 0,
+        "finite": true
+      },
+      {
+        "mode": "legacy",
+        "online_lora": false,
+        "rows": 513,
+        "unequal_values": 0,
+        "finite": true
+      },
+      {
+        "mode": "legacy",
+        "online_lora": true,
+        "rows": 33,
+        "unequal_values": 0,
+        "finite": true
+      },
+      {
+        "mode": "legacy",
+        "online_lora": true,
+        "rows": 513,
+        "unequal_values": 0,
+        "finite": true
+      },
+      {
+        "mode": "fp16",
+        "online_lora": false,
+        "rows": 33,
+        "unequal_values": 0,
+        "finite": true
+      },
+      {
+        "mode": "fp16",
+        "online_lora": false,
+        "rows": 513,
+        "unequal_values": 0,
+        "finite": true
+      },
+      {
+        "mode": "fp16",
+        "online_lora": true,
+        "rows": 33,
+        "unequal_values": 0,
+        "finite": true
+      },
+      {
+        "mode": "fp16",
+        "online_lora": true,
+        "rows": 513,
+        "unequal_values": 0,
+        "finite": true
+      }
+    ],
+    "status": "passed",
+    "nondefault_stream_exact": true
+  },
+  "current_runtime_matches_submitted_source": true,
+  "comparison": {
+    "scope": "Actual T4 DiT-only profiles, seeded shape inputs/base weights; no real-generation acceptance",
+    "accounting": "Phase peaks include resident weights; paired column peaks are incremental allocated bytes",
+    "runs": {
+      "baseline": {
+        "hardware": [
+          {
+            "name": "Tesla T4",
+            "capability": [
+              7,
+              5
+            ],
+            "uuid": "8583bf48-74e5-2e0a-f549-7991b1615728"
+          },
+          {
+            "name": "Tesla T4",
+            "capability": [
+              7,
+              5
+            ],
+            "uuid": "99987475-83ee-02d5-b2e5-b8921487339f"
+          }
+        ],
+        "torch": "2.11.0+cu128",
+        "cuda": "12.8",
+        "allocator_peak_bytes": [
+          13341659648,
+          13343480320
+        ],
+        "reserved_peak_bytes": [
+          15265169408,
+          15370027008
+        ],
+        "ranks": [
+          {
+            "rank": 0,
+            "requested_peak": 13305347650,
+            "peak_categories": {
+              "preexisting_unclassified": 9568256,
+              "model_auxiliary": 3195904,
+              "activation_or_temporary": 8383911490,
+              "resident_weights": 4908672000
+            },
+            "phases": {
+              "Norm/residual outside projections": {
+                "requested_bytes": 11577174514,
+                "block": 32,
+                "categories": {
+                  "preexisting_unclassified": 9568256,
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 6655738354,
+                  "resident_weights": 4908672000
+                }
+              },
+              "QKV": {
+                "requested_bytes": 11441954370,
+                "block": 32,
+                "categories": {
+                  "preexisting_unclassified": 9568256,
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 6520518210,
+                  "resident_weights": 4908672000
+                }
+              },
+              "RoPE": {
+                "requested_bytes": 11461223922,
+                "block": 32,
+                "categories": {
+                  "preexisting_unclassified": 9568256,
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 6539787762,
+                  "resident_weights": 4908672000
+                }
+              },
+              "Attention": {
+                "requested_bytes": 10201312754,
+                "block": 32,
+                "categories": {
+                  "preexisting_unclassified": 9568256,
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 5279876594,
+                  "resident_weights": 4908672000
+                }
+              },
+              "AttentionO": {
+                "requested_bytes": 10871374402,
+                "block": 32,
+                "categories": {
+                  "preexisting_unclassified": 9568256,
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 5949938242,
+                  "resident_weights": 4908672000
+                }
+              },
+              "AttentionO_quantization": {
+                "requested_bytes": 11972604402,
+                "block": 32,
+                "categories": {
+                  "preexisting_unclassified": 9568256,
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 7051168242,
+                  "resident_weights": 4908672000
+                }
+              },
+              "FC1": {
+                "requested_bytes": 13305347650,
+                "block": 32,
+                "categories": {
+                  "preexisting_unclassified": 9568256,
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 8383911490,
+                  "resident_weights": 4908672000
+                }
+              },
+              "FC2": {
+                "requested_bytes": 8852282002,
+                "block": 32,
+                "categories": {
+                  "preexisting_unclassified": 9568256,
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 3930845842,
+                  "resident_weights": 4908672000
+                }
+              }
+            },
+            "boundaries": [
+              {
+                "block": 0,
+                "qkv_reusable_before_O": false,
+                "qkv_reusable_before_O_quant_peak": false,
+                "qkv_release_source": [
+                  [
+                    "/kaggle/temp/h3_light_source/patches/tp_dit.py",
+                    290,
+                    "forward"
+                  ]
+                ],
+                "fc1_internal_at_cat_bytes": 7207062608,
+                "padded_int32_alive_at_cat": true,
+                "rotated_input_alive_at_cat": true,
+                "codes_alive_at_cat": true
+              },
+              {
+                "block": 24,
+                "qkv_reusable_before_O": false,
+                "qkv_reusable_before_O_quant_peak": false,
+                "qkv_release_source": [
+                  [
+                    "/kaggle/temp/h3_light_source/patches/tp_dit.py",
+                    290,
+                    "forward"
+                  ]
+                ],
+                "fc1_internal_at_cat_bytes": 7207062608,
+                "padded_int32_alive_at_cat": true,
+                "rotated_input_alive_at_cat": true,
+                "codes_alive_at_cat": true
+              },
+              {
+                "block": 49,
+                "qkv_reusable_before_O": null,
+                "qkv_reusable_before_O_quant_peak": null,
+                "qkv_release_source": [
+                  [
+                    "/kaggle/temp/h3_light_source/patches/tp_dit.py",
+                    290,
+                    "forward"
+                  ]
+                ],
+                "fc1_internal_at_cat_bytes": 7207062608,
+                "padded_int32_alive_at_cat": true,
+                "rotated_input_alive_at_cat": true,
+                "codes_alive_at_cat": true
+              }
+            ],
+            "complete_history": true,
+            "unknown_frees": 0,
+            "history_limit_reached": false,
+            "marker_limit_reached": true,
+            "fc1_outputs": 50,
+            "qkv_outputs": 50
+          },
+          {
+            "rank": 1,
+            "requested_peak": 13305347650,
+            "peak_categories": {
+              "model_auxiliary": 3195904,
+              "activation_or_temporary": 8393479746,
+              "resident_weights": 4908672000
+            },
+            "phases": {
+              "Norm/residual outside projections": {
+                "requested_bytes": 11577174514,
+                "block": 24,
+                "categories": {
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 6665306610,
+                  "resident_weights": 4908672000
+                }
+              },
+              "QKV": {
+                "requested_bytes": 11441954370,
+                "block": 24,
+                "categories": {
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 6530086466,
+                  "resident_weights": 4908672000
+                }
+              },
+              "RoPE": {
+                "requested_bytes": 11461223922,
+                "block": 24,
+                "categories": {
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 6549356018,
+                  "resident_weights": 4908672000
+                }
+              },
+              "Attention": {
+                "requested_bytes": 10201312754,
+                "block": 24,
+                "categories": {
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 5289444850,
+                  "resident_weights": 4908672000
+                }
+              },
+              "AttentionO": {
+                "requested_bytes": 10871374402,
+                "block": 24,
+                "categories": {
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 5959506498,
+                  "resident_weights": 4908672000
+                }
+              },
+              "AttentionO_quantization": {
+                "requested_bytes": 11972604402,
+                "block": 24,
+                "categories": {
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 7060736498,
+                  "resident_weights": 4908672000
+                }
+              },
+              "FC1": {
+                "requested_bytes": 13305347650,
+                "block": 24,
+                "categories": {
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 8393479746,
+                  "resident_weights": 4908672000
+                }
+              },
+              "FC2": {
+                "requested_bytes": 8852282002,
+                "block": 24,
+                "categories": {
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 3940414098,
+                  "resident_weights": 4908672000
+                }
+              }
+            },
+            "boundaries": [
+              {
+                "block": 0,
+                "qkv_reusable_before_O": false,
+                "qkv_reusable_before_O_quant_peak": false,
+                "qkv_release_source": [
+                  [
+                    "/kaggle/temp/h3_light_source/patches/tp_dit.py",
+                    290,
+                    "forward"
+                  ]
+                ],
+                "fc1_internal_at_cat_bytes": 7207062608,
+                "padded_int32_alive_at_cat": true,
+                "rotated_input_alive_at_cat": true,
+                "codes_alive_at_cat": true
+              },
+              {
+                "block": 24,
+                "qkv_reusable_before_O": false,
+                "qkv_reusable_before_O_quant_peak": false,
+                "qkv_release_source": [
+                  [
+                    "/kaggle/temp/h3_light_source/patches/tp_dit.py",
+                    290,
+                    "forward"
+                  ]
+                ],
+                "fc1_internal_at_cat_bytes": 7207062608,
+                "padded_int32_alive_at_cat": true,
+                "rotated_input_alive_at_cat": true,
+                "codes_alive_at_cat": true
+              },
+              {
+                "block": 49,
+                "qkv_reusable_before_O": null,
+                "qkv_reusable_before_O_quant_peak": null,
+                "qkv_release_source": [
+                  [
+                    "/kaggle/temp/h3_light_source/patches/tp_dit.py",
+                    290,
+                    "forward"
+                  ]
+                ],
+                "fc1_internal_at_cat_bytes": 7207062608,
+                "padded_int32_alive_at_cat": true,
+                "rotated_input_alive_at_cat": true,
+                "codes_alive_at_cat": true
+              }
+            ],
+            "complete_history": true,
+            "unknown_frees": 0,
+            "history_limit_reached": false,
+            "marker_limit_reached": true,
+            "fc1_outputs": 50,
+            "qkv_outputs": 50
+          }
+        ]
+      },
+      "lifetime": {
+        "hardware": [
+          {
+            "name": "Tesla T4",
+            "capability": [
+              7,
+              5
+            ],
+            "uuid": "c4c00a49-388f-19b6-01f5-96493f57f698"
+          },
+          {
+            "name": "Tesla T4",
+            "capability": [
+              7,
+              5
+            ],
+            "uuid": "8e822518-beb3-167e-79bc-dce9d639a6df"
+          }
+        ],
+        "torch": "2.11.0+cu128",
+        "cuda": "12.8",
+        "allocator_peak_bytes": [
+          11300752896,
+          11302536704
+        ],
+        "reserved_peak_bytes": [
+          15250489344,
+          15357444096
+        ],
+        "ranks": [
+          {
+            "rank": 0,
+            "requested_peak": 11263578690,
+            "peak_categories": {
+              "preexisting_unclassified": 9568256,
+              "model_auxiliary": 3195904,
+              "activation_or_temporary": 6342142530,
+              "resident_weights": 4908672000
+            },
+            "phases": {
+              "Norm/residual outside projections": {
+                "requested_bytes": 9190732274,
+                "block": 32,
+                "categories": {
+                  "preexisting_unclassified": 9568256,
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 4269296114,
+                  "resident_weights": 4908672000
+                }
+              },
+              "QKV": {
+                "requested_bytes": 10180766274,
+                "block": 32,
+                "categories": {
+                  "preexisting_unclassified": 9568256,
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 5259330114,
+                  "resident_weights": 4908672000
+                }
+              },
+              "RoPE": {
+                "requested_bytes": 10910506482,
+                "block": 32,
+                "categories": {
+                  "preexisting_unclassified": 9568256,
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 5989070322,
+                  "resident_weights": 4908672000
+                }
+              },
+              "Attention": {
+                "requested_bytes": 9650595314,
+                "block": 32,
+                "categories": {
+                  "preexisting_unclassified": 9568256,
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 4729159154,
+                  "resident_weights": 4908672000
+                }
+              },
+              "AttentionO": {
+                "requested_bytes": 8301359682,
+                "block": 32,
+                "categories": {
+                  "preexisting_unclassified": 9568256,
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 3379923522,
+                  "resident_weights": 4908672000
+                }
+              },
+              "AttentionO_quantization": {
+                "requested_bytes": 9586162162,
+                "block": 32,
+                "categories": {
+                  "preexisting_unclassified": 9568256,
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 4664726002,
+                  "resident_weights": 4908672000
+                }
+              },
+              "FC1": {
+                "requested_bytes": 11263578690,
+                "block": 32,
+                "categories": {
+                  "preexisting_unclassified": 9568256,
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 6342142530,
+                  "resident_weights": 4908672000
+                }
+              },
+              "FC2": {
+                "requested_bytes": 8852282002,
+                "block": 32,
+                "categories": {
+                  "preexisting_unclassified": 9568256,
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 3930845842,
+                  "resident_weights": 4908672000
+                }
+              }
+            },
+            "boundaries": [
+              {
+                "block": 0,
+                "qkv_reusable_before_O": false,
+                "qkv_reusable_before_O_quant_peak": true,
+                "qkv_release_source": [
+                  [
+                    "/kaggle/temp/h3_light_source/patches/tp_dit.py",
+                    289,
+                    "forward"
+                  ]
+                ],
+                "fc1_internal_at_cat_bytes": 2937159680,
+                "padded_int32_alive_at_cat": false,
+                "rotated_input_alive_at_cat": false,
+                "codes_alive_at_cat": false
+              },
+              {
+                "block": 24,
+                "qkv_reusable_before_O": true,
+                "qkv_reusable_before_O_quant_peak": true,
+                "qkv_release_source": [
+                  [
+                    "/kaggle/temp/h3_light_source/patches/tp_dit.py",
+                    285,
+                    "forward"
+                  ]
+                ],
+                "fc1_internal_at_cat_bytes": 2937159680,
+                "padded_int32_alive_at_cat": false,
+                "rotated_input_alive_at_cat": false,
+                "codes_alive_at_cat": false
+              },
+              {
+                "block": 49,
+                "qkv_reusable_before_O": true,
+                "qkv_reusable_before_O_quant_peak": true,
+                "qkv_release_source": [
+                  [
+                    "/kaggle/temp/h3_light_source/patches/tp_dit.py",
+                    285,
+                    "forward"
+                  ]
+                ],
+                "fc1_internal_at_cat_bytes": 2937159680,
+                "padded_int32_alive_at_cat": false,
+                "rotated_input_alive_at_cat": false,
+                "codes_alive_at_cat": false
+              }
+            ],
+            "complete_history": true,
+            "unknown_frees": 0,
+            "history_limit_reached": false,
+            "marker_limit_reached": false,
+            "fc1_outputs": 50,
+            "qkv_outputs": 50
+          },
+          {
+            "rank": 1,
+            "requested_peak": 11263578690,
+            "peak_categories": {
+              "model_auxiliary": 3195904,
+              "activation_or_temporary": 6351710786,
+              "resident_weights": 4908672000
+            },
+            "phases": {
+              "Norm/residual outside projections": {
+                "requested_bytes": 9190732274,
+                "block": 24,
+                "categories": {
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 4278864370,
+                  "resident_weights": 4908672000
+                }
+              },
+              "QKV": {
+                "requested_bytes": 10180766274,
+                "block": 24,
+                "categories": {
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 5268898370,
+                  "resident_weights": 4908672000
+                }
+              },
+              "RoPE": {
+                "requested_bytes": 10910506482,
+                "block": 24,
+                "categories": {
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 5998638578,
+                  "resident_weights": 4908672000
+                }
+              },
+              "Attention": {
+                "requested_bytes": 9650595314,
+                "block": 24,
+                "categories": {
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 4738727410,
+                  "resident_weights": 4908672000
+                }
+              },
+              "AttentionO": {
+                "requested_bytes": 8301359682,
+                "block": 24,
+                "categories": {
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 3389491778,
+                  "resident_weights": 4908672000
+                }
+              },
+              "AttentionO_quantization": {
+                "requested_bytes": 9586162162,
+                "block": 24,
+                "categories": {
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 4674294258,
+                  "resident_weights": 4908672000
+                }
+              },
+              "FC1": {
+                "requested_bytes": 11263578690,
+                "block": 24,
+                "categories": {
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 6351710786,
+                  "resident_weights": 4908672000
+                }
+              },
+              "FC2": {
+                "requested_bytes": 8852282002,
+                "block": 24,
+                "categories": {
+                  "model_auxiliary": 3195904,
+                  "activation_or_temporary": 3940414098,
+                  "resident_weights": 4908672000
+                }
+              }
+            },
+            "boundaries": [
+              {
+                "block": 0,
+                "qkv_reusable_before_O": false,
+                "qkv_reusable_before_O_quant_peak": true,
+                "qkv_release_source": [
+                  [
+                    "/kaggle/temp/h3_light_source/patches/tp_dit.py",
+                    289,
+                    "forward"
+                  ]
+                ],
+                "fc1_internal_at_cat_bytes": 2937159680,
+                "padded_int32_alive_at_cat": false,
+                "rotated_input_alive_at_cat": false,
+                "codes_alive_at_cat": false
+              },
+              {
+                "block": 24,
+                "qkv_reusable_before_O": true,
+                "qkv_reusable_before_O_quant_peak": true,
+                "qkv_release_source": [
+                  [
+                    "/kaggle/temp/h3_light_source/patches/tp_dit.py",
+                    285,
+                    "forward"
+                  ]
+                ],
+                "fc1_internal_at_cat_bytes": 2937159680,
+                "padded_int32_alive_at_cat": false,
+                "rotated_input_alive_at_cat": false,
+                "codes_alive_at_cat": false
+              },
+              {
+                "block": 49,
+                "qkv_reusable_before_O": true,
+                "qkv_reusable_before_O_quant_peak": true,
+                "qkv_release_source": [
+                  [
+                    "/kaggle/temp/h3_light_source/patches/tp_dit.py",
+                    285,
+                    "forward"
+                  ]
+                ],
+                "fc1_internal_at_cat_bytes": 2937159680,
+                "padded_int32_alive_at_cat": false,
+                "rotated_input_alive_at_cat": false,
+                "codes_alive_at_cat": false
+              }
+            ],
+            "complete_history": true,
+            "unknown_frees": 0,
+            "history_limit_reached": false,
+            "marker_limit_reached": false,
+            "fc1_outputs": 50,
+            "qkv_outputs": 50
+          }
+        ]
+      }
+    },
+    "paired_columns": {
+      "status": "passed",
+      "device": {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ]
+      },
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "kitchen": "0.2.37",
+      "tilelang": "0.1.13",
+      "t4_qualified": true,
+      "scope": "Operator-only trained base weights, seeded inputs; not real captured activations or E2E",
+      "changes": "Lifetimes only; full GEMM, scale loop and final cat retained",
+      "rows": 51220,
+      "operators": {
+        "FC1": {
+          "shape": [
+            51220,
+            5376,
+            14336
+          ],
+          "weight_sha256": "c4bdee3bf27a2172a4501bef2209c3f8bce197599bfd0e3c1d8170b3726c4294",
+          "baseline": {
+            "first_call_seconds": 1.2332677850000664,
+            "warmups": 2,
+            "samples_ms": [
+              631.9369919999644,
+              631.1719829999447,
+              631.6889419999825
+            ],
+            "median_ms": 631.6889419999825,
+            "peak_increment_bytes": [
+              7208199680,
+              7208199680,
+              7208199680
+            ]
+          },
+          "lifetime": {
+            "first_call_seconds": 0.6375297690000252,
+            "warmups": 2,
+            "samples_ms": [
+              634.7978310000144,
+              632.7957099999821,
+              630.8588219999365
+            ],
+            "median_ms": 632.7957099999821,
+            "peak_increment_bytes": [
+              5165580800,
+              5165580800,
+              5165580800
+            ]
+          },
+          "unequal_storage_values": 0,
+          "nonfinite_values": 0
+        },
+        "QKV": {
+          "shape": [
+            51220,
+            5376,
+            10752
+          ],
+          "weight_sha256": "57906d791362225af58363d6905997a14f39ff672ff7e07fe86e2cc19cddfb2d",
+          "baseline": {
+            "first_call_seconds": 0.5200440109999818,
+            "warmups": 2,
+            "samples_ms": [
+              483.3677590000889,
+              485.8111450000706,
+              483.7840929999402
+            ],
+            "median_ms": 483.7840929999402,
+            "peak_increment_bytes": [
+              5345314304,
+              5345314304,
+              5345314304
+            ]
+          },
+          "lifetime": {
+            "first_call_seconds": 0.49007586200002606,
+            "warmups": 2,
+            "samples_ms": [
+              488.25913400003174,
+              472.04499899999064,
+              489.1040029999658
+            ],
+            "median_ms": 488.25913400003174,
+            "peak_increment_bytes": [
+              4083247616,
+              4083247616,
+              4083247616
+            ]
+          },
+          "unequal_storage_values": 0,
+          "nonfinite_values": 0
+        }
+      },
+      "source_sha256": "f57d0a557c75bf9d14af577e843de85e724942cebda9697d2f4981a6e997e53d"
+    }
+  },
+  "local_autocast_gate": [
+    {
+      "device": "cpu",
+      "autocast": "torch.float16",
+      "status": "byte_exact",
+      "unequal_storage_values": 0
+    },
+    {
+      "device": "cpu",
+      "autocast": "torch.bfloat16",
+      "status": "same_preexisting_error",
+      "error": "Unexpected floating ScalarType in at::autocast::prioritize"
+    },
+    {
+      "device": "cuda",
+      "autocast": "torch.float16",
+      "status": "byte_exact",
+      "unequal_storage_values": 0
+    },
+    {
+      "device": "cuda",
+      "autocast": "torch.bfloat16",
+      "status": "byte_exact",
+      "unequal_storage_values": 0
+    }
+  ],
+  "raw_download_manifest_sha256": "aa76e9b54c8ceaec8f23383709994d2fa38b045d648dc22040455741b46c4ead",
+  "raw_artifact_files": 46,
+  "frozen_source_and_dependencies_unchanged": true,
+  "analysis_sources_sha256": {
+    "analyze_dit_memory_lifetimes.py": "9f7c9ef59a539cba6dcbbd4f75b483f58a5a410fc0f4dcc5db58d5600578a14d",
+    "compare_dit_lifetimes.py": "4cb43a3ed1fa13bacffa1997142f076efc816a9ea2bb2a7bbc153a44f0d0e940",
+    "test_dit_temporaries.py": "5aa45439484de84b44de7c6a1ca744bfb8cefb7019305420218c231879408100"
+  },
+  "asset_sha256": {
+    "memory_comparison.png": "b29a72229fc321237923d84feacc19a9f35874ed979292e4cd6b651a1f74a42b",
+    "memory_comparison.svg": "3e26822425bdae8282db340a9ff6e4e18c704d0d81ea68c2295c6f031b0f60e3"
+  },
+  "report_sha256": "487ec9a02c604bfc4d08c71640790d58c9053e784d5e7034d300e83f7f374f0f"
+}

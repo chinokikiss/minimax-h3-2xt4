@@ -1,0 +1,59 @@
+{
+  "status": "passed",
+  "scope": "Local trained Audio VAE component only; no full H3 or performance qualification",
+  "hardware": "NVIDIA GeForce RTX 5060 Ti",
+  "torch": "2.12.1+cu132",
+  "checkpoint": "D:\\minimaxH3\\minimax_h3_audio_vae_fp32_clean.safetensors",
+  "input_shape": [
+    1,
+    32,
+    2,
+    16
+  ],
+  "seed": 20261021,
+  "cases": [
+    {
+      "mode": "auto",
+      "strategy": "native",
+      "output_shape": [
+        1,
+        12800,
+        2
+      ],
+      "dtype": "torch.float32",
+      "finite": true,
+      "byte_exact": true,
+      "max_abs": 0.0
+    },
+    {
+      "mode": "native",
+      "strategy": "native",
+      "output_shape": [
+        1,
+        12800,
+        2
+      ],
+      "dtype": "torch.float32",
+      "finite": true,
+      "byte_exact": true,
+      "max_abs": 0.0
+    }
+  ],
+  "worker_commands": [
+    "decode_start",
+    "decode_complete",
+    "decode_start",
+    "decode_complete"
+  ],
+  "audio_worker_dispatch": false,
+  "source_sha256": {
+    "patches/comfy_sampler.py": "ce698f40b9e8e15a45b05a81c226a476bb1af871283432543ce1b2dd27943aab",
+    "patches/comfy_tp_runtime.py": "0b4a9dbe3cc39ade072fd537f763fc8584072c4b4ba4be4125f389d6459ed670",
+    "patches/parallel_vae.py": "78fd27079f103b36b8a3f89099459831230b2039f7b5542c10a5a6a85e1df056",
+    "custom_nodes/minimax_h3_tp2/__init__.py": "8c9598d366fbfb35f81d5fde6311a8c28d2ada365fa7868c13c8336d387d6385",
+    "benchmarks/check_native_audio_decode.py": "6e01601fdb7679cb6268d790509bafd3b1310ec2c44b2c0c38a45dc76ea789de"
+  },
+  "focused_regression_tests": 85,
+  "video_regression": "LEGACY_VIDEO_QUERY_PASS: native 36, parallel 72",
+  "historical_helpers": "Benchmark provenance only; not imported by the runtime"
+}

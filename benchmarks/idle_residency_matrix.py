@@ -17,8 +17,8 @@ def checked_result(path,requests,idle,gap):
     if any(r['nfe']!=4 for r in result['requests']):raise RuntimeError('Unequal NFE workload')
     if any(not all(v['passed'] for v in c.values()) for c in result['correctness']):raise RuntimeError('Native mismatch')
     if any(r['decode']['video']['strategy']!='native_aligned_query' or
-           r['decode']['audio']['strategy']!='channel_parallel' for r in result['requests']):
-        raise RuntimeError('Physical decoder fallback; ineligible comparison')
+           r['decode']['audio']['strategy']!='native' for r in result['requests']):
+        raise RuntimeError('Expected video query parallelism and Native single-GPU audio')
     if any(result['host_budget_after_close'][k]!=0 for k in ('reserved_bytes','preparing','pending_preparation_bytes')):
         raise RuntimeError('Unreleased host ownership')
     if any(r.get('idle',{}).get('errors',0) for r in result['runtime']):raise RuntimeError('Idle worker error')

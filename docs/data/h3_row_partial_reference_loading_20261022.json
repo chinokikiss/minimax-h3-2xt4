@@ -1,0 +1,348 @@
+{
+  "date": "2026-10-22",
+  "status": "integrated_local_checks_passed_no_new_t4_timing",
+  "lora_row_partial_reduce": true,
+  "lora_hidden_sum": "FP32",
+  "operators": {
+    "te_attention": "tilelang_group32",
+    "dit_attention": "kitchen",
+    "row_linear_backend": "tilelang_scaled_fp16",
+    "swiglu_padding": true,
+    "selective_b": true,
+    "scalar_score_workspace_mib": 96,
+    "fc2_quantizer": "fused_stored"
+  },
+  "tensor_flow": {
+    "mode": "fp16",
+    "residual_exponent": 6,
+    "vision_residual_exponent": 0,
+    "video_residual_exponent": 0
+  },
+  "tests": {
+    "count": 64,
+    "status": "passed",
+    "scope": "Current integration, RowPartial arithmetic, lazy component ownership, reference hints, loading stages and Native audio gates"
+  },
+  "artifacts": {
+    "trained_lazy_vae.json": {
+      "path": "D:\\attention_eval\\h3_row_partial_reference_20261022\\trained_lazy_vae.json",
+      "sha256": "957d53fc66ddde79f06834bc6ba7313300c613b94f477995d470a61fb2f56756",
+      "data": {
+        "scope": "Tiny trained VAE encode/decode on one local GPU. No full H3 pipeline or T4 performance claim.",
+        "hardware": "NVIDIA GeForce RTX 5060 Ti",
+        "capability": [
+          12,
+          0
+        ],
+        "records": [
+          {
+            "kind": "video",
+            "encode": "bitwise_pass",
+            "decode": "bitwise_pass",
+            "latent_shape": [
+              1,
+              24,
+              1,
+              2,
+              2
+            ],
+            "output_shape": [
+              1,
+              1,
+              32,
+              32,
+              3
+            ],
+            "stage_events": [
+              {
+                "stage": "encode",
+                "read_bytes": 360747328
+              },
+              {
+                "stage": "decode",
+                "read_bytes": 2450218528
+              }
+            ],
+            "inactive_component_absent": true,
+            "encoder_released_before_decoder": true,
+            "idle_encoder_gpu_preload": true,
+            "constructor_payload_bytes": 0,
+            "decode_strategy": "native",
+            "fallback": null
+          },
+          {
+            "kind": "audio",
+            "encode": "bitwise_pass",
+            "decode": "bitwise_pass",
+            "latent_shape": [
+              1,
+              32,
+              2,
+              2
+            ],
+            "output_shape": [
+              1,
+              1600,
+              2
+            ],
+            "stage_events": [
+              {
+                "stage": "encode",
+                "read_bytes": 345477248
+              },
+              {
+                "stage": "decode",
+                "read_bytes": 259672288
+              }
+            ],
+            "inactive_component_absent": true,
+            "encoder_released_before_decoder": true,
+            "idle_encoder_gpu_preload": true,
+            "constructor_payload_bytes": 0,
+            "decode_strategy": "native",
+            "fallback": null
+          }
+        ]
+      }
+    },
+    "combined_row_local_preview.json": {
+      "path": "D:\\attention_eval\\h3_row_partial_reference_20261022\\combined_row_local_preview.json",
+      "sha256": "8411dfa561837cb2b9f17e313030f9d452f7c1cd631688207f4592a7f1fcffa3",
+      "data": {
+        "status": "passed",
+        "scope": "Local SM120 integration preview, logical TP2, no T4/NCCL/timing qualification",
+        "records": [
+          {
+            "name": "dit_fc2",
+            "rank": 0,
+            "partial_codec_reference_exact": true,
+            "finite": true,
+            "lora_collectives": [
+              {
+                "dtype": "torch.float32",
+                "shape": [
+                  3,
+                  128
+                ]
+              },
+              {
+                "dtype": "torch.float32",
+                "shape": [
+                  3,
+                  128
+                ]
+              }
+            ],
+            "lora_full_activation_gather": false,
+            "storage_dtype": "torch.float16"
+          },
+          {
+            "name": "dit_o",
+            "rank": 0,
+            "partial_codec_reference_exact": true,
+            "finite": true,
+            "lora_collectives": [
+              {
+                "dtype": "torch.float32",
+                "shape": [
+                  3,
+                  128
+                ]
+              },
+              {
+                "dtype": "torch.float32",
+                "shape": [
+                  3,
+                  128
+                ]
+              }
+            ],
+            "lora_full_activation_gather": false,
+            "storage_dtype": "torch.float16"
+          },
+          {
+            "name": "dit_fc2",
+            "rank": 1,
+            "partial_codec_reference_exact": true,
+            "finite": true,
+            "lora_collectives": [
+              {
+                "dtype": "torch.float32",
+                "shape": [
+                  3,
+                  128
+                ]
+              },
+              {
+                "dtype": "torch.float32",
+                "shape": [
+                  3,
+                  128
+                ]
+              }
+            ],
+            "lora_full_activation_gather": false,
+            "storage_dtype": "torch.float16"
+          },
+          {
+            "name": "dit_o",
+            "rank": 1,
+            "partial_codec_reference_exact": true,
+            "finite": true,
+            "lora_collectives": [
+              {
+                "dtype": "torch.float32",
+                "shape": [
+                  3,
+                  128
+                ]
+              },
+              {
+                "dtype": "torch.float32",
+                "shape": [
+                  3,
+                  128
+                ]
+              }
+            ],
+            "lora_full_activation_gather": false,
+            "storage_dtype": "torch.float16"
+          }
+        ]
+      }
+    },
+    "trained_decoder_first_vae.json": {
+      "path": "D:\\attention_eval\\h3_row_partial_reference_20261022\\trained_decoder_first_vae.json",
+      "sha256": "dde7d07346dd75b0193d15653b9039dc657b391725e759217be09f7b3f9017fc",
+      "data": {
+        "scope": "Tiny trained VAE encode/decode on one local GPU. No full H3 pipeline or T4 performance claim.",
+        "hardware": "NVIDIA GeForce RTX 5060 Ti",
+        "capability": [
+          12,
+          0
+        ],
+        "records": [
+          {
+            "kind": "video",
+            "encode": "bitwise_pass",
+            "decode": "bitwise_pass",
+            "latent_shape": [
+              1,
+              24,
+              1,
+              2,
+              2
+            ],
+            "output_shape": [
+              1,
+              1,
+              32,
+              32,
+              3
+            ],
+            "stage_events": [
+              {
+                "stage": "decode",
+                "read_bytes": 2450218528
+              },
+              {
+                "stage": "encode",
+                "read_bytes": 360747328
+              },
+              {
+                "stage": "decode",
+                "read_bytes": 2450218528
+              }
+            ],
+            "inactive_component_absent": true,
+            "encoder_released_before_decoder": true,
+            "idle_encoder_gpu_preload": true,
+            "constructor_payload_bytes": 0,
+            "decoder_first": {
+              "native_exact": true,
+              "encoder_payload_bytes": 0,
+              "decoder_payload_bytes": 2450218528
+            },
+            "decode_strategy": "native",
+            "fallback": null
+          },
+          {
+            "kind": "audio",
+            "encode": "bitwise_pass",
+            "decode": "bitwise_pass",
+            "latent_shape": [
+              1,
+              32,
+              2,
+              2
+            ],
+            "output_shape": [
+              1,
+              1600,
+              2
+            ],
+            "stage_events": [
+              {
+                "stage": "decode",
+                "read_bytes": 259672288
+              },
+              {
+                "stage": "encode",
+                "read_bytes": 345477248
+              },
+              {
+                "stage": "decode",
+                "read_bytes": 259672288
+              }
+            ],
+            "inactive_component_absent": true,
+            "encoder_released_before_decoder": true,
+            "idle_encoder_gpu_preload": true,
+            "constructor_payload_bytes": 0,
+            "decoder_first": {
+              "native_exact": true,
+              "encoder_payload_bytes": 0,
+              "decoder_payload_bytes": 259672288
+            },
+            "decode_strategy": "native",
+            "fallback": null
+          }
+        ]
+      }
+    }
+  },
+  "payload_calculation": {
+    "scope": "Tensor bytes only; not measured wire traffic/latency",
+    "M": 6814,
+    "R": 128,
+    "FC2_local_K": 7168,
+    "FC2_owned_activation_mib": 186.3203125,
+    "FC2_hidden_mib": 3.3271484375,
+    "FC2_gather_output_mib": 372.640625,
+    "single_adapter_input_bytes_ratio": 56
+  },
+  "sources_sha256": {
+    "patches/h3_lora.py": "c5a27ae872235e8bbc4c7010d65fce05481d442b93f203d5d7b126bff2dbbe8c",
+    "patches/h3_reference_plan.py": "b8ffc2905c05ca7a4ff5204b2c706391003c342e1b6d537056d084e4e01b9266",
+    "patches/staged_vae.py": "4134f07fdc3f3ddb81932f0da85b42835cb2ff362a2a490c35f018254984083b",
+    "patches/comfy_tp_runtime.py": "7beb903d12d56b4c5438418ee4e2937d6637b7e0c7966a7fd1df05f0bbeff792",
+    "custom_nodes/minimax_h3_tp2/__init__.py": "54e8fc0ea5c40f8b1a60b863d31b131588700a53d0827df2bb6e36c36e3c1f6e",
+    "patches/tp_dit.py": "4eee17f2eac8e0d2769c19bb1d94799dfa9f6d131355adc0a58366b59ea89dbe",
+    "patches/h3_operator_policy.py": "5a0568cecbb6015e80843a2318acad88968ce9cec9fffdb5101e37a7f84b2157",
+    "patches/tilelang_swiglu_quant.py": "6cc0db5336ab1d4c65c11ce1bcba7823f836457e19569fff573f1c1cd74df703",
+    "build_comfy_tp2_workflow.py": "284ac8696776cee50c5a4e5674f0c9344f36e389c585d848d4b1e34f616f45a1",
+    "workflows/video_minimax_h3_r2v_tp2_int8.json": "fb4aad4d5cb7090a90db48b4715648293a82bb6d19ad013228c94dffb9315be7",
+    "workflows/video_minimax_h3_r2v_tp2_operators.json": "55bcc246481e1448fc40a867aaa21e677eb397524ab39cf04eb6a55ec524742a",
+    "benchmarks/test_h3_row_partial_combined.py": "10300af103380188dc98aba752ed15392b73641f20ef10a5129aa72c0dff80da",
+    "benchmarks/test_h3_reference_loading.py": "bd4976a8378d618615d9e763fabecbbb116e35943eb5d7d59b9dff6178c14732",
+    "benchmarks/preview_h3_row_partial_combined.py": "1ce0259d70acf04bede4ca9bf0fb4594cecb70889706265ce73dbb9559cfc855",
+    "benchmarks/qualify_h3_staged_vae.py": "de5ebd95b8e16d72df4f8a2e0ca22f2aedd9e2652a706624279dfe914c7a74ef"
+  },
+  "limits": [
+    "Local GPU is SM120 logical TP2, not physical T4/NCCL qualification",
+    "No new Kaggle or full H3 pipeline run",
+    "RowPartial changes Native FP32 summation grouping",
+    "Static reference planning affects speculative idle prefetch only; actual encode calls load components",
+    "Video 261 final projection mismatch remains"
+  ]
+}

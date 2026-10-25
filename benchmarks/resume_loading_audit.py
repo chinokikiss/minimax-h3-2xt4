@@ -152,7 +152,7 @@ pathlib.Path(OUTPUT).write_text(json.dumps(dict(devices=devices,torch=torch.__ve
             if not matching_result(result_path,strategy,loader,p2,guard):
                 raise RuntimeError('Unaccepted source/workload/correctness: '+label)
             manifest['jobs'].append(dict(strategy=label,seconds=seconds,passed=True,reused=False));save()
-        command([sys.executable,str(ROOT/'analyze_loading_audit.py'),str(OUT)],300,'analysis.log')
+        command([sys.executable,str(ROOT/'tools/experiments/analyze_loading_audit.py'),str(OUT)],300,'analysis.log')
         manifest.update(status='complete',total_seconds=time.monotonic()-started);save()
     except BaseException as error:
         manifest.update(status='failed',error=type(error).__name__+': '+str(error),

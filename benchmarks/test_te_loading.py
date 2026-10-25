@@ -8,7 +8,7 @@ import time
 import unittest
 import torch
 from safetensors.torch import save_file
-from patches.te_loading import CoalescedTEReader,BoundedTECache
+from benchmarks.historical_te_loading import CoalescedTEReader,BoundedTECache
 from patches.weight_residency import WeightSpec
 
 

@@ -1,0 +1,157 @@
+{
+  "kernel": "pamcks/h3-l1-current-offline-e2e",
+  "version": 2,
+  "status": "failed_first_denoiser_fc1_gpu_oom",
+  "hardware": {
+    "devices": [
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "c7985438-0864-3ba2-2ffe-c39db6dc53ac"
+      },
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "35e36d68-a069-644a-da23-018fd48b58e1"
+      }
+    ],
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "kitchen": "0.2.37",
+    "tilelang": "0.1.13"
+  },
+  "source_publication": {
+    "file": "44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+    "sha256": "44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8",
+    "bytes": 12884750,
+    "capsule_sha256": "8d2f34c6d22a41205a023ab06f7b72e81a4f879f6526c8f948d66b2e2947734a",
+    "source_files": 99,
+    "core_pins": 78,
+    "kaggle_mounts": 0,
+    "repository": "chinokikiss/minimax-h3-2xt4",
+    "branch": "codex/kaggle-light-delivery-20261022-44072cef",
+    "commit": "a203a8074dece58be92b3d812362ff5f75cf6579",
+    "path": "runtime/kaggle_artifacts/44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+    "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/a203a8074dece58be92b3d812362ff5f75cf6579/runtime/kaggle_artifacts/44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+    "published": true,
+    "working_tree_and_index_changed": false
+  },
+  "workload": {
+    "width": 896,
+    "height": 512,
+    "frames": 362,
+    "fps": 24,
+    "seed": 20261020,
+    "steps": 4,
+    "sampler": "lcm",
+    "offline_lora": true
+  },
+  "sequence_tokens": 51220,
+  "query_shape": [
+    1,
+    28,
+    51220,
+    128
+  ],
+  "segments": [
+    {
+      "kind": "text",
+      "start": 0,
+      "stop": 1182
+    },
+    {
+      "kind": "reference_image_1",
+      "start": 1182,
+      "stop": 1630
+    },
+    {
+      "kind": "reference_image_2",
+      "start": 1630,
+      "stop": 2078
+    },
+    {
+      "kind": "audio",
+      "start": 2078,
+      "stop": 3284
+    },
+    {
+      "kind": "video",
+      "start": 3284,
+      "stop": 51220
+    }
+  ],
+  "offline_bake": {
+    "bytes": 20970379616,
+    "sha256": "d487afc287543f4ee66fd0a4da3135e767d8bbc04d0251cddf1a86549d9b9376",
+    "verified_native_targets": 208,
+    "scope": "Native FP32 sequential offline merge and full-width ConvRot requantization; not online-LoRA equality"
+  },
+  "offline_bake_seconds": 352.03667678700003,
+  "stages": {
+    "vae_metadata": {
+      "status": "complete",
+      "seconds": 0.496431457
+    },
+    "reference_and_TE": {
+      "status": "complete",
+      "seconds": 147.802401836
+    },
+    "sampler": {
+      "status": "failed",
+      "seconds": 52.885669191
+    }
+  },
+  "completed_sampling_steps": 0,
+  "completed_denoiser_outputs": 0,
+  "vae_before_sampling": {
+    "video": {
+      "stage": "encode",
+      "read_bytes": 360747328
+    },
+    "audio": {
+      "stage": null,
+      "read_bytes": 0
+    }
+  },
+  "failure": {
+    "operator": "DiT FC1 ColumnParallelLinearINT8",
+    "selected_implementation": "comfy_kitchen.backends.eager.quantization.int8_linear (GPU tensors)",
+    "failing_statement": "torch.cat(scaled_parts, dim=0)",
+    "shape": [
+      51220,
+      5376,
+      14336
+    ],
+    "requested_bytes": 1468579840,
+    "gpu_free_mib_at_error": 896.75,
+    "full_int32_result_bytes": 2937159680,
+    "fp16_output_bytes": 1468579840,
+    "rank0_peak_allocated_bytes": 13501212160,
+    "rank0_peak_reserved_bytes": 14898167808,
+    "dispatch_reason": "Not recorded by this run; CUDA extension/import availability does not establish INT8-linear backend eligibility"
+  },
+  "sampled_nvml_peak_bytes": {
+    "0": 15643967488,
+    "1": 13129482240
+  },
+  "download_manifest_sha256": "a83e1ccd0048a953f846f00e927b9e2fc64fc742b0d2ada5fc5a4233820639ac",
+  "evidence_sha256": {
+    "light_execution/batch_results.json": "31cd3a8ce67f5ac2070e17f45246b72b6441d197ef0a8739ba4b756f51aed0c2",
+    "light_execution/e2e/batch_results.json": "bf81d9c2fd57520b3714d12d054fafc7cc791491489626e6da12052b018f1e5c",
+    "light_execution/e2e/offline_merge_receipt.json": "1d19394f004ae700a1381bee8e9c49cc316b6eca704d714005104c07d5671804",
+    "light_execution/e2e/L1/result.json": "4841db30cb1e384adc1f71c589c82ea459d56a05e0ce23282e9e89ecc29f0714",
+    "light_execution/e2e/L1/exception.txt": "0c2006a13d83ac4ff01d79376736708e9be74c59a731e4ffef05cb0ed386c89b",
+    "light_execution/e2e/L1_generation.log": "e808d9b81f19fa92a502c797d139b88053d3e750137cf38f7d75ca5242a9c5ae",
+    "light_execution/e2e/L1/memory_samples.json.gz": "dd856cd3a28d6156dd7309b2d45144f95bc908da8643c0692992dd90e7f8a7c1"
+  },
+  "media_generated": false,
+  "full_pipeline_quality_accepted": false,
+  "environment_versions_changed": false,
+  "profiling_scope": "Returned stage logs, allocator OOM, rank peak counters and sampled NVML/cgroup records; no Nsight causal attribution in this run"
+}

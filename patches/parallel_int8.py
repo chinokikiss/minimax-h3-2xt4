@@ -78,10 +78,13 @@ def row_linear(x, weight, weight_scale, comm, world_size, groupsize=256, input_a
         # Each rank holds [gate_rank, up_rank]. Restore [all_gate, all_up].
         pieces = full.chunk(world_size, -1)
         full = torch.cat([p.chunk(2, -1)[0] for p in pieces] + [p.chunk(2, -1)[1] for p in pieces], -1)
+        del pieces
         start //= 2
         length //= 2
     q, scale = quantize(full, groupsize, input_act=input_act)
+    del full
     partial = int_mm(q[:, start:start + length].contiguous(), weight)
+    del q
     if world_size > 1:
         comm.all_reduce(partial, op=comm.ReduceOp.SUM)
     # Match the native cuBLAS/Turing path: cast dequantized output before residual.

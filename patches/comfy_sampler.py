@@ -60,9 +60,14 @@ class RemoteDenoiser(nn.Module):
     def __init__(self, service):
         super().__init__()
         self.service = service
+        flow=getattr(service.config,'tensor_flow',None)
+        if flow is not None and flow.enabled:self.dtype=flow.dtype
         self.register_buffer('device_anchor', torch.zeros(1), persistent=False)
 
     def preprocess_text_embeds(self, context):
+        flow=getattr(self.service.config,'tensor_flow',None)
+        if flow is not None and flow.enabled and context.shape[-1]==self.hidden_size:
+            return context.to(flow.dtype)
         return packet(self.service.call('refine', context), context.device)
 
     def forward(self, x, timestep, context=None, control=None, transformer_options=None, **kwargs):
@@ -92,8 +97,24 @@ def create_model(service, device='cuda:0'):
     import comfy.supported_models
     config = comfy.supported_models.MiniMaxH3({'image_model':'minimax_h3',
         'disable_unet_model_creation':True})
-    config.set_inference_dtype(torch.float32, None)
-    native = comfy.model_base.MiniMaxH3(config, device=torch.device(device))
+    flow=getattr(service.config,'tensor_flow',None)
+    config.set_inference_dtype(flow.dtype if flow is not None and flow.enabled else torch.float32, None)
+    base_class=comfy.model_base.MiniMaxH3
+    if flow is not None and flow.enabled:
+        class ScaledConditioningH3(base_class):
+            def extra_conds(self, **kwargs):
+                # Native casts unnormalized TE states to inference dtype before
+                # condition_proj. Preserve this boundary in FP32 until the
+                # projection's folded output scale has made FP16 storage safe.
+                cross=kwargs.get('cross_attn')
+                if cross is not None:
+                    kwargs['cross_attn']=self.diffusion_model.preprocess_text_embeds(
+                        cross.to(device=kwargs['device'],dtype=torch.float32))
+                # Retain Native layout construction, references, masks and tags.
+                # The proxy recognizes the already-refined hidden width.
+                return super().extra_conds(**kwargs)
+        base_class=ScaledConditioningH3
+    native = base_class(config, device=torch.device(device))
     native.diffusion_model = RemoteDenoiser(service)
     patcher = comfy.model_patcher.ModelPatcher(native, torch.device(device), torch.device('cpu'))
 
@@ -156,7 +177,7 @@ class DecodeHandoff:
 
 
 class ParallelDecodeHandoff(DecodeHandoff):
-    """Lease parallel raw decoding inside the unchanged Native public VAE.
+    """Lease video-only parallel decoding; audio always uses Native single-GPU.
 
     Checkpoint path comes from the loader that constructed this Native VAE.
     Single-device / unsupported dtype / memory admission uses Native. Once a
@@ -170,82 +191,80 @@ class ParallelDecodeHandoff(DecodeHandoff):
         self.last_strategy = 'native'
         self.last_fallback = None
         self.last_query_partitioning = None
+        self.last_admission = None
 
     def _decode(self, method, *args, **kwargs):
         with self.service.lock:
-            if hasattr(self.vae,'prepare_decode'):self.vae.prepare_decode()
-            return self._decode_prepared(method,*args,**kwargs)
+            from patches.staged_vae import StagedVAE
+            template=None
+            if (isinstance(self.vae,StagedVAE) and getattr(self.vae,'kind',None)=='video'
+                    and self.mode=='auto' and self.vae.vae_dtype==torch.float16
+                    and not getattr(self.vae.patcher,'patches',None)
+                    and not getattr(self.vae.patcher,'forced_hooks',None)
+                    and torch.device(self.vae.device).type=='cuda'):
+                template=self.vae.prepare_remote_decode()
+            return self._decode_prepared(method,*args,_metadata_model=template,**kwargs)
 
-    def _decode_prepared(self, method, *args, **kwargs):
+    def _native_decode(self,method,*args,**kwargs):
+        from patches.staged_vae import StagedVAE
+        if isinstance(self.vae,StagedVAE):self.vae.prepare_decode()
+        return super()._decode(method,*args,**kwargs)
+
+    def _decode_prepared(self, method, *args, _metadata_model=None, **kwargs):
         import logging
-        import comfy.model_management
         from comfy.ldm.minimax.vae import MiniMaxH3VideoVAE
-        from comfy.ldm.minimax.audio_vae import MiniMaxH3AudioVAE
-        model = self.vae.first_stage_model
-        kind = ('video' if isinstance(model, MiniMaxH3VideoVAE) else
-                'audio' if isinstance(model, MiniMaxH3AudioVAE) else None)
-        dtype = torch.float16 if kind == 'video' else torch.float32
+        model = _metadata_model if _metadata_model is not None else self.vae.first_stage_model
+        kind = 'video' if isinstance(model, MiniMaxH3VideoVAE) else None
+        dtype = torch.float16
         self.last_strategy, self.last_fallback = 'native', None
         self.last_query_partitioning = None
+        self.last_admission = None
         if (self.mode == 'native' or kind is None or self.vae.vae_dtype != dtype or
                 getattr(self.vae.patcher, 'patches', None) or
                 getattr(self.vae.patcher, 'forced_hooks', None) or
                 torch.device(self.vae.device).type != 'cuda'):
-            return super()._decode(method, *args, **kwargs)
-        if kind == 'video':
-            from patches.parallel_vae import query_partitioning_status
-            self.last_query_partitioning=query_partitioning_status(model)
-            if not self.last_query_partitioning['available']:
-                self.last_fallback='Video VAE query-parallel unavailable: '+self.last_query_partitioning['reason']
-                logging.info('MiniMax video VAE using Native: %s',self.last_fallback)
-                return super()._decode(method, *args, **kwargs)
+            return self._native_decode(method, *args, **kwargs)
+        from patches.parallel_vae import query_partitioning_status
+        self.last_query_partitioning=(query_partitioning_status(model,checkpoint_reader=self.vae.reader)
+            if _metadata_model is not None else query_partitioning_status(model))
+        if not self.last_query_partitioning['available']:
+            self.last_fallback='Video VAE query-parallel unavailable: '+self.last_query_partitioning['reason']
+            logging.info('MiniMax video VAE using Native: %s',self.last_fallback)
+            return self._native_decode(method, *args, **kwargs)
+        if type(model) is not MiniMaxH3VideoVAE:
+            self.last_fallback = 'Remote planner requires the frozen Native Video VAE class'
+            return self._native_decode(method, *args, **kwargs)
         samples = args[0] if args else kwargs.get('samples_in', kwargs.get('samples'))
         if samples is None:
             raise ValueError('VAE decode requires samples_in')
-        if kind == 'audio' and (samples.ndim != 4 or samples.shape[2] != 2):
-            return super()._decode(method, *args, **kwargs)
         with self.service.lock:
             memory = self.vae.memory_used_decode(samples.shape, dtype)
-            # Account for the parent model before admitting rank replicas.
-            # The subsequent Native public call owns batch/tile choices.
-            try:
-                with comfy.model_management.cuda_device_context(self.vae.device):
-                    comfy.model_management.load_models_gpu([self.vae.patcher],
-                        memory_required=memory, force_full_load=self.vae.disable_offload)
-            except comfy.model_management.OOM_EXCEPTION:
-                self.last_fallback = 'Parent VAE memory admission'
-                return super()._decode(method, *args, **kwargs)
             numeric = dict(matmul_tf32=torch.backends.cuda.matmul.allow_tf32,
                 cudnn_tf32=torch.backends.cudnn.allow_tf32,
                 cudnn_benchmark=torch.backends.cudnn.benchmark,
                 cudnn_deterministic=torch.backends.cudnn.deterministic)
-            prepared = self.service.call('vae_prepare', self.checkpoint, kind, int(memory), numeric)
-            if not prepared['accepted']:
-                self.last_fallback = prepared['reason']
-                logging.info('MiniMax %s VAE using Native: %s', kind, self.last_fallback)
-                return super()._decode(method, *args, **kwargs)
-            target = '_decode_pixels' if kind == 'video' else 'decode'
-            had_override = target in model.__dict__
-            override = model.__dict__.get(target)
-
             def remote(z):
-                command = 'video_pixels' if kind == 'video' else 'audio_channels'
-                output = self.service.call(command, z)
+                output = self.service.call('video_pixels', z)
                 return output.to(device=z.device)
 
-            self.last_strategy = 'native_aligned_query' if kind == 'video' else 'channel_parallel'
-            try:
-                setattr(model, target, remote)
-                self.service.call('decode_start')
-                output = method(*args, **kwargs)
-                torch.cuda.synchronize(self.vae.device)
-            finally:
-                # Restore the exact instance state, including after cancellation.
-                if had_override:
-                    setattr(model, target, override)
-                else:
-                    delattr(model, target)
-                if not self.service.closed:
-                    self.service.call('vae_release')
-            self.service.call('decode_complete')
-            return output
+            from patches.video_decode_planner import remote_video_planner
+            with remote_video_planner(self.vae, self.service, remote,template=_metadata_model) as planner:
+                prepared = (self.service.call('vae_prepare', self.checkpoint, kind, int(memory), numeric)
+                    if planner is not None else
+                    {'accepted':False, 'reason':'Parent Video VAE could not offload to CPU'})
+                self.last_admission = prepared.get('admission')
+                if prepared['accepted']:
+                    self.last_strategy = 'native_aligned_query'
+                    try:
+                        self.service.call('decode_start')
+                        output = method(*args, **kwargs)
+                        torch.cuda.synchronize(self.vae.device)
+                    finally:
+                        if not self.service.closed:
+                            self.service.call('vae_release')
+                    self.service.call('decode_complete')
+                    return output
+            # Restore the trained parent and release the planner before fallback.
+            self.last_fallback = prepared['reason']
+            logging.info('MiniMax %s VAE using Native: %s', kind, self.last_fallback)
+            return self._native_decode(method, *args, **kwargs)

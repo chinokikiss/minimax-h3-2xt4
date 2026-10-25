@@ -1,0 +1,1044 @@
+{
+  "status": "failed_kitchen_worker_deadline_scalar_not_started",
+  "updated_utc": "2026-10-24T01:06:46.365853+00:00",
+  "scope": "Matched one DiT NFE per backend, real 51220-token inputs; no full pipeline or media generation",
+  "evidence_root": "D:\\attention_eval\\bundle_scalar_profile_20261023",
+  "source_publication": {
+    "file": "af92e389a15b232590af88819c4a686f5639e94686087c3a12b53f70bc838822.tar.gz",
+    "sha256": "af92e389a15b232590af88819c4a686f5639e94686087c3a12b53f70bc838822",
+    "bytes": 17599138,
+    "capsule_sha256": "66e7b8a92aac750c7f8849f09f3914edc09e4158b66b07700152f9ab59643d82",
+    "source_files": 326,
+    "core_pins": 78,
+    "kaggle_mounts": 0,
+    "repository": "chinokikiss/minimax-h3-2xt4",
+    "branch": "codex/bundle-scalar-profile-20261023-af92e389",
+    "commit": "cd49dbe63347d31fbddd78f9ef504f3d6f6b3560",
+    "path": "runtime/kaggle_artifacts/af92e389a15b232590af88819c4a686f5639e94686087c3a12b53f70bc838822.tar.gz",
+    "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/cd49dbe63347d31fbddd78f9ef504f3d6f6b3560/runtime/kaggle_artifacts/af92e389a15b232590af88819c4a686f5639e94686087c3a12b53f70bc838822.tar.gz",
+    "published": true,
+    "working_tree_and_index_changed": false,
+    "local_cpu_tests": 61
+  },
+  "bundle": {
+    "repository": "cnmds/minimax-h3-tp2-int8-561a6211",
+    "revision": "d3e6a4b131056d2c626a01acf6ba48123a885783",
+    "bundle_sha256": "87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a",
+    "shards": 200,
+    "bytes": 44032850400,
+    "te_auxiliary_bytes": 2746396392,
+    "dit_auxiliary_bytes": 1602311528,
+    "base_only": true,
+    "persistent_baked_bytes": 0,
+    "lora_publication": false
+  },
+  "implementation": {
+    "merge_device": "cpu",
+    "matrix_scope": "Full width before deterministic ConvRot quantization and rank split",
+    "cache": "Existing byte-bounded host cache and shared preparation budget",
+    "legacy_safetensors_and_gpu_baker_preserved": true,
+    "generation_quality_qualified": false
+  },
+  "local_tests": {
+    "corrected_isolated_capsule_tests": 61,
+    "passed": true,
+    "additional_legacy_tests": 26,
+    "trained_contract": {
+      "scope": "Local trained weight contract checks only; RTX 5060 Ti is not T4 performance evidence",
+      "cases": [
+        {
+          "target": "blocks.0.attn.qkv_proj",
+          "base_reconstruction_exact": true,
+          "cpu_native_independent_exact": true,
+          "cpu_gpu_int8_exact": false,
+          "cpu_gpu_scale_exact": false,
+          "cpu_weight_sha256": "1f5f65f19645f80568075d93faf84b8ab4d709dbd34b15e19d1a52d8e7822099",
+          "gpu_weight_sha256": "8add672f3938184e0ea307b6fc2ab4ab43c465cdfd7f9a93de4e0a5920a67506"
+        },
+        {
+          "target": "blocks.0.attn.out_proj",
+          "base_reconstruction_exact": true,
+          "cpu_native_independent_exact": true,
+          "cpu_gpu_int8_exact": false,
+          "cpu_gpu_scale_exact": false,
+          "cpu_weight_sha256": "1570ee375def4564d3c5d8141099cb7459e3a133ca463d3e5b0bca60808a8655",
+          "gpu_weight_sha256": "bce58fdf927cf60544e4ad392430b9ca604fe53d93235852214507f1348744d7"
+        },
+        {
+          "target": "blocks.0.mlp.fc1",
+          "base_reconstruction_exact": true,
+          "cpu_native_independent_exact": true,
+          "cpu_gpu_int8_exact": false,
+          "cpu_gpu_scale_exact": false,
+          "cpu_weight_sha256": "bd646e47af8a1ec704fdaa6193568c868b76073b1e367b8cb159b03bcfa89667",
+          "gpu_weight_sha256": "0a41f25e654d9d038bb5ea43f27215857b235a2b0c8c62ec79c25d5e876d8d2b"
+        },
+        {
+          "target": "blocks.0.mlp.fc2",
+          "base_reconstruction_exact": true,
+          "cpu_native_independent_exact": true,
+          "cpu_gpu_int8_exact": true,
+          "cpu_gpu_scale_exact": false,
+          "cpu_weight_sha256": "ad890dd9f56feda866ce42e4c39b000cc2f3b9770fbf7ac9e23fae3a5aff1ea9",
+          "gpu_weight_sha256": "ad890dd9f56feda866ce42e4c39b000cc2f3b9770fbf7ac9e23fae3a5aff1ea9"
+        },
+        {
+          "target": "blocks.49.mlp.fc2",
+          "base_reconstruction_exact": true,
+          "cpu_native_independent_exact": true,
+          "cpu_gpu_int8_exact": false,
+          "cpu_gpu_scale_exact": false,
+          "cpu_weight_sha256": "46feddc28fcd4202a399582c1871995640ab9a49afc47b47c4237df775fbb996",
+          "gpu_weight_sha256": "6a73aefa3b38a6c221879080b1b9bc6789394d2a089de50309d9ed24fb9e5551"
+        }
+      ],
+      "torch": "2.12.1+cu132",
+      "gpu": "NVIDIA GeForce RTX 5060 Ti",
+      "source": "Published immutable base bundle + local pinned source",
+      "passed": true
+    }
+  },
+  "cpu_v1": {
+    "kernel": "pamcks/h3-bundle-scalar-cpu",
+    "version": 1,
+    "tests": 60,
+    "status": "passed_but_superseded_packaging_omission",
+    "capsule_sha256": "4df563663e74f1ec956e23a2f88d641094d054d96f485f1a93d5f2e9418c44bc",
+    "final_artifact_collection_count": 1
+  },
+  "cpu_v2": {
+    "kernel": "pamcks/h3-bundle-scalar-cpu",
+    "version": 2,
+    "status": "cpu_ready",
+    "submission": {
+      "kernel": "pamcks/h3-bundle-scalar-cpu",
+      "submitted_utc": "2026-10-23T15:33:30.113718+00:00",
+      "returncode": 0,
+      "notebook_sha256": "cdebb58d7ff372948667489604f3da16e732649dd79fd630e2d9c9a3bf965b03",
+      "source_binding": {
+        "mode": "cpu",
+        "publication": {
+          "file": "af92e389a15b232590af88819c4a686f5639e94686087c3a12b53f70bc838822.tar.gz",
+          "sha256": "af92e389a15b232590af88819c4a686f5639e94686087c3a12b53f70bc838822",
+          "bytes": 17599138,
+          "capsule_sha256": "66e7b8a92aac750c7f8849f09f3914edc09e4158b66b07700152f9ab59643d82",
+          "source_files": 326,
+          "core_pins": 78,
+          "kaggle_mounts": 0,
+          "repository": "chinokikiss/minimax-h3-2xt4",
+          "branch": "codex/bundle-scalar-profile-20261023-af92e389",
+          "commit": "cd49dbe63347d31fbddd78f9ef504f3d6f6b3560",
+          "path": "runtime/kaggle_artifacts/af92e389a15b232590af88819c4a686f5639e94686087c3a12b53f70bc838822.tar.gz",
+          "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/cd49dbe63347d31fbddd78f9ef504f3d6f6b3560/runtime/kaggle_artifacts/af92e389a15b232590af88819c4a686f5639e94686087c3a12b53f70bc838822.tar.gz",
+          "published": true,
+          "working_tree_and_index_changed": false,
+          "local_cpu_tests": 61
+        },
+        "qualification_sha256": null,
+        "kaggle_dataset_sources": [],
+        "kaggle_kernel_sources": [],
+        "temporary_private_auth": false,
+        "profile_hashes": {},
+        "setup_budget": 240,
+        "execution_budget": null,
+        "dit_lifetimes": false,
+        "dit_attention": "kitchen",
+        "profile_qualification_sha256": null
+      },
+      "final_collection_count": 0,
+      "status_polling": false,
+      "automatic_final_collection": false,
+      "response": "Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.4), please consider upgrading to the latest version (2.2.5)\nKernel version 2 successfully pushed.  Please check progress at https://www.kaggle.com/code/pamcks/h3-bundle-scalar-cpu\n"
+    },
+    "tests": 61,
+    "seconds": 121.81408159700001,
+    "receipt_sha256": "d3b2e583f1c9693361fb30b2c35f87fde5f9417e9521f231bc9a2f9e33a8f758",
+    "api": {
+      "torch": "2.11.0+cpu",
+      "cuda": null,
+      "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]",
+      "kitchen": "0.2.37",
+      "tilelang": "0.1.13",
+      "legacy_video_api": {
+        "signature": "(self, x, rotary_pos_emb, pre_norm, residual, residual_scale)",
+        "source": "/kaggle/temp/h3_light_source/ComfyUI/comfy/ldm/minimax/vae.py",
+        "gpu_available_on_cpu_host": false,
+        "qualification": "CPU signature/import check only; GPU availability is checked by the actual T4 operator gate"
+      },
+      "attention_signature": "(q: 'torch.Tensor', k: 'torch.Tensor', v: 'torch.Tensor', *, scale: 'float | None' = None, attn_mask: 'torch.Tensor | None' = None) -> 'torch.Tensor'",
+      "linear_signature": "(x: torch.Tensor, weight: torch.Tensor, weight_scale: torch.Tensor, bias: torch.Tensor | None = None, out_dtype: torch.dtype | None = None, convrot: bool = False, convrot_groupsize: int = 256, input_act: str | None = None, input_act_weight: torch.Tensor | None = None, input_act_eps: float = 0.0, residual: torch.Tensor | None = None, residual_scale: torch.Tensor | None = None) -> torch.Tensor",
+      "cuda_arch_flags": null,
+      "core_imports": "passed",
+      "tf32_default": false
+    },
+    "local_source_files_matched": 119,
+    "final_artifact_collection_count": 1
+  },
+  "gpu": {
+    "submitted": true,
+    "results_available": true,
+    "target": "2xTesla T4 SM75",
+    "kernel": "pamcks/h3-dit-scalar-single-profile",
+    "backends": [
+      "kitchen",
+      "tilelang_scalar"
+    ],
+    "denoiser_calls_per_backend": 1,
+    "tokens": 51220,
+    "query_shape_per_rank": [
+      1,
+      28,
+      51220,
+      128
+    ],
+    "same_serialized_inputs": true,
+    "core_pins": {
+      "comfy-kitchen": "0.2.37",
+      "tilelang": "0.1.13"
+    },
+    "compile_and_preparation_not_steady_state": true,
+    "version": 1,
+    "submitted_utc": "2026-10-23T15:39:23.546196+00:00",
+    "submission_receipt": {
+      "kernel": "pamcks/h3-dit-scalar-single-profile",
+      "submitted_utc": "2026-10-23T15:39:23.546196+00:00",
+      "returncode": 0,
+      "notebook_sha256": "8ccd56f8f2cb39fb6ec60bdfc273a3288a5fe832f60a1f704dda5d7abf1ed248",
+      "source_binding": {
+        "mode": "dit-profile",
+        "publication": {
+          "file": "af92e389a15b232590af88819c4a686f5639e94686087c3a12b53f70bc838822.tar.gz",
+          "sha256": "af92e389a15b232590af88819c4a686f5639e94686087c3a12b53f70bc838822",
+          "bytes": 17599138,
+          "capsule_sha256": "66e7b8a92aac750c7f8849f09f3914edc09e4158b66b07700152f9ab59643d82",
+          "source_files": 326,
+          "core_pins": 78,
+          "kaggle_mounts": 0,
+          "repository": "chinokikiss/minimax-h3-2xt4",
+          "branch": "codex/bundle-scalar-profile-20261023-af92e389",
+          "commit": "cd49dbe63347d31fbddd78f9ef504f3d6f6b3560",
+          "path": "runtime/kaggle_artifacts/af92e389a15b232590af88819c4a686f5639e94686087c3a12b53f70bc838822.tar.gz",
+          "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/cd49dbe63347d31fbddd78f9ef504f3d6f6b3560/runtime/kaggle_artifacts/af92e389a15b232590af88819c4a686f5639e94686087c3a12b53f70bc838822.tar.gz",
+          "published": true,
+          "working_tree_and_index_changed": false,
+          "local_cpu_tests": 61
+        },
+        "qualification_sha256": "d3b2e583f1c9693361fb30b2c35f87fde5f9417e9521f231bc9a2f9e33a8f758",
+        "kaggle_dataset_sources": [],
+        "kaggle_kernel_sources": [],
+        "temporary_private_auth": false,
+        "profile_hashes": {},
+        "setup_budget": 240,
+        "execution_budget": 4800,
+        "dit_lifetimes": false,
+        "dit_attention": "tilelang_scalar",
+        "profile_qualification_sha256": null
+      },
+      "final_collection_count": 0,
+      "status_polling": false,
+      "automatic_final_collection": false,
+      "experiment_kind": "dit_single",
+      "result_relative": "light_execution/dit_single/dit_profile/result.json",
+      "response": "Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.4), please consider upgrading to the latest version (2.2.5)\nKernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/pamcks/h3-dit-scalar-single-profile\n"
+    },
+    "final_artifact_collection_count": 1,
+    "completed": false,
+    "scalar_started": false,
+    "performance_comparison_available": false
+  },
+  "capture_protocol": {
+    "before_model_downloads": true,
+    "cases": [
+      "terminate_no_flush",
+      "terminate_flush",
+      "graceful_no_flush",
+      "graceful_flush"
+    ],
+    "required_case": "graceful_flush",
+    "actual_nfe_blocks_per_rank": 50,
+    "coverage_correlation": "Runtime APIs; final manual review must include DRIVER APIs and dropped-record warnings",
+    "ncu": "Historical ERR_NVGPUCTRPERM, not reprobed"
+  },
+  "cpu_diagnosis": {
+    "root_cause": "Profiler timing corruption observed; original Norm/Residual host anomaly unresolved",
+    "sampling_interval_seconds": 0.01,
+    "cprofile_calls": [
+      1,
+      2,
+      50,
+      99
+    ],
+    "timers": [
+      "wall",
+      "thread_cpu",
+      "cuda_stream"
+    ],
+    "resident_modes": [
+      "off",
+      "nvtx",
+      "events",
+      "full",
+      "sampled_full",
+      "profiled_full"
+    ],
+    "counterbalanced_repeats": 3,
+    "background_cpu_observer_cuda_guard": true
+  },
+  "delivery": {
+    "dataset_mounts": 0,
+    "kernel_output_mounts": 0,
+    "status_polling": false,
+    "automatic_final_collection": false
+  },
+  "packaging_fix": {
+    "problem": "Delivery builder omitted current worker-base file, leaving bundle-offline stack rejection in submitted CPU source",
+    "gpu_affected": false,
+    "corrected_source": "benchmarks/run_h3_l1_current_e2e.py",
+    "regression": "test_worker_accepts_bundle_offline_stack_and_rejects_online_stack"
+  },
+  "source_hashes": {
+    "patches/tp2_bundle.py": "c7f5273e63c4d56e45e590ceeec2c0368dc82d05297db2b92d1db24b03062486",
+    "patches/windowed_tp.py": "c2a4d07cbee30795b71d3d3975c9b1125fa21f340032daf17eacd518e6e1c0ae",
+    "patches/comfy_tp_runtime.py": "c61d621b86ffe4cf0892f754838d69d0cf96cd2c0403cfd0095c2bd099d28b85",
+    "patches/runtime_diagnostics.py": "7fb515d3582d2657283fe28dc51a98dbcd129b47145c53de271709f25363edfc",
+    "custom_nodes/minimax_h3_tp2/__init__.py": "a46257ae943e6e30510d1361f30f3e111a025d39c0e143aa7394457e834730bf",
+    "benchmarks/build_dit_profile_delivery.py": "4b209384c82055050640d33a036925bdcd3672c6728e2cefbf61ab434278364d",
+    "benchmarks/run_h3_l1_current_e2e.py": "4972d89f71f2ac206494b3c41666dbff650fe70fef2595c676cdb4619bacf4e8",
+    "benchmarks/run_h3_l1_current_batch.py": "b2e2fd35a3b3201246062b72344c342fee29a17a2ed2a0446842c66a725ace56",
+    "benchmarks/launch_dit_profile.py": "c5f6646416c8a638d7c32cf2fa58b59bdb81117320b3c31a06063c10ec78ecbe",
+    "benchmarks/profile_dit_single.py": "bed6712f3c579c1d1ad4b162c7fa48e631f7006ace236d75105de688ccd41a60",
+    "benchmarks/dit_performance_observer.py": "8291d8d7f0e52246460e901b52c4a238c275104450dc521e2754c10ccd436cbe",
+    "benchmarks/worker_cpu_probe.py": "6f0e8b071541a7ed7a9f3cc8d53c972cc59fdfc1c4aa9464d78ba3b4a041b4d3",
+    "benchmarks/qualify_worker_cuda_trace.py": "36e5bed6675a553e7b6349c550b96450b14a33d1d7fbed3d752d0d9df314c308",
+    "benchmarks/worker_trace_coverage.py": "cac2b04648542da54fb951523382fce4de84373da6eb49aed93c230a25059ca9",
+    "benchmarks/test_dit_single_profile.py": "f93e0dc4f0148bef892f8a0abb140903af0f919e24c23f717b9fe2005691b22e",
+    "benchmarks/test_tp2_bundle.py": "f092e5ae1996cae5b036a602f4b47741bf897481b8aec5d580a4c76957238e8c",
+    "benchmarks/test_worker_trace.py": "4bcf89e5400fcb918b1fe330398a0aadc0dd145d853cadf191edac006ee2933d"
+  },
+  "pending": [
+    "Qualify the CPU profiler with concurrent disk/cache threads on native Python 3.13 before GPU retry",
+    "Checkpoint worker progress/CPU samples and flush trace before timeout cleanup",
+    "Separate and measure bounded CPU bundle preparation; current 600s command deadline is insufficient for this run",
+    "Complete matched Kitchen/Scalar calls before performance comparison"
+  ],
+  "gpu_v1_result": {
+    "status": "failed_kitchen_worker_deadline_scalar_not_started",
+    "collected_utc": "2026-10-24T01:03:32.034012+00:00",
+    "artifact_count": 67,
+    "all_local_download_hashes_verified": true,
+    "source_binding_verified": true,
+    "hardware": {
+      "devices": [
+        {
+          "name": "Tesla T4",
+          "capability": [
+            7,
+            5
+          ],
+          "uuid": "b78524fd-ab5f-2511-f84e-f2945169dc73"
+        },
+        {
+          "name": "Tesla T4",
+          "capability": [
+            7,
+            5
+          ],
+          "uuid": "69e8ff5c-bc88-3f9c-18af-ca181a982eda"
+        }
+      ],
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "kitchen": "0.2.37",
+      "tilelang": "0.1.13"
+    },
+    "setup_seconds": 106.40242902400001,
+    "execution_supervision": {
+      "status": "worker_exited",
+      "deadline_seconds": 4800,
+      "scope": "Notebook cell execution only; provider startup/mounting excluded",
+      "worker_pid": 98,
+      "exit_code": 1,
+      "seconds": 1693.5222517519999
+    },
+    "commands": [
+      {
+        "name": "worker_capture_gate",
+        "exit_code": 0,
+        "seconds": 25.942138903
+      },
+      {
+        "name": "dit_single",
+        "exit_code": 1,
+        "seconds": 1663.3789080079998
+      }
+    ],
+    "input_preparation_seconds": 262.023067221,
+    "kitchen_profile_process_seconds": 826.120708727,
+    "capture_gate": {
+      "passed": true,
+      "cases": [
+        {
+          "name": "terminate_no_flush",
+          "exit_code": 0,
+          "seconds": 8.287027840000007,
+          "flush": false,
+          "exit": "terminate",
+          "export_exit_code": 0,
+          "coverage": {
+            "passed": false,
+            "blocker": "Required worker CUDA/NVTX tables missing"
+          }
+        },
+        {
+          "name": "terminate_flush",
+          "exit_code": 0,
+          "seconds": 5.630177991000039,
+          "flush": true,
+          "exit": "terminate",
+          "export_exit_code": 0,
+          "coverage": {
+            "passed": true,
+            "workers": [
+              {
+                "global_tid": 281478768361698,
+                "pid": 226,
+                "labels": [
+                  "H3_CAPTURE/rank=0"
+                ],
+                "correlated_kernels": 4,
+                "devices": [
+                  0
+                ],
+                "trained_blocks_with_kernels": 0
+              },
+              {
+                "global_tid": 281478785138915,
+                "pid": 227,
+                "labels": [
+                  "H3_CAPTURE/rank=1"
+                ],
+                "correlated_kernels": 4,
+                "devices": [
+                  1
+                ],
+                "trained_blocks_with_kernels": 0
+              }
+            ],
+            "scope": "Coverage qualification only; no performance attribution",
+            "blocker": null
+          }
+        },
+        {
+          "name": "graceful_no_flush",
+          "exit_code": 0,
+          "seconds": 5.984085299000014,
+          "flush": false,
+          "exit": "graceful",
+          "export_exit_code": 0,
+          "coverage": {
+            "passed": true,
+            "workers": [
+              {
+                "global_tid": 281480227979577,
+                "pid": 313,
+                "labels": [
+                  "H3_CAPTURE/rank=1"
+                ],
+                "correlated_kernels": 4,
+                "devices": [
+                  1
+                ],
+                "trained_blocks_with_kernels": 0
+              },
+              {
+                "global_tid": 281480211202360,
+                "pid": 312,
+                "labels": [
+                  "H3_CAPTURE/rank=0"
+                ],
+                "correlated_kernels": 4,
+                "devices": [
+                  0
+                ],
+                "trained_blocks_with_kernels": 0
+              }
+            ],
+            "scope": "Coverage qualification only; no performance attribution",
+            "blocker": null
+          }
+        },
+        {
+          "name": "graceful_flush",
+          "exit_code": 0,
+          "seconds": 5.779263694999997,
+          "flush": true,
+          "exit": "graceful",
+          "export_exit_code": 0,
+          "coverage": {
+            "passed": true,
+            "workers": [
+              {
+                "global_tid": 281481670820239,
+                "pid": 399,
+                "labels": [
+                  "H3_CAPTURE/rank=1"
+                ],
+                "correlated_kernels": 4,
+                "devices": [
+                  1
+                ],
+                "trained_blocks_with_kernels": 0
+              },
+              {
+                "global_tid": 281481654043022,
+                "pid": 398,
+                "labels": [
+                  "H3_CAPTURE/rank=0"
+                ],
+                "correlated_kernels": 4,
+                "devices": [
+                  0
+                ],
+                "trained_blocks_with_kernels": 0
+              }
+            ],
+            "scope": "Coverage qualification only; no performance attribution",
+            "blocker": null
+          }
+        }
+      ],
+      "selected": "graceful_flush",
+      "blocker": null
+    },
+    "prior_conditioning_noise_hash_matches": {
+      "conditioning": true,
+      "noise_0": true,
+      "noise_1": true
+    },
+    "operator_warmup": {
+      "seconds": 53.81639095399987,
+      "scope": "One trained block, exact operator shapes; zero full DiT warmup calls"
+    },
+    "kitchen_error": "TimeoutError('TP worker exited or command exceeded its deadline')",
+    "worker_command_deadline_seconds": 600,
+    "worker_exit": [
+      {
+        "pid": 1139,
+        "exit_code": -15,
+        "alive": false
+      },
+      {
+        "pid": 1140,
+        "exit_code": -15,
+        "alive": false
+      }
+    ],
+    "completed_denoiser_calls": 0,
+    "scalar_started": false,
+    "observer_replay_completed": false,
+    "progress": {
+      "1": {
+        "worker_pid": 1140,
+        "compute_scope_blocks": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27
+        ],
+        "last_weight_scope_block": 28,
+        "last_compute_scope_block": 27
+      },
+      "0": {
+        "worker_pid": 1139,
+        "compute_scope_blocks": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27
+        ],
+        "last_weight_scope_block": 28,
+        "last_compute_scope_block": 27
+      }
+    },
+    "trace": {
+      "complete": false,
+      "worker_cuda_kernels": 0,
+      "kernel_pid_counts": [
+        {
+          "global_pid": 281493616197632,
+          "pid": 1111,
+          "device": 0,
+          "kernels": 21
+        }
+      ],
+      "capture_version": "Nsight Systems 2025.1.1.0",
+      "local_export_version": "Nsight Systems 2026.1.3.243",
+      "raw_report_sha256": "d12150ec188a0057957b1d07c72e4ee7beb3e297fbd65fbd92d8945acc7f807f",
+      "local_export_sha256": "19ae36a6473a6b244f8c79c39a65cec79d69b20fb90e0f0d6cf42c071366439e",
+      "warning_groups": [
+        [
+          "No NVTX events collected. Does the process use NVTX?",
+          418
+        ],
+        [
+          "CUDA profiling might have not been started correctly.",
+          417
+        ],
+        [
+          "No CUDA events collected. Does the process use CUDA?",
+          417
+        ],
+        [
+          "Installed CUDA driver version (13.0) is not supported by this build of Nsight Systems. CUDA trace will be collected using libraries for driver version 12.8",
+          3
+        ],
+        [
+          "Not all NVTX events might have been collected.",
+          2
+        ],
+        [
+          "Not all CUDA events might have been collected.",
+          2
+        ],
+        [
+          "Not all OS runtime libraries events might have been collected.",
+          2
+        ],
+        [
+          "Scheduling information is absent. The thread activity is deduced based on OS runtime libraries traces. This is inaccurate and does not take into account asynchronous interrupts and exception faults.",
+          1
+        ]
+      ],
+      "attribution_permitted": false,
+      "scope": "Progress/coverage diagnostics only; no kernel latency attribution"
+    },
+    "cpu_profiles": {
+      "files": 12,
+      "invalid": 11,
+      "records": [
+        {
+          "file": "rank0_norm_modulate_1.pstats",
+          "total_cpu_seconds": 0.004443771999971889,
+          "negative_timing_entries": 4,
+          "impossible_timing_entries": 6,
+          "valid": false,
+          "largest_self_cpu": 42.542305654,
+          "examples_negative": [
+            [
+              "<built-in method builtins.next>",
+              -58.768541903000006,
+              0.00082127
+            ],
+            [
+              "<method 'readinto' of '_io.BufferedReader' objects>",
+              -42.5424878,
+              16.223208048
+            ]
+          ],
+          "examples_impossible": [
+            [
+              "<built-in method torch.rms_norm>",
+              42.542305654,
+              42.542305654
+            ],
+            [
+              "modulated_norm",
+              42.541470620000005,
+              42.541796864000005
+            ]
+          ]
+        },
+        {
+          "file": "rank0_norm_modulate_2.pstats",
+          "total_cpu_seconds": 0.0026251839999904443,
+          "negative_timing_entries": 3,
+          "impossible_timing_entries": 3,
+          "valid": false,
+          "largest_self_cpu": 42.550481086000005,
+          "examples_negative": [
+            [
+              "<method 'readinto' of '_io.BufferedReader' objects>",
+              -42.550198903,
+              -42.550169700000005
+            ],
+            [
+              "record",
+              -42.55026496,
+              0.000662507
+            ]
+          ],
+          "examples_impossible": [
+            [
+              "<method 'float' of 'torch._C.TensorBase' objects>",
+              42.550481086000005,
+              42.550481086000005
+            ],
+            [
+              "modulated_norm",
+              42.550310506,
+              42.550513734000006
+            ]
+          ]
+        },
+        {
+          "file": "rank0_norm_modulate_50.pstats",
+          "total_cpu_seconds": 0.002492285999973306,
+          "negative_timing_entries": 2,
+          "impossible_timing_entries": 2,
+          "valid": false,
+          "largest_self_cpu": 423.418725062,
+          "examples_negative": [
+            [
+              "<method 'float' of 'torch._C.TensorBase' objects>",
+              -423.418017593,
+              -423.418017593
+            ],
+            [
+              "<built-in method torch.rms_norm>",
+              -423.41808932400005,
+              -423.41808932400005
+            ]
+          ],
+          "examples_impossible": [
+            [
+              "<method 'readinto' of '_io.BufferedReader' objects>",
+              423.41814000600004,
+              423.41814000600004
+            ],
+            [
+              "modulated_norm",
+              423.418725062,
+              0.001328042
+            ]
+          ]
+        },
+        {
+          "file": "rank0_residual_gated_add_1.pstats",
+          "total_cpu_seconds": 0.0038455310000109306,
+          "negative_timing_entries": 4,
+          "impossible_timing_entries": 5,
+          "valid": false,
+          "largest_self_cpu": 101.326570067,
+          "examples_negative": [
+            [
+              "<method 'readinto' of '_io.BufferedReader' objects>",
+              -85.102641925,
+              -85.09663069700001
+            ],
+            [
+              "body",
+              -58.776259619,
+              0.001133873
+            ]
+          ],
+          "examples_impossible": [
+            [
+              "<method 'float' of 'torch._C.TensorBase' objects>",
+              42.549975118000006,
+              42.549975118000006
+            ],
+            [
+              "<method 'to' of 'torch._C.TensorBase' objects>",
+              101.326570067,
+              101.326570067
+            ]
+          ]
+        },
+        {
+          "file": "rank0_residual_gated_add_2.pstats",
+          "total_cpu_seconds": 0.003494544000014146,
+          "negative_timing_entries": 4,
+          "impossible_timing_entries": 5,
+          "valid": false,
+          "largest_self_cpu": 127.94886349500001,
+          "examples_negative": [
+            [
+              "<method 'readinto' of '_io.BufferedReader' objects>",
+              -170.596875755,
+              -170.596875755
+            ],
+            [
+              "body",
+              -60.78408584900001,
+              0.0029121950000000002
+            ]
+          ],
+          "examples_impossible": [
+            [
+              "<method 'copy_' of 'torch._C.TensorBase' objects>",
+              42.648706099,
+              42.648706099
+            ],
+            [
+              "<method 'float' of 'torch._C.TensorBase' objects>",
+              127.94886349500001,
+              127.94886349500001
+            ]
+          ]
+        },
+        {
+          "file": "rank0_residual_gated_add_50.pstats",
+          "total_cpu_seconds": 0.002536170999960422,
+          "negative_timing_entries": 2,
+          "impossible_timing_entries": 3,
+          "valid": false,
+          "largest_self_cpu": 423.41727964,
+          "examples_negative": [
+            [
+              "<built-in method torch.addcmul>",
+              -846.832969356,
+              -846.832969356
+            ],
+            [
+              "<function Event.record at 0x7b1578da71a0>",
+              -423.41615032100003,
+              -423.41615032100003
+            ]
+          ],
+          "examples_impossible": [
+            [
+              "<method 'readinto' of '_io.BufferedReader' objects>",
+              423.416277234,
+              423.416277234
+            ],
+            [
+              "gated_add",
+              423.41727964,
+              0.001428068
+            ]
+          ]
+        },
+        {
+          "file": "rank1_norm_modulate_1.pstats",
+          "total_cpu_seconds": 0.004241179000006248,
+          "negative_timing_entries": 3,
+          "impossible_timing_entries": 5,
+          "valid": false,
+          "largest_self_cpu": 38.273437539,
+          "examples_negative": [
+            [
+              "<method 'readinto' of '_io.BufferedReader' objects>",
+              -19.136000391,
+              0.474703209
+            ],
+            [
+              "body",
+              -38.548588233000004,
+              38.750581313000005
+            ]
+          ],
+          "examples_impossible": [
+            [
+              "<method 'acquire' of '_thread.lock' objects>",
+              19.40813005,
+              4.9680000000000005e-06
+            ],
+            [
+              "wait",
+              2.1851e-05,
+              0.0
+            ]
+          ]
+        },
+        {
+          "file": "rank1_norm_modulate_2.pstats",
+          "total_cpu_seconds": 0.0025286019999985095,
+          "negative_timing_entries": 3,
+          "impossible_timing_entries": 4,
+          "valid": false,
+          "largest_self_cpu": 19.141354084,
+          "examples_negative": [
+            [
+              "<method 'readinto' of '_io.BufferedReader' objects>",
+              -38.282159329,
+              -38.282159329
+            ],
+            [
+              "record",
+              -19.141056328,
+              0.000311821
+            ]
+          ],
+          "examples_impossible": [
+            [
+              "<method 'float' of 'torch._C.TensorBase' objects>",
+              19.141239999,
+              19.141239999
+            ],
+            [
+              "<method 'add_' of 'torch._C.TensorBase' objects>",
+              19.141307396000002,
+              19.141307396000002
+            ]
+          ]
+        },
+        {
+          "file": "rank1_norm_modulate_50.pstats",
+          "total_cpu_seconds": 0.0018350659999999993,
+          "negative_timing_entries": 0,
+          "impossible_timing_entries": 0,
+          "valid": true,
+          "largest_self_cpu": 0.000499561,
+          "examples_negative": [],
+          "examples_impossible": []
+        },
+        {
+          "file": "rank1_residual_gated_add_1.pstats",
+          "total_cpu_seconds": 0.003678979000022791,
+          "negative_timing_entries": 4,
+          "impossible_timing_entries": 6,
+          "valid": false,
+          "largest_self_cpu": 57.901793598000005,
+          "examples_negative": [
+            [
+              "__init__",
+              -19.621379486000002,
+              -19.621021408
+            ],
+            [
+              "gated_add",
+              -38.764710821,
+              38.762937254
+            ]
+          ],
+          "examples_impossible": [
+            [
+              "<method 'readinto' of '_io.BufferedReader' objects>",
+              0.48144404900000004,
+              0.48144404900000004
+            ],
+            [
+              "<method 'copy_' of 'torch._C.TensorBase' objects>",
+              19.140159835000002,
+              19.140159835000002
+            ]
+          ]
+        },
+        {
+          "file": "rank1_residual_gated_add_2.pstats",
+          "total_cpu_seconds": 0.002954278000001033,
+          "negative_timing_entries": 2,
+          "impossible_timing_entries": 2,
+          "valid": false,
+          "largest_self_cpu": 19.146349033,
+          "examples_negative": [
+            [
+              "<method 'readinto' of '_io.BufferedReader' objects>",
+              -19.145911635,
+              -19.145911635
+            ],
+            [
+              "gated_add",
+              -19.145397772000003,
+              0.0014647400000000002
+            ]
+          ],
+          "examples_impossible": [
+            [
+              "<method 'float' of 'torch._C.TensorBase' objects>",
+              19.146349033,
+              19.146349033
+            ],
+            [
+              "<built-in method torch.addcmul>",
+              19.146210493,
+              19.146210493
+            ]
+          ]
+        },
+        {
+          "file": "rank1_residual_gated_add_50.pstats",
+          "total_cpu_seconds": -451.7769262760016,
+          "negative_timing_entries": 18,
+          "impossible_timing_entries": 189,
+          "valid": false,
+          "largest_self_cpu": 5411.829040025001,
+          "examples_negative": [
+            [
+              "__init__",
+              -451.79602769400003,
+              -451.79439708
+            ],
+            [
+              "wait",
+              -492.42616998500006,
+              -902.7038210300001
+            ]
+          ],
+          "examples_impossible": [
+            [
+              "<method 'add' of 'set' objects>",
+              4.852e-06,
+              4.852e-06
+            ],
+            [
+              "<method 'discard' of 'set' objects>",
+              5.247e-06,
+              5.247e-06
+            ]
+          ]
+        }
+      ],
+      "attribution_permitted": false,
+      "final_worker_summaries_saved": false,
+      "root_cause": "Profiler timing corruption observed; original Norm/Residual host anomaly unresolved"
+    },
+    "next_requirements": [
+      "Qualify the CPU profiler with concurrent disk/cache threads on native Python 3.13 before GPU retry",
+      "Checkpoint worker progress/CPU samples and flush trace before timeout cleanup",
+      "Separate and measure bounded CPU bundle preparation; current 600s command deadline is insufficient for this run",
+      "Complete matched Kitchen/Scalar calls before performance comparison"
+    ],
+    "status_polls": 0,
+    "final_collection_count": 1,
+    "new_submission": false
+  }
+}

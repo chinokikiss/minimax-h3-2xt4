@@ -31,22 +31,19 @@ class PipelineReview(unittest.TestCase):
     def test_runtime_audio_path_does_not_load_historical_manager_or_benchmarks(self):
         code='''import sys, torch
 import patches.comfy_tp_runtime
-from patches.parallel_vae import channel_decode
-class Comm:
-    def get_world_size(self):return 2
-    def all_gather(self,outputs,x):
-        for output in outputs:output.copy_(x)
-class Model:
-    def decode(self,x):return x.mean(1)
-channel_decode(Model(),torch.ones(1,32,2,4),Comm(),0)
+from patches.comfy_sampler import ParallelDecodeHandoff
+from patches.comfy_tp_runtime import RankRuntime
+result=RankRuntime.__new__(RankRuntime)._prepare_vae('unused','audio',0)
+assert not result['accepted']
 assert 'patches.multi_gpu_audio_vae' not in sys.modules
+assert 'patches.audio_channel_decode' not in sys.modules
 assert not any(n=='benchmarks' or n.startswith('benchmarks.') for n in sys.modules)
 '''
         result=subprocess.run([sys.executable,'-c',code],cwd=ROOT,capture_output=True,text=True)
         self.assertEqual(result.returncode,0,result.stderr)
 
     def test_normal_launcher_preserves_node_availability_and_isolation_is_explicit(self):
-        from launch_h3_legacy import comfy_command
+        from tools.runtime.launch_h3_legacy import comfy_command
         normal=comfy_command(ROOT/'ComfyUI')
         self.assertNotIn('--disable-partner-nodes',normal)
         self.assertNotIn('--disable-all-custom-nodes',normal)
@@ -60,12 +57,13 @@ assert not any(n=='benchmarks' or n.startswith('benchmarks.') for n in sys.modul
         from patches.h3_operator_policy import H3OperatorPolicy
         runtime=SimpleNamespace(config=SimpleNamespace(operators=H3OperatorPolicy(),adaptive_lookahead=False),
             rank=0,calls=3,kind='dit',sample_active=True,completed_decode=False,vae_kind=None,
-            idle_stats={'loads':2},idle_window=None,events=[],
+            idle_stats={'loads':2},idle_window=None,events=[],readers={},
             cache=SimpleNamespace(snapshot=lambda:{'used':4}),startup_cache=SimpleNamespace(snapshot=lambda:{'used':2}))
         before=dict(vars(runtime));snapshot=rank_snapshot(runtime)
         self.assertEqual(vars(runtime),before)
         self.assertEqual(snapshot['calls'],3)
         self.assertEqual(snapshot['operators']['refiner_attention'],'native_sdpa')
+        self.assertEqual(snapshot['operators']['audio_decode'],'native_single_gpu')
 
 
 if __name__=='__main__':unittest.main(verbosity=2)

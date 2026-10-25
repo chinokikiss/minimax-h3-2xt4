@@ -16,6 +16,8 @@ def native_te(reader, layers, startup_state=None):
         state = reader.read('', exclude=('model.layers.',)) if startup_state is None else startup_state
         model.load_state_dict(state, strict=True)
         model.num_layers = layers
+        from patches.h3_tensor_flow import policy_for,prepare_te
+        prepare_te(model,policy_for(reader))
         return model
 
     class Clip(MiniMaxH3ClipModel):
@@ -47,6 +49,8 @@ def native_dit(reader, rank=None):
     if rank!=1:
         from patches.h3_operator_policy import NativeRefinerAttention
         for block in model.token_refiner.blocks:block.attn=NativeRefinerAttention(block.attn)
+    from patches.h3_tensor_flow import policy_for,prepare_dit
+    prepare_dit(model,policy_for(reader),rank)
     return model.eval().requires_grad_(False)
 
 

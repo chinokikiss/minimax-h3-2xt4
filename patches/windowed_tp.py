@@ -35,12 +35,13 @@ class CheckpointReader:
         self.signature = (stat.st_size, stat.st_mtime_ns)
         self.identity = identity or (str(self.path), *self.signature)
         self.read_lock = threading.Lock()
-        self.logical_read_bytes = self.range_read_calls = 0
+        self.logical_read_bytes = self.range_read_calls = self.source_read_bytes = 0
 
     def read_tensor(self, name, *, rows=None, columns=None):
         """Read only owned ranges into final CPU storage, without a full tensor.
 
-        Column slices issue one range per row. Positional reads avoid file cursor
+        Column slices read only the owned columns, one range per row.
+        Positional reads avoid file cursor
         mutation; os.pread returns bytes, copied into final tensor storage in
         bounded chunks. This is buffered filesystem I/O, not O_DIRECT.
         Logical bytes count requested payload, not physical disk traffic.
@@ -71,10 +72,10 @@ class CheckpointReader:
         count = calls = 0
         with self.path.open('rb', buffering=0) as stream:
             pread = getattr(os, 'pread', None)
-            def transfer(offset, size, destination_offset):
+            def transfer(offset, size, destination_offset, target=destination):
                 nonlocal count, calls, pread
                 absolute = self.offset + info['data_offsets'][0] + offset
-                remaining = destination[destination_offset:destination_offset+size]
+                remaining = target[destination_offset:destination_offset+size]
                 done = 0
                 while remaining:
                     if pread is not None:
@@ -101,7 +102,7 @@ class CheckpointReader:
             else:
                 output_row = 0
                 for a,b in intervals:
-                    if columns is None:
+                    if columns is None or (first,last)==(0,width):
                         transfer(a*width*element, (b-a)*width*element, output_row*(last-first)*element)
                     else:
                         for row in range(a,b):
@@ -109,7 +110,8 @@ class CheckpointReader:
                                      (output_row+row-a)*(last-first)*element)
                     output_row += b-a
         with self.read_lock:
-            self.logical_read_bytes += count
+            self.logical_read_bytes += result.numel()*element
+            self.source_read_bytes += count
             self.range_read_calls += calls
         return result
 
@@ -132,7 +134,9 @@ class CheckpointReader:
         if not result:
             raise ValueError(f'No checkpoint tensors under {prefix}')
         with self.read_lock:
-            self.logical_read_bytes += sum(t.numel()*t.element_size() for t in result.values())
+            size=sum(t.numel()*t.element_size() for t in result.values())
+            self.logical_read_bytes += size
+            self.source_read_bytes += size
             self.range_read_calls += len(result)
         return result
 
@@ -149,7 +153,9 @@ def prepare_tp_block_legacy(reader, kind, index, rank):
 
 def prepare_tp_block(reader, kind, index, rank):
     from patches.rank_local_int8 import load_rank_block, load_offline_block
-    if getattr(reader, 'rank_checkpoint_dir', None):
+    if hasattr(reader,'load_rank'):
+        block=reader.load_rank(index,rank)
+    elif getattr(reader, 'rank_checkpoint_dir', None):
         block=load_offline_block(reader,kind,index,rank,reader.rank_checkpoint_dir)
     else:block=load_rank_block(reader, kind, index, rank)
     store=getattr(reader,'lora_store',None)
@@ -158,6 +164,8 @@ def prepare_tp_block(reader, kind, index, rank):
     if policy is not None:
         from patches.h3_operator_policy import configure_block
         block=configure_block(block,kind,policy)
+    from patches.h3_tensor_flow import prepare_tp,policy_for
+    block=prepare_tp(block,kind,policy_for(reader))
     return block
 
 
@@ -169,6 +177,9 @@ def tp_specs(reader, kind, rank, layers=50):
         identity=(reader.identity,store.identity) if store is not None else reader.identity
         policy=getattr(reader,'operator_policy',None)
         if policy is not None:identity=(identity,'h3-operators-v1',policy)
+        from patches.h3_tensor_flow import policy_for
+        flow=policy_for(reader)
+        if flow.enabled:identity=(identity,'h3-tensor-flow-v1',flow)
         key = (identity, kind, index, rank)
         # Full checkpoint block size conservatively bounds a half-weight shard
         # with replicated norms/scales/AdaLN. Admission uses this upper bound;
@@ -179,7 +190,8 @@ def tp_specs(reader, kind, rank, layers=50):
         bound+=adapter_bytes
         specs.append(WeightSpec(key,
             lambda i=index: prepare_tp_block(reader, kind, i, rank), bound,
-            prepare_peak_bytes=bound + adapter_bytes*4 + 8*2**20))
+            prepare_peak_bytes=bound + adapter_bytes*4 + 8*2**20 +
+                (reader.workspace_bytes(index) if hasattr(reader,'workspace_bytes') else 0)))
     return specs
 
 
@@ -283,8 +295,9 @@ class DiTPreprocessing:
                     setattr(self.model, name, previous[name])
 
     def refine(self, text):
+        flow=getattr(self.model,'tensor_flow',None)
         if text.shape[-1] == self.model.hidden_size:
-            return text
+            return text.to(flow.dtype) if flow is not None else text
         if self.rank == 0:
             with self._modules(self.refine_key):
                 refined = self.original_refine(text)
@@ -293,7 +306,7 @@ class DiTPreprocessing:
             if text.shape[0] != 1:
                 raise ValueError('This Native Ref2VA adapter supports batch one')
             refined = torch.empty((1, text.shape[1], self.model.hidden_size),
-                                  dtype=text.dtype, device=self.device)
+                                  dtype=flow.dtype if flow is not None else text.dtype, device=self.device)
         self.comm.broadcast(refined, src=0)
         return refined
 

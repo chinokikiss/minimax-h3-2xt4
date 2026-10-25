@@ -1,0 +1,248 @@
+{
+  "date": "2026-10-25",
+  "status": "main_sync_prepared_branch_cleanup_pending",
+  "base_main_commit": "4c31422a2ad1c4f98928f04a86d79aec0effa033",
+  "script_moves": {
+    "date": "2026-10-25",
+    "paths": {
+      "analyze_causal_audit.py": "tools/experiments/analyze_causal_audit.py",
+      "analyze_cpu_path.py": "tools/experiments/analyze_cpu_path.py",
+      "analyze_h3_physical.py": "tools/experiments/analyze_h3_physical.py",
+      "analyze_idle_pilot.py": "tools/experiments/analyze_idle_pilot.py",
+      "analyze_loading_audit.py": "tools/experiments/analyze_loading_audit.py",
+      "analyze_pipeline_audit.py": "tools/experiments/analyze_pipeline_audit.py",
+      "analyze_residency_p01.py": "tools/experiments/analyze_residency_p01.py",
+      "analyze_study.py": "tools/experiments/analyze_study.py",
+      "analyze_te_causal_profile.py": "tools/experiments/analyze_te_causal_profile.py",
+      "analyze_te_io.py": "tools/experiments/analyze_te_io.py",
+      "analyze_te_io_dependencies.py": "tools/experiments/analyze_te_io_dependencies.py",
+      "analyze_te_path.py": "tools/experiments/analyze_te_path.py",
+      "analyze_te_storage_controls.py": "tools/experiments/analyze_te_storage_controls.py",
+      "analyze_tilelang_t4_attention.py": "tools/experiments/analyze_tilelang_t4_attention.py",
+      "analyze_useful_progress.py": "tools/experiments/analyze_useful_progress.py",
+      "analyze_vae_kv_profile.py": "tools/experiments/analyze_vae_kv_profile.py",
+      "audit_retest.py": "tools/experiments/audit_retest.py",
+      "build_attention_full_job.py": "tools/experiments/build_attention_full_job.py",
+      "build_attention_group_job.py": "tools/experiments/build_attention_group_job.py",
+      "build_attention_p0_job.py": "tools/experiments/build_attention_p0_job.py",
+      "build_causal_audit.py": "tools/experiments/build_causal_audit.py",
+      "build_comfy_sampler_gate.py": "tools/experiments/build_comfy_sampler_gate.py",
+      "build_comfy_tp2_workflow.py": "tools/runtime/build_comfy_tp2_workflow.py",
+      "build_cpu_audit.py": "tools/experiments/build_cpu_audit.py",
+      "build_dit_notebook.py": "tools/experiments/build_dit_notebook.py",
+      "build_fc2_quant_memory_job.py": "tools/experiments/build_fc2_quant_memory_job.py",
+      "build_h3_operator_integration_job.py": "tools/experiments/build_h3_operator_integration_job.py",
+      "build_h3_reduction_job.py": "tools/experiments/build_h3_reduction_job.py",
+      "build_host_cache_gate.py": "tools/experiments/build_host_cache_gate.py",
+      "build_idle_residency.py": "tools/experiments/build_idle_residency.py",
+      "build_manual_loading_resume.py": "tools/experiments/build_manual_loading_resume.py",
+      "build_notebook.py": "tools/experiments/build_notebook.py",
+      "build_offline_checkpoint_job.py": "tools/experiments/build_offline_checkpoint_job.py",
+      "build_optimized_study.py": "tools/experiments/build_optimized_study.py",
+      "build_pipeline_residency_audit.py": "tools/experiments/build_pipeline_residency_audit.py",
+      "build_quality_first_assets.py": "tools/experiments/build_quality_first_assets.py",
+      "build_quality_first_generation_job.py": "tools/experiments/build_quality_first_generation_job.py",
+      "build_quality_first_t4_job.py": "tools/experiments/build_quality_first_t4_job.py",
+      "build_quality_next_job.py": "tools/experiments/build_quality_next_job.py",
+      "build_real_t4_attention_job.py": "tools/experiments/build_real_t4_attention_job.py",
+      "build_real_t4_improvements_job.py": "tools/experiments/build_real_t4_improvements_job.py",
+      "build_real_t4_replay_gate.py": "tools/experiments/build_real_t4_replay_gate.py",
+      "build_real_t4_scalar_pool_job.py": "tools/experiments/build_real_t4_scalar_pool_job.py",
+      "build_ref2va_e2e_job.py": "tools/experiments/build_ref2va_e2e_job.py",
+      "build_ref2va_study.py": "tools/experiments/build_ref2va_study.py",
+      "build_repaired_notebook.py": "tools/experiments/build_repaired_notebook.py",
+      "build_residency_p01.py": "tools/experiments/build_residency_p01.py",
+      "build_retest_notebook.py": "tools/experiments/build_retest_notebook.py",
+      "build_selective_b_job.py": "tools/experiments/build_selective_b_job.py",
+      "build_slab_notebook.py": "tools/experiments/build_slab_notebook.py",
+      "build_sol_drop_job.py": "tools/experiments/build_sol_drop_job.py",
+      "build_study_notebook.py": "tools/experiments/build_study_notebook.py",
+      "build_t4_profiler_probe.py": "tools/experiments/build_t4_profiler_probe.py",
+      "build_te_causal_profile.py": "tools/experiments/build_te_causal_profile.py",
+      "build_te_critical_path.py": "tools/experiments/build_te_critical_path.py",
+      "build_te_io_audit.py": "tools/experiments/build_te_io_audit.py",
+      "build_te_io_storage_study.py": "tools/experiments/build_te_io_storage_study.py",
+      "build_tilelang_t4_job.py": "tools/experiments/build_tilelang_t4_job.py",
+      "build_tp2_attention_repair_job.py": "tools/experiments/build_tp2_attention_repair_job.py",
+      "build_tp2_kitchen_attention_job.py": "tools/experiments/build_tp2_kitchen_attention_job.py",
+      "build_tp2_kitchen_v2_job.py": "tools/experiments/build_tp2_kitchen_v2_job.py",
+      "build_tp2_operator_job.py": "tools/experiments/build_tp2_operator_job.py",
+      "build_tp2_operator_optimization_job.py": "tools/experiments/build_tp2_operator_optimization_job.py",
+      "build_tp2_p2_job.py": "tools/experiments/build_tp2_p2_job.py",
+      "build_tp2_p2_ncu_probe.py": "tools/experiments/build_tp2_p2_ncu_probe.py",
+      "build_tp2_row_fusion_job.py": "tools/experiments/build_tp2_row_fusion_job.py",
+      "build_tp2_swiglu_padding_job.py": "tools/experiments/build_tp2_swiglu_padding_job.py",
+      "build_tp2_tradeoffs_job.py": "tools/experiments/build_tp2_tradeoffs_job.py",
+      "build_tp2_video_followup.py": "tools/experiments/build_tp2_video_followup.py",
+      "build_vae_kv_profile.py": "tools/experiments/build_vae_kv_profile.py",
+      "capture_retest_logs.py": "tools/experiments/capture_retest_logs.py",
+      "collect_repaired_results.py": "tools/experiments/collect_repaired_results.py",
+      "comfy_sampler_control.py": "tools/experiments/comfy_sampler_control.py",
+      "download_retest_artifacts.py": "tools/experiments/download_retest_artifacts.py",
+      "freeze_h3_runtime.py": "tools/runtime/freeze_h3_runtime.py",
+      "freeze_pipeline_job.py": "tools/experiments/freeze_pipeline_job.py",
+      "host_cache_control.py": "tools/experiments/host_cache_control.py",
+      "launch_h3_legacy.py": "tools/runtime/launch_h3_legacy.py",
+      "manage_audit_artifacts.py": "tools/experiments/manage_audit_artifacts.py",
+      "parse_log.py": "tools/experiments/parse_log.py",
+      "pipeline_audit_control.py": "tools/experiments/pipeline_audit_control.py",
+      "prepare_native_audit_reference.py": "tools/experiments/prepare_native_audit_reference.py",
+      "prepare_native_reference_transport.py": "tools/experiments/prepare_native_reference_transport.py",
+      "prepare_offline_reuse_transport.py": "tools/experiments/prepare_offline_reuse_transport.py",
+      "report_study.py": "tools/experiments/report_study.py",
+      "run_kaggle_cli_workflow.py": "tools/experiments/run_kaggle_cli_workflow.py",
+      "run_tilelang_t4_kaggle.py": "tools/experiments/run_tilelang_t4_kaggle.py",
+      "setup_h3_legacy.py": "tools/runtime/setup_h3_legacy.py",
+      "study_control.py": "tools/experiments/study_control.py",
+      "summarize_partial_logs.py": "tools/experiments/summarize_partial_logs.py",
+      "summarize_repaired_results.py": "tools/experiments/summarize_repaired_results.py",
+      "summarize_retest.py": "tools/experiments/summarize_retest.py",
+      "summarize_te_block_os.py": "tools/experiments/summarize_te_block_os.py",
+      "verify_retest_outputs.py": "tools/experiments/verify_retest_outputs.py",
+      "watch_loading_audit.py": "tools/experiments/watch_loading_audit.py"
+    }
+  },
+  "branches": {
+    "codex/bundle-scalar-explicit-20261024-645ef141": {
+      "commit": "f9d8588556ed271e825a6938b27d01aa39436c10",
+      "tag": "archive/20261025/codex/bundle-scalar-explicit-20261024-645ef141",
+      "source_archive_paths": [
+        "runtime/kaggle_artifacts/645ef141804c67cf6d012387d87cfeada2760db2c4b93809d6a8ee0b7bd1f2be.tar.gz"
+      ]
+    },
+    "codex/bundle-scalar-explicit-20261024-a42a03c2": {
+      "commit": "bb8b41dfaa723093d96e718685a02ad7898664e8",
+      "tag": "archive/20261025/codex/bundle-scalar-explicit-20261024-a42a03c2",
+      "source_archive_paths": [
+        "runtime/kaggle_artifacts/a42a03c21a11ddc9080bbc6eda7e7566e0cf102ed9483685272b9054fa6436b2.tar.gz"
+      ]
+    },
+    "codex/bundle-scalar-profile-20261023-5a631ce0": {
+      "commit": "40f607315e14a898f8f47a3c93009f2477fbb5ca",
+      "tag": "archive/20261025/codex/bundle-scalar-profile-20261023-5a631ce0",
+      "source_archive_paths": [
+        "runtime/kaggle_artifacts/5a631ce0f53259a07b085fd0d18a85e11bc96422b5d8605d82c5c5ebcd85cdbb.tar.gz"
+      ]
+    },
+    "codex/bundle-scalar-profile-20261023-af92e389": {
+      "commit": "cd49dbe63347d31fbddd78f9ef504f3d6f6b3560",
+      "tag": "archive/20261025/codex/bundle-scalar-profile-20261023-af92e389",
+      "source_archive_paths": [
+        "runtime/kaggle_artifacts/af92e389a15b232590af88819c4a686f5639e94686087c3a12b53f70bc838822.tar.gz"
+      ]
+    },
+    "codex/bundle-scalar-profile-20261023-b358cb46": {
+      "commit": "af25623dcb959b6935de6de37bb3491a05ed1404",
+      "tag": "archive/20261025/codex/bundle-scalar-profile-20261023-b358cb46",
+      "source_archive_paths": [
+        "runtime/kaggle_artifacts/b358cb46f8d7be6cddf5bfb734478cb526e6852e9c3d245a4ad21d4948b0606b.tar.gz"
+      ]
+    },
+    "codex/bundle-scalar-retry-20261024-0fec1024": {
+      "commit": "750f8d64955174b1ba307213d6ed0b6f909a5bb9",
+      "tag": "archive/20261025/codex/bundle-scalar-retry-20261024-0fec1024",
+      "source_archive_paths": [
+        "runtime/kaggle_artifacts/0fec102465b7c3dbd8c5a91d60a558e23a6dc641a4f9dee605faf781ba489ba4.tar.gz"
+      ]
+    },
+    "codex/dit-lifetimes-20261023-8dd12eb1": {
+      "commit": "0e3545b4e7283598b0a77fd9ba2e4d47e6d5f900",
+      "tag": "archive/20261025/codex/dit-lifetimes-20261023-8dd12eb1",
+      "source_archive_paths": [
+        "runtime/kaggle_artifacts/44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+        "runtime/kaggle_artifacts/8dd12eb1a024ab517e35b3ecf8453c37343a5e049121b29a85c7b75ffb8eaa5e.tar.gz"
+      ]
+    },
+    "codex/dit-single-profile-20261023-6128e10d": {
+      "commit": "41a900987933a375802b7386f5728ca3815160f3",
+      "tag": "archive/20261025/codex/dit-single-profile-20261023-6128e10d",
+      "source_archive_paths": [
+        "runtime/kaggle_artifacts/16caf464e7d72b56d1f320d2aa8f06c650f55d61c05d1417249e9632d794092c.tar.gz",
+        "runtime/kaggle_artifacts/44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+        "runtime/kaggle_artifacts/6128e10d8919b0036589bcf7e36a82bc284665336562ad500ae80a74787b2f47.tar.gz",
+        "runtime/kaggle_artifacts/8dd12eb1a024ab517e35b3ecf8453c37343a5e049121b29a85c7b75ffb8eaa5e.tar.gz"
+      ]
+    },
+    "codex/kaggle-column-memory-20261022-a403e7ff": {
+      "commit": "78507fb524eff738b06c999c70ce15be07f7e590",
+      "tag": "archive/20261025/codex/kaggle-column-memory-20261022-a403e7ff",
+      "source_archive_paths": [
+        "runtime/kaggle_artifacts/44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+        "runtime/kaggle_artifacts/a403e7ffeac991d6c5a04dd065836dd7abfc0c073007621db842bf57b5903c2a.tar.gz"
+      ]
+    },
+    "codex/kaggle-light-delivery-20261022-44072cef": {
+      "commit": "a203a8074dece58be92b3d812362ff5f75cf6579",
+      "tag": "archive/20261025/codex/kaggle-light-delivery-20261022-44072cef",
+      "source_archive_paths": [
+        "runtime/kaggle_artifacts/44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz"
+      ]
+    },
+    "codex/l1-lifetime-e2e-20261023-16caf464": {
+      "commit": "e46a6c382c33e5b763bbc18f68659a03be816efe",
+      "tag": "archive/20261025/codex/l1-lifetime-e2e-20261023-16caf464",
+      "source_archive_paths": [
+        "runtime/kaggle_artifacts/16caf464e7d72b56d1f320d2aa8f06c650f55d61c05d1417249e9632d794092c.tar.gz",
+        "runtime/kaggle_artifacts/44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+        "runtime/kaggle_artifacts/8dd12eb1a024ab517e35b3ecf8453c37343a5e049121b29a85c7b75ffb8eaa5e.tar.gz"
+      ]
+    },
+    "codex/l1-turbo-05mp-20261024-44065534": {
+      "commit": "11cec15df6c3e3b7c03c482f78b831daa62b20a3",
+      "tag": "archive/20261025/codex/l1-turbo-05mp-20261024-44065534",
+      "source_archive_paths": [
+        "runtime/kaggle_artifacts/44065534c117278e22a6c1dd59045edf840bd5f0db6742f1fc9a08c6ff295c7d.tar.gz"
+      ]
+    },
+    "codex/l1-turbo-05mp-20261024-dbb68013": {
+      "commit": "8264f29c60d9bc73287f094be01dacfc0b9f677c",
+      "tag": "archive/20261025/codex/l1-turbo-05mp-20261024-dbb68013",
+      "source_archive_paths": [
+        "runtime/kaggle_artifacts/dbb68013e0ae5a652fcd764520e5724d0c6a4608059654295eb10d272eddfe5e.tar.gz"
+      ]
+    },
+    "codex/review-operators-20261024-077fee30": {
+      "commit": "1064ab91f2f9f253ea7b78dfbba5475109b3f7fa",
+      "tag": "archive/20261025/codex/review-operators-20261024-077fee30",
+      "source_archive_paths": [
+        "runtime/kaggle_artifacts/077fee305cf8cd0a538682bcfbd31d0f9e50e6e2cf60fb3b3d4e228d2578f669.tar.gz"
+      ]
+    },
+    "codex/review-operators-20261024-236f5cd0": {
+      "commit": "82b7922464ddbfcfae2c5e8fef57af492d94b8eb",
+      "tag": "archive/20261025/codex/review-operators-20261024-236f5cd0",
+      "source_archive_paths": [
+        "runtime/kaggle_artifacts/236f5cd073b36c45dfbf19d3e337eb32975d14253c279f1e29a9a11fdf1e2f91.tar.gz"
+      ]
+    },
+    "codex/review-operators-20261024-eb2f7624": {
+      "commit": "c5a59a4e9a2b79840a2444b9808ca0eb6c23834b",
+      "tag": "archive/20261025/codex/review-operators-20261024-eb2f7624",
+      "source_archive_paths": [
+        "runtime/kaggle_artifacts/eb2f76245bf8828de6a816bae0f82f3f9bc388202c3ba075dbe219e98acb32c8.tar.gz"
+      ]
+    }
+  },
+  "remaining_branch": "main",
+  "backup_directory": "D:\\attention_eval\\repo_sync_20261025",
+  "validation": {
+    "cpu_review": {
+      "passed": true,
+      "tests": 163,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 19.796999999999798,
+      "scope": "CPU contracts, not physical T4 qualification"
+    },
+    "moved_analysis_tests": 6,
+    "parsed_python_files": 562,
+    "launcher_from_other_cwd": true,
+    "frozen_source_api_check": true,
+    "dependency_versions_changed": false,
+    "kaggle_requests": 0,
+    "full_pipeline_runs": 0
+  },
+  "archive_policy": "Preserve original commits and immutable source archive URLs using archive tags; no archive bytes rewritten.",
+  "updated_utc": "2026-10-25T01:31:05.414939+00:00"
+}

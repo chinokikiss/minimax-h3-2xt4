@@ -64,7 +64,7 @@ def main():
             raise RuntimeError('Native validation failed')
         evidence['jobs'].append(dict(policy=policy,phase=phase,capture=capture,seconds=time.monotonic()-start,passed=True));save()
         if capture=='kineto':
-            subprocess.run([sys.executable,str(root/'analyze_te_path.py'),str(folder)],check=True,timeout=300)
+            subprocess.run([sys.executable,str(root/'tools/experiments/analyze_te_path.py'),str(folder)],check=True,timeout=300)
         return summary(result)
     evidence['ablations']['baseline']=run('baseline','short',2);save()
     for policy in ('coalesced','coalesced_parallel'):

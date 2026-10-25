@@ -1,8 +1,8 @@
-"""Native-aligned video queries and independent FP32 stereo audio channels.
+"""Native-aligned video query partitioning inside the persistent TP2 ranks.
 
 Runs inside the existing two persistent ranks. Public VAE planning remains on
-the parent: only raw video pixels / the audio model's decode are dispatched.
-Audio channel splitting is intentionally not advertised as Native bit-exact.
+the parent: only raw video pixels are dispatched. Audio VAE decoding is Native
+on a single GPU and never loads a decoder replica into these ranks.
 """
 from types import MethodType
 
@@ -12,7 +12,7 @@ from torch import nn
 from patches.windowed_tp import CheckpointReader
 
 
-def query_partitioning_status(model):
+def query_partitioning_status(model, *, checkpoint_reader=None):
     """Explain the qualified query contract without confusing ABI and build support."""
     import inspect
     import comfy.ops
@@ -22,7 +22,19 @@ def query_partitioning_status(model):
     native_flag=getattr(native,'COMFY_KITCHEN_INT8_ATTENTION_IS_AVAILABLE',None)
     unquantized=[];signature_mismatch=[];missing_scale=[];signatures=set()
     for i,block in enumerate(blocks):
-        if not isinstance(block.attn.to_qkv.weight,comfy.ops.QuantizedTensor):unquantized.append(i)
+        if checkpoint_reader is None:
+            quantized=isinstance(block.attn.to_qkv.weight,comfy.ops.QuantizedTensor)
+        else:
+            # Parent metadata gate only. Workers still qualify the actual
+            # constructed QuantizedTensor and API before collective decode.
+            import json
+            prefix=f'decoder.transformer_blocks.{i}.attn.to_qkv.'
+            weight=checkpoint_reader.header.get(prefix+'weight',{})
+            quantized=weight.get('dtype')=='I8' and prefix+'comfy_quant' in checkpoint_reader.header
+            if quantized:
+                raw=checkpoint_reader.read_tensor(prefix+'comfy_quant')
+                quantized=json.loads(bytes(raw.tolist()))==dict(format='int8_tensorwise',convrot=True,convrot_groupsize=256)
+        if not quantized:unquantized.append(i)
         try:
             signature=inspect.signature(block.attn.forward);parameters=signature.parameters
         except (TypeError,ValueError):signature='<uninspectable>';parameters={}
@@ -41,6 +53,7 @@ def query_partitioning_status(model):
         kitchen_build_available=bool(attention.COMFY_KITCHEN_INT8_ATTENTION_IS_AVAILABLE),
         native_global_attention_backend=getattr(native.optimized_attention,'__name__',type(native.optimized_attention).__name__),
         attention_signatures=sorted(signatures),unquantized_blocks=unquantized,
+        validation='checkpoint_metadata' if checkpoint_reader is not None else 'constructed_weights',
         signature_mismatch_blocks=signature_mismatch,missing_qk_norm_scale_blocks=missing_scale)
 
 
@@ -61,32 +74,15 @@ class VideoDecodeWeights(nn.Module):
         return self.decoder(self.post_quant_conv(z))
 
 
-class AudioDecodeWeights(nn.Module):
-    def __init__(self):
-        super().__init__()
-        import comfy.ops
-        from comfy.ldm.minimax.audio_vae import BigVGAN
-        self.dec_in_proj = comfy.ops.disable_weight_init.Conv1d(32, 2048, 1)
-        self.decoder = BigVGAN(num_mels=2048, upsample_initial_channel=1024)
-        self.register_buffer('latents_mean', torch.empty(32))
-        self.register_buffer('latents_std', torch.empty(32))
-
-    def decode(self, z):
-        from comfy.ldm.minimax.audio_vae import MiniMaxH3AudioVAE
-        return MiniMaxH3AudioVAE.decode(self, z)
-
-
 def checkpoint_plan(path, kind):
+    if kind != 'video':
+        raise ValueError('Parallel VAE decoding is video-only; use Native single-GPU Audio VAE decoding')
     reader = CheckpointReader(path)
-    prefixes = ('decoder.', 'post_quant_conv.') if kind == 'video' else (
-        'decoder.', 'dec_in_proj.', 'latents_mean', 'latents_std')
+    prefixes = ('decoder.', 'post_quant_conv.')
     names = [n for n in reader.header if n != '__metadata__' and n.startswith(prefixes)]
-    if kind == 'video':
-        depth = sum(n.startswith('decoder.transformer_blocks.') and n.endswith('.scale1') for n in names)
-        if depth != 36:
-            raise ValueError('Query partitioning requires the trained 36-layer video checkpoint')
-    elif kind != 'audio':
-        raise ValueError(kind)
+    depth = sum(n.startswith('decoder.transformer_blocks.') and n.endswith('.scale1') for n in names)
+    if depth != 36:
+        raise ValueError('Query partitioning requires the trained 36-layer video checkpoint')
     payload = sum(reader.header[n]['data_offsets'][1] - reader.header[n]['data_offsets'][0] for n in names)
     # CPU checkpoint + model backing + allocator/construction allowance.
     return reader, names, 2 * payload + 256 * 2**20
@@ -95,19 +91,21 @@ def checkpoint_plan(path, kind):
 @torch.inference_mode(False)
 @torch.no_grad()
 def load_decode_weights(reader, names, kind, device):
+    if kind != 'video':
+        raise ValueError('Parallel VAE decoding is video-only; use Native single-GPU Audio VAE decoding')
     # Module.to inside inference_mode can turn a QuantizedTensor parameter
     # into a plain Parameter, changing Native attention/operator dispatch.
     # Construct/transfer like Native loading; inference_mode resumes for decode.
-    model = VideoDecodeWeights() if kind == 'video' else AudioDecodeWeights()
+    model = VideoDecodeWeights()
     state = {n: reader.read_tensor(n) for n in names}
     model.load_state_dict(state, strict=True)
     del state
-    dtype = torch.float16 if kind == 'video' else torch.float32
-    model = model.to(device=device, dtype=dtype).eval().requires_grad_(False)
-    if kind == 'video':
-        status=query_partitioning_status(model)
-        if not status['available']:
-            raise ValueError('Query partitioning unavailable: '+status['reason'])
+    model = model.to(device=device, dtype=torch.float16).eval().requires_grad_(False)
+    from patches.h3_tensor_flow import prepare_video,policy_for
+    prepare_video(model,policy_for(reader))
+    status=query_partitioning_status(model)
+    if not status['available']:
+        raise ValueError('Query partitioning unavailable: '+status['reason'])
     return model
 
 
@@ -203,8 +201,3 @@ def parallel_attention(self, x, rotary_pos_emb, pre_norm, residual, residual_sca
     out = out.transpose(1, 2).reshape(b, s, -1)
     return comfy.ops.linear_input_act(self.to_out, torch.nan_to_num(out), None,
                                      residual=residual, residual_scale=residual_scale)
-
-
-def channel_decode(model, z, comm, rank):
-    from patches.audio_channel_decode import channel_decode as decode
-    return decode(model,z,comm,rank)

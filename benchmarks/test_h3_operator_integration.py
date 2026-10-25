@@ -54,7 +54,7 @@ def control_gates():
     assert inputs['te_attention'][1]['default']=='tilelang_group32'
     assert inputs['dit_attention'][1]['default']=='kitchen'
     from patches import h3_operator_dependencies as dependencies
-    with patch.object(dependencies,'version',side_effect=lambda name:{'comfy-kitchen':'0.2.37','tilelang':'0.1.15'}[name]):
+    with patch.object(dependencies,'version',side_effect=lambda name:{'comfy-kitchen':'0.2.37','tilelang':'0.1.13'}[name]):
         dependencies.validate_dependencies(p,t4=True)
     with patch.object(dependencies,'version',return_value='0.2.33'):
         try:dependencies.validate_dependencies(p,t4=True)
@@ -151,17 +151,12 @@ def selective_b_gates(device):
 
 
 def audio_gates():
-    from patches.parallel_vae import channel_decode
-    z=torch.randn(2,32,2,5)
-    model=SimpleNamespace(decode=lambda x:x.sum(1))
-    expected=model.decode(z)
-    class Comm:
-        def get_world_size(self):return 2
-        def all_gather(self,parts,local):
-            for i,p in enumerate(parts):p.copy_(expected[:,i:i+1])
-    torch.testing.assert_close(channel_decode(model,z,Comm(),0),expected,rtol=0,atol=0)
-    assert channel_decode(model,z,Comm(),1) is None
-    return dict(name='persistent_audio_channel_ownership_and_join',status='pass')
+    import unittest
+    from test_native_audio_decode import NativeAudioDecode
+    result=unittest.TestResult()
+    unittest.defaultTestLoader.loadTestsFromTestCase(NativeAudioDecode).run(result)
+    if not result.wasSuccessful():raise AssertionError(result.errors+result.failures)
+    return dict(name='native_single_gpu_audio_no_parallel_dispatch',status='pass',checks=result.testsRun)
 
 
 def masked_reference(p,mask):

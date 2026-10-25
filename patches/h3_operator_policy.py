@@ -10,22 +10,22 @@ from torch import nn
 class H3OperatorPolicy:
     te_attention: str = 'tilelang_group32'
     dit_attention: str = 'kitchen'
-    row_linear_backend: str = 'tilelang_packed'
-    swiglu_padding: bool = True
-    selective_b: bool = True
+    row_linear_backend: str = 'tilelang_scaled_fp16'
     scalar_score_workspace_mib: int = 96
-    fc2_quantizer: str = 'owned_fp32'
+    fc2_quantizer: str = 'fused_stored'
+    column_linear_backend: str = 'cuda_int8_tilelang'
 
     def __post_init__(self):
         if self.te_attention not in ('tilelang_group32','native'):raise ValueError('Unknown TE attention')
         if self.dit_attention not in ('kitchen','tilelang_dense','tilelang_drop','tilelang_scalar','native'):
             raise ValueError('Unknown DiT attention')
         if self.row_linear_backend not in ('tilelang_packed','tilelang_scaled_fp16','native'):raise ValueError('Unknown row-linear backend')
-        if self.fc2_quantizer not in ('native','owned_fp32'):raise ValueError('Unknown FC2 quantizer')
-        # The quantizer preference applies only to packed rows with SwiGLU padding;
-        # other backends retain their own dispatch when this field is omitted.
+        if self.fc2_quantizer not in ('native','owned_fp32','fused_stored','fused_recompute'):
+            raise ValueError('Unknown FC2 quantizer')
         if type(self.scalar_score_workspace_mib) is not int or self.scalar_score_workspace_mib<0:
             raise ValueError('Nonnegative scalar score workspace MiB required')
+        if self.column_linear_backend not in ('preallocated','cuda_int8_tilelang'):
+            raise ValueError('Unknown column linear backend')
 
 
 @lru_cache(maxsize=32)
@@ -44,6 +44,10 @@ def configure_block(block,kind,policy):
     block.operator_policy=policy
     for name in (('o_proj','down_proj') if kind=='te' else ('out_proj','fc2')):
         getattr(block,name).operator_policy=policy
+    if kind=='dit':
+        for name in ('qkv_proj','fc1'):
+            column=getattr(block,name,None)
+            if column is not None:column.operator_policy=policy
     return block
 
 
@@ -98,27 +102,43 @@ def dit_attention(block,q,k,v,options):
 
 def row_linear(module,x,fallback,comm,input_act=None):
     policy=getattr(module,'operator_policy',None)
+    fused=(policy is not None and policy.fc2_quantizer in ('fused_stored','fused_recompute')
+        and input_act=='swiglu' and policy.row_linear_backend!='native')
+    if fused:
+        from patches import tilelang_swiglu_quant as quant
+        if quant.supported(x,module.weight,module.weight_scale,module.world_size,module.convrot_groupsize):
+            return quant.row_linear(x,module.weight,module.weight_scale,comm,mode=policy.fc2_quantizer,
+                scaled_transport=policy.row_linear_backend=='tilelang_scaled_fp16')
+        # Keep the branch-product FP32 island on fallback hardware/geometry.
+        # This cast happens before SwiGLU, never after an overflowing product.
+        sm75(x,'FP32 SwiGLU quantization')
+        x=x.float()
+    elif policy is not None and policy.row_linear_backend=='tilelang_scaled_fp16':
+        # FP16 residual storage does not require FP16 quantization arithmetic.
+        x=x.float()
     args=(x,module.weight,module.weight_scale,comm,module.world_size,module.convrot_groupsize,input_act)
     if policy is not None and policy.row_linear_backend=='tilelang_scaled_fp16' and sm75(x,'scaled FP16 row-linear'):
         from patches.tilelang_transport_p2 import row_linear as run
-        return run(*args,swiglu_padding=policy.swiglu_padding)
+        return run(*args)
     if policy is not None and policy.row_linear_backend=='tilelang_packed' and sm75(x,'packed row-linear'):
-        if policy.swiglu_padding:
-            from patches.tilelang_swiglu_pad import row_linear as run
-            return run(*args,variant='packed',rotation_mode=policy.fc2_quantizer)
-        else:
-            from patches.tilelang_row_quant import row_linear as run
-        return run(*args,variant='packed')
+        from patches.tilelang_swiglu_pad import row_linear as run
+        rotation=policy.fc2_quantizer if policy.fc2_quantizer in ('native','owned_fp32') else 'owned_fp32'
+        return run(*args,variant='packed',rotation_mode=rotation)
     return fallback(*args)
 
 
 def row_linear_parts(module,gate,up,fallback,comm):
     policy=getattr(module,'operator_policy',None)
-    if (policy is not None and policy.row_linear_backend=='tilelang_scaled_fp16' and policy.swiglu_padding
+    if (policy is not None and policy.row_linear_backend!='native'
+            and policy.fc2_quantizer in ('fused_stored','fused_recompute')):
+        if gate.shape!=up.shape or gate.dtype!=up.dtype or gate.device!=up.device:
+            raise ValueError('Matching gate/up required')
+        return row_linear(module,torch.cat((gate,up),-1),fallback,comm,'swiglu')
+    if (policy is not None and policy.row_linear_backend=='tilelang_scaled_fp16'
             and sm75(gate,'scaled FP16 SwiGLU padding')):
         from patches.tilelang_transport_p2 import row_linear_parts as run
         return run(gate,up,module.weight,module.weight_scale,comm,module.world_size,module.convrot_groupsize)
-    if (policy is not None and policy.row_linear_backend=='tilelang_packed' and policy.swiglu_padding
+    if (policy is not None and policy.row_linear_backend=='tilelang_packed'
             and sm75(gate,'SwiGLU padding')):
         from patches.tilelang_swiglu_pad import row_linear_parts as run
         return run(gate,up,module.weight,module.weight_scale,comm,module.world_size,module.convrot_groupsize)
@@ -149,6 +169,7 @@ class NativeRefinerAttention(nn.Module):
         else:q,k=base.q_norm(q.view(s,h,d)),base.k_norm(k.view(s,h,d))
         q,k,v=(a.transpose(0,1).unsqueeze(0) for a in (q,k,v))
         out=torch.nn.functional.scaled_dot_product_attention(q,k,v).transpose(1,2).reshape(s,h*d)
+        del q,k,v
         return base.out_proj(out)
 
 

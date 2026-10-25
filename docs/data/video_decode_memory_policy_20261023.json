@@ -1,0 +1,730 @@
+{
+  "status": "implemented_local_qualified_physical_t4_pending",
+  "date": "2026-10-23",
+  "scope": "Separate Video VAE admission reserve and remove trained parent GPU decoder; no attention/transport/DiT changes",
+  "defaults": {
+    "video_decode_reserve_bytes": 2147483648,
+    "parent_gpu_decoder": false,
+    "video_decode_mode": "auto",
+    "audio_decode": "native_single_gpu"
+  },
+  "prior_t4_reference": {
+    "kernel": "pamcks/h3-l1-current-offline-e2e",
+    "version": 3,
+    "decode": "native fallback",
+    "new_policy_executed": false
+  },
+  "source_sha256": {
+    "benchmarks/qualify_video_decode_memory.py": "8aaa6ddad6df746b1ddaf0369390aeaa0c804334ae31aff4a527407e65d5a339",
+    "patches/video_decode_planner.py": "f2c77808901742e2c307be7bb6b6e9dc47c4c29332a60ecfdf13582a3bc13304",
+    "patches/comfy_sampler.py": "d39aabc2a9ec06893e7293da54f6f30cf10b7c77b34fd32f492d4a38e0f15c82",
+    "patches/comfy_tp_runtime.py": "a86362df901a205c8727a785a51b1658b65859801bc496a36d2ab6bdb0ca5fe3",
+    "patches/staged_vae.py": "4134f07fdc3f3ddb81932f0da85b42835cb2ff362a2a490c35f018254984083b",
+    "patches/parallel_vae.py": "78fd27079f103b36b8a3f89099459831230b2039f7b5542c10a5a6a85e1df056",
+    "patches/h3_tensor_flow.py": "80272e276b10a9fa06f4accd6e62fa8ae373ebdb08a6edbc0615926f56145b07",
+    "patches/runtime_diagnostics.py": "635083aee4c0f2c64fdaeebb36f98856d92681465263ed0e585dd955726a493a",
+    "custom_nodes/minimax_h3_tp2/__init__.py": "ff8a5d6630ecc3c860404b4d1753f2958d8397efc211833752333f66da829554",
+    "benchmarks/test_video_decode_memory.py": "7b6339b4e9c0329b445fdd185337718843305147ee0f5b24441e19260088a7c8"
+  },
+  "frozen_comfyui_commit": "d49e888586dd8ae012c0667b33466b815fee07f7",
+  "frozen_native_hashes": {
+    "ComfyUI/comfy/sd.py": "939e9b3bfbae9c3de0a559985f6db2f82fa408a962f7190007f2806eb9879d71",
+    "ComfyUI/comfy/ldm/minimax/vae.py": "5bdb45ddd59745e087efc9e5ce90c010f17a8287306a2569fbabb2fc3423981a"
+  },
+  "versions": {
+    "torch": "2.12.1+cu132",
+    "comfy-kitchen": "0.2.37",
+    "tilelang": "0.1.13"
+  },
+  "cpu_tests": {
+    "tests": 57,
+    "failures": 0,
+    "errors": 0,
+    "passed": true,
+    "suites": [
+      "benchmarks.test_video_decode_memory",
+      "benchmarks.test_video_query_fallback",
+      "benchmarks.test_native_audio_decode",
+      "benchmarks.test_h3_loading_stages.ComponentAndIdle",
+      "benchmarks.test_pipeline_review",
+      "benchmarks.test_h3_operator_enhancements",
+      "benchmarks.test_h3_reference_loading",
+      "benchmarks.test_legacy_runtime"
+    ]
+  },
+  "cpu_test_log_sha256": "3a2e6c9b6ee30c01f31b9b64fb5caf89caf8fa047a08964958f3280f2370faec",
+  "local_result_sha256": "cc5b02d7165779fa6414ed61579e06ec4b5b256058f27c0d5a5498fb393bdf81",
+  "local": {
+    "hardware": "NVIDIA GeForce RTX 5060 Ti",
+    "torch": "2.12.1+cu132",
+    "physical": false,
+    "cases": [
+      {
+        "name": "single_frame_261",
+        "shape": [
+          1,
+          24,
+          1,
+          16,
+          16
+        ],
+        "output_shape": [
+          1,
+          1,
+          256,
+          256,
+          3
+        ],
+        "bit_exact": true,
+        "finite": true,
+        "strategy": "native_aligned_query",
+        "fallback": null,
+        "parent_checks": 2,
+        "elapsed_seconds": 2.2809999999990396,
+        "max_abs": 0.0
+      },
+      {
+        "name": "two_item_batch",
+        "shape": [
+          2,
+          24,
+          1,
+          16,
+          16
+        ],
+        "output_shape": [
+          2,
+          1,
+          256,
+          256,
+          3
+        ],
+        "bit_exact": true,
+        "finite": true,
+        "strategy": "native_aligned_query",
+        "fallback": null,
+        "parent_checks": 2,
+        "elapsed_seconds": 2.1090000000003783,
+        "max_abs": 0.0
+      },
+      {
+        "name": "temporal_1797",
+        "shape": [
+          1,
+          24,
+          7,
+          16,
+          16
+        ],
+        "output_shape": [
+          1,
+          22,
+          256,
+          256,
+          3
+        ],
+        "bit_exact": true,
+        "finite": true,
+        "strategy": "native_aligned_query",
+        "fallback": null,
+        "parent_checks": 2,
+        "elapsed_seconds": 2.0929999999971187,
+        "max_abs": 0.0
+      },
+      {
+        "name": "native_repeated_tiles",
+        "shape": [
+          1,
+          24,
+          31,
+          32,
+          32
+        ],
+        "output_shape": [
+          1,
+          103,
+          512,
+          512,
+          3
+        ],
+        "bit_exact": true,
+        "finite": true,
+        "strategy": "native_aligned_query",
+        "fallback": null,
+        "parent_checks": 19,
+        "elapsed_seconds": 10.093000000000757,
+        "max_abs": 0.0
+      },
+      {
+        "name": "public_decode_tiled",
+        "shape": [
+          1,
+          24,
+          1,
+          16,
+          16
+        ],
+        "output_shape": [
+          1,
+          1,
+          256,
+          256,
+          3
+        ],
+        "bit_exact": true,
+        "finite": true,
+        "strategy": "native_aligned_query",
+        "fallback": null,
+        "parent_checks": 2,
+        "elapsed_seconds": 1.8590000000003783,
+        "max_abs": 0.0
+      },
+      {
+        "name": "saved_long_sequence",
+        "shape": [
+          1,
+          24,
+          107,
+          32,
+          56
+        ],
+        "output_shape": [
+          1,
+          362,
+          512,
+          896,
+          3
+        ],
+        "bit_exact": true,
+        "finite": true,
+        "strategy": "native_aligned_query",
+        "fallback": null,
+        "parent_checks": 127,
+        "elapsed_seconds": 51.4529999999977,
+        "max_abs": 0.0
+      },
+      {
+        "name": "host_refusal_native_fallback",
+        "bit_exact": true,
+        "reason": "Host RAM admission (rank 0)"
+      },
+      {
+        "name": "decode_failure_restoration_and_recovery",
+        "bit_exact": true
+      }
+    ],
+    "parent_ownership_checks": 158,
+    "learned_parent_gpu_bytes_at_all_dispatches": 0,
+    "planner_parameter_bytes": 0,
+    "shared_host_reserved_at_close": 0,
+    "saved_decode_inputs_sha256": "ab080385def4a8066805cad486a5ae9cf835fc5a53ae85e1f0b0172e9124c66c",
+    "rank_admissions": [
+      [
+        {
+          "phase": "vae_prepare",
+          "kind": "video",
+          "accepted": true,
+          "checkpoint": [
+            "D:\\minimaxH3\\minimax_h3_video_vae_int8_convrot.safetensors",
+            2811065184,
+            1791422272296856600
+          ],
+          "admission": {
+            "rank": 0,
+            "free_bytes": 15755902976,
+            "total_bytes": 17074421760,
+            "weight_bytes": 2450218336,
+            "activation_estimate_bytes": 227882539,
+            "activation_allowance_bytes": 455765078,
+            "reserve_bytes": 2147483648,
+            "required_free_bytes": 5053467062,
+            "staging_bytes": 5168872128,
+            "gpu_accepted": true,
+            "host_accepted": true
+          },
+          "monotonic": 32237.937
+        },
+        {
+          "phase": "vae_prepare",
+          "kind": "video",
+          "accepted": true,
+          "checkpoint": [
+            "D:\\minimaxH3\\minimax_h3_video_vae_int8_convrot.safetensors",
+            2811065184,
+            1791422272296856600
+          ],
+          "admission": {
+            "rank": 0,
+            "free_bytes": 15367929856,
+            "total_bytes": 17074421760,
+            "weight_bytes": 2450218336,
+            "activation_estimate_bytes": 227882539,
+            "activation_allowance_bytes": 455765078,
+            "reserve_bytes": 2147483648,
+            "required_free_bytes": 5053467062,
+            "staging_bytes": 5168872128,
+            "gpu_accepted": true,
+            "host_accepted": true
+          },
+          "monotonic": 32240.468
+        },
+        {
+          "phase": "vae_prepare",
+          "kind": "video",
+          "accepted": true,
+          "checkpoint": [
+            "D:\\minimaxH3\\minimax_h3_video_vae_int8_convrot.safetensors",
+            2811065184,
+            1791422272296856600
+          ],
+          "admission": {
+            "rank": 0,
+            "free_bytes": 15231614976,
+            "total_bytes": 17074421760,
+            "weight_bytes": 2450218336,
+            "activation_estimate_bytes": 254815869,
+            "activation_allowance_bytes": 509631738,
+            "reserve_bytes": 2147483648,
+            "required_free_bytes": 5107333722,
+            "staging_bytes": 5168872128,
+            "gpu_accepted": true,
+            "host_accepted": true
+          },
+          "monotonic": 32243.015
+        },
+        {
+          "phase": "vae_prepare",
+          "kind": "video",
+          "accepted": true,
+          "checkpoint": [
+            "D:\\minimaxH3\\minimax_h3_video_vae_int8_convrot.safetensors",
+            2811065184,
+            1791422272296856600
+          ],
+          "admission": {
+            "rank": 0,
+            "free_bytes": 15091105792,
+            "total_bytes": 17074421760,
+            "weight_bytes": 2450218336,
+            "activation_estimate_bytes": 710104742,
+            "activation_allowance_bytes": 1420209484,
+            "reserve_bytes": 2147483648,
+            "required_free_bytes": 6017911468,
+            "staging_bytes": 5168872128,
+            "gpu_accepted": true,
+            "host_accepted": true
+          },
+          "monotonic": 32251.25
+        },
+        {
+          "phase": "vae_prepare",
+          "kind": "video",
+          "accepted": true,
+          "checkpoint": [
+            "D:\\minimaxH3\\minimax_h3_video_vae_int8_convrot.safetensors",
+            2811065184,
+            1791422272296856600
+          ],
+          "admission": {
+            "rank": 0,
+            "free_bytes": 15216934912,
+            "total_bytes": 17074421760,
+            "weight_bytes": 2450218336,
+            "activation_estimate_bytes": 227882539,
+            "activation_allowance_bytes": 455765078,
+            "reserve_bytes": 2147483648,
+            "required_free_bytes": 5053467062,
+            "staging_bytes": 5168872128,
+            "gpu_accepted": true,
+            "host_accepted": true
+          },
+          "monotonic": 32261.718
+        },
+        {
+          "phase": "vae_prepare",
+          "kind": "video",
+          "accepted": true,
+          "checkpoint": [
+            "D:\\minimaxH3\\minimax_h3_video_vae_int8_convrot.safetensors",
+            2811065184,
+            1791422272296856600
+          ],
+          "admission": {
+            "rank": 0,
+            "free_bytes": 15319695360,
+            "total_bytes": 17074421760,
+            "weight_bytes": 2450218336,
+            "activation_estimate_bytes": 825533299,
+            "activation_allowance_bytes": 1651066598,
+            "reserve_bytes": 2147483648,
+            "required_free_bytes": 6248768582,
+            "staging_bytes": 5168872128,
+            "gpu_accepted": true,
+            "host_accepted": true
+          },
+          "monotonic": 32299.656
+        },
+        {
+          "phase": "vae_prepare",
+          "kind": "video",
+          "accepted": false,
+          "reason": "Host RAM admission",
+          "admission": {
+            "rank": 0,
+            "free_bytes": 15183380480,
+            "total_bytes": 17074421760,
+            "weight_bytes": 2450218336,
+            "activation_estimate_bytes": 227882539,
+            "activation_allowance_bytes": 455765078,
+            "reserve_bytes": 2147483648,
+            "required_free_bytes": 5053467062,
+            "staging_bytes": 5168872128,
+            "gpu_accepted": true,
+            "host_accepted": false,
+            "host_budget": {
+              "limit_bytes": 5168872128,
+              "reserved_bytes": 4933991488,
+              "peak_reserved_bytes": 15271735744,
+              "admission_denials": 2,
+              "available_bytes": 7512010752,
+              "physical_bytes": 33409265664,
+              "pressure_aware": false,
+              "cgroup": {
+                "available": false
+              },
+              "pending_preparation_bytes": 0,
+              "preparing": 0,
+              "file_cache_reserve_bytes": 6442450944
+            }
+          },
+          "monotonic": 32349.937
+        },
+        {
+          "phase": "vae_prepare",
+          "kind": "video",
+          "accepted": true,
+          "checkpoint": [
+            "D:\\minimaxH3\\minimax_h3_video_vae_int8_convrot.safetensors",
+            2811065184,
+            1791422272296856600
+          ],
+          "admission": {
+            "rank": 0,
+            "free_bytes": 15183380480,
+            "total_bytes": 17074421760,
+            "weight_bytes": 2450218336,
+            "activation_estimate_bytes": 227882539,
+            "activation_allowance_bytes": 455765078,
+            "reserve_bytes": 2147483648,
+            "required_free_bytes": 5053467062,
+            "staging_bytes": 5168872128,
+            "gpu_accepted": true,
+            "host_accepted": true
+          },
+          "monotonic": 32351.718
+        },
+        {
+          "phase": "vae_prepare",
+          "kind": "video",
+          "accepted": false,
+          "reason": "Host RAM admission",
+          "admission": {
+            "rank": 0,
+            "free_bytes": 15458107392,
+            "total_bytes": 17074421760,
+            "weight_bytes": 2450218336,
+            "activation_estimate_bytes": 227882539,
+            "activation_allowance_bytes": 455765078,
+            "reserve_bytes": 2147483648,
+            "required_free_bytes": 5053467062,
+            "staging_bytes": 5168872128,
+            "gpu_accepted": true,
+            "host_accepted": false,
+            "host_budget": {
+              "limit_bytes": 17179869184,
+              "reserved_bytes": 4933991488,
+              "peak_reserved_bytes": 15271735744,
+              "admission_denials": 6,
+              "available_bytes": 5589843968,
+              "physical_bytes": 33409265664,
+              "pressure_aware": false,
+              "cgroup": {
+                "available": false
+              },
+              "pending_preparation_bytes": 0,
+              "preparing": 0,
+              "file_cache_reserve_bytes": 6442450944
+            }
+          },
+          "monotonic": 32351.906
+        }
+      ],
+      [
+        {
+          "phase": "vae_prepare",
+          "kind": "video",
+          "accepted": true,
+          "checkpoint": [
+            "D:\\minimaxH3\\minimax_h3_video_vae_int8_convrot.safetensors",
+            2811065184,
+            1791422272296856600
+          ],
+          "admission": {
+            "rank": 1,
+            "free_bytes": 15753805824,
+            "total_bytes": 17074421760,
+            "weight_bytes": 2450218336,
+            "activation_estimate_bytes": 227882539,
+            "activation_allowance_bytes": 455765078,
+            "reserve_bytes": 2147483648,
+            "required_free_bytes": 5053467062,
+            "staging_bytes": 5168872128,
+            "gpu_accepted": true,
+            "host_accepted": true
+          },
+          "monotonic": 32237.937
+        },
+        {
+          "phase": "vae_prepare",
+          "kind": "video",
+          "accepted": true,
+          "checkpoint": [
+            "D:\\minimaxH3\\minimax_h3_video_vae_int8_convrot.safetensors",
+            2811065184,
+            1791422272296856600
+          ],
+          "admission": {
+            "rank": 1,
+            "free_bytes": 15365832704,
+            "total_bytes": 17074421760,
+            "weight_bytes": 2450218336,
+            "activation_estimate_bytes": 227882539,
+            "activation_allowance_bytes": 455765078,
+            "reserve_bytes": 2147483648,
+            "required_free_bytes": 5053467062,
+            "staging_bytes": 5168872128,
+            "gpu_accepted": true,
+            "host_accepted": true
+          },
+          "monotonic": 32240.468
+        },
+        {
+          "phase": "vae_prepare",
+          "kind": "video",
+          "accepted": true,
+          "checkpoint": [
+            "D:\\minimaxH3\\minimax_h3_video_vae_int8_convrot.safetensors",
+            2811065184,
+            1791422272296856600
+          ],
+          "admission": {
+            "rank": 1,
+            "free_bytes": 15229517824,
+            "total_bytes": 17074421760,
+            "weight_bytes": 2450218336,
+            "activation_estimate_bytes": 254815869,
+            "activation_allowance_bytes": 509631738,
+            "reserve_bytes": 2147483648,
+            "required_free_bytes": 5107333722,
+            "staging_bytes": 5168872128,
+            "gpu_accepted": true,
+            "host_accepted": true
+          },
+          "monotonic": 32243.015
+        },
+        {
+          "phase": "vae_prepare",
+          "kind": "video",
+          "accepted": true,
+          "checkpoint": [
+            "D:\\minimaxH3\\minimax_h3_video_vae_int8_convrot.safetensors",
+            2811065184,
+            1791422272296856600
+          ],
+          "admission": {
+            "rank": 1,
+            "free_bytes": 15089008640,
+            "total_bytes": 17074421760,
+            "weight_bytes": 2450218336,
+            "activation_estimate_bytes": 710104742,
+            "activation_allowance_bytes": 1420209484,
+            "reserve_bytes": 2147483648,
+            "required_free_bytes": 6017911468,
+            "staging_bytes": 5168872128,
+            "gpu_accepted": true,
+            "host_accepted": true
+          },
+          "monotonic": 32251.25
+        },
+        {
+          "phase": "vae_prepare",
+          "kind": "video",
+          "accepted": true,
+          "checkpoint": [
+            "D:\\minimaxH3\\minimax_h3_video_vae_int8_convrot.safetensors",
+            2811065184,
+            1791422272296856600
+          ],
+          "admission": {
+            "rank": 1,
+            "free_bytes": 15214837760,
+            "total_bytes": 17074421760,
+            "weight_bytes": 2450218336,
+            "activation_estimate_bytes": 227882539,
+            "activation_allowance_bytes": 455765078,
+            "reserve_bytes": 2147483648,
+            "required_free_bytes": 5053467062,
+            "staging_bytes": 5168872128,
+            "gpu_accepted": true,
+            "host_accepted": true
+          },
+          "monotonic": 32261.718
+        },
+        {
+          "phase": "vae_prepare",
+          "kind": "video",
+          "accepted": true,
+          "checkpoint": [
+            "D:\\minimaxH3\\minimax_h3_video_vae_int8_convrot.safetensors",
+            2811065184,
+            1791422272296856600
+          ],
+          "admission": {
+            "rank": 1,
+            "free_bytes": 15317598208,
+            "total_bytes": 17074421760,
+            "weight_bytes": 2450218336,
+            "activation_estimate_bytes": 825533299,
+            "activation_allowance_bytes": 1651066598,
+            "reserve_bytes": 2147483648,
+            "required_free_bytes": 6248768582,
+            "staging_bytes": 5168872128,
+            "gpu_accepted": true,
+            "host_accepted": true
+          },
+          "monotonic": 32299.656
+        },
+        {
+          "phase": "vae_prepare",
+          "kind": "video",
+          "accepted": false,
+          "reason": "Host RAM admission",
+          "admission": {
+            "rank": 1,
+            "free_bytes": 15181283328,
+            "total_bytes": 17074421760,
+            "weight_bytes": 2450218336,
+            "activation_estimate_bytes": 227882539,
+            "activation_allowance_bytes": 455765078,
+            "reserve_bytes": 2147483648,
+            "required_free_bytes": 5053467062,
+            "staging_bytes": 5168872128,
+            "gpu_accepted": true,
+            "host_accepted": false,
+            "host_budget": {
+              "limit_bytes": 5168872128,
+              "reserved_bytes": 4933991488,
+              "peak_reserved_bytes": 15271735744,
+              "admission_denials": 4,
+              "available_bytes": 7512010752,
+              "physical_bytes": 33409265664,
+              "pressure_aware": false,
+              "cgroup": {
+                "available": false
+              },
+              "pending_preparation_bytes": 0,
+              "preparing": 0,
+              "file_cache_reserve_bytes": 6442450944
+            }
+          },
+          "monotonic": 32349.937
+        },
+        {
+          "phase": "vae_prepare",
+          "kind": "video",
+          "accepted": true,
+          "checkpoint": [
+            "D:\\minimaxH3\\minimax_h3_video_vae_int8_convrot.safetensors",
+            2811065184,
+            1791422272296856600
+          ],
+          "admission": {
+            "rank": 1,
+            "free_bytes": 15181283328,
+            "total_bytes": 17074421760,
+            "weight_bytes": 2450218336,
+            "activation_estimate_bytes": 227882539,
+            "activation_allowance_bytes": 455765078,
+            "reserve_bytes": 2147483648,
+            "required_free_bytes": 5053467062,
+            "staging_bytes": 5168872128,
+            "gpu_accepted": true,
+            "host_accepted": true
+          },
+          "monotonic": 32351.718
+        },
+        {
+          "phase": "vae_prepare",
+          "kind": "video",
+          "accepted": false,
+          "reason": "Host RAM admission",
+          "admission": {
+            "rank": 1,
+            "free_bytes": 15456010240,
+            "total_bytes": 17074421760,
+            "weight_bytes": 2450218336,
+            "activation_estimate_bytes": 227882539,
+            "activation_allowance_bytes": 455765078,
+            "reserve_bytes": 2147483648,
+            "required_free_bytes": 5053467062,
+            "staging_bytes": 5168872128,
+            "gpu_accepted": true,
+            "host_accepted": false,
+            "host_budget": {
+              "limit_bytes": 17179869184,
+              "reserved_bytes": 4933991488,
+              "peak_reserved_bytes": 15271735744,
+              "admission_denials": 8,
+              "available_bytes": 5589716992,
+              "physical_bytes": 33409265664,
+              "pressure_aware": false,
+              "cgroup": {
+                "available": false
+              },
+              "pending_preparation_bytes": 0,
+              "preparing": 0,
+              "file_cache_reserve_bytes": 6442450944
+            }
+          },
+          "monotonic": 32351.906
+        }
+      ]
+    ]
+  },
+  "admission_example": {
+    "shape": [
+      1,
+      24,
+      107,
+      32,
+      56
+    ],
+    "weights_bytes": 2450218528,
+    "activation_estimate_bytes": 825533299,
+    "previous_reserve_bytes": 9663676416,
+    "new_reserve_bytes": 2147483648,
+    "previous_required_free_bytes": 13764961542,
+    "new_required_free_bytes": 6248768774
+  },
+  "limitations": [
+    "No new physical-T4 or NCCL qualification",
+    "Two logical ranks share one RTX 5060 Ti; no physical-dual-GPU timing claim",
+    "Parent CPU decoder payload, I/O and conservative host lease retained",
+    "Retained TE/DiT CPU caches can still cause host admission denial",
+    "No full H3 rerun and no new Kaggle interactions",
+    "Previous immutable submitted sources and results unchanged"
+  ],
+  "raw_evidence_root": "D:\\attention_eval\\video_decode_memory_20261023",
+  "selected_local_evidence": "local_final",
+  "report_sha256": "ddb8cc379bb267d1f10fcde3f0517cc418898f00a8320a1e4e5e299dec644ab7"
+}

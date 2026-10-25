@@ -98,6 +98,7 @@ def global_row_quantize(x, comm, world_size, groupsize=256, input_act=None, vari
         else:
             padded = torch.zeros((rows, width * world_size), device=flat.device)
             padded[:, rank * width:(rank + 1) * width].copy_(flat)
+    del flat
     # Identical full-width/native FP32 GEMM geometry and input values.
     rotated = backend._rotate_activation(padded, h, groupsize)
     del padded
@@ -121,6 +122,7 @@ def row_linear(x, weight, weight_scale, comm, world_size, groupsize=256, input_a
         return old.row_linear(x, weight, weight_scale, comm, world_size, groupsize, input_act, bias, residual, residual_scale)
     q, scale = global_row_quantize(x, comm, world_size, groupsize, input_act, variant)
     partial = original.int_mm(q, weight)
+    del q
     comm.all_reduce(partial, op=comm.ReduceOp.SUM)
     out = original.dequantize(partial, scale, weight_scale, x.dtype, bias).reshape(*x.shape[:-1], weight.shape[0])
     if residual is not None: out = torch.addcmul(residual, out.to(x.dtype), residual_scale)

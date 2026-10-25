@@ -1,0 +1,128 @@
+{
+  "date": "2026-10-21",
+  "scope": "Retained-evidence/source audit only; no benchmarks, upload, dependency changes or GPU sessions",
+  "missing_definition": "No matching real-T4 evidence found for the stated current variant in the inspected records; not proof an inaccessible remote run never occurred",
+  "frozen_versions": {
+    "torch": "2.12.1+cu132",
+    "comfy-kitchen": "0.2.37",
+    "tilelang": "0.1.13"
+  },
+  "qualification_blocker": "Frozen Linux platform lock/wheelhouse/ABI and TileLang 0.1.13 SM75 qualification not established; historical gate still selects 0.1.15",
+  "live_kaggle": {
+    "verified": false,
+    "list_result": "Not found",
+    "status_result": "kernels.get denied",
+    "queried": [
+      "chinokiki9/h3-tp2-swiglu-padding",
+      "chinokiki9/h3-tp2-p2-attention",
+      "ocnsai/h3-fc2-quantizer-memory"
+    ]
+  },
+  "validation_dimensions": [
+    {
+      "id_priority": "T01 \u2014 first",
+      "family": "FP16-fix residual flow and weight folding",
+      "existing_evidence": "Local trained component checks, 38 configurations against the existing Native FP32 flow; no T4",
+      "remaining_check": "SM75 finite/overflow/underflow behavior and state/output fidelity for current TE/DiT shapes, including LoRA. Keep INT8 operators in the reference; do not replace them with dense FP32"
+    },
+    {
+      "id_priority": "T02 \u2014 first",
+      "family": "Actual FP16 dispatch through Group32 / packed rows / SwiGLU / owned-FP32 FC2",
+      "existing_evidence": "The FP32 variants have historical T4 results; local SM120 uses native fallbacks",
+      "remaining_check": "Trace which backend actually runs with FP16 activations, validate it and measure complete APIs. Several row/SwiGLU/transport helpers have FP32 guards, so earlier FP32 speedups cannot be assumed to apply"
+    },
+    {
+      "id_priority": "T03 \u2014 second",
+      "family": "`tilelang_scaled_fp16` integrated row backend",
+      "existing_evidence": "P2 codec/fused epilogues were tested on T4 for historical DiT FP32 boundaries; the later four-site row integration has local M=17 logical-rank gates",
+      "remaining_check": "Physical NCCL + current wrappers for TE O/down and DiT O/FC2, independent codec reference, cancellation-sensitive inputs and realistic row counts. The wrapper's FP32 eligibility also needs to be reported under the default FP16 flow"
+    },
+    {
+      "id_priority": "T04 \u2014 second",
+      "family": "Native Token Refiner SDPA wrapper and explicit TE attention/MLP lifetime deletion",
+      "existing_evidence": "CPU/local wiring and lifetime checks; native SDPA itself is not a new untested primitive",
+      "remaining_check": "Current integrated SM75 dispatch, output correctness and peak-memory/lifetime behavior. No new target performance result for these particular changes is recorded"
+    },
+    {
+      "id_priority": "T05 \u2014 second",
+      "family": "Current `adaptive_lookahead` option and its 1\u20132-group admission behavior",
+      "existing_evidence": "Local fixture/ownership tests; older adaptive streaming has historical physical results",
+      "remaining_check": "Current flag/wiring, current memory policy and FP16 workspace coexistence on two devices. The older adaptive run does not establish a stable speedup for this flag/version"
+    },
+    {
+      "id_priority": "T06 \u2014 second",
+      "family": "Whole-layer offline LoRA baking on two physical GPUs",
+      "existing_evidence": "Serial/spawned CPU checks and two spawned CUDA workers sharing one 5060 Ti; exact sampled weight/scale bytes",
+      "remaining_check": "Two distinct T4 devices, layer ownership, output artifact identity, peak VRAM/RAM and baking throughput. Older offline-LoRA checkpoints/generation results do not validate this newer layer-parallel baker"
+    },
+    {
+      "id_priority": "T07 \u2014 second",
+      "family": "Encoder-first/decoder-last VAE loading and idle VAE-encoder + TE preload",
+      "existing_evidence": "Trained local Video/Audio component checks; local cancellation, pressure and host-budget fixtures",
+      "remaining_check": "Actual parent/worker coexistence, Native model-management lifetime, decoder loading and cancellation on dual T4. Keep Audio Native single-GPU; no full H3 request is required for a bounded component gate"
+    },
+    {
+      "id_priority": "T08 \u2014 regression",
+      "family": "Current pinned Video query/fallback path and Native-only Audio wrapper",
+      "existing_evidence": "Latest local Video gate: 36 Native / 72 logical-parallel calls. Trained local Audio output is exact for both auto/native; no audio-worker dispatch",
+      "remaining_check": "SM75 regression of the current source/legacy API, staged Native fallback and single-GPU Audio decode. Video query parallelism and Native audio both have historical T4 evidence; this is current-integration requalification, not a new algorithm"
+    },
+    {
+      "id_priority": "T09 \u2014 CPU-first",
+      "family": "Current positional `os.pread` reader and fallback",
+      "existing_evidence": "CPU positional-read fixtures and Windows fallback; earlier T4 I/O studies used their own saved readers",
+      "remaining_check": "Native Linux file descriptors, short reads, current range layout and target-filesystem behavior. This is primarily a CPU/OS/I/O experiment, not a reason to consume T4 time"
+    }
+  ],
+  "planned_not_integrated": [
+    "TE compressed-weight streaming: CPU codec screen exists, loader does not",
+    "Bounded cross-stage streaming planner: revised design only"
+  ],
+  "deferred_or_blocked": [
+    "Nsight Compute counters: historical ERR_NVGPUCTRPERM",
+    "Full H3 sparse semantics / FP16 trajectories / approximate transport quality",
+    "Large idle matrix and physical model-switch/interruption",
+    "Current integrated single/concurrent request acceptance"
+  ],
+  "report_sha256": "2810f50739f7c09fb469ab84d19bcff7027cc710840c94a575205e6aea27496b",
+  "checked_local_links": 30,
+  "source_sha256": {
+    "docs/data/audio_native_only_20261021.json": "8140ebdc691e339b2567a55952da697a41484fc482b4f3a72320537cbd215219",
+    "docs/data/fc2_quantizer_t4_v1_summary.json": "de0ae214287a08af2c6c5c38b4dbe6a7d72fe4b0012837875b679cb56bf65a66",
+    "docs/data/fc2_quantizer_t4_v2_summary.json": "899eb519ef6bc19eee4951807d7a241d4b797c3e295aae7616ac20700317b2c0",
+    "docs/design/H3_TE_COMPRESSED_WEIGHT_STREAMING_PROPOSAL.md": "8223003e9f68acfc59ac1674fd2318bd28285a02995a13eb3162bb81da1e63f1",
+    "docs/design/ZERO_BUBBLE_STREAMING_ARCHITECTURE.md": "1aaf566b9592345d20c940d54aaabea319402c147b3f5ec7912aa41acd8c8e61",
+    "docs/guides/H3_LEGACY_RUNTIME.md": "054fe6860d4338147e8aa9c326e7fd041c7a0a30048acc5aae9fa7236dfa36c7",
+    "docs/guides/H3_LOADING_STAGES.md": "cfb1c4fe607992adaaeffc9a9873d2d6a8630fb44ca4bc10b25c0fbbbbadf3de",
+    "docs/guides/H3_OPERATOR_ENHANCEMENTS.md": "00665db7f70b4f9ea0dd2331c10fb70e26b1b7b1a27c5c0bef0942a6fa3c5f16",
+    "docs/guides/PARALLEL_VAE_INTEGRATION.md": "26b2d505d98f3c3de6fcd0bb4651cca5eeb9e0d07dc1e4abab886625581061e3",
+    "docs/reports/FC2_QUANTIZER_MEMORY.md": "80f7c0b98099d94af522251f27e143adede02134fcd607fe84eab2a6df434ea0",
+    "docs/reports/FP16_RESIDUAL_FIX_LOCAL_20261020.md": "0299dd0d7fc5280e675266b5939c1d63ecc9a70eda3bb520d4d246fa1bd3afa9",
+    "docs/reports/H3_NATIVE_FP32_FLOW_20261021.md": "d69e5f0cb029e56728c6af4182bd0fa1e75ec29017b4e13a2aea1dde8f80c573",
+    "docs/reports/H3_PIPELINE_REVIEW.md": "052a439927da6532e5240bc23625be233493007cb3051c701554a59f42254846",
+    "docs/reports/ONLINE_LORA_BYTE_EXACT_OPTIMIZATION.md": "22fafa8cf9dd235524e86c366851955423d65ebca55377d88973b9dc2e302554",
+    "docs/reports/PIPELINE_RESIDENCY_AUDIT.md": "d25bbefb6dd0f75b0134799ecee24f02718953a3304bd799ebc7528afd318a34",
+    "docs/reports/ROW_PARTIAL_MEMORY.md": "f6897ad1f1c575d4c4dd3e643732844c4f855109ed3e0125b689645cf3107a97",
+    "docs/reports/SELECTIVE_B_FEASIBILITY.md": "9afc059af382cab51570476952291a03382316e06ef0c3cf460b32c185a1d051",
+    "docs/reports/SWIGLU_PADDING_FUSION.md": "7f1e456ac4209fb125e84bee94f0e4f2da77949004fa950a6556281df2242158",
+    "docs/reports/TE_COMPRESSION_LOCAL_20261020.md": "78cffaf4f92b19a45cbb77f986aa60c6443048715afc472172ad920bee13d736",
+    "docs/reports/TE_IDLE_RESIDENCY_RESULTS.md": "080f1c0ba1ba4a8fa661b6be2d5641c7267838677723a5325d1a53f776ce92a4",
+    "docs/reports/TP2_KITCHEN_GROUP32_RESULTS.md": "1738b465d6f3a55a4a1f4e6de4355d161358f4c8c20e160a40d4ae5178feace1",
+    "docs/reports/TP2_KITCHEN_GROUP32_V2_RESULTS.md": "cb0972301e4920349cfafd7b7cacf557d368f053a89743d29c6717b6f9282338",
+    "docs/reports/TP2_OPERATOR_PASS2.md": "5fb8537fe2eee817acb234d0622a2d0f3a2c0de08cb413c2422f6d9efdc35ddf",
+    "docs/reports/TP2_P2_OPTIMIZATION_REPORT.md": "f55688e82fd80cb8308a5ecb3fa6914ab1fe3a4c5ef734fe69a1c08106ceb916",
+    "docs/reports/TP2_ROW_FUSION_RESULTS.md": "4ca906faf1b8e2bc9eddd112e82a060c30eced7118d5135d49db42e7ce07c0dc",
+    "docs/reports/VIDEO_VAE_QUERY_FALLBACK_CHECK.md": "1145cbfbb344948db8ef17b42fe023d45ff11906efad18ecf97445c5a0682c8f",
+    "patches/h3_operator_dependencies.py": "e7ef496d2c0ae2fa7a037381a59df5d5a13cf3e6bfc747af5ac13e3deb699cbd",
+    "runtime/README.md": "74294315cf145f1eba6f9ca48218e46f464114adb81a31b1c7312472f3416fba"
+  },
+  "local_evidence_sha256": {
+    "D:\\attention_eval\\h3_operator_integration_20261018\\integration_results.json": "4f288f74b94806e9e8d848c714736cf310ed551969d2e44130d5125d7b945194",
+    "D:\\attention_eval\\h3_operator_enhancements_20261019\\validation.json": "5cf0c6ff3d5b30edfdfbb2bc4d45506f0a95fc74daa002bfd2630cb4df3ebe5f",
+    "D:\\attention_eval\\h3_loading_stages_20261019\\validation.json": "e9187d9546b13df0accd5f8d69c5b0d7ee4bd257d3aa23848b0ceb541750f202",
+    "D:\\attention_eval\\h3_loading_stages_20261019\\local_layer_bake.json": "3e29e5c74cf0f88ba350dc78398712abcfdfb9e77bf0a47cb3c1c2ee4030d9a2",
+    "D:\\attention_eval\\h3_loading_stages_20261019\\trained_vae.json": "3fd7b692590bdfb60f919dd1e9a077f6167a2b6afba8a7a72facc38aec97fe7b",
+    "D:\\attention_eval\\tp2_p2_20261018\\final_verification.json": "c262e3ce2fdd0ba74cd976bb3019685f03c16538271f72762b2905d4cc0e694f",
+    "D:\\attention_eval\\h3_conda_runtime_20261019\\torch_linux_metadata.json": "75b7c1934d90159f59315020006acdfd4ec76cb66fed4a7eb557ea9c827b4763"
+  }
+}

@@ -14,15 +14,16 @@ bounded weight residency, and parallel VAE decoding. Native ComfyUI retains
 conditioning, sampling, and public VAE planning.
 
 > **Deployment status:** the validated local source and dependency versions are
-> frozen. The matching Linux/T4 stack still requires explicit platform/ABI
-> qualification. Historical T4 operator results are documented separately;
-> they are not a full-pipeline speedup claim.
+> frozen. The [960×544, 362-frame E2E](docs/reports/H3_L1_TURBO_05MP_E2E_20261024.md)
+> completed on two T4s with native Torch2.11.0+cu128, Kitchen0.2.37 and
+> TileLang0.1.13. Generation quality review remains pending; this is not a
+> controlled speedup comparison or qualification of another dependency stack.
 
 ## Start here
 
 | Resource | What you will find |
 |---|---|
-| [40-page technical guide](docs/guides/MiniMax_H3_TP2_Optimization_Technical_Guide.pdf) | Architecture diagrams, numerical contracts, memory charts, and implementation coverage audit |
+| [Technical guide (PDF)](docs/guides/MiniMax_H3_TP2_Optimization_Technical_Guide.pdf) | Architecture diagrams, numerical contracts, current defaults and physical T4 results |
 | [Runtime setup](docs/guides/H3_LEGACY_RUNTIME.md) | Pinned ComfyUI, conda environment, launch commands, and platform limits |
 | [Operator configuration](docs/guides/H3_OPERATOR_INTEGRATION.md) | Backend choices, workflow integration, and qualification scope |
 | [Loading and LoRA](docs/guides/H3_LOADING_STAGES.md) | Layer-parallel baking, staged VAEs, and idle preloading |
@@ -45,15 +46,23 @@ see the [frozen runtime record](runtime/README.md).
 
 | Component | Selection |
 |---|---|
+| Tensor flow | FP16-fix by default; TE/DiT residual divisor 64, explicit FP32 stability islands; `legacy` FP32 flow optional |
 | TE / DiT / Token Refiner | TileLang Group32 dense / Kitchen INT8 / Native SDPA |
-| Row projections | TileLang packed, global row scales, native INT32 SUM |
-| DiT FC2 | Owned FP32 rotation with fused SwiGLU preparation |
-| Video / Audio VAE | Aligned query parallelism with Kitchen INT8 / FP32 channel parallelism |
-| LoRA | Online, with Selective B for qualified FC1 shapes; offline baking optional |
+| Row projections | Scaled FP16 SUM with fused FP32 dequantization; explicit INT32 SUM alternative |
+| TE down / DiT FC2 | `fused_stored`: FP32 SwiGLU + regular ConvRot256, global row scales, original INT8 GEMM |
+| DiT QKV / FC1 columns | Direct INT8 GEMM + ordered TileLang epilogue on supported SM75 shapes; preallocated fallback |
+| Video / Audio VAE | Aligned query parallelism with Kitchen INT8 / Native single-GPU FP32 decoding |
+| LoRA | Offline by default; prefer bounded TP2 bundle merges for long sequences. Optional short/medium online uses FP32 RowParallel A partial SUM and guarded FC1/QKV owned B |
+| Streaming | Lifecycle prefetch, host-pressure admission and adaptive depth 1–2 enabled; idle speculation off |
+| Reference VAE loading | Metadata-only shells; load Video/Audio encoders only on actual reference encoding, decoders at output |
 
-Sparse dropping/scalar pooling, scaled FP16 transport, adaptive lookahead, and
-idle residency are explicit options. Numerical differences and Native fallbacks
+Sparse dropping/scalar pooling, recompute preparation and idle residency remain
+explicit options. Removed controls and saved-workflow migration are documented
+in the [configuration review](docs/reports/H3_CONFIGURATION_REVIEW_20261024.md).
+Numerical differences and Native fallbacks
 are explained in the [technical guide](docs/guides/MiniMax_H3_TP2_Optimization_Technical_Guide.pdf).
+The [2026-10-22 promotion record](docs/reports/H3_FP16_FUSED_DEFAULT_20261022.md)
+separates physical operator evidence from pending full-pipeline quality checks.
 
 ## Repository map
 
@@ -62,6 +71,7 @@ are explained in the [technical guide](docs/guides/MiniMax_H3_TP2_Optimization_T
 | [`patches/`](patches/) | Runtime, operators, loaders, and residency control |
 | [`custom_nodes/`](custom_nodes/) · [`workflows/`](workflows/) | ComfyUI integration and workflow graphs |
 | [`benchmarks/`](benchmarks/README.md) | Explicit tests, profiling, and operator experiments |
+| [`tools/`](tools/README.md) | Runtime commands and historical scripts moved out of the root |
 | [`runtime/`](runtime/README.md) | Frozen source/dependency identity |
 | [`docs/`](docs/README.md) | PDF guide, current documentation, reports, and plans |
 

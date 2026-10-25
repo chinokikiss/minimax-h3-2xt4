@@ -108,11 +108,30 @@ class RowParallelLinearINT8(nn.Module):
         if not reduce_sum and self.world_size > 1:
             raise ValueError("Quantization-preserving row projection requires reduction")
         from patches.h3_operator_policy import row_linear as dispatch_row
-        return dispatch_row(self,x,row_linear,dist)
+        return dispatch_row(self,x,row_linear,dist).to(x.dtype)
 
     def forward_parts(self,gate,up):
         from patches.h3_operator_policy import row_linear_parts
-        return row_linear_parts(self,gate,up,row_linear,dist)
+        return row_linear_parts(self,gate,up,row_linear,dist).to(gate.dtype)
+
+
+_COLUMN_FORWARD=ColumnParallelLinearINT8.forward
+
+
+def project_columns(x,*modules):
+    """Actual TE geometry only; hooks/subclasses/public CUDA paths stay intact."""
+    if (x.shape[-1]==5120 and x.is_contiguous() and
+            ColumnParallelLinearINT8.forward is _COLUMN_FORWARD and
+            not nn.modules.module._global_forward_hooks and not nn.modules.module._global_forward_pre_hooks and
+            all(type(m) is ColumnParallelLinearINT8 and 'forward' not in m.__dict__
+                and not m._forward_hooks and not m._forward_pre_hooks
+                and (m.convrot,m.convrot_groupsize)==(modules[0].convrot,modules[0].convrot_groupsize)
+                for m in modules)):
+        from patches.dit_column_linear import shared_column_linears
+        output=shared_column_linears(x,[(m.weight,m.weight_scale) for m in modules],
+            convrot=modules[0].convrot,convrot_groupsize=modules[0].convrot_groupsize)
+        if output is not None:return output
+    return tuple(m(x) for m in modules)
 
 
 class TPTransformerBlockINT8(nn.Module):
@@ -166,12 +185,16 @@ class TPTransformerBlockINT8(nn.Module):
         residual = x
         # Native ComfyUI casts norm weights to the activation dtype. The
         # CLIP frontend carries FP32 activations even with FP16 TE weights.
-        from comfy.ldm.common_dit import rms_norm
+        from comfy.ldm.common_dit import rms_norm as native_rms_norm
+        flow=getattr(self,'tensor_flow',None)
+        if flow is not None:
+            if x.dtype!=flow.dtype:raise ValueError('TE residual dtype does not match tensor flow')
+            def rms_norm(value,weight,eps):
+                return torch.nn.functional.rms_norm(value.float(),(value.shape[-1],),weight.float(),eps).to(value.dtype)
+        else:rms_norm=native_rms_norm
         normed_x = rms_norm(x, self.input_layernorm.weight, self.input_layernorm.eps)
 
-        q = self.q_proj(normed_x) # [B, S, 32 * 128 = 4096]
-        k = self.k_proj(normed_x) # [B, S, 4 * 128 = 512]
-        v = self.v_proj(normed_x) # [B, S, 4 * 128 = 512]
+        q,k,v=project_columns(normed_x,self.q_proj,self.k_proj,self.v_proj)
 
         B, S, _ = q.shape
         q = q.view(B, S, self.num_heads_per_rank, self.head_dim)
@@ -185,6 +208,7 @@ class TPTransformerBlockINT8(nn.Module):
         from comfy.text_encoders.llama import apply_rope
         from comfy.ldm.modules.attention import optimized_attention_for_device
         q, k = apply_rope(q, k, freqs_cis=freqs_cis)
+        if flow is not None:q,k=q.to(flow.dtype),k.to(flow.dtype)
         from patches.h3_operator_policy import te_attention
         attn_out=te_attention(self,q,k,v,attention_mask)
         if attn_out is None:
@@ -228,25 +252,27 @@ class TPTransformerBlockINT8(nn.Module):
 
         # RowParallel O projection + AllReduce 1
         attn_out = self.o_proj(attn_out, reduce_sum=True)
-        x = residual + attn_out
+        if flow is not None:
+            from patches.h3_tensor_flow import residual_add
+            x=residual_add(residual,attn_out)
+        else:x = residual + attn_out
         del normed_x, q, k, v, attn_out
 
         # 2. MLP
         residual = x
         normed_x = rms_norm(x, self.post_attention_layernorm.weight, self.post_attention_layernorm.eps)
 
-        gate = self.gate_proj(normed_x) # [B, S, 12800]
-        up = self.up_proj(normed_x)     # [B, S, 12800]
+        gate,up=project_columns(normed_x,self.gate_proj,self.up_proj)
         policy=getattr(self,'operator_policy',None)
         # Consume separate producer tensors before materializing SwiGLU.
-        if policy is not None and policy.swiglu_padding:
+        if policy is not None:
             mlp_out=self.down_proj.forward_parts(gate,up)
         else:
             mlp_act = torch.nn.functional.silu(gate) * up
             mlp_out = self.down_proj(mlp_act, reduce_sum=True)
             del mlp_act
         del normed_x, gate, up
-        x = residual + mlp_out
+        x = residual_add(residual,mlp_out) if flow is not None else residual + mlp_out
         del mlp_out
 
         return x

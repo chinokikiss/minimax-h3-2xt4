@@ -573,9 +573,9 @@
       },
       "widgets_values": [
         "minimax_h3_audio_vae_fp32_clean.safetensors",
-        "auto"
+        "native"
       ],
-      "title": "MiniMax H3 parallel VAE (Native public plan)"
+      "title": "MiniMax H3 native audio VAE"
     },
     {
       "id": 127,
@@ -619,13 +619,36 @@
         }
       ],
       "properties": {
-        "Node name for S&R": "MiniMaxH3TP2Loader"
+        "Node name for S&R": "MiniMaxH3TP2Loader",
+        "h3_configuration_version": 2
       },
       "widgets_values": [
         "D:/minimaxH3/qwen3vl_32b_minimax_h3_int8_convrot.safetensors",
         "D:/minimaxH3/MiniMax_H3_Ref2VA_pruned_int8_convrot.safetensors",
         6.0,
-        3.0
+        3.0,
+        false,
+        4.0,
+        true,
+        "tilelang_group32",
+        "kitchen",
+        "tilelang_scaled_fp16",
+        96,
+        true,
+        "fused_stored",
+        "offline",
+        "fp16",
+        6,
+        0,
+        0,
+        2.0,
+        true,
+        true,
+        9.0,
+        1500,
+        "",
+        true,
+        "cuda_int8_tilelang"
       ],
       "title": "MiniMax H3 TP2 — validated INT8 stack"
     },
@@ -1604,7 +1627,25 @@
     "VHS_latentpreviewrate": 0,
     "VHS_MetadataImage": true,
     "VHS_KeepIntermediate": true,
-    "minimax_tp2_note": "Separate validated INT8 variant. Requires two physical CUDA GPUs and linked custom node. Default video decode: Native-aligned query partitioning inside the Native public plan. Default audio decode: FP32 Channel Parallel, with small batch-dependent rounding error; set either VAE decode_mode to native for fallback. Original workflow preserved. Component timings do not establish an integrated pipeline speedup."
+    "minimax_tp2_note": "2026-10-24 defaults: FP16-fix /64, TE Group32, Kitchen DiT/Video, fused_stored + scaled FP16 row SUM, direct INT8 + TileLang aligned SM75 DiT columns. Offline LoRA by default: prefer bounded TP2 bundle merges for long sequences; safetensors input creates a baked checkpoint. Short/medium online remains optional with guarded owned FC1/QKV B. Lifecycle/host pressure/adaptive lookahead enabled; idle off. Single-GPU native audio. Attention alternatives preserved; no E2E speedup claim.",
+    "minimax_h3_audio_decode": "native_single_gpu",
+    "minimax_h3_operators": {
+      "row_linear_backend": "tilelang_scaled_fp16",
+      "fc2_quantizer": "fused_stored",
+      "tensor_flow": "fp16",
+      "residual_exponent": 6,
+      "reduction": "scaled_fp16",
+      "fallback_reduction": "native_int32",
+      "lora_row_partial_reduce": true,
+      "lora_hidden_sum": "fp32",
+      "vae_encoder_loading": "reference_demand",
+      "column_linear_backend": "cuda_int8_tilelang",
+      "lora_mode": "offline",
+      "lora_selective_qkv_b": true,
+      "adaptive_lookahead": true,
+      "prefetch_lifecycle": true,
+      "memory_pressure_aware": true
+    }
   },
   "version": 0.4
 }

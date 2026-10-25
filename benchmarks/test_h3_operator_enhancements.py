@@ -105,29 +105,28 @@ class PositionalIO(unittest.TestCase):
 class OperatorSelection(unittest.TestCase):
     def test_defaults_and_optional_dispatch(self):
         default=RuntimeConfig('te','dit')
-        self.assertFalse(default.adaptive_lookahead)
-        self.assertEqual(default.swiglu_reduction,'native_int32')
-        self.assertEqual(default.operators.row_linear_backend,'tilelang_packed')
-        self.assertEqual(default.operators.fc2_quantizer,'owned_fp32')
+        self.assertTrue(default.adaptive_lookahead)
+        self.assertFalse(hasattr(default,'swiglu_reduction'))
+        self.assertEqual(default.operators.row_linear_backend,'tilelang_scaled_fp16')
+        self.assertEqual(default.operators.fc2_quantizer,'fused_stored')
+        previous=replace(default.operators,row_linear_backend='tilelang_packed',fc2_quantizer='owned_fp32')
         x=torch.randn(2,256);w=torch.zeros(128,256,dtype=torch.int8);ws=torch.ones(128)
         module=SimpleNamespace(weight=w,weight_scale=ws,world_size=2,convrot_groupsize=256,
-                               operator_policy=default.operators)
+                               operator_policy=previous)
         from patches import tilelang_swiglu_pad as swiglu
         with patch.object(policy,'sm75',return_value=True),patch.object(swiglu,'row_linear',return_value=x) as native, \
                 patch.object(transport,'row_linear',return_value=x) as scaled:
             policy.row_linear(module,x,None,None);self.assertEqual(native.call_count,1);scaled.assert_not_called()
             self.assertEqual(native.call_args.kwargs['rotation_mode'],'owned_fp32')
-            module.operator_policy=replace(default.operators,fc2_quantizer='native')
+            module.operator_policy=replace(previous,fc2_quantizer='native')
             policy.row_linear(module,x,None,None)
             self.assertEqual(native.call_args.kwargs['rotation_mode'],'native')
-            module.operator_policy=replace(default.operators,row_linear_backend='tilelang_scaled_fp16')
+            module.operator_policy=replace(previous,row_linear_backend='tilelang_scaled_fp16')
             policy.row_linear(module,x,None,None);self.assertEqual(scaled.call_count,1)
-            scaled.assert_called_with(x,w,ws,None,2,256,None,swiglu_padding=True)
+            scaled.assert_called_with(x,w,ws,None,2,256,None)
         with patch.object(policy,'sm75',return_value=True),patch.object(transport,'row_linear_parts',return_value=x) as parts:
             policy.row_linear_parts(module,x,x,None,None);self.assertEqual(parts.call_count,1)
-        module.operator_policy=replace(module.operator_policy,swiglu_padding=False)
-        with patch.object(policy,'sm75',return_value=True),patch.object(transport,'row_linear',return_value=x) as run:
-            policy.row_linear_parts(module,x,x,None,None);self.assertFalse(run.call_args.kwargs['swiglu_padding'])
+        with self.assertRaises(TypeError):replace(module.operator_policy,swiglu_padding=False)
         # Unsupported devices must preserve the supplied native implementation.
         marker=object()
         with patch.object(policy,'sm75',return_value=False):
@@ -158,9 +157,9 @@ class OperatorSelection(unittest.TestCase):
         import custom_nodes.minimax_h3_tp2 as node
         from patches import h3_operator_dependencies as dep
         options=node.MiniMaxH3TP2Loader.INPUT_TYPES()['optional']
-        self.assertFalse(options['adaptive_lookahead'][1]['default'])
-        self.assertEqual(options['row_linear_backend'][1]['default'],'tilelang_packed')
-        self.assertEqual(options['fc2_quantizer'][1]['default'],'owned_fp32')
+        self.assertTrue(options['adaptive_lookahead'][1]['default'])
+        self.assertEqual(options['row_linear_backend'][1]['default'],'tilelang_scaled_fp16')
+        self.assertEqual(options['fc2_quantizer'][1]['default'],'fused_stored')
         class Service:
             def __init__(self,config):self.config=config;self.closed=False
             def close(self):self.closed=True
@@ -168,7 +167,7 @@ class OperatorSelection(unittest.TestCase):
                 patch.object(node,'create_model'),patch.object(node,'create_clip'):
             loader=node.MiniMaxH3TP2Loader()
             first=loader.load('te','dit')[2]
-            self.assertEqual(first.config.operators.fc2_quantizer,'owned_fp32')
+            self.assertEqual(first.config.operators.fc2_quantizer,'fused_stored')
             native=loader.load('te','dit',fc2_quantizer='native')[2]
             self.assertTrue(first.closed)
             self.assertEqual(native.config.operators.fc2_quantizer,'native')
@@ -178,7 +177,7 @@ class OperatorSelection(unittest.TestCase):
             self.assertEqual(second.config.operators.row_linear_backend,'tilelang_scaled_fp16')
             self.assertIs(second,loader.load('te','dit',adaptive_lookahead=True,row_linear_backend='tilelang_scaled_fp16')[2])
         p=policy.H3OperatorPolicy(te_attention='native',row_linear_backend='tilelang_scaled_fp16')
-        with patch.object(dep,'version',side_effect=lambda name:{'comfy-kitchen':'0.2.37','tilelang':'0.1.15'}[name]) as version:
+        with patch.object(dep,'version',side_effect=lambda name:{'comfy-kitchen':'0.2.37','tilelang':'0.1.13'}[name]) as version:
             dep.validate_dependencies(p,t4=True)
             self.assertIn(('tilelang',),[c.args for c in version.call_args_list])
 
@@ -247,9 +246,9 @@ class RefinerAndLifetime(unittest.TestCase):
         class WithoutDeletes(ast.NodeTransformer):
             def visit_Delete(self,node):return None
         ns=dict(te.__dict__);exec(compile(ast.fix_missing_locations(WithoutDeletes().visit(tree)),'<without_del>','exec'),ns)
-        for fused in (False,True):
+        for configured in (False,True):
             refs={};block=SimpleNamespace(world_size=1,num_heads_per_rank=2,num_kv_heads_per_rank=2,head_dim=4,
-                operator_policy=SimpleNamespace(swiglu_padding=fused))
+                operator_policy=SimpleNamespace() if configured else None)
             for name in ('input_layernorm','post_attention_layernorm','q_norm','k_norm'):setattr(block,name,nn.RMSNorm(4 if name in ('q_norm','k_norm') else 8))
             class Projection(nn.Linear):
                 def forward(self,x,**kw):return super().forward(x)

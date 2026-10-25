@@ -1,0 +1,233 @@
+{
+  "review_date": "2026-10-24",
+  "timezone": "Asia/Shanghai",
+  "review": "Active H3 pipeline performance engineering review; static source, retained physical evidence and CPU fixtures only",
+  "runtime_source_sha256": {
+    "patches/comfy_tp_runtime.py": "c61d621b86ffe4cf0892f754838d69d0cf96cd2c0403cfd0095c2bd099d28b85",
+    "patches/comfy_tp_models.py": "3f09ec20d235716820a1d8ad7b5e754a1627b0a77a0b9155ca59d328b98bf34d",
+    "patches/comfy_sampler.py": "d39aabc2a9ec06893e7293da54f6f30cf10b7c77b34fd32f492d4a38e0f15c82",
+    "patches/tp2_bundle.py": "c7f5273e63c4d56e45e590ceeec2c0368dc82d05297db2b92d1db24b03062486",
+    "patches/windowed_tp.py": "c2a4d07cbee30795b71d3d3975c9b1125fa21f340032daf17eacd518e6e1c0ae",
+    "patches/rank_local_int8.py": "d6fd8040d6bb22b3b19fbb678101ac8cb489451011ad749de0f529cf86615183",
+    "patches/weight_residency.py": "8421a6ab4f64ebd5a9957d2734beed14f765ba6691eb9c1a6232ce64b2eacb04",
+    "patches/host_weight_cache.py": "cbc88510897162e95f21b2e2db019c5507331e4854d0443f6f0cda4f38f1181a",
+    "patches/h3_lora.py": "c5a27ae872235e8bbc4c7010d65fce05481d442b93f203d5d7b126bff2dbbe8c",
+    "patches/offline_lora.py": "dc31dc7764caa78d4cee295f56482109ae0ea0d07cc5a10147ffa4277b690c8a",
+    "patches/h3_operator_policy.py": "ad5e52b83bf18b9a1c68f5da5fa65b63b6eaced6dd3d396d1c402d7f9678582d",
+    "patches/h3_tensor_flow.py": "80272e276b10a9fa06f4accd6e62fa8ae373ebdb08a6edbc0615926f56145b07",
+    "patches/dit_column_linear.py": "437741a15f536925563453eb7463c472a297f3f2c8c7983deed1bd78f1125ebf",
+    "patches/tilelang_swiglu_quant.py": "d8a55c60949b881fc5b2d6f3c9bc9fdf025675fbb2498f9ee9dd38e6679cc265",
+    "patches/tilelang_transport_p2.py": "c8932149d1493479e839fbd0c4afbe20422fcb416be3572f937b912855e3a9f9",
+    "patches/tilelang_swiglu_pad.py": "9d9f292350cbf4d0e63f6d611c647bb09d4e9fcc521f840519746df776c1d70e",
+    "patches/tilelang_row_quant.py": "ff1bb4f853c1e1131c3a4f2e029a1facf27ad0b284adef776a2a1af073fefd09",
+    "patches/optimized_tp.py": "b671394fa99be023c049f93d125402c5492e4f057c229d385ef55da794eb4550",
+    "patches/parallel_int8.py": "5895ffb189f200f6d9f3b1cd097f07a97789b37927eb63fe1d7f8f7d10234f1e",
+    "patches/tp_dit.py": "1ff273d8bb20a7ac5d93cb6fe610962109692b7be55a65128e91a6d50a2e4ccd",
+    "patches/tp_qwen3vl.py": "0fa444b82e3f63b8354f4e17c411f9c700b42e6fe0e53985689cf48e20deebd5",
+    "patches/parallel_vae.py": "78fd27079f103b36b8a3f89099459831230b2039f7b5542c10a5a6a85e1df056",
+    "patches/staged_vae.py": "4134f07fdc3f3ddb81932f0da85b42835cb2ff362a2a490c35f018254984083b",
+    "patches/video_decode_planner.py": "f2c77808901742e2c307be7bb6b6e9dc47c4c29332a60ecfdf13582a3bc13304",
+    "patches/h3_reference_plan.py": "b8ffc2905c05ca7a4ff5204b2c706391003c342e1b6d537056d084e4e01b9266",
+    "patches/comfy_idle_lifecycle.py": "342253c4b4d41ec32ed7cbb316e44ea2d047eae1d0ed66a9bb21ce4a37a1e789",
+    "custom_nodes/minimax_h3_tp2/__init__.py": "a46257ae943e6e30510d1361f30f3e111a025d39c0e143aa7394457e834730bf",
+    "ComfyUI/comfy/quant_ops.py": "8e094d4f29226d50ceb2014f3c0cfe5cabe85a1ed9ce70f0adfe5d943e0ef587",
+    "benchmarks/test_pipeline_review.py": "cb3d46ce356d93c198d131f66de222400ae979db83a6ba717250bcf818f4fe18",
+    "patches/runtime_diagnostics.py": "7fb515d3582d2657283fe28dc51a98dbcd129b47145c53de271709f25363edfc"
+  },
+  "runtime_lock_sha256": "e3a07afb8cb79e6f45c9c0118debc4bd4008c022d2652e0891273dac2db07aa3",
+  "local_packages_checked": 94,
+  "local_package_drift": [],
+  "local_python": "C:\\ProgramData\\miniconda3\\envs\\comfyui\\python.exe",
+  "tests": {
+    "first_suite": {
+      "total": 78,
+      "passed": 77,
+      "errors": 1,
+      "error_test": "benchmarks.test_pipeline_review.PipelineReview.test_explicit_diagnostic_snapshot_is_read_only",
+      "error": "AttributeError: SimpleNamespace fixture has no readers; rank_snapshot now requires runtime.readers",
+      "modules": [
+        "test_pipeline_review",
+        "test_dit_temporaries",
+        "test_tp2_bundle",
+        "test_video_decode_memory",
+        "test_native_audio_decode",
+        "test_h3_default_fused_row",
+        "test_h3_row_partial_combined",
+        "test_h3_reference_loading",
+        "test_h3_tensor_flow",
+        "test_h3_operator_enhancements",
+        "test_residency_policy"
+      ]
+    },
+    "second_suite": {
+      "total": 28,
+      "passed": 28,
+      "modules": [
+        "test_legacy_runtime",
+        "test_frozen_kaggle_setup",
+        "test_direct_pip_delivery",
+        "test_h3_loading_stages",
+        "test_idle_lifecycle",
+        "test_idle_identity"
+      ]
+    },
+    "cuda_visible_devices": "",
+    "scope": "CPU only; tiny temporary fixtures; no full-model inference/download, installation or remote request"
+  },
+  "bundle_cpu_reproduction": {
+    "rank_block_preparations": 4,
+    "full_native_merges": 20,
+    "state_hash_passes": 4,
+    "merges_per_target": 4,
+    "targets": 5,
+    "complete_baked_checkpoint_bytes": 0
+  },
+  "storage_calculations": {
+    "qkv_full_B_fp32_gib": 4.1031646728515625,
+    "qkv_owned_B_fp32_gib": 2.0515823364257812,
+    "fc1_fp16_output_gib": 1.3677215576171875,
+    "video_parent_plus_two_worker_staging_gib": 14.222912967205048
+  },
+  "retained_t4_evidence": {
+    "kitchen": {
+      "verified_file": "D:\\attention_eval\\bundle_scalar_explicit_flush_20261024\\analysis_v1\\kitchen_verified.json",
+      "verified_sha256": "77ccce50c08292bf2671e6077959c9ee4f2114bf3df3dc573cfe5b71b691ad4a",
+      "attribution_file": "D:\\attention_eval\\bundle_scalar_explicit_flush_20261024\\analysis_v1\\kitchen_attribution.json",
+      "attribution_sha256": "0ca238b18246bd35b7a31f6b8fcaffb7ec60fe6fa4f1b9e273cc43daa627db26",
+      "sample_wrapper_seconds": 1020.600882582,
+      "ranks": [
+        {
+          "rank": 0,
+          "bundle": {
+            "dit": {
+              "prepared_blocks": 50,
+              "merged_matrices": 216,
+              "persistent_baked_bytes": 0,
+              "merge_device": "cpu"
+            }
+          },
+          "prepare": {
+            "count": 51,
+            "sum": 995.7395613360003,
+            "median": 20.184816699,
+            "p95": 21.2340531285,
+            "maximum": 21.585647039
+          },
+          "consumer_wait": {
+            "count": 51,
+            "sum": 957.1835733670001,
+            "median": 19.879359036,
+            "p95": 20.724957008,
+            "maximum": 20.907273845
+          },
+          "cache_preparations": 50,
+          "cache_evictions": 47,
+          "gpu_kernel_active_union_seconds": 172.446588182,
+          "attention_kernel_sum_seconds": 48.084667399000004
+        },
+        {
+          "rank": 1,
+          "bundle": {
+            "dit": {
+              "prepared_blocks": 50,
+              "merged_matrices": 200,
+              "persistent_baked_bytes": 0,
+              "merge_device": "cpu"
+            }
+          },
+          "prepare": {
+            "count": 50,
+            "sum": 994.1015630479997,
+            "median": 20.19637946,
+            "p95": 21.22118852175,
+            "maximum": 21.669455312
+          },
+          "consumer_wait": {
+            "count": 50,
+            "sum": 953.631793487,
+            "median": 19.8876641155,
+            "p95": 20.79626835205,
+            "maximum": 20.987622571
+          },
+          "cache_preparations": 50,
+          "cache_evictions": 49,
+          "gpu_kernel_active_union_seconds": 186.891964631,
+          "attention_kernel_sum_seconds": 50.795831251000024
+        }
+      ]
+    },
+    "tilelang_scalar": {
+      "verified_file": "D:\\attention_eval\\bundle_scalar_explicit_flush_20261024\\analysis_v1\\tilelang_scalar_verified.json",
+      "verified_sha256": "e42b187aba2c4f84564fa43180054bdae315b299f37b914729eee26187d51edc",
+      "attribution_file": "D:\\attention_eval\\bundle_scalar_explicit_flush_20261024\\analysis_v1\\tilelang_scalar_attribution.json",
+      "attribution_sha256": "7646b12aec136405f71544a3663dd10af11273eb0638d1a32a7548a408d957fa",
+      "sample_wrapper_seconds": 1010.333719992,
+      "ranks": [
+        {
+          "rank": 0,
+          "bundle": {
+            "dit": {
+              "prepared_blocks": 50,
+              "merged_matrices": 216,
+              "persistent_baked_bytes": 0,
+              "merge_device": "cpu"
+            }
+          },
+          "prepare": {
+            "count": 51,
+            "sum": 983.94571104,
+            "median": 19.896069283,
+            "p95": 21.121872621999998,
+            "maximum": 21.697786025
+          },
+          "consumer_wait": {
+            "count": 51,
+            "sum": 929.3315033399998,
+            "median": 19.722537607,
+            "p95": 20.1831343465,
+            "maximum": 20.551541467
+          },
+          "cache_preparations": 50,
+          "cache_evictions": 49,
+          "gpu_kernel_active_union_seconds": 239.918852499,
+          "attention_kernel_sum_seconds": 113.000456233
+        },
+        {
+          "rank": 1,
+          "bundle": {
+            "dit": {
+              "prepared_blocks": 50,
+              "merged_matrices": 200,
+              "persistent_baked_bytes": 0,
+              "merge_device": "cpu"
+            }
+          },
+          "prepare": {
+            "count": 50,
+            "sum": 984.3456840110002,
+            "median": 19.929489773500002,
+            "p95": 21.480213179699998,
+            "maximum": 22.004905782
+          },
+          "consumer_wait": {
+            "count": 50,
+            "sum": 929.1009924320001,
+            "median": 19.665845889499998,
+            "p95": 20.20993848165,
+            "maximum": 20.394000597
+          },
+          "cache_preparations": 50,
+          "cache_evictions": 48,
+          "gpu_kernel_active_union_seconds": 246.898566395,
+          "attention_kernel_sum_seconds": 118.108607683
+        }
+      ]
+    }
+  },
+  "qualification_limits": [
+    "No new GPU timing",
+    "No matched whole-pipeline comparison of current defaults",
+    "No generation quality verdict",
+    "Historical and current-stack measurements kept distinct"
+  ]
+}

@@ -1,0 +1,2038 @@
+{
+  "status": "out_of_scope_forced_dense_fp32; not_native_fp32_tensor_flow",
+  "environment": {
+    "hardware": "NVIDIA GeForce RTX 5060 Ti",
+    "capability": [
+      12,
+      0
+    ],
+    "torch": "2.12.1+cu132",
+    "runtime_lock_sha256": "e3a07afb8cb79e6f45c9c0118debc4bd4008c022d2652e0891273dac2db07aa3"
+  },
+  "ground_truth": "Dense FP32 execution on Native-dequantized fixed checkpoint weights, TF32 disabled; no INT8 activation GEMMs or attention",
+  "bf16_role": "candidate, never ground truth",
+  "fp16_role": "candidate, never ground truth",
+  "limitations": [
+    "Original pre-quantization FP32 H3 weights are unavailable; fixed INT8 checkpoint quantization error is outside this ground truth.",
+    "Local SM120 accuracy only. No full H3, denoising trajectory, perceptual acceptance, T4/NCCL or performance qualification.",
+    "TE inputs are synthetic and half-rounded; late layers reuse other-layer inputs as stress probes."
+  ],
+  "case_count": 58,
+  "records": [
+    {
+      "file": "dit_7895.json",
+      "sha256": "dbc0301d1604ae502d312e560aefa36aa8ab1e639610ad88e2436d34070a3ff9",
+      "configuration": {
+        "mode": "dit",
+        "tokens": 0,
+        "layer": 0,
+        "lora": null
+      },
+      "distribution": {
+        "source": "D:\\attention_eval\\fp16_residual_fix_20261020\\first_block.pt",
+        "sha256": "ecec1dd4cb1146f9511dd023db2ceb1092290947c6f11593fc3bdbcc340f37bb",
+        "provenance": {
+          "kind": "current pinned Native first-block reconstruction from retained real conditioning/reference/noise",
+          "seed": 20261013,
+          "width": 512,
+          "height": 512,
+          "frames": 90,
+          "sigma": 1.0,
+          "source_files": {
+            "conditioning.pt": "73318db2a3a79b556471d7539bcfca80f27b5d342cce7771e68888d8faa2b535",
+            "initial_noise.pt": "274fc8cfbbd30a2bc645827840855fbcad2b33dba31dcf3a4683a37d06d46668",
+            "sigmas.pt": "ead2c539765f0874647f27e4cc4623b8710f110cb3b693f5f639a5c7c4784e11"
+          },
+          "scope": "Native front-end operators and text refiner only; zero main DiT blocks, no TE/VAE/generation"
+        },
+        "shape": [
+          7895,
+          5376
+        ],
+        "layer": 0,
+        "caveat": "Only layer 0 uses its reconstructed native input; late layers reuse it as a stress probe."
+      },
+      "fp32_ground_truth": {
+        "fp32_ground_truth": {
+          "role": "ground_truth",
+          "activation_dtype": "torch.float32",
+          "linear": "dense FP32 on Native inverse-ConvRot dequantized checkpoint weights",
+          "attention": "dense FP32 SDPA; all keys; query chunk 128; no routing or INT8 attention",
+          "output": [
+            {
+              "dtype": "torch.float32",
+              "elements": 42443520,
+              "nonfinite": 0,
+              "maximum": 110733.1328125,
+              "above_fp16": 1,
+              "subnormal_fp16": 1308,
+              "zeros": 0
+            }
+          ],
+          "contract": {
+            "dense_linear_calls": 15,
+            "dense_conv_calls": 0,
+            "sdpa_calls": 3,
+            "kitchen_attention_redirects": 0,
+            "int8_linear_calls": 0,
+            "query_chunk": 128,
+            "tf32_matmul": false,
+            "tf32_cudnn": false,
+            "linear_input_dtypes": [
+              "torch.float32"
+            ],
+            "linear_weight_dtypes": [
+              "torch.float32"
+            ],
+            "attention_dtypes": [
+              "torch.float32"
+            ]
+          },
+          "output_sha256": [
+            "6064d2bfa61a082e0c1ab6ca2d91e483eba12beaa5c9a7ff4b1e17d2f3fa1b92"
+          ],
+          "repeat_equal": true
+        }
+      },
+      "cases": [
+        {
+          "name": "native_fp32_w8a8_sdpa_control",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 110402.7421875,
+            "above_fp16": 1,
+            "subnormal_fp16": 1233,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.0027251323923655098,
+            "max_abs": 330.390625
+          }
+        },
+        {
+          "name": "native_bf16_w8a8_sdpa",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.bfloat16",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 111104.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 1089,
+            "zeros": 248
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.006280273650551193,
+            "max_abs": 663.609375
+          }
+        },
+        {
+          "name": "native_bf16_w8a8_kitchen",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.bfloat16",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 111104.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 1117,
+            "zeros": 238
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.00675466812774099,
+            "max_abs": 763.0703125
+          }
+        },
+        {
+          "name": "tp_fp32_w8a8_control",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 110585.6640625,
+            "above_fp16": 1,
+            "subnormal_fp16": 1249,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.0029149293898944866,
+            "max_abs": 155.89453125
+          },
+          "divisor": 1.0,
+          "stored_dtype": "torch.float32",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_bf16_w8a8",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 110080.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 1260,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.007541798171980557,
+            "max_abs": 792.6875
+          },
+          "divisor": 1.0,
+          "stored_dtype": "torch.bfloat16",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_fp16_unscaled",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 42443520,
+            "nonfinite": 1,
+            "maximum": 56864.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 1231,
+            "zeros": 1
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "divisor": 1.0,
+          "stored_dtype": "torch.float16",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_fp16_fold_c16",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 110592.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 1202,
+            "zeros": 5
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.0028890654709240893,
+            "max_abs": 187.849609375
+          },
+          "divisor": 16.0,
+          "stored_dtype": "torch.float16",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_fp16_fold_c64",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 110592.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 1127,
+            "zeros": 39
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.0028819430943803535,
+            "max_abs": 187.849609375
+          },
+          "divisor": 64.0,
+          "stored_dtype": "torch.float16",
+          "rank_equal": true,
+          "repeat_equal": true
+        }
+      ]
+    },
+    {
+      "file": "dit_layer24_stress.json",
+      "sha256": "1efe9c1d22194274e6bce4e64e93f8b86ed03abb0b26102e58347236879e8f7e",
+      "configuration": {
+        "mode": "dit",
+        "tokens": 513,
+        "layer": 24,
+        "lora": null
+      },
+      "distribution": {
+        "source": "D:\\attention_eval\\fp16_residual_fix_20261020\\first_block.pt",
+        "sha256": "ecec1dd4cb1146f9511dd023db2ceb1092290947c6f11593fc3bdbcc340f37bb",
+        "provenance": {
+          "kind": "current pinned Native first-block reconstruction from retained real conditioning/reference/noise",
+          "seed": 20261013,
+          "width": 512,
+          "height": 512,
+          "frames": 90,
+          "sigma": 1.0,
+          "source_files": {
+            "conditioning.pt": "73318db2a3a79b556471d7539bcfca80f27b5d342cce7771e68888d8faa2b535",
+            "initial_noise.pt": "274fc8cfbbd30a2bc645827840855fbcad2b33dba31dcf3a4683a37d06d46668",
+            "sigmas.pt": "ead2c539765f0874647f27e4cc4623b8710f110cb3b693f5f639a5c7c4784e11"
+          },
+          "scope": "Native front-end operators and text refiner only; zero main DiT blocks, no TE/VAE/generation"
+        },
+        "shape": [
+          513,
+          5376
+        ],
+        "layer": 24,
+        "caveat": "Only layer 0 uses its reconstructed native input; late layers reuse it as a stress probe."
+      },
+      "fp32_ground_truth": {
+        "fp32_ground_truth": {
+          "role": "ground_truth",
+          "activation_dtype": "torch.float32",
+          "linear": "dense FP32 on Native inverse-ConvRot dequantized checkpoint weights",
+          "attention": "dense FP32 SDPA; all keys; query chunk 128; no routing or INT8 attention",
+          "output": [
+            {
+              "dtype": "torch.float32",
+              "elements": 2757888,
+              "nonfinite": 0,
+              "maximum": 31552.03515625,
+              "above_fp16": 0,
+              "subnormal_fp16": 8,
+              "zeros": 0
+            }
+          ],
+          "contract": {
+            "dense_linear_calls": 15,
+            "dense_conv_calls": 0,
+            "sdpa_calls": 3,
+            "kitchen_attention_redirects": 0,
+            "int8_linear_calls": 0,
+            "query_chunk": 128,
+            "tf32_matmul": false,
+            "tf32_cudnn": false,
+            "linear_input_dtypes": [
+              "torch.float32"
+            ],
+            "linear_weight_dtypes": [
+              "torch.float32"
+            ],
+            "attention_dtypes": [
+              "torch.float32"
+            ]
+          },
+          "output_sha256": [
+            "50841f31307b329eda4fa286b814102546816ed0b7b5cc115ea7feac270c334d"
+          ],
+          "repeat_equal": true
+        }
+      },
+      "cases": [
+        {
+          "name": "native_fp32_w8a8_sdpa_control",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 30959.169921875,
+            "above_fp16": 0,
+            "subnormal_fp16": 8,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.028717381426881888,
+            "max_abs": 620.287109375
+          }
+        },
+        {
+          "name": "native_bf16_w8a8_sdpa",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.bfloat16",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 30336.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 2,
+            "zeros": 40
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.033838420497019246,
+            "max_abs": 1216.03515625
+          }
+        },
+        {
+          "name": "native_bf16_w8a8_kitchen",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.bfloat16",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 31360.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 2,
+            "zeros": 49
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.03975001874306888,
+            "max_abs": 878.849609375
+          }
+        },
+        {
+          "name": "tp_fp32_w8a8_control",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 32042.986328125,
+            "above_fp16": 0,
+            "subnormal_fp16": 9,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.03742920515929221,
+            "max_abs": 1347.357421875
+          },
+          "divisor": 1.0,
+          "stored_dtype": "torch.float32",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_bf16_w8a8",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 32000.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 6,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.039714416902437266,
+            "max_abs": 999.361328125
+          },
+          "divisor": 1.0,
+          "stored_dtype": "torch.bfloat16",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_fp16_unscaled",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 31760.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 11,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.037037380619336244,
+            "max_abs": 1086.849609375
+          },
+          "divisor": 1.0,
+          "stored_dtype": "torch.float16",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_fp16_fold_c16",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 31760.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 11,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.03703738061933647,
+            "max_abs": 1086.849609375
+          },
+          "divisor": 16.0,
+          "stored_dtype": "torch.float16",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_fp16_fold_c64",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 31936.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 7,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.036999192010378844,
+            "max_abs": 1222.849609375
+          },
+          "divisor": 64.0,
+          "stored_dtype": "torch.float16",
+          "rank_equal": true,
+          "repeat_equal": true
+        }
+      ]
+    },
+    {
+      "file": "dit_layer49_stress.json",
+      "sha256": "30ff10e3290ca081d307c13cfb2680be502b4ef0c9e8362a9b0fa6d84959c9eb",
+      "configuration": {
+        "mode": "dit",
+        "tokens": 513,
+        "layer": 49,
+        "lora": null
+      },
+      "distribution": {
+        "source": "D:\\attention_eval\\fp16_residual_fix_20261020\\first_block.pt",
+        "sha256": "ecec1dd4cb1146f9511dd023db2ceb1092290947c6f11593fc3bdbcc340f37bb",
+        "provenance": {
+          "kind": "current pinned Native first-block reconstruction from retained real conditioning/reference/noise",
+          "seed": 20261013,
+          "width": 512,
+          "height": 512,
+          "frames": 90,
+          "sigma": 1.0,
+          "source_files": {
+            "conditioning.pt": "73318db2a3a79b556471d7539bcfca80f27b5d342cce7771e68888d8faa2b535",
+            "initial_noise.pt": "274fc8cfbbd30a2bc645827840855fbcad2b33dba31dcf3a4683a37d06d46668",
+            "sigmas.pt": "ead2c539765f0874647f27e4cc4623b8710f110cb3b693f5f639a5c7c4784e11"
+          },
+          "scope": "Native front-end operators and text refiner only; zero main DiT blocks, no TE/VAE/generation"
+        },
+        "shape": [
+          513,
+          5376
+        ],
+        "layer": 49,
+        "caveat": "Only layer 0 uses its reconstructed native input; late layers reuse it as a stress probe."
+      },
+      "fp32_ground_truth": {
+        "fp32_ground_truth": {
+          "role": "ground_truth",
+          "activation_dtype": "torch.float32",
+          "linear": "dense FP32 on Native inverse-ConvRot dequantized checkpoint weights",
+          "attention": "dense FP32 SDPA; all keys; query chunk 128; no routing or INT8 attention",
+          "output": [
+            {
+              "dtype": "torch.float32",
+              "elements": 2757888,
+              "nonfinite": 0,
+              "maximum": 971404.125,
+              "above_fp16": 18208,
+              "subnormal_fp16": 1,
+              "zeros": 0
+            }
+          ],
+          "contract": {
+            "dense_linear_calls": 15,
+            "dense_conv_calls": 0,
+            "sdpa_calls": 3,
+            "kitchen_attention_redirects": 0,
+            "int8_linear_calls": 0,
+            "query_chunk": 128,
+            "tf32_matmul": false,
+            "tf32_cudnn": false,
+            "linear_input_dtypes": [
+              "torch.float32"
+            ],
+            "linear_weight_dtypes": [
+              "torch.float32"
+            ],
+            "attention_dtypes": [
+              "torch.float32"
+            ]
+          },
+          "output_sha256": [
+            "023cdda64a80790da5041d50a98ed37ff67919b6a316da3cbf669259e8fc157a"
+          ],
+          "repeat_equal": true
+        }
+      },
+      "cases": [
+        {
+          "name": "native_fp32_w8a8_sdpa_control",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 970881.5,
+            "above_fp16": 18329,
+            "subnormal_fp16": 1,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.020333159535700397,
+            "max_abs": 72660.5625
+          }
+        },
+        {
+          "name": "native_bf16_w8a8_sdpa",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.bfloat16",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 974848.0,
+            "above_fp16": 18281,
+            "subnormal_fp16": 1,
+            "zeros": 43
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.02702243333736092,
+            "max_abs": 64240.4375
+          }
+        },
+        {
+          "name": "native_bf16_w8a8_kitchen",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.bfloat16",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 958464.0,
+            "above_fp16": 18210,
+            "subnormal_fp16": 1,
+            "zeros": 43
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.029144684478204768,
+            "max_abs": 80624.4375
+          }
+        },
+        {
+          "name": "tp_fp32_w8a8_control",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 978109.4375,
+            "above_fp16": 18369,
+            "subnormal_fp16": 1,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.021486431210325473,
+            "max_abs": 65161.875
+          },
+          "divisor": 1.0,
+          "stored_dtype": "torch.float32",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_bf16_w8a8",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 978944.0,
+            "above_fp16": 18481,
+            "subnormal_fp16": 1,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.02750799706674926,
+            "max_abs": 59150.1875
+          },
+          "divisor": 1.0,
+          "stored_dtype": "torch.bfloat16",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_fp16_unscaled",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 37900,
+            "maximum": 65504.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 1,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 37900,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "divisor": 1.0,
+          "stored_dtype": "torch.float16",
+          "rank_equal": false,
+          "repeat_equal": false
+        },
+        {
+          "name": "tp_fp16_fold_c16",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 1,
+            "maximum": 881664.0,
+            "above_fp16": 18152,
+            "subnormal_fp16": 1,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "divisor": 16.0,
+          "stored_dtype": "torch.float16",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_fp16_fold_c64",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 964096.0,
+            "above_fp16": 18156,
+            "subnormal_fp16": 1,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.021571391078613347,
+            "max_abs": 50416.4375
+          },
+          "divisor": 64.0,
+          "stored_dtype": "torch.float16",
+          "rank_equal": true,
+          "repeat_equal": true
+        }
+      ]
+    },
+    {
+      "file": "te_layer0.json",
+      "sha256": "d5e5c7d31cb4351a20c153937fbfcace51403d82804f9a0679543245f95b4bd3",
+      "configuration": {
+        "mode": "te",
+        "tokens": 257,
+        "layer": 0,
+        "lora": null
+      },
+      "distribution": {
+        "source": "Identical seeded synthetic TE inputs, half-rounded before this study",
+        "shape": [
+          1,
+          257,
+          5120
+        ],
+        "layer": 0
+      },
+      "fp32_ground_truth": {
+        "fp32_ground_truth": {
+          "role": "ground_truth",
+          "activation_dtype": "torch.float32",
+          "linear": "dense FP32 on Native inverse-ConvRot dequantized checkpoint weights",
+          "attention": "dense FP32 SDPA; all keys; query chunk 128; no routing or INT8 attention",
+          "output": [
+            {
+              "dtype": "torch.float32",
+              "elements": 1315840,
+              "nonfinite": 0,
+              "maximum": 5.600439548492432,
+              "above_fp16": 0,
+              "subnormal_fp16": 75,
+              "zeros": 0
+            }
+          ],
+          "contract": {
+            "dense_linear_calls": 21,
+            "dense_conv_calls": 0,
+            "sdpa_calls": 3,
+            "kitchen_attention_redirects": 0,
+            "int8_linear_calls": 0,
+            "query_chunk": 128,
+            "tf32_matmul": false,
+            "tf32_cudnn": false,
+            "linear_input_dtypes": [
+              "torch.float32"
+            ],
+            "linear_weight_dtypes": [
+              "torch.float32"
+            ],
+            "attention_dtypes": [
+              "torch.float32"
+            ]
+          },
+          "output_sha256": [
+            "8ffddd5fc64b6a774d333e7dc1e143cb3d0e0dd23c555bd90cb440758d275a80"
+          ],
+          "repeat_equal": true
+        }
+      },
+      "cases": [
+        {
+          "name": "native_fp32_w8a8_sdpa_control",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 5.591848850250244,
+            "above_fp16": 0,
+            "subnormal_fp16": 83,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.0014753982021106398,
+            "max_abs": 0.016520977020263672
+          }
+        },
+        {
+          "name": "native_bf16_w8a8_sdpa",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.bfloat16",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 5.625,
+            "above_fp16": 0,
+            "subnormal_fp16": 4,
+            "zeros": 190
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.003187870593369763,
+            "max_abs": 0.04893302917480469
+          }
+        },
+        {
+          "name": "tp_fp32_w8a8_control",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 5.591848850250244,
+            "above_fp16": 0,
+            "subnormal_fp16": 83,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.00147539842110125,
+            "max_abs": 0.016520977020263672
+          },
+          "divisor": 1.0,
+          "stored_dtype": "torch.float32",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_bf16_w8a8",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 5.625,
+            "above_fp16": 0,
+            "subnormal_fp16": 4,
+            "zeros": 190
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.003187870593369763,
+            "max_abs": 0.04893302917480469
+          },
+          "divisor": 1.0,
+          "stored_dtype": "torch.bfloat16",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_fp16_unscaled",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 5.58984375,
+            "above_fp16": 0,
+            "subnormal_fp16": 40,
+            "zeros": 26
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.0015079165523724399,
+            "max_abs": 0.018328189849853516
+          },
+          "divisor": 1.0,
+          "stored_dtype": "torch.float16",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_fp16_fold_c16",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 5.58984375,
+            "above_fp16": 0,
+            "subnormal_fp16": 42,
+            "zeros": 23
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.0015081096581232834,
+            "max_abs": 0.017185211181640625
+          },
+          "divisor": 16.0,
+          "stored_dtype": "torch.float16",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_fp16_fold_c64",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 5.58984375,
+            "above_fp16": 0,
+            "subnormal_fp16": 43,
+            "zeros": 29
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.001507982120274738,
+            "max_abs": 0.018328189849853516
+          },
+          "divisor": 64.0,
+          "stored_dtype": "torch.float16",
+          "rank_equal": true,
+          "repeat_equal": true
+        }
+      ]
+    },
+    {
+      "file": "te_layer49_stress.json",
+      "sha256": "05c72b4adef3678ce70f08201474633d55b8374fcd1c59fa51a07ccea4583cd6",
+      "configuration": {
+        "mode": "te",
+        "tokens": 257,
+        "layer": 49,
+        "lora": null
+      },
+      "distribution": {
+        "source": "Identical seeded synthetic TE inputs, half-rounded before this study",
+        "shape": [
+          1,
+          257,
+          5120
+        ],
+        "layer": 49
+      },
+      "fp32_ground_truth": {
+        "fp32_ground_truth": {
+          "role": "ground_truth",
+          "activation_dtype": "torch.float32",
+          "linear": "dense FP32 on Native inverse-ConvRot dequantized checkpoint weights",
+          "attention": "dense FP32 SDPA; all keys; query chunk 128; no routing or INT8 attention",
+          "output": [
+            {
+              "dtype": "torch.float32",
+              "elements": 1315840,
+              "nonfinite": 0,
+              "maximum": 50.427982330322266,
+              "above_fp16": 0,
+              "subnormal_fp16": 15,
+              "zeros": 0
+            }
+          ],
+          "contract": {
+            "dense_linear_calls": 21,
+            "dense_conv_calls": 0,
+            "sdpa_calls": 3,
+            "kitchen_attention_redirects": 0,
+            "int8_linear_calls": 0,
+            "query_chunk": 128,
+            "tf32_matmul": false,
+            "tf32_cudnn": false,
+            "linear_input_dtypes": [
+              "torch.float32"
+            ],
+            "linear_weight_dtypes": [
+              "torch.float32"
+            ],
+            "attention_dtypes": [
+              "torch.float32"
+            ]
+          },
+          "output_sha256": [
+            "b4619a516dc8fa1fb1e7253614c15b1074f5fff1f9f2988228bd81b78db6b06b"
+          ],
+          "repeat_equal": true
+        }
+      },
+      "cases": [
+        {
+          "name": "native_fp32_w8a8_sdpa_control",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 50.3372917175293,
+            "above_fp16": 0,
+            "subnormal_fp16": 21,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.03166288168315808,
+            "max_abs": 0.9099254608154297
+          }
+        },
+        {
+          "name": "native_bf16_w8a8_sdpa",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.bfloat16",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 50.25,
+            "above_fp16": 0,
+            "subnormal_fp16": 0,
+            "zeros": 788
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.03571361889552628,
+            "max_abs": 0.9801254272460938
+          }
+        },
+        {
+          "name": "tp_fp32_w8a8_control",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 50.3372917175293,
+            "above_fp16": 0,
+            "subnormal_fp16": 21,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.03166288168315808,
+            "max_abs": 0.9099254608154297
+          },
+          "divisor": 1.0,
+          "stored_dtype": "torch.float32",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_bf16_w8a8",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 50.25,
+            "above_fp16": 0,
+            "subnormal_fp16": 0,
+            "zeros": 788
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.03571361889552628,
+            "max_abs": 0.9801254272460938
+          },
+          "divisor": 1.0,
+          "stored_dtype": "torch.bfloat16",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_fp16_unscaled",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 50.21875,
+            "above_fp16": 0,
+            "subnormal_fp16": 0,
+            "zeros": 103
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.031625452552499954,
+            "max_abs": 0.8656940460205078
+          },
+          "divisor": 1.0,
+          "stored_dtype": "torch.float16",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_fp16_fold_c16",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 50.21875,
+            "above_fp16": 0,
+            "subnormal_fp16": 1,
+            "zeros": 94
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.031622580970008446,
+            "max_abs": 0.8656940460205078
+          },
+          "divisor": 16.0,
+          "stored_dtype": "torch.float16",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_fp16_fold_c64",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 1315840,
+            "nonfinite": 0,
+            "maximum": 50.21875,
+            "above_fp16": 0,
+            "subnormal_fp16": 1,
+            "zeros": 97
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.03160834498047443,
+            "max_abs": 0.9461307525634766
+          },
+          "divisor": 64.0,
+          "stored_dtype": "torch.float16",
+          "rank_equal": true,
+          "repeat_equal": true
+        }
+      ]
+    },
+    {
+      "file": "dit_lora_513.json",
+      "sha256": "745b69c276a05e19981f71334853e0f92bb3fa73c4d035944dee74935acb3050",
+      "configuration": {
+        "mode": "dit",
+        "tokens": 513,
+        "layer": 0,
+        "lora": "D:\\minimaxH3\\loras\\dmad_minimax_h3_4step_full_critic_comfyui.safetensors"
+      },
+      "distribution": {
+        "source": "D:\\attention_eval\\fp16_residual_fix_20261020\\first_block.pt",
+        "sha256": "ecec1dd4cb1146f9511dd023db2ceb1092290947c6f11593fc3bdbcc340f37bb",
+        "provenance": {
+          "kind": "current pinned Native first-block reconstruction from retained real conditioning/reference/noise",
+          "seed": 20261013,
+          "width": 512,
+          "height": 512,
+          "frames": 90,
+          "sigma": 1.0,
+          "source_files": {
+            "conditioning.pt": "73318db2a3a79b556471d7539bcfca80f27b5d342cce7771e68888d8faa2b535",
+            "initial_noise.pt": "274fc8cfbbd30a2bc645827840855fbcad2b33dba31dcf3a4683a37d06d46668",
+            "sigmas.pt": "ead2c539765f0874647f27e4cc4623b8710f110cb3b693f5f639a5c7c4784e11"
+          },
+          "scope": "Native front-end operators and text refiner only; zero main DiT blocks, no TE/VAE/generation"
+        },
+        "shape": [
+          513,
+          5376
+        ],
+        "layer": 0,
+        "caveat": "Only layer 0 uses its reconstructed native input; late layers reuse it as a stress probe."
+      },
+      "fp32_ground_truth": {
+        "fp32_ground_truth": {
+          "role": "ground_truth",
+          "activation_dtype": "torch.float32",
+          "linear": "dense FP32 on Native inverse-ConvRot dequantized checkpoint weights",
+          "attention": "dense FP32 SDPA; all keys; query chunk 128; no routing or INT8 attention",
+          "output": [
+            {
+              "dtype": "torch.float32",
+              "elements": 2757888,
+              "nonfinite": 0,
+              "maximum": 88430.8125,
+              "above_fp16": 1,
+              "subnormal_fp16": 68,
+              "zeros": 0
+            }
+          ],
+          "contract": {
+            "dense_linear_calls": 39,
+            "dense_conv_calls": 0,
+            "sdpa_calls": 3,
+            "kitchen_attention_redirects": 0,
+            "int8_linear_calls": 0,
+            "query_chunk": 128,
+            "tf32_matmul": false,
+            "tf32_cudnn": false,
+            "linear_input_dtypes": [
+              "torch.float32"
+            ],
+            "linear_weight_dtypes": [
+              "torch.float32"
+            ],
+            "attention_dtypes": [
+              "torch.float32"
+            ]
+          },
+          "output_sha256": [
+            "44a783b6ad022f90eb04b1b59894f5da5e17935e9dde2d98ef253f77e477f6e3"
+          ],
+          "repeat_equal": true
+        }
+      },
+      "cases": [
+        {
+          "name": "native_fp32_w8a8_sdpa_control",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 88441.515625,
+            "above_fp16": 1,
+            "subnormal_fp16": 71,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.002739571329676361,
+            "max_abs": 77.2109375
+          }
+        },
+        {
+          "name": "native_bf16_w8a8_sdpa",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.bfloat16",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 89088.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 70,
+            "zeros": 24
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.007338254018430144,
+            "max_abs": 657.1875
+          }
+        },
+        {
+          "name": "native_bf16_w8a8_kitchen",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.bfloat16",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 89600.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 67,
+            "zeros": 25
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.011361722592718688,
+            "max_abs": 1169.1875
+          }
+        },
+        {
+          "name": "tp_fp32_w8a8_control",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 88103.921875,
+            "above_fp16": 1,
+            "subnormal_fp16": 65,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.0038318419150551067,
+            "max_abs": 326.890625
+          },
+          "divisor": 1.0,
+          "stored_dtype": "torch.float32",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_bf16_w8a8",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 87552.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 72,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.008712303211681184,
+            "max_abs": 878.8125
+          },
+          "divisor": 1.0,
+          "stored_dtype": "torch.bfloat16",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_fp16_unscaled",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 1,
+            "maximum": 42208.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 78,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 1,
+            "relative_l2": null,
+            "max_abs": null
+          },
+          "divisor": 1.0,
+          "stored_dtype": "torch.float16",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_fp16_fold_c16",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 87936.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 76,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.004671869379803336,
+            "max_abs": 494.8125
+          },
+          "divisor": 16.0,
+          "stored_dtype": "torch.float16",
+          "rank_equal": true,
+          "repeat_equal": true
+        },
+        {
+          "name": "tp_fp16_fold_c64",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 2757888,
+            "nonfinite": 0,
+            "maximum": 87936.0,
+            "above_fp16": 1,
+            "subnormal_fp16": 71,
+            "zeros": 3
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.004671874784574777,
+            "max_abs": 494.8125
+          },
+          "divisor": 64.0,
+          "stored_dtype": "torch.float16",
+          "rank_equal": true,
+          "repeat_equal": true
+        }
+      ]
+    },
+    {
+      "file": "frontend.json",
+      "sha256": "a1afc09bb93b9426f52e3634215a6b24339c80f16d0e6579248dc15f949604d6",
+      "configuration": {
+        "mode": "frontend",
+        "tokens": 513,
+        "layer": 0,
+        "lora": null
+      },
+      "distribution": {
+        "source": "D:\\attention_eval\\quality_constrained_20261015\\quality_challenge_v1\\generation_screen\\challenge_inputs_seed20261013\\conditioning.pt",
+        "sha256": "73318db2a3a79b556471d7539bcfca80f27b5d342cce7771e68888d8faa2b535",
+        "caveat": "Common retained conditioning/reference/noise. This does not recapture a whole FP32 TE trajectory."
+      },
+      "fp32_ground_truth": {
+        "fp32_ground_truth": {
+          "role": "ground_truth",
+          "activation_dtype": "torch.float32",
+          "linear": "dense FP32 on Native inverse-ConvRot dequantized checkpoint weights",
+          "attention": "dense FP32 SDPA; all keys; query chunk 128; no routing or INT8 attention",
+          "output": [
+            {
+              "dtype": "torch.float32",
+              "elements": 2241792,
+              "nonfinite": 0,
+              "maximum": 113.51849365234375,
+              "above_fp16": 0,
+              "subnormal_fp16": 76,
+              "zeros": 0
+            },
+            {
+              "dtype": "torch.float32",
+              "elements": 42443520,
+              "nonfinite": 0,
+              "maximum": 113.51849365234375,
+              "above_fp16": 0,
+              "subnormal_fp16": 1682,
+              "zeros": 0
+            }
+          ],
+          "contract": {
+            "dense_linear_calls": 11,
+            "dense_conv_calls": 0,
+            "sdpa_calls": 2,
+            "kitchen_attention_redirects": 0,
+            "int8_linear_calls": 0,
+            "query_chunk": 128,
+            "tf32_matmul": false,
+            "tf32_cudnn": false,
+            "linear_input_dtypes": [
+              "torch.float32"
+            ],
+            "linear_weight_dtypes": [
+              "torch.float32"
+            ],
+            "attention_dtypes": [
+              "torch.float32"
+            ]
+          },
+          "output_sha256": [
+            "81369b496c84d2e0a38345b76cdc8d648e30177fa42c1d65b36e5c60709c3291",
+            "f329b3688d1aaef727966905e27cc72d60210e5b024be3f1e82034a7a301def6"
+          ]
+        }
+      },
+      "cases": [
+        {
+          "name": "bf16_native_refiner",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.bfloat16",
+            "elements": 2241792,
+            "nonfinite": 0,
+            "maximum": 113.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 0,
+            "zeros": 4067
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.007192623951701778,
+            "max_abs": 1.1857452392578125
+          }
+        },
+        {
+          "name": "bf16_native_packing",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.bfloat16",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 113.0,
+            "above_fp16": 0,
+            "subnormal_fp16": 1589,
+            "zeros": 4067
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.0028059247228790977,
+            "max_abs": 1.1857452392578125
+          }
+        },
+        {
+          "name": "fp16_refiner_c64",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float16",
+            "elements": 2241792,
+            "nonfinite": 0,
+            "maximum": 113.5625,
+            "above_fp16": 0,
+            "subnormal_fp16": 1,
+            "zeros": 549
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.0009007859061018981,
+            "max_abs": 0.15851593017578125
+          }
+        },
+        {
+          "name": "fp16_packing_c64",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float32",
+            "elements": 42443520,
+            "nonfinite": 0,
+            "maximum": 113.5625,
+            "above_fp16": 0,
+            "subnormal_fp16": 1429,
+            "zeros": 605
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.00035124298254828723,
+            "max_abs": 0.15851593017578125
+          },
+          "stored_dtype": "torch.float16"
+        }
+      ]
+    },
+    {
+      "file": "vision.json",
+      "sha256": "20f977b0a27e38311175748707792649721bc7003fd1168dfd6b7ed74d130fc5",
+      "configuration": {
+        "mode": "vision",
+        "tokens": 513,
+        "layer": 0,
+        "lora": null
+      },
+      "distribution": {
+        "image": "C:\\Users\\Administrator\\Documents\\project\\2xT4 minimax h3\\bench_assets\\tokyo_neon.jpg",
+        "sha256": "7685f872c6ff36df72412cb551c3b6eb44bcb8d5a624ce2adf83f8bc2f302193",
+        "grid": [
+          [
+            1,
+            12,
+            18
+          ]
+        ],
+        "max_pixels": 65536
+      },
+      "fp32_ground_truth": {
+        "fp32_ground_truth": {
+          "role": "ground_truth",
+          "activation_dtype": "torch.float32",
+          "linear": "dense FP32 on Native inverse-ConvRot dequantized checkpoint weights",
+          "attention": "dense FP32 SDPA; all keys; query chunk 128; no routing or INT8 attention",
+          "output": [
+            {
+              "dtype": "torch.float32",
+              "elements": 276480,
+              "nonfinite": 0,
+              "maximum": 17.929058074951172,
+              "above_fp16": 0,
+              "subnormal_fp16": 21,
+              "zeros": 0
+            },
+            {
+              "dtype": "torch.float32",
+              "elements": 276480,
+              "nonfinite": 0,
+              "maximum": 7.559077739715576,
+              "above_fp16": 0,
+              "subnormal_fp16": 20,
+              "zeros": 0
+            },
+            {
+              "dtype": "torch.float32",
+              "elements": 276480,
+              "nonfinite": 0,
+              "maximum": 10.179000854492188,
+              "above_fp16": 0,
+              "subnormal_fp16": 18,
+              "zeros": 0
+            },
+            {
+              "dtype": "torch.float32",
+              "elements": 276480,
+              "nonfinite": 0,
+              "maximum": 7.873671054840088,
+              "above_fp16": 0,
+              "subnormal_fp16": 34,
+              "zeros": 0
+            }
+          ],
+          "contract": {
+            "dense_linear_calls": 116,
+            "dense_conv_calls": 1,
+            "sdpa_calls": 27,
+            "kitchen_attention_redirects": 0,
+            "int8_linear_calls": 0,
+            "query_chunk": 128,
+            "tf32_matmul": false,
+            "tf32_cudnn": false,
+            "linear_input_dtypes": [
+              "torch.float32"
+            ],
+            "linear_weight_dtypes": [
+              "torch.float32"
+            ],
+            "attention_dtypes": [
+              "torch.float32"
+            ]
+          },
+          "output_sha256": [
+            "cdf5b2d21f73edcf093a60f56a21d786a414c648b20afe52adb44c9ca3f043ff",
+            "f4cd16dd491c0021000c407c479748085e053e7f89929ea0bb3b255d294ff53f",
+            "8bb0641308af5dc3b93b596ca5e819436bb6366090ef5f3972759d169bfc5183",
+            "fb3271f909c96467f6af53f5827288cf0a2cbe778bce1d81dd6bfeebdc35abb1"
+          ]
+        }
+      },
+      "cases": [
+        {
+          "name": "bf16_native",
+          "role": "candidate",
+          "vs_fp32_ground_truth": [
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.03350103824183099,
+              "max_abs": 0.7469635009765625
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.01215290004616883,
+              "max_abs": 0.133121520280838
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.02049746726651104,
+              "max_abs": 0.29548001289367676
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.02744960097775842,
+              "max_abs": 0.2568180561065674
+            }
+          ],
+          "output": [
+            {
+              "dtype": "torch.bfloat16",
+              "elements": 276480,
+              "nonfinite": 0,
+              "maximum": 18.0,
+              "above_fp16": 0,
+              "subnormal_fp16": 18,
+              "zeros": 0
+            },
+            {
+              "dtype": "torch.bfloat16",
+              "elements": 276480,
+              "nonfinite": 0,
+              "maximum": 7.5625,
+              "above_fp16": 0,
+              "subnormal_fp16": 20,
+              "zeros": 0
+            },
+            {
+              "dtype": "torch.bfloat16",
+              "elements": 276480,
+              "nonfinite": 0,
+              "maximum": 10.125,
+              "above_fp16": 0,
+              "subnormal_fp16": 20,
+              "zeros": 0
+            },
+            {
+              "dtype": "torch.bfloat16",
+              "elements": 276480,
+              "nonfinite": 0,
+              "maximum": 7.84375,
+              "above_fp16": 0,
+              "subnormal_fp16": 24,
+              "zeros": 0
+            }
+          ]
+        },
+        {
+          "name": "fp16_native",
+          "role": "candidate",
+          "vs_fp32_ground_truth": [
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.00432813273080034,
+              "max_abs": 0.07911014556884766
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.0016878991180899225,
+              "max_abs": 0.01653936505317688
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.004333623949844587,
+              "max_abs": 0.07552388310432434
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.005032237731179896,
+              "max_abs": 0.04076942801475525
+            }
+          ],
+          "output": [
+            {
+              "dtype": "torch.float16",
+              "elements": 276480,
+              "nonfinite": 0,
+              "maximum": 17.859375,
+              "above_fp16": 0,
+              "subnormal_fp16": 12,
+              "zeros": 0
+            },
+            {
+              "dtype": "torch.float16",
+              "elements": 276480,
+              "nonfinite": 0,
+              "maximum": 7.55859375,
+              "above_fp16": 0,
+              "subnormal_fp16": 29,
+              "zeros": 0
+            },
+            {
+              "dtype": "torch.float16",
+              "elements": 276480,
+              "nonfinite": 0,
+              "maximum": 10.171875,
+              "above_fp16": 0,
+              "subnormal_fp16": 16,
+              "zeros": 0
+            },
+            {
+              "dtype": "torch.float16",
+              "elements": 276480,
+              "nonfinite": 0,
+              "maximum": 7.8671875,
+              "above_fp16": 0,
+              "subnormal_fp16": 31,
+              "zeros": 0
+            }
+          ]
+        },
+        {
+          "name": "fp16_optional_vision_c16",
+          "role": "candidate",
+          "vs_fp32_ground_truth": [
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.004263493720692757,
+              "max_abs": 0.09668827056884766
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.0016554253395814145,
+              "max_abs": 0.01582282781600952
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.004496497137053805,
+              "max_abs": 0.07285818457603455
+            },
+            {
+              "nonfinite": 0,
+              "relative_l2": 0.005215704711554753,
+              "max_abs": 0.04167605936527252
+            }
+          ],
+          "output": [
+            {
+              "dtype": "torch.float16",
+              "elements": 276480,
+              "nonfinite": 0,
+              "maximum": 17.9375,
+              "above_fp16": 0,
+              "subnormal_fp16": 12,
+              "zeros": 0
+            },
+            {
+              "dtype": "torch.float16",
+              "elements": 276480,
+              "nonfinite": 0,
+              "maximum": 7.55859375,
+              "above_fp16": 0,
+              "subnormal_fp16": 29,
+              "zeros": 0
+            },
+            {
+              "dtype": "torch.float16",
+              "elements": 276480,
+              "nonfinite": 0,
+              "maximum": 10.1796875,
+              "above_fp16": 0,
+              "subnormal_fp16": 15,
+              "zeros": 0
+            },
+            {
+              "dtype": "torch.float16",
+              "elements": 276480,
+              "nonfinite": 0,
+              "maximum": 7.8671875,
+              "above_fp16": 0,
+              "subnormal_fp16": 25,
+              "zeros": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "video_source_direct.json",
+      "sha256": "9dc992d2863a9741fc1a9f99aaa92bf6c5105de9b4872b4bf3abf34af263a00c",
+      "configuration": {
+        "mode": "video",
+        "tokens": 513,
+        "layer": 0,
+        "lora": null
+      },
+      "distribution": {
+        "decoder_latent_shape": [
+          1,
+          24,
+          1,
+          4,
+          4
+        ],
+        "encoder_pixel_shape": [
+          1,
+          3,
+          1,
+          32,
+          32
+        ],
+        "seed": 20261021,
+        "kind": "synthetic tiny component probes"
+      },
+      "fp32_ground_truth": {
+        "fp32_ground_truth_decoder": {
+          "role": "ground_truth",
+          "activation_dtype": "torch.float32",
+          "linear": "dense FP32 on Native inverse-ConvRot dequantized checkpoint weights",
+          "attention": "dense FP32 SDPA; all keys; query chunk 128; no routing or INT8 attention",
+          "output": [
+            {
+              "dtype": "torch.float32",
+              "elements": 49152,
+              "nonfinite": 0,
+              "maximum": 2.5713257789611816,
+              "above_fp16": 0,
+              "subnormal_fp16": 4,
+              "zeros": 0
+            }
+          ],
+          "contract": {
+            "dense_linear_calls": 146,
+            "dense_conv_calls": 1,
+            "sdpa_calls": 36,
+            "kitchen_attention_redirects": 36,
+            "int8_linear_calls": 0,
+            "query_chunk": 128,
+            "tf32_matmul": false,
+            "tf32_cudnn": false,
+            "linear_input_dtypes": [
+              "torch.float32"
+            ],
+            "linear_weight_dtypes": [
+              "torch.float32"
+            ],
+            "attention_dtypes": [
+              "torch.float32"
+            ],
+            "original_fp32_dense_weights_exact": true
+          },
+          "output_sha256": [
+            "d0fc35cd27740324113ffeb0e3ff3fcb35072c4cec0dd1cfd2927bba255d31eb"
+          ]
+        },
+        "fp32_ground_truth_encoder": {
+          "role": "ground_truth",
+          "activation_dtype": "torch.float32",
+          "linear": "dense FP32 on Native inverse-ConvRot dequantized checkpoint weights",
+          "attention": "dense FP32 SDPA; all keys; query chunk 128; no routing or INT8 attention",
+          "output": [
+            {
+              "dtype": "torch.float32",
+              "elements": 192,
+              "nonfinite": 0,
+              "maximum": 7.908985137939453,
+              "above_fp16": 0,
+              "subnormal_fp16": 0,
+              "zeros": 0
+            }
+          ],
+          "contract": {
+            "dense_linear_calls": 0,
+            "dense_conv_calls": 34,
+            "sdpa_calls": 0,
+            "kitchen_attention_redirects": 0,
+            "int8_linear_calls": 0,
+            "query_chunk": 128,
+            "tf32_matmul": false,
+            "tf32_cudnn": false,
+            "linear_input_dtypes": [],
+            "linear_weight_dtypes": [],
+            "attention_dtypes": []
+          },
+          "output_sha256": [
+            "f2aac1abe65c856dc247d7a1ea5c18032d769984866a0cf2fc85693df5ef2e4a"
+          ]
+        }
+      },
+      "cases": [
+        {
+          "name": "bf16_native_decoder",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.bfloat16",
+            "elements": 49152,
+            "nonfinite": 0,
+            "maximum": 2.5625,
+            "above_fp16": 0,
+            "subnormal_fp16": 1,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.015343831104972946,
+            "max_abs": 0.09438052773475647
+          }
+        },
+        {
+          "name": "fp16_native_decoder",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float16",
+            "elements": 49152,
+            "nonfinite": 0,
+            "maximum": 2.568359375,
+            "above_fp16": 0,
+            "subnormal_fp16": 1,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.012377704010096224,
+            "max_abs": 0.06388762593269348
+          }
+        },
+        {
+          "name": "fp16_optional_decoder_c16",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float16",
+            "elements": 49152,
+            "nonfinite": 0,
+            "maximum": 2.55859375,
+            "above_fp16": 0,
+            "subnormal_fp16": 2,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.010516358299345935,
+            "max_abs": 0.0808478593826294
+          },
+          "vs_unfolded_fp16": {
+            "nonfinite": 0,
+            "relative_l2": 0.015038676525133672,
+            "max_abs": 0.0986328125
+          }
+        },
+        {
+          "name": "bf16_native_encoder",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.bfloat16",
+            "elements": 192,
+            "nonfinite": 0,
+            "maximum": 7.875,
+            "above_fp16": 0,
+            "subnormal_fp16": 0,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.002747060832632139,
+            "max_abs": 0.0390172004699707
+          }
+        },
+        {
+          "name": "fp16_native_encoder",
+          "role": "candidate",
+          "output": {
+            "dtype": "torch.float16",
+            "elements": 192,
+            "nonfinite": 0,
+            "maximum": 7.90625,
+            "above_fp16": 0,
+            "subnormal_fp16": 0,
+            "zeros": 0
+          },
+          "vs_fp32_ground_truth": {
+            "nonfinite": 0,
+            "relative_l2": 0.00030724066704042097,
+            "max_abs": 0.005173206329345703
+          }
+        }
+      ]
+    }
+  ],
+  "reference_correction": "Excluded from requested evaluation. Use h3_native_fp32_flow_20261021.json."
+}

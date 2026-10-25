@@ -77,6 +77,33 @@ class OfflineBake(unittest.TestCase):
             Path(path).touch()
             with self.assertRaisesRegex(RuntimeError,'identity changed'):bake.cached_bake(self.base,self.paths)
 
+    def test_cached_bake_overwrites_on_lora_change(self):
+        real_convert=bake.convert
+        def cpu_convert(*args,**kwargs):return real_convert(*args,**kwargs,devices=('cpu',))
+        with patch.object(bake,'convert',side_effect=cpu_convert) as convert:
+            path1=bake.cached_bake(self.base,self.paths)
+            self.assertTrue(Path(path1).is_file())
+            receipt1=json.loads(Path(path1+'.json').read_text())
+            self.assertEqual(receipt1['stack'],[list(x) for x in self.paths])
+            self.assertEqual(convert.call_count,1)
+
+            new_paths=[(self.paths[0][0],0.45)]
+            path2=bake.cached_bake(self.base,new_paths)
+            self.assertEqual(path1,path2)
+            self.assertEqual(convert.call_count,2)
+            receipt2=json.loads(Path(path2+'.json').read_text())
+            self.assertEqual(receipt2['stack'],[list(x) for x in new_paths])
+            self.assertNotEqual(receipt1['lora_identity'],receipt2['lora_identity'])
+            baked_files=list(Path(path1).parent.glob('*.safetensors'))
+            self.assertEqual(len(baked_files),1)
+
+    def test_is_changed_tracks_strength(self):
+        import custom_nodes.minimax_h3_tp2 as node
+        p=self.paths[0][0]
+        k1=node.MiniMaxH3TP2Loader.IS_CHANGED(lora_stack=((p,1.0),))
+        k2=node.MiniMaxH3TP2Loader.IS_CHANGED(lora_stack=((p,0.5),))
+        self.assertNotEqual(k1,k2)
+
     def test_loader_offline_does_not_apply_adapters_twice(self):
         import custom_nodes.minimax_h3_tp2 as node
         class Service:
@@ -102,7 +129,7 @@ class ComponentAndIdle(unittest.TestCase):
 
     def vae(self,s,name='video.safetensors',preload=None):
         class VAE:
-            def __init__(self):self.stage='decode';self.reader=SimpleNamespace(path=Path(name));self.vae=SimpleNamespace(patcher=object());self.released=0
+            def __init__(self):self.stage='decode';self.encoder_used=True;self.reader=SimpleNamespace(path=Path(name));self.vae=SimpleNamespace(patcher=object());self.released=0
             def preload_idle(self,cancel):self.stage='encode';return True if preload is None else preload(cancel)
             def release(self):self.released+=1;self.stage=None
         v=VAE();s.register_staged_vae(v);return v
@@ -133,7 +160,8 @@ class ComponentAndIdle(unittest.TestCase):
         s=self.service()
         def fail(cancel):raise MemoryError('fixture admission')
         old=self.vae(s,'old.safetensors');v=self.vae(s,preload=fail)
-        s.configure_idle_vaes({'v':dict(class_type='MiniMaxH3ParallelVAELoader',inputs={'vae_name':'video.safetensors'})})
+        s.configure_idle_vaes({'v':dict(class_type='MiniMaxH3ParallelVAELoader',inputs={'vae_name':'video.safetensors'}),
+            'ref':dict(class_type='MiniMaxH3ReferenceToVideo',inputs={'vae':['v',0],'ref_image_1':['image',0]})})
         self.assertEqual(s._idle_vaes(),[v]);s.request_idle();s.idle_vae_thread.join(5)
         self.assertIn('idle_begin',s.commands);self.assertEqual(s.idle_vae_stats['errors'],1)
         self.assertIsNone(old.stage)

@@ -1,0 +1,196 @@
+{
+  "date": "2026-10-22",
+  "delivery": "GitHub immutable source + exact direct pip, no Kaggle mounts",
+  "source_publication": {
+    "file": "44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+    "sha256": "44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8",
+    "bytes": 12884750,
+    "capsule_sha256": "8d2f34c6d22a41205a023ab06f7b72e81a4f879f6526c8f948d66b2e2947734a",
+    "source_files": 99,
+    "core_pins": 78,
+    "kaggle_mounts": 0,
+    "repository": "chinokikiss/minimax-h3-2xt4",
+    "branch": "codex/kaggle-light-delivery-20261022-44072cef",
+    "commit": "a203a8074dece58be92b3d812362ff5f75cf6579",
+    "path": "runtime/kaggle_artifacts/44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+    "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/a203a8074dece58be92b3d812362ff5f75cf6579/runtime/kaggle_artifacts/44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+    "published": true,
+    "working_tree_and_index_changed": false
+  },
+  "cpu": {
+    "kernel": "pamcks/h3-light-cpu",
+    "version": 1,
+    "status": "cpu_ready",
+    "worker_seconds": 120.01530125899995,
+    "setup_seconds": 119.02346281100006,
+    "tests_passed": 23,
+    "installed_packages": 61,
+    "reused_packages": 17,
+    "api": {
+      "torch": "2.11.0+cpu",
+      "cuda": null,
+      "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]",
+      "kitchen": "0.2.37",
+      "tilelang": "0.1.13",
+      "legacy_video_api": {
+        "signature": "(self, x, rotary_pos_emb, pre_norm, residual, residual_scale)",
+        "source": "/kaggle/temp/h3_light_source/ComfyUI/comfy/ldm/minimax/vae.py",
+        "gpu_available_on_cpu_host": false,
+        "qualification": "CPU signature/import check only; GPU availability is checked by the actual T4 operator gate"
+      },
+      "attention_signature": "(q: 'torch.Tensor', k: 'torch.Tensor', v: 'torch.Tensor', *, scale: 'float | None' = None, attn_mask: 'torch.Tensor | None' = None) -> 'torch.Tensor'",
+      "linear_signature": "(x: torch.Tensor, weight: torch.Tensor, weight_scale: torch.Tensor, bias: torch.Tensor | None = None, out_dtype: torch.dtype | None = None, convrot: bool = False, convrot_groupsize: int = 256, input_act: str | None = None, input_act_weight: torch.Tensor | None = None, input_act_eps: float = 0.0, residual: torch.Tensor | None = None, residual_scale: torch.Tensor | None = None) -> torch.Tensor",
+      "cuda_arch_flags": null,
+      "core_imports": "passed",
+      "tf32_default": false
+    },
+    "receipt_sha256": "8f7c69f92f8151cb40b735cc7f9f7d8395810ab07a82a1c4d1e78657717fd437"
+  },
+  "e2e": {
+    "kernel": "pamcks/h3-l1-current-offline-e2e",
+    "version": 2,
+    "status": "failed_first_denoiser_fc1_gpu_oom",
+    "metadata": {
+      "id": "pamcks/h3-l1-current-offline-e2e",
+      "title": "H3 L1 Current Offline E2E",
+      "code_file": "experiment.ipynb",
+      "language": "python",
+      "kernel_type": "notebook",
+      "is_private": true,
+      "enable_gpu": true,
+      "enable_tpu": false,
+      "enable_internet": true,
+      "docker_image_pinning_type": "original",
+      "dataset_sources": [],
+      "kernel_sources": [],
+      "competition_sources": [],
+      "model_sources": [],
+      "machine_shape": "NvidiaTeslaT4"
+    },
+    "notebook_sha256": "248a25b8e4954dfd2ad697c18a1c04ce14389ccedbfa5c265ce0059650c74ab2",
+    "hardware": {
+      "devices": [
+        {
+          "name": "Tesla T4",
+          "capability": [
+            7,
+            5
+          ],
+          "uuid": "c7985438-0864-3ba2-2ffe-c39db6dc53ac"
+        },
+        {
+          "name": "Tesla T4",
+          "capability": [
+            7,
+            5
+          ],
+          "uuid": "35e36d68-a069-644a-da23-018fd48b58e1"
+        }
+      ],
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "kitchen": "0.2.37",
+      "tilelang": "0.1.13"
+    },
+    "completed_sampling_steps": 0,
+    "result_record": "h3_l1_current_offline_e2e_20261022_v2.json",
+    "download_manifest_sha256": "a83e1ccd0048a953f846f00e927b9e2fc64fc742b0d2ada5fc5a4233820639ac"
+  },
+  "operator": {
+    "status": "version_3_submission_accepted_execution_unverified",
+    "private_auth": "Temporary token in private worker explicitly authorized by user; no credential values in this receipt",
+    "kernel": "pamcks/h3-rowpartial-reference-t4",
+    "version": 3,
+    "notebook_sha256": "e8b55b4a10045d0c786e21fbdc157de1076ff76a22258f4bbcef8d93c1f59d58",
+    "source_binding_sha256": "0112b906fa4b436fd1666240d2693edb11cd7ea46d347ace6297e57b1b3c0c5b",
+    "dataset_sources": [],
+    "kernel_sources": [],
+    "submission_time_utc": "2026-10-22T15:28:34.394978+00:00",
+    "source_publication_sha256": "44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8",
+    "cpu_qualification_sha256": "8f7c69f92f8151cb40b735cc7f9f7d8395810ab07a82a1c4d1e78657717fd437",
+    "private_input_revision": "c2e165af2b7c2c8ca176d26732a42b56014315af",
+    "cli_limit_seconds": 2400,
+    "setup_deadline_seconds": 900,
+    "execution_deadline_seconds": 1200
+  },
+  "local_environment_modified": false,
+  "full_pipeline_quality_accepted": false,
+  "kaggle_status_polling": false,
+  "private_input": {
+    "repo": "cnmds/h3-kaggle-private-inputs",
+    "repo_type": "dataset",
+    "private": true,
+    "revision": "c2e165af2b7c2c8ca176d26732a42b56014315af",
+    "manifest": {
+      "file": "first_block.pt.gz.bin",
+      "uncompressed_sha256": "ecec1dd4cb1146f9511dd023db2ceb1092290947c6f11593fc3bdbcc340f37bb",
+      "uncompressed_bytes": 175840517,
+      "provenance": {
+        "kind": "current pinned Native first-block reconstruction from retained real conditioning/reference/noise",
+        "seed": 20261013,
+        "width": 512,
+        "height": 512,
+        "frames": 90,
+        "sigma": 1.0,
+        "source_files": {
+          "conditioning.pt": "73318db2a3a79b556471d7539bcfca80f27b5d342cce7771e68888d8faa2b535",
+          "initial_noise.pt": "274fc8cfbbd30a2bc645827840855fbcad2b33dba31dcf3a4683a37d06d46668",
+          "sigmas.pt": "ead2c539765f0874647f27e4cc4623b8710f110cb3b693f5f639a5c7c4784e11"
+        },
+        "scope": "Native front-end operators and text refiner only; zero main DiT blocks, no TE/VAE/generation"
+      },
+      "compressed_sha256": "7f92b41104b07b8e854be2c0032f141f8504218bf11f8acba24e3ce056170b51",
+      "compressed_bytes": 158861503
+    },
+    "migration_kernel": "pamcks/h3-hf-input-migration",
+    "migration_version": 1,
+    "migration_worker_seconds": 8.948342545999992,
+    "download_manifest_sha256": "3b058571344a278f777b24ed2a52ab8a05e4d063055d0edc5862dae00e84c01a",
+    "status": "private_hf_publication_completed"
+  },
+  "column_memory_experiment": {
+    "status": "local_candidates_passed_t4_pending",
+    "record": "h3_bounded_column_local_20261022.json",
+    "production_defaults_changed": false,
+    "source_publication": {
+      "file": "a403e7ffeac991d6c5a04dd065836dd7abfc0c073007621db842bf57b5903c2a.tar.gz",
+      "sha256": "a403e7ffeac991d6c5a04dd065836dd7abfc0c073007621db842bf57b5903c2a",
+      "bytes": 12891078,
+      "capsule_sha256": "372e1c65289cebf1a9cb47ef90e7b535b4de88c30248fade7777625358bc9872",
+      "source_files": 102,
+      "core_pins": 78,
+      "kaggle_mounts": 0,
+      "repository": "chinokikiss/minimax-h3-2xt4",
+      "branch": "codex/kaggle-column-memory-20261022-a403e7ff",
+      "commit": "78507fb524eff738b06c999c70ce15be07f7e590",
+      "path": "runtime/kaggle_artifacts/a403e7ffeac991d6c5a04dd065836dd7abfc0c073007621db842bf57b5903c2a.tar.gz",
+      "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/78507fb524eff738b06c999c70ce15be07f7e590/runtime/kaggle_artifacts/a403e7ffeac991d6c5a04dd065836dd7abfc0c073007621db842bf57b5903c2a.tar.gz",
+      "published": true,
+      "working_tree_and_index_changed": false,
+      "parent_distribution_sha256": "44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8",
+      "changed_source_files": [
+        "benchmarks/bounded_column_int8.py",
+        "benchmarks/prepare_kaggle_direct_pip.py",
+        "benchmarks/preview_bounded_column.py",
+        "benchmarks/test_bounded_column_int8.py"
+      ]
+    },
+    "cpu_qualification": {
+      "kernel": "pamcks/h3-light-cpu",
+      "version": 2,
+      "status": "submission_accepted_execution_unverified",
+      "submission": {
+        "kernel": "pamcks/h3-light-cpu",
+        "expected_version": 2,
+        "returncode": 0,
+        "response": "Kernel version 2 successfully pushed.  Please check progress at https://www.kaggle.com/pamcks/h3-light-cpu\n",
+        "submitted_utc": "2026-10-22T15:46:18.032324+00:00",
+        "notebook_sha256": "4c0e7d064830286d0c205b14d1fe70a27811911eda3c634227b75ce8c6a9e907",
+        "cpu_only": true,
+        "kaggle_mounts": 0
+      },
+      "planned_test_count": 26
+    },
+    "gpu_operator_submitted": false
+  }
+}

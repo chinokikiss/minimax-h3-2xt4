@@ -4,6 +4,9 @@
 
 These documents record proposed mechanisms and planned experiments. Inclusion here does not mean a feature is enabled or qualified.
 
+- [Bounded streaming and stage overlap](ZERO_BUBBLE_STREAMING_ARCHITECTURE.md) — reviewed 2026-10-21; replaces unsupported zero-bubble guarantees with an ownership-safe, phased plan
+- [TE compressed-weight streaming proposal](H3_TE_COMPRESSED_WEIGHT_STREAMING_PROPOSAL.md) — reviewed 2026-10-21; pre-fold artifacts, equivalent RAW controls, bounded CPU replay and frozen-stack gates
+
 - [Idle-time TE VRAM residency](IDLE_RESIDENCY_DESIGN.md)
 - [INT8 sparse attention designs for NVIDIA T4 / SM75](INT8_SPARSE_ATTENTION_SM75_DESIGNS.md)
 - [MiniMax-H3 dual-T4 integration plan](INTEGRATION_PLAN.md)

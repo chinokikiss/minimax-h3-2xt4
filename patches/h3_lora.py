@@ -1,7 +1,8 @@
 """Native-ordered H3 multi-LoRA with component-aware TP output ownership.
 
 Only ordinary linear A/B LoRA is accepted. No ignored keys or dense runtime
-weight delta. Native arithmetic is the default; row A partial reduction is opt-in. A-rank
+weight delta. The store supports Native input gathering and row A partial reduction.
+A-rank
 concatenation is deprecated and rejected. Offline merging uses Native math.
 """
 import hashlib
@@ -67,6 +68,10 @@ class NativeAlignedLoRA(nn.Module):
         self.rows,self.columns=rows,columns
 
     def add_to(self,x,out,comm=None,input_act=None):
+        if getattr(self,'fp32_compute',False) and x.dtype!=torch.float32:
+            value=self.add_to(x.float(),out.float(),comm,input_act)
+            out.copy_(value.to(out.dtype))
+            return out
         flat=x.reshape(-1,x.shape[-1]);target=out.reshape(-1,out.shape[-1])
         if not flat.shape[0]:return out
         if input_act=='swiglu':
@@ -94,7 +99,11 @@ class NativeAlignedLoRA(nn.Module):
 
 
 class RowPartialLoRA(nn.Module):
-    """Opt-in row A partial SUM, with bounded short-lived hidden staging."""
+    """Row A partial SUM, with bounded short-lived hidden staging.
+
+    FP16-fix runs these A/B projections and the hidden SUM in FP32. Its
+    collective is independent of the base INT8 row's scaled-FP16 codec.
+    """
     HIDDEN_STAGE_BYTES=32*2**20
 
     def __init__(self,terms,columns):
@@ -105,13 +114,17 @@ class RowPartialLoRA(nn.Module):
         if not self.terms:raise ValueError('No active LoRA terms')
 
     def add_to(self,x,out,comm=None,input_act=None):
+        if getattr(self,'fp32_compute',False) and x.dtype!=torch.float32:
+            value=self.add_to(x.float(),out.float(),comm,input_act)
+            out.copy_(value.to(out.dtype))
+            return out
         if comm is None or comm.get_world_size()!=2:raise ValueError('TP2 row LoRA requires its rank transport')
         flat=x.reshape(-1,x.shape[-1]);target=out.reshape(-1,out.shape[-1])
         if not flat.shape[0]:return out
         if input_act=='swiglu':
             gate,up=flat.chunk(2,-1);flat=F.silu(gate).mul_(up)
         elif input_act is not None:raise ValueError('Unqualified LoRA input activation')
-        # A GEMM shapes and per-adapter SUM order are unchanged. Stage only
+        # Keep separate per-adapter A GEMMs and SUMs. Stage only
         # when tiny hidden tensors can replace a larger owned activation.
         hidden_bytes=flat.shape[0]*sum(t.down.shape[0] for t in self.terms)*x.element_size()
         stage=(input_act=='swiglu' and hidden_bytes<=self.HIDDEN_STAGE_BYTES
@@ -154,10 +167,10 @@ class NativeLoraMLP(nn.Module):
 
 
 class H3LoRAStore:
-    def __init__(self,sources,base_reader,*,row_partial=False,concat_a=False,selective_b=False):
-        if concat_a:raise ValueError('Concat A is deprecated; disable concat_a and use optional Row Partial')
+    def __init__(self,sources,base_reader,*,row_partial=False,selective_b=False,selective_qkv_b=False):
         self.row_partial=bool(row_partial)
         self.selective_b=bool(selective_b)
+        self.selective_qkv_b=bool(selective_qkv_b)
         self.sources=[];self.targets=set()
         for path,strength in sources:
             if not math.isfinite(strength):raise ValueError('Finite LoRA strength required')
@@ -187,6 +200,7 @@ class H3LoRAStore:
             if unknown or not targets:raise ValueError('Unconsumed LoRA keys: '+str(sorted(unknown)[:8]))
             self.sources.append((reader,float(strength),targets));self.targets.update(targets)
         identity=['native-default-row-partial-selective-b-v6',self.row_partial,self.selective_b,[(r.identity,s) for r,s,_ in self.sources]]
+        if self.selective_qkv_b:identity.append('experimental-owned-qkv-b-v1')
         self.identity=hashlib.sha256(json.dumps(identity,sort_keys=True).encode()).hexdigest()
 
     def check(self):
@@ -203,17 +217,23 @@ class H3LoRAStore:
         return terms
 
     def selective_rows(self,target,rank):
-        """Only the physically qualified TP2 H3 FC1 / rank128 B geometry.
+        """Qualified FC1, plus explicitly enabled experimental QKV rank128.
 
         Other targets, refiner and independently sized LoRAs keep full B.
         Selected rows are read/packed once on CPU before residency admission.
         """
-        if not self.selective_b or rank not in (0,1) or not re.fullmatch(r'blocks\.\d+\.mlp\.fc1',target):return None
+        if not self.selective_b or rank not in (0,1):return None
+        if re.fullmatch(r'blocks\.\d+\.mlp\.fc1',target):
+            full,components=28672,2
+        elif getattr(self,'selective_qkv_b',False) and re.fullmatch(r'blocks\.\d+\.attn\.qkv_proj',target):
+            full,components=21504,3
+        else:return None
         for reader,_,targets in self.sources:
             if target not in targets:continue
             a,b,scale=targets[target]
-            if scale and (reader.header[a]['shape']!=[128,5376] or reader.header[b]['shape']!=[28672,128]):return None
-        return [(rank*7168,(rank+1)*7168),(14336+rank*7168,14336+(rank+1)*7168)]
+            if scale and (reader.header[a]['shape']!=[128,5376] or reader.header[b]['shape']!=[full,128]):return None
+        width=full//components;half=width//2
+        return [(c*width+rank*half,c*width+(rank+1)*half) for c in range(components)]
 
     def adapter(self,target,rank=None):
         self.check();terms=[];rows=columns=None

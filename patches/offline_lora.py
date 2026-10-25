@@ -117,14 +117,14 @@ def _bake_partition(base,lora_stack,partial,targets,device,verify_native,comfy_r
     return checks
 
 
-def convert(base,lora_stack,output,prefix='',verify_native=False,devices=None):
+def convert(base,lora_stack,output,prefix='',verify_native=False,devices=None,overwrite=False):
     from safetensors.torch import save_file
     reader=CheckpointReader(base);store=H3LoRAStore(tuple(lora_stack),reader)
     if not any(scale for _,_,mapping in store.sources for _,_,scale in mapping.values()):return str(reader.path)
     output=Path(output).resolve();output.parent.mkdir(parents=True,exist_ok=True)
     partial=output.with_name(output.name+'.partial')
     receipt=output.with_suffix(output.suffix+'.json')
-    if output.exists() or partial.exists() or receipt.exists():raise FileExistsError('Output/partial/receipt already exists')
+    if not overwrite and (output.exists() or partial.exists() or receipt.exists()):raise FileExistsError('Output/partial/receipt already exists')
     active={t for _,_,mapping in store.sources for t,(_,_,scale) in mapping.items() if scale}
     targets=sorted(t for t in active if (t+'.').startswith(prefix))
     if not targets:raise ValueError('No matching LoRA targets')
@@ -135,6 +135,7 @@ def convert(base,lora_stack,output,prefix='',verify_native=False,devices=None):
     if shutil.disk_usage(output.parent).free<selected_bytes+2**30:raise OSError('Insufficient free disk for new checkpoint')
     # Claim scratch exclusively, including fixture exports. Cancellation and
     # disk failures remove only scratch claimed by this invocation.
+    if overwrite and partial.exists():partial.unlink(missing_ok=True)
     with partial.open('xb'):pass
     try:
         if prefix:
@@ -178,7 +179,7 @@ def convert(base,lora_stack,output,prefix='',verify_native=False,devices=None):
     store.check()
     if reader.path.stat().st_size!=reader.signature[0] or reader.path.stat().st_mtime_ns!=reader.signature[1]:
         raise RuntimeError('Base changed during offline merge')
-    partial.rename(output)
+    partial.replace(output)
     signature=output.stat()
     receipt.write_text(json.dumps(dict(format='h3-native-int8-offline-lora-v2',base=reader.identity,
         lora_identity=store.identity,stack=list(lora_stack),prefix=prefix,tensors=checks,
@@ -190,22 +191,25 @@ def convert(base,lora_stack,output,prefix='',verify_native=False,devices=None):
     return str(output)
 
 
-def cached_bake(base,lora_stack,*,before_bake=None):
+def cached_bake(base,lora_stack,*,before_bake=None,target_name='latest_baked_dit.safetensors'):
     """Return a complete immutable bake, or publish a new one. Never double-apply."""
     reader=CheckpointReader(base);store=H3LoRAStore(tuple(lora_stack),reader)
     if not any(scale for _,_,mapping in store.sources for _,_,scale in mapping.values()):return str(reader.path)
-    identity=hashlib.sha256(json.dumps(['layer-parallel-v2',reader.identity,store.identity],sort_keys=True).encode()).hexdigest()
-    output=reader.path.parent/'h3_lora_baked'/(identity+'.safetensors')
+    output=reader.path.parent/'h3_lora_baked'/target_name
     receipt=output.with_suffix(output.suffix+'.json')
-    if output.exists():
-        if not receipt.is_file():raise RuntimeError('Baked checkpoint receipt is missing: '+str(receipt))
-        record=json.loads(receipt.read_text());stat=output.stat()
-        if (record.get('format')!='h3-native-int8-offline-lora-v2' or record.get('lora_identity')!=store.identity
-                or record.get('base')!=list(reader.identity) or record.get('output_signature')!=[stat.st_size,stat.st_mtime_ns]):
-            raise RuntimeError('Baked checkpoint identity changed; choose a new cache destination')
-        store.check();return str(output)
+    if output.exists() and receipt.is_file():
+        try:
+            record=json.loads(receipt.read_text());stat=output.stat()
+            if (record.get('format')=='h3-native-int8-offline-lora-v2' and record.get('lora_identity')==store.identity
+                    and record.get('base')==list(reader.identity) and record.get('output_signature')==[stat.st_size,stat.st_mtime_ns]):
+                store.check();return str(output)
+            if (record.get('format')=='h3-native-int8-offline-lora-v2' and record.get('lora_identity')==store.identity
+                    and record.get('base')==list(reader.identity) and record.get('output_signature')!=[stat.st_size,stat.st_mtime_ns]):
+                raise RuntimeError('Baked checkpoint identity changed; choose a new cache destination')
+        except (json.JSONDecodeError,KeyError):
+            pass
     if before_bake:before_bake()
-    return convert(base,lora_stack,output)
+    return convert(base,lora_stack,output,overwrite=True)
 
 
 def main():

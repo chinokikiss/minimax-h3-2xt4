@@ -6,7 +6,7 @@ import tempfile
 import unittest
 
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
-import analyze_causal_audit as analysis
+from tools.experiments import analyze_causal_audit as analysis
 
 
 class CausalityTests(unittest.TestCase):

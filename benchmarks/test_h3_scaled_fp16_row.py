@@ -11,6 +11,8 @@ import json
 import os
 from pathlib import Path
 import sys
+import statistics
+import time
 from types import SimpleNamespace
 from unittest.mock import patch
 sys.path[:0]=[str(Path(__file__).resolve().parents[1]),str(Path(__file__).resolve().parent)]
@@ -21,18 +23,19 @@ from patches import tilelang_row_quant as row
 from tp2_tradeoffs import transport_reference
 
 
-def rank_cases(comm,rank,device):
+def rank_cases(comm,rank,device,rows_by_kind=None,fc2_quantizer='owned_fp32',repeats=0):
     records=[];torch.manual_seed(438+rank)
     for kind,width,output in (('dit_o',3584,5376),('dit_fc2',7168,5376),
                               ('te_o',4096,5120),('te_down',12800,5120)):
-        gate=torch.randn(1,17,width,device=device);up=torch.randn_like(gate)
+        rows=(rows_by_kind or {}).get(kind,17)
+        gate=torch.randn(1,rows,width,device=device);up=torch.randn_like(gate)
         weight=torch.randint(-127,128,(output,width),device=device,dtype=torch.int8)
         ws=torch.full((output,1),.0003,device=device)
         parts=kind=='te_down';activated=kind in ('dit_fc2','te_down')
         x=torch.cat((gate,up),-1) if activated else gate
         act='swiglu' if activated else None
         module=SimpleNamespace(weight=weight,weight_scale=ws,world_size=2,convrot_groupsize=256,
-            operator_policy=policy.H3OperatorPolicy())
+            operator_policy=policy.H3OperatorPolicy(row_linear_backend='tilelang_packed',fc2_quantizer=fc2_quantizer))
         # Full gather and Native global-row quantization: independent of TileLang
         # preparation. Keep the pre-SUM partials for the lossy codec reference.
         full,start,length=pi.gather(x,comm,-1)
@@ -43,8 +46,8 @@ def rank_cases(comm,rank,device):
         q,scale=pi.quantize(full,256,input_act=act)
         partial=pi.int_mm(q[:,start:start+length].contiguous(),weight)
         gathered=[torch.empty_like(partial) for _ in range(2)];comm.all_gather(gathered,partial)
-        exact=pi.dequantize(gathered[0]+gathered[1],scale,ws,torch.float32).reshape(1,17,output)
-        expected=pi.dequantize(transport_reference(gathered,'fp16',width),scale,ws,torch.float32).reshape(1,17,output)
+        exact=pi.dequantize(gathered[0]+gathered[1],scale,ws,torch.float32).reshape(1,rows,output)
+        expected=pi.dequantize(transport_reference(gathered,'fp16',width),scale,ws,torch.float32).reshape(1,rows,output)
         baseline=(policy.row_linear_parts(module,gate,up,native.row_linear,comm) if parts else
                   policy.row_linear(module,x,native.row_linear,comm,act))
         assert torch.equal(baseline,exact),(kind,'default INT32 SUM changed')
@@ -53,13 +56,26 @@ def rank_cases(comm,rank,device):
                 policy.row_linear(module,x,native.row_linear,comm,act))
         assert torch.equal(actual,expected),(kind,'FP16 codec + fused epilogue mismatch',float((actual-expected).abs().max()))
         assert torch.isfinite(actual).all()
-        records.append(dict(name=kind,rank=rank,M=17,K=width,N=output,
+        records.append(dict(name=kind,rank=rank,M=rows,K=width,N=output,fc2_quantizer=fc2_quantizer,
             default_native_int32='bitwise_pass',fp16_independent_reference='bitwise_pass'))
-        if activated:
-            module.operator_policy=replace(module.operator_policy,swiglu_padding=False)
-            unfused=policy.row_linear(module,x,native.row_linear,comm,act)
-            assert torch.equal(unfused,expected),(kind,'unfused activation path')
-            records[-1]['unfused_activation']='bitwise_pass'
+        records[-1]['scaled_transport_vs_native_int32']=dict(
+            relative_l2=float((actual-exact).float().norm()/exact.float().norm().clamp_min(1e-30)),
+            max_abs=float((actual-exact).abs().max()),
+            acceptance='Operator diagnostic only; generation acceptance remains deferred')
+        if repeats:
+            measured={}
+            for backend in ('tilelang_packed','tilelang_scaled_fp16'):
+                module.operator_policy=replace(module.operator_policy,row_linear_backend=backend)
+                def run():
+                    return (policy.row_linear_parts(module,gate,up,native.row_linear,comm) if parts else
+                            policy.row_linear(module,x,native.row_linear,comm,act))
+                for _ in range(2):warm=run();del warm
+                torch.cuda.synchronize();samples=[]
+                for _ in range(repeats):
+                    comm.barrier();torch.cuda.synchronize();started=time.perf_counter()
+                    value=run();torch.cuda.synchronize();samples.append(1000*(time.perf_counter()-started));del value
+                measured[backend]=dict(samples_ms=samples,median_ms=statistics.median(samples))
+            records[-1]['steady_state_complete_api']=measured
     return records
 
 

@@ -181,14 +181,14 @@ with ThreadPoolExecutor(max_workers=2) as pool:paths=dict(pool.map(download,spec
                         raise RuntimeError('Incomplete diagnostic '+case)
                     if any(r['nfe']!=4 for r in result['requests']):raise RuntimeError('Actual NFE mismatch '+case)
                     if capture=='kineto':
-                        command([sys.executable,str(root/'analyze_causal_audit.py'),str(directory)],900,f'{phase}_{case}_analysis.log')
+                        command([sys.executable,str(root/'tools/experiments/analyze_causal_audit.py'),str(directory)],900,f'{phase}_{case}_analysis.log')
                         analysis=json.loads((directory/'causal_analysis.json').read_text())
                         if any(r['ranks'][str(rank)]['kernel_count']==0 for r in analysis['requests'] for rank in (0,1)):
                             raise RuntimeError('GPU kernel trace missing; continuous run not admitted')
                         if not analysis['block_loading'] or not analysis['collective_calls']:
                             raise RuntimeError('Loading/NCCL trace missing; continuous run not admitted')
                     manifest['jobs'].append(dict(phase=phase,case=case,capture=capture,seconds=seconds,passed=True));save()
-            command([sys.executable,str(root/'analyze_causal_audit.py'),str(out/phase)],600,phase+'_final_analysis.log')
+            command([sys.executable,str(root/'tools/experiments/analyze_causal_audit.py'),str(out/phase)],600,phase+'_final_analysis.log')
             if phase=='short':
                 manifest['short_trace_quality_gate']='PASS: real NFEs, all ranks, Native checks, loading and NCCL present';save()
         if nsys:
@@ -209,7 +209,7 @@ with ThreadPoolExecutor(max_workers=2) as pool:paths=dict(pool.map(download,spec
                 command(args,2400,'nsys.log');manifest['nsys']['capture']='complete'
             except RuntimeError:
                 manifest['nsys']['capture']='unavailable at runtime; inspect nsys.log; Kineto evidence retained'
-        command([sys.executable,str(root/'analyze_causal_audit.py'),str(out)],900,'combined_analysis.log')
+        command([sys.executable,str(root/'tools/experiments/analyze_causal_audit.py'),str(out)],900,'combined_analysis.log')
         manifest.update(status='complete',seconds=time.monotonic()-start);save()
     except BaseException as error:
         manifest.update(status='failed',error=type(error).__name__+': '+str(error),seconds=time.monotonic()-start);save();raise

@@ -1,0 +1,1303 @@
+{
+  "status": "dual_t4_v3_complete_quality_pending",
+  "date": "2026-10-23",
+  "request": "Repeat the previous long-sequence E2E with validated lifetime scheduling",
+  "baseline": "h3-l1-current-offline-e2e version 2",
+  "workload": {
+    "name": "L1_current_896x512",
+    "prompt": "Use <Picture 1> as the exact reference for the young superhero's identity, hairstyle, face, mask, red costume, and flowing cape. Use <Picture 2> as the exact reference for the enormous mechanical dragon's appearance, black metallic armor, glowing red energy core, and electrical effects.\n\nA spectacular cinematic anime action sequence in a futuristic city during a violent nighttime thunderstorm.\n\n0-4 seconds: A wide establishing shot reveals the superhero standing on a skyscraper rooftop. The enormous mechanical dragon rises between distant buildings. Rain falls heavily, and electric-blue lightning illuminates the skyline. The camera slowly moves forward.\n\n4-9 seconds: The dragon spreads its mechanical wings and releases a deafening roar. Its red energy core pulses brightly. The superhero braces against a powerful gust of wind, his cape whipping dramatically. The camera tracks sideways as lightning arcs between the buildings.\n\n9-15 seconds: The superhero runs forward and leaps across the rooftop. The camera follows his movement in a dynamic tracking shot while the dragon turns toward him. A massive lightning flash briefly illuminates both characters. The scene ends with the superhero landing in a determined stance.\n\nMaintain consistent character identity, costume design, mechanical dragon anatomy, lighting, and anime art style throughout the entire sequence. Smooth continuous motion, coherent spatial relationships, detailed background, dramatic cinematic lighting.",
+    "frames": 362,
+    "seed": 20261020,
+    "steps": 4,
+    "sampler": "lcm",
+    "audio_shift": 2.0,
+    "lora": true,
+    "idle": false,
+    "reserve_gib": 9.0,
+    "operators": {
+      "dit_attention": "tilelang_scalar"
+    },
+    "offline_lora": true,
+    "memory_profile": false,
+    "width": 896,
+    "height": 512,
+    "fps": 24,
+    "source_note": "Previous L1 prompt/references/seed/four LCM-simple steps; current production defaults except preserved scalar DiT attention"
+  },
+  "reference_images": [
+    {
+      "file": "red_superboy_on_city_roof.png",
+      "bytes": 2842523,
+      "sha256": "e1e5a3c758072dbc2ca9873fdfaf112488c12693ed9a6ea5a3b6d6bbd1c2fea7",
+      "source": "Same reference-image URL used by the previous L1 run; bytes frozen for this retry"
+    },
+    {
+      "file": "mecha_dragon_lightning.png",
+      "bytes": 1693361,
+      "sha256": "f2ea58387139aa1accf01b91a145a756a73854618ede4b43ee986225d914c5b3",
+      "source": "Same reference-image URL used by the previous L1 run; bytes frozen for this retry"
+    }
+  ],
+  "prior_inputs": {
+    "conditioning": {
+      "shape": [
+        1,
+        1182,
+        5120
+      ],
+      "dtype": "torch.float32",
+      "sha256": "f5a4015826a2620b1539811908a03e8d2e2bfd8cff6bb242fd7c9087ace07288",
+      "finite": true
+    },
+    "noise_0": {
+      "shape": [
+        1,
+        24,
+        107,
+        32,
+        56
+      ],
+      "dtype": "torch.float32",
+      "sha256": "feca61da604df6ef74cd167c6bbb92882ea7f56d710578374c6ecdc8ffc8d1e5",
+      "finite": true
+    },
+    "noise_1": {
+      "shape": [
+        1,
+        32,
+        2,
+        603
+      ],
+      "dtype": "torch.float32",
+      "sha256": "20a5834541d74571d9dcf6400133069bc3b907632c6fda494a753a9353312caf",
+      "finite": true
+    }
+  },
+  "runtime_source_unchanged_from_t4_lifetime_qualification": true,
+  "added_files": [
+    "bench_assets/l1_current/red_superboy_on_city_roof.png",
+    "bench_assets/l1_current/mecha_dragon_lightning.png"
+  ],
+  "preserved_prior_file_count": 105,
+  "core_pins_unchanged": true,
+  "comfyui_frozen": true,
+  "kaggle_status_polling": false,
+  "online_lora": false,
+  "full_pipeline_authorized": true,
+  "source_publication": {
+    "file": "16caf464e7d72b56d1f320d2aa8f06c650f55d61c05d1417249e9632d794092c.tar.gz",
+    "sha256": "16caf464e7d72b56d1f320d2aa8f06c650f55d61c05d1417249e9632d794092c",
+    "bytes": 17270956,
+    "capsule_sha256": "8481ff336f0573030bcf59c35aba06fee4a3d33123a4cbded9db011498a8d1d1",
+    "source_files": 107,
+    "core_pins": 78,
+    "kaggle_mounts": 0,
+    "repository": "chinokikiss/minimax-h3-2xt4",
+    "branch": "codex/l1-lifetime-e2e-20261023-16caf464",
+    "commit": "e46a6c382c33e5b763bbc18f68659a03be816efe",
+    "path": "runtime/kaggle_artifacts/16caf464e7d72b56d1f320d2aa8f06c650f55d61c05d1417249e9632d794092c.tar.gz",
+    "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/e46a6c382c33e5b763bbc18f68659a03be816efe/runtime/kaggle_artifacts/16caf464e7d72b56d1f320d2aa8f06c650f55d61c05d1417249e9632d794092c.tar.gz",
+    "published": true,
+    "working_tree_and_index_changed": false
+  },
+  "cpu_submission": {
+    "kernel": "pamcks/h3-l1-lifetime-cpu",
+    "submitted_utc": "2026-10-23T07:09:44.644033+00:00",
+    "returncode": 0,
+    "response": "Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.4), please consider upgrading to the latest version (2.2.5)\nKernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/pamcks/h3-l1-lifetime-cpu\n",
+    "notebook_sha256": "78eff6f4b4f9f0ec21fae2d1da1e00e858fff15b78c6b282387f83e9c1886621",
+    "source_binding": {
+      "mode": "cpu",
+      "publication": {
+        "file": "16caf464e7d72b56d1f320d2aa8f06c650f55d61c05d1417249e9632d794092c.tar.gz",
+        "sha256": "16caf464e7d72b56d1f320d2aa8f06c650f55d61c05d1417249e9632d794092c",
+        "bytes": 17270956,
+        "capsule_sha256": "8481ff336f0573030bcf59c35aba06fee4a3d33123a4cbded9db011498a8d1d1",
+        "source_files": 107,
+        "core_pins": 78,
+        "kaggle_mounts": 0,
+        "repository": "chinokikiss/minimax-h3-2xt4",
+        "branch": "codex/l1-lifetime-e2e-20261023-16caf464",
+        "commit": "e46a6c382c33e5b763bbc18f68659a03be816efe",
+        "path": "runtime/kaggle_artifacts/16caf464e7d72b56d1f320d2aa8f06c650f55d61c05d1417249e9632d794092c.tar.gz",
+        "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/e46a6c382c33e5b763bbc18f68659a03be816efe/runtime/kaggle_artifacts/16caf464e7d72b56d1f320d2aa8f06c650f55d61c05d1417249e9632d794092c.tar.gz",
+        "published": true,
+        "working_tree_and_index_changed": false
+      },
+      "qualification_sha256": null,
+      "kaggle_dataset_sources": [],
+      "kaggle_kernel_sources": [],
+      "temporary_private_auth": false,
+      "profile_hashes": {},
+      "setup_budget": 240,
+      "execution_budget": null,
+      "dit_lifetimes": false,
+      "profile_qualification_sha256": null
+    },
+    "final_collection_count": 1,
+    "earliest_final_collection_seconds": 300,
+    "status_polling": false
+  },
+  "cpu_gate": {
+    "status": "cpu_ready",
+    "tests": 31,
+    "seconds": 109.14236166399996,
+    "receipt_sha256": "e19c970fa183bf6153f4e81f35682053da3e1df7bff5047537416b5ffc5ea2c5"
+  },
+  "gpu_submission": {
+    "kernel": "pamcks/h3-l1-current-offline-e2e",
+    "submitted_utc": "2026-10-23T07:16:17.168419+00:00",
+    "returncode": 0,
+    "response": "Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.4), please consider upgrading to the latest version (2.2.5)\nKernel version 3 successfully pushed.  Please check progress at https://www.kaggle.com/code/pamcks/h3-l1-current-offline-e2e\n",
+    "notebook_sha256": "c52ad5351942ecbff5b8e7665c170a4ba0940abfa79ed2c0ac9273cc993f7c8a",
+    "source_binding": {
+      "mode": "e2e",
+      "publication": {
+        "file": "16caf464e7d72b56d1f320d2aa8f06c650f55d61c05d1417249e9632d794092c.tar.gz",
+        "sha256": "16caf464e7d72b56d1f320d2aa8f06c650f55d61c05d1417249e9632d794092c",
+        "bytes": 17270956,
+        "capsule_sha256": "8481ff336f0573030bcf59c35aba06fee4a3d33123a4cbded9db011498a8d1d1",
+        "source_files": 107,
+        "core_pins": 78,
+        "kaggle_mounts": 0,
+        "repository": "chinokikiss/minimax-h3-2xt4",
+        "branch": "codex/l1-lifetime-e2e-20261023-16caf464",
+        "commit": "e46a6c382c33e5b763bbc18f68659a03be816efe",
+        "path": "runtime/kaggle_artifacts/16caf464e7d72b56d1f320d2aa8f06c650f55d61c05d1417249e9632d794092c.tar.gz",
+        "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/e46a6c382c33e5b763bbc18f68659a03be816efe/runtime/kaggle_artifacts/16caf464e7d72b56d1f320d2aa8f06c650f55d61c05d1417249e9632d794092c.tar.gz",
+        "published": true,
+        "working_tree_and_index_changed": false
+      },
+      "qualification_sha256": "e19c970fa183bf6153f4e81f35682053da3e1df7bff5047537416b5ffc5ea2c5",
+      "kaggle_dataset_sources": [],
+      "kaggle_kernel_sources": [],
+      "temporary_private_auth": false,
+      "profile_hashes": {},
+      "setup_budget": 240,
+      "execution_budget": 4800,
+      "dit_lifetimes": false,
+      "profile_qualification_sha256": null
+    },
+    "final_collection_count": 1,
+    "earliest_final_collection_seconds": 5160,
+    "final_collection_not_before_utc": "2026-10-23T08:42:17.168419+00:00",
+    "status_polling": false,
+    "full_pipeline_authorized": true,
+    "expected_prior_inputs": {
+      "conditioning": {
+        "shape": [
+          1,
+          1182,
+          5120
+        ],
+        "dtype": "torch.float32",
+        "sha256": "f5a4015826a2620b1539811908a03e8d2e2bfd8cff6bb242fd7c9087ace07288",
+        "finite": true
+      },
+      "noise_0": {
+        "shape": [
+          1,
+          24,
+          107,
+          32,
+          56
+        ],
+        "dtype": "torch.float32",
+        "sha256": "feca61da604df6ef74cd167c6bbb92882ea7f56d710578374c6ecdc8ffc8d1e5",
+        "finite": true
+      },
+      "noise_1": {
+        "shape": [
+          1,
+          32,
+          2,
+          603
+        ],
+        "dtype": "torch.float32",
+        "sha256": "20a5834541d74571d9dcf6400133069bc3b907632c6fda494a753a9353312caf",
+        "finite": true
+      }
+    },
+    "expected_workload": {
+      "name": "L1_current_896x512",
+      "prompt": "Use <Picture 1> as the exact reference for the young superhero's identity, hairstyle, face, mask, red costume, and flowing cape. Use <Picture 2> as the exact reference for the enormous mechanical dragon's appearance, black metallic armor, glowing red energy core, and electrical effects.\n\nA spectacular cinematic anime action sequence in a futuristic city during a violent nighttime thunderstorm.\n\n0-4 seconds: A wide establishing shot reveals the superhero standing on a skyscraper rooftop. The enormous mechanical dragon rises between distant buildings. Rain falls heavily, and electric-blue lightning illuminates the skyline. The camera slowly moves forward.\n\n4-9 seconds: The dragon spreads its mechanical wings and releases a deafening roar. Its red energy core pulses brightly. The superhero braces against a powerful gust of wind, his cape whipping dramatically. The camera tracks sideways as lightning arcs between the buildings.\n\n9-15 seconds: The superhero runs forward and leaps across the rooftop. The camera follows his movement in a dynamic tracking shot while the dragon turns toward him. A massive lightning flash briefly illuminates both characters. The scene ends with the superhero landing in a determined stance.\n\nMaintain consistent character identity, costume design, mechanical dragon anatomy, lighting, and anime art style throughout the entire sequence. Smooth continuous motion, coherent spatial relationships, detailed background, dramatic cinematic lighting.",
+      "frames": 362,
+      "seed": 20261020,
+      "steps": 4,
+      "sampler": "lcm",
+      "audio_shift": 2.0,
+      "lora": true,
+      "idle": false,
+      "reserve_gib": 9.0,
+      "operators": {
+        "dit_attention": "tilelang_scalar"
+      },
+      "offline_lora": true,
+      "memory_profile": false,
+      "width": 896,
+      "height": 512,
+      "fps": 24,
+      "source_note": "Previous L1 prompt/references/seed/four LCM-simple steps; current production defaults except preserved scalar DiT attention"
+    }
+  },
+  "collector_launch": {
+    "script": "D:\\attention_eval\\h3_l1_lifetime_e2e_20261023\\collector_v1.py",
+    "hidden": true,
+    "launched_utc": "2026-10-23T07:17:38.5731109Z",
+    "purpose": "One final artifact collection after bounded E2E window",
+    "status_polling": false,
+    "pid": 3668
+  },
+  "collector_status": {
+    "status": "collected",
+    "kaggle_requests": 1,
+    "kernel": "pamcks/h3-l1-current-offline-e2e",
+    "output": "D:\\attention_eval\\h3_l1_lifetime_e2e_20261023\\gpu_output_v1",
+    "returncode": 0,
+    "files": 27,
+    "completed_utc": "2026-10-23T08:42:45.231261+00:00",
+    "experiment": {
+      "status": "complete",
+      "error": null,
+      "stages": {
+        "vae_metadata": {
+          "start_ns": 1403161956349,
+          "end_ns": 1403655640673,
+          "status": "complete"
+        },
+        "reference_and_TE": {
+          "start_ns": 1403656391090,
+          "end_ns": 1552599560811,
+          "status": "complete"
+        },
+        "sampler": {
+          "start_ns": 1552891949875,
+          "end_ns": 2506058133602,
+          "status": "complete"
+        },
+        "video_decode": {
+          "start_ns": 2506101098517,
+          "end_ns": 2898381071335,
+          "status": "complete"
+        },
+        "audio_decode": {
+          "start_ns": 2898382224041,
+          "end_ns": 2901715946100,
+          "status": "complete"
+        },
+        "file_export": {
+          "start_ns": 2901717179891,
+          "end_ns": 2918545350713,
+          "status": "complete"
+        }
+      },
+      "completed_sampler_steps": 4,
+      "completed_denoiser_calls": 4,
+      "media": {
+        "video_bytes": 11642577,
+        "audio_bytes": 1929644
+      },
+      "quality_acceptance": "Pending review; collection does not establish generation quality"
+    },
+    "prior_input_hash_matches": {
+      "conditioning": true,
+      "noise_0": true,
+      "noise_1": true
+    }
+  },
+  "collector_sha256": "9dc9b17dd3c0514c548b5d7839ad904308156398baea8839043ecff66088a4ea",
+  "e2e_success": true,
+  "quality_review": "pending; no dense Native paired generation or independent visual/audio acceptance",
+  "local_preparation_tests": 4,
+  "collector_tests": 2,
+  "current_production_files_match_submitted": 60,
+  "report_sha256": "bf663195915255ce8f5d571f0417264aae5b8b09d1d7416c563323947d82243f",
+  "result": {
+    "status": "complete",
+    "hardware": {
+      "devices": [
+        {
+          "name": "Tesla T4",
+          "capability": [
+            7,
+            5
+          ],
+          "uuid": "2d404199-eecc-9752-2adf-5d26094f2387"
+        },
+        {
+          "name": "Tesla T4",
+          "capability": [
+            7,
+            5
+          ],
+          "uuid": "3b4b9581-1133-815b-2f01-23aeca70c5c3"
+        }
+      ],
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "kitchen": "0.2.37",
+      "tilelang": "0.1.13"
+    },
+    "stage_seconds": {
+      "vae_metadata": 0.493684324,
+      "reference_and_TE": 148.943169721,
+      "sampler": 953.166183727,
+      "video_decode": 392.279972818,
+      "audio_decode": 3.333722059,
+      "file_export": 16.828170822
+    },
+    "foreground_seconds": 1515.384379757,
+    "cold_execution_seconds": 2634.630132736,
+    "setup_seconds": 73.64698100699997,
+    "batch_commands": [
+      {
+        "stage": "offline_bake",
+        "seconds": 352.0320421680001,
+        "exit_code": 0
+      },
+      {
+        "stage": "L1_generation",
+        "seconds": 1560.132518887,
+        "exit_code": 0
+      }
+    ],
+    "verified_native_offline_targets": 208,
+    "source_binding_matches": true,
+    "artifact_hashes_verified": 27,
+    "prior_input_hash_matches": {
+      "conditioning": true,
+      "noise_0": true,
+      "noise_1": true
+    },
+    "completed_sampler_steps": 4,
+    "completed_denoiser_calls": 4,
+    "all_recorded_outputs_finite": true,
+    "denoiser_outputs": [
+      [
+        {
+          "shape": [
+            1,
+            24,
+            107,
+            32,
+            56
+          ],
+          "dtype": "torch.float16",
+          "finite": true,
+          "minimum": -3.939453125,
+          "maximum": 3.623046875,
+          "mean": -0.09423519670963287,
+          "rms": 0.757282555103302
+        },
+        {
+          "shape": [
+            1,
+            32,
+            2,
+            603
+          ],
+          "dtype": "torch.float16",
+          "finite": true,
+          "minimum": -25.21875,
+          "maximum": 22.625,
+          "mean": -0.06515486538410187,
+          "rms": 4.53853178024292
+        }
+      ],
+      [
+        {
+          "shape": [
+            1,
+            24,
+            107,
+            32,
+            56
+          ],
+          "dtype": "torch.float16",
+          "finite": true,
+          "minimum": -4.47265625,
+          "maximum": 3.744140625,
+          "mean": -0.0951705053448677,
+          "rms": 0.7563655972480774
+        },
+        {
+          "shape": [
+            1,
+            32,
+            2,
+            603
+          ],
+          "dtype": "torch.float16",
+          "finite": true,
+          "minimum": -17.21875,
+          "maximum": 16.796875,
+          "mean": -0.019651733338832855,
+          "rms": 3.397257089614868
+        }
+      ],
+      [
+        {
+          "shape": [
+            1,
+            24,
+            107,
+            32,
+            56
+          ],
+          "dtype": "torch.float16",
+          "finite": true,
+          "minimum": -3.97265625,
+          "maximum": 3.998046875,
+          "mean": -0.087607242166996,
+          "rms": 0.7106444835662842
+        },
+        {
+          "shape": [
+            1,
+            32,
+            2,
+            603
+          ],
+          "dtype": "torch.float16",
+          "finite": true,
+          "minimum": -13.3984375,
+          "maximum": 12.5703125,
+          "mean": -0.026866033673286438,
+          "rms": 2.6092309951782227
+        }
+      ],
+      [
+        {
+          "shape": [
+            1,
+            24,
+            107,
+            32,
+            56
+          ],
+          "dtype": "torch.float16",
+          "finite": true,
+          "minimum": -3.453125,
+          "maximum": 3.322265625,
+          "mean": -0.0796157568693161,
+          "rms": 0.6760864853858948
+        },
+        {
+          "shape": [
+            1,
+            32,
+            2,
+            603
+          ],
+          "dtype": "torch.float16",
+          "finite": true,
+          "minimum": -12.0625,
+          "maximum": 11.5625,
+          "mean": -0.010177897289395332,
+          "rms": 1.981711983680725
+        }
+      ]
+    ],
+    "sampler_steps": [
+      {
+        "step": 0,
+        "total": 4,
+        "denoised": [
+          {
+            "shape": [
+              1,
+              24,
+              107,
+              32,
+              56
+            ],
+            "dtype": "torch.float32",
+            "finite": true,
+            "minimum": -3.000784158706665,
+            "maximum": 3.0698695182800293,
+            "mean": 0.09461244940757751,
+            "rms": 0.6757637858390808
+          },
+          {
+            "shape": [
+              1,
+              32,
+              2,
+              603
+            ],
+            "dtype": "torch.float32",
+            "finite": true,
+            "minimum": -18.28897476196289,
+            "maximum": 20.9552001953125,
+            "mean": 0.05994626507163048,
+            "rms": 3.6490988731384277
+          }
+        ],
+        "latent": [
+          {
+            "shape": [
+              1,
+              24,
+              107,
+              32,
+              56
+            ],
+            "dtype": "torch.float32",
+            "finite": true,
+            "minimum": -4.8705220222473145,
+            "maximum": 4.9171576499938965,
+            "mean": 0.000377266580471769,
+            "rms": 0.9997527599334717
+          },
+          {
+            "shape": [
+              1,
+              32,
+              2,
+              603
+            ],
+            "dtype": "torch.float32",
+            "finite": true,
+            "minimum": -4.263550281524658,
+            "maximum": 4.490799427032471,
+            "mean": -0.0052086119540035725,
+            "rms": 0.9932419061660767
+          }
+        ]
+      },
+      {
+        "step": 1,
+        "total": 4,
+        "denoised": [
+          {
+            "shape": [
+              1,
+              24,
+              107,
+              32,
+              56
+            ],
+            "dtype": "torch.float32",
+            "finite": true,
+            "minimum": -2.6222639083862305,
+            "maximum": 2.724870204925537,
+            "mean": 0.09503710269927979,
+            "rms": 0.5722940564155579
+          },
+          {
+            "shape": [
+              1,
+              32,
+              2,
+              603
+            ],
+            "dtype": "torch.float32",
+            "finite": true,
+            "minimum": -12.731653213500977,
+            "maximum": 13.218388557434082,
+            "mean": 0.02676508016884327,
+            "rms": 2.453505754470825
+          }
+        ],
+        "latent": [
+          {
+            "shape": [
+              1,
+              24,
+              107,
+              32,
+              56
+            ],
+            "dtype": "torch.float32",
+            "finite": true,
+            "minimum": -4.902812957763672,
+            "maximum": 4.962145805358887,
+            "mean": 0.0024387796875089407,
+            "rms": 0.9735743999481201
+          },
+          {
+            "shape": [
+              1,
+              32,
+              2,
+              603
+            ],
+            "dtype": "torch.float32",
+            "finite": true,
+            "minimum": -3.987272262573242,
+            "maximum": 4.19057035446167,
+            "mean": 0.007644466124475002,
+            "rms": 0.9888886213302612
+          }
+        ]
+      },
+      {
+        "step": 2,
+        "total": 4,
+        "denoised": [
+          {
+            "shape": [
+              1,
+              24,
+              107,
+              32,
+              56
+            ],
+            "dtype": "torch.float32",
+            "finite": true,
+            "minimum": -2.444382667541504,
+            "maximum": 2.6570987701416016,
+            "mean": 0.08871259540319443,
+            "rms": 0.548323392868042
+          },
+          {
+            "shape": [
+              1,
+              32,
+              2,
+              603
+            ],
+            "dtype": "torch.float32",
+            "finite": true,
+            "minimum": -9.026687622070312,
+            "maximum": 9.29703426361084,
+            "mean": 0.026659931987524033,
+            "rms": 1.6893459558486938
+          }
+        ],
+        "latent": [
+          {
+            "shape": [
+              1,
+              24,
+              107,
+              32,
+              56
+            ],
+            "dtype": "torch.float32",
+            "finite": true,
+            "minimum": -4.94170618057251,
+            "maximum": 4.945496082305908,
+            "mean": 0.007844372652471066,
+            "rms": 0.9233426451683044
+          },
+          {
+            "shape": [
+              1,
+              32,
+              2,
+              603
+            ],
+            "dtype": "torch.float32",
+            "finite": true,
+            "minimum": -3.7708921432495117,
+            "maximum": 3.8720145225524902,
+            "mean": 0.0018605140503495932,
+            "rms": 0.9406319856643677
+          }
+        ]
+      },
+      {
+        "step": 3,
+        "total": 4,
+        "denoised": [
+          {
+            "shape": [
+              1,
+              24,
+              107,
+              32,
+              56
+            ],
+            "dtype": "torch.float32",
+            "finite": true,
+            "minimum": -2.2527647018432617,
+            "maximum": 2.490349769592285,
+            "mean": 0.0816977322101593,
+            "rms": 0.5110694169998169
+          },
+          {
+            "shape": [
+              1,
+              32,
+              2,
+              603
+            ],
+            "dtype": "torch.float32",
+            "finite": true,
+            "minimum": -5.737027168273926,
+            "maximum": 6.576650142669678,
+            "mean": 0.021802131086587906,
+            "rms": 1.0386461019515991
+          }
+        ],
+        "latent": [
+          {
+            "shape": [
+              1,
+              24,
+              107,
+              32,
+              56
+            ],
+            "dtype": "torch.float32",
+            "finite": true,
+            "minimum": -3.9930307865142822,
+            "maximum": 4.209667205810547,
+            "mean": 0.0180051252245903,
+            "rms": 0.8073310256004333
+          },
+          {
+            "shape": [
+              1,
+              32,
+              2,
+              603
+            ],
+            "dtype": "torch.float32",
+            "finite": true,
+            "minimum": -3.3387880325317383,
+            "maximum": 3.6396992206573486,
+            "mean": 0.01365981437265873,
+            "rms": 0.8672234416007996
+          }
+        ]
+      }
+    ],
+    "ranks": [
+      {
+        "rank": 0,
+        "peak_allocated_bytes": 12491559424,
+        "peak_reserved_bytes": 14973665280,
+        "blocks_by_denoiser_call": {
+          "1": 50,
+          "2": 50,
+          "3": 50,
+          "4": 50
+        },
+        "layouts": [
+          {
+            "sequence_tokens": 51220,
+            "segments": [
+              [
+                0,
+                1182,
+                "text"
+              ],
+              [
+                1182,
+                1630,
+                "ref_img"
+              ],
+              [
+                1630,
+                2078,
+                "ref_img"
+              ],
+              [
+                2078,
+                3284,
+                "audio"
+              ],
+              [
+                3284,
+                51220,
+                "video"
+              ]
+            ],
+            "query_shape": [
+              1,
+              28,
+              51220,
+              128
+            ]
+          }
+        ],
+        "executed_backends": {
+          "TE/tilelang_group32": 50,
+          "current/scaled_fp16_epilogue": 500,
+          "current/fused_swiglu_quant": 250,
+          "DiT/tilelang_sparse_execute": 200
+        },
+        "online_lora_attached": false,
+        "denoiser_gpu_span_seconds": [
+          263.33103125,
+          223.59109375,
+          223.95040625,
+          224.04978125
+        ],
+        "denoise_commands": [
+          {
+            "command": "denoise",
+            "nfe": 1,
+            "start_ns": 1569384696487,
+            "enqueue_end_ns": 1823953880639,
+            "peak_allocated": 12491559424,
+            "peak_reserved": 14973665280
+          },
+          {
+            "command": "denoise",
+            "nfe": 2,
+            "start_ns": 1833049675735,
+            "enqueue_end_ns": 2047911478743,
+            "peak_allocated": 10892365824,
+            "peak_reserved": 14852030464
+          },
+          {
+            "command": "denoise",
+            "nfe": 3,
+            "start_ns": 2056869682582,
+            "enqueue_end_ns": 2272116326677,
+            "peak_allocated": 10892361728,
+            "peak_reserved": 14831058944
+          },
+          {
+            "command": "denoise",
+            "nfe": 4,
+            "start_ns": 2281038837240,
+            "enqueue_end_ns": 2504051650083,
+            "peak_allocated": 10892361728,
+            "peak_reserved": 14831058944
+          }
+        ]
+      },
+      {
+        "rank": 1,
+        "peak_allocated_bytes": 11285653504,
+        "peak_reserved_bytes": 15359541248,
+        "blocks_by_denoiser_call": {
+          "1": 50,
+          "2": 50,
+          "3": 50,
+          "4": 50
+        },
+        "layouts": [
+          {
+            "sequence_tokens": 51220,
+            "segments": [
+              [
+                0,
+                1182,
+                "text"
+              ],
+              [
+                1182,
+                1630,
+                "ref_img"
+              ],
+              [
+                1630,
+                2078,
+                "ref_img"
+              ],
+              [
+                2078,
+                3284,
+                "audio"
+              ],
+              [
+                3284,
+                51220,
+                "video"
+              ]
+            ],
+            "query_shape": [
+              1,
+              28,
+              51220,
+              128
+            ]
+          }
+        ],
+        "executed_backends": {
+          "TE/tilelang_group32": 50,
+          "current/scaled_fp16_epilogue": 500,
+          "current/fused_swiglu_quant": 250,
+          "DiT/tilelang_sparse_execute": 200
+        },
+        "online_lora_attached": false,
+        "denoiser_gpu_span_seconds": [
+          263.3298125,
+          223.594265625,
+          223.949140625,
+          224.04796875
+        ],
+        "denoise_commands": [
+          {
+            "command": "denoise",
+            "nfe": 1,
+            "start_ns": 1569387197154,
+            "enqueue_end_ns": 1823733851690,
+            "peak_allocated": 11285266432,
+            "peak_reserved": 15359541248
+          },
+          {
+            "command": "denoise",
+            "nfe": 2,
+            "start_ns": 1833047782257,
+            "enqueue_end_ns": 2047899768902,
+            "peak_allocated": 11285653504,
+            "peak_reserved": 15328083968
+          },
+          {
+            "command": "denoise",
+            "nfe": 3,
+            "start_ns": 2056872110344,
+            "enqueue_end_ns": 2272107153550,
+            "peak_allocated": 11285653504,
+            "peak_reserved": 15328083968
+          },
+          {
+            "command": "denoise",
+            "nfe": 4,
+            "start_ns": 2281041676856,
+            "enqueue_end_ns": 2496039130297,
+            "peak_allocated": 11285653504,
+            "peak_reserved": 15328083968
+          }
+        ]
+      }
+    ],
+    "decode": {
+      "video": {
+        "strategy": "native",
+        "fallback": "RAM/VRAM admission declined on a rank"
+      },
+      "audio": {
+        "strategy": "native",
+        "fallback": null
+      }
+    },
+    "decoded_shapes": {
+      "pixels": [
+        1,
+        362,
+        512,
+        896,
+        3
+      ],
+      "waveform": [
+        1,
+        482400,
+        2
+      ]
+    },
+    "vae_before_sampling": {
+      "video": {
+        "stage": "encode",
+        "read_bytes": 360747328
+      },
+      "audio": {
+        "stage": null,
+        "read_bytes": 0
+      }
+    },
+    "vae_events": {
+      "video": [
+        {
+          "stage": "encode",
+          "read_bytes": 360747328
+        },
+        {
+          "stage": "decode",
+          "read_bytes": 2450218528
+        }
+      ],
+      "audio": [
+        {
+          "stage": "decode",
+          "read_bytes": 259672288
+        }
+      ]
+    },
+    "memory_samples": 3019,
+    "phase_sampled_memory": {
+      "vae_metadata": [
+        {
+          "device": 0,
+          "samples": 1,
+          "peak_nvml_used_bytes": 687079424,
+          "mean_sampled_utilization_percent": 0
+        },
+        {
+          "device": 1,
+          "samples": 1,
+          "peak_nvml_used_bytes": 580124672,
+          "mean_sampled_utilization_percent": 0
+        }
+      ],
+      "reference_and_TE": [
+        {
+          "device": 0,
+          "samples": 294,
+          "peak_nvml_used_bytes": 5147721728,
+          "mean_sampled_utilization_percent": 3.574829931972789
+        },
+        {
+          "device": 1,
+          "samples": 294,
+          "peak_nvml_used_bytes": 4973658112,
+          "mean_sampled_utilization_percent": 4.431972789115647
+        }
+      ],
+      "sampler": [
+        {
+          "device": 0,
+          "samples": 1877,
+          "peak_nvml_used_bytes": 16101146624,
+          "mean_sampled_utilization_percent": 93.4411294619073
+        },
+        {
+          "device": 1,
+          "samples": 1877,
+          "peak_nvml_used_bytes": 16084369408,
+          "mean_sampled_utilization_percent": 95.01438465636654
+        }
+      ],
+      "video_decode": [
+        {
+          "device": 0,
+          "samples": 775,
+          "peak_nvml_used_bytes": 5653135360,
+          "mean_sampled_utilization_percent": 96.42451612903226
+        },
+        {
+          "device": 1,
+          "samples": 775,
+          "peak_nvml_used_bytes": 777256960,
+          "mean_sampled_utilization_percent": 0
+        }
+      ],
+      "audio_decode": [
+        {
+          "device": 0,
+          "samples": 7,
+          "peak_nvml_used_bytes": 5667815424,
+          "mean_sampled_utilization_percent": 43.42857142857143
+        },
+        {
+          "device": 1,
+          "samples": 7,
+          "peak_nvml_used_bytes": 777256960,
+          "mean_sampled_utilization_percent": 0
+        }
+      ],
+      "file_export": [
+        {
+          "device": 0,
+          "samples": 33,
+          "peak_nvml_used_bytes": 5667815424,
+          "mean_sampled_utilization_percent": 1.0606060606060606
+        },
+        {
+          "device": 1,
+          "samples": 33,
+          "peak_nvml_used_bytes": 777256960,
+          "mean_sampled_utilization_percent": 0
+        }
+      ]
+    },
+    "outputs": {
+      "video": {
+        "shape": [
+          1,
+          24,
+          107,
+          32,
+          56
+        ],
+        "dtype": "torch.float32",
+        "sha256": "ea5963c21dca3eb3c0fb9eb91946678bc02be3b17e88e71679ccb6ea60939c87",
+        "finite": true
+      },
+      "audio": {
+        "shape": [
+          1,
+          32,
+          2,
+          603
+        ],
+        "dtype": "torch.float32",
+        "sha256": "0bdd5402481ff2dcb4ae10921c411e7fa4412fffc7b7c36cb5cb2ed78f7c1469",
+        "finite": true
+      },
+      "pixels": {
+        "shape": [
+          1,
+          362,
+          512,
+          896,
+          3
+        ],
+        "dtype": "torch.float32",
+        "sha256": "e41ed05a7ddfc7cfd5242509e01db7a29a9dfe7c752600ae574caebfd22a3345",
+        "finite": true
+      },
+      "waveform": {
+        "shape": [
+          1,
+          482400,
+          2
+        ],
+        "dtype": "torch.float32",
+        "sha256": "b01fafb99a4a9ab40d64138fbeea01734fe4ff7776c0c7034fba7c3ac7e5989f",
+        "finite": true
+      }
+    },
+    "media": {
+      "video.mp4": {
+        "bytes": 11642577,
+        "sha256": "5dbbd3fe868e2b8cd28d1fcd6647ab829e0b878e9889fcd2579589db68396089",
+        "container_duration_seconds": 15.083333,
+        "streams": [
+          {
+            "type": "video",
+            "codec": "h264",
+            "frames": 362,
+            "duration_seconds": 15.083333333333334,
+            "width": 896,
+            "height": 512,
+            "fps": "24"
+          },
+          {
+            "type": "audio",
+            "codec": "aac",
+            "frames": 473,
+            "duration_seconds": 15.075
+          }
+        ]
+      },
+      "audio.wav": {
+        "bytes": 1929644,
+        "sha256": "b85f5ab9d2250778f293b996e7723ea45a40eb904bceaa55b5f0975ce7caff4f",
+        "container_duration_seconds": 15.075,
+        "streams": [
+          {
+            "type": "audio",
+            "codec": "pcm_s16le",
+            "frames": 0,
+            "duration_seconds": 15.075
+          }
+        ]
+      }
+    },
+    "raw_evidence_root": "D:\\attention_eval\\h3_l1_lifetime_e2e_20261023\\gpu_output_v1",
+    "artifact_manifest": {
+      "h3-l1-current-offline-e2e.log": {
+        "bytes": 37927,
+        "sha256": "a48ebf7dfcc834fcbf86616fac1059090c486680f4b768210182de5aa8e3a999"
+      },
+      "light_execution\\batch_results.json": {
+        "bytes": 900,
+        "sha256": "b3ac93343c20731659b8c4f4740bb3d19c003b6cd20a7fb95fb921fb14398613"
+      },
+      "light_execution\\long_e2e.log": {
+        "bytes": 14909,
+        "sha256": "f07125e326d4dabe1ec265e58c522bf1e5c1ced3f7e6f83a17a14c7fa6d01cb3"
+      },
+      "light_execution\\e2e\\batch_results.json": {
+        "bytes": 2446,
+        "sha256": "bc5e13e82368358095c4bcdb75b2ef1380b9b910890b57d494936da0e4351231"
+      },
+      "light_execution\\e2e\\L1_generation.log": {
+        "bytes": 18114,
+        "sha256": "f08e9f7766b3767f7ad948510540b94ab74a99c78acd3f8dd116b7fc5c04a7d2"
+      },
+      "light_execution\\e2e\\offline_bake.log": {
+        "bytes": 7792,
+        "sha256": "d6c0c2f005a36a1a91320a79e7838e545bc47e4c9ac7bf28d90c036fdfaf3e09"
+      },
+      "light_execution\\e2e\\offline_merge_receipt.json": {
+        "bytes": 77561,
+        "sha256": "84da4a93cbb4ceb80264e6d6eab6d4d5ec91f8e93a65f6daba8e4a71707b2263"
+      },
+      "light_execution\\e2e\\request_config.json": {
+        "bytes": 2963,
+        "sha256": "41a6221ab6d6d9d42f36a02727c175bf2be667509fb1faa49bb68f71c48b7f61"
+      },
+      "light_execution\\e2e\\L1\\audio.wav": {
+        "bytes": 1929644,
+        "sha256": "b85f5ab9d2250778f293b996e7723ea45a40eb904bceaa55b5f0975ce7caff4f"
+      },
+      "light_execution\\e2e\\L1\\decode_inputs.pt": {
+        "bytes": 18563733,
+        "sha256": "ab080385def4a8066805cad486a5ae9cf835fc5a53ae85e1f0b0172e9124c66c"
+      },
+      "light_execution\\e2e\\L1\\memory_samples.json.gz": {
+        "bytes": 158675,
+        "sha256": "896e6734341c3dcb305687722c3f1c04ce358d0e197ce44ee0519e50cdc0e066"
+      },
+      "light_execution\\e2e\\L1\\result.json": {
+        "bytes": 800481,
+        "sha256": "88169214d192d2965684bc0d7ad8abdc6fe34e728e5c064bbfbd203527166814"
+      },
+      "light_execution\\e2e\\L1\\video.mp4": {
+        "bytes": 11642577,
+        "sha256": "5dbbd3fe868e2b8cd28d1fcd6647ab829e0b878e9889fcd2579589db68396089"
+      },
+      "light_execution_supervision\\bounded_worker.py": {
+        "bytes": 667,
+        "sha256": "9a03aa95e68fd75cb1ac7ea4f05b438ede6ccb48cf28b253ca7a0c53a883f8ae"
+      },
+      "light_execution_supervision\\notebook_worker.log": {
+        "bytes": 14960,
+        "sha256": "8bda31732ffed7080eef4eadf49f7b77bbfd0b96c0381d982c4407e41c28a7cf"
+      },
+      "light_execution_supervision\\supervision.json": {
+        "bytes": 206,
+        "sha256": "b16504dcb8522fa8ae975980ce8b8a5363d4efdd0690000cd266754384270203"
+      },
+      "light_setup\\api_probe.log": {
+        "bytes": 1420,
+        "sha256": "16401c525113952b9f12881dd4803be748019d8aa892a98da31d95f79f04a26d"
+      },
+      "light_setup\\bounded_worker.py": {
+        "bytes": 2172,
+        "sha256": "56135368ece1bf178116a82c87c60cd6e9d8d34eeb6e6f82aafe1b47c6af38dc"
+      },
+      "light_setup\\cpu_qualification.json": {
+        "bytes": 36227,
+        "sha256": "50a1536a75552bb16e28299a5d49abd6a3b185474df44c8fca71d5b0a75fd1e5"
+      },
+      "light_setup\\delivery_binding.json": {
+        "bytes": 884,
+        "sha256": "4f4e02ece23cac19879a56e0f2dca6e305d7867130e6cdb5843ce36ace07ee37"
+      },
+      "light_setup\\direct-core.txt": {
+        "bytes": 5811,
+        "sha256": "f67dca5cc9543d06bcca19426bda0914306d6e143f8712037e84ee54f30e8eee"
+      },
+      "light_setup\\direct_pip.log": {
+        "bytes": 20141,
+        "sha256": "ae155fff6a3baf419114102542a97bbb9be8bfd02e89772d9f6a8af722af3f54"
+      },
+      "light_setup\\execution_env.json": {
+        "bytes": 449,
+        "sha256": "53f8cbaa42b4a30ef25583746477a1d1570f37b3f30affd13d09ffcec0dd7911"
+      },
+      "light_setup\\notebook_worker.log": {
+        "bytes": 211,
+        "sha256": "a236037b442479f19c7968c83a44398e1f9c04babd0ba7e40eb7071543ebf739"
+      },
+      "light_setup\\runtime_profile.json": {
+        "bytes": 27836,
+        "sha256": "aa74f4220d2f9abd161ad5fa726f0043987ae3fac2eb49593563c2f153d18948"
+      },
+      "light_setup\\setup_receipt.json": {
+        "bytes": 42769,
+        "sha256": "45d3656832c1a0226ca81ef3352c87da67359e156aed914a7717dae12044bc4d"
+      },
+      "light_setup\\supervision.json": {
+        "bytes": 207,
+        "sha256": "864fa389e79dda4552a909a6d237f4ecdeac8aa9352ab4124078939cdd0f72b2"
+      }
+    },
+    "limitations": [
+      "One cold E2E run; no repeated warmed throughput or latency benchmark",
+      "Video parallel admission declined; native fallback completed",
+      "Worker allocated/reserved peaks differ from sampled device-wide NVML memory",
+      "Finite summaries do not establish internal range safety at every operation or generation quality",
+      "No dense Native paired generation and no Nsight capture in this retry"
+    ]
+  }
+}

@@ -62,7 +62,7 @@ def main():
         if any(state[k]!=0 for k in ('reserved_bytes','preparing','pending_preparation_bytes')):
             raise RuntimeError('Host lease leaked')
         if capture=='kineto':
-            subprocess.run([sys.executable,str(root/'analyze_te_path.py'),str(folder)],check=True,timeout=300)
+            subprocess.run([sys.executable,str(root/'tools/experiments/analyze_te_path.py'),str(folder)],check=True,timeout=300)
             # Preserve complete trace evidence compressed; never generate tensor dumps.
             import gzip,hashlib
             receipts=[]

@@ -1,0 +1,515 @@
+{
+  "date": "2026-10-23",
+  "status": "physical_t4_profile_completed_fc1_plan_proposed",
+  "request": "Memory profile of current DiT at 51220 tokens before FC1 optimization plan",
+  "production_changes": false,
+  "candidate_experiments_paused": true,
+  "observer_selftest": {
+    "scope": "Local SM120 small observer self-test only, not target memory evidence",
+    "byte_exact": true,
+    "does_not_retain_tensor": true,
+    "timestamped_allocator_events": 63,
+    "unknown_free_events": 0
+  },
+  "cpu_storage_inventory": {
+    "scope": "CPU storage inventory only; not measured GPU lifetimes or T4 profile",
+    "source_bytes": 20970379616,
+    "auxiliary_modules": {
+      "video_patch_proj": 2085888,
+      "audio_patch_proj": 709632,
+      "condition_proj": 110121984,
+      "rope": 64,
+      "token_refiner": 3082923008,
+      "blocks": 0,
+      "final_layer": 3161600
+    },
+    "prepared_aux_total_bytes": 3199034976,
+    "auxiliary_bytes_by_dtype": {
+      "torch.float32": 3199034976
+    },
+    "rank0_block0_bytes": 196346880,
+    "rank0_block0_modules": {
+      "norm1": 21504,
+      "norm2": 21504,
+      "q_norm": 512,
+      "k_norm": 512,
+      "adaln_proj": 3483648,
+      "qkv_proj": 57845760,
+      "out_proj": 19289088,
+      "fc1": 77127680,
+      "fc2": 38556672
+    }
+  },
+  "source_sha256": {
+    "benchmarks/dit_memory_lines.py": "cd660c80399ec67a70fa81a68f90c7d45c49c882216d2942e7de947ac1a74dc2",
+    "benchmarks/run_dit_memory_51220.py": "80d89f426ab2d57b52e45e7716fa9d6b0614caff7e26887188683c1c4d69def8",
+    "benchmarks/analyze_dit_memory_lifetimes.py": "0a6434b88aec23eb2cdeb2928ec68d3b20755cec8eeec9c40d614022e2d0e9cd",
+    "benchmarks/test_dit_memory_lifetimes.py": "89c2bad098bb0c7c5b25a032fab6f97f8f0c965454d725a453a0ab05ffc75e36"
+  },
+  "profiler_limits": [
+    "One DiT NFE only: no TE/VAE/sampler/full generation",
+    "Synthetic inputs with exact failed-L1 shapes and PackedLayout; original 51220 activation payload was not retained",
+    "Original trained base checkpoint, no online/offline LoRA; not the exact failed offline-baked model trajectory",
+    "No source/dependency upgrades",
+    "Crash-safe prefix snapshots preserve continuous allocator history; incomplete peer traces remain explicitly labelled"
+  ],
+  "kaggle_status_polling": false,
+  "cpu_submission_v1": {
+    "kernel": "pamcks/h3-dit-memory-cpu",
+    "version": 1,
+    "returncode": 0,
+    "response": "Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.4), please consider upgrading to the latest version (2.2.5)\nKernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/pamcks/h3-dit-memory-cpu\n",
+    "submitted_utc": "2026-10-23T02:19:30.582280+00:00",
+    "notebook_sha256": "445443c191442887d0308d6c35b5821775f5b513c1df93121c80c25ec25e5d3f",
+    "source_binding": {
+      "mode": "cpu",
+      "publication": {
+        "file": "44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+        "sha256": "44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8",
+        "bytes": 12884750,
+        "capsule_sha256": "8d2f34c6d22a41205a023ab06f7b72e81a4f879f6526c8f948d66b2e2947734a",
+        "source_files": 99,
+        "core_pins": 78,
+        "kaggle_mounts": 0,
+        "repository": "chinokikiss/minimax-h3-2xt4",
+        "branch": "codex/kaggle-light-delivery-20261022-44072cef",
+        "commit": "a203a8074dece58be92b3d812362ff5f75cf6579",
+        "path": "runtime/kaggle_artifacts/44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+        "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/a203a8074dece58be92b3d812362ff5f75cf6579/runtime/kaggle_artifacts/44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+        "published": true,
+        "working_tree_and_index_changed": false
+      },
+      "qualification_sha256": null,
+      "kaggle_dataset_sources": [],
+      "kaggle_kernel_sources": [],
+      "temporary_private_auth": false,
+      "profile_hashes": {
+        "run_dit_memory_51220.py": "6f750d90578b08729d90df420cf811e8ba8ea971a508c8b9ddd29d086451a038",
+        "dit_memory_lines.py": "1481eee52a7a4f4d574ae807c672979b9fcdbaf6b25515b3def5dd5e59e4d0bd"
+      },
+      "setup_budget": 360,
+      "profile_qualification_sha256": null
+    },
+    "cpu_only": true
+  },
+  "cpu_v1_failure": "Frozen runtime 23 tests passed; profiler analyzer missing from bundle",
+  "cpu_submission_v2": {
+    "kernel": "pamcks/h3-dit-memory-cpu",
+    "version": 2,
+    "submitted_utc": "2026-10-23T02:32:09.911394+00:00",
+    "returncode": 0,
+    "response": "Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.4), please consider upgrading to the latest version (2.2.5)\nKernel version 2 successfully pushed.  Please check progress at https://www.kaggle.com/code/pamcks/h3-dit-memory-cpu\n",
+    "notebook_sha256": "7103da851e5cd09a46704e756846171e72278bd5f05a1a55873d6947c6a72dd8",
+    "source_binding": {
+      "mode": "cpu",
+      "publication": {
+        "file": "44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+        "sha256": "44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8",
+        "bytes": 12884750,
+        "capsule_sha256": "8d2f34c6d22a41205a023ab06f7b72e81a4f879f6526c8f948d66b2e2947734a",
+        "source_files": 99,
+        "core_pins": 78,
+        "kaggle_mounts": 0,
+        "repository": "chinokikiss/minimax-h3-2xt4",
+        "branch": "codex/kaggle-light-delivery-20261022-44072cef",
+        "commit": "a203a8074dece58be92b3d812362ff5f75cf6579",
+        "path": "runtime/kaggle_artifacts/44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+        "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/a203a8074dece58be92b3d812362ff5f75cf6579/runtime/kaggle_artifacts/44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+        "published": true,
+        "working_tree_and_index_changed": false
+      },
+      "qualification_sha256": null,
+      "kaggle_dataset_sources": [],
+      "kaggle_kernel_sources": [],
+      "temporary_private_auth": false,
+      "profile_hashes": {
+        "run_dit_memory_51220.py": "80d89f426ab2d57b52e45e7716fa9d6b0614caff7e26887188683c1c4d69def8",
+        "dit_memory_lines.py": "cd660c80399ec67a70fa81a68f90c7d45c49c882216d2942e7de947ac1a74dc2",
+        "analyze_gpu_memory_overhead.py": "2a6c487efe1d4e908119ebaf3a6c03c7d42611a710d90672ae180fe01bb9e8cf"
+      },
+      "setup_budget": 240,
+      "profile_qualification_sha256": null
+    },
+    "reason": "Include missing existing analyzer; continuous OOM-safe snapshots; no runtime/core changes"
+  },
+  "continuous_snapshot_selftest": {
+    "continuous_history": true,
+    "observer_retains_no_tensor": true,
+    "prefix_events": 2,
+    "final_events": 8,
+    "scope": "Small local SM120 checkpoint observer self-test only"
+  },
+  "offline_analyzer_tests_passed": 5,
+  "cpu_gate": {
+    "status": "passed",
+    "kernel": "pamcks/h3-dit-memory-cpu",
+    "version": 2,
+    "runtime_tests": 23,
+    "profiler_tests": 3,
+    "setup_seconds": 108.81164191199997,
+    "download_manifest_sha256": "e3ad716911af3ec599f0b3e2ad036c5bb3d9a475b42aa46a7f154cfe381a7d12",
+    "qualification": {
+      "status": "profile_cpu_ready",
+      "tests": [
+        "native_51220_layout",
+        "line_observer_retains_no_tensor",
+        "collector_analyzer_and_all_phase_helpers_import"
+      ],
+      "cuda_allocation": false,
+      "driver_sha256": "80d89f426ab2d57b52e45e7716fa9d6b0614caff7e26887188683c1c4d69def8",
+      "line_observer_sha256": "cd660c80399ec67a70fa81a68f90c7d45c49c882216d2942e7de947ac1a74dc2",
+      "analyzer_sha256": "2a6c487efe1d4e908119ebaf3a6c03c7d42611a710d90672ae180fe01bb9e8cf"
+    }
+  },
+  "gpu_submission": {
+    "kernel": "pamcks/h3-dit-memory-51220",
+    "version": 1,
+    "submitted_utc": "2026-10-23T02:40:27.911836+00:00",
+    "returncode": 0,
+    "response": "Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.4), please consider upgrading to the latest version (2.2.5)\nKernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/pamcks/h3-dit-memory-51220\n",
+    "notebook_sha256": "acef07edb153e056ca0569638987d8d0851145a2d8641c318dd100263d7e3f35",
+    "source_binding": {
+      "mode": "dit-memory",
+      "publication": {
+        "file": "44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+        "sha256": "44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8",
+        "bytes": 12884750,
+        "capsule_sha256": "8d2f34c6d22a41205a023ab06f7b72e81a4f879f6526c8f948d66b2e2947734a",
+        "source_files": 99,
+        "core_pins": 78,
+        "kaggle_mounts": 0,
+        "repository": "chinokikiss/minimax-h3-2xt4",
+        "branch": "codex/kaggle-light-delivery-20261022-44072cef",
+        "commit": "a203a8074dece58be92b3d812362ff5f75cf6579",
+        "path": "runtime/kaggle_artifacts/44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+        "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/a203a8074dece58be92b3d812362ff5f75cf6579/runtime/kaggle_artifacts/44072cef35d063a90427fa5ae02fb1959a451e8351193fe40a091151878539d8.tar.gz",
+        "published": true,
+        "working_tree_and_index_changed": false
+      },
+      "qualification_sha256": "5730f3a5b313f7be77a08adc234b00059de4aefe2a38da4862f5acd94681f12b",
+      "kaggle_dataset_sources": [],
+      "kaggle_kernel_sources": [],
+      "temporary_private_auth": false,
+      "profile_hashes": {
+        "run_dit_memory_51220.py": "80d89f426ab2d57b52e45e7716fa9d6b0614caff7e26887188683c1c4d69def8",
+        "dit_memory_lines.py": "cd660c80399ec67a70fa81a68f90c7d45c49c882216d2942e7de947ac1a74dc2",
+        "analyze_gpu_memory_overhead.py": "2a6c487efe1d4e908119ebaf3a6c03c7d42611a710d90672ae180fe01bb9e8cf"
+      },
+      "setup_budget": 240,
+      "execution_budget": 600,
+      "profile_qualification_sha256": "4929dddb3a2f88da833c35fec91085f50f870dbff386d16e6749dfe65dc75e50"
+    },
+    "cli_limit_seconds": 900,
+    "scope": "One DiT-only NFE memory profile at 51220 tokens; no optimizer, TE, VAE, sampler or full pipeline"
+  },
+  "result": {
+    "status": "profile_completed",
+    "hardware": [
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "8583bf48-74e5-2e0a-f549-7991b1615728"
+      },
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "99987475-83ee-02d5-b2e5-b8921487339f"
+      }
+    ],
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "input_scope": "Seeded synthetic; exact failed-L1 tensor shapes/packing, not captured real activations",
+    "weight_scope": "Original trained base INT8 ConvRot; no online/offline LoRA in this diagnostic",
+    "stages": {
+      "immutable_checkpoint_download": {
+        "status": "complete",
+        "seconds": 149.11809527599996
+      },
+      "service_start": {
+        "status": "complete",
+        "seconds": 5.796693946999994
+      },
+      "refiner": {
+        "status": "complete",
+        "seconds": 11.29378370500001
+      },
+      "dit_51220": {
+        "status": "complete",
+        "seconds": 296.413602987
+      }
+    },
+    "download_manifest_sha256": "b2f8a50510dbf3ee6b6af8ea7b0b90688273aefc618417d327dbd269ba176cd0",
+    "raw_history_complete": true,
+    "rank_results": [
+      {
+        "rank": 0,
+        "allocator_peak_bytes": 13341659648,
+        "reserved_peak_bytes": 15265169408,
+        "requested_replay_peak_bytes": 13305347650,
+        "allocation_history_events": 39356,
+        "unknown_free_events": 0,
+        "missing_timestamps": 0,
+        "history_limit_reached": false,
+        "verbose_marker_cap_reached": true,
+        "verified_checkpoint_markers": 6,
+        "qkv_outputs": 50,
+        "fc1_outputs": 50,
+        "snapshots": [
+          {
+            "block": 0,
+            "cat_requested_live_bytes": 11794105922,
+            "category_bytes": {
+              "resident_weights": 3397430272,
+              "preexisting_unclassified": 9568256,
+              "model_auxiliary": 3195904,
+              "activation_or_temporary": 8383911490
+            },
+            "qkv_released_before_fc1": true,
+            "qkv_cuda_reusable_before_fc1": true,
+            "refiner_weight_bytes": 3193044992,
+            "registered_weight_groups": {
+              "('dit_refine', 0)": 3193044992,
+              "('dit_project', 0)": 2795520,
+              "('dit', 0, 0)": 196346880,
+              "model_auxiliary": 3194464
+            }
+          },
+          {
+            "block": 24,
+            "cat_requested_live_bytes": 11734572610,
+            "category_bytes": {
+              "preexisting_unclassified": 9568256,
+              "model_auxiliary": 3195904,
+              "activation_or_temporary": 8383911490,
+              "resident_weights": 3337896960
+            },
+            "qkv_released_before_fc1": true,
+            "qkv_cuda_reusable_before_fc1": true,
+            "refiner_weight_bytes": 0,
+            "registered_weight_groups": {
+              "('dit', 8, 0)": 196346880,
+              "('dit', 9, 0)": 196346880,
+              "('dit', 10, 0)": 196346880,
+              "('dit', 11, 0)": 196346880,
+              "('dit', 12, 0)": 196346880,
+              "('dit', 13, 0)": 196346880,
+              "('dit', 14, 0)": 196346880,
+              "('dit', 15, 0)": 196346880,
+              "('dit', 16, 0)": 196346880,
+              "('dit', 17, 0)": 196346880,
+              "('dit', 18, 0)": 196346880,
+              "('dit', 19, 0)": 196346880,
+              "('dit', 20, 0)": 196346880,
+              "('dit', 21, 0)": 196346880,
+              "('dit', 22, 0)": 196346880,
+              "('dit', 23, 0)": 196346880,
+              "('dit', 24, 0)": 196346880,
+              "model_auxiliary": 3194464
+            }
+          },
+          {
+            "block": 49,
+            "cat_requested_live_bytes": 11734572610,
+            "category_bytes": {
+              "preexisting_unclassified": 9568256,
+              "model_auxiliary": 3195904,
+              "activation_or_temporary": 8383911490,
+              "resident_weights": 3337896960
+            },
+            "qkv_released_before_fc1": true,
+            "qkv_cuda_reusable_before_fc1": true,
+            "refiner_weight_bytes": 0,
+            "registered_weight_groups": {
+              "('dit', 33, 0)": 196346880,
+              "('dit', 34, 0)": 196346880,
+              "('dit', 35, 0)": 196346880,
+              "('dit', 36, 0)": 196346880,
+              "('dit', 37, 0)": 196346880,
+              "('dit', 38, 0)": 196346880,
+              "('dit', 39, 0)": 196346880,
+              "('dit', 40, 0)": 196346880,
+              "('dit', 41, 0)": 196346880,
+              "('dit', 42, 0)": 196346880,
+              "('dit', 43, 0)": 196346880,
+              "('dit', 44, 0)": 196346880,
+              "('dit', 45, 0)": 196346880,
+              "('dit', 46, 0)": 196346880,
+              "('dit', 47, 0)": 196346880,
+              "('dit', 48, 0)": 196346880,
+              "('dit', 49, 0)": 196346880,
+              "model_auxiliary": 3194464
+            }
+          }
+        ]
+      },
+      {
+        "rank": 1,
+        "allocator_peak_bytes": 13343480320,
+        "reserved_peak_bytes": 15370027008,
+        "requested_replay_peak_bytes": 13305347650,
+        "allocation_history_events": 38884,
+        "unknown_free_events": 0,
+        "missing_timestamps": 0,
+        "history_limit_reached": false,
+        "verbose_marker_cap_reached": true,
+        "verified_checkpoint_markers": 6,
+        "qkv_outputs": 50,
+        "fc1_outputs": 50,
+        "snapshots": [
+          {
+            "block": 0,
+            "cat_requested_live_bytes": 8593022530,
+            "category_bytes": {
+              "model_auxiliary": 3195904,
+              "activation_or_temporary": 8393479746,
+              "resident_weights": 196346880
+            },
+            "qkv_released_before_fc1": true,
+            "qkv_cuda_reusable_before_fc1": true,
+            "refiner_weight_bytes": 0,
+            "registered_weight_groups": {
+              "('dit', 0, 1)": 196346880,
+              "model_auxiliary": 3194464
+            }
+          },
+          {
+            "block": 24,
+            "cat_requested_live_bytes": 13305347650,
+            "category_bytes": {
+              "model_auxiliary": 3195904,
+              "activation_or_temporary": 8393479746,
+              "resident_weights": 4908672000
+            },
+            "qkv_released_before_fc1": true,
+            "qkv_cuda_reusable_before_fc1": true,
+            "refiner_weight_bytes": 0,
+            "registered_weight_groups": {
+              "('dit', 0, 1)": 196346880,
+              "('dit', 1, 1)": 196346880,
+              "('dit', 2, 1)": 196346880,
+              "('dit', 3, 1)": 196346880,
+              "('dit', 4, 1)": 196346880,
+              "('dit', 5, 1)": 196346880,
+              "('dit', 6, 1)": 196346880,
+              "('dit', 7, 1)": 196346880,
+              "('dit', 8, 1)": 196346880,
+              "('dit', 9, 1)": 196346880,
+              "('dit', 10, 1)": 196346880,
+              "('dit', 11, 1)": 196346880,
+              "('dit', 12, 1)": 196346880,
+              "('dit', 13, 1)": 196346880,
+              "('dit', 14, 1)": 196346880,
+              "('dit', 15, 1)": 196346880,
+              "('dit', 16, 1)": 196346880,
+              "('dit', 17, 1)": 196346880,
+              "('dit', 18, 1)": 196346880,
+              "('dit', 19, 1)": 196346880,
+              "('dit', 20, 1)": 196346880,
+              "('dit', 21, 1)": 196346880,
+              "('dit', 22, 1)": 196346880,
+              "('dit', 23, 1)": 196346880,
+              "('dit', 24, 1)": 196346880,
+              "model_auxiliary": 3194464
+            }
+          },
+          {
+            "block": 49,
+            "cat_requested_live_bytes": 13305347650,
+            "category_bytes": {
+              "model_auxiliary": 3195904,
+              "activation_or_temporary": 8393479746,
+              "resident_weights": 4908672000
+            },
+            "qkv_released_before_fc1": true,
+            "qkv_cuda_reusable_before_fc1": true,
+            "refiner_weight_bytes": 0,
+            "registered_weight_groups": {
+              "('dit', 25, 1)": 196346880,
+              "('dit', 26, 1)": 196346880,
+              "('dit', 27, 1)": 196346880,
+              "('dit', 28, 1)": 196346880,
+              "('dit', 29, 1)": 196346880,
+              "('dit', 30, 1)": 196346880,
+              "('dit', 31, 1)": 196346880,
+              "('dit', 32, 1)": 196346880,
+              "('dit', 33, 1)": 196346880,
+              "('dit', 34, 1)": 196346880,
+              "('dit', 35, 1)": 196346880,
+              "('dit', 36, 1)": 196346880,
+              "('dit', 37, 1)": 196346880,
+              "('dit', 38, 1)": 196346880,
+              "('dit', 39, 1)": 196346880,
+              "('dit', 40, 1)": 196346880,
+              "('dit', 41, 1)": 196346880,
+              "('dit', 42, 1)": 196346880,
+              "('dit', 43, 1)": 196346880,
+              "('dit', 44, 1)": 196346880,
+              "('dit', 45, 1)": 196346880,
+              "('dit', 46, 1)": 196346880,
+              "('dit', 47, 1)": 196346880,
+              "('dit', 48, 1)": 196346880,
+              "('dit', 49, 1)": 196346880,
+              "model_auxiliary": 3194464
+            }
+          }
+        ]
+      }
+    ],
+    "fc1_component_bytes": {
+      "Rotated FP16 input": 550717440,
+      "Small FC1 scale buffers": 204880,
+      "INT8 activation codes": 275358720,
+      "Padded INT32 accumulator": 2937847808,
+      "FP16 scaled chunk list": 1468579840,
+      "Last FP32 result chunk": 252887040,
+      "Last FP32 scale matrix": 252887040,
+      "Contiguous FP16 output": 1468579840
+    },
+    "candidate_changes": false,
+    "fc1_internal_live_bytes": 7207062608,
+    "representative_rank": 1,
+    "representative_block": 24,
+    "representative_total_requested_bytes": 13305347650,
+    "phase_requested_peaks": {
+      "Norm/residual outside projection scopes": 11577174514,
+      "QKV": 11441954370,
+      "RoPE": 11461223922,
+      "Attention": 10201312754,
+      "AttentionO": 10871374402,
+      "AttentionO/FC2_global_quantizer": 10320656962,
+      "AttentionO/FC2_global_quantizer/row_global_quantizer": 11972604402,
+      "FC1": 13305347650,
+      "FC2": 8852282002
+    },
+    "attribution_limits": [
+      "Verbose line markers capped during block 37; complete allocation/free history continues through all 50 blocks.",
+      "Layer numbering of 50 FC1/QKV outputs derives from exact output sizes, eager cat call stacks and execution order; snapshots validate blocks 0/24/49.",
+      "Requested-byte replay differs from allocator counters because rounded/reused allocation blocks include additional slack.",
+      "Timing includes tracing and snapshot export; no latency speedup or real E2E success is established."
+    ]
+  },
+  "optimization_implemented": false,
+  "analysis_sources_sha256": {
+    "analyze_dit_memory_lifetimes.py": "0a6434b88aec23eb2cdeb2928ec68d3b20755cec8eeec9c40d614022e2d0e9cd",
+    "summarize_dit_memory_profile.py": "cc7805b17d71615cd10bf8bb64efce3c0026e1bc13297b6201dbc44142db4dc0",
+    "test_dit_memory_lifetimes.py": "89c2bad098bb0c7c5b25a032fab6f97f8f0c965454d725a453a0ab05ffc75e36"
+  },
+  "asset_sha256": {
+    "fc1_lifetime_order.png": "5c32e9cb63d41a4d5b0ddc55f354c4a6b4557857cd616bfe52db2145fa4b1944",
+    "fc1_lifetime_order.svg": "f3d547968cb116e8a57fe44b728ae461c4973d5ff1b898949ab548915f67b655",
+    "fc1_memory_breakdown.png": "098ce55b05cb6f17f9115741add9a17215f54fca2810812d1d5196c68e2d0cdd",
+    "fc1_memory_breakdown.svg": "7fae43bf4573c811314b43f06351ba4f09b05316344564e9b7ac7c120a9edfb4"
+  },
+  "report_sha256": "a3bbc11422c7ecc3d1722878149201625a4803cefcf1d2b56016a46f65c8ac45",
+  "production_source_recheck": {
+    "matched_files": 59,
+    "capsule_sha256": "8d2f34c6d22a41205a023ab06f7b72e81a4f879f6526c8f948d66b2e2947734a",
+    "changed_files": 0
+  }
+}

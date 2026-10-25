@@ -1,0 +1,89 @@
+{
+  "status": "passed",
+  "device": {
+    "name": "NVIDIA GeForce RTX 5060 Ti",
+    "capability": [
+      12,
+      0
+    ]
+  },
+  "torch": "2.12.1+cu132",
+  "kitchen": "0.2.37",
+  "tilelang": "0.1.13",
+  "scope": "Operator memory/equality screen only; no H3 pipeline or quality acceptance",
+  "t4_qualified": false,
+  "requested_backend": "eager",
+  "cuda_extension_available": true,
+  "kitchen_cublaslt_available": true,
+  "shape": [
+    51220,
+    5376,
+    14336
+  ],
+  "input_template_sha256": "ecec1dd4cb1146f9511dd023db2ceb1092290947c6f11593fc3bdbcc340f37bb",
+  "weight_fixture_sha256": "3ad0d421c987cff18ed41dbb8fd090042fc10877a1ddf92a2352678ae28e1ff5",
+  "input_scope": "RMS-normalized retained first-block input, repeated rows; not actual long-trajectory FC1 input",
+  "row_chunk": 4096,
+  "fp16_output_bytes": 1468579840,
+  "full_int32_result_bytes": 2937159680,
+  "bounded_int32_result_bytes": 234881024,
+  "selected_backend": "eager",
+  "baseline": {
+    "first_call_seconds": 0.34220060000006924,
+    "warmups": 2,
+    "samples_ms": [
+      139.4655000003695,
+      151.87069999956293,
+      151.44529999997758
+    ],
+    "median_ms": 151.44529999997758,
+    "peak_increment_bytes": [
+      7208199680,
+      7208199680,
+      7208199680
+    ]
+  },
+  "bounded": {
+    "first_call_seconds": 0.21057230000042182,
+    "warmups": 2,
+    "samples_ms": [
+      176.30540000027395,
+      167.38859999895794,
+      177.44710000079067
+    ],
+    "median_ms": 176.30540000027395,
+    "peak_increment_bytes": [
+      2592669696,
+      2592669696,
+      2592669696
+    ],
+    "unequal_values": 0,
+    "nonfinite_values": 0
+  },
+  "preallocated_eager": {
+    "first_call_seconds": 0.1888455000007525,
+    "warmups": 2,
+    "samples_ms": [
+      134.87069999973755,
+      143.14229999945383,
+      139.0758999987156
+    ],
+    "median_ms": 139.0758999987156,
+    "peak_increment_bytes": [
+      5212176896,
+      5212176896,
+      5212176896
+    ],
+    "unequal_values": 0,
+    "nonfinite_values": 0
+  },
+  "local_tests_passed": 3,
+  "production_defaults_changed": false,
+  "submitted_operator_v3_modified": false,
+  "source_sha256": {
+    "benchmarks/bounded_column_int8.py": "7695d2d1fdb9ed18eec35b62e9b2944a24ecd8f6fe066fb7d6d33ff8d02e05c8",
+    "benchmarks/preview_bounded_column.py": "82fd4a6798cda980063e7bb19dffafba5cc55f0af74928fed2fa14c8c83d30f9",
+    "benchmarks/test_bounded_column_int8.py": "ff2a742dbae5ca065ff1edaa8465559f142fce8b7f1a6073ea7199cdf4f45891"
+  },
+  "timing_limitations": "Non-interleaved exploratory local screen, two warmups and three samples; no T4 latency or speedup qualification"
+}

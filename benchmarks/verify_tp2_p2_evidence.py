@@ -71,7 +71,7 @@ def main():
             assert row['unattributed']==0;attributed+=1
     assert attributed==len(traces)
     source_names=['patches/tilelang_transport_p2.py','patches/tilelang_attention_p2.py',
-        'build_tp2_p2_job.py','build_tp2_p2_ncu_probe.py']
+        'tools/experiments/build_tp2_p2_job.py','tools/experiments/build_tp2_p2_ncu_probe.py']
     source_names += [str(p.relative_to(ROOT)).replace('\\','/') for p in (ROOT/'benchmarks').glob('*tp2_p2*.py')]
     for name in source_names:
         path=ROOT/name;files[str(path)]=dict(bytes=path.stat().st_size,sha256=sha(path))

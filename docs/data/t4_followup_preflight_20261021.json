@@ -1,0 +1,86 @@
+{
+  "date": "2026-10-21",
+  "status": "blocked_before_t4_submission",
+  "account": "pamcks",
+  "cpu_jobs_submitted": 2,
+  "t4_jobs_submitted": 0,
+  "full_h3_runs": 0,
+  "package_installation_reached": false,
+  "polling_policy": "No further status/list/live-log polling; one final version-bound output collection per batch",
+  "frozen_versions": {
+    "torch": "2.12.1+cu132",
+    "tilelang": "0.1.13",
+    "comfy_kitchen": "0.2.37"
+  },
+  "actual_resolver_conflict": {
+    "package": "nvidia-cublas",
+    "frozen": "13.6.0.2",
+    "required": "==13.4.0.1.*",
+    "result": "ResolutionImpossible"
+  },
+  "metadata_proven_constraint_conflicts": [
+    {
+      "package": "nvidia-cublas",
+      "frozen_version": "13.6.0.2",
+      "proposed_linux_version": "13.4.0.1",
+      "linux_required": "==13.4.0.1.*"
+    },
+    {
+      "package": "nvidia-cuda-nvrtc",
+      "frozen_version": "13.3.33",
+      "proposed_linux_version": "13.2.78",
+      "linux_required": "==13.2.78.*"
+    },
+    {
+      "package": "nvidia-cuda-runtime",
+      "frozen_version": "13.3.29",
+      "proposed_linux_version": "13.2.75",
+      "linux_required": "==13.2.75.*"
+    },
+    {
+      "package": "nvidia-curand",
+      "frozen_version": "10.4.3.29",
+      "proposed_linux_version": "10.4.2.55",
+      "linux_required": "==10.4.2.55.*"
+    }
+  ],
+  "proposal_status": "Not applied; explicit Linux-only version exception needed",
+  "pending_validation_dimensions": [
+    "T01",
+    "T02",
+    "T03",
+    "T04",
+    "T05",
+    "T06",
+    "T07",
+    "T08",
+    "T09"
+  ],
+  "evidence": {
+    "kernel": "pamcks/h3-frozen-linux-cpu-candidate",
+    "requested_version": "1",
+    "files": [
+      {
+        "file": "linux_candidate/candidate_receipt.json",
+        "bytes": 3267,
+        "sha256": "bad4de17f873d66564475658a0d4807bf4ed6231c002b187679e69ada78e7095"
+      },
+      {
+        "file": "linux_candidate/prepare.log",
+        "bytes": 3755,
+        "sha256": "fc78473591a5652324f76563d835579268313fbc6d9cb585854459d9139f8780"
+      },
+      {
+        "file": "linux_candidate/resolution.log",
+        "bytes": 25115,
+        "sha256": "ca0e88152a3062b2f6c8a19c71a8f68a2fb58005d21d45f20b491d7015de1e59"
+      }
+    ]
+  },
+  "local_fixture_manifest": "D:\\attention_eval\\t4_followup_20261021\\component_fixtures\\fixture_manifest.json",
+  "new_regression_tests": {
+    "passed": 7,
+    "scope": "Local CPU contract tests; no T4 evidence"
+  },
+  "production_changes_this_attempt": false
+}

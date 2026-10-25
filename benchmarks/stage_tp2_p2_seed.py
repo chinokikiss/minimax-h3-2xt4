@@ -9,7 +9,7 @@ import os
 from pathlib import Path
 import sys
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
-from build_h3_reduction_job import plan
+from tools.experiments.build_h3_reduction_job import plan
 
 OUT=Path('D:/attention_eval/tp2_p2_20261018');dst=OUT/'seed_dataset';dst.mkdir(exist_ok=True)
 source=OUT/'real_transport_dataset/fc1_seed.pt';target=dst/source.name

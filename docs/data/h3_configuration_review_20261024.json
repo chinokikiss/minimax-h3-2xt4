@@ -1,0 +1,664 @@
+{
+  "date": "2026-10-24",
+  "status": "supported_defaults_promoted_cpu_contracts_passed",
+  "recommendation_not_runtime_default_change": false,
+  "report": "C:\\Users\\Administrator\\Documents\\project\\2xT4 minimax h3\\docs\\reports\\H3_CONFIGURATION_REVIEW_20261024.md",
+  "table_entries": [
+    "lora_mode",
+    "bundle_offline_lora",
+    "lora_row_partial_reduce",
+    "selective_b",
+    "lora_selective_qkv_b",
+    "lora_concat_a",
+    "te_attention",
+    "dit_attention",
+    "scalar_score_workspace_mib",
+    "row_linear_backend",
+    "fc2_quantizer",
+    "swiglu_padding",
+    "column_linear_backend",
+    "swiglu_reduction",
+    "tp_quantization",
+    "tensor_flow",
+    "residual_exponent",
+    "vision_residual_exponent",
+    "video_residual_exponent",
+    "gpu_weight_window_gib",
+    "ram_cache_per_rank_gib",
+    "pinned_bytes",
+    "host_bytes",
+    "dit_reserve_gib",
+    "video_decode_reserve_gib",
+    "te_weight_bytes",
+    "idle_weight_gib",
+    "idle_reserve_bytes",
+    "adaptive_lookahead",
+    "prefetch_lifecycle",
+    "idle_residency",
+    "idle_delay_seconds",
+    "memory_pressure_aware",
+    "cpu_lookahead",
+    "gpu_lookahead",
+    "cross_request_te",
+    "cross_model_cpu",
+    "layers",
+    "decode_te_blocks",
+    "command_timeout_seconds",
+    "rank_checkpoint_dir",
+    "checkpoint_read_chunk_mib",
+    "decode_mode",
+    "MiniMaxH3PostDecodePrefetch",
+    "launch_h3_legacy.py --preview",
+    "launch_h3_legacy.py --isolated-ui",
+    "launch_h3_legacy.py --check",
+    "launch_h3_legacy.py --comfy-root",
+    "CUDACXX",
+    "NCCL_P2P_DISABLE",
+    "NCCL_IB_DISABLE",
+    "NCCL_MIN_NCHANNELS",
+    "NCCL_PROTO",
+    "H3_RUNTIME_LOCK",
+    "te_loading.install(mode)"
+  ],
+  "table_entries_reviewed": 55,
+  "missing_entries": [],
+  "loader_options_without_model_paths_or_adapter_stack": {
+    "gpu_weight_window_gib": 6.0,
+    "ram_cache_per_rank_gib": 3.0,
+    "idle_residency": false,
+    "idle_weight_gib": 4.0,
+    "lora_row_partial_reduce": true,
+    "te_attention": "tilelang_group32",
+    "dit_attention": "kitchen",
+    "row_linear_backend": "tilelang_scaled_fp16",
+    "scalar_score_workspace_mib": 96,
+    "adaptive_lookahead": true,
+    "fc2_quantizer": "fused_stored",
+    "lora_mode": "offline",
+    "tensor_flow": "fp16",
+    "residual_exponent": 6,
+    "vision_residual_exponent": 0,
+    "video_residual_exponent": 0,
+    "video_decode_reserve_gib": 2.0,
+    "prefetch_lifecycle": true,
+    "memory_pressure_aware": true,
+    "dit_reserve_gib": 9.0,
+    "command_timeout_seconds": 1500,
+    "rank_checkpoint_dir": "",
+    "lora_selective_qkv_b": true,
+    "column_linear_backend": "cuda_int8_tilelang"
+  },
+  "runtime_template": {
+    "te_path": "USER_TE_TP2_DESCRIPTOR.json",
+    "dit_path": "USER_DIT_TP2_DESCRIPTOR.json",
+    "layers": 50,
+    "weight_bytes": 6442450944,
+    "pinned_bytes": 6442450944,
+    "cache_bytes": 3221225472,
+    "host_bytes": 17179869184,
+    "reserve_bytes": 9663676416,
+    "timeout_seconds": 1500,
+    "te_weight_bytes": null,
+    "cpu_lookahead": 16,
+    "gpu_lookahead": 2,
+    "cross_request_te": true,
+    "rank_checkpoint_dir": null,
+    "cross_model_cpu": true,
+    "prefetch_lifecycle": true,
+    "memory_pressure_aware": true,
+    "decode_te_blocks": 2,
+    "idle_residency": false,
+    "idle_weight_bytes": 4294967296,
+    "idle_reserve_bytes": 4294967296,
+    "idle_delay_seconds": 0.25,
+    "lora_stack": [],
+    "lora_signature": [],
+    "lora_row_partial_reduce": true,
+    "operators": {
+      "te_attention": "tilelang_group32",
+      "dit_attention": "kitchen",
+      "row_linear_backend": "tilelang_scaled_fp16",
+      "scalar_score_workspace_mib": 96,
+      "fc2_quantizer": "fused_stored",
+      "column_linear_backend": "cuda_int8_tilelang"
+    },
+    "adaptive_lookahead": true,
+    "tensor_flow": {
+      "mode": "fp16",
+      "residual_exponent": 6,
+      "vision_residual_exponent": 0,
+      "video_residual_exponent": 0
+    },
+    "video_decode_reserve_bytes": 2147483648,
+    "bundle_offline_lora": true,
+    "lora_selective_qkv_b": true
+  },
+  "conditions": {
+    "interactive": {
+      "idle_residency": true,
+      "idle_weight_gib": 4.0,
+      "note": "Requires useful idle time; integrated speedup not established"
+    },
+    "memory_pressure_fc2": {
+      "fc2_quantizer": "fused_recompute",
+      "note": "Only if stored buffer prevents admission"
+    },
+    "exact_transport": {
+      "row_linear_backend": "tilelang_packed",
+      "note": "Retains INT32 SUM; does not remove FP16/fused quantization approximations"
+    },
+    "strict_video": {
+      "decode_mode": "native",
+      "note": "Auto final projection changes GEMM row geometry"
+    },
+    "long_sequence": {
+      "lora_mode": "offline",
+      "bundle_offline_lora": "derived True for TP2 JSON descriptor",
+      "lora_selective_qkv_b": true,
+      "note": "Bounded CPU block merges, not a full baked checkpoint; online long-sequence tests and profiling retries cancelled by user; cold CPU cost remains. Online-only switches, including QKV B, are inactive offline."
+    },
+    "short_medium_online": {
+      "lora_mode": "online",
+      "lora_row_partial_reduce": true,
+      "lora_selective_qkv_b": true,
+      "bundle_offline_lora": false,
+      "tested_qkv_lora_rows": [
+        261,
+        4096
+      ],
+      "note": "Supported rank128 QKV guard only; tested rows are fixtures, not a universal admission threshold. Choose workload-specific reserve; 9 GiB is historical long-shape headroom. Guarded FC1 owned B is fixed on."
+    },
+    "column_fallback_controls": {
+      "preallocated": "Exact allocation fallback/control; used for unsupported devices/shapes",
+      "guard": "SM75, inference/eager, selected Kitchen eager implementation, DiT weights (10752,5376) or (14336,5376); public API retained for other backends/compiled/autograd calls",
+      "historical_benchmark_only": "tilelang_exact; no production selector"
+    }
+  },
+  "numerical_scope": "Native FP32 tensor flow reference retains original INT8 operators; no generation acceptance",
+  "deployment_scope": "Two SM75 T4 GPUs, approximately30GiB Linux host, current TP2 geometry",
+  "online_51220_request_vram_qualified": false,
+  "scheduling_selection": "Code/ownership plus version-bound prior T4 support; no current-pipeline measured optimum",
+  "scalar_score_workspace": [
+    {
+      "batch": 1,
+      "heads_per_rank": 28,
+      "tokens": 6814,
+      "padded_tokens": 6848,
+      "leaves": 107,
+      "bytes": 82066432,
+      "mib": 78.2646484375
+    },
+    {
+      "batch": 1,
+      "heads_per_rank": 28,
+      "tokens": 51220,
+      "padded_tokens": 51264,
+      "leaves": 801,
+      "bytes": 4598995968,
+      "mib": 4385.9443359375
+    }
+  ],
+  "scaled_nonfused_rotation_selector_probe": [
+    {
+      "mode": "native",
+      "argument_dtypes": [
+        "torch.float32",
+        "torch.int8",
+        "torch.float32",
+        "Mock",
+        "int",
+        "int",
+        "str"
+      ],
+      "kwargs": {
+        "swiglu_padding": true
+      }
+    },
+    {
+      "mode": "owned_fp32",
+      "argument_dtypes": [
+        "torch.float32",
+        "torch.int8",
+        "torch.float32",
+        "Mock",
+        "int",
+        "int",
+        "str"
+      ],
+      "kwargs": {
+        "swiglu_padding": true
+      }
+    }
+  ],
+  "source_sha256": {
+    "custom_nodes/minimax_h3_tp2/__init__.py": "0a1d83e6e890fdd7813b1256971068c76d1adf7cd5ea211453fa1b3ae466587f",
+    "custom_nodes/minimax_h3_tp2/web/loader_migration.js": "7e7cc326f9ca85a0205754381b2baca5db76d77e1317e49399e16b1475d356c0",
+    "patches/comfy_sampler.py": "dfa6740fed20c5cbd4f1025922d42993b5a39558e389e711d5d99bf4dacd99d2",
+    "patches/comfy_tp_runtime.py": "151d287ba4a0bcd79fc1514734655705384177fd5f1f20c23192fb84a11ff280",
+    "patches/dit_column_linear.py": "0f11be5ad4efcfc538295a5e473d5b76b4574eac06c4eae61035f416f45eb473",
+    "patches/h3_configuration.py": "2b98b22fe3d13ef4e391a58058632d457bbd1048bf6c09f30a278fdaadce169c",
+    "patches/h3_lora.py": "9e2689c1ba26a493f19060d0bbbf5e71c4df349a92862465684a42548c534ee2",
+    "patches/h3_operator_policy.py": "fdb6dbea7dd1c67e05771544884f5031cda1ea2adee29389ae6dd6f6375e4dd1",
+    "patches/h3_tensor_flow.py": "80272e276b10a9fa06f4accd6e62fa8ae373ebdb08a6edbc0615926f56145b07",
+    "patches/host_weight_cache.py": "cbc88510897162e95f21b2e2db019c5507331e4854d0443f6f0cda4f38f1181a",
+    "patches/optimized_tp.py": "db2512ecfe7ca643405d1f37087f23b0fbbeeb2c2f06cad7b5780b466272cdd5",
+    "patches/tilelang_transport_p2.py": "2ba3032848a83049bdaf419b7deb50e165e75a3d1fe0820851761bc15e9e89fd",
+    "patches/tp2_bundle.py": "772900be5cb1a471fbf600cea7053a4d5dca15f1ba670b3415046ab6d9df12f3",
+    "patches/tp_qwen3vl.py": "c877ebc93b68fe9a638ce47060f282b316f6a460693df2b40529e495938e398e",
+    "patches/weight_residency.py": "8421a6ab4f64ebd5a9957d2734beed14f765ba6691eb9c1a6232ce64b2eacb04",
+    "patches/windowed_tp.py": "af23b50b93e983f3166b6d9278383a8fe9e9c65a6e678a221056bb3299c9dc05"
+  },
+  "runtime_snapshot_sha256": "e3a07afb8cb79e6f45c9c0118debc4bd4008c022d2652e0891273dac2db07aa3",
+  "local_packages_checked": 94,
+  "core_versions": {
+    "comfy-kitchen": "0.2.37",
+    "tilelang": "0.1.13"
+  },
+  "kaggle_requests": 0,
+  "hardware_runs": 0,
+  "production_source_changes": 12,
+  "original_configuration_audit": {
+    "status": "source_and_cpu_configuration_audit_passed",
+    "recommendation_json_sha256": "c78a93f8a5679f9007fd6f417132f4d9cdcf9679aeb0c7603eca7b785bad6edd",
+    "loader_recommendations_superseded": {
+      "lora_mode": "online",
+      "column_linear_backend": "preallocated",
+      "lora_selective_qkv_b": false
+    },
+    "pending_t4_upgrades": {
+      "column_linear_backend": [
+        "tilelang_exact",
+        "cuda_int8_tilelang"
+      ],
+      "lora_selective_qkv_b": true,
+      "note": "Do not promote from local SM120 previews; actual T4 final artifacts not collected in this review"
+    },
+    "note": "Original CPU/source audit retained; updated recommendations validated separately."
+  },
+  "long_sequence_online_tests": "cancelled_by_user_no_retry_scheduled",
+  "loader_profile_scope": "Promoted loader defaults. Prefer TP2 JSON offline blocks for long sequences. Bare RuntimeConfig does not infer offline baking; loader derives the flag from mode and descriptor suffix.",
+  "t4_evidence_revision": {
+    "date": "2026-10-24",
+    "source_report": "docs/reports/H3_REVIEW_T4_RECOVERY_20261024.md",
+    "evidence_files": {
+      "docs/data/h3_review_t4_partial_20261024.json": "5ba63563e283a4ecabd40970549686aecc04a1dae836e564e6138da31733bbf0",
+      "docs/data/h3_review_t4_recovery_20261024.json": "a0425b9e95ddbe85f414e1818b6b4b9830d2d8fb2173b85b60e16e461ea36832"
+    },
+    "hardware": "Two actual Tesla T4 SM75 GPUs",
+    "versions": {
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "comfy-kitchen": "0.2.37",
+      "tilelang": "0.1.13"
+    },
+    "inputs": "Seeded shape fixtures with real trained base shards; not captured trajectory activations",
+    "timing": "Median of five aligned samples, slower rank per sample; compilation/loading/checks excluded",
+    "v1_cases": [
+      {
+        "label": "column/qkv_proj",
+        "rows": 261,
+        "backends": {
+          "old": {
+            "median_ms": 8.087519645690918,
+            "max_incremental_peak_bytes": 74401792,
+            "byte_exact_on_both_owners": true
+          },
+          "preallocated": {
+            "median_ms": 8.022944450378418,
+            "max_incremental_peak_bytes": 74401792,
+            "byte_exact_on_both_owners": true
+          },
+          "tilelang_exact": {
+            "median_ms": 7.684095859527588,
+            "max_incremental_peak_bytes": 74401792,
+            "byte_exact_on_both_owners": true
+          },
+          "cuda_int8_tilelang": {
+            "median_ms": 1.5544639825820923,
+            "max_incremental_peak_bytes": 16839168,
+            "byte_exact_on_both_owners": true
+          }
+        }
+      },
+      {
+        "label": "column/qkv_proj",
+        "rows": 4096,
+        "backends": {
+          "old": {
+            "median_ms": 41.883583068847656,
+            "max_incremental_peak_bytes": 792739840,
+            "byte_exact_on_both_owners": true
+          },
+          "preallocated": {
+            "median_ms": 41.2407341003418,
+            "max_incremental_peak_bytes": 616579072,
+            "byte_exact_on_both_owners": true
+          },
+          "tilelang_exact": {
+            "median_ms": 36.374977111816406,
+            "max_incremental_peak_bytes": 264257536,
+            "byte_exact_on_both_owners": true
+          },
+          "cuda_int8_tilelang": {
+            "median_ms": 14.927871704101562,
+            "max_incremental_peak_bytes": 264257536,
+            "byte_exact_on_both_owners": true
+          }
+        }
+      },
+      {
+        "label": "column/qkv_proj",
+        "rows": 51220,
+        "backends": {
+          "old": {
+            "median_ms": 533.2889404296875,
+            "max_incremental_peak_bytes": 4083202560,
+            "byte_exact_on_both_owners": true
+          },
+          "preallocated": {
+            "median_ms": 520.6918334960938,
+            "max_incremental_peak_bytes": 3842572800,
+            "byte_exact_on_both_owners": true
+          },
+          "tilelang_exact": {
+            "median_ms": 466.790771484375,
+            "max_incremental_peak_bytes": 3305746944,
+            "byte_exact_on_both_owners": true
+          },
+          "cuda_int8_tilelang": {
+            "median_ms": 232.46060180664062,
+            "max_incremental_peak_bytes": 3304509952,
+            "byte_exact_on_both_owners": true
+          }
+        }
+      },
+      {
+        "label": "column/fc1",
+        "rows": 261,
+        "backends": {
+          "old": {
+            "median_ms": 13.500320434570312,
+            "max_incremental_peak_bytes": 97470464,
+            "byte_exact_on_both_owners": true
+          },
+          "preallocated": {
+            "median_ms": 13.467935562133789,
+            "max_incremental_peak_bytes": 97470464,
+            "byte_exact_on_both_owners": true
+          },
+          "tilelang_exact": {
+            "median_ms": 12.612832069396973,
+            "max_incremental_peak_bytes": 97470464,
+            "byte_exact_on_both_owners": true
+          },
+          "cuda_int8_tilelang": {
+            "median_ms": 1.5598399639129639,
+            "max_incremental_peak_bytes": 22451712,
+            "byte_exact_on_both_owners": true
+          }
+        }
+      },
+      {
+        "label": "column/fc1",
+        "rows": 4096,
+        "backends": {
+          "old": {
+            "median_ms": 56.868927001953125,
+            "max_incremental_peak_bytes": 1056980992,
+            "byte_exact_on_both_owners": true
+          },
+          "preallocated": {
+            "median_ms": 56.47564697265625,
+            "max_incremental_peak_bytes": 822099968,
+            "byte_exact_on_both_owners": true
+          },
+          "tilelang_exact": {
+            "median_ms": 50.05286407470703,
+            "max_incremental_peak_bytes": 352337920,
+            "byte_exact_on_both_owners": true
+          },
+          "cuda_int8_tilelang": {
+            "median_ms": 19.577632904052734,
+            "max_incremental_peak_bytes": 352337920,
+            "byte_exact_on_both_owners": true
+          }
+        }
+      },
+      {
+        "label": "column/fc1",
+        "rows": 51220,
+        "backends": {
+          "old": {
+            "median_ms": 742.5637817382812,
+            "max_incremental_peak_bytes": 5165556224,
+            "byte_exact_on_both_owners": true
+          },
+          "preallocated": {
+            "median_ms": 736.2332763671875,
+            "max_incremental_peak_bytes": 4943749632,
+            "byte_exact_on_both_owners": true
+          },
+          "tilelang_exact": {
+            "median_ms": 668.2152099609375,
+            "max_incremental_peak_bytes": 4406895104,
+            "byte_exact_on_both_owners": true
+          },
+          "cuda_int8_tilelang": {
+            "median_ms": 338.2579650878906,
+            "max_incremental_peak_bytes": 4406895104,
+            "byte_exact_on_both_owners": true
+          }
+        }
+      },
+      {
+        "label": "te/qkv",
+        "rows": 1182,
+        "backends": {
+          "independent": {
+            "median_ms": 9.625951766967773,
+            "max_incremental_peak_bytes": 106606592,
+            "byte_exact_on_both_owners": true
+          },
+          "shared": {
+            "median_ms": 7.618559837341309,
+            "max_incremental_peak_bytes": 74657792,
+            "byte_exact_on_both_owners": true
+          }
+        }
+      },
+      {
+        "label": "te/gate_up",
+        "rows": 1182,
+        "backends": {
+          "independent": {
+            "median_ms": 38.553470611572266,
+            "max_incremental_peak_bytes": 322736128,
+            "byte_exact_on_both_owners": true
+          },
+          "shared": {
+            "median_ms": 36.5777587890625,
+            "max_incremental_peak_bytes": 249815040,
+            "byte_exact_on_both_owners": true
+          }
+        }
+      },
+      {
+        "label": "qkv_lora",
+        "rows": 261,
+        "backends": {
+          "full": {
+            "median_ms": 1.7009600400924683,
+            "max_incremental_peak_bytes": 45652480,
+            "byte_exact_on_both_owners": true
+          },
+          "owned": {
+            "median_ms": 1.3742079734802246,
+            "max_incremental_peak_bytes": 33808896,
+            "byte_exact_on_both_owners": true
+          }
+        }
+      },
+      {
+        "label": "qkv_lora",
+        "rows": 4096,
+        "backends": {
+          "full": {
+            "median_ms": 27.147552490234375,
+            "max_incremental_peak_bytes": 706740224,
+            "byte_exact_on_both_owners": true
+          },
+          "owned": {
+            "median_ms": 20.841888427734375,
+            "max_incremental_peak_bytes": 530579456,
+            "byte_exact_on_both_owners": true
+          }
+        }
+      }
+    ],
+    "v2_collected_result": {
+      "status": "operators_complete_profiler_blocked",
+      "all_outputs_byte_exact": true,
+      "profiling": {
+        "status": "blocked",
+        "blocker": "capture failed; no profiler attribution"
+      },
+      "source": "gpu_outputs_v2/review_operators/result.json"
+    },
+    "download_resume": {
+      "status": "complete",
+      "expected_files": 48,
+      "source_binding_verified": true,
+      "artifact_manifest_requests": 1,
+      "preserved_files": 35,
+      "downloaded_files": 13
+    },
+    "cancellation": {
+      "status": "cancelled_by_user",
+      "cancelled_utc": "2026-10-24T13:23:48.247787+00:00",
+      "scope": "Long-sequence online-LoRA tests and their profiling retries",
+      "reason": "User explicitly dropped this test because long-sequence online LoRA is prone to OOM",
+      "local_replay_running": false,
+      "new_kaggle_submission": false,
+      "automatic_followup": false,
+      "historical_results_preserved": true
+    },
+    "whole_request_vram_qualified": false,
+    "complete_profiler_attribution": false,
+    "e2e_speedup_claim": false,
+    "new_kaggle_requests": 0,
+    "new_hardware_runs": 0,
+    "production_source_changes": 0
+  },
+  "historical_source_audit": {
+    "source_sha256": {
+      "patches/h3_operator_policy.py": "6da007dec3e2aa041735e299a79c0927c5c14548f83a98bc1cc5359b3b9327fc",
+      "patches/comfy_tp_runtime.py": "e6f44eb1c3187c1adf0e3ad5f93a876836a3bc25df203d3da5ce2ee9bbc09c7b",
+      "patches/tp_qwen3vl.py": "5a23583bd3f1312815c2f37e1bd5621cedfef3811b6039361ee21d8ca485f133",
+      "patches/weight_residency.py": "8421a6ab4f64ebd5a9957d2734beed14f765ba6691eb9c1a6232ce64b2eacb04",
+      "patches/host_weight_cache.py": "cbc88510897162e95f21b2e2db019c5507331e4854d0443f6f0cda4f38f1181a",
+      "patches/windowed_tp.py": "0bb08363ae7af29d2869e401fed0b95b86d17df8ecfb5062ceab77a238c7e8ea",
+      "patches/tp2_bundle.py": "772900be5cb1a471fbf600cea7053a4d5dca15f1ba670b3415046ab6d9df12f3",
+      "patches/h3_lora.py": "386bb87739d1889c26d2c6e6bc0f1a8f00d1fdc0b17bb788e78f49b92de4402c",
+      "patches/tilelang_transport_p2.py": "c8932149d1493479e839fbd0c4afbe20422fcb416be3572f937b912855e3a9f9",
+      "patches/te_loading.py": "5db9c3083dca5ed9c242d6019d2ebaee37a536784c8f70f7a887c603548ce829",
+      "patches/h3_tensor_flow.py": "80272e276b10a9fa06f4accd6e62fa8ae373ebdb08a6edbc0615926f56145b07",
+      "patches/comfy_sampler.py": "dfa6740fed20c5cbd4f1025922d42993b5a39558e389e711d5d99bf4dacd99d2",
+      "custom_nodes/minimax_h3_tp2/__init__.py": "efe7fe4d64f2d2227225bae34d21c359c5344144ffde7683391b16ccfecc1826"
+    },
+    "runtime_snapshot_sha256": "e3a07afb8cb79e6f45c9c0118debc4bd4008c022d2652e0891273dac2db07aa3",
+    "local_packages_checked": 94,
+    "production_source_changes": 0,
+    "note": "Source and validation scope before the user-authorized default promotion."
+  },
+  "historical_recommendation_revision_validation": {
+    "status": "passed",
+    "table_entries": 55,
+    "loader_fields_per_profile": 28,
+    "profiles_validated": [
+      "long_sequence_bundle_offline",
+      "short_medium_online"
+    ],
+    "measurement_rounding": "matches retained T4 records",
+    "markdown_links": "resolved",
+    "packages_checked": 94,
+    "source_hashes_unchanged": true,
+    "production_source_changes": 0,
+    "new_kaggle_requests": 0,
+    "new_hardware_runs": 0,
+    "report_sha256": "c9e28b1a5055bacba69100b4e1d05ced49ea751e2bf075b3e4221639b65b3df7"
+  },
+  "removed_runtime_sources": [
+    "patches/te_loading.py"
+  ],
+  "historical_te_loading_source": "benchmarks/historical_te_loading.py",
+  "default_promotion": {
+    "date": "2026-10-24",
+    "changed_runtime_sources": [
+      "patches/comfy_tp_runtime.py",
+      "patches/h3_operator_policy.py",
+      "patches/tp_qwen3vl.py",
+      "patches/tilelang_transport_p2.py",
+      "patches/windowed_tp.py",
+      "patches/h3_lora.py",
+      "patches/optimized_tp.py",
+      "patches/dit_column_linear.py",
+      "patches/h3_configuration.py",
+      "patches/te_loading.py",
+      "custom_nodes/minimax_h3_tp2/__init__.py",
+      "custom_nodes/minimax_h3_tp2/web/loader_migration.js"
+    ],
+    "fixed_contracts": [
+      "scalemax",
+      "fallback Native INT32 SUM",
+      "SwiGLU padding",
+      "guarded FC1 owned B"
+    ],
+    "retired_fields": [
+      "tp_quantization",
+      "swiglu_reduction",
+      "lora_concat_a",
+      "swiglu_padding",
+      "selective_b",
+      "checkpoint_read_chunk_mib",
+      "checkpoint_read_chunk_bytes"
+    ],
+    "retired_production_column_choices": [
+      "tilelang_exact"
+    ],
+    "attention_choices_preserved": {
+      "te": [
+        "tilelang_group32",
+        "native"
+      ],
+      "dit": [
+        "kitchen",
+        "tilelang_drop",
+        "tilelang_scalar",
+        "tilelang_dense",
+        "native"
+      ]
+    },
+    "all_attention_implementations_retained": true,
+    "frontend_migration": "version1 positional -> version2 named mapping",
+    "repository_workflows_updated": 2,
+    "existing_local_workflows_updated": 1,
+    "generated_workflow_widgets_match_schema": true,
+    "local_conda_unchanged": true,
+    "frozen_comfyui_unchanged": true,
+    "cpu_suite": {
+      "passed": true,
+      "tests": 140,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 10.764999999999418,
+      "scope": "CPU contracts, not physical T4 qualification"
+    },
+    "package_versions_checked": 94,
+    "report_sha256": "10f4f4b71cefa1f9a63c9a8979bc10f5cdec14f688b33cc79da73630b6aba4bf",
+    "new_gpu_runs": 0,
+    "new_kaggle_requests": 0,
+    "full_h3_runs": 0,
+    "limitation": "CPU/API/migration contracts passed; no fresh T4 or E2E run for this default/cleanup change. Physical support refers to retained operator results, not generation admission."
+  }
+}

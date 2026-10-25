@@ -90,7 +90,7 @@ def main():
     service=LogicalVAEService()
     result=dict(passed=False,physical=False,gpu=torch.cuda.get_device_name(),torch=torch.__version__,
         scope='Full trained Native public ComfyUI VAE decode; two logical CUDA ranks; no latency or T4 claim',
-        audio_contract='Channel splitting matches sequential mono; small Native rounding differences are accepted explicitly, not bit-exact',
+        audio_contract='Native single-GPU FP32; no channel splitting, replicas or audio collectives',
         cases=[])
     def save():
         args.output.parent.mkdir(parents=True,exist_ok=True)
@@ -102,14 +102,15 @@ def main():
         workflow=json.loads((ROOT/'workflows/video_minimax_h3_r2v_tp2_int8.json').read_text(encoding='utf-8'))
         by_id={node['id']:node for node in workflow['nodes']}
         loaders=[node for node in by_id.values() if node['type']=='MiniMaxH3ParallelVAELoader']
-        assert len(loaders)==2 and all(node['widgets_values'][1]=='auto' for node in loaders)
+        assert len(loaders)==2
+        assert all(node['widgets_values'][1]==('native' if 'audio' in node['widgets_values'][0].lower() else 'auto') for node in loaders)
         for identity,source,slot,dest,dest_slot,kind in workflow['links']:
             assert by_id[dest]['inputs'][dest_slot]['link']==identity
             assert identity in by_id[source]['outputs'][slot]['links']
         for node in loaders:
             edge=next(link for link in workflow['links'] if link[0]==node['inputs'][0]['link'])
             assert by_id[edge[1]]['type']=='MiniMaxH3TP2Loader' and edge[-1]=='MINIMAX_TP2_SESSION'
-        record('default_workflow_dispatch',dict(passed=True),parallel_vae_loaders=2)
+        record('default_workflow_dispatch',dict(passed=True),video_query_parallel_loaders=1,native_audio_loaders=1)
         video=comfy.sd.VAE(sd=comfy.utils.load_torch_file(str(args.video)),device=torch.device('cuda:0'),
                            dtype=torch.float16)
         wrapper=ParallelDecodeHandoff(video,service,args.video)
@@ -179,17 +180,16 @@ def main():
         for seconds in (5,10,20):
             z=torch.load(ROOT/f'semantic_results/audio_saved_references/input_{seconds}s.pt',weights_only=True)
             ref=audio.decode(z).cpu()
+            count=len(service.commands)
             actual=wrapper.decode(z).cpu()
-            with torch.cuda.device(0):
-                mono=torch.cat([audio.first_stage_model.decode(z[:,:,i:i+1].cuda()).cpu() for i in (0,1)],1).movedim(1,-1)
-            check=metric(actual,ref);control=metric(actual,mono)
-            assert control['bit_exact'] and check['finite'] and check['rel_l2']<3e-5
-            assert wrapper.last_strategy=='channel_parallel'
+            check=metric(actual,ref)
+            assert check['bit_exact'] and check['finite']
+            assert wrapper.last_strategy=='native'
+            assert service.commands[count:]==['decode_start','decode_complete']
             assert 'decode' not in audio.first_stage_model.__dict__
             assert all(r.vae_model is None for r in service.ranks)
-            record(f'audio_{seconds}s',check,vs_sequential_mono=control,strategy=wrapper.last_strategy,
-                   original_strict_gate_pass=check['rel_l2']<=1e-5)
-            del actual,ref,mono,z
+            record(f'audio_{seconds}s',check,strategy=wrapper.last_strategy,worker_audio_dispatch=False)
+            del actual,ref,z
         native=ParallelDecodeHandoff(audio,service,args.audio,'native')
         z=torch.zeros((1,32,2,200));ref=audio.decode(z).cpu();out=native.decode(z).cpu()
         record('audio_strict_native_override',metric(out,ref),strategy=native.last_strategy)
@@ -197,7 +197,7 @@ def main():
         result['source_sha256']={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
             for p in [Path(__file__),ROOT/'patches/parallel_vae.py',ROOT/'patches/comfy_sampler.py',
                       ROOT/'patches/comfy_tp_runtime.py',ROOT/'benchmarks/logical_dual_gpu.py',
-                      ROOT/'custom_nodes/minimax_h3_tp2/__init__.py',ROOT/'build_comfy_tp2_workflow.py',
+                      ROOT/'custom_nodes/minimax_h3_tp2/__init__.py',ROOT/'tools/runtime/build_comfy_tp2_workflow.py',
                       ROOT/'workflows/video_minimax_h3_r2v_tp2_int8.json']}
         result['passed']=True
     finally:

@@ -41,14 +41,14 @@ def main():
         raise TimeoutError('One-shot continuation deadline exceeded')
     try:
         wait(STORAGE,'waiting_storage')
-        command(['pipeline_audit_control.py','--slug',STORAGE,'--output','kaggle_te_io_storage_output',
+        command(['tools/experiments/pipeline_audit_control.py','--slug',STORAGE,'--output','kaggle_te_io_storage_output',
             '--prefix','te_storage_results/','--download','--resume','--workers','2'], 'te_storage_collect')
-        command(['analyze_te_storage_controls.py','kaggle_te_io_storage_output/te_storage_results'],'te_storage_analysis')
+        command(['tools/experiments/analyze_te_storage_controls.py','kaggle_te_io_storage_output/te_storage_results'],'te_storage_analysis')
         state.update(status='storage_analyzed',storage_summary='kaggle_te_io_storage_output/te_storage_results/storage_summary.json');save()
         # Launch only the reviewed, qualified frozen source. Never rebuild from
         # a checkout that another task could edit while this helper waits.
         sys.path.insert(0,str(ROOT))
-        from freeze_pipeline_job import read_bundle
+        from tools.experiments.freeze_pipeline_job import read_bundle
         _,files=read_bundle(ROOT/'kaggle_idle_residency/pipeline.ipynb')
         binding=json.loads((ROOT/'kaggle_idle_residency/source_binding.json').read_text())
         if any(hashlib.sha256(files[n]).hexdigest()!=sha for n,sha in binding.items()):
@@ -67,9 +67,9 @@ def main():
         if not pushed:raise RuntimeError('GPU capacity unavailable after bounded retries')
         time.sleep(60);wait(IDLE,'waiting_idle_pilot')
         output='kaggle_idle_residency_v2_output'
-        command(['pipeline_audit_control.py','--slug',IDLE,'--output',output,'--prefix','idle_residency_results/',
+        command(['tools/experiments/pipeline_audit_control.py','--slug',IDLE,'--output',output,'--prefix','idle_residency_results/',
             '--download','--resume','--workers','2','--exclude','*nccl*'],'te_idle_v2_collect',timeout=1200)
-        command(['analyze_idle_pilot.py',output+'/idle_residency_results'],'te_idle_v2_analysis')
+        command(['tools/experiments/analyze_idle_pilot.py',output+'/idle_residency_results'],'te_idle_v2_analysis')
         state.update(status='complete',idle_summary=output+'/idle_residency_results/idle_validated_summary.json',
             remaining='Review physical controls/pilot before new file-cache or combined inference changes; smaller workload and gap matrix still required.');save()
     except BaseException as error:

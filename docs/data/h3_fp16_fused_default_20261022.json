@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-22",
+  "status": "integrated_local_checks_passed_not_full_pipeline_acceptance",
+  "operators": {
+    "te_attention": "tilelang_group32",
+    "dit_attention": "kitchen",
+    "row_linear_backend": "tilelang_scaled_fp16",
+    "swiglu_padding": true,
+    "selective_b": true,
+    "scalar_score_workspace_mib": 96,
+    "fc2_quantizer": "fused_stored"
+  },
+  "tensor_flow": {
+    "mode": "fp16",
+    "residual_exponent": 6,
+    "vision_residual_exponent": 0,
+    "video_residual_exponent": 0
+  },
+  "base_fallback_reduction": "native_int32",
+  "tests": {
+    "count": 42,
+    "status": "passed",
+    "command": "python -m unittest benchmarks.test_h3_default_fused_row benchmarks.test_h3_operator_enhancements benchmarks.test_h3_tensor_flow benchmarks.test_pipeline_review benchmarks.test_fp16_fc2_experiment benchmarks.test_fc2_video_summary -q"
+  },
+  "cpu_integration_gate": "config_layout_cache_dispatch_residency_UI: pass",
+  "local_preview": {
+    "path": "D:\\attention_eval\\fp16_fc2_video_20261022\\production_default_local_preview.json",
+    "sha256": "d6c77a819d52eca15cc6444f7e8d1b13c4eb0e5b6c1be27bb4e4578748fa60f9",
+    "status": "passed",
+    "scope": "Local SM120 integration preview, logical TP2, no T4/NCCL/timing qualification",
+    "records": [
+      {
+        "name": "te_down",
+        "rank": 0,
+        "codec_reference_exact": true,
+        "finite": true
+      },
+      {
+        "name": "dit_fc2",
+        "rank": 0,
+        "codec_reference_exact": true,
+        "finite": true
+      },
+      {
+        "name": "te_o",
+        "rank": 0,
+        "codec_reference_exact": true,
+        "finite": true
+      },
+      {
+        "name": "dit_o",
+        "rank": 0,
+        "codec_reference_exact": true,
+        "finite": true
+      },
+      {
+        "name": "te_down",
+        "rank": 1,
+        "codec_reference_exact": true,
+        "finite": true
+      },
+      {
+        "name": "dit_fc2",
+        "rank": 1,
+        "codec_reference_exact": true,
+        "finite": true
+      },
+      {
+        "name": "te_o",
+        "rank": 1,
+        "codec_reference_exact": true,
+        "finite": true
+      },
+      {
+        "name": "dit_o",
+        "rank": 1,
+        "codec_reference_exact": true,
+        "finite": true
+      }
+    ]
+  },
+  "physical_evidence": {
+    "path": "docs/data/fp16_fc2_fusion_video_split_20261022.json",
+    "sha256": "78f57832fc6c46899e731d5949677cd80bcbdc150c57a2368b0189891ad3d3ae",
+    "scope": "Prior version-bound physical dual-T4 operator matrix; new production bridge tested locally, not a new full H3 run"
+  },
+  "sources_sha256": {
+    "patches/h3_operator_policy.py": "5a0568cecbb6015e80843a2318acad88968ce9cec9fffdb5101e37a7f84b2157",
+    "patches/h3_operator_dependencies.py": "612c2c55a29b29b6af5f48331fa23c42d9b0562110959d61e7a924c62bd13587",
+    "patches/tilelang_swiglu_quant.py": "6cc0db5336ab1d4c65c11ce1bcba7823f836457e19569fff573f1c1cd74df703",
+    "patches/tilelang_transport_p2.py": "0829702fa4d72ecd0cab4d4c746894048b6da6c5bbe6febbcadc46e3854b024e",
+    "patches/tp_dit.py": "4eee17f2eac8e0d2769c19bb1d94799dfa9f6d131355adc0a58366b59ea89dbe",
+    "patches/tp_qwen3vl.py": "0fa444b82e3f63b8354f4e17c411f9c700b42e6fe0e53985689cf48e20deebd5",
+    "patches/comfy_tp_runtime.py": "8869e4c9ec5b7695295e1349acaa428d272c0b7e9d9447944909a1826b350fba",
+    "patches/h3_tensor_flow.py": "80272e276b10a9fa06f4accd6e62fa8ae373ebdb08a6edbc0615926f56145b07",
+    "custom_nodes/minimax_h3_tp2/__init__.py": "9ddd1141342fdf93204f3ef7d0353ba17bf969df152ccf582919764bf4e375d6",
+    "build_comfy_tp2_workflow.py": "482535faf72d60e6425e16d80d4a5932604b942e5b87e8f4f0a76b5dab8d9ca0",
+    "benchmarks/test_h3_default_fused_row.py": "f5049b9fe60ef7928438e64c059facdab5957847f934554547e7dd5be9f2af4a",
+    "benchmarks/preview_h3_default_row.py": "19af1d619f4103a5908f1a76dee76345d90e3c30862623c7543dd52def3abeb1",
+    "workflows/video_minimax_h3_r2v_tp2_int8.json": "4248fec79269370ebb2c5b6c86aba9c7bb3fb99c56a2bbdb29bebf5d1a2f76dd",
+    "workflows/video_minimax_h3_r2v_tp2_operators.json": "2931852993c8b399586beb0a52e8bca26630e5b372121a7812f6a7be959fab58"
+  },
+  "unchanged": [
+    "Core package versions",
+    "Local conda snapshot",
+    "Pinned ComfyUI tracked source",
+    "Historical submitted sources and results",
+    "Sparse quality policy",
+    "Native single-GPU FP32 Audio VAE"
+  ]
+}

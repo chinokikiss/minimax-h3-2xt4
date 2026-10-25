@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-22",
+  "status": "user_stopped_no_physical_evidence",
+  "kernel": "pamcks/h3-rowpartial-reference-t4",
+  "version": 1,
+  "user_observation": {
+    "reported_notebook_state": "Running, then manually stopped",
+    "reported_duration_minutes": 25,
+    "reported_visible_output": "none",
+    "actual_gpu_compute_time": "unknown"
+  },
+  "artifact_attempts": [
+    {
+      "directory": "D:\\attention_eval\\h3_row_partial_t4_20261022\\gpu_output_v1",
+      "manifest_sha256": "203626d152b1118cf69e558e5683b743aca5f0b4e8e5592cabc1970c7ed3075e",
+      "manifest": {
+        "kernel": "pamcks/h3-rowpartial-reference-t4",
+        "requested_version": "1",
+        "files": []
+      }
+    },
+    {
+      "directory": "D:\\attention_eval\\h3_row_partial_t4_20261022\\gpu_output_v1_after_ui_stop",
+      "manifest_sha256": "203626d152b1118cf69e558e5683b743aca5f0b4e8e5592cabc1970c7ed3075e",
+      "manifest": {
+        "kernel": "pamcks/h3-rowpartial-reference-t4",
+        "requested_version": "1",
+        "files": []
+      }
+    }
+  ],
+  "confirmed_harness_gaps": [
+    "Setup phases not interrupted by the shared 600-second experiment deadline",
+    "Offline pip has a separate 600-second timeout",
+    "First visible progress emitted only after a test subprocess finishes"
+  ],
+  "root_cause": "Unknown: no worker receipt or log; setup defects do not prove where this run stalled",
+  "requested_cli_runtime_limit_seconds": 900,
+  "requested_limit_enforcement_verified": false,
+  "local_revision": {
+    "directory": "D:\\attention_eval\\h3_row_partial_t4_20261022\\gpu_v2_prepared_not_submitted",
+    "submitted": false,
+    "source_bindings_equal_v1": true,
+    "watchdog": {
+      "deadline_seconds": 600,
+      "includes": "Source preparation, offline extraction/install, device gate and all experiment subprocesses",
+      "excludes": "Provider startup and input mounting before notebook execution",
+      "generator_sha256": "dd1b97d173021089849178ae557d93ab4ce68c1f586e8cfea4d69b82ca2e2e9e"
+    },
+    "notebook_sha256": "b5060a029f542286e01aaca5eea593ad1e8bc31b81eb9a02338fcb873feae676",
+    "outer_and_embedded_worker_ast_valid": true,
+    "local_tests": {
+      "watchdog": 2,
+      "evidence_analyzer": 4,
+      "status": "passed"
+    },
+    "qualification_limit": "Windows CPU tests only; Linux process-group cleanup and provider behavior unvalidated"
+  },
+  "physical_t4_execution_verified": false,
+  "t4_performance_metrics_available": false,
+  "nsight_artifacts_available": false,
+  "next_step": "Validate revised watchdog on a CPU host before any GPU resubmission; no new submission made"
+}

@@ -10,7 +10,7 @@ import torch
 mode=os.environ.get('MINIMAX_H3_TE_ABLATION','baseline')
 import causal_pipeline_audit as pipeline
 import cpu_causal_trace as cpu
-from patches.te_loading import install
+from benchmarks.historical_te_loading import install
 install(mode)
 
 

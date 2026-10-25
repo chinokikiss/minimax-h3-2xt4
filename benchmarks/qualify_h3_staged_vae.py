@@ -17,6 +17,7 @@ def main():
     parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,
         default=Path('D:/attention_eval/h3_loading_stages_20261019/trained_vae.json'))
     parser.add_argument('--kind',choices=['video','audio','both'],default='both')
+    parser.add_argument('--decoder-first',action='store_true',help='Also verify trained decode without any encoder payload read')
     args=parser.parse_args();sys.argv=sys.argv[:1]
     import comfy.sd,comfy.utils,comfy.model_management as management
     from patches.staged_vae import StagedVAE,component_names,component_payload
@@ -32,9 +33,23 @@ def main():
         path=Path('D:/minimaxH3')/name;dtype=torch.float16 if kind=='video' else torch.float32
         baseline=comfy.sd.VAE(sd=comfy.utils.load_torch_file(str(path)),device=torch.device('cuda:0'),dtype=dtype)
         staged=StagedVAE(path,service)
-        assert staged.stage=='encode' and not hasattr(staged.first_stage_model,'decoder')
-        assert staged.reader.logical_read_bytes==component_payload(staged.reader,component_names(staged.reader,kind,'encode'))
+        assert staged.stage is None and staged.first_stage_model is None
+        assert staged.reader.logical_read_bytes==0
+        decoder_first=None;extra_payload=0
+        if args.decoder_first:
+            from patches.comfy_sampler import ParallelDecodeHandoff
+            shape=(1,24,1,2,2) if kind=='video' else (1,32,2,2)
+            latent=torch.randn(shape,generator=torch.Generator().manual_seed(732)).to(dtype)
+            expected=baseline.decode(latent.clone())
+            actual=ParallelDecodeHandoff(staged,service,path,'native').decode(latent.clone())
+            assert torch.equal(actual,expected) and torch.isfinite(actual).all(),(kind,'decoder-first differs')
+            extra_payload=component_payload(staged.reader,component_names(staged.reader,kind,'decode'))
+            assert staged.reader.logical_read_bytes==extra_payload and not hasattr(staged.first_stage_model,'encoder')
+            decoder_first=dict(native_exact=True,encoder_payload_bytes=0,decoder_payload_bytes=extra_payload)
+            staged.release();del actual,expected,latent
         assert staged.preload_idle(threading.Event())
+        assert staged.stage=='encode' and not hasattr(staged.first_stage_model,'decoder')
+        assert staged.reader.logical_read_bytes==extra_payload+component_payload(staged.reader,component_names(staged.reader,kind,'encode'))
         pixels=(torch.rand(1,32,32,3,generator=torch.Generator().manual_seed(419)) if kind=='video' else
                 torch.rand(1,1600,2,generator=torch.Generator().manual_seed(419))*2-1)
         reference=baseline.encode(pixels.clone());actual=staged.encode(pixels.clone())
@@ -50,10 +65,11 @@ def main():
         assert encoder() is None and staged.stage=='decode' and not hasattr(staged.first_stage_model,'encoder')
         assert torch.equal(decode_actual,decode_reference),(kind,'decode differs',float((decode_actual-decode_reference).abs().max()))
         assert torch.isfinite(actual).all() and torch.isfinite(decode_actual).all()
-        assert staged.reader.logical_read_bytes==sum(component_payload(staged.reader,component_names(staged.reader,kind,s)) for s in ('encode','decode'))
+        assert staged.reader.logical_read_bytes==extra_payload+sum(component_payload(staged.reader,component_names(staged.reader,kind,s)) for s in ('encode','decode'))
         rows.append(dict(kind=kind,encode='bitwise_pass',decode='bitwise_pass',
             latent_shape=list(actual.shape),output_shape=list(decode_actual.shape),stage_events=staged.events,
             inactive_component_absent=True,encoder_released_before_decoder=True,idle_encoder_gpu_preload=True,
+            constructor_payload_bytes=0,decoder_first=decoder_first,
             decode_strategy=wrapper.last_strategy,fallback=wrapper.last_fallback))
         staged.release();assert service.budget.snapshot()['reserved_bytes']==0
         management.unload_model_and_clones(baseline.patcher)

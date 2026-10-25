@@ -3,6 +3,23 @@
 Use the [pinned local ComfyUI runtime](H3_LEGACY_RUNTIME.md) for deployment;
 the legacy Video VAE attention API is retained.
 
+As of 2026-10-22, the H3 loader and `RuntimeConfig` default to **FP16-fix +
+`fused_stored` + scaled FP16 transport**:
+`tensor_flow=fp16`, TE/DiT `residual_exponent=6` (divisor 64), and vision/Video
+gauge exponents 0. Audio VAE remains FP32. Select `tensor_flow=legacy` in the
+loader, or pass `tensor_flow=TensorFlowPolicy('legacy')` to `RuntimeConfig`,
+to use the original FP32 tensor flow. Existing INT8 operators and the frozen
+dependencies are retained. See the [Native FP32 comparison](../reports/H3_NATIVE_FP32_FLOW_20261021.md)
+for component evidence and its scope.
+
+Update 2026-10-24: supported SM75 DiT columns now default to
+`cuda_int8_tilelang`. Lifecycle/host-pressure/adaptive lookahead are enabled,
+with a historical long-shape reserve of9GiB and a1500s command deadline.
+The loader defaults to offline LoRA; use TP2 JSON descriptors for bounded CPU
+merges. Safetensors offline still creates a baked checkpoint. Short/medium online
+remains explicit, with guarded FC1/QKV owned B enabled. Long-sequence online
+tests are cancelled. See the [configuration review](../reports/H3_CONFIGURATION_REVIEW_20261024.md).
+
 Implemented 2026-10-18. The ComfyUI loader now carries an explicit per-session
 operator policy through checkpoint preparation, host caches, GPU residency
 copies and persistent TP2 workers. This supersedes the earlier benchmark-only
@@ -14,25 +31,27 @@ status of these operator entry points. No complete H3 generation was run here.
 | DiT main blocks | `comfy_kitchen.int8_attention` | `tilelang_drop`, `tilelang_scalar`, `tilelang_dense`, or `native` |
 | DiT token refiner | Native PyTorch SDPA | All DiT modes; Native projections, RMSNorm and RoPE |
 | Video VAE | Kitchen INT8 attention | Existing query partitioning and Native public decode planning remain |
-| TP row projections | TileLang packed row-linear | Native override or approximate `tilelang_scaled_fp16`; SM75 |
-| TE down / DiT FC2 | `tilelang_swiglu_pad` | Separate TE gate/up and packed DiT gate/up; disable with `swiglu_padding` |
-| LoRA B GEMM | Selective B for eligible FC1 | Only TP2 H3 `[128,5376]` A / `[28672,128]` B; other shapes/targets retain full B |
-| Audio VAE | `multi_gpu_audio_vae.channel_decode` | Existing FP32 stereo split inside persistent workers; VAE `native` override |
+| TP row projections | `tilelang_scaled_fp16`: approximate FP16 SUM + fused FP32 epilogue | `tilelang_packed` INT32 SUM or Native; SM75 |
+| TE down / DiT FC2 | `fused_stored`: FP32 SwiGLU / regular ConvRot256 | `fused_recompute`, prior `owned_fp32` / `native`; shared global row MAX retained |
+| LoRA B GEMM | Owned B always enabled for eligible online FC1; QKV enabled by default | Rank128 H3 guards; inactive offline; unsupported shapes retain full B |
+| DiT columns | `cuda_int8_tilelang` | SM75 aligned QKV/FC1; `preallocated` fallback; epilogue-only control is benchmark-only |
+| Audio VAE | Native single-GPU FP32 decode | Parallel audio decoding is removed, including when an old workflow selects `auto` |
 
-The base INT8 GEMM still uses Kitchen's native INT32 accumulator. Row projection
-transport defaults to **native INT32 SUM before dequantization**. Packed row-linear
-means ownership padding and external-global-MAX INT8 activation preparation;
-it does not enable the lossy packed-INT8 or FP16 transport codecs. As of
-2026-10-19, `tilelang_scaled_fp16` explicitly selects power-of-two FP16 SUM
-with the fused TileLang reconstruction/dequantization epilogue. See
-[the five enhancements and validation limits](H3_OPERATOR_ENHANCEMENTS.md).
-The INT8-PV attention approximation is not added to the TileLang paths here.
+The original INT8 GEMM still writes INT32 partials. The default row backend
+encodes them with a power-of-two scale, performs FP16 AllReduce SUM, then
+reconstructs/dequantizes in FP32 with TileLang. Online LoRA is added before
+one FP16 output store. This transport and fused rotation summation order are
+approximate. Select `tilelang_packed` for INT32 SUM; select `owned_fp32` or
+`native` preparation to restore the prior rotation choice. The base runtime
+fallback reduction is hard-coded to Native INT32 SUM, below the policy-selected
+scaled codec. See the [promotion record](../reports/H3_FP16_FUSED_DEFAULT_20261022.md)
+and [physical T4 results](../reports/FP16_FC2_FUSION_VIDEO_SPLIT_20261022.md).
 
 ## Configuration and workflow
 
 The linked node is installed at:
 
-`C:/Users/Administrator/Documents/project/ComfyUI-master/custom_nodes/minimax_h3_tp2`
+`C:/Users/Administrator/Documents/project/2xT4 minimax h3/ComfyUI/custom_nodes/minimax_h3_tp2`
 
 It is a junction to this repository's `custom_nodes/minimax_h3_tp2`. The new
 workflow is in both `workflows/video_minimax_h3_r2v_tp2_operators.json` and the
@@ -41,11 +60,17 @@ Native fallback workflow are preserved. Restart ComfyUI to load the node and
 updated dependency, then open **video_minimax_h3_r2v_tp2_operators.json**.
 
 `MiniMaxH3TP2Loader` exposes `te_attention`, `dit_attention`,
-`row_linear_backend`, `swiglu_padding`, `selective_b` and
-`scalar_score_workspace_mib`, plus `adaptive_lookahead=False`. The existing memory budgets, LoRA stack and
-optional row-LoRA A partial reduction stay separate. Selective B changes
-neither A factor concatenation nor adapter ordering nor post-B scale/add order.
-No LoRA means the Selective B switch has no effect.
+`row_linear_backend` and `scalar_score_workspace_mib`, plus
+`adaptive_lookahead=True`. SwiGLU padding and guarded FC1 owned B are fixed on;
+there are no disable switches. The existing memory budgets, LoRA stack and
+row-LoRA A partial-reduction setting stay separate from attention selection.
+As of 2026-10-22, `lora_row_partial_reduce=True` is the default for online
+RowParallel adapters. It computes local FP32 A projections, FP32 SUMs the
+low-rank hidden states, then applies full B before the final FP16 store.
+Explicit `False` restores full-input gathering. See the
+[combined optimization and reference-loading follow-up](../reports/H3_ROW_PARTIAL_REFERENCE_LOADING_20261022.md).
+Selective B changes neither adapter ordering nor post-B scale/add order.
+No online LoRA means owned B has no effect.
 
 Python callers can pass the same policy:
 
@@ -56,12 +81,24 @@ from patches.h3_operator_policy import H3OperatorPolicy
 config = RuntimeConfig(te_path, dit_path, operators=H3OperatorPolicy(
     te_attention='tilelang_group32',
     dit_attention='kitchen',           # or tilelang_drop / tilelang_scalar
-    row_linear_backend='tilelang_packed',
-    swiglu_padding=True,
-    selective_b=True,
+    row_linear_backend='tilelang_scaled_fp16',
+    fc2_quantizer='fused_stored',
+    column_linear_backend='cuda_int8_tilelang',
     scalar_score_workspace_mib=96,
 ))
 ```
+
+For adapter-bearing TP2 JSON descriptors, direct `RuntimeConfig` callers must
+set `bundle_offline_lora=True` to use offline block merging. The loader derives
+this from its default `lora_mode='offline'` and the descriptor suffix. A bare
+runtime configuration does not guess whether an ordinary checkpoint was baked.
+
+The one-value quantization/base-SUM controls, deprecated Concat A and full-row
+column-read scratch path have been removed from runtime configuration.
+Old Python loader calls accept only a narrow retired-argument shim; it cannot
+reactivate removed algorithms. Browser workflows migrate removed widget slots
+by name. Both maintained workflows use configuration version2. Restart ComfyUI
+and reload its page to load the migration extension.
 
 Changing policy recreates the loader service. Policy identity also participates
 in streamed block and preprocessing cache keys, including next-request idle
@@ -107,19 +144,19 @@ each lease and released at stage teardown; Native model source is not edited.
 The refiner uses a module wrapper around its Native projections/norms/RoPE,
 so streamed copies do not retain bound methods pointing at canonical CPU
 weights. Video uses its existing Kitchen INT8 query-partitioned decoder.
-Audio's rank entry point lives in `multi_gpu_audio_vae`; it reuses each worker's
-loaded decoder, preserves left/right ordering, and leaves Native chunking and
-normalization in the parent. It does not instantiate the standalone dual-device
-manager inside each rank or introduce temporal tiling.
+Audio always uses Native single-GPU FP32 decoding in the parent; no audio
+decoder replicas or channel/temporal collectives run in TP workers.
 
 ## Dependencies and deployment
 
-The target validation used Torch **2.11.0+cu130**, Kitchen **0.2.37**, TileLang
-**0.1.15**, CUDA **12.8.93** nvcc, and two physical Tesla T4s. Install
-`requirements-tp2-operators.txt` in that environment. The service checks the
-operator ABI before launching workers, requires NCCL and matching GPU
-architectures, and selects the CUDA 12.8 compiler before importing TileLang.
-Set `CUDACXX` to the validated nvcc if it is not on PATH.
+Current core gates require Kitchen **0.2.37**, TileLang **0.1.13** and the
+preserved legacy source. The 2026-10-22 dual-T4 batch used native Kaggle Torch
+**2.11.0+cu128**, CUDA **12.8**, and nvcc **12.8.93**. This qualifies its recorded
+operator/component cases, not full H3 generation or the local Windows ABI on
+Linux. Historical `requirements-tp2-operators.txt` describes the older 0.1.15
+qualification and must not be installed over the preserved environment. Keep
+the CPU-prepared pinned-core overlay and native-Torch profile for Kaggle. The
+runtime still requires NCCL, two matching GPUs and the CUDA 12.8 compiler.
 
 Each worker sets `NCCL_P2P_DISABLE=1`, min/max channels4 and leaves NCCL protocol
 selection at its default. These settings are local to the workers. Single-GPU

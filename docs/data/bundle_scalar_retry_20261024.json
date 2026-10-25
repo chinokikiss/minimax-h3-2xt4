@@ -1,0 +1,417 @@
+{
+  "status": "blocked_before_models_periodic_flush_failed",
+  "updated_utc": "2026-10-24T04:18:17.274804+00:00",
+  "evidence_root": "D:\\attention_eval\\bundle_scalar_retry_20261024",
+  "replaces": {
+    "kernel": "pamcks/h3-dit-scalar-single-profile",
+    "version": 1,
+    "final_outputs_collected": true,
+    "result": "Kitchen deadline failure; zero completed NFEs; Scalar not started"
+  },
+  "source_publication": {
+    "file": "0fec102465b7c3dbd8c5a91d60a558e23a6dc641a4f9dee605faf781ba489ba4.tar.gz",
+    "sha256": "0fec102465b7c3dbd8c5a91d60a558e23a6dc641a4f9dee605faf781ba489ba4",
+    "bytes": 17602851,
+    "capsule_sha256": "28af6446c16c416dcad2a4c03bcf85906e2489225fcb8c2b4a792ded3ba7a965",
+    "source_files": 326,
+    "core_pins": 78,
+    "kaggle_mounts": 0,
+    "repository": "chinokikiss/minimax-h3-2xt4",
+    "branch": "codex/bundle-scalar-retry-20261024-0fec1024",
+    "commit": "750f8d64955174b1ba307213d6ed0b6f909a5bb9",
+    "path": "runtime/kaggle_artifacts/0fec102465b7c3dbd8c5a91d60a558e23a6dc641a4f9dee605faf781ba489ba4.tar.gz",
+    "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/750f8d64955174b1ba307213d6ed0b6f909a5bb9/runtime/kaggle_artifacts/0fec102465b7c3dbd8c5a91d60a558e23a6dc641a4f9dee605faf781ba489ba4.tar.gz",
+    "published": true,
+    "working_tree_and_index_changed": false,
+    "local_cpu_tests": 67
+  },
+  "changed_source_hashes": {
+    "benchmarks/launch_dit_profile.py": "5c0b916c147de52a66b7c71fa46bafb0f7b23066237cbd9afa0f82c918a89ba8",
+    "benchmarks/launch_kaggle_light.py": "2dfdaa3403a6d50c4e4acc333b6fb9f367e3050b0e393ce71abf15e8ad5a710d",
+    "benchmarks/prepare_kaggle_direct_pip.py": "add17e929bc00ef3988d567afbff26ec120a102ff2464b7d87ba18b2922135b9",
+    "benchmarks/profile_dit_single.py": "45af62caf6e3549d55a4af93a6175e9041aceac8c0394053010711063ef4204d",
+    "benchmarks/qualify_worker_cuda_trace.py": "6b1706fea37578af5e6714f70b62153e6a91e31b856adf00343d11065bd2dc07",
+    "benchmarks/run_h3_l1_current_batch.py": "e206ec5342cb8849cec1976ab6efaacb91b0e9421ca2cb2d9e47423fc3f429fd",
+    "benchmarks/test_dit_single_profile.py": "99e8b8b702086f1cf9ef753efefe1c7da8b6da3a8eee153d29bb7f5f6245e73c",
+    "benchmarks/test_worker_trace.py": "fd4178c91dcf6617d7ec7c7816598fdcdba18de8ade60288be3f293f76bdd51e",
+    "benchmarks/worker_cpu_probe.py": "0a9e101a23bd9299165f4daf9c62f2300d3b42c81a70c67f46383bd586a90933",
+    "benchmarks/worker_trace_coverage.py": "4df5154d60304a9a4c5cf884029b8e107e9296cfe59c33a0816ae4529f948671",
+    "benchmarks/worker_trace_probe.py": "20b561bf2c4d9ff4f0651a574766c0d39ab9750c163c21a537b97c5cd102dd79"
+  },
+  "production_operator_changes": false,
+  "frozen_distribution_hashes": {
+    "component_asset_plans.json": "dc7ab4fcb2d044a9cd32b4f6e3fd378f67232e7f358cb3d6e97434a4bd83ab1b",
+    "direct_core_requirements.json": "50eb673de9cb28e6b17a4c59997793eb3ed2df68d7da6a8d2fe9d5761aef9db3",
+    "frozen/comfy_source.tar.gz.bin": "97cb93348993c7ff9a1390680ca4509d2880712707ae5bb249a1f4b2e8a92ebc",
+    "frozen/constraints-local-conda.txt": "5a94152799828ea794a0f84ddd925df76967a89692b24a13f3ee16b3b254f573",
+    "frozen/frozen_kaggle_setup.py": "fd6c168e576e8b654803408380985260d1f38c651e5698644d6cb27674ecc318",
+    "frozen/local_conda.json": "e3a07afb8cb79e6f45c9c0118debc4bd4008c022d2652e0891273dac2db07aa3",
+    "frozen/requirements-local-conda.txt": "81e4f75c02676e0bdb7e35cb5ad3746465053935a23e764be7c385d46585c3f7"
+  },
+  "local_tests": {
+    "passed": true,
+    "count": 67,
+    "source": "Exact isolated published capsule"
+  },
+  "cpu": {
+    "kernel": "pamcks/h3-bundle-scalar-cpu",
+    "version": 3,
+    "submitted": true,
+    "collected": true,
+    "submission": {
+      "kernel": "pamcks/h3-bundle-scalar-cpu",
+      "submitted_utc": "2026-10-24T01:20:05.147222+00:00",
+      "returncode": 0,
+      "notebook_sha256": "46b6e39e584f62145fc377dc7c3160cb6edb460170b8345dbd7cfa62f90b4a20",
+      "source_binding": {
+        "mode": "cpu",
+        "publication": {
+          "file": "0fec102465b7c3dbd8c5a91d60a558e23a6dc641a4f9dee605faf781ba489ba4.tar.gz",
+          "sha256": "0fec102465b7c3dbd8c5a91d60a558e23a6dc641a4f9dee605faf781ba489ba4",
+          "bytes": 17602851,
+          "capsule_sha256": "28af6446c16c416dcad2a4c03bcf85906e2489225fcb8c2b4a792ded3ba7a965",
+          "source_files": 326,
+          "core_pins": 78,
+          "kaggle_mounts": 0,
+          "repository": "chinokikiss/minimax-h3-2xt4",
+          "branch": "codex/bundle-scalar-retry-20261024-0fec1024",
+          "commit": "750f8d64955174b1ba307213d6ed0b6f909a5bb9",
+          "path": "runtime/kaggle_artifacts/0fec102465b7c3dbd8c5a91d60a558e23a6dc641a4f9dee605faf781ba489ba4.tar.gz",
+          "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/750f8d64955174b1ba307213d6ed0b6f909a5bb9/runtime/kaggle_artifacts/0fec102465b7c3dbd8c5a91d60a558e23a6dc641a4f9dee605faf781ba489ba4.tar.gz",
+          "published": true,
+          "working_tree_and_index_changed": false,
+          "local_cpu_tests": 67
+        },
+        "qualification_sha256": null,
+        "kaggle_dataset_sources": [],
+        "kaggle_kernel_sources": [],
+        "temporary_private_auth": false,
+        "profile_hashes": {},
+        "setup_budget": 240,
+        "execution_budget": null,
+        "dit_lifetimes": false,
+        "dit_attention": "kitchen",
+        "profile_qualification_sha256": null
+      },
+      "final_collection_count": 0,
+      "status_polling": false,
+      "automatic_final_collection": false,
+      "response": "Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.4), please consider upgrading to the latest version (2.2.5)\nKernel version 3 successfully pushed.  Please check progress at https://www.kaggle.com/code/pamcks/h3-bundle-scalar-cpu\n"
+    },
+    "status": "cpu_ready",
+    "tests": 67,
+    "seconds": 113.90011712700004,
+    "worker_cpu_probe": {
+      "passed": true,
+      "qualification": "Concurrent disk-thread wall-clock validity, live-profile disabled, incremental output, invalid-clock rejection and one-attempt claims tested in CPU suite",
+      "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]"
+    },
+    "api": {
+      "torch": "2.11.0+cpu",
+      "cuda": null,
+      "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]",
+      "kitchen": "0.2.37",
+      "tilelang": "0.1.13",
+      "legacy_video_api": {
+        "signature": "(self, x, rotary_pos_emb, pre_norm, residual, residual_scale)",
+        "source": "/kaggle/temp/h3_light_source/ComfyUI/comfy/ldm/minimax/vae.py",
+        "gpu_available_on_cpu_host": false,
+        "qualification": "CPU signature/import check only; GPU availability is checked by the actual T4 operator gate"
+      },
+      "attention_signature": "(q: 'torch.Tensor', k: 'torch.Tensor', v: 'torch.Tensor', *, scale: 'float | None' = None, attn_mask: 'torch.Tensor | None' = None) -> 'torch.Tensor'",
+      "linear_signature": "(x: torch.Tensor, weight: torch.Tensor, weight_scale: torch.Tensor, bias: torch.Tensor | None = None, out_dtype: torch.dtype | None = None, convrot: bool = False, convrot_groupsize: int = 256, input_act: str | None = None, input_act_weight: torch.Tensor | None = None, input_act_eps: float = 0.0, residual: torch.Tensor | None = None, residual_scale: torch.Tensor | None = None) -> torch.Tensor",
+      "cuda_arch_flags": null,
+      "core_imports": "passed",
+      "tf32_default": false
+    },
+    "receipt_sha256": "829c73c2d2cfa24434f23424d4db8da6179ff94def6880dfdaf718b52f97e7ee",
+    "final_collection_count": 1
+  },
+  "gpu": {
+    "kernel": "pamcks/h3-dit-scalar-single-profile",
+    "submitted": true,
+    "collected": true,
+    "backends": [
+      "tilelang_scalar",
+      "kitchen"
+    ],
+    "denoiser_calls_per_backend": 1,
+    "tokens": 51220,
+    "query_shape_per_rank": [
+      1,
+      28,
+      51220,
+      128
+    ],
+    "full_pipeline": false,
+    "results_available": true,
+    "version": 2,
+    "submitted_utc": "2026-10-24T01:25:33.461746+00:00",
+    "submission": {
+      "kernel": "pamcks/h3-dit-scalar-single-profile",
+      "submitted_utc": "2026-10-24T01:25:33.461746+00:00",
+      "returncode": 0,
+      "notebook_sha256": "364d1611610e17422fbfe83760ea807c100f443287afcfb71c96a61ca3fb15e8",
+      "source_binding": {
+        "mode": "dit-profile",
+        "publication": {
+          "file": "0fec102465b7c3dbd8c5a91d60a558e23a6dc641a4f9dee605faf781ba489ba4.tar.gz",
+          "sha256": "0fec102465b7c3dbd8c5a91d60a558e23a6dc641a4f9dee605faf781ba489ba4",
+          "bytes": 17602851,
+          "capsule_sha256": "28af6446c16c416dcad2a4c03bcf85906e2489225fcb8c2b4a792ded3ba7a965",
+          "source_files": 326,
+          "core_pins": 78,
+          "kaggle_mounts": 0,
+          "repository": "chinokikiss/minimax-h3-2xt4",
+          "branch": "codex/bundle-scalar-retry-20261024-0fec1024",
+          "commit": "750f8d64955174b1ba307213d6ed0b6f909a5bb9",
+          "path": "runtime/kaggle_artifacts/0fec102465b7c3dbd8c5a91d60a558e23a6dc641a4f9dee605faf781ba489ba4.tar.gz",
+          "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/750f8d64955174b1ba307213d6ed0b6f909a5bb9/runtime/kaggle_artifacts/0fec102465b7c3dbd8c5a91d60a558e23a6dc641a4f9dee605faf781ba489ba4.tar.gz",
+          "published": true,
+          "working_tree_and_index_changed": false,
+          "local_cpu_tests": 67
+        },
+        "qualification_sha256": "829c73c2d2cfa24434f23424d4db8da6179ff94def6880dfdaf718b52f97e7ee",
+        "kaggle_dataset_sources": [],
+        "kaggle_kernel_sources": [],
+        "temporary_private_auth": false,
+        "profile_hashes": {},
+        "setup_budget": 240,
+        "execution_budget": 4800,
+        "dit_lifetimes": false,
+        "dit_attention": "tilelang_scalar",
+        "profile_qualification_sha256": null
+      },
+      "final_collection_count": 0,
+      "status_polling": false,
+      "automatic_final_collection": false,
+      "experiment_kind": "dit_single",
+      "result_relative": "light_execution/dit_single/dit_profile/result.json",
+      "replaces": {
+        "kernel": "pamcks/h3-dit-scalar-single-profile",
+        "version": 1,
+        "final_outputs_collected": true
+      },
+      "response": "Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.4), please consider upgrading to the latest version (2.2.5)\nKernel version 2 successfully pushed.  Please check progress at https://www.kaggle.com/code/pamcks/h3-dit-scalar-single-profile\n"
+    },
+    "final_collection_count": 1,
+    "performance_results_available": false,
+    "completed": false,
+    "scalar_started": false,
+    "kitchen_started": false
+  },
+  "duplicate_prevention": {
+    "replacement_push_attempts": 1,
+    "exclusive_submission_claim": true,
+    "exclusive_backend_claim": true,
+    "automatic_nfe_retries": 0,
+    "independent_backend_failures": true,
+    "prior_four_case_capture_matrix_repeated": false,
+    "conditioning_preparations": 1,
+    "model_downloads_per_job": 1,
+    "new_weight_or_lora_uploads": 0,
+    "base_bundle": "cnmds/minimax-h3-tp2-int8-561a6211@d3e6a4b131056d2c626a01acf6ba48123a885783"
+  },
+  "repairs": {
+    "benchmark_worker_timeout_seconds": 1500,
+    "cuda_flush_interval_ms": 1000,
+    "cpu_checkpoint_interval_seconds": 15,
+    "live_cprofile": false,
+    "resident_cprofile_clock": "monotonic_wall",
+    "resident_weight_caches_closed": true,
+    "profile_validation_required": true,
+    "both_rank_replays_required": true,
+    "driver_correlations_included": true,
+    "failed_nfe_partial_trace_export": true
+  },
+  "capture_gate": {
+    "cases": [
+      "terminate_with_periodic_save",
+      "graceful_explicit_flush_with_periodic_save"
+    ],
+    "forced_exit_dwell_seconds": 3,
+    "kernels_per_worker": 4,
+    "before_model_downloads": true
+  },
+  "budgets": {
+    "single_profile_process_seconds": 1850,
+    "backend_launcher_seconds": 2000,
+    "batch_seconds": 4600,
+    "execution_seconds": 4800
+  },
+  "dependencies": {
+    "kitchen": "0.2.37",
+    "tilelang": "0.1.13",
+    "comfy_commit": "d49e888586dd8ae012c0667b33466b815fee07f7",
+    "native_kaggle_torch_retained": true
+  },
+  "status_polling": false,
+  "automatic_final_collection": false,
+  "pending": [
+    "Qualify explicit worker-side flush checkpoints and restart semantics before another NFE; periodic saving alone is insufficient on this stack.",
+    "Complete one Scalar NFE and one matched Kitchen NFE after capture qualification",
+    "Resolve original Norm/Residual host CPU anomaly and observer overhead using valid evidence"
+  ],
+  "gpu_v2_result": {
+    "status": "blocked_before_models_periodic_flush_failed",
+    "version": 2,
+    "hardware": {
+      "devices": [
+        {
+          "name": "Tesla T4",
+          "capability": [
+            7,
+            5
+          ],
+          "uuid": "acde98a9-8dcf-c1ed-5d7f-e4639c74bc62"
+        },
+        {
+          "name": "Tesla T4",
+          "capability": [
+            7,
+            5
+          ],
+          "uuid": "4ae402e6-8a35-20b6-1214-1f45be49b75f"
+        }
+      ],
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "kitchen": "0.2.37",
+      "tilelang": "0.1.13"
+    },
+    "source_binding_verified": true,
+    "artifact_files": 28,
+    "final_artifacts_complete": true,
+    "setup_seconds": 80.53797331300004,
+    "capture_gate_seconds": 15.401730165000004,
+    "execution": {
+      "status": "worker_exited",
+      "deadline_seconds": 4800,
+      "scope": "Notebook cell execution only; provider startup/mounting excluded",
+      "worker_pid": 97,
+      "exit_code": 1,
+      "seconds": 19.316058516
+    },
+    "cases": [
+      {
+        "name": "terminate_no_flush",
+        "seconds": 9.438387593000016,
+        "coverage": {
+          "passed": false,
+          "blocker": "Required worker CUDA/NVTX tables missing"
+        },
+        "table_counts": {
+          "NVTX_EVENTS": 2,
+          "CUPTI_ACTIVITY_KIND_RUNTIME": 10,
+          "CUPTI_ACTIVITY_KIND_KERNEL": 0
+        },
+        "workers": {
+          "workers": [
+            {
+              "rank": 0,
+              "pid": 139,
+              "value": 1.5,
+              "flushed": false
+            },
+            {
+              "rank": 1,
+              "pid": 140,
+              "value": 2.5,
+              "flushed": false
+            }
+          ],
+          "flush": "no",
+          "exit": "terminate",
+          "exit_codes": [
+            -15,
+            -15
+          ]
+        },
+        "sqlite_sha256": "5975f2ae6f816ffe52d5700505150964f740e192f83d82b3b5d6d6dd663f51c2"
+      },
+      {
+        "name": "graceful_flush",
+        "seconds": 5.779440264999948,
+        "coverage": {
+          "passed": true,
+          "workers": [
+            {
+              "global_tid": 281478751584481,
+              "pid": 225,
+              "labels": [
+                "H3_CAPTURE/rank=0"
+              ],
+              "correlated_kernels": 4,
+              "devices": [
+                0
+              ],
+              "trained_blocks_with_kernels": 0
+            },
+            {
+              "global_tid": 281478768361698,
+              "pid": 226,
+              "labels": [
+                "H3_CAPTURE/rank=1"
+              ],
+              "correlated_kernels": 4,
+              "devices": [
+                1
+              ],
+              "trained_blocks_with_kernels": 0
+            }
+          ],
+          "api_tables": [
+            "CUPTI_ACTIVITY_KIND_RUNTIME"
+          ],
+          "scope": "Coverage qualification only; no performance attribution",
+          "blocker": null
+        },
+        "table_counts": {
+          "NVTX_EVENTS": 2,
+          "CUPTI_ACTIVITY_KIND_RUNTIME": 36,
+          "CUPTI_ACTIVITY_KIND_KERNEL": 10
+        },
+        "workers": {
+          "workers": [
+            {
+              "rank": 0,
+              "pid": 225,
+              "value": 1.5,
+              "flushed": true
+            },
+            {
+              "rank": 1,
+              "pid": 226,
+              "value": 2.5,
+              "flushed": true
+            }
+          ],
+          "flush": "yes",
+          "exit": "graceful",
+          "exit_codes": [
+            0,
+            0
+          ]
+        },
+        "sqlite_sha256": "57c4f405a54eac57412e529148967b8708d2f52774b305f3ce6af719c316b521"
+      }
+    ],
+    "model_downloads_started": false,
+    "completed_denoiser_calls": 0,
+    "scalar_started": false,
+    "kitchen_started": false,
+    "attention_performance_results": false,
+    "original_norm_residual_root_cause": "Unresolved; no live NFE was run",
+    "conclusion": "The 1000-ms Nsight save setting plus 3-s dwell did not preserve kernels after forced worker termination; graceful explicit flush retained four kernels per rank.",
+    "next_requirement": "Qualify explicit worker-side flush checkpoints and restart semantics before another NFE; periodic saving alone is insufficient on this stack.",
+    "transfer": {
+      "initial_files": 20,
+      "preserved_files": 20,
+      "resumed_files": 8,
+      "resume_inventory_requests": 1,
+      "completed_utc": "2026-10-24T04:16:28.981848+00:00"
+    },
+    "status_polls": 0,
+    "new_gpu_submissions": 0
+  }
+}

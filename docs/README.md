@@ -2,7 +2,7 @@
 
 [Repository home](../README.md) / Documentation
 
-Start with the **[40-page technical guide](guides/MiniMax_H3_TP2_Optimization_Technical_Guide.pdf)**
+Start with the **[technical guide](guides/MiniMax_H3_TP2_Optimization_Technical_Guide.pdf)**
 for an illustrated explanation of the integrated H3 pipeline. It covers operator
 contracts, TP2 ownership, fusion, LoRA, memory residency, and staged parallel VAEs.
 The PDF includes bookmarks and an embedded source-hash manifest.
@@ -11,11 +11,14 @@ The PDF includes bookmarks and an embedded source-hash manifest.
 
 | Guide | Use it for |
 |---|---|
+| [Performance engineering follow-up](reports/H3_REVIEW_OPTIMIZATIONS_20261024.md) | Allocation/ownership/integrity repairs and opt-in column/QKV/IO candidates; local operator evidence and pending physical T4 qualification |
+| [TP2 bundle LoRA and profiling experiment](reports/BUNDLE_SCALAR_WORKER_PROFILE_20261023.md) | Bounded offline LoRA without baked-model uploads; matched Kitchen/Scalar, worker trace capture and observer-overhead investigation |
+| [FP16-fix / stored fusion / scaled transport default](reports/H3_FP16_FUSED_DEFAULT_20261022.md) | Current production dispatch, preserved alternatives, real T4 evidence and remaining quality limits |
 | [Runtime setup](guides/H3_LEGACY_RUNTIME.md) | Preserved local ComfyUI and environment, launch commands, Linux qualification limits |
 | [Operator integration](guides/H3_OPERATOR_INTEGRATION.md) | Node options, attention policies, row operators, and workflow wiring |
 | [Operator enhancements](guides/H3_OPERATOR_ENHANCEMENTS.md) | FP16 transport, positional reads, lifetimes, adaptive lookahead, Native refiner |
 | [Loading stages](guides/H3_LOADING_STAGES.md) | Online/offline LoRA, layer-parallel baking, encoder/decoder stages, idle preloading |
-| [Parallel VAE integration](guides/PARALLEL_VAE_INTEGRATION.md) | Video query partitioning, FP32 audio channels, Native fallbacks |
+| [VAE integration](guides/PARALLEL_VAE_INTEGRATION.md) | Video query partitioning, Native single-GPU FP32 audio |
 | [Sampler integration](guides/COMFYUI_SAMPLER_INTEGRATION.md) | Native conditioning/sampling interfaces and the scoped sampler gates |
 | [Pipeline review](reports/H3_PIPELINE_REVIEW.md) | Current code boundaries, cleanup, regression evidence, remaining blockers |
 | [Runtime provenance audit](reports/H3_RUNTIME_PROVENANCE_AUDIT.md) | Which source/dependency versions were selected and preserved |
