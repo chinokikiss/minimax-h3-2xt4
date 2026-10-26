@@ -1,0 +1,2995 @@
+{
+  "date": "2026-10-26",
+  "kind": "optimization techniques; mechanisms, removed work and numerical/ownership contracts",
+  "chapters": [
+    {
+      "id": "SYS",
+      "title": "Partitioning and persistent execution",
+      "intro": "Keep Native conditioning, sampling and public interfaces in the parent. Partition learned computation inside persistent workers. Component ownership, collective order and resource ownership are parts of the algorithm.",
+      "flow": [
+        "Native parent",
+        "Persistent rank 0 + rank 1",
+        "Owned projections",
+        "SUM / gather",
+        "Native output"
+      ]
+    },
+    {
+      "id": "LIN",
+      "title": "INT8 projections, fusion and communication",
+      "intro": "A coherent TP row operator uses a shared activation quantizer, local INT8 GEMMs, a collective on partial results and a deliberate dequantization order. Fusion removes materialized intermediates while preserving the selected arithmetic boundaries.",
+      "flow": [
+        "Rotate / activate",
+        "Shared row MAX",
+        "Owned INT8 packing",
+        "INT32 GEMM",
+        "SUM + dequantize"
+      ]
+    },
+    {
+      "id": "NUM",
+      "title": "Numerical storage and lifetime management",
+      "intro": "Reduce activation bytes with explicit storage boundaries. Preserve FP32 statistics and nonlinear preparation where range or rounding requires them. Residual gauges are coordinate changes on privately prepared modules, not checkpoint requantization.",
+      "flow": [
+        "FP32 stable island",
+        "Scale branch / residual",
+        "FP16 storage",
+        "INT8 projection",
+        "FP32 public boundary"
+      ]
+    },
+    {
+      "id": "ATT",
+      "title": "Dense attention and preparation techniques",
+      "intro": "Dense attention techniques change operand preparation, reuse, layout or scheduling. State the quantization and output-store contract before discussing fusion: INT8, Group32 and Native SDPA are distinct numerical paths.",
+      "flow": [
+        "Q/K norm + RoPE",
+        "Quantize / pack",
+        "QK + online softmax",
+        "Probability x V",
+        "BND output"
+      ]
+    },
+    {
+      "id": "SPR",
+      "title": "Sparse routing and pooled attention",
+      "intro": "Route blocks of tokens, preserve protected conditioning, and explicitly define omitted attention. Sparse dropping and scalar pooling implement different approximation equations. Scheduling and preparation are independent optimization dimensions.",
+      "flow": [
+        "Leaf means + counts",
+        "Protected routes",
+        "Fine selected blocks",
+        "Optional omitted centroids",
+        "Online normalize + merge"
+      ]
+    },
+    {
+      "id": "LOR",
+      "title": "Online adapter ownership and arithmetic",
+      "intro": "For delta = scale * B(Ax), preserve Native adapter order and the post-B scale. Reduce work by changing storage ownership or communication only where the selected numerical contract permits it.",
+      "flow": [
+        "Common activation",
+        "Full or owned A",
+        "Optional FP32 hidden SUM",
+        "Owned B output",
+        "Post-B scale + ordered add"
+      ]
+    },
+    {
+      "id": "IO",
+      "title": "Offline baking and checkpoint access",
+      "intro": "Move repeatable work to preparation and read only admitted payloads. Preserve checkpoint representation and immutable identity while replacing full-file reads, repeated validation or repeated adapter merging with bounded owned operations.",
+      "flow": [
+        "Immutable descriptor",
+        "Owned tensor ranges",
+        "Prepare / bake once",
+        "Verified CPU backing",
+        "Bounded H2D"
+      ]
+    },
+    {
+      "id": "RES",
+      "title": "Host cache, GPU windows and phase scheduling",
+      "intro": "Treat disk construction, pageable cache, pinned staging and GPU residency as distinct owners under explicit byte budgets. Prefetch is useful only while it respects foreground work and the next actual use.",
+      "flow": [
+        "Disk preparation",
+        "Shared host budget",
+        "Pinned staging lease",
+        "H2D ready event",
+        "GPU use lease / eviction"
+      ]
+    },
+    {
+      "id": "VAE",
+      "title": "Component loading and parallel decode",
+      "intro": "Keep Native temporal/spatial planning, normalization and blending in the public interface. Parallelize only the declared learned work, with coordinated admission before distributed execution and a scoped fallback owner.",
+      "flow": [
+        "Reference-dependent encoder",
+        "Native decode planner",
+        "Admit decoder owners",
+        "Aligned queries + global KV",
+        "Native normalize / blend"
+      ]
+    },
+    {
+      "id": "ALT",
+      "title": "Retained alternative optimization methods",
+      "intro": "Retired and experimental methods remain part of the technique inventory. Their mechanisms are described here without treating an old result or a surviving function as a current deployment selection.",
+      "flow": [
+        "Alternative representation",
+        "Explicit numerical contract",
+        "Owned implementation",
+        "Scoped activation",
+        "Retained source"
+      ]
+    }
+  ],
+  "techniques": [
+    {
+      "id": "SYS01",
+      "chapter": "SYS",
+      "title": "Component-aware tensor parallelism",
+      "status": "active",
+      "method": "Split column-parallel weight output rows and row-parallel input columns. For packed QKV and gate/up tensors, split each component independently and concatenate the owned pieces in Native component order.",
+      "saves": "Each rank stores and multiplies its owned matrix pieces instead of replicating the complete TE and DiT block.",
+      "contract": "Replicate the required scales, norms and metadata. A half of a packed tensor is not generally the same as half of each component.",
+      "sources": [
+        "patches/rank_local_int8.py",
+        "patches/tp_qwen3vl.py",
+        "patches/tp_dit.py"
+      ],
+      "legacy_ids": [
+        "TP2"
+      ]
+    },
+    {
+      "id": "SYS02",
+      "chapter": "SYS",
+      "title": "Persistent serial worker sessions",
+      "status": "active",
+      "method": "Create one spawned process per CUDA device and reuse its initialized modules, readers and caches across commands. Carry sequence identifiers through a serial request/acknowledgement protocol.",
+      "saves": "Amortize process, CUDA and module startup and retain useful prepared weights between actual evaluations.",
+      "contract": "Preserve collective ordering and propagate failures before reusing a session. Persistence does not imply concurrent sampling requests.",
+      "sources": [
+        "patches/comfy_tp_runtime.py",
+        "patches/comfy_sampler.py"
+      ],
+      "legacy_ids": [
+        "SERVICE"
+      ]
+    },
+    {
+      "id": "SYS03",
+      "chapter": "SYS",
+      "title": "Bounded CPU packet handoff",
+      "status": "active",
+      "method": "Serialize the required tensors and nested layout metadata through the parent/worker protocol at explicit phase boundaries. Preserve dtype and PackedLayout rather than reconstructing context from tensor size.",
+      "saves": "Keep Native orchestration outside GPU workers while avoiding repeated model construction.",
+      "contract": "Handoff is synchronous. Do not infer communication/compute overlap from the existence of persistent processes.",
+      "sources": [
+        "patches/comfy_tp_runtime.py",
+        "patches/comfy_sampler.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "SYS04",
+      "chapter": "SYS",
+      "title": "Discard unused secondary-rank replies",
+      "status": "active",
+      "method": "After both ranks finish computation and synchronization, discard rank-1 nondiagnostic output before making the CPU packet. Keep acknowledgements and explicit diagnostic responses.",
+      "saves": "Remove a redundant device-to-host tensor copy, CPU allocation and pipe payload.",
+      "contract": "Both ranks still participate in all collectives and error handling; output suppression is not computation suppression.",
+      "sources": [
+        "patches/comfy_tp_runtime.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "SYS05",
+      "chapter": "SYS",
+      "title": "Stable collective topology",
+      "status": "active",
+      "method": "Use NCCL with peer-to-peer disabled and four minimum/maximum channels; retain automatic protocol selection. Run corresponding collectives in the same order on both owners.",
+      "saves": "Bound the communication configuration for the two-device deployment and avoid depending on unavailable peer-copy topology.",
+      "contract": "Actual distributed collectives remain necessary. Logical-rank execution on one GPU is not a replacement for this topology.",
+      "sources": [
+        "patches/comfy_tp_runtime.py",
+        "patches/quantized_collectives.py"
+      ],
+      "legacy_ids": [
+        "NCCL"
+      ]
+    },
+    {
+      "id": "SYS06",
+      "chapter": "SYS",
+      "title": "Policy-keyed prepared module reuse",
+      "status": "active",
+      "method": "Attach an immutable operator and numerical-flow policy to prepared modules, streamed specifications and cache identities. Recreate the service when loader choices change.",
+      "saves": "Reuse prepared representations without applying a second fold or serving weights prepared under a different backend or LoRA stack.",
+      "contract": "Residency copies must preserve registered buffers, rank metadata and policy; avoid methods bound to the canonical CPU module.",
+      "sources": [
+        "patches/h3_operator_policy.py",
+        "patches/comfy_tp_runtime.py",
+        "patches/weight_residency.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "SYS07",
+      "chapter": "SYS",
+      "title": "Architecture and selected-backend guards",
+      "status": "active",
+      "method": "Select specialized kernels only for supported inference geometry and SM75. Retain the selected public Kitchen implementation for other backends, autograd, compiled calls, hooks and unsupported shapes.",
+      "saves": "Concentrate specialized code on the H3 shapes it implements without replacing the global operator registry.",
+      "contract": "Validate the pinned core ABI before execution. A fallback must preserve the public shape, dtype and mask interface.",
+      "sources": [
+        "patches/h3_operator_dependencies.py",
+        "patches/legacy_runtime.py",
+        "patches/h3_configuration.py",
+        "custom_nodes/minimax_h3_tp2/__init__.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "SYS08",
+      "chapter": "SYS",
+      "title": "Separate hot-path execution from diagnostics",
+      "status": "active",
+      "method": "Keep detailed events, tensor scans, observers and profiler capture behind explicit diagnostic entry points. Normal worker commands retain only required protocol and lifecycle accounting.",
+      "saves": "Avoid tracing allocation, host synchronization and repeated scalar extraction during ordinary inference.",
+      "contract": "Required acknowledgements, failures and admission decisions remain available. Diagnostics must not become an implicit production dependency.",
+      "sources": [
+        "patches/diagnostic_metrics.py",
+        "patches/runtime_diagnostics.py",
+        "patches/comfy_tp_runtime.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "SYS09",
+      "chapter": "SYS",
+      "title": "Full-model backend geometry at sharded boundaries",
+      "status": "active",
+      "method": "When Native attention backend priority depends on the original query size, reconstruct that size from the head shard and world size before selecting the retained backend policy.",
+      "saves": "Keep tensor parallelism from accidentally changing a shape-dependent Native kernel selection.",
+      "contract": "Preserve the complete model threshold and supported public attention API even though each rank owns fewer heads.",
+      "sources": [
+        "patches/tp_qwen3vl.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "LIN01",
+      "chapter": "LIN",
+      "title": "Direct Turing INT8 matrix multiplication",
+      "status": "active",
+      "method": "Call the retained Kitchen CUDA/cuBLAS INT8 matrix primitive on contiguous activation codes and owned weight rows, producing an INT32 accumulator.",
+      "saves": "Avoid eager per-call transposed-weight and padded-row intermediates where the scoped direct path applies.",
+      "contract": "Keep the complete intended GEMM geometry, signed integer operands and original activation/weight scales.",
+      "sources": [
+        "patches/optimized_tp.py",
+        "patches/parallel_int8.py"
+      ],
+      "legacy_ids": [
+        "GEMM"
+      ]
+    },
+    {
+      "id": "LIN02",
+      "chapter": "LIN",
+      "title": "Global-row activation scale across owners",
+      "status": "active",
+      "method": "Compute local maxima over the owned rotated activation slice, then MAX-reduce them. Quantize both owners with the same full-row maximum before local GEMMs.",
+      "saves": "Avoid gathering the entire floating activation merely to reproduce a full-row quantizer.",
+      "contract": "Independent rank-local scales cannot be followed by a single common INT32 SUM/dequantization. Preserve the shared scale contract.",
+      "sources": [
+        "patches/optimized_tp.py",
+        "patches/tilelang_row_quant.py"
+      ],
+      "legacy_ids": [
+        "SCALEMAX"
+      ]
+    },
+    {
+      "id": "LIN03",
+      "chapter": "LIN",
+      "title": "External-maximum quantization",
+      "status": "active",
+      "method": "Pass the already reduced full-row maximum directly into the owned-slice quantizer. Apply the pinned division, nearest rounding, clamp and scale floor in the packing kernel.",
+      "saves": "Remove an artificial maximum sentinel, extra scan, temporary copy and restoration stage.",
+      "contract": "Match the selected quantizer rounding and scale-floor order, including zero rows; algebraically similar division is not automatically bit-equivalent.",
+      "sources": [
+        "patches/tilelang_row_quant.py"
+      ],
+      "legacy_ids": [
+        "EXTERNALMAX"
+      ]
+    },
+    {
+      "id": "LIN04",
+      "chapter": "LIN",
+      "title": "Strided maxima and direct owned reads",
+      "status": "active",
+      "method": "Read each owner from the original packed or strided activation and reduce its absolute maximum in place. Use explicit source strides and ownership offsets.",
+      "saves": "Remove full-width contiguous copies and intermediate owned-slice materialization.",
+      "contract": "Handle component packing and padding separately. Source views must remain live until the consuming kernel finishes.",
+      "sources": [
+        "patches/tilelang_row_quant.py"
+      ],
+      "legacy_ids": [
+        "STRIDEDMAX"
+      ]
+    },
+    {
+      "id": "LIN05",
+      "chapter": "LIN",
+      "title": "Positive-zero ownership padding",
+      "status": "active",
+      "method": "Write the owner codes directly to aligned GEMM storage and initialize every unowned/padded position as positive zero. Define padding from ConvRot groups and packed component boundaries.",
+      "saves": "Fuse ownership packing, layout conversion and padding into one destination.",
+      "contract": "Signed zero and uninitialized tail bytes can change raw-byte equivalence or subsequent transforms. Read only valid source channels.",
+      "sources": [
+        "patches/tilelang_row_quant.py",
+        "patches/tilelang_swiglu_pad.py"
+      ],
+      "legacy_ids": [
+        "PACK"
+      ]
+    },
+    {
+      "id": "LIN06",
+      "chapter": "LIN",
+      "title": "SwiGLU plus ownership-padding fusion",
+      "status": "active",
+      "method": "Compute silu(gate) * up in the selected floating island and store directly into the padded/owned destination. Support separate TE gate/up tensors and packed DiT branch inputs.",
+      "saves": "Remove eager activation/product tensors and a later ownership-padding copy.",
+      "contract": "Promoted FP16-flow preparation converts operands to FP32 before the nonlinear product. Converting an already overflowed product is too late.",
+      "sources": [
+        "patches/tilelang_swiglu_pad.py",
+        "patches/h3_operator_policy.py"
+      ],
+      "legacy_ids": [
+        "SWIGLU"
+      ]
+    },
+    {
+      "id": "LIN07",
+      "chapter": "LIN",
+      "title": "Owned FP32 ConvRot preparation",
+      "status": "alternative",
+      "method": "Compute the supported rank-owned SwiGLU/ConvRot channels in FP32 and feed the common global-MAX quantization procedure. Retain complete transform groups across ownership boundaries.",
+      "saves": "Avoid a full-width FP32 rotated activation while retaining the required local slice.",
+      "contract": "This is the owned_fp32 alternative. Its grouping and input layout guards differ from the newer regular-H4 fused producer.",
+      "sources": [
+        "patches/tilelang_swiglu_pad.py"
+      ],
+      "legacy_ids": [
+        "OWNED"
+      ]
+    },
+    {
+      "id": "LIN08",
+      "chapter": "LIN",
+      "title": "Stored fused FP32 SwiGLU and regular H4 rotation",
+      "status": "active",
+      "method": "Fuse branch activation and regular ConvRot256 preparation in FP32, retain the rotated FP32 intermediate, and produce owned INT8 codes using the shared row maximum.",
+      "saves": "Collapse separate activation, rotation and packing launches while reusing the rotated result in subsequent preparation.",
+      "contract": "Use the pinned H4/ConvRot order and explicit rounding boundaries. This is fused_stored, the default eligible FC2/down preparation.",
+      "sources": [
+        "patches/tilelang_swiglu_quant.py",
+        "patches/h3_operator_policy.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "LIN09",
+      "chapter": "LIN",
+      "title": "Recomputed fused preparation",
+      "status": "alternative",
+      "method": "Calculate the same FP32 branch/rotation once for maxima and recompute it for the final packing rather than retaining the complete rotated activation.",
+      "saves": "Trade additional arithmetic and reads for a shorter/smaller FP32 intermediate lifetime.",
+      "contract": "Keep the stored variant arithmetic contract. Recompute is an explicit memory alternative, not an automatic faster path.",
+      "sources": [
+        "patches/tilelang_swiglu_quant.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "LIN10",
+      "chapter": "LIN",
+      "title": "Exact INT32 partial SUM",
+      "status": "active",
+      "method": "SUM the local INT32 GEMM accumulators before applying the common row scale and output-channel weight scale, then bias and output conversion in the required order.",
+      "saves": "Preserve the integer reduction contract without gathering full activations.",
+      "contract": "INT32 SUM is the explicit accuracy alternative to scaled FP16 communication. The native fallback reduction is fixed, not a second hidden policy switch.",
+      "sources": [
+        "patches/parallel_int8.py",
+        "patches/optimized_tp.py",
+        "patches/tilelang_swiglu_pad.py"
+      ],
+      "legacy_ids": [
+        "INT32"
+      ]
+    },
+    {
+      "id": "LIN11",
+      "chapter": "LIN",
+      "title": "Power-of-two FP16 partial transport",
+      "status": "active",
+      "method": "Choose an exponent from the local-K accumulator bound and world size. Encode partial INT32 values as FP16 after power-of-two scaling, AllReduce SUM, and reconstruct/dequantize in FP32.",
+      "saves": "Halve partial-sum payload size relative to INT32 and fuse reconstruction with the final epilogue.",
+      "contract": "FP16 encoding and SUM are approximate, especially under cancellation. Bound both rank contributions below FP16 maximum; scaling changes range, not mantissa bits.",
+      "sources": [
+        "patches/tilelang_transport_p2.py",
+        "patches/tilelang_transport_tradeoffs.py"
+      ],
+      "legacy_ids": [
+        "FP16SUM"
+      ]
+    },
+    {
+      "id": "LIN12",
+      "chapter": "LIN",
+      "title": "Fused row dequantization epilogue",
+      "status": "active",
+      "method": "Combine transport reconstruction, shared row scale, weight scale, bias and final dtype store in one kernel after the collective.",
+      "saves": "Remove full-size reconstructed and separately dequantized floating temporaries.",
+      "contract": "Keep explicit FP32 operation order and the final activation-store boundary; apply online LoRA at its defined post-base boundary.",
+      "sources": [
+        "patches/tilelang_transport_p2.py",
+        "patches/parallel_int8.py"
+      ],
+      "legacy_ids": [
+        "DEQUANT"
+      ]
+    },
+    {
+      "id": "LIN13",
+      "chapter": "LIN",
+      "title": "Fixed-size feature gather fallback",
+      "status": "fallback",
+      "method": "Gather equal-size rank-owned feature pieces into fixed receive storage and restore Native order before the retained fallback operator.",
+      "saves": "Provide a predictable fallback without variable-size object transport or repeated gather-list construction.",
+      "contract": "The gathered floating path is distinct from shared-scale local INT32 partials. It remains a fallback, not an INT8 communication claim.",
+      "sources": [
+        "patches/optimized_tp.py",
+        "patches/parallel_int8.py"
+      ],
+      "legacy_ids": [
+        "GATHER"
+      ]
+    },
+    {
+      "id": "LIN14",
+      "chapter": "LIN",
+      "title": "Single-destination chunked column dequantization",
+      "status": "active",
+      "method": "Allocate the final output once. Process bounded accumulator row chunks, form row_scale * weight_scale in FP32, multiply the converted accumulator in place, and copy to final rows.",
+      "saves": "Remove a list of output chunks, their final concatenation and a redundant full-size scaled intermediate.",
+      "contract": "Keep the two FP32 multiplication boundaries in this order. Chunking the epilogue does not change GEMM dimensions.",
+      "sources": [
+        "patches/dit_column_linear.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "LIN15",
+      "chapter": "LIN",
+      "title": "Direct column GEMM with ordered TileLang epilogue",
+      "status": "active",
+      "method": "Reuse eager activation rotation/quantization, call the direct INT8 GEMM for aligned SM75 DiT QKV/FC1 weights, then apply an epilogue with explicit rounded FP32 products and one output store.",
+      "saves": "Remove eager weight transpose/padding and broadcast dequantization scratch on the supported column shapes.",
+      "contract": "Require inference, the selected eager backend and the guarded DiT geometry. Preserve the public backend elsewhere; epilogue-only tilelang_exact remains a private comparator.",
+      "sources": [
+        "patches/dit_column_linear.py",
+        "patches/tilelang_column_epilogue.py"
+      ],
+      "legacy_ids": [
+        "COLUMN"
+      ]
+    },
+    {
+      "id": "LIN16",
+      "chapter": "LIN",
+      "title": "Shared TE input rotation and quantization",
+      "status": "active",
+      "method": "Prepare a common normalized input once for independent Q/K/V column GEMMs, and similarly once for gate/up. Reuse only deterministic activation codes and row scales.",
+      "saves": "Remove repeated ConvRot and row-quantization work without merging projection GEMMs.",
+      "contract": "Keep hooks, subclasses, overridden forwards, autograd and compiled calls on their original module paths. Preserve each projection weight and GEMM geometry.",
+      "sources": [
+        "patches/dit_column_linear.py",
+        "patches/tp_qwen3vl.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "LIN17",
+      "chapter": "LIN",
+      "title": "Bounded complete column-row scheduling",
+      "status": "experimental",
+      "method": "Partition large inference activation rows into bounded calls around the public linear API; write each completed block to its final output position.",
+      "saves": "Bound per-call accumulator/workspace residency for long sequences.",
+      "contract": "A changed GEMM row geometry can change floating/backend behavior. This experimental schedule is distinct from epilogue-only chunking.",
+      "sources": [
+        "benchmarks/bounded_column_int8.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "NUM01",
+      "chapter": "NUM",
+      "title": "FP16 residual storage with a power-of-two gauge",
+      "status": "active",
+      "method": "Represent the residual stream as y = x / c, with c = 2^e and default e = 6 for TE/DiT. Divide branch outputs before storage and use epsilon / c^2 for gauge-aware normalization.",
+      "saves": "Reduce residual/activation storage and movement while preserving range headroom.",
+      "contract": "Power-of-two scaling does not add precision. Vision/Video gauges remain independently specified; legacy flow retains the original coordinate system.",
+      "sources": [
+        "patches/h3_tensor_flow.py",
+        "patches/comfy_tp_runtime.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "NUM02",
+      "chapter": "NUM",
+      "title": "Private scale and bias folding",
+      "status": "active",
+      "method": "Fold the scalar residual divisor into private FP32 INT8 weight scales or dense weights and biases once during module preparation. Adjust LoRA post-B coefficients consistently.",
+      "saves": "Avoid separate runtime branch-rescale tensors and repeated multiplications.",
+      "contract": "Never mutate checkpoint bytes or apply a fold twice. Nonuniform gains cannot be commuted through ConvRot as a scalar fold.",
+      "sources": [
+        "patches/h3_tensor_flow.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "NUM03",
+      "chapter": "NUM",
+      "title": "FP32 normalization and modulation islands",
+      "status": "active",
+      "method": "Compute normalization statistics, gains, epsilon, AdaLN modulation and gated additions in FP32, then cast at the declared activation storage boundary.",
+      "saves": "Allow compact FP16 storage around operations whose reductions and products need wider range.",
+      "contract": "Keep sampler state, time curves, statistics and final DiT heads in their FP32 islands. Restore public conditioning in its unscaled representation.",
+      "sources": [
+        "patches/h3_tensor_flow.py",
+        "patches/tp_dit.py",
+        "patches/tp_qwen3vl.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "NUM04",
+      "chapter": "NUM",
+      "title": "FP32 online adapter products before scaling",
+      "status": "active",
+      "method": "For FP16 tensor flow, perform the A/B products in FP32 and apply the adapter strength after B before the final activation store.",
+      "saves": "Prevent an overflowing half-precision B product from destroying information before a small post-B coefficient is applied.",
+      "contract": "Preserve adapter order and strength placement; a small scale cannot recover a product that already overflowed.",
+      "sources": [
+        "patches/h3_lora.py",
+        "patches/h3_tensor_flow.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "NUM05",
+      "chapter": "NUM",
+      "title": "Prompt release of attention and MLP intermediates",
+      "status": "active",
+      "method": "Release caller references to Q/K/V, attention buffers, branch tensors, LoRA output views and old residual owners immediately after their last consuming operation.",
+      "saves": "Reduce overlap between attention, FFN, residual and next-block activation lifetimes.",
+      "contract": "Deleting a local name is effective only if callers and views no longer retain the storage. Respect stream/event lifetime before reuse.",
+      "sources": [
+        "patches/tp_qwen3vl.py",
+        "patches/tp_dit.py",
+        "patches/h3_lora.py"
+      ],
+      "legacy_ids": [
+        "DEL"
+      ]
+    },
+    {
+      "id": "NUM06",
+      "chapter": "NUM",
+      "title": "Retained fused norms and rotary embedding",
+      "status": "active",
+      "method": "Use the pinned Kitchen RMSNorm/RoPE helpers at the established Native boundary, including compact head layouts and required gain casts.",
+      "saves": "Fuse normalization/rotary work and avoid otherwise separate layout and elementwise passes.",
+      "contract": "Preserve Native residual, normalization, projection and rotation ordering. This does not authorize a replacement of the frozen legacy attention API.",
+      "sources": [
+        "patches/tp_dit.py",
+        "patches/tp_qwen3vl.py",
+        "patches/h3_operator_policy.py"
+      ],
+      "legacy_ids": [
+        "NATIVEFUSE"
+      ]
+    },
+    {
+      "id": "NUM07",
+      "chapter": "NUM",
+      "title": "BF16 reference activation storage",
+      "status": "experimental",
+      "method": "Use the numerical-flow wrapper with BF16 storage while retaining the same explicit FP32 stability islands and private residual-gauge preparation.",
+      "saves": "Provide a 16-bit storage/reference representation with a different range/precision tradeoff from FP16.",
+      "contract": "This is reference-only; deployment RuntimeConfig rejects bf16_reference on the T4 path. Storage support does not imply native BF16 Tensor Core arithmetic on SM75.",
+      "sources": [
+        "patches/h3_tensor_flow.py",
+        "patches/comfy_tp_runtime.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ATT01",
+      "chapter": "ATT",
+      "title": "Pinned Kitchen INT8 dense attention",
+      "status": "active",
+      "method": "Rotate/quantize Q/K, use packed per-thread scales and an optional representative-key shift, and accumulate attention with the retained signed-INT8 Q/K and unsigned-probability/INT8 V primitives.",
+      "saves": "Use Tensor Core integer products and online softmax without materializing a token-by-token score matrix.",
+      "contract": "Preserve the installed quantizer and scale packing. FP32 input uses BF16 output storage followed by an FP32 cast, not full FP32 numerical precision.",
+      "sources": [
+        "patches/h3_operator_policy.py",
+        "experiments/kitchen_attention/attention.py",
+        "experiments/kitchen_attention/native/vendor/attn_utils.cuh"
+      ],
+      "legacy_ids": [
+        "KITCHEN"
+      ]
+    },
+    {
+      "id": "ATT02",
+      "chapter": "ATT",
+      "title": "Direct masked Kitchen TE with compact GQA",
+      "status": "active",
+      "method": "Forward the original boolean/additive mask and compact KV heads directly to pinned Kitchen, then expose the BND output expected by TE.",
+      "saves": "Avoid KV-head replication, full-mask reconstruction, host mask classification and a separate native-extension build in default dispatch.",
+      "contract": "Score masking and raw-input prefix invariance are separate contracts: shared data-dependent quantization can couple earlier representations to future inputs.",
+      "sources": [
+        "patches/kitchen_te_attention.py",
+        "patches/h3_operator_policy.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ATT03",
+      "chapter": "ATT",
+      "title": "Native SDPA for the token refiner",
+      "status": "active",
+      "method": "Keep the Native refiner projections, normalization, rotary embedding and SDPA while wrapping the module so policy survives residency copies.",
+      "saves": "Avoid applying sparse/quantized main-DiT attention preparation to the small refiner sequence.",
+      "contract": "Refiner tokens are not sparsified. Use a registered module wrapper rather than a closure bound to a CPU canonical object.",
+      "sources": [
+        "patches/h3_operator_policy.py"
+      ],
+      "legacy_ids": [
+        "REFINER"
+      ]
+    },
+    {
+      "id": "ATT04",
+      "chapter": "ATT",
+      "title": "Group32 QK with FP16 PV",
+      "status": "alternative",
+      "method": "Partition each head dimension into 32-channel groups. Compute an INT32 QK product per group, apply the corresponding FP32 scales, and use FP16 probabilities/values for PV.",
+      "saves": "Use narrower quantization groups and Tensor Core QK while retaining a wider PV path.",
+      "contract": "This is an explicit numerical alternative to Kitchen per-thread packing. Preserve the centering and rounding selected by its preparation.",
+      "sources": [
+        "patches/tilelang_grouped_qk.py",
+        "patches/tilelang_grouped_tp.py",
+        "patches/tilelang_grouped_tp_kitchen.py"
+      ],
+      "legacy_ids": [
+        "DENSE"
+      ]
+    },
+    {
+      "id": "ATT05",
+      "chapter": "ATT",
+      "title": "Mask-aware Group32 TE kernel",
+      "status": "alternative",
+      "method": "Broadcast compact 2D/3D/4D masks within online softmax and map query heads to shared KV heads without expanding K/V. Apply additive bias in the kernel score domain.",
+      "saves": "Avoid repeated KV copies and full expanded mask storage for GQA prefill.",
+      "contract": "Preserve empty-row handling and later-leaf accumulation after masked leaves. tilelang_group32 is an explicit override, not the current TE default.",
+      "sources": [
+        "patches/tilelang_group32_masked.py"
+      ],
+      "legacy_ids": [
+        "TEATTN"
+      ]
+    },
+    {
+      "id": "ATT06",
+      "chapter": "ATT",
+      "title": "Fused stride-aware cast, pad and quantize",
+      "status": "alternative",
+      "method": "Read packed/strided Q/K/V directly and combine input conversion, ragged-tail padding, Group32 scale reduction and code production. Keep only mode-required representations.",
+      "saves": "Remove separate contiguous/cast/pad passes and avoid duplicate padded floating tensors.",
+      "contract": "Use the selected input FP16 rounding boundary, nearest rounding and scale floor. Arbitrary layout fusion must retain source strides and valid tails.",
+      "sources": [
+        "patches/tilelang_grouped_tp_kitchen_v2.py",
+        "patches/tilelang_grouped_fused.py"
+      ],
+      "legacy_ids": [
+        "PREP"
+      ]
+    },
+    {
+      "id": "ATT07",
+      "chapter": "ATT",
+      "title": "Prepared dense-only fast path",
+      "status": "experimental",
+      "method": "Build an internally owned all-dense route object and prepare only dense operands. Omit pooled V, V8 and LSE work when the consumer does not read them.",
+      "saves": "Remove unused routing metadata and repeated GPU-to-CPU validation for internally generated immutable routes.",
+      "contract": "Only the exact internally generated route object may use the prevalidated path. Older GQA preparation may explicitly expand heads and must not be confused with compact GQA.",
+      "sources": [
+        "patches/tilelang_dense_preparation.py",
+        "patches/tilelang_sage_preparation.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ATT08",
+      "chapter": "ATT",
+      "title": "Bounded immutable geometry reuse",
+      "status": "alternative",
+      "method": "Cache counts, padding geometry and all-dense metadata by device, stream and tensor geometry; keep content-dependent Q/K/V and routes outside immutable caches.",
+      "saves": "Remove repeated allocation and geometry kernel launches on recurring shapes.",
+      "contract": "Bound cache size and distinguish stream ownership. Reusing immutable metadata does not make activation-dependent summaries reusable.",
+      "sources": [
+        "patches/tilelang_grouped_tp_optimized.py",
+        "patches/tilelang_dense_preparation.py"
+      ],
+      "legacy_ids": [
+        "GEOMETRY"
+      ]
+    },
+    {
+      "id": "ATT09",
+      "chapter": "ATT",
+      "title": "Query-only and full-QK reuse",
+      "status": "alternative",
+      "method": "Retain query fragments across key tiles; the both-cache candidate additionally retains key fragments when its kernel mapping permits. The selected optional dense path uses query-only reuse.",
+      "saves": "Reduce repeated shared/global operand loads at the cost of longer register lifetimes.",
+      "contract": "Cache choice interacts with head dimension, query tile, scale fragments and occupancy. A both-cache flag is a separate candidate, not implied by query-only selection.",
+      "sources": [
+        "patches/tilelang_grouped_tp_kitchen_v2.py",
+        "patches/tilelang_attention_tradeoffs.py"
+      ],
+      "legacy_ids": [
+        "QCACHE"
+      ]
+    },
+    {
+      "id": "ATT10",
+      "chapter": "ATT",
+      "title": "Warp, query-tile and scale-placement specialization",
+      "status": "experimental",
+      "method": "Specialize BQ32/BQ64 schedules, 128/256-thread blocks, row/square warp mappings, register or staged scales and row-score fragments for fixed geometry.",
+      "saves": "Trade reuse, parallel rows, register pressure and staging traffic without changing the intended attention equation.",
+      "contract": "Every specialization must keep valid tail/mask handling. Exposed candidate flags do not mean the production caller selects all of them.",
+      "sources": [
+        "patches/tilelang_grouped_tp_kitchen_v2.py",
+        "patches/tilelang_attention_tradeoffs.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ATT11",
+      "chapter": "ATT",
+      "title": "Direct BND and dtype epilogue stores",
+      "status": "alternative",
+      "method": "Map output fragments directly to batch-token-flattened-head storage and perform the declared dtype conversion in the kernel epilogue.",
+      "saves": "Remove a BHND-to-BND transpose/contiguous copy and a later cast.",
+      "contract": "Retain an intermediate FP16 rounding boundary when that is part of the original path. The finite-output epilogue is a separate guarded candidate, not permission to hide nonfinite values.",
+      "sources": [
+        "patches/tilelang_group32_masked.py",
+        "patches/tilelang_attention_tradeoffs.py"
+      ],
+      "legacy_ids": [
+        "BND"
+      ]
+    },
+    {
+      "id": "ATT12",
+      "chapter": "ATT",
+      "title": "Sage-style block scales and centering alternatives",
+      "status": "experimental",
+      "method": "Quantize Q and K with independently selected block sizes, token-mean or leaf-mean centering, and explicit half-away or nearest-even rounding variants.",
+      "saves": "Reduce preparation cost or adapt the quantizer granularity while retaining INT8 QK and floating PV.",
+      "contract": "Different group sizes, centering means and rounding rules define different approximations. Ragged leaf means must use actual counts.",
+      "sources": [
+        "patches/tilelang_sage_qk.py",
+        "patches/tilelang_sage_preparation.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ATT13",
+      "chapter": "ATT",
+      "title": "Prequantize then release floating operands",
+      "status": "experimental",
+      "method": "Separate the pinned Q/K/V quantizer from its attention consumer. Retain packed integer operands, scales, mask and launch metadata while releasing floating inputs when their callers no longer need them.",
+      "saves": "Shorten raw Q/K/V lifetimes and expose prepared-operand reuse without rerunning quantization.",
+      "contract": "The snapshot owns a mask representation and is immutable with respect to input/mask changes. Storage/API dtype is not a promise of full FP32 precision.",
+      "sources": [
+        "experiments/kitchen_attention/attention.py",
+        "experiments/kitchen_attention/te_precision.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ATT14",
+      "chapter": "ATT",
+      "title": "Implicit causal index masking",
+      "status": "experimental",
+      "method": "Intersect key traversal with key_index <= query_index + query_offset, avoiding a materialized token-pair triangle in the explicit native kernel.",
+      "saves": "Remove full causal-mask storage and mask loads in supported prefill geometry.",
+      "contract": "Keep offsets, ragged bounds and GQA mapping explicit. Implicit score masking does not make the preserved global quantizer prefix invariant.",
+      "sources": [
+        "experiments/kitchen_attention/native/kitchen_sm75.cu",
+        "experiments/kitchen_attention/attention.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ATT15",
+      "chapter": "ATT",
+      "title": "Kitchen query64 and cached-Q schedules",
+      "status": "experimental",
+      "method": "Derive an SM75 extension from the retained Kitchen source with a smaller query tile or a query128 schedule retaining Q fragments in registers.",
+      "saves": "Change CTA parallelism and repeated operand loading while keeping quantization and core integer arithmetic intact.",
+      "contract": "Keep the original schedule as the control. Cached Q requires the supported D128/key128 geometry; register/spill checks guide specialization selection.",
+      "sources": [
+        "experiments/kitchen_attention/derive.py",
+        "experiments/kitchen_attention/native/kitchen_sm75.cu"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ATT16",
+      "chapter": "ATT",
+      "title": "n8 probability-value scheduling",
+      "status": "experimental",
+      "method": "Dispatch to the retained compute_int8_sv_pipelined_n8 helper for its supported D128/key128 tile. Shorten live V/partial fragments while preserving the four integer products and FP32 FMA order.",
+      "saves": "Reduce live fragment pressure and change instruction scheduling without replacing the probability quantizer.",
+      "contract": "Use only supported warp/tile geometry. Spill elimination alone is not a performance guarantee; unsupported geometries retain the original helper.",
+      "sources": [
+        "experiments/kitchen_attention/native/h3_dense_utils.cuh",
+        "experiments/kitchen_attention/derive.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ATT17",
+      "chapter": "ATT",
+      "title": "Guarded narrow tensor addressing",
+      "status": "experimental",
+      "method": "Use uint32 tensor offsets for supported dense specializations only after checking the batch/head/length/dimension product against the address range in Python and CUDA dispatch.",
+      "saves": "Reduce wide pointer-offset arithmetic and associated register lifetimes.",
+      "contract": "Reject overflow before allocation/launch and retain the uint64 implementation. Narrow addressing is not valid merely because an individual sequence length is small.",
+      "sources": [
+        "experiments/kitchen_attention/attention.py",
+        "experiments/kitchen_attention/native/kitchen_sm75.cu"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ATT18",
+      "chapter": "ATT",
+      "title": "Explicit fixed-shape CUDA Graph replay",
+      "status": "experimental",
+      "method": "Capture the unchanged Kitchen operator and BND conversion after side-stream warmup. Copy current inputs into persistent buffers for each replay and clone the output for independent ownership.",
+      "saves": "Amortize repeated Python/driver launch setup for a fixed sequence of kernels.",
+      "contract": "Enforce creating-stream, dtype and geometry identity; retain graph-private storage and count input/output copies and capture lifetime. No production graph cache is installed.",
+      "sources": [
+        "experiments/kitchen_attention/graph.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ATT19",
+      "chapter": "ATT",
+      "title": "Mutation-aware causal mask recognition cache",
+      "status": "experimental",
+      "method": "Recognize only an exact causal triangle, then cache its identity and mutation version using weak references. Recheck versionless inference tensors and reject padding/custom bias from this shortcut.",
+      "saves": "Amortize repeated classification when a normal immutable mask is explicitly routed to the native causal experiment.",
+      "contract": "The default TE path bypasses recognition. Classification can synchronize the host, and inference tensors cannot safely use a mutation-version cache.",
+      "sources": [
+        "patches/kitchen_te_attention.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ATT20",
+      "chapter": "ATT",
+      "title": "Fingerprint-keyed native build reuse",
+      "status": "experimental",
+      "method": "Hash the retained native/Python build inputs, serialize CPU compilation with a bounded exclusive lock, and reuse a binary only after source, compiler, architecture and artifact-hash validation.",
+      "saves": "Avoid redundant compilation by multiple workers and accidental reuse of a stale experimental binary.",
+      "contract": "Compilation is explicit and installs no dependencies. Imports/default TE dispatch do not compile; a foreign build lock is never removed by a waiter.",
+      "sources": [
+        "patches/kitchen_te_attention.py",
+        "experiments/kitchen_attention/build.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ATT21",
+      "chapter": "ATT",
+      "title": "Group32 and Group64 scale-granularity alternatives",
+      "status": "experimental",
+      "method": "Choose the channel-group width for independent Q/K scales and restore each group product scale before summing logits. Keep the PV path and input/output rounding boundaries explicit.",
+      "saves": "Trade quantization-range locality against the number of group products, scale loads and fragments.",
+      "contract": "Different group widths are separate approximations. The selected Group32 path must not be relabeled as a Group64 or whole-head result.",
+      "sources": [
+        "patches/tilelang_grouped_qk.py",
+        "benchmarks/attention_grouped_study.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ATT22",
+      "chapter": "ATT",
+      "title": "Cast/pad centering preparation",
+      "status": "experimental",
+      "method": "Fuse the FP16 input cast and ragged padding stage used to build key leaf means, then feed the selected mean/centering recipe into operand quantization.",
+      "saves": "Remove a separate conversion/padding launch and duplicate preparation storage.",
+      "contract": "Preserve actual leaf counts and the recipe distinction between unweighted leaf means and token-weighted means. castpad is an explicit preparation variant.",
+      "sources": [
+        "patches/tilelang_grouped_tp_kitchen_v2.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "SPR01",
+      "chapter": "SPR",
+      "title": "Leaf64 centroid routing",
+      "status": "active",
+      "method": "Compute query/key means over 64-token leaves, account for ragged counts, center keys and compare centroid scores to the selected threshold. Retain first/global and adjacent leaves as mandatory routes.",
+      "saves": "Replace token-pair routing decisions with a block-sized route matrix and skip fine QK/PV for omitted blocks.",
+      "contract": "Keep the exact centering and threshold recipe for the selected variant. A routing approximation changes which token interactions are computed.",
+      "sources": [
+        "patches/tilelang_grouped_tp_optimized.py",
+        "patches/tilelang_sparse_attention.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "SPR02",
+      "chapter": "SPR",
+      "title": "PackedLayout-derived protected prefix",
+      "status": "alternative",
+      "method": "Read the current Native packed segment layout and protect every complete leaf intersecting the prefix before the final generated-video span.",
+      "saves": "Apply sparsity to the intended video region while retaining text, references, conditioning and generated audio interactions.",
+      "contract": "Reject stale/missing layouts or ambiguous final video spans. Do not substitute a fixed historical prefix token count.",
+      "sources": [
+        "patches/h3_operator_policy.py"
+      ],
+      "legacy_ids": [
+        "PREFIX"
+      ]
+    },
+    {
+      "id": "SPR03",
+      "chapter": "SPR",
+      "title": "Mode-specific preparation and finite tau0 shortcut",
+      "status": "alternative",
+      "method": "For drop mode, omit pooled/V8/LSE representations. For scalar mode, prepare its required summaries. Use the tau0 algebraic shortcut only when centered means and finite inputs satisfy its assumptions.",
+      "saves": "Remove preparation and threshold work the chosen sparse consumer cannot use.",
+      "contract": "The shortcut is not valid for arbitrary nonfinite tensors or another centering convention. Keep dense-prefix and mandatory-route rules.",
+      "sources": [
+        "patches/tilelang_grouped_tp_optimized.py",
+        "patches/tilelang_sol_drop_fused.py"
+      ],
+      "legacy_ids": [
+        "PRUNE"
+      ]
+    },
+    {
+      "id": "SPR04",
+      "chapter": "SPR",
+      "title": "Sparse dropping",
+      "status": "alternative",
+      "method": "Traverse selected fine leaves and update online softmax/output only from their tokens. Renormalize over the retained interactions.",
+      "saves": "Eliminate fine QK and PV products for omitted leaves.",
+      "contract": "Omitted mass is discarded. This is not numerically equivalent to dense attention or count-weighted pooling.",
+      "sources": [
+        "patches/tilelang_grouped_tp_optimized.py",
+        "patches/h3_operator_policy.py"
+      ],
+      "legacy_ids": [
+        "DROP"
+      ]
+    },
+    {
+      "id": "SPR05",
+      "chapter": "SPR",
+      "title": "Scalar pooling of omitted leaves",
+      "status": "alternative",
+      "method": "Represent each omitted leaf by a mean key/value and weight its exponential score by the valid token count. Merge fine and coarse mass in a shared normalization state.",
+      "saves": "Replace many omitted-token products with one centroid contribution while retaining an approximation to their attention mass.",
+      "contract": "Use actual ragged counts and omitted-only contributions. Selected leaves must not be counted again as centroids.",
+      "sources": [
+        "patches/tilelang_scalar_pool.py",
+        "patches/tilelang_grouped_tp_optimized.py"
+      ],
+      "legacy_ids": [
+        "SCALAR"
+      ]
+    },
+    {
+      "id": "SPR06",
+      "chapter": "SPR",
+      "title": "Capped omitted-centroid score workspace",
+      "status": "alternative",
+      "method": "Precompute omitted centroid scores only when B * H * padded_queries * leaf_count * 4 fits the configured cap. Otherwise calculate coarse contributions inline.",
+      "saves": "Move repeated scalar-score work out of the fine loop without permitting an unbounded query-by-centroid allocation.",
+      "contract": "A zero cap selects inline processing, not disabled sparsity. Workspace geometry includes all head owners and padding.",
+      "sources": [
+        "patches/tilelang_attention_p2.py",
+        "patches/h3_operator_policy.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "SPR07",
+      "chapter": "SPR",
+      "title": "GPU ballot route compaction",
+      "status": "experimental",
+      "method": "Convert block masks into sorted selected-key leaf indices with per-query counts, using GPU ballot/prefix operations. Traverse only initialized active list slots.",
+      "saves": "Avoid scanning rejected leaves inside every fine attention tile.",
+      "contract": "Keep ordering, empty-row behavior and list capacity explicit. Unused index slots are unspecified and must never be consumed.",
+      "sources": [
+        "experiments/kitchen_attention/native/kitchen_sm75.cu",
+        "patches/tilelang_attention_tradeoffs.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "SPR08",
+      "chapter": "SPR",
+      "title": "Native Kitchen routed leaf execution",
+      "status": "experimental",
+      "method": "Use compact selected-leaf lists with the retained Kitchen quantization and INT8 QK/PV primitives. Intersect explicit routes with token causal bounds when requested.",
+      "saves": "Skip omitted native QK/PV products while reusing Kitchen operand packing.",
+      "contract": "Routing changes scheduling to supported query64/key64 geometry. Noncausal content routes and explicit causal routes have separate contracts.",
+      "sources": [
+        "experiments/kitchen_attention/native/routed_loop.cuh",
+        "experiments/kitchen_attention/attention.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "SPR09",
+      "chapter": "SPR",
+      "title": "Pooled centroids in quantized operand space",
+      "status": "experimental",
+      "method": "Build omitted K/V centroids after the retained rotation, centering and dequantization so fine and coarse scores share the same key-anchor shift.",
+      "saves": "Avoid mixing incompatible score origins when combining native INT8 fine attention and FP16 coarse attention.",
+      "contract": "This is a different approximation from older Group32 scalar pooling. Coarse means and fine output rounding remain declared numerical boundaries.",
+      "sources": [
+        "experiments/kitchen_attention/native/kitchen_sm75.cu",
+        "experiments/kitchen_attention/attention.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "SPR10",
+      "chapter": "SPR",
+      "title": "Tiled coarse attention and fused LSE merge",
+      "status": "experimental",
+      "method": "Batch centroid contributions, retain FP32 maximum/denominator state, and merge a fine output/LSE with coarse count-weighted attention directly into the final output tile.",
+      "saves": "Avoid a full Q-half copy, full query-by-centroid score tensor, separate coarse output and standalone merge tensor.",
+      "contract": "Fine and coarse normalization must use a common score shift. Density-one routing reduces to the fine path; partially causal centroids are rejected.",
+      "sources": [
+        "experiments/kitchen_attention/native/kitchen_sm75.cu",
+        "experiments/kitchen_attention/attention.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "SPR11",
+      "chapter": "SPR",
+      "title": "INT8 PV and compact-drop TileLang alternatives",
+      "status": "experimental",
+      "method": "Quantize V per leaf/channel and quantize probabilities for an integer PV path; optionally compact drop routes before the existing fine kernel.",
+      "saves": "Trade FP16 PV traffic/work for integer operands and shorten selected-block traversal.",
+      "contract": "Probability/V quantization changes the approximation. These flags are retained experiments and are not selected by current integrated Group32 sparse callers.",
+      "sources": [
+        "patches/tilelang_attention_tradeoffs.py",
+        "patches/tilelang_sparse_attention.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "SPR12",
+      "chapter": "SPR",
+      "title": "Legacy Sol drop preparation fusion",
+      "status": "experimental",
+      "method": "Fuse preparation for the retained Sol centering/nearest-even recipe, omit unused V8/coarse/LSE arrays, and bind the prepared geometry to its routes.",
+      "saves": "Remove legacy drop-only preparation stages without importing scalar-pooling work.",
+      "contract": "Preserve this older method own quantization and route equation; it is not interchangeable with the Group32 or native Kitchen sparse recipes.",
+      "sources": [
+        "patches/tilelang_sol_drop_fused.py",
+        "benchmarks/attention_sol_drop_study.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "LOR01",
+      "chapter": "LOR",
+      "title": "Native ordered adapter application",
+      "status": "active",
+      "method": "Apply each adapter own A/B products, strength and addition in source order. Activate SwiGLU before gathering the adapter input when the Native operation uses activated features.",
+      "saves": "Provide a stable base for storage/ownership optimizations without rebuilding full dense delta weights online.",
+      "contract": "Do not pre-scale B or concatenate adapters implicitly: those change floating GEMM/reduction boundaries.",
+      "sources": [
+        "patches/h3_lora.py",
+        "patches/offline_lora_reference.py"
+      ],
+      "legacy_ids": [
+        "NATIVEORDER"
+      ]
+    },
+    {
+      "id": "LOR02",
+      "chapter": "LOR",
+      "title": "Single rank-major input receive buffer",
+      "status": "active",
+      "method": "Gather activated rank-owned inputs into one receive storage, then expose the Native feature order to the full-A computation.",
+      "saves": "Avoid a list of per-rank receive tensors, a concatenation copy and simultaneous duplicate gathered inputs.",
+      "contract": "Packed gate/up ownership must be reordered component-wise. Keep the backing storage alive only until all views are consumed.",
+      "sources": [
+        "patches/h3_lora.py"
+      ],
+      "legacy_ids": [
+        "LORASTORE"
+      ]
+    },
+    {
+      "id": "LOR03",
+      "chapter": "LOR",
+      "title": "Owned adapter output views",
+      "status": "active",
+      "method": "Scale and add only the rank-owned B output rows, then release the view and its full backing product before the next adapter.",
+      "saves": "Avoid full-width delta scaling/add buffers and unintended lifetime overlap between adapters.",
+      "contract": "A narrow view can retain a full allocation. Explicitly drop both caller and internal references after the ordered add.",
+      "sources": [
+        "patches/h3_lora.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "LOR04",
+      "chapter": "LOR",
+      "title": "Selected-B FC1 computation",
+      "status": "active",
+      "method": "Load and multiply only the owner half of each gate/up B component for the qualified ordinary DiT FC1 rank128 adapter geometry.",
+      "saves": "Remove unowned FC1 B factor storage and unowned output computation.",
+      "contract": "Retain full A and post-B scale/order. Wrong geometry, other adapter ranks and refiner targets use full B.",
+      "sources": [
+        "patches/h3_lora.py"
+      ],
+      "legacy_ids": [
+        "SELECTB"
+      ]
+    },
+    {
+      "id": "LOR05",
+      "chapter": "LOR",
+      "title": "Component-aware selected-B QKV",
+      "status": "active",
+      "method": "Pack each owner rows independently from all three QKV B components for the guarded rank128 DiT target. Carry packed representation sizes into admission accounting.",
+      "saves": "Avoid materializing the other owner Q/K/V delta outputs and B rows.",
+      "contract": "Keep separate adapter GEMMs and full A. Selection is an H3 shape guard, not a universal LoRA slicing rule.",
+      "sources": [
+        "patches/h3_lora.py",
+        "patches/comfy_tp_runtime.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "LOR06",
+      "chapter": "LOR",
+      "title": "FP32 Row-A partial hidden reduction",
+      "status": "active",
+      "method": "Read only owned A columns, compute A_r x_r locally, FP32-SUM the small low-rank hidden state, and apply full B followed by the original strength.",
+      "saves": "Replace full-width floating input gathering with communication proportional to adapter rank.",
+      "contract": "The changed reduction order is approximate relative to one full A GEMM. Keep the hidden SUM in FP32 independently of base partial-sum transport.",
+      "sources": [
+        "patches/h3_lora.py"
+      ],
+      "legacy_ids": [
+        "ROWPARTIAL"
+      ]
+    },
+    {
+      "id": "LOR07",
+      "chapter": "LOR",
+      "title": "Bounded hidden-state staging",
+      "status": "active",
+      "method": "Limit live gathered/low-rank temporary rows, reuse only the selected staging representation and release per-adapter outputs before advancing.",
+      "saves": "Bound Row-A partial and adapter output peaks for long sequences or multiple adapters.",
+      "contract": "Account for real backing tensors, not only view sizes. Preserve adapter ordering across staged work.",
+      "sources": [
+        "patches/h3_lora.py",
+        "docs/reports/ROW_PARTIAL_MEMORY.md"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "LOR08",
+      "chapter": "LOR",
+      "title": "Policy-aware factor residency and identity",
+      "status": "active",
+      "method": "Validate canonical targets, factor shapes, alpha and finite strengths once; include adapter source identity, owner representation and selected modes in cache keys.",
+      "saves": "Cache only the factor rows/columns required by the selected ownership method and reuse their prepared representation.",
+      "contract": "Detect file mutation and reject unconsumed or duplicate targets. Zero-strength adapters need no factor computation.",
+      "sources": [
+        "patches/h3_lora.py",
+        "patches/weight_residency.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "LOR09",
+      "chapter": "LOR",
+      "title": "Registered-buffer module copies",
+      "status": "active",
+      "method": "Represent online adapters and refiner wrappers as modules with registered tensors and immutable rank metadata, copied through the residency mapper.",
+      "saves": "Reuse canonical CPU preparation and controlled H2D staging without reconstructing adapter closures for each block.",
+      "contract": "A bound method referencing the CPU owner can defeat GPU residency. Copy parameters, buffers and ownership consistently.",
+      "sources": [
+        "patches/h3_lora.py",
+        "patches/weight_residency.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "IO01",
+      "chapter": "IO",
+      "title": "Whole-layer offline adapter baking",
+      "status": "active",
+      "method": "Dequantize a complete layer, apply ordered LoRA updates in the reference domain and quantize once into the normal checkpoint representation. Assign whole layers across up to two GPUs.",
+      "saves": "Eliminate recurring online A/B GEMMs and adapter communication during inference.",
+      "contract": "Do not split a matrix in a way that changes its quantizer domain. Publish atomically and identify the complete recipe and source stack.",
+      "sources": [
+        "patches/offline_lora.py",
+        "patches/offline_lora_reference.py"
+      ],
+      "legacy_ids": [
+        "BAKE"
+      ]
+    },
+    {
+      "id": "IO02",
+      "chapter": "IO",
+      "title": "Bounded offline merging into TP2 bundles",
+      "status": "active",
+      "method": "For a rank-sharded bundle, reconstruct the full matrix required by the merge, apply the ordered adapter update, requantize, then split the result into the owned component layout.",
+      "saves": "Bound host/device preparation by matrix/block instead of creating an entire merged model in RAM.",
+      "contract": "Internal bundle merging must be explicitly enabled for descriptor callers; a path suffix alone cannot prove a checkpoint was already baked.",
+      "sources": [
+        "patches/tp2_bundle.py",
+        "patches/comfy_tp_runtime.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "IO03",
+      "chapter": "IO",
+      "title": "Persistent disk-baked rank shards",
+      "status": "active",
+      "method": "Bake the owned outputs to immutable rank-block safetensors and publish a descriptor/state manifest after all required blocks are complete. Reopen them through DiskBakedReader.",
+      "saves": "Avoid repeating offline merges on each request, process start or unchanged adapter stack.",
+      "contract": "Verify recipe, base identity, adapter strengths, auxiliary tensors and complete state. Partial writes must never become a complete published descriptor.",
+      "sources": [
+        "patches/tp2_disk_bake.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "IO04",
+      "chapter": "IO",
+      "title": "Cached proof of immutable baked state",
+      "status": "active",
+      "method": "Validate state schema on every load, but memoize a full file/state proof for an unchanged shard/manifest identity. Recheck the admitted set at block boundaries and addressed files on reads.",
+      "saves": "Avoid repeated expensive full integrity work for unchanged persisted shards.",
+      "contract": "Cache proof identities and reader metadata, not merged tensors. Detect mutations and require reload instead of trusting stale evidence.",
+      "sources": [
+        "patches/tp2_disk_bake.py",
+        "patches/tp2_bundle.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "IO05",
+      "chapter": "IO",
+      "title": "Positional owned-range reads",
+      "status": "active",
+      "method": "Translate safetensors metadata and row/column ownership into exact file byte ranges. Use positional pread where available, otherwise a scoped seek/readinto implementation.",
+      "saves": "Read the owner tensor pieces without loading full matrices or moving a shared file cursor between concurrent readers.",
+      "contract": "Validate file identity, bounds, dtype and tensor sizes before constructing views. Platform-specific readers preserve the same bytes.",
+      "sources": [
+        "patches/windowed_tp.py",
+        "patches/rank_local_int8.py"
+      ],
+      "legacy_ids": [
+        "READ"
+      ]
+    },
+    {
+      "id": "IO06",
+      "chapter": "IO",
+      "title": "Contiguous verified rank-block export",
+      "status": "alternative",
+      "method": "Export prepared rank-owned weights, replicated scales and required metadata into contiguous safetensors shards plus a verified descriptor.",
+      "saves": "Replace many strided source-range reads and repeated ownership reconstruction with block-local contiguous payloads.",
+      "contract": "Retain component-aware ownership and source hashes. Exports change storage layout, not tensor values or upstream checkpoints.",
+      "sources": [
+        "patches/rank_local_int8.py",
+        "patches/tp2_bundle.py"
+      ],
+      "legacy_ids": [
+        "SHARDS"
+      ]
+    },
+    {
+      "id": "IO07",
+      "chapter": "IO",
+      "title": "Bounded full-row and contiguous column reads",
+      "status": "experimental",
+      "method": "Allow a bounded full-row scratch read before slicing owned columns. Read full-width column projections contiguously without the row-stride path.",
+      "saves": "Trade additional source bytes for fewer small read calls while capping scratch memory.",
+      "contract": "Keep direct owned ranges as the normal path. Row amplification and I/O concurrency are distinct from GPU numerical kernels.",
+      "sources": [
+        "patches/windowed_tp.py",
+        "patches/rank_local_int8.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "IO08",
+      "chapter": "IO",
+      "title": "Prepare-once canonical CPU modules",
+      "status": "active",
+      "method": "Build canonical CPU modules with policy, LoRA representation and tensor-flow folds once. Cache these prepared owners and copy them through explicit staging leases.",
+      "saves": "Avoid repeated parsing, module construction and nonlinear preparation during recurring layer evaluations.",
+      "contract": "Canonical CPU tensors remain immutable under GPU execution. Cache keys include source and complete numerical policy.",
+      "sources": [
+        "patches/windowed_tp.py",
+        "patches/host_weight_cache.py",
+        "patches/custom_te_loader.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "IO09",
+      "chapter": "IO",
+      "title": "Coalesced TE block backing views",
+      "status": "retired",
+      "method": "Read a complete rank-local TE payload sequentially into one CPU backing allocation and expose disjoint tensor views during preparation.",
+      "saves": "Amortize many tiny tensor reads and allocations into a single block read.",
+      "contract": "This retained TE loading ablation is not a production path. Views retain the complete payload; count that backing allocation in peak budgets.",
+      "sources": [
+        "benchmarks/historical_te_loading.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "IO10",
+      "chapter": "IO",
+      "title": "Descriptor, mmap and read-advice alternatives",
+      "status": "experimental",
+      "method": "Study shared versus independent descriptors, preadv, mmap views, sequential/random advice and bounded additional reader workers as alternative byte-delivery schedules.",
+      "saves": "Trade read-call overhead, page-cache behavior and allocation copies for a fixed tensor-byte workload.",
+      "contract": "These are storage-study variants. Do not change the pinned source reader or assume that mmap-backed pages are free resident memory.",
+      "sources": [
+        "benchmarks/te_io_storage_study.py",
+        "benchmarks/te_io_pipeline.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "IO11",
+      "chapter": "IO",
+      "title": "Source-only immutable bootstrap overlays",
+      "status": "active",
+      "method": "Deliver frozen source by immutable commit/hash and install only exact approved package differences into an isolated overlay, retaining the native matching Torch/CUDA family where authorized.",
+      "saves": "Avoid large wheel/model dataset mounts and repeated transfers of unchanged runtime material.",
+      "contract": "This optimizes delivery, not attention arithmetic. Keep core pins and source ABI fixed; authenticate private activations without publishing credentials.",
+      "sources": [
+        "benchmarks/prepare_kaggle_direct_pip.py",
+        "experiments/kitchen_attention/dense_delivery.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "IO12",
+      "chapter": "IO",
+      "title": "Hash-bound source deltas and lazy payload delivery",
+      "status": "active",
+      "method": "Apply a verified small source delta over an immutable retained distribution, reconstruct its capsule hash, and fetch learned block payloads only for the bounded work that needs them.",
+      "saves": "Reduce repeated full source/archive transfers and avoid loading unused model payloads.",
+      "contract": "Record the reconstructed source identity and preserve historical archives. Source deltas cannot silently replace frozen ComfyUI or unpin core operators.",
+      "sources": [
+        "experiments/kitchen_attention/delivery.py",
+        "benchmarks/build_kaggle_light_delivery.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "RES01",
+      "chapter": "RES",
+      "title": "Process-shared host admission",
+      "status": "active",
+      "method": "Pass one synchronized host budget to both spawned ranks. Reserve bytes for pageable modules, preparation and pinned staging, with system-memory headroom.",
+      "saves": "Avoid multiplying the nominal RAM allowance by rank or ignoring simultaneous construction and staging allocations.",
+      "contract": "A tensor view is charged by its retained backing. Denied speculative work must not strand a reservation.",
+      "sources": [
+        "patches/host_weight_cache.py"
+      ],
+      "legacy_ids": [
+        "HOST"
+      ]
+    },
+    {
+      "id": "RES02",
+      "chapter": "RES",
+      "title": "Pageable cache with bounded pin staging",
+      "status": "active",
+      "method": "Keep reusable prepared modules in a pageable cache. Pin only the admitted transfer representation while its staging lease is active, then release it after H2D completion.",
+      "saves": "Avoid permanently pinning the entire CPU cache and duplicate long-lived pinned owners.",
+      "contract": "Pageable, pin-construction and transfer lifetimes are separately accounted. A nonblocking transfer alone does not prove its source can be freed.",
+      "sources": [
+        "patches/host_weight_cache.py",
+        "patches/weight_residency.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "RES03",
+      "chapter": "RES",
+      "title": "Foreground-priority deadline prefetch",
+      "status": "active",
+      "method": "Queue CPU preparation by next-use deadline and reuse value, with one worker per cache and foreground demand admitted ahead of speculative modules at safe boundaries.",
+      "saves": "Overlap useful disk/CPU preparation with GPU computation without allowing speculative work to block imminent layers.",
+      "contract": "Changing priority does not cancel an already executing unsafe operation. Scope cancellation at module/preparation boundaries.",
+      "sources": [
+        "patches/host_weight_cache.py"
+      ],
+      "legacy_ids": [
+        "REUSE"
+      ]
+    },
+    {
+      "id": "RES04",
+      "chapter": "RES",
+      "title": "Reuse-aware host eviction",
+      "status": "active",
+      "method": "Choose cached owners for eviction using recency and planned next use, preserve useful repeated-evaluation groups, and release their budget reservations explicitly.",
+      "saves": "Avoid discarding a soon-reused DiT block merely because a speculative TE block arrived.",
+      "contract": "Evict only unleased owners. Identity and reuse plans must be reset when a request/policy changes.",
+      "sources": [
+        "patches/host_weight_cache.py",
+        "patches/weight_residency.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "RES05",
+      "chapter": "RES",
+      "title": "Event-owned H2D residency windows",
+      "status": "active",
+      "method": "Prefetch admitted modules on the transfer stream, record completion events, and wait on those events at use. Associate every resident module with byte, preparation and use owners.",
+      "saves": "Overlap transfers with computation while bounding live GPU weights and staging storage.",
+      "contract": "Ready, in-flight and leased states differ. Do not evict an in-use module or reuse an unfinished transfer buffer.",
+      "sources": [
+        "patches/weight_residency.py"
+      ],
+      "legacy_ids": [
+        "WINDOW"
+      ]
+    },
+    {
+      "id": "RES06",
+      "chapter": "RES",
+      "title": "Next-use GPU eviction and explicit leases",
+      "status": "active",
+      "method": "Track remaining uses, evict unleased far-next-use groups when making room, and retain currently leased attention/MLP/auxiliary modules until their operation ends.",
+      "saves": "Use a bounded GPU window without reloading every group immediately after use or evicting active work.",
+      "contract": "Admission accounts for pending allocations and external reservations. Completion and exception paths release leases deterministically.",
+      "sources": [
+        "patches/weight_residency.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "RES07",
+      "chapter": "RES",
+      "title": "Adaptive one/two-group lookahead",
+      "status": "active",
+      "method": "Choose supported lookahead depth from available VRAM, activation reserve, group sizes and current in-flight residency. Reduce speculation under pressure.",
+      "saves": "Prefetch an additional useful group when safe without reserving a fixed large window on every shape.",
+      "contract": "Lookahead is byte-bounded and distinct from CPU cache depth. Larger activation sequences can force a smaller safe window.",
+      "sources": [
+        "patches/weight_residency.py"
+      ],
+      "legacy_ids": [
+        "ADAPT"
+      ]
+    },
+    {
+      "id": "RES08",
+      "chapter": "RES",
+      "title": "Linux cgroup and PSI-aware admission",
+      "status": "active",
+      "method": "Read available cgroup-v2 charge, nonfile/file-cache usage and pressure stall information. Protect useful file cache and cap concurrent preparation/speculation before exhausting the effective host limit.",
+      "saves": "Avoid reclaim/thrashing caused by treating nominal machine RAM as the only memory constraint.",
+      "contract": "Metrics are read-only and optional. Missing metrics retain the explicit managed/system-RAM budget rather than inventing zero pressure.",
+      "sources": [
+        "patches/host_memory_pressure.py",
+        "patches/host_weight_cache.py"
+      ],
+      "legacy_ids": [
+        "PRESSURE"
+      ]
+    },
+    {
+      "id": "RES09",
+      "chapter": "RES",
+      "title": "Separated startup groups",
+      "status": "active",
+      "method": "Prepare vision and embedding/startup modules as independent CPU groups rather than an undifferentiated model payload.",
+      "saves": "Allow only the next required startup owner to occupy a GPU window or pinned stage.",
+      "contract": "Preserve Native embedding and vision execution order and canonical CPU backing.",
+      "sources": [
+        "patches/comfy_tp_runtime.py",
+        "patches/comfy_tp_models.py"
+      ],
+      "legacy_ids": [
+        "STARTUP"
+      ]
+    },
+    {
+      "id": "RES10",
+      "chapter": "RES",
+      "title": "On-demand vision GPU lifetime",
+      "status": "active",
+      "method": "Copy the vision owner to its device only for the actual frontend work, fence completion and release its GPU tensors before admitting the next phase.",
+      "saves": "Avoid retaining the vision tower through text layers or diffusion sampling.",
+      "contract": "A synchronization fence is part of ownership. Full frontend replication remains a separate property from where weight groups reside.",
+      "sources": [
+        "patches/comfy_tp_models.py"
+      ],
+      "legacy_ids": [
+        "VISION"
+      ]
+    },
+    {
+      "id": "RES11",
+      "chapter": "RES",
+      "title": "Rank-zero auxiliary projection leases",
+      "status": "active",
+      "method": "Lease refiner and input/output auxiliary modules on rank zero, compute the required Native interfaces and broadcast shared results to both ranks.",
+      "saves": "Avoid replicating auxiliary learned work and weights that are not tensor-parallel block computation.",
+      "contract": "Keep public conditioning, refiner normalization and layout semantics. Only the explicitly owned auxiliary work is rank-zero-only.",
+      "sources": [
+        "patches/windowed_tp.py",
+        "patches/comfy_tp_runtime.py"
+      ],
+      "legacy_ids": [
+        "AUX"
+      ]
+    },
+    {
+      "id": "RES12",
+      "chapter": "RES",
+      "title": "Retain DiT groups between real evaluations",
+      "status": "active",
+      "method": "Extend next-use plans over the actual sequence of denoiser evaluations, retaining useful groups rather than treating each call as the end of model lifetime.",
+      "saves": "Reuse expensive prepared/resident diffusion weights across sampler steps.",
+      "contract": "Use actual command/evaluation boundaries rather than a guessed timestep count, and surrender residency when another phase needs the budget.",
+      "sources": [
+        "patches/comfy_tp_runtime.py"
+      ],
+      "legacy_ids": [
+        "RETAIN"
+      ]
+    },
+    {
+      "id": "RES13",
+      "chapter": "RES",
+      "title": "Cross-model CPU preparation",
+      "status": "active",
+      "method": "When TE completes, prepare the known next DiT CPU groups while the parent completes conditioning/packing. Preserve separate CPU and GPU admission.",
+      "saves": "Move deterministic next-phase CPU loading off the immediate DiT start path.",
+      "contract": "Cross-model CPU prefetch does not imply early DiT GPU residency or permission to exceed host preparation limits.",
+      "sources": [
+        "patches/comfy_tp_runtime.py"
+      ],
+      "legacy_ids": [
+        "CROSSMODEL"
+      ]
+    },
+    {
+      "id": "RES14",
+      "chapter": "RES",
+      "title": "Decode-start next-request preparation",
+      "status": "active",
+      "method": "At output decode start, schedule reusable TE startup groups and a bounded lifecycle-controlled prefix for a compatible next request.",
+      "saves": "Use decode time for preparation that can be reused after the current sampling phase.",
+      "contract": "Speculation obeys foreground decode and memory-pressure ownership. It does not preload an arbitrary next prompt activation.",
+      "sources": [
+        "patches/comfy_tp_runtime.py"
+      ],
+      "legacy_ids": [
+        "DECODEPREFETCH"
+      ]
+    },
+    {
+      "id": "RES15",
+      "chapter": "RES",
+      "title": "Idle compatible-prefix residency",
+      "status": "alternative",
+      "method": "After prompt compatibility checks, load only required parent reference encoders and a bounded worker TE prefix during an admitted idle interval.",
+      "saves": "Amortize compatible next-request startup without making idle residency mandatory.",
+      "contract": "Idle is explicit and off by default. Cancellation, incompatible prompts and foreground work revoke speculation at defined boundaries.",
+      "sources": [
+        "patches/comfy_idle_lifecycle.py",
+        "patches/comfy_tp_runtime.py"
+      ],
+      "legacy_ids": [
+        "IDLE",
+        "LIFECYCLE"
+      ]
+    },
+    {
+      "id": "RES16",
+      "chapter": "RES",
+      "title": "Event-owned activation handoff",
+      "status": "active",
+      "method": "Copy a boundary activation through a dedicated handoff owner with completion tracking, and close that owner when the receiving stage is finished.",
+      "saves": "Avoid accidental duplicate cross-phase activation residency and synchronize only the required handoff.",
+      "contract": "Keep source and destination alive until stream work completes; a pipe acknowledgement does not by itself complete a CUDA transfer.",
+      "sources": [
+        "patches/weight_residency.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "VAE01",
+      "chapter": "VAE",
+      "title": "Metadata-only staged VAE shells",
+      "status": "active",
+      "method": "Construct component metadata without reading learned tensors. Instantiate/load only the encoder required by reference input and load the decoder at output time.",
+      "saves": "Avoid unconditional video/audio encoder and decoder payload reads and simultaneous component residency.",
+      "contract": "Retain required normalization buffers and the frozen constructor/forward API. Decoder-first execution must work without an encoder preload.",
+      "sources": [
+        "patches/staged_vae.py",
+        "patches/reference_loaders.py"
+      ],
+      "legacy_ids": [
+        "STAGEVAE"
+      ]
+    },
+    {
+      "id": "VAE02",
+      "chapter": "VAE",
+      "title": "Reference-demand encoder planning",
+      "status": "active",
+      "method": "Derive immutable hints from graph-required image/video/audio references and pass only those encoder needs into idle/startup loading.",
+      "saves": "Avoid speculative encoder construction for absent reference modalities.",
+      "contract": "Hints identify component demand, not activation values. Actual reference encoding still selects the Native public encoder path.",
+      "sources": [
+        "patches/h3_reference_plan.py",
+        "patches/comfy_sampler.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "VAE03",
+      "chapter": "VAE",
+      "title": "Independent decoder memory admission",
+      "status": "active",
+      "method": "Separate Video decoder weight and activation reserve budgets from the DiT weight window. Coordinate room/refusal on both ranks before starting decoder collectives.",
+      "saves": "Prevent a narrow DiT window policy from incorrectly excluding or over-admitting a replicated decoder phase.",
+      "contract": "Count learned decoder replicas and external activation headroom. Both owners must make the same distributed execution decision.",
+      "sources": [
+        "patches/comfy_tp_runtime.py",
+        "patches/weight_residency.py",
+        "patches/parallel_vae.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "VAE04",
+      "chapter": "VAE",
+      "title": "Weight-free Native parent decode planner",
+      "status": "active",
+      "method": "Build a metadata-only Native Video planner with tiny normalization buffers and a remote decode-pixels callback. Keep learned decoder layers only in admitted workers.",
+      "saves": "Avoid a redundant learned parent decoder and its CPU/GPU weight lease during remote decoding.",
+      "contract": "Preserve Native chunking, interpolation, blending and output writes. Restore the original patcher/model owner in a scoped finally path.",
+      "sources": [
+        "patches/video_decode_planner.py",
+        "patches/staged_vae.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "VAE05",
+      "chapter": "VAE",
+      "title": "Global-KV query-parallel Video attention",
+      "status": "active",
+      "method": "Split query ranges on the retained 128-query scale-group boundary while preserving global K/V and required full-sequence inputs. Exchange outputs in Native token order.",
+      "saves": "Share query-side attention and downstream owned-token work between two decoder replicas.",
+      "contract": "Global KV/quantization context must not be replaced by cropped spatial tiles. Check the trained legacy decoder shape/API and aligned range availability.",
+      "sources": [
+        "patches/parallel_vae.py"
+      ],
+      "legacy_ids": [
+        "VIDEO"
+      ]
+    },
+    {
+      "id": "VAE06",
+      "chapter": "VAE",
+      "title": "Owned final normalization and projection",
+      "status": "active",
+      "method": "Apply the decoder final norm and proj_out to each owned query/token range, then exchange the completed output in the required layout.",
+      "saves": "Avoid reconstructing and projecting the complete final activation on both replicas.",
+      "contract": "Changing matrix row geometry can change backend rounding. Preserve declared numerical/output contracts and Native global planning.",
+      "sources": [
+        "patches/parallel_vae.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "VAE07",
+      "chapter": "VAE",
+      "title": "Coordinated Native fallback and scoped leases",
+      "status": "active",
+      "method": "Resolve unsupported geometry, unavailable ABI and admission refusal before collectives. Exit remote planner/decoder leases and invoke the preserved Native decode owner.",
+      "saves": "Provide a bounded supported path without retaining both a remote and parent learned GPU decoder.",
+      "contract": "One rank cannot silently fall back while the other enters collectives. Restore patcher state and release in-flight ownership on exceptions.",
+      "sources": [
+        "patches/video_decode_planner.py",
+        "patches/parallel_vae.py",
+        "patches/comfy_sampler.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "VAE08",
+      "chapter": "VAE",
+      "title": "Native public tiling and chunk normalization",
+      "status": "active",
+      "method": "Delegate temporal/spatial chunk coordinates, overlap fades, normalization buffers and final assembly to the frozen public VAE API around the selected learned decoder.",
+      "saves": "Reuse the existing bounded decode planner instead of retaining an extra full-resolution intermediate pipeline.",
+      "contract": "Preserve crop coordinates and temporal context. A raw decode fragment is not a complete substitute for the public normalized output.",
+      "sources": [
+        "patches/staged_vae.py",
+        "patches/comfy_sampler.py",
+        "patches/parallel_vae.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "VAE09",
+      "chapter": "VAE",
+      "title": "Single-owner FP32 Audio decoding",
+      "status": "active",
+      "method": "Load the required audio decoder on one GPU and run the complete Native FP32 stereo/chunk pipeline through the public API.",
+      "saves": "Avoid an additional audio decoder replica, channel collectives and alternative temporal reconstruction.",
+      "contract": "The runtime selects Native single-GPU audio even when an old workflow requests an obsolete automatic parallel mode.",
+      "sources": [
+        "patches/comfy_sampler.py",
+        "patches/staged_vae.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "VAE10",
+      "chapter": "VAE",
+      "title": "Overlapping spatial slab decoding",
+      "status": "historical",
+      "method": "Decode two independently loaded spatial slabs with explicit latent overlap, map them to output coordinates and blend the overlap.",
+      "saves": "Bound each decoder spatial workload and distribute independent slab work.",
+      "contract": "Cropping changes global attention context and is an approximation. Keep latent/output scale ratios and fade coordinates explicit; this is not the current query-parallel route.",
+      "sources": [
+        "patches/slab_video_vae.py",
+        "patches/multi_gpu_video_vae.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "VAE11",
+      "chapter": "VAE",
+      "title": "Video tensor/sequence-parallel block alternatives",
+      "status": "historical",
+      "method": "Partition decoder projection weights and row partials, or partition token-boundary work while gathering the global context needed by the block.",
+      "saves": "Distribute learned matrix work or activations instead of replicating every decoder block.",
+      "contract": "Keep quantizer grouping, global norm/attention context and legacy block arguments. These retained adapters are distinct from the active replicated-decoder query split.",
+      "sources": [
+        "patches/tp_video_vae.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "VAE12",
+      "chapter": "VAE",
+      "title": "Stereo channel-parallel Audio decoding",
+      "status": "retired",
+      "method": "Assign one stereo latent channel to each persistent rank decoder, decode its mono view in FP32 and gather the resulting channels in original order.",
+      "saves": "Distribute left/right learned decode work and output storage.",
+      "contract": "Require stereo geometry and account for shape-dependent normalization/GEMM rounding. This retained technique is removed from normal runtime dispatch.",
+      "sources": [
+        "patches/audio_channel_decode.py",
+        "patches/multi_gpu_audio_vae.py"
+      ],
+      "legacy_ids": [
+        "AUDIO"
+      ]
+    },
+    {
+      "id": "VAE13",
+      "chapter": "VAE",
+      "title": "Temporal and hybrid Audio tiling",
+      "status": "historical",
+      "method": "Distribute overlapping temporal chunks across decoders, cross-fade reconstructed waveforms, and optionally combine temporal ownership with stereo-channel ownership.",
+      "saves": "Parallelize chunked audio work and bound each chunk activation footprint.",
+      "contract": "Preserve temporal context, normalization and sample-aligned fades. These historical manager paths are not the Native audio default.",
+      "sources": [
+        "patches/multi_gpu_audio_vae.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ALT01",
+      "chapter": "ALT",
+      "title": "Two-stage layer pipeline parallelism",
+      "status": "historical",
+      "method": "Place contiguous layer ranges on two GPUs and transfer the boundary activation once per model pass. Preserve mask, positions, KV/intermediate state and Native model ordering across the boundary.",
+      "saves": "Fit separate layer weight sets without a collective at every row projection.",
+      "contract": "A single stream traverses stages serially; this is a different weight/communication schedule from TP2, not simultaneous execution of both layer halves.",
+      "sources": [
+        "patches/pp_dit.py",
+        "patches/pp_qwen3vl.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ALT02",
+      "chapter": "ALT",
+      "title": "Sequence-sharded block boundaries",
+      "status": "historical",
+      "method": "Gather Native floating activations from local token ranges, execute the repaired tensor-parallel block with global RoPE/modulation/masks, then return the owner token slice.",
+      "saves": "Store only local sequence slices at block boundaries while retaining the existing TP arithmetic inside.",
+      "contract": "The repaired adapters gather activations, not legacy INT8 sequence payloads. Global attention context and modulation cannot be inferred from one local slice.",
+      "sources": [
+        "patches/sp_int8_dit.py",
+        "patches/sp_int8_qwen3vl.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ALT03",
+      "chapter": "ALT",
+      "title": "Groupwise packed INT8 partial transport",
+      "status": "experimental",
+      "method": "Quantize groups of INT32 partial outputs to signed byte codes plus serialized FP32 group scales, gather owner payloads and reconstruct/add them before the output epilogue.",
+      "saves": "Trade a smaller byte payload for group metadata and encode/decode work.",
+      "contract": "Separate rank scales require reconstruction before addition; byte-code SUM would overflow or apply incompatible scales. This is approximate and not default transport.",
+      "sources": [
+        "patches/tilelang_transport_tradeoffs.py",
+        "patches/quantized_collectives.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ALT04",
+      "chapter": "ALT",
+      "title": "Floating partial reduction alternative",
+      "status": "retired",
+      "method": "Convert integer GEMM partials to floating point before distributed SUM instead of preserving the exact INT32 collective or the bounded scaled-FP16 codec.",
+      "saves": "Permit a floating collective representation and different communication kernel selection.",
+      "contract": "Conversion and floating SUM change cancellation/reduction behavior. This retired control does not override the current policy-selected transport.",
+      "sources": [
+        "docs/reports/TP2_P2_OPTIMIZATION_REPORT.md",
+        "patches/tilelang_transport_tradeoffs.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ALT05",
+      "chapter": "ALT",
+      "title": "Concatenated LoRA A projections",
+      "status": "retired",
+      "method": "Stack multiple adapter A factors into one projection, split its low-rank outputs and apply the corresponding B products and post-B strengths.",
+      "saves": "Amortize repeated A input reads and GEMM setup across an adapter stack.",
+      "contract": "Changing the A GEMM shape changes rounding and staging. This older option is rejected by current runtime controls; separate ordered adapters remain the supported method.",
+      "sources": [
+        "benchmarks/h3_lora_options_audit.py",
+        "docs/reports/ONLINE_LORA_OPTIONS.md"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ALT06",
+      "chapter": "ALT",
+      "title": "Streamed SwiGLU row preparation",
+      "status": "retired",
+      "method": "Produce/rotate/quantize activation chunks in a bounded schedule instead of retaining a complete branch product and its full rotated representation.",
+      "saves": "Trade recomputation and chunk orchestration for shorter temporary lifetimes.",
+      "contract": "The old streamed control is retired. The supported fused_recompute implementation is a separate, explicitly defined FP32 preparation path.",
+      "sources": [
+        "benchmarks/qualify_streamed_swiglu.py",
+        "docs/reports/FC2_QUANTIZER_MEMORY.md"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ALT07",
+      "chapter": "ALT",
+      "title": "Independent lossless ZSTD tensor frames",
+      "status": "experimental",
+      "method": "Encode bounded chunks within each tensor/rank as independent ZSTD frames and retain a side index. Decode frames through a bounded outer worker pool.",
+      "saves": "Reduce stored/transferred checkpoint bytes while permitting random frame-level reconstruction.",
+      "contract": "This CPU codec is not integrated into the active loader. Bound output allocation and context/thread counts; decompression alone does not include disk or tensor assembly.",
+      "sources": [
+        "benchmarks/te_compression_local.py",
+        "docs/reports/TE_COMPRESSION_LOCAL_20261020.md"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ALT08",
+      "chapter": "ALT",
+      "title": "BitShuffle plus block compression",
+      "status": "experimental",
+      "method": "Transpose bit planes within bounded blocks, then apply the selected Blosc/ZSTD compressor, retaining independently decodable tensor/rank frames.",
+      "saves": "Expose repeated bit-plane patterns to the entropy codec and enable bounded parallel decoding.",
+      "contract": "Keep dtype typesize and filter order explicit. Bit-plane structure is a property of the encoded data, not a guarantee of compression for every INT8 tensor.",
+      "sources": [
+        "benchmarks/te_compression_local.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ALT09",
+      "chapter": "ALT",
+      "title": "Direct and ZigZag FSE byte coding",
+      "status": "experimental",
+      "method": "Entropy-code tensor bytes with FSE directly, or map signed values through ZigZag before the same framed coding procedure.",
+      "saves": "Compress nonuniform byte distributions with a table-based entropy representation.",
+      "contract": "Retain a reversible frame/index format and actual decoder output allocation. Direct and ZigZag variants are separate codecs, not interchangeable stored payloads.",
+      "sources": [
+        "benchmarks/te_compression_local.py",
+        "benchmarks/build_te_compression_codecs.ps1"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ALT10",
+      "chapter": "ALT",
+      "title": "Typed ZipNN codec path",
+      "status": "experimental",
+      "method": "Use the codec typed-tensor entry point rather than treating an arbitrary byte buffer as an assumed supported INT8 numerical format.",
+      "saves": "Apply specialized lossless representation coding where the library supports the tensor dtype.",
+      "contract": "Keep unsupported dtype handling explicit; a proposed or blocked codec is not an active H3 decompression stage.",
+      "sources": [
+        "benchmarks/te_compression_local.py",
+        "benchmarks/requirements-te-compression.txt"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ALT11",
+      "chapter": "ALT",
+      "title": "Codec frame-size and worker scheduling",
+      "status": "experimental",
+      "method": "Choose independently decodable frame sizes and a bounded number of outer decode workers, with one library thread per frame job. Release materialized outputs when consumed.",
+      "saves": "Balance frame/index overhead, CPU parallelism, allocation peaks and random-read granularity.",
+      "contract": "Avoid nested oversubscription and count live decompressed buffers. This scheduling method does not change quantized tensor values.",
+      "sources": [
+        "benchmarks/te_compression_local.py"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ALT12",
+      "chapter": "ALT",
+      "title": "Folded-strength concatenated low-rank updates",
+      "status": "retired",
+      "method": "Stack adapter A factors vertically and combine strength-scaled B factors horizontally, representing the sum of several updates as a composed larger low-rank operator.",
+      "saves": "Amortize A/B projection setup and repeated activation reads across multiple adapters.",
+      "contract": "Pre-folding strengths and changing GEMM/reduction shapes changes floating arithmetic. This historical fused-B variant is distinct from supported ordered post-B scaling.",
+      "sources": [
+        "docs/reports/H3_INT8_SWIGLU_LORA.md",
+        "docs/reports/ONLINE_LORA_NATIVE_ORDER_REPAIR.md"
+      ],
+      "legacy_ids": []
+    },
+    {
+      "id": "ALT13",
+      "chapter": "ALT",
+      "title": "Quantized sequence activation exchange",
+      "status": "historical",
+      "method": "Exchange INT8 activation codes together with the scales and ownership metadata needed to reconstruct a global sequence representation before the consuming operation.",
+      "saves": "Reduce exchanged activation payload relative to a full floating-point gather.",
+      "contract": "Quantizer domains, global normalization and rotary context must remain coherent. The old sequence-payload variant is not the repaired adapter that gathers Native activations.",
+      "sources": [
+        "docs/reports/TEXT_ENCODER_SP_INT8_REPORT.md",
+        "patches/sp_int8_qwen3vl.py"
+      ],
+      "legacy_ids": []
+    }
+  ],
+  "defaults": [
+    [
+      "TE attention",
+      "kitchen_causal",
+      "Pinned masked Kitchen INT8; compact GQA"
+    ],
+    [
+      "DiT / refiner",
+      "kitchen / Native SDPA",
+      "Sparse modes remain explicit"
+    ],
+    [
+      "Columns",
+      "cuda_int8_tilelang",
+      "Guarded aligned SM75 DiT shapes; preallocated fallback"
+    ],
+    [
+      "FC2 / down preparation",
+      "fused_stored",
+      "Explicit fused_recompute and owned_fp32 alternatives"
+    ],
+    [
+      "Row communication",
+      "tilelang_scaled_fp16",
+      "Explicit INT32 SUM alternative"
+    ],
+    [
+      "Tensor storage",
+      "FP16-fix; divisor 64",
+      "FP32 numerical islands; public unscaled outputs"
+    ],
+    [
+      "LoRA",
+      "offline",
+      "Optional ordered online adapters with FP32 Row-A SUM"
+    ],
+    [
+      "Scheduling",
+      "Lifecycle / pressure / adaptive enabled",
+      "Idle residency remains explicit"
+    ],
+    [
+      "Video / Audio",
+      "Query-parallel Kitchen / Native FP32",
+      "Coordinated Native Video fallback"
+    ]
+  ],
+  "sources": [
+    {
+      "path": "benchmarks/attention_grouped_study.py",
+      "sha256": "6e1c35544bbd41b07468886c9cec7918c3f1ad02bd548398f23796ac0582dcad",
+      "canonical_lf_sha256": "6e1c35544bbd41b07468886c9cec7918c3f1ad02bd548398f23796ac0582dcad",
+      "techniques": [
+        "ATT21"
+      ]
+    },
+    {
+      "path": "benchmarks/attention_sol_drop_study.py",
+      "sha256": "e07923959bcd98c84de77d1c772815ec8652aa97fe02bf4633109a72782437e6",
+      "canonical_lf_sha256": "e07923959bcd98c84de77d1c772815ec8652aa97fe02bf4633109a72782437e6",
+      "techniques": [
+        "SPR12"
+      ]
+    },
+    {
+      "path": "benchmarks/bounded_column_int8.py",
+      "sha256": "7695d2d1fdb9ed18eec35b62e9b2944a24ecd8f6fe066fb7d6d33ff8d02e05c8",
+      "canonical_lf_sha256": "7695d2d1fdb9ed18eec35b62e9b2944a24ecd8f6fe066fb7d6d33ff8d02e05c8",
+      "techniques": [
+        "LIN17"
+      ]
+    },
+    {
+      "path": "benchmarks/build_kaggle_light_delivery.py",
+      "sha256": "fa7a10c1e672273186fe33a8d500d2114ec2cfefd4c5867e3247eeabdf9c8327",
+      "canonical_lf_sha256": "fa7a10c1e672273186fe33a8d500d2114ec2cfefd4c5867e3247eeabdf9c8327",
+      "techniques": [
+        "IO12"
+      ]
+    },
+    {
+      "path": "benchmarks/build_te_compression_codecs.ps1",
+      "sha256": "fd571182a091ec6007a21f9ec6061be5d9249f0e3447eb7b72e18f83c80b7f71",
+      "canonical_lf_sha256": "fd571182a091ec6007a21f9ec6061be5d9249f0e3447eb7b72e18f83c80b7f71",
+      "techniques": [
+        "ALT09"
+      ]
+    },
+    {
+      "path": "benchmarks/h3_lora_options_audit.py",
+      "sha256": "82da7f7cd8426907a12eed10d225141b6b8661fe6509003d9fa049ed16a6289c",
+      "canonical_lf_sha256": "cbfe3d45cd5e54a20d25d1b94c27fbdbf2cf0c433af435b181e30c25d071aefb",
+      "techniques": [
+        "ALT05"
+      ]
+    },
+    {
+      "path": "benchmarks/historical_te_loading.py",
+      "sha256": "4171ad02114385265fa76fe0daa845802e0a2bb477e625d1a8a20c4e84abeb83",
+      "canonical_lf_sha256": "4171ad02114385265fa76fe0daa845802e0a2bb477e625d1a8a20c4e84abeb83",
+      "techniques": [
+        "IO09"
+      ]
+    },
+    {
+      "path": "benchmarks/prepare_kaggle_direct_pip.py",
+      "sha256": "f2333e01acadfad48e7b519d426bdb7ad7c036144eed44b98c5855bc6b6b497f",
+      "canonical_lf_sha256": "f2333e01acadfad48e7b519d426bdb7ad7c036144eed44b98c5855bc6b6b497f",
+      "techniques": [
+        "IO11"
+      ]
+    },
+    {
+      "path": "benchmarks/qualify_streamed_swiglu.py",
+      "sha256": "d53e233bba70ccc678d19abc50b9566f8f286ac9d37a038f68c7f7e1a997bd67",
+      "canonical_lf_sha256": "d53e233bba70ccc678d19abc50b9566f8f286ac9d37a038f68c7f7e1a997bd67",
+      "techniques": [
+        "ALT06"
+      ]
+    },
+    {
+      "path": "benchmarks/requirements-te-compression.txt",
+      "sha256": "a71a44df35b36f88f61c82a415b2f1e1d84a8deaf16ac022dc82ff8c8ba9fd5c",
+      "canonical_lf_sha256": "a71a44df35b36f88f61c82a415b2f1e1d84a8deaf16ac022dc82ff8c8ba9fd5c",
+      "techniques": [
+        "ALT10"
+      ]
+    },
+    {
+      "path": "benchmarks/te_compression_local.py",
+      "sha256": "085ceb08252044d6e77d7bb0ba7cdb882b624a683796cc5917c44ffaf2007e25",
+      "canonical_lf_sha256": "b173c66202108ec3eb0df44dd11c3eddc54a98d8cf9ed938a39e8cecfd52624c",
+      "techniques": [
+        "ALT07",
+        "ALT08",
+        "ALT09",
+        "ALT10",
+        "ALT11"
+      ]
+    },
+    {
+      "path": "benchmarks/te_io_pipeline.py",
+      "sha256": "9b4acf4170029f185766972d23e34616855ff437ed5d5a366e3f11e6851de1a8",
+      "canonical_lf_sha256": "9b4acf4170029f185766972d23e34616855ff437ed5d5a366e3f11e6851de1a8",
+      "techniques": [
+        "IO10"
+      ]
+    },
+    {
+      "path": "benchmarks/te_io_storage_study.py",
+      "sha256": "c8353d0361329afdf49df06bbfaabdc1a594b58857d150f31052970083e18e9f",
+      "canonical_lf_sha256": "c8353d0361329afdf49df06bbfaabdc1a594b58857d150f31052970083e18e9f",
+      "techniques": [
+        "IO10"
+      ]
+    },
+    {
+      "path": "custom_nodes/minimax_h3_tp2/__init__.py",
+      "sha256": "538932bba7ce97a1f724870e50190bb616cc88070d7247c5b590a4ebb8880d59",
+      "canonical_lf_sha256": "c08ae97433a7bdf3e34c358735bde8d4ff07262ee3b1b4e28dab889f7d90cf9a",
+      "techniques": [
+        "SYS07"
+      ]
+    },
+    {
+      "path": "docs/reports/FC2_QUANTIZER_MEMORY.md",
+      "sha256": "80f7c0b98099d94af522251f27e143adede02134fcd607fe84eab2a6df434ea0",
+      "canonical_lf_sha256": "3a3103263f9ba1b8ad0958ee4909671264c1f00624b73e3f2207901eb208a70e",
+      "techniques": [
+        "ALT06"
+      ]
+    },
+    {
+      "path": "docs/reports/H3_INT8_SWIGLU_LORA.md",
+      "sha256": "9085351746bdf4920def9b369a03e055b0884184ef4a5f9960a06e64e98dfc9c",
+      "canonical_lf_sha256": "2a9e168ecd00ce2a2da2e2bf5515ce9ed1758399fa5d12bf277e26692f167ede",
+      "techniques": [
+        "ALT12"
+      ]
+    },
+    {
+      "path": "docs/reports/ONLINE_LORA_NATIVE_ORDER_REPAIR.md",
+      "sha256": "c17bde8f566a07637f71f02f43287b556a808e67a532b70b83393fc4f37fcf2c",
+      "canonical_lf_sha256": "f2ef68a789c6a387cb5b149cc97dcd12e146f2d87f76373be3b903663a37ebf3",
+      "techniques": [
+        "ALT12"
+      ]
+    },
+    {
+      "path": "docs/reports/ONLINE_LORA_OPTIONS.md",
+      "sha256": "93d7509863a34af076619e519fdec4f9d04dd03836825c531eaa4175a1f82894",
+      "canonical_lf_sha256": "5b04cb89be1b2ff836bad2e621e205f93260fa85fa87dac9407f74cda01b19cc",
+      "techniques": [
+        "ALT05"
+      ]
+    },
+    {
+      "path": "docs/reports/ROW_PARTIAL_MEMORY.md",
+      "sha256": "4a0a44ed7db505ee3aff93baa0477c6eb0c40d742f8330fdd323014b8c83db78",
+      "canonical_lf_sha256": "a0da862f5e033a4deb9b3c0384782bd61cac4675981ad2a9428bd6d872dce5b0",
+      "techniques": [
+        "LOR07"
+      ]
+    },
+    {
+      "path": "docs/reports/TEXT_ENCODER_SP_INT8_REPORT.md",
+      "sha256": "c8aa626cc1552eae90c89de2ef81a96519204c856987ce817b128d3520bd5de2",
+      "canonical_lf_sha256": "ed3217ba7171f0a6da58c5047128feb00b37b5b15f4976c276ca3cba8b9c8fd9",
+      "techniques": [
+        "ALT13"
+      ]
+    },
+    {
+      "path": "docs/reports/TE_COMPRESSION_LOCAL_20261020.md",
+      "sha256": "78cffaf4f92b19a45cbb77f986aa60c6443048715afc472172ad920bee13d736",
+      "canonical_lf_sha256": "78cffaf4f92b19a45cbb77f986aa60c6443048715afc472172ad920bee13d736",
+      "techniques": [
+        "ALT07"
+      ]
+    },
+    {
+      "path": "docs/reports/TP2_P2_OPTIMIZATION_REPORT.md",
+      "sha256": "f55688e82fd80cb8308a5ecb3fa6914ab1fe3a4c5ef734fe69a1c08106ceb916",
+      "canonical_lf_sha256": "9025f841b29cee189f77568ce5ae3c1796c38791c1eb9be8b9e8f5a0b9242174",
+      "techniques": [
+        "ALT04"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/attention.py",
+      "sha256": "6b3ad8374764fb3520115d2c8df340242c1f28204f8aa2c71e550e0e6b24341d",
+      "canonical_lf_sha256": "6b3ad8374764fb3520115d2c8df340242c1f28204f8aa2c71e550e0e6b24341d",
+      "techniques": [
+        "ATT01",
+        "ATT13",
+        "ATT14",
+        "ATT17",
+        "SPR08",
+        "SPR09",
+        "SPR10"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/build.py",
+      "sha256": "ba483bd2f8fe88137602a82d7862e62d6245d3051b30e066d90b7dc6d375717f",
+      "canonical_lf_sha256": "ba483bd2f8fe88137602a82d7862e62d6245d3051b30e066d90b7dc6d375717f",
+      "techniques": [
+        "ATT20"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/delivery.py",
+      "sha256": "a2a3738cd5cd629e49090596bdedd17dc29106038958d7328b253fc9d912e4af",
+      "canonical_lf_sha256": "a2a3738cd5cd629e49090596bdedd17dc29106038958d7328b253fc9d912e4af",
+      "techniques": [
+        "IO12"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/dense_delivery.py",
+      "sha256": "433d62daf046a7530c0e2f7c8dd5326c365ff2ccc96c807df1e181b94d3a2195",
+      "canonical_lf_sha256": "433d62daf046a7530c0e2f7c8dd5326c365ff2ccc96c807df1e181b94d3a2195",
+      "techniques": [
+        "IO11"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/derive.py",
+      "sha256": "ce435b0f21ffa57328c6eb28e8c785f9f2f74b6d2d2c6fe4256fc9bfc3fecb0f",
+      "canonical_lf_sha256": "ce435b0f21ffa57328c6eb28e8c785f9f2f74b6d2d2c6fe4256fc9bfc3fecb0f",
+      "techniques": [
+        "ATT15",
+        "ATT16"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/graph.py",
+      "sha256": "8f6855188b91c28bb08eae058bfcffc4ec1c5825df5a4b8ca1056d19ac4031f1",
+      "canonical_lf_sha256": "8f6855188b91c28bb08eae058bfcffc4ec1c5825df5a4b8ca1056d19ac4031f1",
+      "techniques": [
+        "ATT18"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/native/h3_dense_utils.cuh",
+      "sha256": "44143260ba407a7f9cba56ea3e1508975ff09a7f85ca82e6baa56abee2857445",
+      "canonical_lf_sha256": "44143260ba407a7f9cba56ea3e1508975ff09a7f85ca82e6baa56abee2857445",
+      "techniques": [
+        "ATT16"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/native/kitchen_sm75.cu",
+      "sha256": "46fd2c8fa2d8254ffd4241949a3bdf8b6dee34f1a516ef5e29df30b4aa7dece3",
+      "canonical_lf_sha256": "46fd2c8fa2d8254ffd4241949a3bdf8b6dee34f1a516ef5e29df30b4aa7dece3",
+      "techniques": [
+        "ATT14",
+        "ATT15",
+        "ATT17",
+        "SPR07",
+        "SPR09",
+        "SPR10"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/native/routed_loop.cuh",
+      "sha256": "1827fa03e629972691f0816183123d537dd44569918b13f0cd454b7b83dddf0a",
+      "canonical_lf_sha256": "1827fa03e629972691f0816183123d537dd44569918b13f0cd454b7b83dddf0a",
+      "techniques": [
+        "SPR08"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/native/vendor/attn_utils.cuh",
+      "sha256": "a39d82563c569aec4d9828b85cfc1697c201611912559f36826e8a7d91125ad1",
+      "canonical_lf_sha256": "a39d82563c569aec4d9828b85cfc1697c201611912559f36826e8a7d91125ad1",
+      "techniques": [
+        "ATT01"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/te_precision.py",
+      "sha256": "9d88ab051c6280e4fad576735a45a52d045dbc76b28db740ca5204243978b7cb",
+      "canonical_lf_sha256": "9d88ab051c6280e4fad576735a45a52d045dbc76b28db740ca5204243978b7cb",
+      "techniques": [
+        "ATT13"
+      ]
+    },
+    {
+      "path": "patches/audio_channel_decode.py",
+      "sha256": "df43be56d14421d946f277989198725fe3f37471ae7c63d93664dc673d5a26d2",
+      "canonical_lf_sha256": "f8710f3c03a81f641e777b529222d231b3294a34352d224096d34eed451e018c",
+      "techniques": [
+        "VAE12"
+      ]
+    },
+    {
+      "path": "patches/comfy_idle_lifecycle.py",
+      "sha256": "342253c4b4d41ec32ed7cbb316e44ea2d047eae1d0ed66a9bb21ce4a37a1e789",
+      "canonical_lf_sha256": "342253c4b4d41ec32ed7cbb316e44ea2d047eae1d0ed66a9bb21ce4a37a1e789",
+      "techniques": [
+        "RES15"
+      ]
+    },
+    {
+      "path": "patches/comfy_sampler.py",
+      "sha256": "dfa6740fed20c5cbd4f1025922d42993b5a39558e389e711d5d99bf4dacd99d2",
+      "canonical_lf_sha256": "30c23f1a63c3c1066c33602abf21326f4789dcd01cd3550f292659541b021f8a",
+      "techniques": [
+        "SYS02",
+        "SYS03",
+        "VAE02",
+        "VAE07",
+        "VAE08",
+        "VAE09"
+      ]
+    },
+    {
+      "path": "patches/comfy_tp_models.py",
+      "sha256": "3f09ec20d235716820a1d8ad7b5e754a1627b0a77a0b9155ca59d328b98bf34d",
+      "canonical_lf_sha256": "cbfdd2e99a729342cc5b6ac88a4d63a5e2f4b414eb0d31f94914824425121fe3",
+      "techniques": [
+        "RES09",
+        "RES10"
+      ]
+    },
+    {
+      "path": "patches/comfy_tp_runtime.py",
+      "sha256": "151d287ba4a0bcd79fc1514734655705384177fd5f1f20c23192fb84a11ff280",
+      "canonical_lf_sha256": "3cf70cac813266d28662198c4ff59991abeb51d96e916e1a1fd9b3739ab3595d",
+      "techniques": [
+        "SYS02",
+        "SYS03",
+        "SYS04",
+        "SYS05",
+        "SYS06",
+        "SYS08",
+        "NUM01",
+        "NUM07",
+        "LOR05",
+        "IO02",
+        "RES09",
+        "RES11",
+        "RES12",
+        "RES13",
+        "RES14",
+        "RES15",
+        "VAE03"
+      ]
+    },
+    {
+      "path": "patches/custom_te_loader.py",
+      "sha256": "0f447d28eb48e3bb0cbbde6e2b9c67a617a8230f5e18a9489616597cad2771d3",
+      "canonical_lf_sha256": "0f447d28eb48e3bb0cbbde6e2b9c67a617a8230f5e18a9489616597cad2771d3",
+      "techniques": [
+        "IO08"
+      ]
+    },
+    {
+      "path": "patches/diagnostic_metrics.py",
+      "sha256": "f58e4312e45d8e3b5ac938d98fe8b0b411e21f0c894967b7361968617516cb9e",
+      "canonical_lf_sha256": "f58e4312e45d8e3b5ac938d98fe8b0b411e21f0c894967b7361968617516cb9e",
+      "techniques": [
+        "SYS08"
+      ]
+    },
+    {
+      "path": "patches/dit_column_linear.py",
+      "sha256": "0f11be5ad4efcfc538295a5e473d5b76b4574eac06c4eae61035f416f45eb473",
+      "canonical_lf_sha256": "0f11be5ad4efcfc538295a5e473d5b76b4574eac06c4eae61035f416f45eb473",
+      "techniques": [
+        "LIN14",
+        "LIN15",
+        "LIN16"
+      ]
+    },
+    {
+      "path": "patches/h3_configuration.py",
+      "sha256": "2b98b22fe3d13ef4e391a58058632d457bbd1048bf6c09f30a278fdaadce169c",
+      "canonical_lf_sha256": "2b98b22fe3d13ef4e391a58058632d457bbd1048bf6c09f30a278fdaadce169c",
+      "techniques": [
+        "SYS07"
+      ]
+    },
+    {
+      "path": "patches/h3_lora.py",
+      "sha256": "9e2689c1ba26a493f19060d0bbbf5e71c4df349a92862465684a42548c534ee2",
+      "canonical_lf_sha256": "7c8d8d74a8fd737a714fcc9019adcc2233efe132a85bfdd32cc1e2c4e98c2b02",
+      "techniques": [
+        "NUM04",
+        "NUM05",
+        "LOR01",
+        "LOR02",
+        "LOR03",
+        "LOR04",
+        "LOR05",
+        "LOR06",
+        "LOR07",
+        "LOR08",
+        "LOR09"
+      ]
+    },
+    {
+      "path": "patches/h3_operator_dependencies.py",
+      "sha256": "0e3d47f6dc681b688cc4c88ad9816edcbcffdd25b2ac1b89e8d04c636fbc6e1d",
+      "canonical_lf_sha256": "0e3d47f6dc681b688cc4c88ad9816edcbcffdd25b2ac1b89e8d04c636fbc6e1d",
+      "techniques": [
+        "SYS07"
+      ]
+    },
+    {
+      "path": "patches/h3_operator_policy.py",
+      "sha256": "2b6929e8ae5974a4d4e6798d6edd1050f7425fd21be7ba46c10f6c936f29c631",
+      "canonical_lf_sha256": "2b6929e8ae5974a4d4e6798d6edd1050f7425fd21be7ba46c10f6c936f29c631",
+      "techniques": [
+        "SYS06",
+        "LIN06",
+        "LIN08",
+        "NUM06",
+        "ATT01",
+        "ATT02",
+        "ATT03",
+        "SPR02",
+        "SPR04",
+        "SPR06"
+      ]
+    },
+    {
+      "path": "patches/h3_reference_plan.py",
+      "sha256": "b8ffc2905c05ca7a4ff5204b2c706391003c342e1b6d537056d084e4e01b9266",
+      "canonical_lf_sha256": "b8ffc2905c05ca7a4ff5204b2c706391003c342e1b6d537056d084e4e01b9266",
+      "techniques": [
+        "VAE02"
+      ]
+    },
+    {
+      "path": "patches/h3_tensor_flow.py",
+      "sha256": "80272e276b10a9fa06f4accd6e62fa8ae373ebdb08a6edbc0615926f56145b07",
+      "canonical_lf_sha256": "80272e276b10a9fa06f4accd6e62fa8ae373ebdb08a6edbc0615926f56145b07",
+      "techniques": [
+        "NUM01",
+        "NUM02",
+        "NUM03",
+        "NUM04",
+        "NUM07"
+      ]
+    },
+    {
+      "path": "patches/host_memory_pressure.py",
+      "sha256": "61b8cb395490a1e8d149e2e3ba4abd72d2ba64b73846c6823ab1b8d63b9b07f0",
+      "canonical_lf_sha256": "61b8cb395490a1e8d149e2e3ba4abd72d2ba64b73846c6823ab1b8d63b9b07f0",
+      "techniques": [
+        "RES08"
+      ]
+    },
+    {
+      "path": "patches/host_weight_cache.py",
+      "sha256": "cbc88510897162e95f21b2e2db019c5507331e4854d0443f6f0cda4f38f1181a",
+      "canonical_lf_sha256": "cbc88510897162e95f21b2e2db019c5507331e4854d0443f6f0cda4f38f1181a",
+      "techniques": [
+        "IO08",
+        "RES01",
+        "RES02",
+        "RES03",
+        "RES04",
+        "RES08"
+      ]
+    },
+    {
+      "path": "patches/kitchen_te_attention.py",
+      "sha256": "b6ca5a8b046dbbaf1026b30a1cd48516433cfc81d849efb562e00dffe40c93c5",
+      "canonical_lf_sha256": "b6ca5a8b046dbbaf1026b30a1cd48516433cfc81d849efb562e00dffe40c93c5",
+      "techniques": [
+        "ATT02",
+        "ATT19",
+        "ATT20"
+      ]
+    },
+    {
+      "path": "patches/legacy_runtime.py",
+      "sha256": "7ed378e3d0473973ea4a203fbf7dd6bd0a4a446a0b41249d1de4e48b7ef34e9c",
+      "canonical_lf_sha256": "7ed378e3d0473973ea4a203fbf7dd6bd0a4a446a0b41249d1de4e48b7ef34e9c",
+      "techniques": [
+        "SYS07"
+      ]
+    },
+    {
+      "path": "patches/multi_gpu_audio_vae.py",
+      "sha256": "bed3646ff98b2bf829967e5c6877fbfa80e708addf213b1970ffaf06375b3618",
+      "canonical_lf_sha256": "ebb26bd319e7994c0679eab4c15f487e3812a26147470c201627b9b66d582db1",
+      "techniques": [
+        "VAE12",
+        "VAE13"
+      ]
+    },
+    {
+      "path": "patches/multi_gpu_video_vae.py",
+      "sha256": "eff4376b8be541fb70546b4e8fe36870368f6b9656766d0a27e43b16d234ea01",
+      "canonical_lf_sha256": "eff4376b8be541fb70546b4e8fe36870368f6b9656766d0a27e43b16d234ea01",
+      "techniques": [
+        "VAE10"
+      ]
+    },
+    {
+      "path": "patches/offline_lora.py",
+      "sha256": "40e20dc24e1367c9eb7bac044717efdea71922578891ecedf4b6ce9b9ce1fbe2",
+      "canonical_lf_sha256": "f7b31191e4ea93b4c784df9ca73706ff9705328628bb8f070b2a18cc6f0a6406",
+      "techniques": [
+        "IO01"
+      ]
+    },
+    {
+      "path": "patches/offline_lora_reference.py",
+      "sha256": "355b445a75b4a026ac046290b282d07356cf757b9ac3be8bcfcbf09c3559abd4",
+      "canonical_lf_sha256": "bc64ff56f156326cf5d23a68ab450ae3e7c648949af6c3c2dcce9665dee239a1",
+      "techniques": [
+        "LOR01",
+        "IO01"
+      ]
+    },
+    {
+      "path": "patches/optimized_tp.py",
+      "sha256": "db2512ecfe7ca643405d1f37087f23b0fbbeeb2c2f06cad7b5780b466272cdd5",
+      "canonical_lf_sha256": "69d26de4f73a669771f3e8fde63731ddbdbeaf7be1348a5eea94133d3366627e",
+      "techniques": [
+        "LIN01",
+        "LIN02",
+        "LIN10",
+        "LIN13"
+      ]
+    },
+    {
+      "path": "patches/parallel_int8.py",
+      "sha256": "5895ffb189f200f6d9f3b1cd097f07a97789b37927eb63fe1d7f8f7d10234f1e",
+      "canonical_lf_sha256": "be870750b59c941f8cb197629ef905f97887d12765852ade2cb65921011e306f",
+      "techniques": [
+        "LIN01",
+        "LIN10",
+        "LIN12",
+        "LIN13"
+      ]
+    },
+    {
+      "path": "patches/parallel_vae.py",
+      "sha256": "9fcbf96407294294f283cb897eee807adcd361cec5b1d1a8b17aa7004142dbb2",
+      "canonical_lf_sha256": "51a792b84b5ee8c1ba8ee96a5426c8ad1e0f6a27afd8e6c14dbc06dc4c7eb806",
+      "techniques": [
+        "VAE03",
+        "VAE05",
+        "VAE06",
+        "VAE07",
+        "VAE08"
+      ]
+    },
+    {
+      "path": "patches/pp_dit.py",
+      "sha256": "21b9f22f2c779f485588c3bbea11d326fd20fbe94ae5ddbbb3d531db38d4b826",
+      "canonical_lf_sha256": "f4811777f48af80cbf99bfabaa76568db0d9524c7709d2e3262a84070ced4bb2",
+      "techniques": [
+        "ALT01"
+      ]
+    },
+    {
+      "path": "patches/pp_qwen3vl.py",
+      "sha256": "3541cb818fcb97a9c736e733fc0b7dec5cd5b73b76112a1096f29345b53405cf",
+      "canonical_lf_sha256": "6cd5cfb52bab3596453d426a2989aa1883132e00478abf6d534625ae2b66c3b7",
+      "techniques": [
+        "ALT01"
+      ]
+    },
+    {
+      "path": "patches/quantized_collectives.py",
+      "sha256": "a5c56bb13b1fe5daf598365b0470c2a2c6b7d5b0f242061eb40f641d262e2233",
+      "canonical_lf_sha256": "a5c56bb13b1fe5daf598365b0470c2a2c6b7d5b0f242061eb40f641d262e2233",
+      "techniques": [
+        "SYS05",
+        "ALT03"
+      ]
+    },
+    {
+      "path": "patches/rank_local_int8.py",
+      "sha256": "d6fd8040d6bb22b3b19fbb678101ac8cb489451011ad749de0f529cf86615183",
+      "canonical_lf_sha256": "d6fd8040d6bb22b3b19fbb678101ac8cb489451011ad749de0f529cf86615183",
+      "techniques": [
+        "SYS01",
+        "IO05",
+        "IO06",
+        "IO07"
+      ]
+    },
+    {
+      "path": "patches/reference_loaders.py",
+      "sha256": "d6e59a73552831b6c80c286cb83edb75435c7d08a0823b8090dbdd4720f7454f",
+      "canonical_lf_sha256": "eca18244c47c0c9422f03c362f13ec4f907f6707e6af5b9e47908c6e44ea5756",
+      "techniques": [
+        "VAE01"
+      ]
+    },
+    {
+      "path": "patches/runtime_diagnostics.py",
+      "sha256": "3c72d2e2b78f8bd636db2cd853c4951f88b1fa0c6c9920a412cda43d2fa8e19e",
+      "canonical_lf_sha256": "3c72d2e2b78f8bd636db2cd853c4951f88b1fa0c6c9920a412cda43d2fa8e19e",
+      "techniques": [
+        "SYS08"
+      ]
+    },
+    {
+      "path": "patches/slab_video_vae.py",
+      "sha256": "8025557c091ef07f2cf81b4d8498e0b586e575bf27871f902b5e3893b353a59f",
+      "canonical_lf_sha256": "8025557c091ef07f2cf81b4d8498e0b586e575bf27871f902b5e3893b353a59f",
+      "techniques": [
+        "VAE10"
+      ]
+    },
+    {
+      "path": "patches/sp_int8_dit.py",
+      "sha256": "63f744b092ef1b91d9c1313a63ef4cc10f84f86183e966fd91f93cbb582b6856",
+      "canonical_lf_sha256": "b7087098ce885acd360415f410658e49385a58bf7e41359703fbdc62df714f04",
+      "techniques": [
+        "ALT02"
+      ]
+    },
+    {
+      "path": "patches/sp_int8_qwen3vl.py",
+      "sha256": "1f1385858e46d553d7c1c084b669534be1901f9c4935b0da51d694e445e04480",
+      "canonical_lf_sha256": "0d7343d9ddbc082bf21aca6dd07aa2680d08d9b7dc096d8a6a5cd3b60734b52a",
+      "techniques": [
+        "ALT02",
+        "ALT13"
+      ]
+    },
+    {
+      "path": "patches/staged_vae.py",
+      "sha256": "48e42a01c571bbac8243d21e4333322140dda93076d7b202a0e215e2ca37c15d",
+      "canonical_lf_sha256": "48e42a01c571bbac8243d21e4333322140dda93076d7b202a0e215e2ca37c15d",
+      "techniques": [
+        "VAE01",
+        "VAE04",
+        "VAE08",
+        "VAE09"
+      ]
+    },
+    {
+      "path": "patches/tilelang_attention_p2.py",
+      "sha256": "9e451dfd5961b02f68707bb63a7cbfdfd74383ffb27d2fc7169ad1406764737c",
+      "canonical_lf_sha256": "30fe3d321358f3ad835a55fe30ece86c860d95728670e92e939b7a92345eb42d",
+      "techniques": [
+        "SPR06"
+      ]
+    },
+    {
+      "path": "patches/tilelang_attention_tradeoffs.py",
+      "sha256": "2e9514ce5393b7a93b4ee75bda252329bd0b537e114adbc307a1c2146e8f4a7d",
+      "canonical_lf_sha256": "c24ce4f1821366a1c03ecbaab283963f678d0cb6e9c96a9a939392b9bbadc1c1",
+      "techniques": [
+        "ATT09",
+        "ATT10",
+        "ATT11",
+        "SPR07",
+        "SPR11"
+      ]
+    },
+    {
+      "path": "patches/tilelang_column_epilogue.py",
+      "sha256": "f176b7597cf899230d3801f35345a301c40d3b0b8fe00bcc31013d73912ee192",
+      "canonical_lf_sha256": "f176b7597cf899230d3801f35345a301c40d3b0b8fe00bcc31013d73912ee192",
+      "techniques": [
+        "LIN15"
+      ]
+    },
+    {
+      "path": "patches/tilelang_dense_preparation.py",
+      "sha256": "a65370e1002de13b72a0b3c90d6f0b1e0fd2337b508babb829cfd744d6129ffe",
+      "canonical_lf_sha256": "a65370e1002de13b72a0b3c90d6f0b1e0fd2337b508babb829cfd744d6129ffe",
+      "techniques": [
+        "ATT07",
+        "ATT08"
+      ]
+    },
+    {
+      "path": "patches/tilelang_group32_masked.py",
+      "sha256": "75aefd9f8e3516249f4b04b220fe97885577e01eccce4ede75b64460b2aba140",
+      "canonical_lf_sha256": "75aefd9f8e3516249f4b04b220fe97885577e01eccce4ede75b64460b2aba140",
+      "techniques": [
+        "ATT05",
+        "ATT11"
+      ]
+    },
+    {
+      "path": "patches/tilelang_grouped_fused.py",
+      "sha256": "fdda215620c2cd0957c0890ad86de6a97b9a3ac00c386870f9af7f599fe2a6ba",
+      "canonical_lf_sha256": "fdda215620c2cd0957c0890ad86de6a97b9a3ac00c386870f9af7f599fe2a6ba",
+      "techniques": [
+        "ATT06"
+      ]
+    },
+    {
+      "path": "patches/tilelang_grouped_qk.py",
+      "sha256": "0fca9d7e2c06382293de73970d41dd39ab004b464ba22472164a68f85c3f4dbf",
+      "canonical_lf_sha256": "0fca9d7e2c06382293de73970d41dd39ab004b464ba22472164a68f85c3f4dbf",
+      "techniques": [
+        "ATT04",
+        "ATT21"
+      ]
+    },
+    {
+      "path": "patches/tilelang_grouped_tp.py",
+      "sha256": "067bede9be733f465769773689cb7c2031d56bfd1dd59939c4d42ea7cadffdb0",
+      "canonical_lf_sha256": "067bede9be733f465769773689cb7c2031d56bfd1dd59939c4d42ea7cadffdb0",
+      "techniques": [
+        "ATT04"
+      ]
+    },
+    {
+      "path": "patches/tilelang_grouped_tp_kitchen.py",
+      "sha256": "4ba3620655c3d4a3ad556b257207fd9304b08edb6f43d766a3fe50a99cf831a7",
+      "canonical_lf_sha256": "769c3514aa1d1a64d9a04e80b473e28392f299952619db4f9d60fd673f9030bc",
+      "techniques": [
+        "ATT04"
+      ]
+    },
+    {
+      "path": "patches/tilelang_grouped_tp_kitchen_v2.py",
+      "sha256": "1a665316b9d11d29846ad1f37a66607d610566104f729557d6b53b9a0f594904",
+      "canonical_lf_sha256": "76587cadd49ec57e62839b03badf65e32efc5ab69a4fcad4fcb82932f831f9ea",
+      "techniques": [
+        "ATT06",
+        "ATT09",
+        "ATT10",
+        "ATT22"
+      ]
+    },
+    {
+      "path": "patches/tilelang_grouped_tp_optimized.py",
+      "sha256": "ee0b48a87d44b313f110bdf3d58a75a1e00bf5f37b0ca2be02f4b9a9fa971d1f",
+      "canonical_lf_sha256": "ee0b48a87d44b313f110bdf3d58a75a1e00bf5f37b0ca2be02f4b9a9fa971d1f",
+      "techniques": [
+        "ATT08",
+        "SPR01",
+        "SPR03",
+        "SPR04",
+        "SPR05"
+      ]
+    },
+    {
+      "path": "patches/tilelang_row_quant.py",
+      "sha256": "ff1bb4f853c1e1131c3a4f2e029a1facf27ad0b284adef776a2a1af073fefd09",
+      "canonical_lf_sha256": "ff1bb4f853c1e1131c3a4f2e029a1facf27ad0b284adef776a2a1af073fefd09",
+      "techniques": [
+        "LIN02",
+        "LIN03",
+        "LIN04",
+        "LIN05"
+      ]
+    },
+    {
+      "path": "patches/tilelang_sage_preparation.py",
+      "sha256": "ebe5ccbc18db031b98926051e44d802f7d70ff333d03daa13518b1be7d9a2346",
+      "canonical_lf_sha256": "ebe5ccbc18db031b98926051e44d802f7d70ff333d03daa13518b1be7d9a2346",
+      "techniques": [
+        "ATT07",
+        "ATT12"
+      ]
+    },
+    {
+      "path": "patches/tilelang_sage_qk.py",
+      "sha256": "f78151941b8e0890df21bd2ffd11ac6abaff17c4dbcc0a6af1c59614900a3f2a",
+      "canonical_lf_sha256": "f78151941b8e0890df21bd2ffd11ac6abaff17c4dbcc0a6af1c59614900a3f2a",
+      "techniques": [
+        "ATT12"
+      ]
+    },
+    {
+      "path": "patches/tilelang_scalar_pool.py",
+      "sha256": "54cd0d284044069bda847dca35c5e6471d2111c7d3c1d38e82825ddc37a4bdca",
+      "canonical_lf_sha256": "54cd0d284044069bda847dca35c5e6471d2111c7d3c1d38e82825ddc37a4bdca",
+      "techniques": [
+        "SPR05"
+      ]
+    },
+    {
+      "path": "patches/tilelang_sol_drop_fused.py",
+      "sha256": "26a192bc6876cd0245c6993d8712696ec1b1ed22dbd163a6c9946f05772b3398",
+      "canonical_lf_sha256": "26a192bc6876cd0245c6993d8712696ec1b1ed22dbd163a6c9946f05772b3398",
+      "techniques": [
+        "SPR03",
+        "SPR12"
+      ]
+    },
+    {
+      "path": "patches/tilelang_sparse_attention.py",
+      "sha256": "f783effba120825ab161f658e6fd4e0f22c0c143c1da980c36879073298867c3",
+      "canonical_lf_sha256": "f783effba120825ab161f658e6fd4e0f22c0c143c1da980c36879073298867c3",
+      "techniques": [
+        "SPR01",
+        "SPR11"
+      ]
+    },
+    {
+      "path": "patches/tilelang_swiglu_pad.py",
+      "sha256": "9d9f292350cbf4d0e63f6d611c647bb09d4e9fcc521f840519746df776c1d70e",
+      "canonical_lf_sha256": "9d9f292350cbf4d0e63f6d611c647bb09d4e9fcc521f840519746df776c1d70e",
+      "techniques": [
+        "LIN05",
+        "LIN06",
+        "LIN07",
+        "LIN10"
+      ]
+    },
+    {
+      "path": "patches/tilelang_swiglu_quant.py",
+      "sha256": "d8a55c60949b881fc5b2d6f3c9bc9fdf025675fbb2498f9ee9dd38e6679cc265",
+      "canonical_lf_sha256": "3d061420c9486dbbb78b317deb2db5fb2d51c6110cb7953e2323de7ba2b34f8d",
+      "techniques": [
+        "LIN08",
+        "LIN09"
+      ]
+    },
+    {
+      "path": "patches/tilelang_transport_p2.py",
+      "sha256": "2ba3032848a83049bdaf419b7deb50e165e75a3d1fe0820851761bc15e9e89fd",
+      "canonical_lf_sha256": "2ba3032848a83049bdaf419b7deb50e165e75a3d1fe0820851761bc15e9e89fd",
+      "techniques": [
+        "LIN11",
+        "LIN12"
+      ]
+    },
+    {
+      "path": "patches/tilelang_transport_tradeoffs.py",
+      "sha256": "94a653a562a74ab45800025e094e0644a7de0de073107ce5e7a2896695053e26",
+      "canonical_lf_sha256": "94a653a562a74ab45800025e094e0644a7de0de073107ce5e7a2896695053e26",
+      "techniques": [
+        "LIN11",
+        "ALT03",
+        "ALT04"
+      ]
+    },
+    {
+      "path": "patches/tp2_bundle.py",
+      "sha256": "4b8f11dadbc38731ddc27a429412f176e00d3586bb99fcc66b932b5c02dd1ca3",
+      "canonical_lf_sha256": "4b8f11dadbc38731ddc27a429412f176e00d3586bb99fcc66b932b5c02dd1ca3",
+      "techniques": [
+        "IO02",
+        "IO04",
+        "IO06"
+      ]
+    },
+    {
+      "path": "patches/tp2_disk_bake.py",
+      "sha256": "22141cdd6eec47cbaad512ee9c9411fa55901b74fc46e34f8504079e2b434068",
+      "canonical_lf_sha256": "22141cdd6eec47cbaad512ee9c9411fa55901b74fc46e34f8504079e2b434068",
+      "techniques": [
+        "IO03",
+        "IO04"
+      ]
+    },
+    {
+      "path": "patches/tp_dit.py",
+      "sha256": "a72bd5f4fa1a9ffaa91cfcf0aeffdb11eba237909b4f08d6c2fe3f8e8c8a544e",
+      "canonical_lf_sha256": "f1d3bd76f59d279d2dabbf3727866e476a03e76a52151b4bf1784880aed3536e",
+      "techniques": [
+        "SYS01",
+        "NUM03",
+        "NUM05",
+        "NUM06"
+      ]
+    },
+    {
+      "path": "patches/tp_qwen3vl.py",
+      "sha256": "c877ebc93b68fe9a638ce47060f282b316f6a460693df2b40529e495938e398e",
+      "canonical_lf_sha256": "9cb6521bb79b460fadbccef4d603e28da826238a95b0d5f41678e66274ac7b0e",
+      "techniques": [
+        "SYS01",
+        "SYS09",
+        "LIN16",
+        "NUM03",
+        "NUM05",
+        "NUM06"
+      ]
+    },
+    {
+      "path": "patches/tp_video_vae.py",
+      "sha256": "353d01562aa809a95faa4ad5554a43e8f41a0986035b1dccaa1481ea2dee8b51",
+      "canonical_lf_sha256": "cf4689e9b77fdb3f1ac8b16d46e62da6a54ab28453430e12b6446fec636256c4",
+      "techniques": [
+        "VAE11"
+      ]
+    },
+    {
+      "path": "patches/video_decode_planner.py",
+      "sha256": "a012f0e7e1f43d33ae44bd697c091ce36b98d402f93b48057fe04ced9cdc8ea6",
+      "canonical_lf_sha256": "a012f0e7e1f43d33ae44bd697c091ce36b98d402f93b48057fe04ced9cdc8ea6",
+      "techniques": [
+        "VAE04",
+        "VAE07"
+      ]
+    },
+    {
+      "path": "patches/weight_residency.py",
+      "sha256": "8421a6ab4f64ebd5a9957d2734beed14f765ba6691eb9c1a6232ce64b2eacb04",
+      "canonical_lf_sha256": "8421a6ab4f64ebd5a9957d2734beed14f765ba6691eb9c1a6232ce64b2eacb04",
+      "techniques": [
+        "SYS06",
+        "LOR08",
+        "LOR09",
+        "RES02",
+        "RES04",
+        "RES05",
+        "RES06",
+        "RES07",
+        "RES16",
+        "VAE03"
+      ]
+    },
+    {
+      "path": "patches/windowed_tp.py",
+      "sha256": "af23b50b93e983f3166b6d9278383a8fe9e9c65a6e678a221056bb3299c9dc05",
+      "canonical_lf_sha256": "6b0d19710b9c012287b6c8552fb5febf3f75459c48e0446ff85cf1120a802eba",
+      "techniques": [
+        "IO05",
+        "IO07",
+        "IO08",
+        "RES11"
+      ]
+    }
+  ]
+}

@@ -177,7 +177,7 @@ def main():
         assert len(state['sampler_steps'])==config['steps'] and len(state['denoiser_outputs'])==config['steps']
         for rank in state['ranks']:
             bench=rank['benchmark'];calls=bench['executed_backends']
-            assert bench['layouts'] and calls.get('TE/tilelang_group32')
+            assert bench['layouts'] and calls.get('TE/kitchen_causal')
             assert kitchen_denoiser_calls(bench) == 50*config['steps']
             assert rank['bundle_preparation']['dit']['disk_baked']
             assert rank['bundle_preparation']['dit']['merged_matrices']==0

@@ -1,0 +1,24 @@
+{
+  "file": "2b910fa71cea33996b988c1cbdfa0e9798f41392c10c0f39c70c4dffd33697ac.tar.gz",
+  "sha256": "2b910fa71cea33996b988c1cbdfa0e9798f41392c10c0f39c70c4dffd33697ac",
+  "bytes": 5031814,
+  "capsule_sha256": "dcbc4c4da405fc8092654e62ef51bf1b7bc15098fac236391774121199d9c5f4",
+  "source_files": 368,
+  "core_pins": 78,
+  "kaggle_mounts": 0,
+  "base": {
+    "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/f8fffbfd0e3cff2138e1b2ebd4cae02c248d969f/runtime/kaggle_artifacts/3e9947c02cf3452fccc90297c3018d6d37cf8a6e186b85a0d88759e79b985273.tar.gz",
+    "sha256": "3e9947c02cf3452fccc90297c3018d6d37cf8a6e186b85a0d88759e79b985273",
+    "bytes": 17669172
+  },
+  "reconstructed_full_distribution_sha256": "d4214485ab73fb8a3be0c4ab93f5551b27f140c2bae48f6792ffd99eed526cfb",
+  "delivery": "Hash-bound source delta over immutable frozen base",
+  "repository": "chinokikiss/minimax-h3-2xt4",
+  "branch": "codex/kitchen-attn-matrix-20261025-2b910fa7",
+  "commit": "391274244d9ca7083bf40c25586317c494e76bcf",
+  "path": "runtime/kaggle_artifacts/2b910fa71cea33996b988c1cbdfa0e9798f41392c10c0f39c70c4dffd33697ac.tar.gz",
+  "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/391274244d9ca7083bf40c25586317c494e76bcf/runtime/kaggle_artifacts/2b910fa71cea33996b988c1cbdfa0e9798f41392c10c0f39c70c4dffd33697ac.tar.gz",
+  "published": true,
+  "working_tree_and_index_changed": false,
+  "download_verification_transport": "curl TLS1.2, certificate verification enabled"
+}

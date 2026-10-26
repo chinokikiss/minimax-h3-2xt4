@@ -23,7 +23,7 @@ conditioning, sampling, and public VAE planning.
 
 | Resource | What you will find |
 |---|---|
-| [Technical guide (PDF)](docs/guides/MiniMax_H3_TP2_Optimization_Technical_Guide.pdf) | Architecture diagrams, numerical contracts, current defaults and physical T4 results |
+| [Technical guide (PDF)](docs/guides/MiniMax_H3_TP2_Optimization_Technical_Guide.pdf) / [Markdown](docs/guides/H3_OPTIMIZATION_TECHNIQUES.md) | 130 optimization techniques: mechanisms, work removal, dataflow and numerical contracts; complete source coverage |
 | [Runtime setup](docs/guides/H3_LEGACY_RUNTIME.md) | Pinned ComfyUI, conda environment, launch commands, and platform limits |
 | [Operator configuration](docs/guides/H3_OPERATOR_INTEGRATION.md) | Backend choices, workflow integration, and qualification scope |
 | [Loading and LoRA](docs/guides/H3_LOADING_STAGES.md) | Layer-parallel baking, staged VAEs, and idle preloading |
@@ -47,7 +47,7 @@ see the [frozen runtime record](runtime/README.md).
 | Component | Selection |
 |---|---|
 | Tensor flow | FP16-fix by default; TE/DiT residual divisor 64, explicit FP32 stability islands; `legacy` FP32 flow optional |
-| TE / DiT / Token Refiner | TileLang Group32 dense / Kitchen INT8 / Native SDPA |
+| TE / DiT / Token Refiner | Kitchen causal INT8 / Kitchen dense INT8 / Native SDPA |
 | Row projections | Scaled FP16 SUM with fused FP32 dequantization; explicit INT32 SUM alternative |
 | TE down / DiT FC2 | `fused_stored`: FP32 SwiGLU + regular ConvRot256, global row scales, original INT8 GEMM |
 | DiT QKV / FC1 columns | Direct INT8 GEMM + ordered TileLang epilogue on supported SM75 shapes; preallocated fallback |
@@ -63,6 +63,11 @@ Numerical differences and Native fallbacks
 are explained in the [technical guide](docs/guides/MiniMax_H3_TP2_Optimization_Technical_Guide.pdf).
 The [2026-10-22 promotion record](docs/reports/H3_FP16_FUSED_DEFAULT_20261022.md)
 separates physical operator evidence from pending full-pipeline quality checks.
+The [SM75 dense attention results](docs/reports/KITCHEN_DENSE_SM75_20261025.md)
+record the Kitchen causal TE default and the measured dense candidates.
+The [TE causal/precision audit](docs/reports/TE_CAUSAL_PREFIX_PRECISION_20261026.md)
+records fixed-packed masking, floating-input prefix dependence and FP32/BF16
+output precision on both T4s.
 
 ## Repository map
 

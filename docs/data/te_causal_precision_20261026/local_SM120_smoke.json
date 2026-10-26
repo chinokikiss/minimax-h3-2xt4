@@ -1,0 +1,218 @@
+{
+  "scope": "Local SM120 API/experiment smoke only, not T4 evidence",
+  "torch": "2.12.1+cu132",
+  "gpu": "NVIDIA GeForce RTX 5060 Ti",
+  "cases": [
+    {
+      "dtype": "torch.float16",
+      "mask": "bool",
+      "vs_FP32": {
+        "max_abs": 0.03301370143890381,
+        "mean_abs": 0.002844760762011985,
+        "rmse": 0.0038438486968518345,
+        "relative_l2": 0.010595394410839874,
+        "p99_abs": 0.012092282772064209,
+        "changed_fraction": 0.99921875,
+        "byte_equal": false,
+        "finite": true
+      },
+      "future_V_drift": {
+        "max_abs": 0.372314453125,
+        "mean_abs": 0.059535215751478264,
+        "rmse": 0.07864350707795704,
+        "relative_l2": 0.16886350034895228,
+        "p99_abs": 0.24462890625,
+        "changed_fraction": 0.9979208669354839,
+        "byte_equal": false,
+        "finite": true
+      },
+      "fixed_packed_passed": true,
+      "dequantized_ref": {
+        "max_abs": 0.010206937789916992,
+        "mean_abs": 0.0008364297496887419,
+        "rmse": 0.001145641000400093,
+        "relative_l2": 0.003157394870125298,
+        "p99_abs": 0.003598854020237921,
+        "changed_fraction": 0.9990985576923077,
+        "byte_equal": false,
+        "finite": true
+      }
+    },
+    {
+      "dtype": "torch.float16",
+      "mask": "additive",
+      "vs_FP32": {
+        "max_abs": 0.03301370143890381,
+        "mean_abs": 0.002844760762011985,
+        "rmse": 0.0038438486968518345,
+        "relative_l2": 0.010595394410839874,
+        "p99_abs": 0.012092282772064209,
+        "changed_fraction": 0.99921875,
+        "byte_equal": false,
+        "finite": true
+      },
+      "future_V_drift": {
+        "max_abs": 0.372314453125,
+        "mean_abs": 0.059535215751478264,
+        "rmse": 0.07864350707795704,
+        "relative_l2": 0.16886350034895228,
+        "p99_abs": 0.24462890625,
+        "changed_fraction": 0.9979208669354839,
+        "byte_equal": false,
+        "finite": true
+      },
+      "fixed_packed_passed": true,
+      "dequantized_ref": {
+        "max_abs": 0.010206937789916992,
+        "mean_abs": 0.0008364297496887419,
+        "rmse": 0.001145641000400093,
+        "relative_l2": 0.003157394870125298,
+        "p99_abs": 0.003598854020237921,
+        "changed_fraction": 0.9990985576923077,
+        "byte_equal": false,
+        "finite": true
+      }
+    },
+    {
+      "dtype": "torch.float16",
+      "mask": "padding_bias",
+      "vs_FP32": {
+        "max_abs": 0.03301370143890381,
+        "mean_abs": 0.002862768102383757,
+        "rmse": 0.0038656021729990843,
+        "relative_l2": 0.010606550604867128,
+        "p99_abs": 0.012121022343635554,
+        "changed_fraction": 0.99921875,
+        "byte_equal": false,
+        "finite": true
+      },
+      "future_V_drift": {
+        "max_abs": 0.372314453125,
+        "mean_abs": 0.06013293049838995,
+        "rmse": 0.07918476404190805,
+        "relative_l2": 0.1692285614023747,
+        "p99_abs": 0.24473510742187465,
+        "changed_fraction": 0.9979838709677419,
+        "byte_equal": false,
+        "finite": true
+      },
+      "fixed_packed_passed": true,
+      "dequantized_ref": {
+        "max_abs": 0.010107755661010742,
+        "mean_abs": 0.0008350084409030956,
+        "rmse": 0.0011458531132173965,
+        "relative_l2": 0.0031435950647194953,
+        "p99_abs": 0.0036835055053234082,
+        "changed_fraction": 0.9990985576923077,
+        "byte_equal": false,
+        "finite": true
+      }
+    },
+    {
+      "dtype": "torch.float32",
+      "mask": "bool",
+      "vs_FP32": {
+        "max_abs": 0.039533793926239014,
+        "mean_abs": 0.002863472755000274,
+        "rmse": 0.0039214107910955425,
+        "relative_l2": 0.010809054523423487,
+        "p99_abs": 0.012600136995315547,
+        "changed_fraction": 0.999969951923077,
+        "byte_equal": false,
+        "finite": true
+      },
+      "future_V_drift": {
+        "max_abs": 0.373046875,
+        "mean_abs": 0.05954698344031649,
+        "rmse": 0.07868996269336727,
+        "relative_l2": 0.1689417893113306,
+        "p99_abs": 0.24442382812499908,
+        "changed_fraction": 0.988344254032258,
+        "byte_equal": false,
+        "finite": true
+      },
+      "fixed_packed_passed": true,
+      "dequantized_ref": {
+        "max_abs": 0.00907433032989502,
+        "mean_abs": 0.0009399858987298679,
+        "rmse": 0.0012841223019097324,
+        "relative_l2": 0.0035388712800293143,
+        "p99_abs": 0.004054133668541906,
+        "changed_fraction": 0.9996995192307693,
+        "byte_equal": false,
+        "finite": true
+      }
+    },
+    {
+      "dtype": "torch.float32",
+      "mask": "additive",
+      "vs_FP32": {
+        "max_abs": 0.039533793926239014,
+        "mean_abs": 0.002863472755000274,
+        "rmse": 0.0039214107910955425,
+        "relative_l2": 0.010809054523423487,
+        "p99_abs": 0.012600136995315547,
+        "changed_fraction": 0.999969951923077,
+        "byte_equal": false,
+        "finite": true
+      },
+      "future_V_drift": {
+        "max_abs": 0.373046875,
+        "mean_abs": 0.05954698344031649,
+        "rmse": 0.07868996269336727,
+        "relative_l2": 0.1689417893113306,
+        "p99_abs": 0.24442382812499908,
+        "changed_fraction": 0.988344254032258,
+        "byte_equal": false,
+        "finite": true
+      },
+      "fixed_packed_passed": true,
+      "dequantized_ref": {
+        "max_abs": 0.00907433032989502,
+        "mean_abs": 0.0009399858987298679,
+        "rmse": 0.0012841223019097324,
+        "relative_l2": 0.0035388712800293143,
+        "p99_abs": 0.004054133668541906,
+        "changed_fraction": 0.9996995192307693,
+        "byte_equal": false,
+        "finite": true
+      }
+    },
+    {
+      "dtype": "torch.float32",
+      "mask": "padding_bias",
+      "vs_FP32": {
+        "max_abs": 0.039533793926239014,
+        "mean_abs": 0.0028818915709108296,
+        "rmse": 0.003947691343398139,
+        "relative_l2": 0.010831668839783344,
+        "p99_abs": 0.012650048434734338,
+        "changed_fraction": 1.0,
+        "byte_equal": false,
+        "finite": true
+      },
+      "future_V_drift": {
+        "max_abs": 0.373046875,
+        "mean_abs": 0.06013829681661821,
+        "rmse": 0.07922591627184976,
+        "relative_l2": 0.16929964974265274,
+        "p99_abs": 0.24540039062499908,
+        "changed_fraction": 0.98828125,
+        "byte_equal": false,
+        "finite": true
+      },
+      "fixed_packed_passed": true,
+      "dequantized_ref": {
+        "max_abs": 0.01068115234375,
+        "mean_abs": 0.0009434626975258423,
+        "rmse": 0.0012887147577008806,
+        "relative_l2": 0.0035353559653681786,
+        "p99_abs": 0.004091290235519408,
+        "changed_fraction": 0.9996694711538462,
+        "byte_equal": false,
+        "finite": true
+      }
+    }
+  ],
+  "status": "passed"
+}

@@ -1,0 +1,21 @@
+{
+  "expanded_suite": {
+    "run": 95,
+    "passed": 94,
+    "failed": 1,
+    "reason": "Historical Turbo/base header JSON fixture is absent locally; no model data was downloaded or synthesized"
+  },
+  "operator_control_gates_passed": true,
+  "focused_unittest_count": 52,
+  "focused_unittest_passed": true,
+  "cuda_visible_devices": "",
+  "source_hashes": {
+    "patches/h3_operator_policy.py": "2b6929e8ae5974a4d4e6798d6edd1050f7425fd21be7ba46c10f6c936f29c631",
+    "patches/kitchen_te_attention.py": "b6ca5a8b046dbbaf1026b30a1cd48516433cfc81d849efb562e00dffe40c93c5",
+    "custom_nodes/minimax_h3_tp2/__init__.py": "538932bba7ce97a1f724870e50190bb616cc88070d7247c5b590a4ebb8880d59",
+    "workflows/video_minimax_h3_r2v_tp2_int8.json": "5e575690d25d46275c231456ef2db3062bc51cc490c1cac83284f1eac77dde7a",
+    "workflows/video_minimax_h3_r2v_tp2_operators.json": "85d17dd91b1e6f726fe9d3ac2e5a477b92bbc1d21d8527e4a8d032cfac28cc55",
+    "runtime/local_conda.json": "e3a07afb8cb79e6f45c9c0118debc4bd4008c022d2652e0891273dac2db07aa3"
+  },
+  "comfy_commit": "d49e888586dd8ae012c0667b33466b815fee07f7"
+}

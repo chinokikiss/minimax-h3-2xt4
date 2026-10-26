@@ -1,0 +1,16 @@
+{
+  "status": "benchmark_evidence_verified_after_partial_transport",
+  "collection_attempts": 1,
+  "status_or_log_polling": false,
+  "raw_batch_sha256": "661b2d62fb236cd337126b9bd9448377ca704be0226bce756b3cfc58b17a9ecd",
+  "setup_binding_matches": true,
+  "both_rank_jsons_match": true,
+  "both_supervisors_exit_zero": true,
+  "source_hashes_match_submission": true,
+  "downloaded_source_modules_verified": 2,
+  "missing_downloaded_source_modules": [
+    "kitchen_te_attention.py"
+  ],
+  "recovered_sources": "Decoded from exact submitted hash-bound payload, preserved separately; no second provider request",
+  "note": "The original CLI collection status remains final_outputs_unavailable because transport failed after downloading the benchmark data and receipts."
+}

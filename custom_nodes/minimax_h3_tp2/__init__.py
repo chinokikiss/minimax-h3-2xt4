@@ -29,7 +29,7 @@ class MiniMaxH3TP2Loader:
                         'lora_stack':('MINIMAX_TP2_LORAS',),
                         'idle_weight_gib':('FLOAT',{'default':4.,'min':.5,'max':8.,'step':.5}),
                         'lora_row_partial_reduce':('BOOLEAN',{'default':True,'tooltip':'Default: project owned RowParallel LoRA A columns locally, then FP32 SUM the low-rank hidden state. Approximate reduction order; disable to gather the full input.'}),
-                        'te_attention':(['tilelang_group32','native'],{'default':'tilelang_group32'}),
+                        'te_attention':(['kitchen_causal','tilelang_group32','native'],{'default':'kitchen_causal','tooltip':'Default: pinned Kitchen INT8 with the complete causal/padding/additive mask. Direct dispatch avoids GPU mask-classification overhead.'}),
                         'dit_attention':(['kitchen','tilelang_drop','tilelang_scalar','tilelang_dense','native'],{'default':'kitchen'}),
                         'row_linear_backend':(['tilelang_packed','tilelang_scaled_fp16','native'],{'default':'tilelang_scaled_fp16','tooltip':'Default: approximate power-of-two scaled FP16 SUM with fused FP32 dequantization. Select tilelang_packed for INT32 SUM.'}),
                         'scalar_score_workspace_mib':('INT',{'default':96,'min':0,'max':512,'step':1,'tooltip':'Extra score workspace cap per rank. Set 0 for inline scalar summaries.'}),
@@ -59,7 +59,7 @@ class MiniMaxH3TP2Loader:
 
     def load(self, text_encoder, diffusion_model, gpu_weight_window_gib=6., ram_cache_per_rank_gib=3.,
              idle_residency=False,idle_weight_gib=4.,lora_stack=(),
-             lora_row_partial_reduce=True,te_attention='tilelang_group32',
+             lora_row_partial_reduce=True,te_attention='kitchen_causal',
              dit_attention='kitchen',row_linear_backend='tilelang_scaled_fp16',
              scalar_score_workspace_mib=96,adaptive_lookahead=True,fc2_quantizer='fused_stored',lora_mode='offline',tensor_flow='fp16',residual_exponent=6,
              vision_residual_exponent=0,video_residual_exponent=0,video_decode_reserve_gib=2.,

@@ -1,0 +1,1656 @@
+{
+  "id": "e3f2b845-8f2c-4b5a-9caf-eac1029d3e7e",
+  "revision": 0,
+  "last_node_id": 149,
+  "last_link_id": 298,
+  "nodes": [
+    {
+      "id": 92,
+      "type": "SaveVideo",
+      "pos": [
+        1150,
+        4880
+      ],
+      "size": [
+        1210,
+        106
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "视频",
+          "name": "video",
+          "type": "VIDEO",
+          "link": 260
+        },
+        {
+          "localized_name": "文件名前缀",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "格式",
+          "name": "format",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "format"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "编解码器",
+          "name": "format.codec",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "format.codec"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "编码器",
+          "name": "codec",
+          "shape": 7,
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "codec"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "links": null
+        }
+      ],
+      "properties": {},
+      "widgets_values": [
+        "video/MiniMax_H3",
+        "auto",
+        "auto",
+        "auto"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "video/MiniMax_H3",
+        "format": "auto",
+        "format.codec": "auto",
+        "codec": "auto"
+      }
+    },
+    {
+      "id": 119,
+      "type": "MiniMaxH3ParallelVAELoader",
+      "pos": [
+        -1490,
+        5270
+      ],
+      "size": [
+        430,
+        110
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "session",
+          "type": "MINIMAX_TP2_SESSION",
+          "link": 297
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "VAE",
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            251,
+            273
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MiniMaxH3ParallelVAELoader"
+      },
+      "widgets_values": [
+        "minimax_h3_video_vae_int8_convrot.safetensors",
+        "auto"
+      ],
+      "title": "MiniMax H3 parallel VAE (Native public plan)"
+    },
+    {
+      "id": 121,
+      "type": "VAEDecodeAudio",
+      "pos": [
+        480,
+        5180
+      ],
+      "size": [
+        230,
+        60
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 19,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "Latent",
+          "name": "samples",
+          "type": "LATENT",
+          "link": 281
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "type": "VAE",
+          "link": 250
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "音频",
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            259
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecodeAudio"
+      }
+    },
+    {
+      "id": 122,
+      "type": "VAEDecode",
+      "pos": [
+        480,
+        5060
+      ],
+      "size": [
+        230,
+        60
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "Latent",
+          "name": "samples",
+          "type": "LATENT",
+          "link": 280
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "type": "VAE",
+          "link": 251
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "图像",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            258
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      }
+    },
+    {
+      "id": 123,
+      "type": "KSamplerSelect",
+      "pos": [
+        -260,
+        5190
+      ],
+      "size": [
+        370,
+        70
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "采样器名称",
+          "name": "sampler_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "sampler_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "采样器",
+          "name": "SAMPLER",
+          "type": "SAMPLER",
+          "links": [
+            255
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSamplerSelect"
+      },
+      "widgets_values": [
+        "res_multistep"
+      ],
+      "widgets_values_named": {
+        "sampler_name": "res_multistep"
+      }
+    },
+    {
+      "id": 125,
+      "type": "SamplerCustomAdvanced",
+      "pos": [
+        150,
+        5110
+      ],
+      "size": [
+        230,
+        140
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "噪波",
+          "name": "noise",
+          "type": "NOISE",
+          "link": 253
+        },
+        {
+          "localized_name": "引导器",
+          "name": "guider",
+          "type": "GUIDER",
+          "link": 254
+        },
+        {
+          "localized_name": "采样器",
+          "name": "sampler",
+          "type": "SAMPLER",
+          "link": 255
+        },
+        {
+          "localized_name": "西格玛",
+          "name": "sigmas",
+          "type": "SIGMAS",
+          "link": 256
+        },
+        {
+          "localized_name": "Latent图像",
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 271
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "Latent",
+          "name": "output",
+          "type": "LATENT",
+          "links": [
+            280,
+            281
+          ]
+        },
+        {
+          "localized_name": "降噪Latent",
+          "name": "denoised_output",
+          "type": "LATENT",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SamplerCustomAdvanced"
+      }
+    },
+    {
+      "id": 126,
+      "type": "BasicGuider",
+      "pos": [
+        -260,
+        5080
+      ],
+      "size": [
+        360,
+        60
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "模型",
+          "name": "model",
+          "type": "MODEL",
+          "link": 292
+        },
+        {
+          "localized_name": "条件",
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 270
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "引导器",
+          "name": "GUIDER",
+          "type": "GUIDER",
+          "links": [
+            254
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "BasicGuider"
+      }
+    },
+    {
+      "id": 129,
+      "type": "RandomNoise",
+      "pos": [
+        -260,
+        4940
+      ],
+      "size": [
+        360,
+        90
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "噪波随机种",
+          "name": "noise_seed",
+          "type": "INT",
+          "widget": {
+            "name": "noise_seed"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "噪波",
+          "name": "NOISE",
+          "type": "NOISE",
+          "links": [
+            253
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "RandomNoise"
+      },
+      "widgets_values": [
+        989295563698185,
+        "randomize"
+      ],
+      "widgets_values_named": {
+        "noise_seed": 989295563698185,
+        "control_after_generate": "randomize"
+      }
+    },
+    {
+      "id": 130,
+      "type": "CreateVideo",
+      "pos": [
+        790,
+        5090
+      ],
+      "size": [
+        270,
+        150
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "图像",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 258
+        },
+        {
+          "localized_name": "音频",
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 259
+        },
+        {
+          "localized_name": "帧率",
+          "name": "fps",
+          "type": "FLOAT",
+          "widget": {
+            "name": "fps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "bit_depth",
+          "name": "bit_depth",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "bit_depth"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "color_space",
+          "name": "color_space",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "color_space"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "codec",
+          "name": "codec",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "codec"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "视频",
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            260
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CreateVideo"
+      },
+      "widgets_values": [
+        24,
+        8,
+        "sRGB",
+        "none"
+      ],
+      "widgets_values_named": {
+        "fps": 24,
+        "bit_depth": 8,
+        "color_space": "sRGB",
+        "codec": "none"
+      }
+    },
+    {
+      "id": 140,
+      "type": "MarkdownNote",
+      "pos": [
+        -1890,
+        5830
+      ],
+      "size": [
+        300,
+        520
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note: Size Settings Reference",
+      "properties": {},
+      "widgets_values": [
+        "| megapixels | Aspect | Output (multiple=32) |\n|---|---|---|\n| 0.2 | 16:9 | 608 x 352 |\n| 0.3 | 16:9 | 736 x 416 |\n| 0.4 | 16:9 | 864 x 480 |\n| 0.5 | 16:9 | 960 x 544 |\n| 0.6 | 16:9 | 1056 x 608 |\n| 0.7 | 16:9 | 1152 x 640 |\n| 0.8 | 16:9 | 1216 x 672 |\n| 0.9 | 16:9 | 1280 x 736 |\n| 0.98 | 16:9 | 1344 x 768 |\n| 1.0 | 16:9 | 1376 x 768 |\n| 1.2 | 16:9 | 1504 x 832 |\n| 1.5 | 16:9 | 1664 x 928 |\n| 1.8 | 16:9 | 1824 x 1024 |\n| 2.0 | 16:9 | 1920 x 1088 |\n"
+      ],
+      "widgets_values_named": {
+        "text": "| megapixels | Aspect | Output (multiple=32) |\n|---|---|---|\n| 0.2 | 16:9 | 608 x 352 |\n| 0.3 | 16:9 | 736 x 416 |\n| 0.4 | 16:9 | 864 x 480 |\n| 0.5 | 16:9 | 960 x 544 |\n| 0.6 | 16:9 | 1056 x 608 |\n| 0.7 | 16:9 | 1152 x 640 |\n| 0.8 | 16:9 | 1216 x 672 |\n| 0.9 | 16:9 | 1280 x 736 |\n| 0.98 | 16:9 | 1344 x 768 |\n| 1.0 | 16:9 | 1376 x 768 |\n| 1.2 | 16:9 | 1504 x 832 |\n| 1.5 | 16:9 | 1664 x 928 |\n| 1.8 | 16:9 | 1824 x 1024 |\n| 2.0 | 16:9 | 1920 x 1088 |\n"
+      },
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 120,
+      "type": "MiniMaxH3ParallelVAELoader",
+      "pos": [
+        -1490,
+        5400
+      ],
+      "size": [
+        430,
+        110
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "session",
+          "type": "MINIMAX_TP2_SESSION",
+          "link": 298
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "VAE",
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            250,
+            274
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MiniMaxH3ParallelVAELoader"
+      },
+      "widgets_values": [
+        "minimax_h3_audio_vae_fp32_clean.safetensors",
+        "auto"
+      ],
+      "title": "MiniMax H3 parallel VAE (Native public plan)"
+    },
+    {
+      "id": 127,
+      "type": "MiniMaxH3TP2Loader",
+      "pos": [
+        -1490,
+        4940
+      ],
+      "size": [
+        640,
+        180
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lora_stack",
+          "type": "MINIMAX_TP2_LORAS",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "模型",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            292,
+            293
+          ]
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            272
+          ]
+        },
+        {
+          "name": "session",
+          "type": "MINIMAX_TP2_SESSION",
+          "links": [
+            297,
+            298
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MiniMaxH3TP2Loader",
+        "h3_configuration_version": 2
+      },
+      "widgets_values": [
+        "D:/minimaxH3/qwen3vl_32b_minimax_h3_int8_convrot.safetensors",
+        "D:/minimaxH3/MiniMax_H3_Ref2VA_pruned_int8_convrot.safetensors",
+        6.0,
+        3.0,
+        false,
+        4.0,
+        true,
+        "tilelang_group32",
+        "kitchen",
+        "tilelang_scaled_fp16",
+        96,
+        true,
+        "fused_stored",
+        "offline",
+        "fp16",
+        6,
+        0,
+        0,
+        2.0,
+        true,
+        true,
+        9.0,
+        1500,
+        "",
+        true,
+        "cuda_int8_tilelang"
+      ],
+      "title": "MiniMax H3 TP2 — integrated operators"
+    },
+    {
+      "id": 124,
+      "type": "BasicScheduler",
+      "pos": [
+        -260,
+        5310
+      ],
+      "size": [
+        370,
+        130
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "模型",
+          "name": "model",
+          "type": "MODEL",
+          "link": 293
+        },
+        {
+          "localized_name": "调度器",
+          "name": "scheduler",
+          "type": "COMBO",
+          "widget": {
+            "name": "scheduler"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "步数",
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "降噪",
+          "name": "denoise",
+          "type": "FLOAT",
+          "widget": {
+            "name": "denoise"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "Sigmas",
+          "name": "SIGMAS",
+          "type": "SIGMAS",
+          "links": [
+            256
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "BasicScheduler"
+      },
+      "widgets_values": [
+        "simple",
+        20,
+        1
+      ],
+      "widgets_values_named": {
+        "scheduler": "simple",
+        "steps": 20,
+        "denoise": 1
+      }
+    },
+    {
+      "id": 137,
+      "type": "LoadImage",
+      "pos": [
+        -823.1065365171838,
+        5617.832200607223
+      ],
+      "size": [
+        290,
+        330
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "图像",
+          "name": "image",
+          "type": "COMBO",
+          "widget": {
+            "name": "image"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "选择文件上传",
+          "name": "upload",
+          "type": "IMAGEUPLOAD",
+          "widget": {
+            "name": "upload"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "图像",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            278
+          ]
+        },
+        {
+          "localized_name": "遮罩",
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "DADFF0F3CEE01F72917A2F53C786A653.jpg",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "DADFF0F3CEE01F72917A2F53C786A653.jpg",
+        "upload": "image"
+      }
+    },
+    {
+      "id": 136,
+      "type": "MiniMaxH3ReferenceToVideo",
+      "pos": [
+        -716.1555033329732,
+        5124.793114389628
+      ],
+      "size": [
+        410,
+        364
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "clip",
+          "name": "clip",
+          "type": "CLIP",
+          "link": 272
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 273
+        },
+        {
+          "localized_name": "audio_vae",
+          "name": "audio_vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 274
+        },
+        {
+          "label": "ref_image_0",
+          "localized_name": "ref_image_0",
+          "name": "ref_images.ref_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 278
+        },
+        {
+          "localized_name": "ref_image_1",
+          "name": "ref_images.ref_image_1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "ref_video_0",
+          "localized_name": "ref_video_0",
+          "name": "ref_videos.ref_video_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 296
+        },
+        {
+          "localized_name": "ref_video_1",
+          "name": "ref_videos.ref_video_1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "ref_video_audio_0",
+          "localized_name": "ref_video_audio_0",
+          "name": "ref_video_audios.ref_video_audio_0",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "label": "ref_audio_0",
+          "localized_name": "ref_audio_0",
+          "name": "ref_audios.ref_audio_0",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "localized_name": "提示词",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": 294
+        },
+        {
+          "localized_name": "宽度",
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": 276
+        },
+        {
+          "localized_name": "高度",
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": 277
+        },
+        {
+          "localized_name": "长度",
+          "name": "length",
+          "type": "INT",
+          "widget": {
+            "name": "length"
+          },
+          "link": 275
+        },
+        {
+          "localized_name": "参考图像尺寸",
+          "name": "ref_image_size",
+          "type": "COMBO",
+          "widget": {
+            "name": "ref_image_size"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "正向",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            270
+          ]
+        },
+        {
+          "localized_name": "Latent",
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            271
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "MiniMaxH3ReferenceToVideo"
+      },
+      "widgets_values": [
+        "",
+        1344,
+        768,
+        124,
+        "match"
+      ],
+      "widgets_values_named": {
+        "prompt": "",
+        "width": 1344,
+        "height": 768,
+        "length": 124,
+        "ref_image_size": "match"
+      }
+    },
+    {
+      "id": 138,
+      "type": "PrimitiveStringMultiline",
+      "pos": [
+        -1523.2517529291056,
+        6011.894232055502
+      ],
+      "size": [
+        370,
+        390
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "值",
+          "name": "value",
+          "type": "STRING",
+          "widget": {
+            "name": "value"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "字符串",
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            294
+          ]
+        }
+      ],
+      "title": "Input Text (Prompt)",
+      "properties": {
+        "Node name for S&R": "PrimitiveStringMultiline"
+      },
+      "widgets_values": [
+        "subject_definitions:\n<Subject 1> is the young man whose visual identity and appearance come from <Picture 1>. Preserve his facial identity, facial proportions, black medium-length center-parted hair, thin metal-frame glasses, natural skin appearance, and plain white T-shirt. <Picture 1> is used only as the appearance and identity reference for <Subject 1>; its original seated pose and finger gesture are not part of the target motion.\n\n<Subject 2> is the complete human motion performance derived from <Video 1>, including the walking-dance choreography, step timing, alternating leg motion, body sway, torso rotation, arm swing, hand gestures, changes of facing direction, weight shifts, and final two-arm raised gesture. Transfer this motion to <Subject 1> while adapting it naturally to realistic human anatomy and proportions.\n\n<Video 1> is the temporal motion reference for the target video. It defines the pose sequence, motion timing, movement rhythm, body trajectory, weight transfer, and overall choreography. Do not transfer the creature's appearance, body proportions, colors, costume, or identity from <Video 1>.\n\nsummary:\n[reference generation] The target video shows <Subject 1>, whose appearance is derived from <Picture 1>, performing the complete movement sequence from <Subject 2> and <Video 1>. The character identity, face, hairstyle, glasses, and white T-shirt come from <Picture 1>, while the body motion, choreography, timing, pose transitions, and movement rhythm come from <Video 1>. The yellow creature design from <Video 1> must not appear in the target video.\n\nretention_analysis:\n<Subject 1> (appears throughout [Shot 1]): fully_preserved - preserve the young man's recognizable facial identity, black medium-length hair, thin-frame glasses, white T-shirt, and realistic human appearance from <Picture 1> throughout the entire motion sequence.\n\n<Subject 2> (appears throughout [Shot 1]): attribute_transfer - transfer the complete choreography from <Video 1> onto <Subject 1>, preserving the temporal order, step rhythm, body sway, arm movements, torso turns, weight shifts, and final raised-arm gesture, while converting the source creature's anatomy into physically plausible human motion.\n\n<Video 1> (motion timing and temporal structure): partially_preserved - preserve its choreography timing, pose progression, movement cadence, and trajectory, but do not preserve the original creature appearance, stylized body proportions, costume, colors, or environment.\n\ndetailed_description:\nThe target video uses realistic live-action photographic rendering. <Subject 1> remains a realistic human being throughout the entire video. His facial identity, black medium-length center-parted hair, thin metal-frame glasses, and plain white T-shirt remain visually consistent with <Picture 1>. Because <Picture 1> does not show the complete lower body, extend his appearance naturally with realistic human proportions, dark casual trousers and simple casual shoes. Do not alter his face or transform him into the creature from <Video 1>.\n\n[Shot 1] <Subject 1> performs the choreography from <Video 1> as one continuous full-body movement sequence. Frame him in a medium-full to full-body shot so that the legs, feet, torso, arms, and hands remain visible enough to reproduce the reference motion.\n\nAt the beginning, <Subject 1> adopts the initial walking posture from <Video 1>. His elbows remain naturally bent near the torso while he begins the distinctive relaxed walking-dance. He alternates his steps with slightly exaggerated but anatomically realistic weight transfer. One leg passes or crosses slightly in front of the other while his upper body gently sways in the opposite direction. His shoulders, hips, and arms follow the same loose rhythmic cadence as the reference performance.\n\nAs the sequence progresses, reproduce the timing and pose transitions from <Video 1> closely. <Subject 1> continues the playful forward and lateral stepping pattern, allowing his torso to rock naturally from side to side. His arms alternate between relaxed swings and short bent-elbow gestures near the chest and abdomen. The movement should feel continuous rather than a collection of disconnected poses.\n\nAround the middle of the sequence, follow <Video 1>'s change in facing direction. <Subject 1> rotates his torso and hips slightly while continuing the stepping rhythm, briefly presenting a three-quarter side orientation before smoothly returning toward the camera. Preserve the reference video's balance shifts, foot placement rhythm, subtle turns, and hand timing.\n\nDuring the later section, reproduce the quicker side-to-side steps and stronger body sway from <Video 1>. His feet change support naturally, knees flex slightly to absorb the motion, and the shoulders and arms respond with realistic secondary movement. Preserve the playful quality of the reference performance without exaggerating the human anatomy or causing limb deformation.\n\nAt the end of the sequence, <Subject 1> transitions into the final pose from <Video 1>: he faces generally toward the camera, stabilizes his stance, and raises both arms outward and upward on either side of his head. Match the timing and energy of the reference ending, then hold the final pose briefly.\n\nMotion fidelity is the highest priority. Keep the movement trajectory, pose ordering, stepping rhythm, arm timing, torso sway, and ending gesture as close to <Video 1> as possible. Preserve <Subject 1>'s identity throughout. Do not copy the yellow creature's face, skin, body shape, belly size, hands, feet, or other non-human features. Do not introduce extra limbs, missing fingers, warped legs, sudden costume changes, or identity drift.\n\noverall_soundscape:\nNo dialogue is required. Use only subtle natural movement sounds such as clothing rustle and soft footsteps synchronized with the transferred choreography. Do not derive character vocalizations from <Video 1>.\n\nnon_diegetic_music:\nN/A"
+      ],
+      "widgets_values_named": {
+        "value": "subject_definitions:\n<Subject 1> is the young man whose visual identity and appearance come from <Picture 1>. Preserve his facial identity, facial proportions, black medium-length center-parted hair, thin metal-frame glasses, natural skin appearance, and plain white T-shirt. <Picture 1> is used only as the appearance and identity reference for <Subject 1>; its original seated pose and finger gesture are not part of the target motion.\n\n<Subject 2> is the complete human motion performance derived from <Video 1>, including the walking-dance choreography, step timing, alternating leg motion, body sway, torso rotation, arm swing, hand gestures, changes of facing direction, weight shifts, and final two-arm raised gesture. Transfer this motion to <Subject 1> while adapting it naturally to realistic human anatomy and proportions.\n\n<Video 1> is the temporal motion reference for the target video. It defines the pose sequence, motion timing, movement rhythm, body trajectory, weight transfer, and overall choreography. Do not transfer the creature's appearance, body proportions, colors, costume, or identity from <Video 1>.\n\nsummary:\n[reference generation] The target video shows <Subject 1>, whose appearance is derived from <Picture 1>, performing the complete movement sequence from <Subject 2> and <Video 1>. The character identity, face, hairstyle, glasses, and white T-shirt come from <Picture 1>, while the body motion, choreography, timing, pose transitions, and movement rhythm come from <Video 1>. The yellow creature design from <Video 1> must not appear in the target video.\n\nretention_analysis:\n<Subject 1> (appears throughout [Shot 1]): fully_preserved - preserve the young man's recognizable facial identity, black medium-length hair, thin-frame glasses, white T-shirt, and realistic human appearance from <Picture 1> throughout the entire motion sequence.\n\n<Subject 2> (appears throughout [Shot 1]): attribute_transfer - transfer the complete choreography from <Video 1> onto <Subject 1>, preserving the temporal order, step rhythm, body sway, arm movements, torso turns, weight shifts, and final raised-arm gesture, while converting the source creature's anatomy into physically plausible human motion.\n\n<Video 1> (motion timing and temporal structure): partially_preserved - preserve its choreography timing, pose progression, movement cadence, and trajectory, but do not preserve the original creature appearance, stylized body proportions, costume, colors, or environment.\n\ndetailed_description:\nThe target video uses realistic live-action photographic rendering. <Subject 1> remains a realistic human being throughout the entire video. His facial identity, black medium-length center-parted hair, thin metal-frame glasses, and plain white T-shirt remain visually consistent with <Picture 1>. Because <Picture 1> does not show the complete lower body, extend his appearance naturally with realistic human proportions, dark casual trousers and simple casual shoes. Do not alter his face or transform him into the creature from <Video 1>.\n\n[Shot 1] <Subject 1> performs the choreography from <Video 1> as one continuous full-body movement sequence. Frame him in a medium-full to full-body shot so that the legs, feet, torso, arms, and hands remain visible enough to reproduce the reference motion.\n\nAt the beginning, <Subject 1> adopts the initial walking posture from <Video 1>. His elbows remain naturally bent near the torso while he begins the distinctive relaxed walking-dance. He alternates his steps with slightly exaggerated but anatomically realistic weight transfer. One leg passes or crosses slightly in front of the other while his upper body gently sways in the opposite direction. His shoulders, hips, and arms follow the same loose rhythmic cadence as the reference performance.\n\nAs the sequence progresses, reproduce the timing and pose transitions from <Video 1> closely. <Subject 1> continues the playful forward and lateral stepping pattern, allowing his torso to rock naturally from side to side. His arms alternate between relaxed swings and short bent-elbow gestures near the chest and abdomen. The movement should feel continuous rather than a collection of disconnected poses.\n\nAround the middle of the sequence, follow <Video 1>'s change in facing direction. <Subject 1> rotates his torso and hips slightly while continuing the stepping rhythm, briefly presenting a three-quarter side orientation before smoothly returning toward the camera. Preserve the reference video's balance shifts, foot placement rhythm, subtle turns, and hand timing.\n\nDuring the later section, reproduce the quicker side-to-side steps and stronger body sway from <Video 1>. His feet change support naturally, knees flex slightly to absorb the motion, and the shoulders and arms respond with realistic secondary movement. Preserve the playful quality of the reference performance without exaggerating the human anatomy or causing limb deformation.\n\nAt the end of the sequence, <Subject 1> transitions into the final pose from <Video 1>: he faces generally toward the camera, stabilizes his stance, and raises both arms outward and upward on either side of his head. Match the timing and energy of the reference ending, then hold the final pose briefly.\n\nMotion fidelity is the highest priority. Keep the movement trajectory, pose ordering, stepping rhythm, arm timing, torso sway, and ending gesture as close to <Video 1> as possible. Preserve <Subject 1>'s identity throughout. Do not copy the yellow creature's face, skin, body shape, belly size, hands, feet, or other non-human features. Do not introduce extra limbs, missing fingers, warped legs, sudden costume changes, or identity drift.\n\noverall_soundscape:\nNo dialogue is required. Use only subtle natural movement sounds such as clothing rustle and soft footsteps synchronized with the transferred choreography. Do not derive character vocalizations from <Video 1>.\n\nnon_diegetic_music:\nN/A"
+      },
+      "color": "#322",
+      "bgcolor": "#533"
+    },
+    {
+      "id": 131,
+      "type": "ComfyMathExpression",
+      "pos": [
+        -1182.9204256627715,
+        5814.569916505607
+      ],
+      "size": [
+        225,
+        128
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "a",
+          "localized_name": "a",
+          "name": "values.a",
+          "type": "FLOAT,INT,BOOLEAN",
+          "link": 261
+        },
+        {
+          "localized_name": "b",
+          "name": "values.b",
+          "shape": 7,
+          "type": "FLOAT,INT,BOOLEAN",
+          "link": null
+        },
+        {
+          "localized_name": "表达式",
+          "name": "expression",
+          "type": "STRING",
+          "widget": {
+            "name": "expression"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "浮点",
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "links": []
+        },
+        {
+          "localized_name": "整数",
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            275
+          ]
+        },
+        {
+          "localized_name": "布尔值",
+          "name": "BOOL",
+          "type": "BOOLEAN",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ComfyMathExpression"
+      },
+      "widgets_values": [
+        "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17"
+      ],
+      "widgets_values_named": {
+        "expression": "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17"
+      }
+    },
+    {
+      "id": 132,
+      "type": "PrimitiveFloat",
+      "pos": [
+        -1491.8942320555034,
+        5854.869757934243
+      ],
+      "size": [
+        270,
+        70
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "值",
+          "name": "value",
+          "type": "FLOAT",
+          "widget": {
+            "name": "value"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "浮点",
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "links": [
+            261
+          ]
+        }
+      ],
+      "title": "Float (Duration)",
+      "properties": {
+        "Node name for S&R": "PrimitiveFloat"
+      },
+      "widgets_values": [
+        15
+      ],
+      "widgets_values_named": {
+        "value": 15
+      },
+      "color": "#322",
+      "bgcolor": "#533"
+    },
+    {
+      "id": 115,
+      "type": "ResolutionSelector",
+      "pos": [
+        -1501.6258764645534,
+        5598.1057679444975
+      ],
+      "size": [
+        270,
+        170
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "showAdvanced": false,
+      "inputs": [
+        {
+          "localized_name": "宽高比",
+          "name": "aspect_ratio",
+          "type": "COMBO",
+          "widget": {
+            "name": "aspect_ratio"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "百万像素",
+          "name": "megapixels",
+          "type": "FLOAT",
+          "widget": {
+            "name": "megapixels"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "倍数",
+          "name": "multiple",
+          "type": "INT",
+          "widget": {
+            "name": "multiple"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "预览",
+          "name": "preview",
+          "shape": 7,
+          "type": "RESOLUTION_PREVIEW",
+          "widget": {
+            "name": "preview"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "宽度",
+          "name": "width",
+          "type": "INT",
+          "links": [
+            276
+          ]
+        },
+        {
+          "localized_name": "高度",
+          "name": "height",
+          "type": "INT",
+          "links": [
+            277
+          ]
+        }
+      ],
+      "title": "Resolution Selector (Size)",
+      "properties": {
+        "Node name for S&R": "ResolutionSelector"
+      },
+      "widgets_values": [
+        "3:4 (Portrait Standard)",
+        0.4,
+        32
+      ],
+      "widgets_values_named": {
+        "aspect_ratio": "3:4 (Portrait Standard)",
+        "megapixels": 0.4,
+        "multiple": 32
+      },
+      "color": "#322",
+      "bgcolor": "#533"
+    },
+    {
+      "id": 145,
+      "type": "LoadVideo",
+      "pos": [
+        -480.6604488504243,
+        5585.845228051239
+      ],
+      "size": [
+        270,
+        418.25
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "文件",
+          "name": "file",
+          "type": "COMBO",
+          "widget": {
+            "name": "file"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "选择要上传的文件",
+          "name": "upload",
+          "type": "IMAGEUPLOAD",
+          "widget": {
+            "name": "upload"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "视频",
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            295
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadVideo"
+      },
+      "widgets_values": [
+        "6E3C0B3E4571D461D666DF139C8917BC.mp4",
+        "image"
+      ],
+      "widgets_values_named": {
+        "file": "6E3C0B3E4571D461D666DF139C8917BC.mp4",
+        "upload": "image"
+      }
+    },
+    {
+      "id": 149,
+      "type": "GetVideoComponents",
+      "pos": [
+        -162.45094292901018,
+        5605.470852767621
+      ],
+      "size": [
+        140,
+        106
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "视频",
+          "name": "video",
+          "type": "VIDEO",
+          "link": 295
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "图像",
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            296
+          ]
+        },
+        {
+          "localized_name": "音频",
+          "name": "audio",
+          "type": "AUDIO",
+          "links": null
+        },
+        {
+          "localized_name": "帧率",
+          "name": "fps",
+          "type": "FLOAT",
+          "links": null
+        },
+        {
+          "localized_name": "bit_depth",
+          "name": "bit_depth",
+          "type": "COMBO",
+          "links": null
+        },
+        {
+          "localized_name": "color_space",
+          "name": "color_space",
+          "type": "COMBO",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "GetVideoComponents"
+      }
+    }
+  ],
+  "links": [
+    [
+      250,
+      120,
+      0,
+      121,
+      1,
+      "VAE"
+    ],
+    [
+      251,
+      119,
+      0,
+      122,
+      1,
+      "VAE"
+    ],
+    [
+      253,
+      129,
+      0,
+      125,
+      0,
+      "NOISE"
+    ],
+    [
+      254,
+      126,
+      0,
+      125,
+      1,
+      "GUIDER"
+    ],
+    [
+      255,
+      123,
+      0,
+      125,
+      2,
+      "SAMPLER"
+    ],
+    [
+      256,
+      124,
+      0,
+      125,
+      3,
+      "SIGMAS"
+    ],
+    [
+      258,
+      122,
+      0,
+      130,
+      0,
+      "IMAGE"
+    ],
+    [
+      259,
+      121,
+      0,
+      130,
+      1,
+      "AUDIO"
+    ],
+    [
+      260,
+      130,
+      0,
+      92,
+      0,
+      "VIDEO"
+    ],
+    [
+      261,
+      132,
+      0,
+      131,
+      0,
+      "FLOAT"
+    ],
+    [
+      270,
+      136,
+      0,
+      126,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      271,
+      136,
+      1,
+      125,
+      4,
+      "LATENT"
+    ],
+    [
+      272,
+      127,
+      1,
+      136,
+      0,
+      "CLIP"
+    ],
+    [
+      273,
+      119,
+      0,
+      136,
+      1,
+      "VAE"
+    ],
+    [
+      274,
+      120,
+      0,
+      136,
+      2,
+      "VAE"
+    ],
+    [
+      275,
+      131,
+      1,
+      136,
+      12,
+      "INT"
+    ],
+    [
+      276,
+      115,
+      0,
+      136,
+      10,
+      "INT"
+    ],
+    [
+      277,
+      115,
+      1,
+      136,
+      11,
+      "INT"
+    ],
+    [
+      278,
+      137,
+      0,
+      136,
+      3,
+      "IMAGE"
+    ],
+    [
+      280,
+      125,
+      0,
+      122,
+      0,
+      "LATENT"
+    ],
+    [
+      281,
+      125,
+      0,
+      121,
+      0,
+      "LATENT"
+    ],
+    [
+      292,
+      127,
+      0,
+      126,
+      0,
+      "MODEL"
+    ],
+    [
+      293,
+      127,
+      0,
+      124,
+      0,
+      "MODEL"
+    ],
+    [
+      294,
+      138,
+      0,
+      136,
+      9,
+      "STRING"
+    ],
+    [
+      295,
+      145,
+      0,
+      149,
+      0,
+      "VIDEO"
+    ],
+    [
+      296,
+      149,
+      0,
+      136,
+      5,
+      "IMAGE"
+    ],
+    [
+      297,
+      127,
+      2,
+      119,
+      0,
+      "MINIMAX_TP2_SESSION"
+    ],
+    [
+      298,
+      127,
+      2,
+      120,
+      0,
+      "MINIMAX_TP2_SESSION"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "Models",
+      "bounding": [
+        -1520,
+        4840,
+        700,
+        670
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "Sampling",
+      "bounding": [
+        -280,
+        4840,
+        690,
+        670
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "Conditioning",
+      "bounding": [
+        -790,
+        4840,
+        480,
+        670
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "Decoding and create video",
+      "bounding": [
+        440,
+        4840,
+        670,
+        670
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "User Inputs",
+      "bounding": [
+        -1520,
+        5540,
+        1930,
+        900
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.6316631434426283,
+      "offset": [
+        2479.32105222265,
+        -4324.563918267979
+      ]
+    },
+    "frontendVersion": "1.47.11",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true,
+    "minimax_tp2_note": "2026-10-24 defaults: FP16-fix /64, TE Group32, Kitchen DiT/Video, fused_stored + scaled FP16 row SUM, direct INT8 + TileLang aligned SM75 DiT columns. Offline LoRA by default: prefer bounded TP2 bundle merges for long sequences; safetensors input creates a baked checkpoint. Short/medium online remains optional with guarded owned FC1/QKV B. Lifecycle/host pressure/adaptive lookahead enabled; idle off. Single-GPU native audio. Attention alternatives preserved; no E2E speedup claim.",
+    "minimax_h3_operators": {
+      "te_attention": "tilelang_group32",
+      "dit_attention": "kitchen",
+      "video_attention": "kitchen",
+      "row_linear_backend": "tilelang_packed",
+      "scalar_score_workspace_mib": 96,
+      "reduction": "native_int32",
+      "lora_row_partial_reduce": true,
+      "lora_hidden_sum": "fp32",
+      "vae_encoder_loading": "reference_demand",
+      "column_linear_backend": "cuda_int8_tilelang",
+      "lora_mode": "offline",
+      "lora_selective_qkv_b": true,
+      "adaptive_lookahead": true,
+      "prefetch_lifecycle": true,
+      "memory_pressure_aware": true
+    }
+  },
+  "version": 0.4
+}

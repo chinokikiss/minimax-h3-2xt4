@@ -1,0 +1,1420 @@
+{
+  "date": "2026-10-26",
+  "techniques": 130,
+  "chapters": 10,
+  "runtime_modules": 64,
+  "runtime_coverage": {
+    "patches/audio_channel_decode.py": [
+      "VAE12"
+    ],
+    "patches/comfy_idle_lifecycle.py": [
+      "RES15"
+    ],
+    "patches/comfy_sampler.py": [
+      "SYS02",
+      "SYS03",
+      "VAE02",
+      "VAE07",
+      "VAE08",
+      "VAE09"
+    ],
+    "patches/comfy_tp_models.py": [
+      "RES09",
+      "RES10"
+    ],
+    "patches/comfy_tp_runtime.py": [
+      "SYS02",
+      "SYS03",
+      "SYS04",
+      "SYS05",
+      "SYS06",
+      "SYS08",
+      "NUM01",
+      "NUM07",
+      "LOR05",
+      "IO02",
+      "RES09",
+      "RES11",
+      "RES12",
+      "RES13",
+      "RES14",
+      "RES15",
+      "VAE03"
+    ],
+    "patches/custom_te_loader.py": [
+      "IO08"
+    ],
+    "patches/diagnostic_metrics.py": [
+      "SYS08"
+    ],
+    "patches/dit_column_linear.py": [
+      "LIN14",
+      "LIN15",
+      "LIN16"
+    ],
+    "patches/h3_configuration.py": [
+      "SYS07"
+    ],
+    "patches/h3_lora.py": [
+      "NUM04",
+      "NUM05",
+      "LOR01",
+      "LOR02",
+      "LOR03",
+      "LOR04",
+      "LOR05",
+      "LOR06",
+      "LOR07",
+      "LOR08",
+      "LOR09"
+    ],
+    "patches/h3_operator_dependencies.py": [
+      "SYS07"
+    ],
+    "patches/h3_operator_policy.py": [
+      "SYS06",
+      "LIN06",
+      "LIN08",
+      "NUM06",
+      "ATT01",
+      "ATT02",
+      "ATT03",
+      "SPR02",
+      "SPR04",
+      "SPR06"
+    ],
+    "patches/h3_reference_plan.py": [
+      "VAE02"
+    ],
+    "patches/h3_tensor_flow.py": [
+      "NUM01",
+      "NUM02",
+      "NUM03",
+      "NUM04",
+      "NUM07"
+    ],
+    "patches/host_memory_pressure.py": [
+      "RES08"
+    ],
+    "patches/host_weight_cache.py": [
+      "IO08",
+      "RES01",
+      "RES02",
+      "RES03",
+      "RES04",
+      "RES08"
+    ],
+    "patches/kitchen_te_attention.py": [
+      "ATT02",
+      "ATT19",
+      "ATT20"
+    ],
+    "patches/legacy_runtime.py": [
+      "SYS07"
+    ],
+    "patches/multi_gpu_audio_vae.py": [
+      "VAE12",
+      "VAE13"
+    ],
+    "patches/multi_gpu_video_vae.py": [
+      "VAE10"
+    ],
+    "patches/offline_lora.py": [
+      "IO01"
+    ],
+    "patches/offline_lora_reference.py": [
+      "LOR01",
+      "IO01"
+    ],
+    "patches/optimized_tp.py": [
+      "LIN01",
+      "LIN02",
+      "LIN10",
+      "LIN13"
+    ],
+    "patches/parallel_int8.py": [
+      "LIN01",
+      "LIN10",
+      "LIN12",
+      "LIN13"
+    ],
+    "patches/parallel_vae.py": [
+      "VAE03",
+      "VAE05",
+      "VAE06",
+      "VAE07",
+      "VAE08"
+    ],
+    "patches/pp_dit.py": [
+      "ALT01"
+    ],
+    "patches/pp_qwen3vl.py": [
+      "ALT01"
+    ],
+    "patches/quantized_collectives.py": [
+      "SYS05",
+      "ALT03"
+    ],
+    "patches/rank_local_int8.py": [
+      "SYS01",
+      "IO05",
+      "IO06",
+      "IO07"
+    ],
+    "patches/reference_loaders.py": [
+      "VAE01"
+    ],
+    "patches/runtime_diagnostics.py": [
+      "SYS08"
+    ],
+    "patches/slab_video_vae.py": [
+      "VAE10"
+    ],
+    "patches/sp_int8_dit.py": [
+      "ALT02"
+    ],
+    "patches/sp_int8_qwen3vl.py": [
+      "ALT02",
+      "ALT13"
+    ],
+    "patches/staged_vae.py": [
+      "VAE01",
+      "VAE04",
+      "VAE08",
+      "VAE09"
+    ],
+    "patches/tilelang_attention_p2.py": [
+      "SPR06"
+    ],
+    "patches/tilelang_attention_tradeoffs.py": [
+      "ATT09",
+      "ATT10",
+      "ATT11",
+      "SPR07",
+      "SPR11"
+    ],
+    "patches/tilelang_column_epilogue.py": [
+      "LIN15"
+    ],
+    "patches/tilelang_dense_preparation.py": [
+      "ATT07",
+      "ATT08"
+    ],
+    "patches/tilelang_group32_masked.py": [
+      "ATT05",
+      "ATT11"
+    ],
+    "patches/tilelang_grouped_fused.py": [
+      "ATT06"
+    ],
+    "patches/tilelang_grouped_qk.py": [
+      "ATT04",
+      "ATT21"
+    ],
+    "patches/tilelang_grouped_tp.py": [
+      "ATT04"
+    ],
+    "patches/tilelang_grouped_tp_kitchen.py": [
+      "ATT04"
+    ],
+    "patches/tilelang_grouped_tp_kitchen_v2.py": [
+      "ATT06",
+      "ATT09",
+      "ATT10",
+      "ATT22"
+    ],
+    "patches/tilelang_grouped_tp_optimized.py": [
+      "ATT08",
+      "SPR01",
+      "SPR03",
+      "SPR04",
+      "SPR05"
+    ],
+    "patches/tilelang_row_quant.py": [
+      "LIN02",
+      "LIN03",
+      "LIN04",
+      "LIN05"
+    ],
+    "patches/tilelang_sage_preparation.py": [
+      "ATT07",
+      "ATT12"
+    ],
+    "patches/tilelang_sage_qk.py": [
+      "ATT12"
+    ],
+    "patches/tilelang_scalar_pool.py": [
+      "SPR05"
+    ],
+    "patches/tilelang_sol_drop_fused.py": [
+      "SPR03",
+      "SPR12"
+    ],
+    "patches/tilelang_sparse_attention.py": [
+      "SPR01",
+      "SPR11"
+    ],
+    "patches/tilelang_swiglu_pad.py": [
+      "LIN05",
+      "LIN06",
+      "LIN07",
+      "LIN10"
+    ],
+    "patches/tilelang_swiglu_quant.py": [
+      "LIN08",
+      "LIN09"
+    ],
+    "patches/tilelang_transport_p2.py": [
+      "LIN11",
+      "LIN12"
+    ],
+    "patches/tilelang_transport_tradeoffs.py": [
+      "LIN11",
+      "ALT03",
+      "ALT04"
+    ],
+    "patches/tp2_bundle.py": [
+      "IO02",
+      "IO04",
+      "IO06"
+    ],
+    "patches/tp2_disk_bake.py": [
+      "IO03",
+      "IO04"
+    ],
+    "patches/tp_dit.py": [
+      "SYS01",
+      "NUM03",
+      "NUM05",
+      "NUM06"
+    ],
+    "patches/tp_qwen3vl.py": [
+      "SYS01",
+      "SYS09",
+      "LIN16",
+      "NUM03",
+      "NUM05",
+      "NUM06"
+    ],
+    "patches/tp_video_vae.py": [
+      "VAE11"
+    ],
+    "patches/video_decode_planner.py": [
+      "VAE04",
+      "VAE07"
+    ],
+    "patches/weight_residency.py": [
+      "SYS06",
+      "LOR08",
+      "LOR09",
+      "RES02",
+      "RES04",
+      "RES05",
+      "RES06",
+      "RES07",
+      "RES16",
+      "VAE03"
+    ],
+    "patches/windowed_tp.py": [
+      "IO05",
+      "IO07",
+      "IO08",
+      "RES11"
+    ]
+  },
+  "prior_52_feature_coverage": {
+    "ADAPT": [
+      "RES07"
+    ],
+    "AUDIO": [
+      "VAE12"
+    ],
+    "AUX": [
+      "RES11"
+    ],
+    "BAKE": [
+      "IO01"
+    ],
+    "BND": [
+      "ATT11"
+    ],
+    "COLUMN": [
+      "LIN15"
+    ],
+    "CROSSMODEL": [
+      "RES13"
+    ],
+    "DECODEPREFETCH": [
+      "RES14"
+    ],
+    "DEL": [
+      "NUM05"
+    ],
+    "DENSE": [
+      "ATT04"
+    ],
+    "DEQUANT": [
+      "LIN12"
+    ],
+    "DROP": [
+      "SPR04"
+    ],
+    "EXTERNALMAX": [
+      "LIN03"
+    ],
+    "FP16SUM": [
+      "LIN11"
+    ],
+    "GATHER": [
+      "LIN13"
+    ],
+    "GEMM": [
+      "LIN01"
+    ],
+    "GEOMETRY": [
+      "ATT08"
+    ],
+    "HOST": [
+      "RES01"
+    ],
+    "IDLE": [
+      "RES15"
+    ],
+    "INT32": [
+      "LIN10"
+    ],
+    "KITCHEN": [
+      "ATT01"
+    ],
+    "LIFECYCLE": [
+      "RES15"
+    ],
+    "LORASTORE": [
+      "LOR02"
+    ],
+    "NATIVEFUSE": [
+      "NUM06"
+    ],
+    "NATIVEORDER": [
+      "LOR01"
+    ],
+    "NCCL": [
+      "SYS05"
+    ],
+    "OWNED": [
+      "LIN07"
+    ],
+    "PACK": [
+      "LIN05"
+    ],
+    "PREFIX": [
+      "SPR02"
+    ],
+    "PREP": [
+      "ATT06"
+    ],
+    "PRESSURE": [
+      "RES08"
+    ],
+    "PRUNE": [
+      "SPR03"
+    ],
+    "QCACHE": [
+      "ATT09"
+    ],
+    "READ": [
+      "IO05"
+    ],
+    "REFINER": [
+      "ATT03"
+    ],
+    "RETAIN": [
+      "RES12"
+    ],
+    "REUSE": [
+      "RES03"
+    ],
+    "ROWPARTIAL": [
+      "LOR06"
+    ],
+    "SCALAR": [
+      "SPR05"
+    ],
+    "SCALEMAX": [
+      "LIN02"
+    ],
+    "SELECTB": [
+      "LOR04"
+    ],
+    "SERVICE": [
+      "SYS02"
+    ],
+    "SHARDS": [
+      "IO06"
+    ],
+    "STAGEVAE": [
+      "VAE01"
+    ],
+    "STARTUP": [
+      "RES09"
+    ],
+    "STRIDEDMAX": [
+      "LIN04"
+    ],
+    "SWIGLU": [
+      "LIN06"
+    ],
+    "TEATTN": [
+      "ATT05"
+    ],
+    "TP2": [
+      "SYS01"
+    ],
+    "VIDEO": [
+      "VAE05"
+    ],
+    "VISION": [
+      "RES10"
+    ],
+    "WINDOW": [
+      "RES05"
+    ]
+  },
+  "attention_native_sources": {
+    "experiments/kitchen_attention/native/h3_dense_utils.cuh": [
+      "ATT16"
+    ],
+    "experiments/kitchen_attention/native/kitchen_sm75.cu": [
+      "ATT14",
+      "ATT15",
+      "ATT17",
+      "SPR07",
+      "SPR09",
+      "SPR10"
+    ],
+    "experiments/kitchen_attention/native/routed_loop.cuh": [
+      "SPR08"
+    ]
+  },
+  "sources": [
+    {
+      "path": "benchmarks/attention_grouped_study.py",
+      "sha256": "6e1c35544bbd41b07468886c9cec7918c3f1ad02bd548398f23796ac0582dcad",
+      "canonical_lf_sha256": "6e1c35544bbd41b07468886c9cec7918c3f1ad02bd548398f23796ac0582dcad",
+      "techniques": [
+        "ATT21"
+      ]
+    },
+    {
+      "path": "benchmarks/attention_sol_drop_study.py",
+      "sha256": "e07923959bcd98c84de77d1c772815ec8652aa97fe02bf4633109a72782437e6",
+      "canonical_lf_sha256": "e07923959bcd98c84de77d1c772815ec8652aa97fe02bf4633109a72782437e6",
+      "techniques": [
+        "SPR12"
+      ]
+    },
+    {
+      "path": "benchmarks/bounded_column_int8.py",
+      "sha256": "7695d2d1fdb9ed18eec35b62e9b2944a24ecd8f6fe066fb7d6d33ff8d02e05c8",
+      "canonical_lf_sha256": "7695d2d1fdb9ed18eec35b62e9b2944a24ecd8f6fe066fb7d6d33ff8d02e05c8",
+      "techniques": [
+        "LIN17"
+      ]
+    },
+    {
+      "path": "benchmarks/build_kaggle_light_delivery.py",
+      "sha256": "fa7a10c1e672273186fe33a8d500d2114ec2cfefd4c5867e3247eeabdf9c8327",
+      "canonical_lf_sha256": "fa7a10c1e672273186fe33a8d500d2114ec2cfefd4c5867e3247eeabdf9c8327",
+      "techniques": [
+        "IO12"
+      ]
+    },
+    {
+      "path": "benchmarks/build_te_compression_codecs.ps1",
+      "sha256": "fd571182a091ec6007a21f9ec6061be5d9249f0e3447eb7b72e18f83c80b7f71",
+      "canonical_lf_sha256": "fd571182a091ec6007a21f9ec6061be5d9249f0e3447eb7b72e18f83c80b7f71",
+      "techniques": [
+        "ALT09"
+      ]
+    },
+    {
+      "path": "benchmarks/h3_lora_options_audit.py",
+      "sha256": "82da7f7cd8426907a12eed10d225141b6b8661fe6509003d9fa049ed16a6289c",
+      "canonical_lf_sha256": "cbfe3d45cd5e54a20d25d1b94c27fbdbf2cf0c433af435b181e30c25d071aefb",
+      "techniques": [
+        "ALT05"
+      ]
+    },
+    {
+      "path": "benchmarks/historical_te_loading.py",
+      "sha256": "4171ad02114385265fa76fe0daa845802e0a2bb477e625d1a8a20c4e84abeb83",
+      "canonical_lf_sha256": "4171ad02114385265fa76fe0daa845802e0a2bb477e625d1a8a20c4e84abeb83",
+      "techniques": [
+        "IO09"
+      ]
+    },
+    {
+      "path": "benchmarks/prepare_kaggle_direct_pip.py",
+      "sha256": "f2333e01acadfad48e7b519d426bdb7ad7c036144eed44b98c5855bc6b6b497f",
+      "canonical_lf_sha256": "f2333e01acadfad48e7b519d426bdb7ad7c036144eed44b98c5855bc6b6b497f",
+      "techniques": [
+        "IO11"
+      ]
+    },
+    {
+      "path": "benchmarks/qualify_streamed_swiglu.py",
+      "sha256": "d53e233bba70ccc678d19abc50b9566f8f286ac9d37a038f68c7f7e1a997bd67",
+      "canonical_lf_sha256": "d53e233bba70ccc678d19abc50b9566f8f286ac9d37a038f68c7f7e1a997bd67",
+      "techniques": [
+        "ALT06"
+      ]
+    },
+    {
+      "path": "benchmarks/requirements-te-compression.txt",
+      "sha256": "a71a44df35b36f88f61c82a415b2f1e1d84a8deaf16ac022dc82ff8c8ba9fd5c",
+      "canonical_lf_sha256": "a71a44df35b36f88f61c82a415b2f1e1d84a8deaf16ac022dc82ff8c8ba9fd5c",
+      "techniques": [
+        "ALT10"
+      ]
+    },
+    {
+      "path": "benchmarks/te_compression_local.py",
+      "sha256": "085ceb08252044d6e77d7bb0ba7cdb882b624a683796cc5917c44ffaf2007e25",
+      "canonical_lf_sha256": "b173c66202108ec3eb0df44dd11c3eddc54a98d8cf9ed938a39e8cecfd52624c",
+      "techniques": [
+        "ALT07",
+        "ALT08",
+        "ALT09",
+        "ALT10",
+        "ALT11"
+      ]
+    },
+    {
+      "path": "benchmarks/te_io_pipeline.py",
+      "sha256": "9b4acf4170029f185766972d23e34616855ff437ed5d5a366e3f11e6851de1a8",
+      "canonical_lf_sha256": "9b4acf4170029f185766972d23e34616855ff437ed5d5a366e3f11e6851de1a8",
+      "techniques": [
+        "IO10"
+      ]
+    },
+    {
+      "path": "benchmarks/te_io_storage_study.py",
+      "sha256": "c8353d0361329afdf49df06bbfaabdc1a594b58857d150f31052970083e18e9f",
+      "canonical_lf_sha256": "c8353d0361329afdf49df06bbfaabdc1a594b58857d150f31052970083e18e9f",
+      "techniques": [
+        "IO10"
+      ]
+    },
+    {
+      "path": "custom_nodes/minimax_h3_tp2/__init__.py",
+      "sha256": "538932bba7ce97a1f724870e50190bb616cc88070d7247c5b590a4ebb8880d59",
+      "canonical_lf_sha256": "c08ae97433a7bdf3e34c358735bde8d4ff07262ee3b1b4e28dab889f7d90cf9a",
+      "techniques": [
+        "SYS07"
+      ]
+    },
+    {
+      "path": "docs/reports/FC2_QUANTIZER_MEMORY.md",
+      "sha256": "80f7c0b98099d94af522251f27e143adede02134fcd607fe84eab2a6df434ea0",
+      "canonical_lf_sha256": "3a3103263f9ba1b8ad0958ee4909671264c1f00624b73e3f2207901eb208a70e",
+      "techniques": [
+        "ALT06"
+      ]
+    },
+    {
+      "path": "docs/reports/H3_INT8_SWIGLU_LORA.md",
+      "sha256": "9085351746bdf4920def9b369a03e055b0884184ef4a5f9960a06e64e98dfc9c",
+      "canonical_lf_sha256": "2a9e168ecd00ce2a2da2e2bf5515ce9ed1758399fa5d12bf277e26692f167ede",
+      "techniques": [
+        "ALT12"
+      ]
+    },
+    {
+      "path": "docs/reports/ONLINE_LORA_NATIVE_ORDER_REPAIR.md",
+      "sha256": "c17bde8f566a07637f71f02f43287b556a808e67a532b70b83393fc4f37fcf2c",
+      "canonical_lf_sha256": "f2ef68a789c6a387cb5b149cc97dcd12e146f2d87f76373be3b903663a37ebf3",
+      "techniques": [
+        "ALT12"
+      ]
+    },
+    {
+      "path": "docs/reports/ONLINE_LORA_OPTIONS.md",
+      "sha256": "93d7509863a34af076619e519fdec4f9d04dd03836825c531eaa4175a1f82894",
+      "canonical_lf_sha256": "5b04cb89be1b2ff836bad2e621e205f93260fa85fa87dac9407f74cda01b19cc",
+      "techniques": [
+        "ALT05"
+      ]
+    },
+    {
+      "path": "docs/reports/ROW_PARTIAL_MEMORY.md",
+      "sha256": "4a0a44ed7db505ee3aff93baa0477c6eb0c40d742f8330fdd323014b8c83db78",
+      "canonical_lf_sha256": "a0da862f5e033a4deb9b3c0384782bd61cac4675981ad2a9428bd6d872dce5b0",
+      "techniques": [
+        "LOR07"
+      ]
+    },
+    {
+      "path": "docs/reports/TEXT_ENCODER_SP_INT8_REPORT.md",
+      "sha256": "c8aa626cc1552eae90c89de2ef81a96519204c856987ce817b128d3520bd5de2",
+      "canonical_lf_sha256": "ed3217ba7171f0a6da58c5047128feb00b37b5b15f4976c276ca3cba8b9c8fd9",
+      "techniques": [
+        "ALT13"
+      ]
+    },
+    {
+      "path": "docs/reports/TE_COMPRESSION_LOCAL_20261020.md",
+      "sha256": "78cffaf4f92b19a45cbb77f986aa60c6443048715afc472172ad920bee13d736",
+      "canonical_lf_sha256": "78cffaf4f92b19a45cbb77f986aa60c6443048715afc472172ad920bee13d736",
+      "techniques": [
+        "ALT07"
+      ]
+    },
+    {
+      "path": "docs/reports/TP2_P2_OPTIMIZATION_REPORT.md",
+      "sha256": "f55688e82fd80cb8308a5ecb3fa6914ab1fe3a4c5ef734fe69a1c08106ceb916",
+      "canonical_lf_sha256": "9025f841b29cee189f77568ce5ae3c1796c38791c1eb9be8b9e8f5a0b9242174",
+      "techniques": [
+        "ALT04"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/attention.py",
+      "sha256": "6b3ad8374764fb3520115d2c8df340242c1f28204f8aa2c71e550e0e6b24341d",
+      "canonical_lf_sha256": "6b3ad8374764fb3520115d2c8df340242c1f28204f8aa2c71e550e0e6b24341d",
+      "techniques": [
+        "ATT01",
+        "ATT13",
+        "ATT14",
+        "ATT17",
+        "SPR08",
+        "SPR09",
+        "SPR10"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/build.py",
+      "sha256": "ba483bd2f8fe88137602a82d7862e62d6245d3051b30e066d90b7dc6d375717f",
+      "canonical_lf_sha256": "ba483bd2f8fe88137602a82d7862e62d6245d3051b30e066d90b7dc6d375717f",
+      "techniques": [
+        "ATT20"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/delivery.py",
+      "sha256": "a2a3738cd5cd629e49090596bdedd17dc29106038958d7328b253fc9d912e4af",
+      "canonical_lf_sha256": "a2a3738cd5cd629e49090596bdedd17dc29106038958d7328b253fc9d912e4af",
+      "techniques": [
+        "IO12"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/dense_delivery.py",
+      "sha256": "433d62daf046a7530c0e2f7c8dd5326c365ff2ccc96c807df1e181b94d3a2195",
+      "canonical_lf_sha256": "433d62daf046a7530c0e2f7c8dd5326c365ff2ccc96c807df1e181b94d3a2195",
+      "techniques": [
+        "IO11"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/derive.py",
+      "sha256": "ce435b0f21ffa57328c6eb28e8c785f9f2f74b6d2d2c6fe4256fc9bfc3fecb0f",
+      "canonical_lf_sha256": "ce435b0f21ffa57328c6eb28e8c785f9f2f74b6d2d2c6fe4256fc9bfc3fecb0f",
+      "techniques": [
+        "ATT15",
+        "ATT16"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/graph.py",
+      "sha256": "8f6855188b91c28bb08eae058bfcffc4ec1c5825df5a4b8ca1056d19ac4031f1",
+      "canonical_lf_sha256": "8f6855188b91c28bb08eae058bfcffc4ec1c5825df5a4b8ca1056d19ac4031f1",
+      "techniques": [
+        "ATT18"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/native/h3_dense_utils.cuh",
+      "sha256": "44143260ba407a7f9cba56ea3e1508975ff09a7f85ca82e6baa56abee2857445",
+      "canonical_lf_sha256": "44143260ba407a7f9cba56ea3e1508975ff09a7f85ca82e6baa56abee2857445",
+      "techniques": [
+        "ATT16"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/native/kitchen_sm75.cu",
+      "sha256": "46fd2c8fa2d8254ffd4241949a3bdf8b6dee34f1a516ef5e29df30b4aa7dece3",
+      "canonical_lf_sha256": "46fd2c8fa2d8254ffd4241949a3bdf8b6dee34f1a516ef5e29df30b4aa7dece3",
+      "techniques": [
+        "ATT14",
+        "ATT15",
+        "ATT17",
+        "SPR07",
+        "SPR09",
+        "SPR10"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/native/routed_loop.cuh",
+      "sha256": "1827fa03e629972691f0816183123d537dd44569918b13f0cd454b7b83dddf0a",
+      "canonical_lf_sha256": "1827fa03e629972691f0816183123d537dd44569918b13f0cd454b7b83dddf0a",
+      "techniques": [
+        "SPR08"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/native/vendor/attn_utils.cuh",
+      "sha256": "a39d82563c569aec4d9828b85cfc1697c201611912559f36826e8a7d91125ad1",
+      "canonical_lf_sha256": "a39d82563c569aec4d9828b85cfc1697c201611912559f36826e8a7d91125ad1",
+      "techniques": [
+        "ATT01"
+      ]
+    },
+    {
+      "path": "experiments/kitchen_attention/te_precision.py",
+      "sha256": "9d88ab051c6280e4fad576735a45a52d045dbc76b28db740ca5204243978b7cb",
+      "canonical_lf_sha256": "9d88ab051c6280e4fad576735a45a52d045dbc76b28db740ca5204243978b7cb",
+      "techniques": [
+        "ATT13"
+      ]
+    },
+    {
+      "path": "patches/audio_channel_decode.py",
+      "sha256": "df43be56d14421d946f277989198725fe3f37471ae7c63d93664dc673d5a26d2",
+      "canonical_lf_sha256": "f8710f3c03a81f641e777b529222d231b3294a34352d224096d34eed451e018c",
+      "techniques": [
+        "VAE12"
+      ]
+    },
+    {
+      "path": "patches/comfy_idle_lifecycle.py",
+      "sha256": "342253c4b4d41ec32ed7cbb316e44ea2d047eae1d0ed66a9bb21ce4a37a1e789",
+      "canonical_lf_sha256": "342253c4b4d41ec32ed7cbb316e44ea2d047eae1d0ed66a9bb21ce4a37a1e789",
+      "techniques": [
+        "RES15"
+      ]
+    },
+    {
+      "path": "patches/comfy_sampler.py",
+      "sha256": "dfa6740fed20c5cbd4f1025922d42993b5a39558e389e711d5d99bf4dacd99d2",
+      "canonical_lf_sha256": "30c23f1a63c3c1066c33602abf21326f4789dcd01cd3550f292659541b021f8a",
+      "techniques": [
+        "SYS02",
+        "SYS03",
+        "VAE02",
+        "VAE07",
+        "VAE08",
+        "VAE09"
+      ]
+    },
+    {
+      "path": "patches/comfy_tp_models.py",
+      "sha256": "3f09ec20d235716820a1d8ad7b5e754a1627b0a77a0b9155ca59d328b98bf34d",
+      "canonical_lf_sha256": "cbfdd2e99a729342cc5b6ac88a4d63a5e2f4b414eb0d31f94914824425121fe3",
+      "techniques": [
+        "RES09",
+        "RES10"
+      ]
+    },
+    {
+      "path": "patches/comfy_tp_runtime.py",
+      "sha256": "151d287ba4a0bcd79fc1514734655705384177fd5f1f20c23192fb84a11ff280",
+      "canonical_lf_sha256": "3cf70cac813266d28662198c4ff59991abeb51d96e916e1a1fd9b3739ab3595d",
+      "techniques": [
+        "SYS02",
+        "SYS03",
+        "SYS04",
+        "SYS05",
+        "SYS06",
+        "SYS08",
+        "NUM01",
+        "NUM07",
+        "LOR05",
+        "IO02",
+        "RES09",
+        "RES11",
+        "RES12",
+        "RES13",
+        "RES14",
+        "RES15",
+        "VAE03"
+      ]
+    },
+    {
+      "path": "patches/custom_te_loader.py",
+      "sha256": "0f447d28eb48e3bb0cbbde6e2b9c67a617a8230f5e18a9489616597cad2771d3",
+      "canonical_lf_sha256": "0f447d28eb48e3bb0cbbde6e2b9c67a617a8230f5e18a9489616597cad2771d3",
+      "techniques": [
+        "IO08"
+      ]
+    },
+    {
+      "path": "patches/diagnostic_metrics.py",
+      "sha256": "f58e4312e45d8e3b5ac938d98fe8b0b411e21f0c894967b7361968617516cb9e",
+      "canonical_lf_sha256": "f58e4312e45d8e3b5ac938d98fe8b0b411e21f0c894967b7361968617516cb9e",
+      "techniques": [
+        "SYS08"
+      ]
+    },
+    {
+      "path": "patches/dit_column_linear.py",
+      "sha256": "0f11be5ad4efcfc538295a5e473d5b76b4574eac06c4eae61035f416f45eb473",
+      "canonical_lf_sha256": "0f11be5ad4efcfc538295a5e473d5b76b4574eac06c4eae61035f416f45eb473",
+      "techniques": [
+        "LIN14",
+        "LIN15",
+        "LIN16"
+      ]
+    },
+    {
+      "path": "patches/h3_configuration.py",
+      "sha256": "2b98b22fe3d13ef4e391a58058632d457bbd1048bf6c09f30a278fdaadce169c",
+      "canonical_lf_sha256": "2b98b22fe3d13ef4e391a58058632d457bbd1048bf6c09f30a278fdaadce169c",
+      "techniques": [
+        "SYS07"
+      ]
+    },
+    {
+      "path": "patches/h3_lora.py",
+      "sha256": "9e2689c1ba26a493f19060d0bbbf5e71c4df349a92862465684a42548c534ee2",
+      "canonical_lf_sha256": "7c8d8d74a8fd737a714fcc9019adcc2233efe132a85bfdd32cc1e2c4e98c2b02",
+      "techniques": [
+        "NUM04",
+        "NUM05",
+        "LOR01",
+        "LOR02",
+        "LOR03",
+        "LOR04",
+        "LOR05",
+        "LOR06",
+        "LOR07",
+        "LOR08",
+        "LOR09"
+      ]
+    },
+    {
+      "path": "patches/h3_operator_dependencies.py",
+      "sha256": "0e3d47f6dc681b688cc4c88ad9816edcbcffdd25b2ac1b89e8d04c636fbc6e1d",
+      "canonical_lf_sha256": "0e3d47f6dc681b688cc4c88ad9816edcbcffdd25b2ac1b89e8d04c636fbc6e1d",
+      "techniques": [
+        "SYS07"
+      ]
+    },
+    {
+      "path": "patches/h3_operator_policy.py",
+      "sha256": "2b6929e8ae5974a4d4e6798d6edd1050f7425fd21be7ba46c10f6c936f29c631",
+      "canonical_lf_sha256": "2b6929e8ae5974a4d4e6798d6edd1050f7425fd21be7ba46c10f6c936f29c631",
+      "techniques": [
+        "SYS06",
+        "LIN06",
+        "LIN08",
+        "NUM06",
+        "ATT01",
+        "ATT02",
+        "ATT03",
+        "SPR02",
+        "SPR04",
+        "SPR06"
+      ]
+    },
+    {
+      "path": "patches/h3_reference_plan.py",
+      "sha256": "b8ffc2905c05ca7a4ff5204b2c706391003c342e1b6d537056d084e4e01b9266",
+      "canonical_lf_sha256": "b8ffc2905c05ca7a4ff5204b2c706391003c342e1b6d537056d084e4e01b9266",
+      "techniques": [
+        "VAE02"
+      ]
+    },
+    {
+      "path": "patches/h3_tensor_flow.py",
+      "sha256": "80272e276b10a9fa06f4accd6e62fa8ae373ebdb08a6edbc0615926f56145b07",
+      "canonical_lf_sha256": "80272e276b10a9fa06f4accd6e62fa8ae373ebdb08a6edbc0615926f56145b07",
+      "techniques": [
+        "NUM01",
+        "NUM02",
+        "NUM03",
+        "NUM04",
+        "NUM07"
+      ]
+    },
+    {
+      "path": "patches/host_memory_pressure.py",
+      "sha256": "61b8cb395490a1e8d149e2e3ba4abd72d2ba64b73846c6823ab1b8d63b9b07f0",
+      "canonical_lf_sha256": "61b8cb395490a1e8d149e2e3ba4abd72d2ba64b73846c6823ab1b8d63b9b07f0",
+      "techniques": [
+        "RES08"
+      ]
+    },
+    {
+      "path": "patches/host_weight_cache.py",
+      "sha256": "cbc88510897162e95f21b2e2db019c5507331e4854d0443f6f0cda4f38f1181a",
+      "canonical_lf_sha256": "cbc88510897162e95f21b2e2db019c5507331e4854d0443f6f0cda4f38f1181a",
+      "techniques": [
+        "IO08",
+        "RES01",
+        "RES02",
+        "RES03",
+        "RES04",
+        "RES08"
+      ]
+    },
+    {
+      "path": "patches/kitchen_te_attention.py",
+      "sha256": "b6ca5a8b046dbbaf1026b30a1cd48516433cfc81d849efb562e00dffe40c93c5",
+      "canonical_lf_sha256": "b6ca5a8b046dbbaf1026b30a1cd48516433cfc81d849efb562e00dffe40c93c5",
+      "techniques": [
+        "ATT02",
+        "ATT19",
+        "ATT20"
+      ]
+    },
+    {
+      "path": "patches/legacy_runtime.py",
+      "sha256": "7ed378e3d0473973ea4a203fbf7dd6bd0a4a446a0b41249d1de4e48b7ef34e9c",
+      "canonical_lf_sha256": "7ed378e3d0473973ea4a203fbf7dd6bd0a4a446a0b41249d1de4e48b7ef34e9c",
+      "techniques": [
+        "SYS07"
+      ]
+    },
+    {
+      "path": "patches/multi_gpu_audio_vae.py",
+      "sha256": "bed3646ff98b2bf829967e5c6877fbfa80e708addf213b1970ffaf06375b3618",
+      "canonical_lf_sha256": "ebb26bd319e7994c0679eab4c15f487e3812a26147470c201627b9b66d582db1",
+      "techniques": [
+        "VAE12",
+        "VAE13"
+      ]
+    },
+    {
+      "path": "patches/multi_gpu_video_vae.py",
+      "sha256": "eff4376b8be541fb70546b4e8fe36870368f6b9656766d0a27e43b16d234ea01",
+      "canonical_lf_sha256": "eff4376b8be541fb70546b4e8fe36870368f6b9656766d0a27e43b16d234ea01",
+      "techniques": [
+        "VAE10"
+      ]
+    },
+    {
+      "path": "patches/offline_lora.py",
+      "sha256": "40e20dc24e1367c9eb7bac044717efdea71922578891ecedf4b6ce9b9ce1fbe2",
+      "canonical_lf_sha256": "f7b31191e4ea93b4c784df9ca73706ff9705328628bb8f070b2a18cc6f0a6406",
+      "techniques": [
+        "IO01"
+      ]
+    },
+    {
+      "path": "patches/offline_lora_reference.py",
+      "sha256": "355b445a75b4a026ac046290b282d07356cf757b9ac3be8bcfcbf09c3559abd4",
+      "canonical_lf_sha256": "bc64ff56f156326cf5d23a68ab450ae3e7c648949af6c3c2dcce9665dee239a1",
+      "techniques": [
+        "LOR01",
+        "IO01"
+      ]
+    },
+    {
+      "path": "patches/optimized_tp.py",
+      "sha256": "db2512ecfe7ca643405d1f37087f23b0fbbeeb2c2f06cad7b5780b466272cdd5",
+      "canonical_lf_sha256": "69d26de4f73a669771f3e8fde63731ddbdbeaf7be1348a5eea94133d3366627e",
+      "techniques": [
+        "LIN01",
+        "LIN02",
+        "LIN10",
+        "LIN13"
+      ]
+    },
+    {
+      "path": "patches/parallel_int8.py",
+      "sha256": "5895ffb189f200f6d9f3b1cd097f07a97789b37927eb63fe1d7f8f7d10234f1e",
+      "canonical_lf_sha256": "be870750b59c941f8cb197629ef905f97887d12765852ade2cb65921011e306f",
+      "techniques": [
+        "LIN01",
+        "LIN10",
+        "LIN12",
+        "LIN13"
+      ]
+    },
+    {
+      "path": "patches/parallel_vae.py",
+      "sha256": "9fcbf96407294294f283cb897eee807adcd361cec5b1d1a8b17aa7004142dbb2",
+      "canonical_lf_sha256": "51a792b84b5ee8c1ba8ee96a5426c8ad1e0f6a27afd8e6c14dbc06dc4c7eb806",
+      "techniques": [
+        "VAE03",
+        "VAE05",
+        "VAE06",
+        "VAE07",
+        "VAE08"
+      ]
+    },
+    {
+      "path": "patches/pp_dit.py",
+      "sha256": "21b9f22f2c779f485588c3bbea11d326fd20fbe94ae5ddbbb3d531db38d4b826",
+      "canonical_lf_sha256": "f4811777f48af80cbf99bfabaa76568db0d9524c7709d2e3262a84070ced4bb2",
+      "techniques": [
+        "ALT01"
+      ]
+    },
+    {
+      "path": "patches/pp_qwen3vl.py",
+      "sha256": "3541cb818fcb97a9c736e733fc0b7dec5cd5b73b76112a1096f29345b53405cf",
+      "canonical_lf_sha256": "6cd5cfb52bab3596453d426a2989aa1883132e00478abf6d534625ae2b66c3b7",
+      "techniques": [
+        "ALT01"
+      ]
+    },
+    {
+      "path": "patches/quantized_collectives.py",
+      "sha256": "a5c56bb13b1fe5daf598365b0470c2a2c6b7d5b0f242061eb40f641d262e2233",
+      "canonical_lf_sha256": "a5c56bb13b1fe5daf598365b0470c2a2c6b7d5b0f242061eb40f641d262e2233",
+      "techniques": [
+        "SYS05",
+        "ALT03"
+      ]
+    },
+    {
+      "path": "patches/rank_local_int8.py",
+      "sha256": "d6fd8040d6bb22b3b19fbb678101ac8cb489451011ad749de0f529cf86615183",
+      "canonical_lf_sha256": "d6fd8040d6bb22b3b19fbb678101ac8cb489451011ad749de0f529cf86615183",
+      "techniques": [
+        "SYS01",
+        "IO05",
+        "IO06",
+        "IO07"
+      ]
+    },
+    {
+      "path": "patches/reference_loaders.py",
+      "sha256": "d6e59a73552831b6c80c286cb83edb75435c7d08a0823b8090dbdd4720f7454f",
+      "canonical_lf_sha256": "eca18244c47c0c9422f03c362f13ec4f907f6707e6af5b9e47908c6e44ea5756",
+      "techniques": [
+        "VAE01"
+      ]
+    },
+    {
+      "path": "patches/runtime_diagnostics.py",
+      "sha256": "3c72d2e2b78f8bd636db2cd853c4951f88b1fa0c6c9920a412cda43d2fa8e19e",
+      "canonical_lf_sha256": "3c72d2e2b78f8bd636db2cd853c4951f88b1fa0c6c9920a412cda43d2fa8e19e",
+      "techniques": [
+        "SYS08"
+      ]
+    },
+    {
+      "path": "patches/slab_video_vae.py",
+      "sha256": "8025557c091ef07f2cf81b4d8498e0b586e575bf27871f902b5e3893b353a59f",
+      "canonical_lf_sha256": "8025557c091ef07f2cf81b4d8498e0b586e575bf27871f902b5e3893b353a59f",
+      "techniques": [
+        "VAE10"
+      ]
+    },
+    {
+      "path": "patches/sp_int8_dit.py",
+      "sha256": "63f744b092ef1b91d9c1313a63ef4cc10f84f86183e966fd91f93cbb582b6856",
+      "canonical_lf_sha256": "b7087098ce885acd360415f410658e49385a58bf7e41359703fbdc62df714f04",
+      "techniques": [
+        "ALT02"
+      ]
+    },
+    {
+      "path": "patches/sp_int8_qwen3vl.py",
+      "sha256": "1f1385858e46d553d7c1c084b669534be1901f9c4935b0da51d694e445e04480",
+      "canonical_lf_sha256": "0d7343d9ddbc082bf21aca6dd07aa2680d08d9b7dc096d8a6a5cd3b60734b52a",
+      "techniques": [
+        "ALT02",
+        "ALT13"
+      ]
+    },
+    {
+      "path": "patches/staged_vae.py",
+      "sha256": "48e42a01c571bbac8243d21e4333322140dda93076d7b202a0e215e2ca37c15d",
+      "canonical_lf_sha256": "48e42a01c571bbac8243d21e4333322140dda93076d7b202a0e215e2ca37c15d",
+      "techniques": [
+        "VAE01",
+        "VAE04",
+        "VAE08",
+        "VAE09"
+      ]
+    },
+    {
+      "path": "patches/tilelang_attention_p2.py",
+      "sha256": "9e451dfd5961b02f68707bb63a7cbfdfd74383ffb27d2fc7169ad1406764737c",
+      "canonical_lf_sha256": "30fe3d321358f3ad835a55fe30ece86c860d95728670e92e939b7a92345eb42d",
+      "techniques": [
+        "SPR06"
+      ]
+    },
+    {
+      "path": "patches/tilelang_attention_tradeoffs.py",
+      "sha256": "2e9514ce5393b7a93b4ee75bda252329bd0b537e114adbc307a1c2146e8f4a7d",
+      "canonical_lf_sha256": "c24ce4f1821366a1c03ecbaab283963f678d0cb6e9c96a9a939392b9bbadc1c1",
+      "techniques": [
+        "ATT09",
+        "ATT10",
+        "ATT11",
+        "SPR07",
+        "SPR11"
+      ]
+    },
+    {
+      "path": "patches/tilelang_column_epilogue.py",
+      "sha256": "f176b7597cf899230d3801f35345a301c40d3b0b8fe00bcc31013d73912ee192",
+      "canonical_lf_sha256": "f176b7597cf899230d3801f35345a301c40d3b0b8fe00bcc31013d73912ee192",
+      "techniques": [
+        "LIN15"
+      ]
+    },
+    {
+      "path": "patches/tilelang_dense_preparation.py",
+      "sha256": "a65370e1002de13b72a0b3c90d6f0b1e0fd2337b508babb829cfd744d6129ffe",
+      "canonical_lf_sha256": "a65370e1002de13b72a0b3c90d6f0b1e0fd2337b508babb829cfd744d6129ffe",
+      "techniques": [
+        "ATT07",
+        "ATT08"
+      ]
+    },
+    {
+      "path": "patches/tilelang_group32_masked.py",
+      "sha256": "75aefd9f8e3516249f4b04b220fe97885577e01eccce4ede75b64460b2aba140",
+      "canonical_lf_sha256": "75aefd9f8e3516249f4b04b220fe97885577e01eccce4ede75b64460b2aba140",
+      "techniques": [
+        "ATT05",
+        "ATT11"
+      ]
+    },
+    {
+      "path": "patches/tilelang_grouped_fused.py",
+      "sha256": "fdda215620c2cd0957c0890ad86de6a97b9a3ac00c386870f9af7f599fe2a6ba",
+      "canonical_lf_sha256": "fdda215620c2cd0957c0890ad86de6a97b9a3ac00c386870f9af7f599fe2a6ba",
+      "techniques": [
+        "ATT06"
+      ]
+    },
+    {
+      "path": "patches/tilelang_grouped_qk.py",
+      "sha256": "0fca9d7e2c06382293de73970d41dd39ab004b464ba22472164a68f85c3f4dbf",
+      "canonical_lf_sha256": "0fca9d7e2c06382293de73970d41dd39ab004b464ba22472164a68f85c3f4dbf",
+      "techniques": [
+        "ATT04",
+        "ATT21"
+      ]
+    },
+    {
+      "path": "patches/tilelang_grouped_tp.py",
+      "sha256": "067bede9be733f465769773689cb7c2031d56bfd1dd59939c4d42ea7cadffdb0",
+      "canonical_lf_sha256": "067bede9be733f465769773689cb7c2031d56bfd1dd59939c4d42ea7cadffdb0",
+      "techniques": [
+        "ATT04"
+      ]
+    },
+    {
+      "path": "patches/tilelang_grouped_tp_kitchen.py",
+      "sha256": "4ba3620655c3d4a3ad556b257207fd9304b08edb6f43d766a3fe50a99cf831a7",
+      "canonical_lf_sha256": "769c3514aa1d1a64d9a04e80b473e28392f299952619db4f9d60fd673f9030bc",
+      "techniques": [
+        "ATT04"
+      ]
+    },
+    {
+      "path": "patches/tilelang_grouped_tp_kitchen_v2.py",
+      "sha256": "1a665316b9d11d29846ad1f37a66607d610566104f729557d6b53b9a0f594904",
+      "canonical_lf_sha256": "76587cadd49ec57e62839b03badf65e32efc5ab69a4fcad4fcb82932f831f9ea",
+      "techniques": [
+        "ATT06",
+        "ATT09",
+        "ATT10",
+        "ATT22"
+      ]
+    },
+    {
+      "path": "patches/tilelang_grouped_tp_optimized.py",
+      "sha256": "ee0b48a87d44b313f110bdf3d58a75a1e00bf5f37b0ca2be02f4b9a9fa971d1f",
+      "canonical_lf_sha256": "ee0b48a87d44b313f110bdf3d58a75a1e00bf5f37b0ca2be02f4b9a9fa971d1f",
+      "techniques": [
+        "ATT08",
+        "SPR01",
+        "SPR03",
+        "SPR04",
+        "SPR05"
+      ]
+    },
+    {
+      "path": "patches/tilelang_row_quant.py",
+      "sha256": "ff1bb4f853c1e1131c3a4f2e029a1facf27ad0b284adef776a2a1af073fefd09",
+      "canonical_lf_sha256": "ff1bb4f853c1e1131c3a4f2e029a1facf27ad0b284adef776a2a1af073fefd09",
+      "techniques": [
+        "LIN02",
+        "LIN03",
+        "LIN04",
+        "LIN05"
+      ]
+    },
+    {
+      "path": "patches/tilelang_sage_preparation.py",
+      "sha256": "ebe5ccbc18db031b98926051e44d802f7d70ff333d03daa13518b1be7d9a2346",
+      "canonical_lf_sha256": "ebe5ccbc18db031b98926051e44d802f7d70ff333d03daa13518b1be7d9a2346",
+      "techniques": [
+        "ATT07",
+        "ATT12"
+      ]
+    },
+    {
+      "path": "patches/tilelang_sage_qk.py",
+      "sha256": "f78151941b8e0890df21bd2ffd11ac6abaff17c4dbcc0a6af1c59614900a3f2a",
+      "canonical_lf_sha256": "f78151941b8e0890df21bd2ffd11ac6abaff17c4dbcc0a6af1c59614900a3f2a",
+      "techniques": [
+        "ATT12"
+      ]
+    },
+    {
+      "path": "patches/tilelang_scalar_pool.py",
+      "sha256": "54cd0d284044069bda847dca35c5e6471d2111c7d3c1d38e82825ddc37a4bdca",
+      "canonical_lf_sha256": "54cd0d284044069bda847dca35c5e6471d2111c7d3c1d38e82825ddc37a4bdca",
+      "techniques": [
+        "SPR05"
+      ]
+    },
+    {
+      "path": "patches/tilelang_sol_drop_fused.py",
+      "sha256": "26a192bc6876cd0245c6993d8712696ec1b1ed22dbd163a6c9946f05772b3398",
+      "canonical_lf_sha256": "26a192bc6876cd0245c6993d8712696ec1b1ed22dbd163a6c9946f05772b3398",
+      "techniques": [
+        "SPR03",
+        "SPR12"
+      ]
+    },
+    {
+      "path": "patches/tilelang_sparse_attention.py",
+      "sha256": "f783effba120825ab161f658e6fd4e0f22c0c143c1da980c36879073298867c3",
+      "canonical_lf_sha256": "f783effba120825ab161f658e6fd4e0f22c0c143c1da980c36879073298867c3",
+      "techniques": [
+        "SPR01",
+        "SPR11"
+      ]
+    },
+    {
+      "path": "patches/tilelang_swiglu_pad.py",
+      "sha256": "9d9f292350cbf4d0e63f6d611c647bb09d4e9fcc521f840519746df776c1d70e",
+      "canonical_lf_sha256": "9d9f292350cbf4d0e63f6d611c647bb09d4e9fcc521f840519746df776c1d70e",
+      "techniques": [
+        "LIN05",
+        "LIN06",
+        "LIN07",
+        "LIN10"
+      ]
+    },
+    {
+      "path": "patches/tilelang_swiglu_quant.py",
+      "sha256": "d8a55c60949b881fc5b2d6f3c9bc9fdf025675fbb2498f9ee9dd38e6679cc265",
+      "canonical_lf_sha256": "3d061420c9486dbbb78b317deb2db5fb2d51c6110cb7953e2323de7ba2b34f8d",
+      "techniques": [
+        "LIN08",
+        "LIN09"
+      ]
+    },
+    {
+      "path": "patches/tilelang_transport_p2.py",
+      "sha256": "2ba3032848a83049bdaf419b7deb50e165e75a3d1fe0820851761bc15e9e89fd",
+      "canonical_lf_sha256": "2ba3032848a83049bdaf419b7deb50e165e75a3d1fe0820851761bc15e9e89fd",
+      "techniques": [
+        "LIN11",
+        "LIN12"
+      ]
+    },
+    {
+      "path": "patches/tilelang_transport_tradeoffs.py",
+      "sha256": "94a653a562a74ab45800025e094e0644a7de0de073107ce5e7a2896695053e26",
+      "canonical_lf_sha256": "94a653a562a74ab45800025e094e0644a7de0de073107ce5e7a2896695053e26",
+      "techniques": [
+        "LIN11",
+        "ALT03",
+        "ALT04"
+      ]
+    },
+    {
+      "path": "patches/tp2_bundle.py",
+      "sha256": "4b8f11dadbc38731ddc27a429412f176e00d3586bb99fcc66b932b5c02dd1ca3",
+      "canonical_lf_sha256": "4b8f11dadbc38731ddc27a429412f176e00d3586bb99fcc66b932b5c02dd1ca3",
+      "techniques": [
+        "IO02",
+        "IO04",
+        "IO06"
+      ]
+    },
+    {
+      "path": "patches/tp2_disk_bake.py",
+      "sha256": "22141cdd6eec47cbaad512ee9c9411fa55901b74fc46e34f8504079e2b434068",
+      "canonical_lf_sha256": "22141cdd6eec47cbaad512ee9c9411fa55901b74fc46e34f8504079e2b434068",
+      "techniques": [
+        "IO03",
+        "IO04"
+      ]
+    },
+    {
+      "path": "patches/tp_dit.py",
+      "sha256": "a72bd5f4fa1a9ffaa91cfcf0aeffdb11eba237909b4f08d6c2fe3f8e8c8a544e",
+      "canonical_lf_sha256": "f1d3bd76f59d279d2dabbf3727866e476a03e76a52151b4bf1784880aed3536e",
+      "techniques": [
+        "SYS01",
+        "NUM03",
+        "NUM05",
+        "NUM06"
+      ]
+    },
+    {
+      "path": "patches/tp_qwen3vl.py",
+      "sha256": "c877ebc93b68fe9a638ce47060f282b316f6a460693df2b40529e495938e398e",
+      "canonical_lf_sha256": "9cb6521bb79b460fadbccef4d603e28da826238a95b0d5f41678e66274ac7b0e",
+      "techniques": [
+        "SYS01",
+        "SYS09",
+        "LIN16",
+        "NUM03",
+        "NUM05",
+        "NUM06"
+      ]
+    },
+    {
+      "path": "patches/tp_video_vae.py",
+      "sha256": "353d01562aa809a95faa4ad5554a43e8f41a0986035b1dccaa1481ea2dee8b51",
+      "canonical_lf_sha256": "cf4689e9b77fdb3f1ac8b16d46e62da6a54ab28453430e12b6446fec636256c4",
+      "techniques": [
+        "VAE11"
+      ]
+    },
+    {
+      "path": "patches/video_decode_planner.py",
+      "sha256": "a012f0e7e1f43d33ae44bd697c091ce36b98d402f93b48057fe04ced9cdc8ea6",
+      "canonical_lf_sha256": "a012f0e7e1f43d33ae44bd697c091ce36b98d402f93b48057fe04ced9cdc8ea6",
+      "techniques": [
+        "VAE04",
+        "VAE07"
+      ]
+    },
+    {
+      "path": "patches/weight_residency.py",
+      "sha256": "8421a6ab4f64ebd5a9957d2734beed14f765ba6691eb9c1a6232ce64b2eacb04",
+      "canonical_lf_sha256": "8421a6ab4f64ebd5a9957d2734beed14f765ba6691eb9c1a6232ce64b2eacb04",
+      "techniques": [
+        "SYS06",
+        "LOR08",
+        "LOR09",
+        "RES02",
+        "RES04",
+        "RES05",
+        "RES06",
+        "RES07",
+        "RES16",
+        "VAE03"
+      ]
+    },
+    {
+      "path": "patches/windowed_tp.py",
+      "sha256": "af23b50b93e983f3166b6d9278383a8fe9e9c65a6e678a221056bb3299c9dc05",
+      "canonical_lf_sha256": "6b0d19710b9c012287b6c8552fb5febf3f75459c48e0446ff85cf1120a802eba",
+      "techniques": [
+        "IO05",
+        "IO07",
+        "IO08",
+        "RES11"
+      ]
+    }
+  ],
+  "scope": "All current runtime modules, all 52 prior audited items, retained native kernels and described historical alternatives; binary/provider artifacts are provenance, not independent techniques",
+  "observation_charts_in_technical_guide": false
+}

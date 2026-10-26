@@ -105,11 +105,13 @@ class ObservedRank(BASE_RANK):
         policy.dit_attention=dit_attention
         # Observe actual executed entrypoints, not the configured policy string.
         import patches.tilelang_group32_masked as te
+        import patches.kitchen_te_attention as kitchen_te
         import patches.tilelang_grouped_tp_optimized as sparse
         import patches.tilelang_attention_p2 as split
         import comfy_kitchen as ck
         import patches.h3_lora as lora
         for module, name, label in ((te,'attention','TE/tilelang_group32'),
+                (kitchen_te,'attention','TE/kitchen_causal'),
                 (sparse,'execute','DiT/tilelang_sparse_execute'),
                 (split,'execute','DiT/tilelang_scalar_split_execute'),
                 (ck,'int8_attention','kitchen/int8_attention'),
@@ -459,7 +461,8 @@ def main():
         for rank in state['ranks']:
             bench=rank['benchmark']
             if not bench['layouts']:raise AssertionError('No actual packed DiT layout was observed')
-            if not bench['executed_backends'].get('TE/tilelang_group32'):raise AssertionError('TE kernel not executed')
+            te_backend={'kitchen_causal':'TE/kitchen_causal','tilelang_group32':'TE/tilelang_group32'}.get(operators.te_attention)
+            if te_backend and not bench['executed_backends'].get(te_backend):raise AssertionError('Configured TE kernel not executed')
             if config['lora']:
                 if not any('tilelang_s' in k and v for k,v in bench['executed_backends'].items()):
                     raise AssertionError('Scalar kernel not executed')

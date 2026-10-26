@@ -1,0 +1,86 @@
+{
+  "graph_matrix\\batch_results.json": {
+    "bytes": 70428,
+    "sha256": "661b2d62fb236cd337126b9bd9448377ca704be0226bce756b3cfc58b17a9ecd"
+  },
+  "graph_matrix\\rank0.json": {
+    "bytes": 30906,
+    "sha256": "c2367f97b75644e4933f4de2ff0dcd016a48bb422670ce91e5a89ea611df8355"
+  },
+  "graph_matrix\\rank0.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "graph_matrix\\rank1.json": {
+    "bytes": 30939,
+    "sha256": "a0b4479023d5efa065a8fd1cf1df0e416e01f3256e6da79d3bbadced3720baaf"
+  },
+  "graph_matrix\\rank1.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "graph_supervision\\bounded_worker.py": {
+    "bytes": 21110,
+    "sha256": "a08aa582b28d6117159f139ce56ac8454d33689248e684a7df5edac07a8787cf"
+  },
+  "graph_supervision\\notebook_worker.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "graph_supervision\\supervision.json": {
+    "bytes": 206,
+    "sha256": "48f5c99289248fc862ed0b541411d5416878ab4dc84c354f07b8bd3278746067"
+  },
+  "light_setup\\api_probe.log": {
+    "bytes": 1420,
+    "sha256": "16401c525113952b9f12881dd4803be748019d8aa892a98da31d95f79f04a26d"
+  },
+  "light_setup\\bounded_worker.py": {
+    "bytes": 68706,
+    "sha256": "4eaf90327606015ed5f8642a142c16dd2ce091882c2660fb8d502f6cfe9179eb"
+  },
+  "light_setup\\cpu_qualification.json": {
+    "bytes": 65661,
+    "sha256": "49dc2558fdf1abfcd5ca89a3012fefadee57f1675a5d32bce98f74c84ef93d9d"
+  },
+  "light_setup\\delivery_binding.json": {
+    "bytes": 1488,
+    "sha256": "3f0ac3bac71e0d8add006c5514907952b86c95ca733a9172ecb592c5de743a90"
+  },
+  "light_setup\\direct-core.txt": {
+    "bytes": 5811,
+    "sha256": "f67dca5cc9543d06bcca19426bda0914306d6e143f8712037e84ee54f30e8eee"
+  },
+  "light_setup\\direct_pip.log": {
+    "bytes": 15664,
+    "sha256": "0a5358cde9e243394656fb0e79b99e67a7d1ccdbe9db336994106eef24892c38"
+  },
+  "light_setup\\execution_env.json": {
+    "bytes": 449,
+    "sha256": "53f8cbaa42b4a30ef25583746477a1d1570f37b3f30affd13d09ffcec0dd7911"
+  },
+  "light_setup\\notebook_worker.log": {
+    "bytes": 164,
+    "sha256": "a144c920a99331d1ea8b2ad8441c60e5ba022f15c8a87adb1333406aa6be2e2d"
+  },
+  "light_setup\\runtime_profile.json": {
+    "bytes": 27855,
+    "sha256": "fb2c2512300010c032bc9c2a3dc28f2e534102c9fb89171861508158e03af13f"
+  },
+  "light_setup\\setup_receipt.json": {
+    "bytes": 72980,
+    "sha256": "18e099b97b7432ce35f0a44b512cbd4af6f75bfd79be9f02579a1a2a66cc90cc"
+  },
+  "light_setup\\supervision.json": {
+    "bytes": 202,
+    "sha256": "d30224496cc39a47bb07f062786264e68ff04d12d56cfcb9ed491bf671be449d"
+  },
+  "supplemental\\graph.py": {
+    "bytes": 2680,
+    "sha256": "8f6855188b91c28bb08eae058bfcffc4ec1c5825df5a4b8ca1056d19ac4031f1"
+  },
+  "supplemental\\graph_bench.py": {
+    "bytes": 6693,
+    "sha256": "fbe83f671b301bfe2986f9e6dbc5e7ea605f692634996f54217938ded3dbb71b"
+  }
+}

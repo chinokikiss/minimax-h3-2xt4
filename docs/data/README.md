@@ -7,6 +7,10 @@ captures, traces, model weights, and private provider capabilities are not inclu
 
 | Record | Scope |
 |---|---|
+| [Optimization technique catalogue](h3_optimization_techniques_20261026.json) | Canonical130-technique mechanism/benefit/contract content and97 source identities; no benchmark observations |
+| [Technique coverage matrix](h3_optimization_coverage_20261026.json) | Complete mapping of64 runtime modules,52 previous audit items and retained native attention kernels |
+| [TE causal/precision raw evidence](te_causal_precision_20261026/manifest.json) | Two physical T4s: 168 precision cases,336 prefix comparisons,144 fixed-packed controls, exact submitted sources and one-shot final collection |
+| [Kitchen dense SM75 raw evidence](kitchen_dense_sm75_20261025/manifest.json) | Complete paired T4 samples, profiling phases, compile resources, pinned CPU/environment receipts, source bindings and one-shot collection receipts |
 | [Main synchronization and branch archive](repository_sync_20261025.json) |95-script path migration, CPU validation, preserved experiment commit/tag map and branch-cleanup state |
 | [0.5MP Turbo long E2E](h3_l1_turbo_05mp_e2e_20261024.json) | Real2×T4 completion at58,102 tokens,208 Native-verified disk-baked targets, four sampling steps and query-parallel Video decode;25 final artifacts verified, stage timing/device peaks/media decode audited; quality pending |
 | [Scoped T4 benchmark recovery](h3_review_t4_recovery_20261024.json) | Benchmark-only CPU-oracle lifetime repair,132-test CPU/extracted-source checks and local12GiB-quota preview; retry only unfinished large LoRA timings and first complete profiling pass |

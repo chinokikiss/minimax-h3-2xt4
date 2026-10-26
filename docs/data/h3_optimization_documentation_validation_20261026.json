@@ -1,0 +1,419 @@
+{
+  "pages": 50,
+  "techniques": 130,
+  "all_technique_headings_present_once": true,
+  "text_outside_page_safe_area": [],
+  "embedded_manifest": true,
+  "pdf_pages_by_technique": {
+    "SYS01": [
+      4
+    ],
+    "SYS02": [
+      4
+    ],
+    "SYS03": [
+      4
+    ],
+    "SYS04": [
+      5
+    ],
+    "SYS05": [
+      5
+    ],
+    "SYS06": [
+      5
+    ],
+    "SYS07": [
+      5
+    ],
+    "SYS08": [
+      6
+    ],
+    "SYS09": [
+      6
+    ],
+    "LIN01": [
+      7
+    ],
+    "LIN02": [
+      7
+    ],
+    "LIN03": [
+      7
+    ],
+    "LIN04": [
+      8
+    ],
+    "LIN05": [
+      8
+    ],
+    "LIN06": [
+      8
+    ],
+    "LIN07": [
+      8
+    ],
+    "LIN08": [
+      9
+    ],
+    "LIN09": [
+      9
+    ],
+    "LIN10": [
+      9
+    ],
+    "LIN11": [
+      9
+    ],
+    "LIN12": [
+      10
+    ],
+    "LIN13": [
+      10
+    ],
+    "LIN14": [
+      10
+    ],
+    "LIN15": [
+      10
+    ],
+    "LIN16": [
+      11
+    ],
+    "LIN17": [
+      11
+    ],
+    "NUM01": [
+      12
+    ],
+    "NUM02": [
+      12
+    ],
+    "NUM03": [
+      12
+    ],
+    "NUM04": [
+      13
+    ],
+    "NUM05": [
+      13
+    ],
+    "NUM06": [
+      13
+    ],
+    "NUM07": [
+      13
+    ],
+    "ATT01": [
+      14
+    ],
+    "ATT02": [
+      14
+    ],
+    "ATT03": [
+      14
+    ],
+    "ATT04": [
+      15
+    ],
+    "ATT05": [
+      15
+    ],
+    "ATT06": [
+      15
+    ],
+    "ATT07": [
+      15
+    ],
+    "ATT08": [
+      16
+    ],
+    "ATT09": [
+      16
+    ],
+    "ATT10": [
+      16
+    ],
+    "ATT11": [
+      16
+    ],
+    "ATT12": [
+      17
+    ],
+    "ATT13": [
+      17
+    ],
+    "ATT14": [
+      17
+    ],
+    "ATT15": [
+      17
+    ],
+    "ATT16": [
+      18
+    ],
+    "ATT17": [
+      18
+    ],
+    "ATT18": [
+      18
+    ],
+    "ATT19": [
+      18
+    ],
+    "ATT20": [
+      19
+    ],
+    "ATT21": [
+      19
+    ],
+    "ATT22": [
+      19
+    ],
+    "SPR01": [
+      20
+    ],
+    "SPR02": [
+      20
+    ],
+    "SPR03": [
+      20
+    ],
+    "SPR04": [
+      21
+    ],
+    "SPR05": [
+      21
+    ],
+    "SPR06": [
+      21
+    ],
+    "SPR07": [
+      21
+    ],
+    "SPR08": [
+      22
+    ],
+    "SPR09": [
+      22
+    ],
+    "SPR10": [
+      22
+    ],
+    "SPR11": [
+      22
+    ],
+    "SPR12": [
+      23
+    ],
+    "LOR01": [
+      24
+    ],
+    "LOR02": [
+      24
+    ],
+    "LOR03": [
+      24
+    ],
+    "LOR04": [
+      25
+    ],
+    "LOR05": [
+      25
+    ],
+    "LOR06": [
+      25
+    ],
+    "LOR07": [
+      25
+    ],
+    "LOR08": [
+      26
+    ],
+    "LOR09": [
+      26
+    ],
+    "IO01": [
+      27
+    ],
+    "IO02": [
+      27
+    ],
+    "IO03": [
+      27
+    ],
+    "IO04": [
+      28
+    ],
+    "IO05": [
+      28
+    ],
+    "IO06": [
+      28
+    ],
+    "IO07": [
+      28
+    ],
+    "IO08": [
+      29
+    ],
+    "IO09": [
+      29
+    ],
+    "IO10": [
+      29
+    ],
+    "IO11": [
+      29
+    ],
+    "IO12": [
+      30
+    ],
+    "RES01": [
+      31
+    ],
+    "RES02": [
+      31
+    ],
+    "RES03": [
+      31
+    ],
+    "RES04": [
+      32
+    ],
+    "RES05": [
+      32
+    ],
+    "RES06": [
+      32
+    ],
+    "RES07": [
+      32
+    ],
+    "RES08": [
+      33
+    ],
+    "RES09": [
+      33
+    ],
+    "RES10": [
+      33
+    ],
+    "RES11": [
+      33
+    ],
+    "RES12": [
+      34
+    ],
+    "RES13": [
+      34
+    ],
+    "RES14": [
+      34
+    ],
+    "RES15": [
+      34
+    ],
+    "RES16": [
+      35
+    ],
+    "VAE01": [
+      36
+    ],
+    "VAE02": [
+      36
+    ],
+    "VAE03": [
+      36
+    ],
+    "VAE04": [
+      37
+    ],
+    "VAE05": [
+      37
+    ],
+    "VAE06": [
+      37
+    ],
+    "VAE07": [
+      37
+    ],
+    "VAE08": [
+      38
+    ],
+    "VAE09": [
+      38
+    ],
+    "VAE10": [
+      38
+    ],
+    "VAE11": [
+      38
+    ],
+    "VAE12": [
+      39
+    ],
+    "VAE13": [
+      39
+    ],
+    "ALT01": [
+      40
+    ],
+    "ALT02": [
+      40
+    ],
+    "ALT03": [
+      40
+    ],
+    "ALT04": [
+      41
+    ],
+    "ALT05": [
+      41
+    ],
+    "ALT06": [
+      41
+    ],
+    "ALT07": [
+      41
+    ],
+    "ALT08": [
+      42
+    ],
+    "ALT09": [
+      42
+    ],
+    "ALT10": [
+      42
+    ],
+    "ALT11": [
+      42
+    ],
+    "ALT12": [
+      43
+    ],
+    "ALT13": [
+      43
+    ]
+  },
+  "visual_review": "Review all five contact sheets and full-size samples before delivery",
+  "date": "2026-10-26",
+  "visual_review_completed": true,
+  "visual_review_scope": "All50 pages via five contact sheets plus full-size pages1,7,14,21,28,37,42,50",
+  "renderer": "Bundled ReportLab/pypdf and Poppler, separate from frozen inference environment",
+  "focused_cpu_tests": {
+    "run": 57,
+    "passed": true
+  },
+  "inference_scope": "Documentation render plus CPU regression only; no H3 pipeline, package changes or Kaggle submissions",
+  "artifacts": {
+    "docs/guides/MiniMax_H3_TP2_Optimization_Technical_Guide.pdf": {
+      "bytes": 291542,
+      "sha256": "bf685cf61f085997e07405adb29cddf1ca528dc6c803fe16097994dfcb8f2a97"
+    },
+    "docs/guides/H3_OPTIMIZATION_TECHNIQUES.md": {
+      "bytes": 93714,
+      "sha256": "e93670f1615648e57eccf3e4d13a39678a884663817d336fa66df8ad773c1165"
+    }
+  }
+}

@@ -8,7 +8,7 @@ from torch import nn
 
 @dataclass(frozen=True)
 class H3OperatorPolicy:
-    te_attention: str = 'tilelang_group32'
+    te_attention: str = 'kitchen_causal'
     dit_attention: str = 'kitchen'
     row_linear_backend: str = 'tilelang_scaled_fp16'
     scalar_score_workspace_mib: int = 96
@@ -16,7 +16,7 @@ class H3OperatorPolicy:
     column_linear_backend: str = 'cuda_int8_tilelang'
 
     def __post_init__(self):
-        if self.te_attention not in ('tilelang_group32','native'):raise ValueError('Unknown TE attention')
+        if self.te_attention not in ('kitchen_causal','tilelang_group32','native'):raise ValueError('Unknown TE attention')
         if self.dit_attention not in ('kitchen','tilelang_dense','tilelang_drop','tilelang_scalar','native'):
             raise ValueError('Unknown DiT attention')
         if self.row_linear_backend not in ('tilelang_packed','tilelang_scaled_fp16','native'):raise ValueError('Unknown row-linear backend')
@@ -54,6 +54,10 @@ def configure_block(block,kind,policy):
 def te_attention(block,q,k,v,mask):
     policy=getattr(block,'operator_policy',None)
     if policy is None or policy.te_attention=='native':return None
+    if policy.te_attention=='kitchen_causal':
+        if not q.is_cuda:return None
+        from patches.kitchen_te_attention import attention
+        return attention(q,k,v,mask=mask)
     if not sm75(q,'TE Group32 attention'):return None
     from patches.tilelang_group32_masked import attention
     return attention(q,k,v,mask=mask)

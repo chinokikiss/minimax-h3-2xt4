@@ -1,0 +1,23 @@
+{
+  "scope": "Operator arithmetic/integration gates; no full-pipeline speed/quality qualification",
+  "torch": "2.12.1+cu132",
+  "comfy_kitchen": "0.2.37",
+  "tilelang": "0.1.13",
+  "hardware": "CPU",
+  "records": [
+    {
+      "name": "config_layout_cache_dispatch_residency_UI",
+      "status": "pass"
+    },
+    {
+      "name": "selective_B_both_owners_stack_scale_order_and_bytes",
+      "device": "cpu",
+      "status": "pass"
+    },
+    {
+      "name": "native_single_gpu_audio_no_parallel_dispatch",
+      "status": "pass",
+      "checks": 5
+    }
+  ]
+}

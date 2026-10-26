@@ -1,0 +1,9 @@
+{
+  "status": "final_outputs_unavailable",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-kitchen-dense-graph-t4-20261025",
+  "output": "D:\\attention_eval\\kitchen_dense_graph_20261025\\gpu_outputs",
+  "returncode": 1,
+  "files": 21,
+  "completed_utc": "2026-10-25T15:31:06.501813+00:00"
+}

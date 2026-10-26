@@ -1,0 +1,19 @@
+{
+  "status": "collected",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-kitchen-dense-sm75-t4-20261025",
+  "output": "D:\\attention_eval\\kitchen_dense_sm75_20261025_r5\\gpu_outputs",
+  "returncode": 0,
+  "files": 23,
+  "completed_utc": "2026-10-25T15:04:51.016889+00:00",
+  "experiment": {
+    "status": "completed",
+    "error": null,
+    "stages": null,
+    "completed_sampler_steps": 0,
+    "completed_denoiser_calls": 0,
+    "media": null,
+    "quality_acceptance": "Pending review; collection does not establish generation quality"
+  },
+  "prior_input_hash_matches": {}
+}

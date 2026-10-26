@@ -20,6 +20,11 @@ merges. Safetensors offline still creates a baked checkpoint. Short/medium onlin
 remains explicit, with guarded FC1/QKV owned B enabled. Long-sequence online
 tests are cancelled. See the [configuration review](../reports/H3_CONFIGURATION_REVIEW_20261024.md).
 
+Update 2026-10-25: TE now defaults to `kitchen_causal`, preserving the complete
+incoming mask through Kitchen 0.2.37's masked INT8 API. It performs no mask
+classification or native extension compilation. Dense DiT/Video defaults
+remain Kitchen while additional SM75 dense candidates are evaluated.
+
 Implemented 2026-10-18. The ComfyUI loader now carries an explicit per-session
 operator policy through checkpoint preparation, host caches, GPU residency
 copies and persistent TP2 workers. This supersedes the earlier benchmark-only
@@ -27,7 +32,7 @@ status of these operator entry points. No complete H3 generation was run here.
 
 | Component | Default | Alternatives / scope |
 |---|---|---|
-| TE text decoder | TileLang Group32 dense QK, FP16 PV | Native attention override; compact GQA and actual boolean/additive masks |
+| TE text decoder | Kitchen causal INT8 | Complete causal/padding/additive mask passed to the pinned API; Group32/native remain explicit overrides |
 | DiT main blocks | `comfy_kitchen.int8_attention` | `tilelang_drop`, `tilelang_scalar`, `tilelang_dense`, or `native` |
 | DiT token refiner | Native PyTorch SDPA | All DiT modes; Native projections, RMSNorm and RoPE |
 | Video VAE | Kitchen INT8 attention | Existing query partitioning and Native public decode planning remain |
@@ -79,7 +84,7 @@ from patches.comfy_tp_runtime import RuntimeConfig
 from patches.h3_operator_policy import H3OperatorPolicy
 
 config = RuntimeConfig(te_path, dit_path, operators=H3OperatorPolicy(
-    te_attention='tilelang_group32',
+    te_attention='kitchen_causal',
     dit_attention='kitchen',           # or tilelang_drop / tilelang_scalar
     row_linear_backend='tilelang_scaled_fp16',
     fc2_quantizer='fused_stored',
@@ -108,7 +113,18 @@ logged; kernels do not pretend to run SM75 code on the local SM120 GPU.
 
 ## Attention boundaries
 
-TE receives BHND Q/K/V after Native Q/K norms and RoPE. Group32 preparation uses
+TE receives BHND Q/K/V after Native Q/K norms and RoPE. Since 2026-10-25 its
+default is Kitchen causal INT8: all masks pass unchanged to Kitchen 0.2.37,
+with compact GQA inputs and BND output. No native build or mask readback is
+required. The optional experimental implicit-causal kernel is not selected
+automatically: classifying inference-mode masks cost more than it saved in
+the short T4 probe. The [physical T4 causal/precision audit](../reports/TE_CAUSAL_PREFIX_PRECISION_20261026.md)
+confirmed that packed masking passes while future floating-input changes can
+alter earlier outputs, even at fixed lengths. FP32 inputs use INT8 attention
+and BF16 output storage before conversion back to FP32; the dtype does not
+imply FP32 numerical precision.
+
+The explicit `tilelang_group32` override remains available. Group32 preparation uses
 the existing fused quantizer and unweighted leaf-mean centering, retaining the
 FP32-to-FP16 input boundary and FP16-PV/output rounding. The new mask-aware main
 kernel broadcasts compact 2D/3D/4D masks without repeating KV heads or copying

@@ -1,0 +1,45 @@
+{
+  "scope": "Synthetic T4 TE operator audit, no model/captured activations or credentials",
+  "files": {
+    "cpu_tests.log": {
+      "bytes": 116,
+      "sha256": "b0d82568e6be28b09ab06b20da77f74a3e93ace5d8d9bbf6253c6cc8628bb9c6"
+    },
+    "cpu_validation.json": {
+      "bytes": 624,
+      "sha256": "dc589aa8ec858402a0bdfa089b5dbad911c6322bfb7076f305c6523ac0d7d26c"
+    },
+    "gpu_collection.json": {
+      "bytes": 447,
+      "sha256": "4adac412a5bd657c35a3f3d937b921d48b1dc498a134544a1dad783589c304a4"
+    },
+    "gpu_submission.json": {
+      "bytes": 3406,
+      "sha256": "84021ae4cbd0fa9ce8a3ed5de20dad9aa65d5c94eb42da382cbf3cbc1a33ac56"
+    },
+    "local_SM120_smoke.json": {
+      "bytes": 7024,
+      "sha256": "c9f87895cee02c9742e323ad92feb9a3086590f7d0b4c7e3e44d6e2eb4c4ead1"
+    },
+    "raw_batch.json": {
+      "bytes": 1000151,
+      "sha256": "ab90a6de33e99e69b1246a4960fa2f80ff06145def3c2c1de41cf42ee1a31320"
+    },
+    "source_binding.json": {
+      "bytes": 2446,
+      "sha256": "74cfe9eba527f705f4c08a72f9014c13ff277321b1c4dcd987d0fef083845adc"
+    },
+    "source_kitchen_te_attention.py.txt": {
+      "bytes": 5649,
+      "sha256": "b6ca5a8b046dbbaf1026b30a1cd48516433cfc81d849efb562e00dffe40c93c5"
+    },
+    "source_te_precision.py.txt": {
+      "bytes": 13311,
+      "sha256": "9d88ab051c6280e4fad576735a45a52d045dbc76b28db740ca5204243978b7cb"
+    },
+    "summary.json": {
+      "bytes": 96827,
+      "sha256": "5f6993e39970c27d06a8170c0d57a975c3e7eee1661061fe9e8e1e8611a15462"
+    }
+  }
+}

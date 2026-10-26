@@ -1,0 +1,190 @@
+{
+  "date": "2026-10-26",
+  "status": "archive_tags_verified_main_sync_and_branch_cleanup_pending",
+  "base_main": "7050e4b6b99d54db6aa2e0a13b265c95e98c21ac",
+  "local_before": {
+    "codex/kitchen-attn-matrix-20261025-0bb97a8b": "99ae1f255c0f7c038d21a862d9a6f470d236e689",
+    "codex/kitchen-attn-matrix-20261025-1807f560": "14320bf13228952e655e0257557c5c2378583c25",
+    "codex/kitchen-attn-matrix-20261025-2b910fa7": "391274244d9ca7083bf40c25586317c494e76bcf",
+    "codex/kitchen-attn-matrix-20261025-3e9947c0": "f8fffbfd0e3cff2138e1b2ebd4cae02c248d969f",
+    "codex/kitchen-attn-matrix-20261025-47bde77b": "827a866fa90c93827f5755cd918a34f61deacab7",
+    "codex/kitchen-attn-matrix-20261025-6c0c34b3": "0f1a16615541d05dcf12aaa67d3db5cd000c5f9b",
+    "codex/kitchen-attn-matrix-20261025-e1ad3194": "030c511bcb4b1b803d74fa931fa566f0216e9879",
+    "main": "7050e4b6b99d54db6aa2e0a13b265c95e98c21ac"
+  },
+  "remote_before": {
+    "codex/kitchen-attn-matrix-20261025-2b910fa7": "391274244d9ca7083bf40c25586317c494e76bcf",
+    "codex/kitchen-attn-matrix-20261025-6c0c34b3": "0f1a16615541d05dcf12aaa67d3db5cd000c5f9b",
+    "codex/kitchen-attn-matrix-20261025-e1ad3194": "030c511bcb4b1b803d74fa931fa566f0216e9879",
+    "main": "7050e4b6b99d54db6aa2e0a13b265c95e98c21ac"
+  },
+  "branches": [
+    {
+      "branch": "codex/kitchen-attn-matrix-20261025-0bb97a8b",
+      "commit": "99ae1f255c0f7c038d21a862d9a6f470d236e689",
+      "locations": [
+        "local"
+      ],
+      "archive_tag": "archive/20261026/codex/kitchen-attn-matrix-20261025-0bb97a8b",
+      "unique_commit_count": 1,
+      "changed_paths": [
+        "runtime/kaggle_artifacts/0bb97a8b77df1999a95d917bda38a4e4127d01eda08797717a3149c21889473b.tar.gz"
+      ],
+      "source_archives": [
+        {
+          "path": "runtime/kaggle_artifacts/0bb97a8b77df1999a95d917bda38a4e4127d01eda08797717a3149c21889473b.tar.gz",
+          "bytes": 17666954,
+          "sha256": "0bb97a8b77df1999a95d917bda38a4e4127d01eda08797717a3149c21889473b",
+          "capability_scan": "clear"
+        }
+      ]
+    },
+    {
+      "branch": "codex/kitchen-attn-matrix-20261025-1807f560",
+      "commit": "14320bf13228952e655e0257557c5c2378583c25",
+      "locations": [
+        "local"
+      ],
+      "archive_tag": "archive/20261026/codex/kitchen-attn-matrix-20261025-1807f560",
+      "unique_commit_count": 1,
+      "changed_paths": [
+        "runtime/kaggle_artifacts/1807f560b1a68bc0a063125a1544a1fbc7a857eb0ffdbc30389bd4cfee3a6b15.tar.gz"
+      ],
+      "source_archives": [
+        {
+          "path": "runtime/kaggle_artifacts/1807f560b1a68bc0a063125a1544a1fbc7a857eb0ffdbc30389bd4cfee3a6b15.tar.gz",
+          "bytes": 17667986,
+          "sha256": "1807f560b1a68bc0a063125a1544a1fbc7a857eb0ffdbc30389bd4cfee3a6b15",
+          "capability_scan": "clear"
+        }
+      ]
+    },
+    {
+      "branch": "codex/kitchen-attn-matrix-20261025-2b910fa7",
+      "commit": "391274244d9ca7083bf40c25586317c494e76bcf",
+      "locations": [
+        "local",
+        "remote"
+      ],
+      "archive_tag": "archive/20261026/codex/kitchen-attn-matrix-20261025-2b910fa7",
+      "unique_commit_count": 1,
+      "changed_paths": [
+        "runtime/kaggle_artifacts/2b910fa71cea33996b988c1cbdfa0e9798f41392c10c0f39c70c4dffd33697ac.tar.gz"
+      ],
+      "source_archives": [
+        {
+          "path": "runtime/kaggle_artifacts/2b910fa71cea33996b988c1cbdfa0e9798f41392c10c0f39c70c4dffd33697ac.tar.gz",
+          "bytes": 5031814,
+          "sha256": "2b910fa71cea33996b988c1cbdfa0e9798f41392c10c0f39c70c4dffd33697ac",
+          "capability_scan": "clear"
+        }
+      ]
+    },
+    {
+      "branch": "codex/kitchen-attn-matrix-20261025-3e9947c0",
+      "commit": "f8fffbfd0e3cff2138e1b2ebd4cae02c248d969f",
+      "locations": [
+        "local"
+      ],
+      "archive_tag": "archive/20261026/codex/kitchen-attn-matrix-20261025-3e9947c0",
+      "unique_commit_count": 1,
+      "changed_paths": [
+        "runtime/kaggle_artifacts/3e9947c02cf3452fccc90297c3018d6d37cf8a6e186b85a0d88759e79b985273.tar.gz"
+      ],
+      "source_archives": [
+        {
+          "path": "runtime/kaggle_artifacts/3e9947c02cf3452fccc90297c3018d6d37cf8a6e186b85a0d88759e79b985273.tar.gz",
+          "bytes": 17669172,
+          "sha256": "3e9947c02cf3452fccc90297c3018d6d37cf8a6e186b85a0d88759e79b985273",
+          "capability_scan": "clear"
+        }
+      ]
+    },
+    {
+      "branch": "codex/kitchen-attn-matrix-20261025-47bde77b",
+      "commit": "827a866fa90c93827f5755cd918a34f61deacab7",
+      "locations": [
+        "local"
+      ],
+      "archive_tag": "archive/20261026/codex/kitchen-attn-matrix-20261025-47bde77b",
+      "unique_commit_count": 1,
+      "changed_paths": [
+        "runtime/kaggle_artifacts/47bde77b0cbb51b2389ca4c56a7f84cc33615d7bd81794a34ab0a5a15590749d.tar.gz"
+      ],
+      "source_archives": [
+        {
+          "path": "runtime/kaggle_artifacts/47bde77b0cbb51b2389ca4c56a7f84cc33615d7bd81794a34ab0a5a15590749d.tar.gz",
+          "bytes": 17697937,
+          "sha256": "47bde77b0cbb51b2389ca4c56a7f84cc33615d7bd81794a34ab0a5a15590749d",
+          "capability_scan": "clear"
+        }
+      ]
+    },
+    {
+      "branch": "codex/kitchen-attn-matrix-20261025-6c0c34b3",
+      "commit": "0f1a16615541d05dcf12aaa67d3db5cd000c5f9b",
+      "locations": [
+        "local",
+        "remote"
+      ],
+      "archive_tag": "archive/20261026/codex/kitchen-attn-matrix-20261025-6c0c34b3",
+      "unique_commit_count": 1,
+      "changed_paths": [
+        "runtime/kaggle_artifacts/6c0c34b35f228619e4869e85cec55fd04547e3f152d1e9d475129b52d8c50578.tar.gz"
+      ],
+      "source_archives": [
+        {
+          "path": "runtime/kaggle_artifacts/6c0c34b35f228619e4869e85cec55fd04547e3f152d1e9d475129b52d8c50578.tar.gz",
+          "bytes": 17681219,
+          "sha256": "6c0c34b35f228619e4869e85cec55fd04547e3f152d1e9d475129b52d8c50578",
+          "capability_scan": "clear"
+        }
+      ]
+    },
+    {
+      "branch": "codex/kitchen-attn-matrix-20261025-e1ad3194",
+      "commit": "030c511bcb4b1b803d74fa931fa566f0216e9879",
+      "locations": [
+        "local",
+        "remote"
+      ],
+      "archive_tag": "archive/20261026/codex/kitchen-attn-matrix-20261025-e1ad3194",
+      "unique_commit_count": 1,
+      "changed_paths": [
+        "runtime/kaggle_artifacts/e1ad3194e8c86b602ef75f1cc008464e1bea1d641f8304393bdc5bbffd53d523.tar.gz"
+      ],
+      "source_archives": [
+        {
+          "path": "runtime/kaggle_artifacts/e1ad3194e8c86b602ef75f1cc008464e1bea1d641f8304393bdc5bbffd53d523.tar.gz",
+          "bytes": 17697434,
+          "sha256": "e1ad3194e8c86b602ef75f1cc008464e1bea1d641f8304393bdc5bbffd53d523",
+          "capability_scan": "clear"
+        }
+      ]
+    }
+  ],
+  "main_backup_tag": "archive/20261026/main-before-technique-guide",
+  "deletion_rule": "Publish and verify archive tags and synced main before deleting only the recorded other branch refs",
+  "preserved_local_untracked": "best.txt",
+  "archive_tags": {
+    "archive/20261026/codex/kitchen-attn-matrix-20261025-0bb97a8b": "99ae1f255c0f7c038d21a862d9a6f470d236e689",
+    "archive/20261026/codex/kitchen-attn-matrix-20261025-1807f560": "14320bf13228952e655e0257557c5c2378583c25",
+    "archive/20261026/codex/kitchen-attn-matrix-20261025-2b910fa7": "391274244d9ca7083bf40c25586317c494e76bcf",
+    "archive/20261026/codex/kitchen-attn-matrix-20261025-3e9947c0": "f8fffbfd0e3cff2138e1b2ebd4cae02c248d969f",
+    "archive/20261026/codex/kitchen-attn-matrix-20261025-47bde77b": "827a866fa90c93827f5755cd918a34f61deacab7",
+    "archive/20261026/codex/kitchen-attn-matrix-20261025-6c0c34b3": "0f1a16615541d05dcf12aaa67d3db5cd000c5f9b",
+    "archive/20261026/codex/kitchen-attn-matrix-20261025-e1ad3194": "030c511bcb4b1b803d74fa931fa566f0216e9879",
+    "archive/20261026/main-before-technique-guide": "7050e4b6b99d54db6aa2e0a13b265c95e98c21ac"
+  },
+  "local_bundle": "D:\\attention_eval\\documentation_techniques_20261026\\branches_before_cleanup.bundle",
+  "documentation": {
+    "techniques": 130,
+    "pages": 50,
+    "runtime_modules": 64,
+    "prior_audit_items": 52,
+    "source_records": 97
+  },
+  "validation": "57 focused CPU tests and complete document coverage/geometry/visual checks passed",
+  "existing_fixture_gap": "The preceding expanded CPU run had one absent historical Turbo/base header fixture; its failure log remains preserved",
+  "user_request": "Update complete optimization-technique documentation, sync remote, delete all other branches"
+}

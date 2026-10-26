@@ -2,6 +2,12 @@
 
 [Documentation index](../README.md)
 
+[TE causal prefix invariance and FP32 precision](TE_CAUSAL_PREFIX_PRECISION_20261026.md)
+records the current Kitchen default's numerical contract on both physical T4s.
+
+Latest attention results: [Kitchen dense SM75](KITCHEN_DENSE_SM75_20261025.md)
+and the [Kitchen / TileLang short and long T4 matrix](KITCHEN_ATTENTION_T4_MATRIX_20261025.md).
+
 Measurements are version-bound. Read each report's hardware, software, shapes,
 numerical reference, and timing boundary before comparing results.
 The [zero-mount GitHub/HF/direct-pip migration](KAGGLE_LIGHT_DELIVERY_20261022.md)

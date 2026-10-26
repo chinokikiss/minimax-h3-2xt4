@@ -1,0 +1,11 @@
+{
+  "path": "C:\\Users\\Administrator\\Documents\\project\\2xT4 minimax h3\\ComfyUI\\user\\default\\workflows\\video_minimax_h3_r2v_tp2_int8.json",
+  "before_sha256": "436f4dcf71ab4988ba48e4375f2e2ddfcbcc8f7d52c7bdc315f5031f906332a4",
+  "after_sha256": "a2832db4c5b1c56b33df6a5570a63497d70177f4d4e6243474dd7953865182fc",
+  "changes": [
+    "TE loader selection",
+    "TE operator metadata",
+    "TE wording in workflow note"
+  ],
+  "before_preserved": "D:\\attention_eval\\kitchen_dense_sm75_20261025_r5\\local_workflow_before_te_default.json"
+}

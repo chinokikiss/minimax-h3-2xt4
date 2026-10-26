@@ -20,7 +20,7 @@ from patches import h3_operator_policy as policy
 def control_gates():
     from patches.comfy_tp_runtime import RuntimeConfig
     from patches.windowed_tp import tp_specs
-    p=policy.H3OperatorPolicy();assert p.te_attention=='tilelang_group32' and p.dit_attention=='kitchen'
+    p=policy.H3OperatorPolicy();assert p.te_attention=='kitchen_causal' and p.dit_attention=='kitchen'
     config=RuntimeConfig('te','dit');assert config.operators==p
     assert replace(config,operators=replace(p,dit_attention='tilelang_scalar'))!=config
     for kwargs in ({'dit_attention':'bad'},{'te_attention':'bad'},{'row_linear_backend':'bad'}, {'scalar_score_workspace_mib':-1}):
@@ -51,7 +51,7 @@ def control_gates():
     import custom_nodes.minimax_h3_tp2 as node
     MiniMaxH3TP2Loader=node.MiniMaxH3TP2Loader
     inputs=MiniMaxH3TP2Loader.INPUT_TYPES()['optional']
-    assert inputs['te_attention'][1]['default']=='tilelang_group32'
+    assert inputs['te_attention'][1]['default']=='kitchen_causal'
     assert inputs['dit_attention'][1]['default']=='kitchen'
     from patches import h3_operator_dependencies as dependencies
     with patch.object(dependencies,'version',side_effect=lambda name:{'comfy-kitchen':'0.2.37','tilelang':'0.1.13'}[name]):
@@ -208,7 +208,7 @@ def t4_dispatch_gates():
     device=torch.device('cuda',torch.cuda.current_device());torch.manual_seed(812)
     q=torch.randn(1,4,65,128,device=device);k=torch.randn(1,1,65,128,device=device);v=torch.randn_like(k)
     mask=torch.ones(65,65,device=device,dtype=torch.bool).tril()
-    block=SimpleNamespace(operator_policy=policy.H3OperatorPolicy())
+    block=SimpleNamespace(operator_policy=policy.H3OperatorPolicy(te_attention='tilelang_group32'))
     y=policy.te_attention(block,q,k,v,mask)
     expected=masked_reference(dense.prepare(q,k,v),mask)
     torch.testing.assert_close(y,expected,rtol=.006,atol=.003)

@@ -1,1 +1,14 @@
 *.pdf binary
+
+# Keep newly archived evidence and vendored experiments byte-identical.
+# Their manifests and submitted source receipts hash raw bytes.
+/docs/data/kitchen*_20261025.json -text whitespace=cr-at-eol
+/docs/data/kitchen_dense_sm75_20261025/** -text whitespace=cr-at-eol
+/docs/data/te_causal_precision_20261026/** -text whitespace=cr-at-eol
+/docs/data/h3_optimization_*_20261026.json -text whitespace=cr-at-eol
+/docs/data/repository_sync_20261026.json -text whitespace=cr-at-eol
+/docs/guides/H3_OPTIMIZATION_TECHNIQUES.md -text whitespace=cr-at-eol
+/experiments/kitchen_attention/** -text whitespace=cr-at-eol
+/experiments/kitchen_attention/native/vendor/** -text -whitespace
+/patches/kitchen_te_attention.py -text
+/docs/pdf/*.py text eol=lf

@@ -1,0 +1,215 @@
+ptxas warning : Registers are spilled to local memory in function '_Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E6__halfLb0EmEv13AttentionArgs', 4 bytes spill stores, 4 bytes spill loads
+ptxas warning : Registers are spilled to local memory in function '_Z12h3_attentionILi128ELi64ELi128ELb0ELb0ELb0E6__halfLb0EmEv13AttentionArgs', 12 bytes spill stores, 12 bytes spill loads
+ptxas warning : Registers are spilled to local memory in function '_Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E6__halfLb0EjEv13AttentionArgs', 4 bytes spill stores, 4 bytes spill loads
+ptxas warning : Registers are spilled to local memory in function '_Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E6__halfLb1EmEv13AttentionArgs', 4 bytes spill stores, 4 bytes spill loads
+ptxas info    : 3 bytes gmem, 24 bytes cmem[4]
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 254 registers, used 1 barriers, 496 bytes cmem[0], 16 bytes cmem[2]
+ptxas info    : Compile time = 857.132 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi64ELi128ELb0ELb0ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi64ELi128ELb0ELb0ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 255 registers, used 1 barriers, 496 bytes cmem[0], 16 bytes cmem[2]
+ptxas info    : Compile time = 758.696 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb1E13__nv_bfloat16Lb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb1E13__nv_bfloat16Lb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 254 registers, used 1 barriers, 496 bytes cmem[0], 16 bytes cmem[2]
+ptxas info    : Compile time = 786.154 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi64ELi128ELb0ELb0ELb0E13__nv_bfloat16Lb1EjEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi64ELi128ELb0ELb0ELb0E13__nv_bfloat16Lb1EjEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 254 registers, used 1 barriers, 496 bytes cmem[0], 16 bytes cmem[2]
+ptxas info    : Compile time = 772.293 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E13__nv_bfloat16Lb1EjEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E13__nv_bfloat16Lb1EjEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 253 registers, used 1 barriers, 496 bytes cmem[0], 16 bytes cmem[2]
+ptxas info    : Compile time = 729.400 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E13__nv_bfloat16Lb0EjEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E13__nv_bfloat16Lb0EjEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 254 registers, used 1 barriers, 496 bytes cmem[0], 16 bytes cmem[2]
+ptxas info    : Compile time = 729.977 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi64ELi128ELb0ELb0ELb0E13__nv_bfloat16Lb1EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi64ELi128ELb0ELb0ELb0E13__nv_bfloat16Lb1EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 255 registers, used 1 barriers, 496 bytes cmem[0], 16 bytes cmem[2]
+ptxas info    : Compile time = 781.357 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E13__nv_bfloat16Lb1EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E13__nv_bfloat16Lb1EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 254 registers, used 1 barriers, 496 bytes cmem[0], 16 bytes cmem[2]
+ptxas info    : Compile time = 732.492 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi128ELi64ELb0ELb0ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi128ELi64ELb0ELb0ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 237 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 431.714 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi64ELi64ELb0ELb0ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi64ELi64ELb0ELb0ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 248 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 435.934 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi128ELi64ELb0ELb0ELb0E13__nv_bfloat16Lb0EjEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi128ELi64ELb0ELb0ELb0E13__nv_bfloat16Lb0EjEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 238 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 424.583 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi64ELi64ELb1ELb0ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi64ELi64ELb1ELb0ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 207 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 216.586 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi64ELi64ELb1ELb1ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi64ELi64ELb1ELb1ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 206 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 221.414 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E6__halfLb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E6__halfLb0EmEv13AttentionArgs
+    8 bytes stack frame, 4 bytes spill stores, 4 bytes spill loads
+ptxas info    : Used 255 registers, used 1 barriers, 8 bytes cumulative stack size, 496 bytes cmem[0], 16 bytes cmem[2]
+ptxas info    : Compile time = 801.419 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi64ELi128ELb0ELb0ELb0E6__halfLb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi64ELi128ELb0ELb0ELb0E6__halfLb0EmEv13AttentionArgs
+    16 bytes stack frame, 12 bytes spill stores, 12 bytes spill loads
+ptxas info    : Used 255 registers, used 1 barriers, 16 bytes cumulative stack size, 496 bytes cmem[0], 16 bytes cmem[2]
+ptxas info    : Compile time = 859.287 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb1E6__halfLb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb1E6__halfLb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 255 registers, used 1 barriers, 496 bytes cmem[0], 16 bytes cmem[2]
+ptxas info    : Compile time = 830.546 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi64ELi128ELb0ELb0ELb0E6__halfLb1EjEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi64ELi128ELb0ELb0ELb0E6__halfLb1EjEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 254 registers, used 1 barriers, 496 bytes cmem[0], 16 bytes cmem[2]
+ptxas info    : Compile time = 682.282 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E6__halfLb1EjEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E6__halfLb1EjEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 255 registers, used 1 barriers, 496 bytes cmem[0], 16 bytes cmem[2]
+ptxas info    : Compile time = 826.221 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E6__halfLb0EjEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E6__halfLb0EjEv13AttentionArgs
+    8 bytes stack frame, 4 bytes spill stores, 4 bytes spill loads
+ptxas info    : Used 255 registers, used 1 barriers, 8 bytes cumulative stack size, 496 bytes cmem[0], 16 bytes cmem[2]
+ptxas info    : Compile time = 831.322 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi64ELi128ELb0ELb0ELb0E6__halfLb1EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi64ELi128ELb0ELb0ELb0E6__halfLb1EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 255 registers, used 1 barriers, 496 bytes cmem[0], 16 bytes cmem[2]
+ptxas info    : Compile time = 872.379 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E6__halfLb1EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi128ELi128ELb0ELb0ELb0E6__halfLb1EmEv13AttentionArgs
+    8 bytes stack frame, 4 bytes spill stores, 4 bytes spill loads
+ptxas info    : Used 255 registers, used 1 barriers, 8 bytes cumulative stack size, 496 bytes cmem[0], 16 bytes cmem[2]
+ptxas info    : Compile time = 823.519 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi128ELi64ELb0ELb0ELb0E6__halfLb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi128ELi64ELb0ELb0ELb0E6__halfLb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 224 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 344.137 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi64ELi64ELb0ELb0ELb0E6__halfLb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi64ELi64ELb0ELb0ELb0E6__halfLb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 202 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 359.520 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi128ELi64ELb0ELb0ELb0E6__halfLb0EjEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi128ELi64ELb0ELb0ELb0E6__halfLb0EjEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 193 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 351.147 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi64ELi64ELb1ELb0ELb0E6__halfLb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi64ELi64ELb1ELb0ELb0E6__halfLb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 207 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 167.720 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi128ELi64ELi64ELb1ELb1ELb0E6__halfLb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi128ELi64ELi64ELb1ELb1ELb0E6__halfLb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 206 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 169.922 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi64ELi128ELi64ELb0ELb0ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi64ELi128ELi64ELb0ELb0ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 255 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 466.970 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi64ELi64ELi64ELb0ELb0ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi64ELi64ELi64ELb0ELb0ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 241 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 478.056 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi64ELi128ELi64ELb0ELb0ELb0E13__nv_bfloat16Lb0EjEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi64ELi128ELi64ELb0ELb0ELb0E13__nv_bfloat16Lb0EjEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 254 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 471.278 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi64ELi64ELi64ELb1ELb0ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi64ELi64ELi64ELb1ELb0ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 254 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 263.695 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi64ELi64ELi64ELb1ELb1ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi64ELi64ELi64ELb1ELb1ELb0E13__nv_bfloat16Lb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 254 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 267.017 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi64ELi128ELi64ELb0ELb0ELb0E6__halfLb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi64ELi128ELi64ELb0ELb0ELb0E6__halfLb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 255 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 391.124 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi64ELi64ELi64ELb0ELb0ELb0E6__halfLb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi64ELi64ELi64ELb0ELb0ELb0E6__halfLb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 192 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 381.236 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi64ELi128ELi64ELb0ELb0ELb0E6__halfLb0EjEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi64ELi128ELi64ELb0ELb0ELb0E6__halfLb0EjEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 187 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 416.733 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi64ELi64ELi64ELb1ELb0ELb0E6__halfLb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi64ELi64ELi64ELb1ELb0ELb0E6__halfLb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 254 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 201.867 ms
+ptxas info    : Compiling entry function '_Z12h3_attentionILi64ELi64ELi64ELb1ELb1ELb0E6__halfLb0EmEv13AttentionArgs' for 'sm_75'
+ptxas info    : Function properties for _Z12h3_attentionILi64ELi64ELi64ELb1ELb1ELb0E6__halfLb0EmEv13AttentionArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 254 registers, used 1 barriers, 496 bytes cmem[0], 4 bytes cmem[2]
+ptxas info    : Compile time = 205.953 ms
+ptxas info    : Compiling entry function '_Z17h3_compact_kernelPKiPiS1_i' for 'sm_75'
+ptxas info    : Function properties for _Z17h3_compact_kernelPKiPiS1_i
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 22 registers, used 0 barriers, 380 bytes cmem[0]
+ptxas info    : Compile time = 9.558 ms
+ptxas info    : Compiling entry function '_Z17h3_pool_attentionILi128E13__nv_bfloat16Ev8PoolArgs' for 'sm_75'
+ptxas info    : Function properties for _Z17h3_pool_attentionILi128E13__nv_bfloat16Ev8PoolArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 64 registers, used 0 barriers, 22208 bytes smem, 488 bytes cmem[0]
+ptxas info    : Compile time = 129.878 ms
+ptxas info    : Compiling entry function '_Z17h3_pool_attentionILi128E6__halfEv8PoolArgs' for 'sm_75'
+ptxas info    : Function properties for _Z17h3_pool_attentionILi128E6__halfEv8PoolArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 72 registers, used 0 barriers, 22208 bytes smem, 488 bytes cmem[0]
+ptxas info    : Compile time = 147.086 ms
+ptxas info    : Compiling entry function '_Z17h3_pool_attentionILi64E13__nv_bfloat16Ev8PoolArgs' for 'sm_75'
+ptxas info    : Function properties for _Z17h3_pool_attentionILi64E13__nv_bfloat16Ev8PoolArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 64 registers, used 0 barriers, 11968 bytes smem, 488 bytes cmem[0]
+ptxas info    : Compile time = 114.355 ms
+ptxas info    : Compiling entry function '_Z17h3_pool_attentionILi64E6__halfEv8PoolArgs' for 'sm_75'
+ptxas info    : Function properties for _Z17h3_pool_attentionILi64E6__halfEv8PoolArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 72 registers, used 0 barriers, 11968 bytes smem, 488 bytes cmem[0]
+ptxas info    : Compile time = 131.526 ms
+ptxas info    : Compiling entry function '_Z18h3_pool_prepare_kv8PoolArgs' for 'sm_75'
+ptxas info    : Function properties for _Z18h3_pool_prepare_kv8PoolArgs
+    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads
+ptxas info    : Used 48 registers, used 0 barriers, 488 bytes cmem[0]
+ptxas info    : Compile time = 29.592 ms

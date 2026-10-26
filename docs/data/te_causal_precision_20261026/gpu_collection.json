@@ -1,0 +1,13 @@
+{
+  "status": "collected",
+  "final_collection_operations": 1,
+  "status_or_live_log_polling": false,
+  "returncode": 0,
+  "completed_utc": "2026-10-26T02:20:13.946327+00:00",
+  "requested_file": "000_te_causal_precision.json",
+  "self_contained_source_binding": true,
+  "audit_status": "completed",
+  "raw_sha256": "ab90a6de33e99e69b1246a4960fa2f80ff06145def3c2c1de41cf42ee1a31320",
+  "source_binding_verified": true,
+  "ranks": 2
+}

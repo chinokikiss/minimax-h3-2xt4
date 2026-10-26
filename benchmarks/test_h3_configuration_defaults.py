@@ -41,7 +41,7 @@ class ConfigurationDefaults(unittest.TestCase):
             self.assertNotIn(name, inputs)
         self.assertNotIn('tilelang_exact', inputs['column_linear_backend'][0])
         self.assertEqual(inputs['dit_attention'][0], ['kitchen', 'tilelang_drop', 'tilelang_scalar', 'tilelang_dense', 'native'])
-        self.assertEqual(inputs['te_attention'][0], ['tilelang_group32', 'native'])
+        self.assertEqual(inputs['te_attention'][0], ['kitchen_causal', 'tilelang_group32', 'native'])
 
     def test_offline_bundle_keeps_adapters_and_online_is_explicit(self):
         with tempfile.TemporaryDirectory() as folder:

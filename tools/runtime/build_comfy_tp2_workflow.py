@@ -37,7 +37,7 @@ def main():
         size=[640,180], properties={'Node name for S&R':'MiniMaxH3TP2Loader','h3_configuration_version':2},
         widgets_values=['D:/minimaxH3/qwen3vl_32b_minimax_h3_int8_convrot.safetensors',
             'D:/minimaxH3/MiniMax_H3_Ref2VA_pruned_int8_convrot.safetensors',6.,3.,
-            False,4.,True,'tilelang_group32','kitchen','tilelang_scaled_fp16',96,True,'fused_stored','offline',
+            False,4.,True,'kitchen_causal','kitchen','tilelang_scaled_fp16',96,True,'fused_stored','offline',
             'fp16',6,0,0,2.,True,True,9.,1500,'',True,'cuda_int8_tilelang'])
     loader.pop('widgets_values_named',None)
     loader['outputs'] += [dict(name='CLIP',type='CLIP',links=clip_links),
@@ -73,7 +73,7 @@ def main():
     workflow.setdefault('extra',{})['minimax_tp2_note'] = (
         'Separate INT8 TP2 variant. Requires two physical CUDA GPUs and linked custom node. '
         'Default tensor flow: FP16-fix, TE/DiT divisor 64; Audio VAE remains FP32. '
-        'TE: TileLang Group32 dense; DiT: Kitchen INT8 by default, optional TileLang drop/scalar/dense; '
+        'TE: Kitchen causal INT8; DiT: Kitchen INT8 by default, optional TileLang drop/scalar/dense; '
         'Video attention: Kitchen INT8. FP32 fused_stored SwiGLU/ConvRot quantization for TE down/DiT FC2; '
         'scaled FP16 row SUM and fused FP32 dequantization on SM75. Approximate transport. '
         'Direct INT8 + TileLang columns on aligned SM75 DiT shapes. '
@@ -86,7 +86,7 @@ def main():
         'H3 VAE loaders read no component payload until used: encoders for actual references, decoders for outputs; '
         'idle residency preloads only graph-required reference encoders. '
         'Component timings do not establish an integrated pipeline speedup.')
-    workflow['extra']['minimax_h3_operators']={'te_attention':'tilelang_group32','dit_attention':'kitchen',
+    workflow['extra']['minimax_h3_operators']={'te_attention':'kitchen_causal','dit_attention':'kitchen',
         'video_attention':'kitchen','row_linear_backend':'tilelang_scaled_fp16',
         'fc2_quantizer':'fused_stored','tensor_flow':'fp16','residual_exponent':6,
         'column_linear_backend':'cuda_int8_tilelang','lora_mode':'offline','lora_selective_qkv_b':True,

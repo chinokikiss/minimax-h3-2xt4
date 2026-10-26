@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "unit_tests": 12,
+  "local_smoke_cases": 6,
+  "smoke_scope": "SM120 API smoke, not T4 evidence",
+  "production_policy_and_adapter_unchanged": true,
+  "local_snapshot_unchanged": true,
+  "source_hashes": {
+    "patches/h3_operator_policy.py": "2b6929e8ae5974a4d4e6798d6edd1050f7425fd21be7ba46c10f6c936f29c631",
+    "patches/kitchen_te_attention.py": "b6ca5a8b046dbbaf1026b30a1cd48516433cfc81d849efb562e00dffe40c93c5",
+    "runtime/local_conda.json": "e3a07afb8cb79e6f45c9c0118debc4bd4008c022d2652e0891273dac2db07aa3"
+  },
+  "comfy_commit": "d49e888586dd8ae012c0667b33466b815fee07f7"
+}

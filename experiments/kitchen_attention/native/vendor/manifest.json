@@ -1,0 +1,16 @@
+{
+  "version": "0.2.37",
+  "archive_sha256": "94d06941b4bb8e523008d29157a9c0f0522cd3e37472ad651fc13ffc6a55669c",
+  "origin": "Previously retained official v0.2.37 archive; no upstream fetch",
+  "files": {
+    "attn_utils.cuh": "a39d82563c569aec4d9828b85cfc1697c201611912559f36826e8a7d91125ad1",
+    "cp_async.cuh": "689f1ac8bcc7bbf223a39bf7e296388dd7c660f613ea9b16d71438d459cb3502",
+    "math.cuh": "9dd9cbd33b628106e5ba0336f2279f04652826165192f5004cd981eba5e951a2",
+    "mma.cuh": "1335e47299c6e178a4a0b0b2ba76db76ce4730e6ac347206e5e86f14681eeff0",
+    "numeric_conversion.cuh": "14cbcb4345c039d24f967a2bbf6ebc8420519adee9798f96f4dfb397ddb2adf6",
+    "permuted_smem.cuh": "cd7c61a559714adcde2a3ed00c163a463a1dda876e9e603a3b31bc3f53d06278",
+    "qk_int_sv_i8_cuda.cuh": "e18bc3658830537ef5df72b72db3fa38cb3b9ab590e46ceec120280f13496a21",
+    "LICENSE": "457609350489eb6ea2982cbd2d19695e54741dc9778c9140f89e7b4e5e64ba58",
+    "NOTICE": "27a6b994dc3c6d5ff4ac589eb633e09e4627b0efd276b89dd9ea87f561991644"
+  }
+}

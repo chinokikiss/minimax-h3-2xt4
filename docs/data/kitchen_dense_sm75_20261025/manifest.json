@@ -1,0 +1,117 @@
+{
+  "scope": "Final synthetic T4 operator evidence; no activations or credentials",
+  "files": {
+    "cpu_operator_qualification.json": {
+      "sha256": "fb498e892e8bff93bda7b3fed23e260536e56d260a30ebdcd1e4bcb8fb8cb790",
+      "bytes": 3455
+    },
+    "cpu_setup_receipt.json": {
+      "sha256": "aa4def37c429d3af944c4e77f4bcb60cd1ab794676674fa204fcd85474f2a2ae",
+      "bytes": 71343
+    },
+    "dense_build_receipt.json": {
+      "sha256": "5ac8a62457682e7e549b23db7ecabb82190c8bafb67c3c5553bb7ae8d85c5854",
+      "bytes": 23464
+    },
+    "dense_compile.log": {
+      "sha256": "a0bc73bb0b3c7995092041439a4ab3deb6bc109d0c63cf6427fdfdfb83678fc0",
+      "bytes": 19435
+    },
+    "dense_cpu_collection.json": {
+      "sha256": "4c5cde845944968f547a1960bf1526e6d6d25839e0fa79be776226a59bdba312",
+      "bytes": 598
+    },
+    "dense_cpu_submission.json": {
+      "sha256": "912e7a74f44c14e7ddaa80b95689a2698eb57ffbd1f2122d3a4b6b8f2b54a25b",
+      "bytes": 2580
+    },
+    "dense_gpu_collection.json": {
+      "sha256": "d8915a21c1cf94e05ab99b3eb9d71f0ddc86c1f953c6c2e755d8f7a7b72e9b23",
+      "bytes": 597
+    },
+    "dense_gpu_submission.json": {
+      "sha256": "1dcd35786f33cd0bf07590ee88d1a8ff36babbb0bfa5ffb5075ec089d3203dc9",
+      "bytes": 2714
+    },
+    "dense_raw.json": {
+      "sha256": "c0ebef389ce2ceba88f7f58bbf3e874c5791ced891215613c7098a35e7f874cd",
+      "bytes": 177239
+    },
+    "dense_source_publication.json": {
+      "sha256": "db359d59eddcdd7707f76428de2e2948e786ace692a07394690a2ac7eb7f17bd",
+      "bytes": 1513
+    },
+    "dense_summary.json": {
+      "sha256": "f828f4b664cc1c90ed2acfee43491a56e874964b42245804a0b60890b834b579",
+      "bytes": 44003
+    },
+    "final_local_operator_controls.json": {
+      "sha256": "2990c093aa0332ec2650e06ed2823cffca0bc4a4a73d860f6c34ccbbf88873a1",
+      "bytes": 582
+    },
+    "final_local_preserved.log": {
+      "sha256": "ff5f2643eb076cb14f4389f2d9fd6e6ce20771be6ded7e058f39d90d36316007",
+      "bytes": 20970
+    },
+    "final_local_validation.json": {
+      "sha256": "ae2856ba30dee02a011cdeddd1ef70d83a1df4d121b09be5410d87d772a084f7",
+      "bytes": 1119
+    },
+    "graph_collection.json": {
+      "sha256": "499308e35f74b1c3ae44417bcd27e37d08d53fd0160daa17668fc0cc5f7891b2",
+      "bytes": 298
+    },
+    "graph_download_manifest.json": {
+      "sha256": "22c4ea6ae362d8a0b16d00d82ff5c0b6a35ff0557e76833c9603791dd8845baf",
+      "bytes": 3077
+    },
+    "graph_evidence_verification.json": {
+      "sha256": "0607e39c501b74c46323bdf8290137668ce9c66ebe31c05cbafaa86d797d5981",
+      "bytes": 785
+    },
+    "graph_execution_supervision.json": {
+      "sha256": "48f5c99289248fc862ed0b541411d5416878ab4dc84c354f07b8bd3278746067",
+      "bytes": 206
+    },
+    "graph_raw.json": {
+      "sha256": "661b2d62fb236cd337126b9bd9448377ca704be0226bce756b3cfc58b17a9ecd",
+      "bytes": 70428
+    },
+    "graph_setup_receipt.json": {
+      "sha256": "18e099b97b7432ce35f0a44b512cbd4af6f75bfd79be9f02579a1a2a66cc90cc",
+      "bytes": 72980
+    },
+    "graph_source_graph.py.txt": {
+      "sha256": "8f6855188b91c28bb08eae058bfcffc4ec1c5825df5a4b8ca1056d19ac4031f1",
+      "bytes": 2680
+    },
+    "graph_source_graph_bench.py.txt": {
+      "sha256": "fbe83f671b301bfe2986f9e6dbc5e7ea605f692634996f54217938ded3dbb71b",
+      "bytes": 6693
+    },
+    "graph_source_hashes.json": {
+      "sha256": "ab1ab3b0bd99d59b48ebef89cb13a038225a6fb6e7ddde948b29603e7fce4432",
+      "bytes": 275
+    },
+    "graph_source_kitchen_te_attention.py.txt": {
+      "sha256": "b6ca5a8b046dbbaf1026b30a1cd48516433cfc81d849efb562e00dffe40c93c5",
+      "bytes": 5649
+    },
+    "graph_submission.json": {
+      "sha256": "d8f3e02c327d6ddb60e97fc24b3e80ec79e87c9c417da79bf179b87205e34ccd",
+      "bytes": 3257
+    },
+    "graph_summary.json": {
+      "sha256": "b5f02de8c9e41a259099dff6223bab91fe4a81882350da1fa50044deed04fb36",
+      "bytes": 23574
+    },
+    "local_workflow_before_te_default.json": {
+      "sha256": "436f4dcf71ab4988ba48e4375f2e2ddfcbcc8f7d52c7bdc315f5031f906332a4",
+      "bytes": 46698
+    },
+    "local_workflow_update.json": {
+      "sha256": "063b3a27e4e178cba64c0dfc5bc2fef76c504b786c5020eb880c2665747833af",
+      "bytes": 557
+    }
+  }
+}

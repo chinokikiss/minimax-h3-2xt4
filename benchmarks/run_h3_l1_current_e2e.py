@@ -172,7 +172,7 @@ def main():
         assert len(state['sampler_steps'])==config['steps'] and len(state['denoiser_outputs'])==config['steps']
         for rank in state['ranks']:
             bench=rank['benchmark'];calls=bench['executed_backends']
-            assert bench['layouts'] and calls.get('TE/tilelang_group32')
+            assert bench['layouts'] and calls.get('TE/kitchen_causal')
             assert any('tilelang_s' in k and v for k,v in calls.items())
             assert calls.get('current/fused_swiglu_quant') and calls.get('current/scaled_fp16_epilogue')
             assert not any(v for k,v in calls.items() if k.startswith('LoRA/'))

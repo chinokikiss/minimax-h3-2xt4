@@ -1,0 +1,72 @@
+{
+  "status": "cpu_ready",
+  "vendor": {
+    "version": "0.2.37",
+    "archive_sha256": "94d06941b4bb8e523008d29157a9c0f0522cd3e37472ad651fc13ffc6a55669c",
+    "origin": "Previously retained official v0.2.37 archive; no upstream fetch",
+    "files": {
+      "attn_utils.cuh": "a39d82563c569aec4d9828b85cfc1697c201611912559f36826e8a7d91125ad1",
+      "cp_async.cuh": "689f1ac8bcc7bbf223a39bf7e296388dd7c660f613ea9b16d71438d459cb3502",
+      "math.cuh": "9dd9cbd33b628106e5ba0336f2279f04652826165192f5004cd981eba5e951a2",
+      "mma.cuh": "1335e47299c6e178a4a0b0b2ba76db76ce4730e6ac347206e5e86f14681eeff0",
+      "numeric_conversion.cuh": "14cbcb4345c039d24f967a2bbf6ebc8420519adee9798f96f4dfb397ddb2adf6",
+      "permuted_smem.cuh": "cd7c61a559714adcde2a3ed00c163a463a1dda876e9e603a3b31bc3f53d06278",
+      "qk_int_sv_i8_cuda.cuh": "e18bc3658830537ef5df72b72db3fa38cb3b9ab590e46ceec120280f13496a21",
+      "LICENSE": "457609350489eb6ea2982cbd2d19695e54741dc9778c9140f89e7b4e5e64ba58",
+      "NOTICE": "27a6b994dc3c6d5ff4ac589eb633e09e4627b0efd276b89dd9ea87f561991644"
+    }
+  },
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "comfy-kitchen": "0.2.37",
+    "tilelang": "0.1.13"
+  },
+  "tests": {
+    "run": 21,
+    "errors": 0,
+    "failures": 0,
+    "passed": true
+  },
+  "cuda_extension_loadable_on_cpu": true,
+  "target_signatures": {
+    "group32_prepare": "(q, k, v, query_tile=32, mean_mode='eager')",
+    "group32_execute": "(p, r=None, causal=False, query_offset=0, cache='group', layout='BHND', output_dtype=torch.float16, finite_output=False, threads=128, warp_policy='square', row_scores=False, staged_scales=False)",
+    "sparse_execute": "(p, r=None, causal=False, query_offset=0, cache='group', layout='BHND', output_dtype=torch.float16, finite_output=False)",
+    "split_execute": "(p, r=None, *, causal=False, query_offset=0, cache='group', output_dtype=torch.float16, threads=128, warp_policy='square', pv_int8=False, compact_drop=False, value=None, scales=None, lengths=None, restore_unit=False, running_max=False, centroids=None)"
+  },
+  "cpu_build_tool_archives": [
+    {
+      "name": "cuda_nvcc",
+      "version": "12.8.93",
+      "url": "https://developer.download.nvidia.com/compute/cuda/redist/cuda_nvcc/linux-x86_64/cuda_nvcc-linux-x86_64-12.8.93-archive.tar.xz",
+      "sha256": "9961b3484b6b71314063709a4f9529654f96782ad39e72bf1e00f070db8210d3",
+      "bytes": 79015464
+    },
+    {
+      "name": "cuda_cudart",
+      "version": "12.8.90",
+      "url": "https://developer.download.nvidia.com/compute/cuda/redist/cuda_cudart/linux-x86_64/cuda_cudart-linux-x86_64-12.8.90-archive.tar.xz",
+      "sha256": "8d566b5fe745c46842dc16945cf36686227536decd2302c372be86da37faca68",
+      "bytes": 1354240
+    },
+    {
+      "name": "cuda_cccl",
+      "version": "12.8.90",
+      "url": "https://developer.download.nvidia.com/compute/cuda/redist/cuda_cccl/linux-x86_64/cuda_cccl-linux-x86_64-12.8.90-archive.tar.xz",
+      "sha256": "0740e9e01e4f15e17c5ab8d68bba4f8ec0eb6b84edccba4ac45112d2d2174e4b",
+      "bytes": 928524
+    }
+  ],
+  "cpu_native_compile": {
+    "status": "passed",
+    "library_sha256": "36503ffa384b793000c0cca1b4ae66764acffe8fea811e649caf1950883a21cf",
+    "qualification": "Exact CUDA12.8.93 compiler and headers extracted for CPU build only; native packages unchanged"
+  },
+  "dense_promotion_tests": {
+    "run": 22,
+    "passed": true,
+    "errors": 0,
+    "failures": 0
+  },
+  "operator_control_gates": "passed"
+}
