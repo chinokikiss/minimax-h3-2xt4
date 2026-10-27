@@ -1,7 +1,7 @@
 {
   "kernel": "pamcks/h3-anime-ref2va-cpu-preflight-20261027",
   "submitted_utc": "2026-10-27T13:27:57.829669+00:00",
-  "status": "acceptance_uncertain",
+  "status": "retry_source_not_saved",
   "returncode": 1,
   "source_binding": {
     "mode": "cpu",
@@ -54,5 +54,5 @@
   "result_relative": "anime_inputs/input_qualification.json",
   "run_timeout_seconds": 900,
   "notebook_sha256": "ca9b1664817e8ec204dd49e8a6d8780bffb49fb08cf97bb894e994db696131cf",
-  "acceptance_reason": "CLI returned no successful acknowledgement; no automatic resubmission"
+  "acceptance_reason": "Saved source matched already-collected failed CPU version 2, not the mirror retry"
 }

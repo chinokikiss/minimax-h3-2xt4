@@ -1,6 +1,6 @@
 {
   "date": "2026-10-27",
-  "status": "reference_mirror_verified_cpu_retry_tls_acknowledgement_uncertain_gpu_not_submitted",
+  "status": "cpu_version_3_accepted_with_verified_local_inputs_gpu_not_submitted",
   "full_pipeline_authorized": true,
   "automatic_polling": false,
   "automatic_retry": false,
@@ -94,9 +94,9 @@
   "local_extra_cpu_tests": 12,
   "cpu_submission": {
     "kernel": "pamcks/h3-anime-ref2va-cpu-preflight-20261027",
-    "submitted_utc": "2026-10-27T13:27:57.829669+00:00",
-    "status": "acceptance_uncertain",
-    "returncode": 1,
+    "submitted_utc": "2026-10-27T13:59:57.786318+00:00",
+    "status": "accepted",
+    "returncode": 0,
     "source_binding": {
       "mode": "cpu",
       "publication": {
@@ -130,13 +130,15 @@
       "full_pipeline_authorized": true,
       "workload_contract": "anime_ref2va_8step",
       "private_auth": false,
-      "reference_delivery": "Immutable GitHub reference mirrors; mandatory original SHA256 verification",
+      "reference_delivery": "Private local reference bytes plus immutable GitHub mirrors; mandatory original SHA256 verification",
       "reference_mirror_urls": {
         "reference_shrine.png": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/225da31d025d510bb152683f53cf6f0a9843e0d2/bench_assets/public_reference_images/cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03.png"
       },
-      "staged_reference_files": [],
-      "reference_encoding": null,
-      "notebook_bytes": 12848,
+      "staged_reference_files": [
+        "reference_character.jpg"
+      ],
+      "reference_encoding": "base85",
+      "notebook_bytes": 409954,
       "reference_sha256": [
         "e5b1710572f2587f7927e65b9e5f8f742bc435ca388ae23a16880fa6bf542383",
         "cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03"
@@ -147,8 +149,10 @@
     "experiment_kind": "anime_e2e_cpu",
     "result_relative": "anime_inputs/input_qualification.json",
     "run_timeout_seconds": 900,
-    "notebook_sha256": "ca9b1664817e8ec204dd49e8a6d8780bffb49fb08cf97bb894e994db696131cf",
-    "acceptance_reason": "CLI returned no successful acknowledgement; no automatic resubmission"
+    "notebook_sha256": "4c465944e916aa4b5ff7447544609ce4eab8f1860aeea460176a760acb4afc29",
+    "version": 3,
+    "requested_kernel": "pamcks/h3-anime-ref2va-cpu-preflight-20261027",
+    "url": "https://www.kaggle.com/code/pamcks/h3-anime-ref2va-cpu-preflight-20261027"
   },
   "gpu_submission": null,
   "generation_result": null,
@@ -192,6 +196,33 @@
       "version": 2,
       "notebook_sha256": "6f46ac9f1d95c9ab8cdab0f69913f39ce33e1b394f95abcacae455f098f4b00d",
       "acceptance_reason": null
+    },
+    {
+      "attempt": "single_shrine_retry",
+      "status": "retry_source_not_saved",
+      "returncode": 1,
+      "submitted_utc": "2026-10-27T13:15:11.631332+00:00",
+      "version": null,
+      "notebook_sha256": "45d027cd6ce15bead3dfcd1651d765ea5df20e975f96d738f83d260c733ac539",
+      "acceptance_reason": "Saved source matched already-collected failed CPU version 2, not this retry"
+    },
+    {
+      "attempt": "mirror_retry",
+      "status": "retry_source_not_saved",
+      "returncode": 1,
+      "submitted_utc": "2026-10-27T13:27:57.829669+00:00",
+      "version": null,
+      "notebook_sha256": "ca9b1664817e8ec204dd49e8a6d8780bffb49fb08cf97bb894e994db696131cf",
+      "acceptance_reason": "Saved source matched already-collected failed CPU version 2, not the mirror retry"
+    },
+    {
+      "attempt": "cpu_v3_local_inputs",
+      "status": "accepted",
+      "returncode": 0,
+      "submitted_utc": "2026-10-27T13:59:57.786318+00:00",
+      "version": 3,
+      "notebook_sha256": "4c465944e916aa4b5ff7447544609ce4eab8f1860aeea460176a760acb4afc29",
+      "acceptance_reason": null
     }
   ],
   "cpu_v1_outcome": {
@@ -205,8 +236,8 @@
     ],
     "gpu_used": false
   },
-  "active_evidence_directory": "D:\\attention_eval\\h3_anime_e2e_20261027\\retry_cpu_v6",
-  "reference_delivery": "Mirror retry prepared; Kaggle SaveKernel TLS EOF before acknowledgement. Acceptance uncertain; no further requests.",
+  "active_evidence_directory": "D:\\attention_eval\\h3_anime_e2e_20261027\\retry_cpu_v7",
+  "reference_delivery": "Private exact character JPEG from user-supplied local file plus exact immutable GitHub shrine mirror; zero Dataset mounts",
   "cpu_v2_outcome": {
     "status": "runtime_passed_inputs_blocked",
     "runtime_tests_passed": 179,
@@ -292,7 +323,7 @@
     "notebook_sha256": "45d027cd6ce15bead3dfcd1651d765ea5df20e975f96d738f83d260c733ac539",
     "acceptance_reason": "Saved source matched already-collected failed CPU version 2, not this retry"
   },
-  "proposed_reference_delivery": "Zero Dataset mounts; immutable GitHub mirror for exact public shrine PNG; original public URL for character image",
+  "proposed_reference_delivery": "Private exact character JPEG from user-supplied local file plus exact immutable GitHub shrine mirror; zero Dataset mounts",
   "private_dataset_submission": {
     "dataset": "pamcks/h3-anime-reference-images-20261027",
     "private": true,
@@ -346,9 +377,44 @@
     "source": "Public Wikimedia original",
     "original_bytes_unchanged": true
   },
-  "latest_blocker": "Kaggle API TLS EOF / uncertain upload acceptance, after input-origin HTTP 429 was addressed",
-  "no_further_kaggle_requests": true,
+  "latest_blocker": null,
+  "no_further_kaggle_requests": false,
   "notebook_status_list_live_log_requests": 0,
   "dataset_cli_creation_attempts": 2,
-  "dataset_native_existence_check_note": "Each native datasets-create invocation performs its own existence check; no separate status or readiness polling was performed."
+  "dataset_native_existence_check_note": "Each native datasets-create invocation performs its own existence check; no separate status or readiness polling was performed.",
+  "original_image_origins_required": false,
+  "supplied_local_files": [
+    {
+      "supplied_path": "C:\\Users\\Administrator\\Pictures\\cb246f62-8fcd-47b3-b585-99ffe6313002.jpg",
+      "staged_file": "reference_character.jpg",
+      "bytes": 317018,
+      "sha256": "e5b1710572f2587f7927e65b9e5f8f742bc435ca388ae23a16880fa6bf542383",
+      "size": [
+        1280,
+        905
+      ],
+      "matches_original_contract": true
+    },
+    {
+      "supplied_path": "C:\\Users\\Administrator\\Pictures\\屏幕截图 2026-10-27 211852.png",
+      "staged_file": "reference_shrine.png",
+      "bytes": 7703256,
+      "sha256": "cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03",
+      "size": [
+        4096,
+        2048
+      ],
+      "matches_original_contract": true
+    }
+  ],
+  "pending": "CPU version 3 final qualification; no execution-status polling",
+  "previous_mirror_retry_source_identity": {
+    "source_requests": 1,
+    "scope": "Submission source identity only",
+    "returncode": 0,
+    "matches_retry": false,
+    "matches_cpu_version_2": true,
+    "requested_code_sha256": "726a61be0c26f36afcf2f78f62c040ac81d3c9fd583cd402cdfdae9368b98b8c",
+    "received_code_sha256": "70d6a3752ac3581b618c83547e090750d4eeab9a4f8431a149426c93e49b7913"
+  }
 }

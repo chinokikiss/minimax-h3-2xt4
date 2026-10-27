@@ -1,0 +1,24 @@
+[
+  {
+    "supplied_path": "C:\\Users\\Administrator\\Pictures\\cb246f62-8fcd-47b3-b585-99ffe6313002.jpg",
+    "staged_file": "reference_character.jpg",
+    "bytes": 317018,
+    "sha256": "e5b1710572f2587f7927e65b9e5f8f742bc435ca388ae23a16880fa6bf542383",
+    "size": [
+      1280,
+      905
+    ],
+    "matches_original_contract": true
+  },
+  {
+    "supplied_path": "C:\\Users\\Administrator\\Pictures\\屏幕截图 2026-10-27 211852.png",
+    "staged_file": "reference_shrine.png",
+    "bytes": 7703256,
+    "sha256": "cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03",
+    "size": [
+      4096,
+      2048
+    ],
+    "matches_original_contract": true
+  }
+]

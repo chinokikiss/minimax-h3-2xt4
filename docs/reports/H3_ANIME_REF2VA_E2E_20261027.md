@@ -1,13 +1,12 @@
 # Eight-step anime REF2VA E2E — 2026-10-27
 
-Status: the corrected Kaggle CPU preflight **version 2** at
+Status: Kaggle acknowledged the corrected CPU preflight as **version 3** at
 [H3 Anime REF2VA CPU Preflight](https://www.kaggle.com/code/pamcks/h3-anime-ref2va-cpu-preflight-20261027)
-passed environment, runtime and vendor checks, then failed reference
-authentication because Wikimedia returned **HTTP 429** for the original shrine
-image. Its final outputs were collected once. An exact immutable GitHub mirror
-now resolves that input-origin dependency. The replacement small notebook's
-submission hit a Kaggle API TLS EOF; acceptance is **unconfirmed**. Further
-Kaggle requests have stopped to avoid duplicate execution.
+after verifying both files supplied from the user's local Pictures directory.
+They match the original references byte-for-byte. The private notebook carries
+the 317,018-byte character JPEG and fetches the exact shrine PNG from the
+immutable GitHub mirror. Neither original image origin is contacted. Version 3
+has not yet had its final outputs collected; CPU qualification remains pending.
 **No GPU job has been submitted and no T4 generation result is claimed.**
 The GPU job requires the matching Linux setup, runtime checks and reference-image
 authentication to pass first. No notebook execution status/list/live-log endpoint
@@ -180,8 +179,34 @@ notebook-output mounts, no embedded image payload and no credentials. Its
 `SaveKernel` call returned `SSL: UNEXPECTED_EOF_WHILE_READING` before a version
 acknowledgement. **Acceptance is unconfirmed; no GPU job exists in our submission
 records.** The transport error also affects a small notebook, so large payloads
-alone do not explain all failed submissions. No additional source/status/output
-request has been made for this latest uncertain attempt.
+alone do not explain all failed submissions. Further requests were held at that
+point; the later user-authorized saved-source check is recorded below.
+
+### User-authorized local-input retry: accepted version 3
+
+The user supplied the character JPEG and a PNG named
+`屏幕截图 2026-10-27 211852.png`. Inspection confirms that the latter is the full
+4096×2048, 7,703,256-byte original PNG with the original SHA256; its filename
+does not indicate any pixel or encoding difference. Both supplied files were
+verified and copied into a new evidence directory without replacing historical
+attempts or changing the prompt/input contract.
+
+One saved-source retrieval resolved the previous mirror retry's uncertainty:
+the saved code still matched the already-collected failed version 2. That retry
+was not recorded as accepted. The new submission was then acknowledged as
+**version 3**. It combines private inline delivery of the small JPEG with the
+immutable GitHub PNG mirror, keeping zero Dataset/output mounts and avoiding
+both original image sites. Each file still undergoes the original byte count,
+dimension and SHA256 checks.
+
+The active evidence directory is
+`D:/attention_eval/h3_anime_e2e_20261027/retry_cpu_v7/`. Its notebook includes
+reference image bytes and remains private; only metadata, hashes and diagnostic
+receipts are archived publicly. Local syntax, content-hash, delivery-binding and
+no-GPU/no-Dataset checks passed, alongside three reference-delivery tests.
+The frozen runtime capsule, package pins and generation settings are unchanged.
+GPU construction inherits both delivery paths from a successful CPU receipt.
+No notebook status/list/live-log polling is configured.
 
 ## GPU execution and acceptance
 

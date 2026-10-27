@@ -98,10 +98,10 @@ os.chdir(src);os.execve(sys.executable,argv,env)
         staged_names=qualified_staging
     if staged_names-{row['file'] for row in references}:raise ValueError('Unknown reference filename')
     staged=[row for row in references if row['file'] in staged_names]
+    if staged_names & set(mirrors):raise ValueError('A reference must have exactly one delivery method')
     if mirrors:
-        if staged:raise ValueError('Use one reference delivery method per notebook')
         code=mirror_reference_prefix([r for r in references if r['file'] in mirrors],mirrors,destination)+code
-    elif staged:
+    if staged:
         code=private_reference_prefix(staged,plan_dir.parent,destination)+code
     ast.parse(code)
     notebook['cells'][0]['source'] = code.splitlines(keepends=True)
@@ -115,7 +115,8 @@ os.chdir(src);os.execve(sys.executable,argv,env)
     meta_path.write_text(json.dumps(meta, indent=2))
     binding = json.loads((job/'source_binding.json').read_text())
     binding.update(full_pipeline_authorized=True, workload_contract='anime_ref2va_8step', private_auth=False,
-                   reference_delivery=('Immutable GitHub reference mirrors; mandatory original SHA256 verification' if mirrors
+                   reference_delivery=('Private local reference bytes plus immutable GitHub mirrors; mandatory original SHA256 verification' if mirrors and staged
+                       else 'Immutable GitHub reference mirrors; mandatory original SHA256 verification' if mirrors
                        else 'Selected original bytes in private notebook; public URLs for remaining images' if staged
                        else 'Direct public URLs, mandatory original SHA256 verification'),
                    reference_mirror_urls=mirrors,
