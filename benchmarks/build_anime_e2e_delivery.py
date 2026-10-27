@@ -31,11 +31,14 @@ def main():
     suffixes = {'.py', '.cu', '.cuh', '.json', '.js'}
     paths = []
     for name in ('patches', 'custom_nodes/minimax_h3_tp2', 'benchmarks', 'tools'):
-        paths.extend(p for p in (ROOT/name).rglob('*') if p.is_file() and p.suffix in suffixes
+        paths.extend(p for p in (ROOT/name).rglob('*') if p.is_file() and (p.suffix in suffixes or p.name in ('LICENSE','NOTICE'))
                      and '__pycache__' not in p.parts)
     snapshot = {p.relative_to(ROOT).as_posix(): p.read_bytes() for p in paths}
     assert all((ROOT/name).read_bytes() == value for name, value in snapshot.items()), 'Source changed during snapshot'
     files.update(snapshot)
+    vendor = 'patches/kitchen_attention_native/vendor/'
+    for name, expected in json.loads(files[vendor+'manifest.json'])['files'].items():
+        assert hashlib.sha256(files[vendor+name]).hexdigest() == expected, 'Incomplete pinned vendor payload: '+name
     for name in ('turbo_plan.json', 'turbo_lora_header.json', 'l1_assets_identity.json'):
         files[name] = (args.plans/name).read_bytes()
     from anime_e2e_contract import validate

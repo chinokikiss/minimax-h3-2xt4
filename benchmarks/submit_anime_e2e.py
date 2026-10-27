@@ -1,6 +1,7 @@
 """One CPU preflight then one explicitly authorized T4 E2E; never polling."""
 import argparse
 import ast
+import base64
 import datetime as dt
 import hashlib
 import json
@@ -66,16 +67,38 @@ os.chdir(src);os.execve(sys.executable,argv,env)
 '''
         code += supervise_worker(probe, budget=240, output='/kaggle/working/anime_input_supervision')
         code += "\nassert json.loads(pathlib.Path('/kaggle/working/anime_inputs/input_qualification.json').read_text())['status']=='cpu_input_ready'\n"
+    plan_dir=args.evidence/'plan_files'
+    if not plan_dir.exists():plan_dir=args.evidence.parent/'plan_files'
+    references=json.loads((plan_dir/'l1_assets_identity.json').read_text())['images']
+    payload={}
+    for row in references:
+        raw=(plan_dir.parent/row['file']).read_bytes()
+        assert hashlib.sha256(raw).hexdigest()==row['sha256']
+        payload[row['file']]=base64.b64encode(raw).decode()
+    destination='/kaggle/working/anime_inputs' if args.mode=='cpu' else '/kaggle/temp/h3_light_source/bench_assets/l1_current'
+    private_inputs='''import base64,hashlib,pathlib
+PRIVATE_REFERENCES=__REFERENCE_PAYLOAD__
+REFERENCE_ROWS=__REFERENCE_ROWS__
+refdir=pathlib.Path(__REFERENCE_DESTINATION__);refdir.mkdir(parents=True,exist_ok=True)
+for row in REFERENCE_ROWS:
+ raw=base64.b64decode(PRIVATE_REFERENCES.pop(row['file']))
+ assert len(raw)==row['bytes'] and hashlib.sha256(raw).hexdigest()==row['sha256']
+ (refdir/row['file']).write_bytes(raw)
+del PRIVATE_REFERENCES,raw
+'''.replace('__REFERENCE_PAYLOAD__',repr(payload)).replace('__REFERENCE_ROWS__',repr(references)).replace('__REFERENCE_DESTINATION__',repr(destination))
+    code=private_inputs+code
     ast.parse(code)
     notebook['cells'][0]['source'] = code.splitlines(keepends=True)
     notebook_path.write_text(json.dumps(notebook))
     meta_path = job/'kernel-metadata.json'
     meta = json.loads(meta_path.read_text())
-    meta.update(id='pamcks/h3-anime-ref2va-'+('cpu' if args.mode=='cpu' else '8step-t4')+'-20261027',
-                title='H3 Anime REF2VA '+('CPU Preflight' if args.mode=='cpu' else '8Step T4 E2E')+' 20261027')
+    meta.update(id='pamcks/h3-anime-ref2va-'+('cpu-preflight' if args.mode=='cpu' else '8step-t4')+'-20261027',
+                title='H3 Anime REF2VA '+('CPU Preflight' if args.mode=='cpu' else '8Step T4')+' 20261027')
     meta_path.write_text(json.dumps(meta, indent=2))
     binding = json.loads((job/'source_binding.json').read_text())
-    binding.update(full_pipeline_authorized=True, workload_contract='anime_ref2va_8step', private_auth=False)
+    binding.update(full_pipeline_authorized=True, workload_contract='anime_ref2va_8step', private_auth=False,
+                   reference_delivery='Exact bytes in private notebook only; absent from public source archive',
+                   reference_sha256=[row['sha256'] for row in references])
     (job/'source_binding.json').write_text(json.dumps(binding, indent=2))
     if not args.submit:
         print('Built:', job)
@@ -97,6 +120,9 @@ os.chdir(src);os.execve(sys.executable,argv,env)
         state.update(returncode=result.returncode,status='accepted' if result.returncode==0 else 'submission_failed')
         version = re.search(r'Kernel version (\d+)', output)
         if version:state['version']=int(version.group(1))
+        resolved = re.search(r'https://www\.kaggle\.com/code/([\w-]+/[\w-]+)', output)
+        if resolved:
+            state.update(requested_kernel=state['kernel'],kernel=resolved.group(1),url=resolved.group(0))
     except subprocess.TimeoutExpired:
         output='Submission acknowledgement timed out; do not automatically resubmit.'
         state.update(returncode=-1,status='acceptance_uncertain')

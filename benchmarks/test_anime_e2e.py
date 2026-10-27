@@ -1,8 +1,12 @@
 """Fixed workload, reference order, and actual eight-step adapter contracts."""
 import copy
 import json
+import hashlib
+import io
 from pathlib import Path
+import tempfile
 import unittest
+from unittest.mock import patch
 
 from benchmarks.anime_e2e_contract import validate
 from benchmarks.turbo_e2e_contract import validate_header
@@ -39,3 +43,16 @@ class AnimeE2E(unittest.TestCase):
         header = json.loads((self.root/'turbo_lora_header.json').read_text())
         native = json.loads((self.root/'bundle_assets.json').read_text())['auxiliary']['dit']['native_header']
         self.assertEqual(len(validate_header(header, native)), 208)
+
+    def test_staged_reference_is_verified_without_any_network_access(self):
+        from PIL import Image
+        from benchmarks.qualify_anime_inputs import download_image
+        stream=io.BytesIO();Image.new('RGB',(2,3),'purple').save(stream,format='PNG')
+        data=stream.getvalue()
+        row=dict(file='ref.png',bytes=len(data),sha256=hashlib.sha256(data).hexdigest(),size=[2,3])
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);(root/row['file']).write_bytes(data)
+            with patch('requests.get',side_effect=AssertionError('No network for a staged reference')):
+                self.assertEqual(download_image(row,root)['sha256'],row['sha256'])
+                (root/row['file']).write_bytes(data+b'changed')
+                with self.assertRaises(ValueError):download_image(row,root)

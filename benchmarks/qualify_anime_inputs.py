@@ -10,18 +10,22 @@ from PIL import Image
 
 
 def download_image(row, output):
-    # Public input URLs only. No credentials, browser state or mutable aliases.
-    response = requests.get(row['url'], timeout=(20, 90),
-        headers={'User-Agent': 'H3-REF2VA-evaluation/1.0'})
-    response.raise_for_status()
-    data = response.content
+    # Private notebook staging avoids fragile public-origin access. A supplied
+    # file must match exactly; corruption must never silently trigger a refetch.
+    path = output / row['file']
+    if path.exists():
+        data = path.read_bytes()
+    else:
+        response = requests.get(row['url'], timeout=(20, 90),
+            headers={'User-Agent': 'H3-REF2VA-evaluation/1.0'})
+        response.raise_for_status()
+        data = response.content
     if len(data) != row['bytes'] or hashlib.sha256(data).hexdigest() != row['sha256']:
         raise ValueError('Reference bytes changed: ' + row['file'])
     image = Image.open(io.BytesIO(data))
     if list(image.size) != row['size']:
         raise ValueError('Reference dimensions changed')
     image.verify()
-    path = output / row['file']
     path.write_bytes(data)
     return dict(file=row['file'], bytes=len(data), sha256=row['sha256'], size=row['size'])
 
@@ -44,6 +48,8 @@ def main():
         assert assets['publication']['commit'] == 'd3e6a4b131056d2c626a01acf6ba48123a885783'
         header = json.loads((args.source/'turbo_lora_header.json').read_text())
         assert len(validate_header(header, assets['auxiliary']['dit']['native_header'])) == 208
+        result['reference_delivery'] = ('verified_private_notebook_bytes'
+            if all((args.output/row['file']).exists() for row in references) else 'public_url_download')
         result['references'] = [download_image(row, args.output) for row in references]
         result.update(status='cpu_input_ready', lora_targets=208)
     except BaseException as exc:
