@@ -3,7 +3,9 @@
 Status: optional Temporal decoding is implemented and qualified on two physical
 Tesla T4s. For the saved 362-frame, 960×544 H3 latent, Temporal's median warm
 decode is **207.61 seconds versus Query's 247.55 seconds**: **1.192× speedup**
-and **16.13% less latency**. Query remains the default; Temporal is selectable.
+and **16.13% less latency**. Following the user's 2026-10-27 promotion request,
+**Temporal is now the Video default**. `auto` follows Temporal; explicit Query
+and Native remain available. Audio stays Native single-GPU FP32.
 
 The private frozen-source [CPU preflight, version 1](https://www.kaggle.com/code/pamcks/h3-vae-temporal-cpu-20261027)
 passed, including all 178 tests, core imports/legacy API checks, private-input
@@ -85,10 +87,11 @@ Query already differs from Native on that control. Attribution of the remaining
 full-shape differences would require raw-tile/attention/blending ablations.
 No new sampling, audio comparison or generation-quality acceptance is claimed.
 
-For this measured workload, select `temporal` when prioritizing decode latency
-and accepting its additional memory use. Keep `auto`/Query as the compatibility
-default. No default promotion, new approximation or attention API change is
-included in this result.
+For this measured workload, Temporal reduces decode latency with the additional
+memory use shown above. The comparison itself preserved Query as the default;
+the subsequent user-authorized promotion changes the loader, handoff, generated
+workflows and saved `auto` selections to Temporal. It adds no approximation or
+attention API change. Explicit `query` retains the measured Query path.
 
 ## Implementation
 
@@ -121,8 +124,9 @@ there are no per-layer KV collectives in Temporal mode. Query remains
 available and unchanged. Audio VAE remains Native single-GPU FP32; encoder
 parallelism is outside this decoder-only experiment.
 
-Select `decode_mode=temporal` on `MiniMaxH3ParallelVAELoader`. Explicit
-`query` aliases the existing `auto` Query selection; `native` is retained.
+`MiniMaxH3ParallelVAELoader` defaults to `decode_mode=temporal`. Saved `auto`
+selections also use Temporal. Explicit `query` retains aligned Query decoding;
+`native` is retained.
 Unsupported dtype/model, patched parent or admission refusal uses the existing
 Native fallback. A failure after worker execution begins propagates and
 releases the stage instead of silently repeating a partial decode.

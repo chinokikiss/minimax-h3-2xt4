@@ -51,7 +51,7 @@ see the [frozen runtime record](runtime/README.md).
 | Row projections | Scaled FP16 SUM with fused FP32 dequantization; explicit INT32 SUM alternative |
 | TE down / DiT FC2 | `fused_stored`: FP32 SwiGLU + regular ConvRot256, global row scales, original INT8 GEMM |
 | DiT QKV / FC1 columns | Direct INT8 GEMM + ordered TileLang epilogue on supported SM75 shapes; preallocated fallback |
-| Video / Audio VAE | Aligned query parallelism with Kitchen INT8 / Native single-GPU FP32 decoding |
+| Video / Audio VAE | Temporal clip parallelism with Kitchen INT8; Query optional / Native single-GPU FP32 audio |
 | LoRA | Offline by default; prefer bounded TP2 bundle merges for long sequences. Optional short/medium online uses FP32 RowParallel A partial SUM and guarded FC1/QKV owned B |
 | Streaming | Lifecycle prefetch, host-pressure admission and adaptive depth 1–2 enabled; idle speculation off |
 | Reference VAE loading | Metadata-only shells; load Video/Audio encoders only on actual reference encoding, decoders at output |
@@ -68,6 +68,8 @@ record the Kitchen causal TE default and the measured dense candidates.
 The [TE causal/precision audit](docs/reports/TE_CAUSAL_PREFIX_PRECISION_20261026.md)
 records fixed-packed masking, floating-input prefix dependence and FP32/BF16
 output precision on both T4s.
+The [Temporal/Query Video VAE comparison](docs/reports/VAE_TEMPORAL_QUERY_20261027.md)
+records the 1.192× measured T4 decoder speedup and Temporal default promotion.
 
 ## Repository map
 

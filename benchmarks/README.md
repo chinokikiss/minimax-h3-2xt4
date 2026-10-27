@@ -9,6 +9,12 @@ Runtime commands use `python -m tools.runtime.NAME`; historical builders and
 analysis helpers use `python -m tools.experiments.NAME`. Historical submissions
 remain unchanged and are not current setup templates.
 
+`build_te_parallel_job.py`, `run_te_parallel_batch.py` and `te_parallel_matrix.py`
+implement the [TE attention/communication comparison](../docs/reports/TE_ATTENTION_TP2_MATRIX_20261027.md).
+The resident trained-block matrix measures single-GPU and actual NCCL TP2,
+with exact fixed-input collective-result replay as a separate causal ablation.
+It uses two public TE shards and the existing CPU-qualified frozen core setup.
+
 `run_vae_temporal_batch.py` and `run_vae_temporal_compare.py` implement the
 [decoder-only Temporal/Query comparison](../docs/reports/VAE_TEMPORAL_QUERY_20261027.md).
 They replay the private saved H3 video latent and load only the trained Video

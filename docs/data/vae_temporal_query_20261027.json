@@ -1,7 +1,7 @@
 {
   "status": "physical_t4_complete",
   "scope": "Video decoder only; no TE, DiT sampling or Audio VAE",
-  "default_mode": "auto_query",
+  "default_mode": "temporal",
   "candidate_mode": "temporal",
   "distribution_sha256": "519bc752462ac2be251dd637d7398de637a5c29c7b581fa28525dd254689896a",
   "capsule_sha256": "168bf4446f17eb4a0714f5a8f4727d9c2cb8ddf78602868b0002481fad2a95d3",
@@ -273,5 +273,23 @@
   },
   "t4_speedup_claim": 1.1923573239551029,
   "evidence_directory": "D:/attention_eval/h3_temporal_vae_20261026",
-  "best_measured_backend_for_this_shape": "temporal"
+  "best_measured_backend_for_this_shape": "temporal",
+  "benchmark_default_mode": "auto_query",
+  "default_promotion": {
+    "date": "2026-10-27",
+    "explicit_user_request": true,
+    "auto_alias": "temporal",
+    "query_retained": true,
+    "native_retained": true,
+    "audio": "native_single_gpu_fp32",
+    "cpu_regression": {
+      "passed": true,
+      "tests": 179,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 12.70299999999952,
+      "scope": "CPU contracts, not physical T4 qualification"
+    }
+  }
 }

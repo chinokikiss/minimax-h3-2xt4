@@ -35,7 +35,7 @@ status of these operator entry points. No complete H3 generation was run here.
 | TE text decoder | Kitchen causal INT8 | Complete causal/padding/additive mask passed to the pinned API; Group32/native remain explicit overrides |
 | DiT main blocks | `comfy_kitchen.int8_attention` | `tilelang_drop`, `tilelang_scalar`, `tilelang_dense`, or `native` |
 | DiT token refiner | Native PyTorch SDPA | All DiT modes; Native projections, RMSNorm and RoPE |
-| Video VAE | Kitchen INT8 attention | Existing query partitioning and Native public decode planning remain |
+| Video VAE | Kitchen INT8 attention | Temporal clip parallelism by default; explicit Query and Native remain |
 | TP row projections | `tilelang_scaled_fp16`: approximate FP16 SUM + fused FP32 epilogue | `tilelang_packed` INT32 SUM or Native; SM75 |
 | TE down / DiT FC2 | `fused_stored`: FP32 SwiGLU / regular ConvRot256 | `fused_recompute`, prior `owned_fp32` / `native`; shared global row MAX retained |
 | LoRA B GEMM | Owned B always enabled for eligible online FC1; QKV enabled by default | Rank128 H3 guards; inactive offline; unsupported shapes retain full B |
@@ -159,7 +159,9 @@ each lease and released at stage teardown; Native model source is not edited.
 
 The refiner uses a module wrapper around its Native projections/norms/RoPE,
 so streamed copies do not retain bound methods pointing at canonical CPU
-weights. Video uses its existing Kitchen INT8 query-partitioned decoder.
+weights. Video defaults to whole Native temporal clips on two Kitchen INT8
+decoder replicas; aligned Query partitioning remains explicit. Saved `auto`
+selections follow Temporal. Native public planning and blending are retained.
 Audio always uses Native single-GPU FP32 decoding in the parent; no audio
 decoder replicas or channel/temporal collectives run in TP workers.
 

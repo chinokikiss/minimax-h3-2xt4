@@ -85,8 +85,9 @@ class NativeAudioDecode(unittest.TestCase):
              patch('patches.windowed_tp.CheckpointReader'), \
              patch('patches.staged_vae.checkpoint_kind',return_value='audio'), \
              patch('patches.staged_vae.StagedVAE',return_value=vae):
-            result,=node.MiniMaxH3ParallelVAELoader().load('audio.safetensors',session,decode_mode='auto')
-        self.assertEqual(result.mode,'native');self.assertIs(result.vae,vae)
+            for kwargs in ({}, {'decode_mode':'auto'}, {'decode_mode':'temporal'}):
+                result,=node.MiniMaxH3ParallelVAELoader().load('audio.safetensors',session,**kwargs)
+                self.assertEqual(result.mode,'native');self.assertIs(result.vae,vae)
 
 
 if __name__=='__main__':unittest.main()

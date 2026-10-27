@@ -259,7 +259,7 @@ class LazyVideoParent(unittest.TestCase):
                 if fail:raise RuntimeError('remote failure')
                 return self.raw(args[0])
         self.service.call.side_effect=call
-        return ParallelDecodeHandoff(self.staged,self.service,'fixture')
+        return ParallelDecodeHandoff(self.staged,self.service,'fixture','query')
 
     def test_success_never_loads_parent_component_and_keeps_native_plan_exact(self):
         wrapper=self.wrapper();z=torch.randn(1,24,7,2,2)

@@ -92,6 +92,18 @@ class TemporalPlanning(unittest.TestCase):
 
 
 class TemporalHandoff(memory_tests.ParentOwnership):
+    def test_default_and_auto_select_temporal_while_query_remains_explicit(self):
+        import inspect
+        from custom_nodes.minimax_h3_tp2 import MiniMaxH3ParallelVAELoader
+        with patch('folder_paths.get_filename_list',return_value=[]):
+            schema=MiniMaxH3ParallelVAELoader.INPUT_TYPES()['required']['decode_mode']
+        self.assertEqual(schema[1]['default'],'temporal')
+        self.assertEqual(inspect.signature(MiniMaxH3ParallelVAELoader.load).parameters['decode_mode'].default,'temporal')
+        for mode in (None, 'auto', 'temporal', 'query'):
+            args = () if mode is None else (mode,)
+            wrapper = ParallelDecodeHandoff(self.vae, self.service, 'fixture', *args)
+            self.assertEqual(wrapper.mode, 'query' if mode == 'query' else 'temporal')
+
     def test_temporal_handoff_uses_both_replies_and_restores_native_parent(self):
         seen = []
         def command(name, *args):

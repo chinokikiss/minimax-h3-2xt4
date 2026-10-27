@@ -122,7 +122,7 @@
       },
       "widgets_values": [
         "minimax_h3_video_vae_int8_convrot.safetensors",
-        "auto"
+        "temporal"
       ],
       "title": "MiniMax H3 parallel VAE (Native public plan)"
     },

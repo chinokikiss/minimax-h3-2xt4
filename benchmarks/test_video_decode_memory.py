@@ -167,7 +167,7 @@ class ParentOwnership(unittest.TestCase):
         self.service.call.side_effect=command
         def decode(samples_in=None,**kwargs):return self.vae.first_stage_model.decode(samples_in)
         self.vae.decode=decode;self.vae.decode_tiled=lambda samples=None,**kwargs:decode(samples)
-        return ParallelDecodeHandoff(self.vae,self.service,'fixture')
+        return ParallelDecodeHandoff(self.vae,self.service,'fixture','query')
 
     def test_parallel_handoff_uses_weightless_parent_and_restores_native(self):
         wrapper=self.handoff();z=torch.randn(1,24,7,2,2)

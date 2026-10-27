@@ -63,7 +63,7 @@ def main():
         node.update(type='MiniMaxH3ParallelVAELoader',
             title='MiniMax H3 native audio VAE' if audio else 'MiniMax H3 parallel video VAE (Native public plan)',
             inputs=[dict(name='session',type='MINIMAX_TP2_SESSION',link=link_id)],
-            widgets_values=[name,'native' if audio else 'auto'], size=[430,110],
+            widgets_values=[name,'native' if audio else 'temporal'], size=[430,110],
             properties={'Node name for S&R':'MiniMaxH3ParallelVAELoader'})
         node.pop('widgets_values_named',None)
         workflow['links'].append([link_id,127,2,node['id'],0,'MINIMAX_TP2_SESSION'])

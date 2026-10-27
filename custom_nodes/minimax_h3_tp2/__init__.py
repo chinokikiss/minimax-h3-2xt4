@@ -40,7 +40,7 @@ class MiniMaxH3TP2Loader:
                         'residual_exponent':('INT',{'default':6,'min':0,'max':12,'tooltip':'TE/DiT FP16 residual divisor is 2**exponent. Default: 64.'}),
                         'vision_residual_exponent':('INT',{'default':0,'min':0,'max':12,'tooltip':'Optional vision gauge. Default 0 retains the Native FP16 vision arithmetic.'}),
                         'video_residual_exponent':('INT',{'default':0,'min':0,'max':12,'tooltip':'Optional Video VAE decoder gauge. Default 0 preserves its existing FP16 arithmetic.'}),
-                        'video_decode_reserve_gib':('FLOAT',{'default':2.,'min':0.,'max':12.,'step':.5,'tooltip':'Extra VRAM headroom for Video query-parallel admission, separate from the DiT sampling reserve.'}),
+                        'video_decode_reserve_gib':('FLOAT',{'default':2.,'min':0.,'max':12.,'step':.5,'tooltip':'Extra VRAM headroom for Video parallel-decoder admission, separate from the DiT sampling reserve.'}),
                         'prefetch_lifecycle':('BOOLEAN',{'default':True,'tooltip':'Enable reuse-aware scheduling independently of idle speculation. Idle residency also enables this policy.'}),
                         'memory_pressure_aware':('BOOLEAN',{'default':True,'tooltip':'Use available host/cgroup headroom as well as the explicit RAM budget.'}),
                         'dit_reserve_gib':('FLOAT',{'default':9.,'min':0.,'max':12.,'step':.5,'tooltip':'Historical long-sequence headroom; also applies to TE. Tune separately for shorter workloads. Video decode uses its own reserve.'}),
@@ -142,19 +142,19 @@ class MiniMaxH3PostDecodePrefetch:
 
 
 class MiniMaxH3ParallelVAELoader:
-    DESCRIPTION='Demand-loaded H3 VAEs: encoders load only for reference encoding, decoders only for output. Video supports query or temporal clip parallelism; Audio decodes natively on one GPU in FP32.'
+    DESCRIPTION='Demand-loaded H3 VAEs: encoders load only for reference encoding, decoders only for output. Video defaults to Temporal clip parallelism, with Query optional; Audio decodes natively on one GPU in FP32.'
     @classmethod
     def INPUT_TYPES(cls):
         import folder_paths
         return {'required':{
             'vae_name':(folder_paths.get_filename_list('vae'),),
             'session':('MINIMAX_TP2_SESSION',),
-            'decode_mode':(['auto', 'native', 'query', 'temporal'], {'default':'auto','tooltip':'Video: auto/query uses query parallelism; temporal assigns independent Native clips to two decoder replicas. Audio always uses Native single-GPU decoding.'})}}
+            'decode_mode':(['temporal', 'auto', 'native', 'query'], {'default':'temporal','tooltip':'Video defaults to Temporal clip parallelism (auto is an alias). Query remains selectable. Audio always uses Native single-GPU decoding.'})}}
     RETURN_TYPES = ('VAE',)
     FUNCTION = 'load'
     CATEGORY = 'MiniMax H3/TP2'
 
-    def load(self, vae_name, session, decode_mode='auto'):
+    def load(self, vae_name, session, decode_mode='temporal'):
         import folder_paths
         # Only video shares its checkpoint with decoder ranks.
         path = folder_paths.get_full_path_or_raise('vae', vae_name)

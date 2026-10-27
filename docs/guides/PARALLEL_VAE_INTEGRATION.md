@@ -1,7 +1,8 @@
-# Video query parallelism and Native single-GPU Audio VAE
+# Temporal Video parallelism and Native single-GPU Audio VAE
 
-The TP2 ComfyUI workflow now defaults to **Native-aligned Query Partitioning
-for video** and **Native single-GPU FP32 decoding for audio**. TE/DiT, conditioning,
+The TP2 ComfyUI workflow defaults to **Temporal clip parallelism for video**
+and **Native single-GPU FP32 decoding for audio**. Query remains selectable.
+TE/DiT, conditioning,
 samplers and reference encoding keep their existing implementations. Independent
 cropped video slabs are not enabled.
 
@@ -12,7 +13,10 @@ the linked `custom_nodes/minimax_h3_tp2` directory. Both existing VAE loaders
 are now `MiniMaxH3ParallelVAELoader` nodes, connected to the same persistent
 TP2 session. Select the INT8 video and FP32 audio files in the VAE directory;
 the video decoder ranks read the exact same path that constructed the Native VAE.
-Video defaults to `decode_mode=auto`; `native` disables video query partitioning.
+Video defaults to `decode_mode=temporal`; `auto` also selects Temporal.
+Use explicit `query` for aligned Query partitioning, or `native` for Native
+single-GPU fallback. The physical comparison and numerical limits are recorded
+in [the T4 report](../reports/VAE_TEMPORAL_QUERY_20261027.md).
 Audio is always Native single-GPU, including older workflows saved with `auto`.
 The shared loader node name is retained for workflow compatibility. Both audio
 channels stay together in the original Native decode call; channel, temporal
@@ -25,7 +29,12 @@ dual-GPU performance evidence.
 
 ## Dispatch and lifetimes
 
-- `patches/parallel_vae.py` extracts the physically qualified aligned video
+- Default Temporal assigns complete Native temporal clips to the two existing
+  workers, including Native spatial tiling and blending inside each owner.
+  The parent consumes both CPU replies in order, caching at most one neighbour.
+  It retains Native temporal overlap blending and finalization. There are no
+  per-layer decoder collectives in this strategy.
+- Explicit Query uses `patches/parallel_vae.py` for the physically qualified aligned video
   algorithm into inference code: Native prefix projection once, contiguous
   query ownership aligned to 128-token scale groups, global RoPE coordinates,
   global KV per layer, and a final projected-output join. All 36 trained blocks
@@ -38,7 +47,7 @@ dual-GPU performance evidence.
   model methods; public layout, chunking and output conversion stay Native. Encoding
   methods and reference latents are untouched.
 - Existing persistent rank processes perform these operations, with NCCL KV
-  AllGather/broadcast for video. No audio tensors are sent to workers. There is
+  AllGather/broadcast only for explicit Query. No audio tensors are sent to workers. There is
   no second worker service or benchmark-module import in inference.
 - Decoder-only checkpoint loading excludes unused encoder parameters. Shared
   HostBudget covers checkpoint staging and construction. Trained parent weights

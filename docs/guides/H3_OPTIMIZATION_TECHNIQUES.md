@@ -16,7 +16,7 @@ The catalogue contains 130 techniques in 10 areas. Active, alternative, experime
 | Tensor storage | FP16-fix; divisor 64 | FP32 numerical islands; public unscaled outputs |
 | LoRA | offline | Optional ordered online adapters with FP32 Row-A SUM |
 | Scheduling | Lifecycle / pressure / adaptive enabled | Idle residency remains explicit |
-| Video / Audio | Query-parallel Kitchen / Native FP32 | Coordinated Native Video fallback |
+| Video / Audio | Temporal clips with Kitchen / Native FP32 audio | Query optional; coordinated Native Video fallback |
 
 ## Reading the technique entries
 

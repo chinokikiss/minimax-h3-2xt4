@@ -27,3 +27,8 @@
 
 - The user separately authorizes the supplied HF token inside this private Query-versus-Temporal Video VAE benchmark notebook only, including its CPU input-authentication preflight. Keep it out of public source archives, logs and receipts. Do not extend this exception to another job or credential.
 - Benchmark only the Video decoder with the saved real H3 latents; no TE/DiT sampling or Audio VAE parallelism. Preserve the default Query mode while Temporal is qualified.
+
+## Validated Temporal promotion — 2026-10-27
+
+- After the physical two-T4 comparison, the user explicitly requests Temporal as the Video VAE default. `auto` follows Temporal; explicit Query and Native remain available. Audio stays Native single-GPU.
+- The new TE attention/communication experiment is operator/block level, without DiT sampling or full H3 generation. Its public trained shards need no HF credential; the earlier private-token exception is not extended.

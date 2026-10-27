@@ -22,7 +22,7 @@ manifest; measurements remain in separate reports.
 | [Operator integration](guides/H3_OPERATOR_INTEGRATION.md) | Node options, attention policies, row operators, and workflow wiring |
 | [Operator enhancements](guides/H3_OPERATOR_ENHANCEMENTS.md) | FP16 transport, positional reads, lifetimes, adaptive lookahead, Native refiner |
 | [Loading stages](guides/H3_LOADING_STAGES.md) | Online/offline LoRA, layer-parallel baking, encoder/decoder stages, idle preloading |
-| [VAE integration](guides/PARALLEL_VAE_INTEGRATION.md) | Video query partitioning, Native single-GPU FP32 audio |
+| [VAE integration](guides/PARALLEL_VAE_INTEGRATION.md) | Default Temporal Video decoding, optional Query, Native single-GPU FP32 audio |
 | [Sampler integration](guides/COMFYUI_SAMPLER_INTEGRATION.md) | Native conditioning/sampling interfaces and the scoped sampler gates |
 | [Pipeline review](reports/H3_PIPELINE_REVIEW.md) | Current code boundaries, cleanup, regression evidence, remaining blockers |
 | [Runtime provenance audit](reports/H3_RUNTIME_PROVENANCE_AUDIT.md) | Which source/dependency versions were selected and preserved |

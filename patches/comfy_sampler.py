@@ -183,11 +183,12 @@ class ParallelDecodeHandoff(DecodeHandoff):
     Single-device / unsupported dtype / memory admission uses Native. Once a
     collective decode starts, execution errors propagate; no partial fallback.
     """
-    def __init__(self, vae, service, checkpoint, mode='auto'):
+    def __init__(self, vae, service, checkpoint, mode='temporal'):
         super().__init__(vae, service)
         if mode not in ('auto', 'native', 'query', 'temporal'):
             raise ValueError(mode)
-        self.checkpoint, self.mode = str(checkpoint), mode
+        # Saved workflows using auto follow the promoted parallel strategy.
+        self.checkpoint, self.mode = str(checkpoint), 'temporal' if mode == 'auto' else mode
         self.last_strategy = 'native'
         self.last_fallback = None
         self.last_query_partitioning = None
