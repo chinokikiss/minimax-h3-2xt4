@@ -1,16 +1,12 @@
 # Eight-step anime REF2VA E2E — 2026-10-27
 
-Status: Kaggle acknowledged the corrected CPU preflight as **version 3** at
-[H3 Anime REF2VA CPU Preflight](https://www.kaggle.com/code/pamcks/h3-anime-ref2va-cpu-preflight-20261027)
-after verifying both files supplied from the user's local Pictures directory.
-They match the original references byte-for-byte. The private notebook carries
-the 317,018-byte character JPEG and fetches the exact shrine PNG from the
-immutable GitHub mirror. Neither original image origin is contacted. Version 3
-has not yet had its final outputs collected; CPU qualification remains pending.
-**No GPU job has been submitted and no T4 generation result is claimed.**
-The GPU job requires the matching Linux setup, runtime checks and reference-image
-authentication to pass first. No notebook execution status/list/live-log endpoint
-is queried.
+Status: **CPU preflight version 3 passed** and its final outputs were collected
+once. Kaggle then acknowledged **GPU E2E version 1** at
+[H3 Anime REF2VA 8Step T4](https://www.kaggle.com/code/pamcks/h3-anime-ref2va-8step-t4-20261027).
+The GPU notebook is private and requests T4 hardware; the frozen worker must
+verify two distinct physical SM75 T4 devices before model preparation.
+**Submission is accepted; physical execution and E2E results are pending.**
+No notebook execution status/list/live-log endpoint is queried.
 
 The user's explicit request authorizes one full E2E generation for this workload,
 superseding the operator-only restriction for this run. Other experiments and
@@ -210,7 +206,13 @@ No notebook status/list/live-log polling is configured.
 
 ## GPU execution and acceptance
 
-After the fresh CPU gate passes, one bounded physical 2×T4 job will:
+The fresh CPU version 3 gate passed 179 runtime regressions, 12 workload/layout
+tests, all vendor-file checks, the disk-bake CPU contract, both original image
+hashes/dimensions and the eight-step adapter's 208 target mappings. Its result
+is `cpu_input_ready` and its matching frozen setup receipt is `cpu_ready`.
+This qualifies the CPU setup/input path; it is not physical GPU validation.
+
+One bounded 2×T4 job has now been submitted to:
 
 1. Verify both distinct SM75 T4 owners and the retained environment/compiler.
 2. Fetch the immutable DiT shards and eight-step adapter, then bake offline on
@@ -222,6 +224,14 @@ After the fresh CPU gate passes, one bounded physical 2×T4 job will:
    per-step finite summaries, actual layouts, backend counters and memory data.
 5. Save final decode latents before decoding, use the default Temporal Video
    strategy and Native Audio decoding, then export MP4 with audio and a WAV.
+
+Kaggle acknowledged GPU notebook **version 1**. The notebook uses the identical
+CPU-qualified capsule and inherits both verified reference delivery paths. Local
+checks confirm syntax, private visibility, T4 selection, zero Dataset/output
+mounts, exact embedded JPEG bytes and absence of credentials. The reference
+JPEG is inside the private notebook; that notebook is not copied to the public
+evidence archive. The GPU submission receipt, qualification receipts and public
+metadata are archived separately from reference payloads.
 
 Acceptance requires eight completed denoiser outputs and sampling steps,
 finite sampled/decoded tensors, exact requested video dimensions/frame count,

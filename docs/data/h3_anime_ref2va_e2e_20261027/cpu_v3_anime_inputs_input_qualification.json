@@ -1,0 +1,36 @@
+{
+  "status": "cpu_input_ready",
+  "full_pipeline_authorized": true,
+  "gpu_used": false,
+  "workload": {
+    "width": 1152,
+    "height": 672,
+    "frames": 243,
+    "video_latent_t": 72,
+    "audio_latent_t": 405,
+    "duration_seconds": 10.125,
+    "output_megapixels": 0.774144
+  },
+  "reference_delivery": "verified_private_notebook_bytes",
+  "references": [
+    {
+      "file": "reference_character.jpg",
+      "bytes": 317018,
+      "sha256": "e5b1710572f2587f7927e65b9e5f8f742bc435ca388ae23a16880fa6bf542383",
+      "size": [
+        1280,
+        905
+      ]
+    },
+    {
+      "file": "reference_shrine.png",
+      "bytes": 7703256,
+      "sha256": "cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03",
+      "size": [
+        4096,
+        2048
+      ]
+    }
+  ],
+  "lora_targets": 208
+}

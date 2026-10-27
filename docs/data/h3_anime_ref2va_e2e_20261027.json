@@ -1,6 +1,6 @@
 {
   "date": "2026-10-27",
-  "status": "cpu_version_3_accepted_with_verified_local_inputs_gpu_not_submitted",
+  "status": "cpu_v3_passed_gpu_v1_accepted_e2e_results_pending",
   "full_pipeline_authorized": true,
   "automatic_polling": false,
   "automatic_retry": false,
@@ -144,7 +144,7 @@
         "cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03"
       ]
     },
-    "final_collection_count": 0,
+    "final_collection_count": 1,
     "earliest_final_collection_seconds": 900,
     "experiment_kind": "anime_e2e_cpu",
     "result_relative": "anime_inputs/input_qualification.json",
@@ -154,7 +154,68 @@
     "requested_kernel": "pamcks/h3-anime-ref2va-cpu-preflight-20261027",
     "url": "https://www.kaggle.com/code/pamcks/h3-anime-ref2va-cpu-preflight-20261027"
   },
-  "gpu_submission": null,
+  "gpu_submission": {
+    "kernel": "pamcks/h3-anime-ref2va-8step-t4-20261027",
+    "submitted_utc": "2026-10-27T14:12:41.799630+00:00",
+    "status": "accepted",
+    "returncode": 0,
+    "source_binding": {
+      "mode": "e2e",
+      "publication": {
+        "file": "1973087713b2627b03135908f0d118485fb12bfa61918238cfe99139e0354de3.tar.gz",
+        "sha256": "1973087713b2627b03135908f0d118485fb12bfa61918238cfe99139e0354de3",
+        "bytes": 18501310,
+        "capsule_sha256": "6e4e1212cecc2cc838ec79c91bcf8c9d95a3bb11383771aab38682f001a8c350",
+        "source_files": 824,
+        "core_pins": 78,
+        "kaggle_mounts": 0,
+        "repository": "chinokikiss/minimax-h3-2xt4",
+        "commit": "68510431656fb806d30b3528a1d5844cc2510ea9",
+        "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/68510431656fb806d30b3528a1d5844cc2510ea9/runtime/kaggle_artifacts/1973087713b2627b03135908f0d118485fb12bfa61918238cfe99139e0354de3.tar.gz",
+        "published": true
+      },
+      "qualification_sha256": "8c3998ec587d0bb9e8cbaae3942c0b588990afa5fe4f64738caafa23ab7f2cc9",
+      "kaggle_dataset_sources": [],
+      "kaggle_kernel_sources": [],
+      "temporary_private_auth": false,
+      "profile_hashes": {},
+      "setup_budget": 300,
+      "execution_budget": 4800,
+      "dit_lifetimes": false,
+      "dit_attention": "kitchen",
+      "review_suite": false,
+      "review_recovery": false,
+      "turbo_e2e": true,
+      "vae_compare_preflight": false,
+      "vae_input_qualification_sha256": null,
+      "profile_qualification_sha256": null,
+      "full_pipeline_authorized": true,
+      "workload_contract": "anime_ref2va_8step",
+      "private_auth": false,
+      "reference_delivery": "Private local reference bytes plus immutable GitHub mirrors; mandatory original SHA256 verification",
+      "reference_mirror_urls": {
+        "reference_shrine.png": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/225da31d025d510bb152683f53cf6f0a9843e0d2/bench_assets/public_reference_images/cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03.png"
+      },
+      "staged_reference_files": [
+        "reference_character.jpg"
+      ],
+      "reference_encoding": "base85",
+      "notebook_bytes": 532304,
+      "reference_sha256": [
+        "e5b1710572f2587f7927e65b9e5f8f742bc435ca388ae23a16880fa6bf542383",
+        "cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03"
+      ]
+    },
+    "final_collection_count": 0,
+    "earliest_final_collection_seconds": 5400,
+    "experiment_kind": "anime_e2e",
+    "result_relative": "turbo_e2e/generation/result.json",
+    "run_timeout_seconds": 5400,
+    "notebook_sha256": "05125f872718adeebeb1bc6820683e79eb8b4b237c13d69de7ebbeaaab0c6497",
+    "version": 1,
+    "requested_kernel": "pamcks/h3-anime-ref2va-8step-t4-20261027",
+    "url": "https://www.kaggle.com/code/pamcks/h3-anime-ref2va-8step-t4-20261027"
+  },
   "generation_result": null,
   "evidence_directory": "D:\\attention_eval\\h3_anime_e2e_20261027",
   "new_reference_bytes_in_public_archive": false,
@@ -407,7 +468,7 @@
       "matches_original_contract": true
     }
   ],
-  "pending": "CPU version 3 final qualification; no execution-status polling",
+  "pending": "One physical 2xT4 E2E; accepted submission only, hardware/execution results not yet collected",
   "previous_mirror_retry_source_identity": {
     "source_requests": 1,
     "scope": "Submission source identity only",
@@ -416,5 +477,49 @@
     "matches_cpu_version_2": true,
     "requested_code_sha256": "726a61be0c26f36afcf2f78f62c040ac81d3c9fd583cd402cdfdae9368b98b8c",
     "received_code_sha256": "70d6a3752ac3581b618c83547e090750d4eeab9a4f8431a149426c93e49b7913"
+  },
+  "cpu_v3_outcome": {
+    "status": "cpu_ready_and_inputs_ready",
+    "runtime_tests_passed": 179,
+    "workload_layout_tests_passed": 12,
+    "all_reference_hashes_verified": true,
+    "lora_targets": 208,
+    "disk_bake_cpu_passed": true,
+    "gpu_used": false
+  },
+  "cpu_v3_final_collection": {
+    "status": "collected",
+    "kaggle_requests": 1,
+    "kernel": "pamcks/h3-anime-ref2va-cpu-preflight-20261027",
+    "output": "D:\\attention_eval\\h3_anime_e2e_20261027\\retry_cpu_v7\\cpu_outputs",
+    "returncode": 0,
+    "files": 25,
+    "completed_utc": "2026-10-27T14:12:19.107773+00:00",
+    "experiment": {
+      "status": "cpu_input_ready",
+      "error": null,
+      "stages": null,
+      "completed_sampler_steps": 0,
+      "completed_denoiser_calls": 0,
+      "media": null,
+      "quality_acceptance": "Pending review; collection does not establish generation quality"
+    },
+    "prior_input_hash_matches": {}
+  },
+  "gpu_notebook_verification": {
+    "syntax_valid": true,
+    "notebook_bytes": 532304,
+    "gpu_requested": "NvidiaTeslaT4",
+    "requires_two_distinct_sm75_devices": true,
+    "physical_device_validation": "Pending remote execution; enforced in frozen batch",
+    "private": true,
+    "zero_dataset_kernel_mounts": true,
+    "matches_successful_cpu_source_and_reference_delivery": true,
+    "embedded_jpeg_byte_exact": true,
+    "credentials_present": false,
+    "one_e2e_request": true,
+    "execution_budget_seconds": 4800,
+    "setup_budget_seconds": 300,
+    "notebook_timeout_seconds": 5400
   }
 }

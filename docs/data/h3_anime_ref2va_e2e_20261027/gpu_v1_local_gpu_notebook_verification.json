@@ -1,0 +1,16 @@
+{
+  "syntax_valid": true,
+  "notebook_bytes": 532304,
+  "gpu_requested": "NvidiaTeslaT4",
+  "requires_two_distinct_sm75_devices": true,
+  "physical_device_validation": "Pending remote execution; enforced in frozen batch",
+  "private": true,
+  "zero_dataset_kernel_mounts": true,
+  "matches_successful_cpu_source_and_reference_delivery": true,
+  "embedded_jpeg_byte_exact": true,
+  "credentials_present": false,
+  "one_e2e_request": true,
+  "execution_budget_seconds": 4800,
+  "setup_budget_seconds": 300,
+  "notebook_timeout_seconds": 5400
+}
