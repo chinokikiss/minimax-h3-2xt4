@@ -1,9 +1,11 @@
 import hashlib
+import io
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
-from benchmarks.private_reference_delivery import private_reference_prefix
+from benchmarks.private_reference_delivery import private_reference_prefix, mirror_reference_prefix
 
 
 class PrivateReferenceDelivery(unittest.TestCase):
@@ -28,3 +30,17 @@ class PrivateReferenceDelivery(unittest.TestCase):
             (root / 'image').write_bytes(b'changed')
             with self.assertRaises(ValueError):
                 private_reference_prefix([dict(file='image', bytes=7, sha256='0' * 64)], root, root / 'out')
+
+    def test_immutable_mirror_is_byte_exact_and_corruption_blocks_execution(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            raw = b'original reference bytes\x00\xff'
+            row = dict(file='ref.png', bytes=len(raw), sha256=hashlib.sha256(raw).hexdigest())
+            urls={'ref.png':'https://raw.githubusercontent.com/owner/repo/'+'1'*40+'/ref.png'}
+            prefix = mirror_reference_prefix([row], urls, root / 'output')
+            with patch('urllib.request.urlopen',return_value=io.BytesIO(raw)):exec(prefix, {})
+            self.assertEqual((root / 'output' / row['file']).read_bytes(), raw)
+            with patch('urllib.request.urlopen',return_value=io.BytesIO(b'corrupted')):
+                with self.assertRaises(ValueError):exec(prefix, {})
+            with self.assertRaises(ValueError):
+                mirror_reference_prefix([row],{'ref.png':urls['ref.png'].replace('1'*40,'main')},root)

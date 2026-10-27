@@ -1,0 +1,57 @@
+{
+  "kernel": "pamcks/h3-anime-ref2va-cpu-preflight-20261027",
+  "submitted_utc": "2026-10-27T13:15:11.631332+00:00",
+  "status": "retry_source_not_saved",
+  "returncode": 1,
+  "source_binding": {
+    "mode": "cpu",
+    "publication": {
+      "file": "1973087713b2627b03135908f0d118485fb12bfa61918238cfe99139e0354de3.tar.gz",
+      "sha256": "1973087713b2627b03135908f0d118485fb12bfa61918238cfe99139e0354de3",
+      "bytes": 18501310,
+      "capsule_sha256": "6e4e1212cecc2cc838ec79c91bcf8c9d95a3bb11383771aab38682f001a8c350",
+      "source_files": 824,
+      "core_pins": 78,
+      "kaggle_mounts": 0,
+      "repository": "chinokikiss/minimax-h3-2xt4",
+      "commit": "68510431656fb806d30b3528a1d5844cc2510ea9",
+      "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/68510431656fb806d30b3528a1d5844cc2510ea9/runtime/kaggle_artifacts/1973087713b2627b03135908f0d118485fb12bfa61918238cfe99139e0354de3.tar.gz",
+      "published": true
+    },
+    "qualification_sha256": null,
+    "kaggle_dataset_sources": [],
+    "kaggle_kernel_sources": [],
+    "temporary_private_auth": false,
+    "profile_hashes": {},
+    "setup_budget": 600,
+    "execution_budget": null,
+    "dit_lifetimes": false,
+    "dit_attention": "kitchen",
+    "review_suite": true,
+    "review_recovery": false,
+    "turbo_e2e": false,
+    "vae_compare_preflight": false,
+    "vae_input_qualification_sha256": null,
+    "profile_qualification_sha256": null,
+    "full_pipeline_authorized": true,
+    "workload_contract": "anime_ref2va_8step",
+    "private_auth": false,
+    "reference_delivery": "Selected original bytes in private notebook; public URLs for remaining images",
+    "staged_reference_files": [
+      "reference_shrine.png"
+    ],
+    "reference_encoding": "base85",
+    "notebook_bytes": 9641569,
+    "reference_sha256": [
+      "e5b1710572f2587f7927e65b9e5f8f742bc435ca388ae23a16880fa6bf542383",
+      "cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03"
+    ]
+  },
+  "final_collection_count": 0,
+  "earliest_final_collection_seconds": 900,
+  "experiment_kind": "anime_e2e_cpu",
+  "result_relative": "anime_inputs/input_qualification.json",
+  "run_timeout_seconds": 900,
+  "notebook_sha256": "45d027cd6ce15bead3dfcd1651d765ea5df20e975f96d738f83d260c733ac539",
+  "acceptance_reason": "Saved source matched already-collected failed CPU version 2, not this retry"
+}

@@ -1,0 +1,17 @@
+test_exact_requested_workload_and_native_frame_grid (benchmarks.test_anime_e2e.AnimeE2E.test_exact_requested_workload_and_native_frame_grid) ... ok
+test_real_eight_step_header_matches_all_native_targets (benchmarks.test_anime_e2e.AnimeE2E.test_real_eight_step_header_matches_all_native_targets) ... ok
+test_sampler_resolution_prompt_and_adapter_substitution_rejected (benchmarks.test_anime_e2e.AnimeE2E.test_sampler_resolution_prompt_and_adapter_substitution_rejected) ... ok
+test_staged_reference_is_verified_without_any_network_access (benchmarks.test_anime_e2e.AnimeE2E.test_staged_reference_is_verified_without_any_network_access) ... ok
+test_default_keeps_contiguous_rhs_and_direct_is_explicit (benchmarks.test_te_column_layout.ColumnLayout.test_default_keeps_contiguous_rhs_and_direct_is_explicit) ... ok
+test_full_range_int8_bound_and_signed_extremes (benchmarks.test_te_column_layout.ColumnLayout.test_full_range_int8_bound_and_signed_extremes) ... ok
+test_qualified_dispatch_uses_original_storage_and_preserves_padding (benchmarks.test_te_column_layout.ColumnLayout.test_qualified_dispatch_uses_original_storage_and_preserves_padding) ... ok
+test_runtime_guard_requires_the_qualified_device_and_geometry (benchmarks.test_te_column_layout.ColumnLayout.test_runtime_guard_requires_the_qualified_device_and_geometry) ... ok
+test_scope_restores_after_error_and_does_not_patch_global_helper (benchmarks.test_te_column_layout.ColumnLayout.test_scope_restores_after_error_and_does_not_patch_global_helper) ... ok
+test_shared_projection_outputs_exact_and_no_weight_cache (benchmarks.test_te_column_layout.ColumnLayout.test_shared_projection_outputs_exact_and_no_weight_cache) ... ok
+test_three_repetitions_balance_variant_positions (benchmarks.test_te_column_layout.ColumnLayout.test_three_repetitions_balance_variant_positions) ... ok
+test_view_preserves_storage_and_integer_results (benchmarks.test_te_column_layout.ColumnLayout.test_view_preserves_storage_and_integer_results) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.145s
+
+OK

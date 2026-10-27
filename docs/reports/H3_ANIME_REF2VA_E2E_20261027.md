@@ -1,10 +1,17 @@
 # Eight-step anime REF2VA E2E — 2026-10-27
 
-Status: the corrected Kaggle CPU preflight was accepted as **version 2** at
-[H3 Anime REF2VA CPU Preflight](https://www.kaggle.com/code/pamcks/h3-anime-ref2va-cpu-preflight-20261027).
+Status: the corrected Kaggle CPU preflight **version 2** at
+[H3 Anime REF2VA CPU Preflight](https://www.kaggle.com/code/pamcks/h3-anime-ref2va-cpu-preflight-20261027)
+passed environment, runtime and vendor checks, then failed reference
+authentication because Wikimedia returned **HTTP 429** for the original shrine
+image. Its final outputs were collected once. An exact immutable GitHub mirror
+now resolves that input-origin dependency. The replacement small notebook's
+submission hit a Kaggle API TLS EOF; acceptance is **unconfirmed**. Further
+Kaggle requests have stopped to avoid duplicate execution.
 **No GPU job has been submitted and no T4 generation result is claimed.**
 The GPU job requires the matching Linux setup, runtime checks and reference-image
-authentication to pass first. No status/list/live-log endpoint is queried.
+authentication to pass first. No notebook execution status/list/live-log endpoint
+is queried.
 
 The user's explicit request authorizes one full E2E generation for this workload,
 superseding the operator-only restriction for this run. Other experiments and
@@ -71,9 +78,11 @@ The immutable source publication is commit
 It preserves the frozen legacy ComfyUI `d49e888586dd8ae012c0667b33466b815fee07f7`
 archive and the approved exact core lock. Kitchen0.2.37 and TileLang0.1.13 stay
 pinned. Kaggle retains and records its matching native Torch/CUDA/NumPy family;
-the local conda environment and original snapshot are not modified. There are
-zero Kaggle dataset/output mounts, no wheel archives, no upstream HEAD fetches
-and no credentials in the published distribution.
+the local conda environment and original snapshot are not modified. Source,
+dependencies and weights use direct delivery without model/dependency Dataset
+or notebook-output mounts. The latest replacement retains zero Dataset mounts.
+There are no wheel archives, upstream HEAD fetches or credentials in the
+published distribution.
 
 The current H3 source is captured with per-file hashes, including:
 
@@ -119,14 +128,60 @@ The replacement is an 11,607-byte notebook using the original public URLs and
 mandatory SHA256, byte-length and image-dimension checks. Kaggle acknowledged
 **version 2** at `2026-10-27T13:02:43.718714+00:00`. It repeats the Linux setup,
 179 runtime tests, 12 workload/layout tests, vendor integrity and reference
-authentication, without a GPU. A download failure blocks the GPU submission.
-There are no uploaded model datasets or embedded credentials.
+authentication, without a GPU. Its collected results confirm that all 179+12
+tests, vendor integrity and disk-bake CPU qualification passed. The character
+download returned the original bytes; the shrine request returned HTTP 429
+`Too Many Requests (015d12c)`. There was no sampling, decoding or GPU allocation.
+A local negative check confirms that this failed input receipt blocks GPU job
+construction before any submission call.
 
 The accepted CPU attempt is preserved under
 `D:/attention_eval/h3_anime_e2e_20261027/retry_cpu_v4/`; earlier attempts remain
 in their own directories. The directory name counts local delivery attempts;
 the accepted Kaggle version is 2. Public metadata and diagnostic logs are
 archived in [the evidence directory](../data/h3_anime_ref2va_e2e_20261027/).
+
+### Reference-only Dataset recovery
+
+A selective private notebook carrying only the original shrine PNG was locally
+verified byte-for-byte (7,703,256 image bytes, 9,641,569 notebook bytes), but its
+submission also returned a connection reset without acknowledgement. One saved
+source retrieval matched the already-collected failed CPU version 2, not that
+retry. The image-bearing retry is not recorded as accepted.
+
+An alternate private Dataset upload containing only the two original images
+(8,020,274 bytes total) was attempted. The first creation failed with a TLS EOF
+at the CLI's built-in existence check, before upload began. One separately
+preserved retry timed out after 300 seconds without acknowledgement. Its
+creation remains uncertain; no Dataset readiness query or further retry was
+made. The current replacement does not depend on this Dataset.
+
+### Immutable GitHub input recovery and remaining blocker
+
+The publicly supplied shrine PNG is now mirrored separately from the frozen
+runtime capsule at commit `225da31d025d510bb152683f53cf6f0a9843e0d2`.
+[Attribution and original-file provenance](../../bench_assets/public_reference_images/README.md)
+are retained. A local download from the immutable raw GitHub URL returned all
+7,703,256 original bytes and the original SHA256; there was no re-encoding,
+resizing or pixel change. The character image continues to use its already
+successful original public URL. Captured activations and credentials are not
+part of this mirror.
+
+The replacement notebook fetches the mirror and verifies its byte count/hash
+before runtime setup. The regular input gate then authenticates both images
+against the original contract. GPU notebook construction inherits the exact
+mirror URLs from its successful CPU qualification. A changed response fails
+before any model execution. Three local reference-delivery tests pass, covering
+exact binary transport, corruption rejection and immutable-URL enforcement.
+
+The small mirror retry is stored under
+`D:/attention_eval/h3_anime_e2e_20261027/retry_cpu_v6/`. It has zero Dataset or
+notebook-output mounts, no embedded image payload and no credentials. Its
+`SaveKernel` call returned `SSL: UNEXPECTED_EOF_WHILE_READING` before a version
+acknowledgement. **Acceptance is unconfirmed; no GPU job exists in our submission
+records.** The transport error also affects a small notebook, so large payloads
+alone do not explain all failed submissions. No additional source/status/output
+request has been made for this latest uncertain attempt.
 
 ## GPU execution and acceptance
 

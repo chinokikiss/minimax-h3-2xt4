@@ -10,7 +10,7 @@ import subprocess
 import sys
 
 from t4_notebook_watchdog import supervise_worker
-from private_reference_delivery import private_reference_prefix
+from private_reference_delivery import private_reference_prefix, mirror_reference_prefix
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -20,6 +20,10 @@ def main():
     parser.add_argument('--mode', choices=('cpu', 'gpu'), required=True)
     parser.add_argument('--evidence', type=Path, required=True)
     parser.add_argument('--reference-delivery', choices=('staged', 'public_url'), default='public_url')
+    parser.add_argument('--stage-reference', action='append', default=[],
+                        help='Stage only this original file; fetch remaining references from their public URLs')
+    parser.add_argument('--reference-mirror-publication', type=Path,
+                        help='Content-verified immutable public-reference mirrors; GPU inherits the CPU binding')
     parser.add_argument('--submit', action='store_true')
     args = parser.parse_args()
     publication = args.evidence/'source_publication.json'
@@ -72,13 +76,38 @@ os.chdir(src);os.execve(sys.executable,argv,env)
     if not plan_dir.exists():plan_dir=args.evidence.parent/'plan_files'
     references=json.loads((plan_dir/'l1_assets_identity.json').read_text())['images']
     destination='/kaggle/working/anime_inputs' if args.mode=='cpu' else '/kaggle/temp/h3_light_source/bench_assets/l1_current'
-    if args.reference_delivery=='staged':
-        code=private_reference_prefix(references,plan_dir.parent,destination)+code
+    staged_names=set(args.stage_reference)
+    mirrors={}
+    if args.reference_mirror_publication:
+        mirror_publication=json.loads(args.reference_mirror_publication.read_text())
+        assert mirror_publication['published']
+        for name,row in mirror_publication['files'].items():
+            expected=next(r for r in references if r['file']==name)
+            assert row['sha256']==expected['sha256'] and row['bytes']==expected['bytes']
+            mirrors[name]=row['url']
+    if args.reference_delivery=='staged':staged_names={row['file'] for row in references}
+    if args.mode=='gpu':
+        cpu_submission=json.loads((args.evidence/'cpu_submission.json').read_text())
+        qualified_staging=set(cpu_submission['source_binding'].get('staged_reference_files',[]))
+        qualified_mirrors=cpu_submission['source_binding'].get('reference_mirror_urls',{})
+        if mirrors and mirrors!=qualified_mirrors:
+            raise ValueError('GPU reference mirrors must match its successful CPU preflight')
+        mirrors=qualified_mirrors
+        if staged_names and staged_names!=qualified_staging:
+            raise ValueError('GPU reference delivery must match its successful CPU preflight')
+        staged_names=qualified_staging
+    if staged_names-{row['file'] for row in references}:raise ValueError('Unknown reference filename')
+    staged=[row for row in references if row['file'] in staged_names]
+    if mirrors:
+        if staged:raise ValueError('Use one reference delivery method per notebook')
+        code=mirror_reference_prefix([r for r in references if r['file'] in mirrors],mirrors,destination)+code
+    elif staged:
+        code=private_reference_prefix(staged,plan_dir.parent,destination)+code
     ast.parse(code)
     notebook['cells'][0]['source'] = code.splitlines(keepends=True)
     notebook_path.write_text(json.dumps(notebook))
-    if notebook_path.stat().st_size >= 10 * 1024 * 1024:
-        raise ValueError('Private notebook exceeds the conservative 10 MiB delivery budget')
+    if notebook_path.stat().st_size >= 9_900_000:
+        raise ValueError('Private notebook exceeds the conservative 9.9 MB delivery budget')
     meta_path = job/'kernel-metadata.json'
     meta = json.loads(meta_path.read_text())
     meta.update(id='pamcks/h3-anime-ref2va-'+('cpu-preflight' if args.mode=='cpu' else '8step-t4')+'-20261027',
@@ -86,9 +115,12 @@ os.chdir(src);os.execve(sys.executable,argv,env)
     meta_path.write_text(json.dumps(meta, indent=2))
     binding = json.loads((job/'source_binding.json').read_text())
     binding.update(full_pipeline_authorized=True, workload_contract='anime_ref2va_8step', private_auth=False,
-                   reference_delivery=('Exact bytes in private notebook only; absent from public source archive'
-                       if args.reference_delivery=='staged' else 'Direct public URLs, mandatory original SHA256 verification'),
-                   reference_encoding='base85' if args.reference_delivery=='staged' else None,
+                   reference_delivery=('Immutable GitHub reference mirrors; mandatory original SHA256 verification' if mirrors
+                       else 'Selected original bytes in private notebook; public URLs for remaining images' if staged
+                       else 'Direct public URLs, mandatory original SHA256 verification'),
+                   reference_mirror_urls=mirrors,
+                   staged_reference_files=[row['file'] for row in staged],
+                   reference_encoding='base85' if staged else None,
                    notebook_bytes=notebook_path.stat().st_size,
                    reference_sha256=[row['sha256'] for row in references])
     (job/'source_binding.json').write_text(json.dumps(binding, indent=2))

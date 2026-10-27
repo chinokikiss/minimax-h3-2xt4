@@ -1,0 +1,9 @@
+{
+  "source_requests": 1,
+  "scope": "Submission source identity only",
+  "returncode": 0,
+  "matches_retry": false,
+  "matches_cpu_version_2": true,
+  "requested_code_sha256": "73a96026186160690f517499955ffc51c5913337dd1886750cf64dfb51073f41",
+  "received_code_sha256": "70d6a3752ac3581b618c83547e090750d4eeab9a4f8431a149426c93e49b7913"
+}

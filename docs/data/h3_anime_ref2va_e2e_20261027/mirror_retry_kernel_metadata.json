@@ -1,0 +1,16 @@
+{
+  "id": "pamcks/h3-anime-ref2va-cpu-preflight-20261027",
+  "title": "H3 Anime REF2VA CPU Preflight 20261027",
+  "code_file": "experiment.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "docker_image_pinning_type": "original",
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": [],
+  "model_sources": []
+}

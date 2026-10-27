@@ -1,0 +1,11 @@
+{
+  "syntax_valid": true,
+  "notebook_bytes": 12848,
+  "gpu_enabled": false,
+  "dataset_mounts": 0,
+  "embedded_image_payloads": false,
+  "immutable_mirrors": {
+    "reference_shrine.png": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/225da31d025d510bb152683f53cf6f0a9843e0d2/bench_assets/public_reference_images/cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03.png"
+  },
+  "credentials_present": false
+}

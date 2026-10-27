@@ -1,0 +1,19 @@
+{
+  "status": "collected",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-anime-ref2va-cpu-preflight-20261027",
+  "output": "D:\\attention_eval\\h3_anime_e2e_20261027\\retry_cpu_v4\\cpu_outputs",
+  "returncode": 0,
+  "files": 24,
+  "completed_utc": "2026-10-27T13:14:02.096458+00:00",
+  "experiment": {
+    "status": "blocked",
+    "error": "HTTPError('429 Client Error: Too Many Requests (015d12c) for url: https://upload.wikimedia.org/wikipedia/commons/6/6d/Algorithmically-generated_landscape_artwork_of_forest_with_Shinto_shrine.png')",
+    "stages": null,
+    "completed_sampler_steps": 0,
+    "completed_denoiser_calls": 0,
+    "media": null,
+    "quality_acceptance": "Pending review; collection does not establish generation quality"
+  },
+  "prior_input_hash_matches": {}
+}

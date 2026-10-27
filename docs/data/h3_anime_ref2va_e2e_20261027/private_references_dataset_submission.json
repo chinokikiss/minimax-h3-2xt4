@@ -1,0 +1,34 @@
+{
+  "dataset": "pamcks/h3-anime-reference-images-20261027",
+  "private": true,
+  "uploaded_image_bytes": 8020274,
+  "images": [
+    {
+      "file": "reference_character.jpg",
+      "url": "https://dthezntil550i.cloudfront.net/1h/latest/1h2106242105027740014340778/1280_960/cb246f62-8fcd-47b3-b585-99ffe6313002.jpg",
+      "source_page": "https://medibang.com/picture/1h2106242105027740014340778/",
+      "bytes": 317018,
+      "sha256": "e5b1710572f2587f7927e65b9e5f8f742bc435ca388ae23a16880fa6bf542383",
+      "size": [
+        1280,
+        905
+      ]
+    },
+    {
+      "file": "reference_shrine.png",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Algorithmically-generated_landscape_artwork_of_forest_with_Shinto_shrine.png",
+      "source_page": "https://commons.wikimedia.org/wiki/File:Algorithmically-generated_landscape_artwork_of_forest_with_Shinto_shrine.png",
+      "bytes": 7703256,
+      "sha256": "cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03",
+      "size": [
+        4096,
+        2048
+      ]
+    }
+  ],
+  "status": "failed_before_upload",
+  "submitted_utc": "2026-10-27T13:17:56.310159+00:00",
+  "no_automatic_outer_retry": true,
+  "returncode": 1,
+  "failure_stage": "CLI built-in dataset existence check; TLS EOF before file upload"
+}

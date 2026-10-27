@@ -1,0 +1,16 @@
+{"status": "blocked", "full_pipeline_authorized": true, "gpu_used": false, "workload": {"width": 1152, "height": 672, "frames": 243, "video_latent_t": 72, "audio_latent_t": 405, "duration_seconds": 10.125, "output_megapixels": 0.774144}, "reference_delivery": "public_url_download", "error": "HTTPError('429 Client Error: Too Many Requests (015d12c) for url: https://upload.wikimedia.org/wikipedia/commons/6/6d/Algorithmically-generated_landscape_artwork_of_forest_with_Shinto_shrine.png')"}
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/kaggle/temp/h3_light_source/benchmarks/qualify_anime_inputs.py", line 64, in <module>
+    main()
+    ~~~~^^
+  File "/kaggle/temp/h3_light_source/benchmarks/qualify_anime_inputs.py", line 53, in main
+    result['references'] = [download_image(row, args.output) for row in references]
+                            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/kaggle/temp/h3_light_source/benchmarks/qualify_anime_inputs.py", line 21, in download_image
+    response.raise_for_status()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/kaggle/temp/h3_direct_overlay/requests/models.py", line 1026, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 429 Client Error: Too Many Requests (015d12c) for url: https://upload.wikimedia.org/wikipedia/commons/6/6d/Algorithmically-generated_landscape_artwork_of_forest_with_Shinto_shrine.png
