@@ -1,5 +1,5 @@
 {
-  "status": "kaggle_cpu_passed_t4_submitted",
+  "status": "physical_t4_complete",
   "scope": "Video decoder only; no TE, DiT sampling or Audio VAE",
   "default_mode": "auto_query",
   "candidate_mode": "temporal",
@@ -103,18 +103,175 @@
     }
   },
   "kaggle_t4": {
-    "status": "accepted_final_artifacts_pending",
+    "status": "complete",
     "repeats_per_backend": 3,
     "kernel": "pamcks/h3-vae-query-temporal-t4-20261027",
     "version": 1,
     "submitted_utc": "2026-10-27T04:41:42.737138+00:00",
-    "final_collection_count": 0,
+    "final_collection_count": 1,
     "setup_budget_seconds": 300,
     "execution_budget_seconds": 2700,
     "notebook_limit_seconds": 3300,
     "kaggle_mounts": 0,
-    "submission_receipt_sha256": "b4e7928d86402c3220e44aaf596fb6ef6e02fc958ac561ad4717a06cbaf75a0c"
+    "submission_receipt_sha256": "51fb4b59a3bdac6180d3ecb480167dfa423b69ecc8c4b80fd2424c3b24b75fc0",
+    "collected_utc": "2026-10-27T05:10:31.250111+00:00",
+    "hardware": {
+      "devices": [
+        {
+          "name": "Tesla T4",
+          "capability": [
+            7,
+            5
+          ],
+          "uuid": "0b5064c1-348d-4358-81a0-91250ace86df"
+        },
+        {
+          "name": "Tesla T4",
+          "capability": [
+            7,
+            5
+          ],
+          "uuid": "71b3f09e-da72-8acc-26c7-d5eab4360c81"
+        }
+      ],
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "kitchen": "0.2.37",
+      "tilelang": "0.1.13"
+    },
+    "summary": {
+      "query": {
+        "samples_seconds": [
+          247.545035796,
+          248.594444676,
+          246.611794223
+        ],
+        "median_seconds": 247.545035796,
+        "repeatable_output_sha256": true,
+        "peak_device_bytes": [
+          5527306240,
+          4669571072
+        ],
+        "median_worker_cuda_span_seconds": [
+          239.19258251953124,
+          239.0074782104493
+        ],
+        "mean_sampled_utilization": [
+          96.898017090467,
+          96.46352730130943
+        ]
+      },
+      "temporal": {
+        "samples_seconds": [
+          207.609775042,
+          210.570776049,
+          205.760739289
+        ],
+        "median_seconds": 207.609775042,
+        "repeatable_output_sha256": true,
+        "peak_device_bytes": [
+          5919473664,
+          5380505600
+        ],
+        "median_worker_cuda_span_seconds": [
+          204.079083984375,
+          171.70534600225093
+        ],
+        "mean_sampled_utilization": [
+          98.56864027485572,
+          82.39951595412029
+        ]
+      }
+    },
+    "latency_reduction_percent": 16.132523371185826,
+    "accuracy": {
+      "reference": "First full Query output; Native control is cropped only",
+      "controls": [
+        {
+          "mode": "query",
+          "check": {
+            "sha256": "4c04b266fb9a5d2ee7e685bbccb8042c018cfda98282b4d6757e4293cdf357fc",
+            "finite": true,
+            "per_frame_max_abs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.00044727325439453125,
+              0.00044727325439453125,
+              0.00044727325439453125,
+              0.00044727325439453125,
+              0.00044727325439453125,
+              0.00044727325439453125,
+              0.00044727325439453125,
+              0.00044727325439453125,
+              0.00044727325439453125
+            ],
+            "bit_exact": false,
+            "max_abs": 0.00044727325439453125
+          }
+        },
+        {
+          "mode": "temporal",
+          "check": {
+            "sha256": "639b59b3c2c256fe963b0a6c163b1a8b1dda4bb1ee88e0e66099366df10a3319",
+            "finite": true,
+            "per_frame_max_abs": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "bit_exact": true,
+            "max_abs": 0.0
+          }
+        }
+      ],
+      "all_finite": true,
+      "full_cross_method_max_abs": 0.0013418197631835938,
+      "nonzero_frames": 189,
+      "frames": 362,
+      "first_48_frames_max_abs": 0.0013418197631835938,
+      "remaining_frames_max_abs": 0.0013418197631835938
+    },
+    "all_outputs_byte_exact": false,
+    "all_cases_without_fallback": true,
+    "model_download_and_verification_seconds": 29.127012901000057,
+    "comparison_seconds": 1527.0673157590002,
+    "private_launcher_removed": true,
+    "final_artifact_credential_scan": "passed",
+    "native_full_decode_performed": false,
+    "visual_or_generation_quality_acceptance": false,
+    "archived_evidence_manifest": "vae_temporal_query_20261027/manifest.json"
   },
-  "t4_speedup_claim": null,
-  "evidence_directory": "D:/attention_eval/h3_temporal_vae_20261026"
+  "t4_speedup_claim": 1.1923573239551029,
+  "evidence_directory": "D:/attention_eval/h3_temporal_vae_20261026",
+  "best_measured_backend_for_this_shape": "temporal"
 }

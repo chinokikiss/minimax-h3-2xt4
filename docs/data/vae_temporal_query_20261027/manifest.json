@@ -1,0 +1,62 @@
+{
+  "analysis.json": {
+    "bytes": 13900,
+    "sha256": "ed3a511eca8d9ddd038b4ce39b9f796b3950f24ec6d1a969c524381b8f5e6ec2"
+  },
+  "comparison.png": {
+    "bytes": 113593,
+    "sha256": "4c70392020623c0f8fc0d239537aff2df7ba89a255d266a88fd006df7c540f5b"
+  },
+  "cpu_api_probe.txt": {
+    "bytes": 1158,
+    "sha256": "e5900b029eaaff7664c772d6aec92634e63fb1e9124e059a28dbcdf1c7e212d4"
+  },
+  "cpu_collection.json": {
+    "bytes": 592,
+    "sha256": "e4340841292a666b2bc0fac2180fc93f8ffd11aafdc85218ca0de6d36f3625a7"
+  },
+  "cpu_input_gate.json": {
+    "bytes": 475,
+    "sha256": "3f925c77df76ac1501e86be6f95c278f3159042981b5d820eb9bf8a9926e5c01"
+  },
+  "cpu_setup_receipt.json": {
+    "bytes": 119635,
+    "sha256": "b8817015239a39aab67d4ad5176ca79b380d347cafdaf9c280741b727ca82460"
+  },
+  "cpu_submission.json": {
+    "bytes": 1806,
+    "sha256": "4c728579b96f418db929e88f686fd17c5ae0c76b12ae65016fab473332216a8f"
+  },
+  "gpu_api_probe.txt": {
+    "bytes": 1420,
+    "sha256": "16401c525113952b9f12881dd4803be748019d8aa892a98da31d95f79f04a26d"
+  },
+  "gpu_batch.json": {
+    "bytes": 1309,
+    "sha256": "42b63303c670cbf3682d7a241b8a2572b8be6f2cb019a3e436f465592e4a9235"
+  },
+  "gpu_collection.json": {
+    "bytes": 590,
+    "sha256": "f3edfd025d74a1d3da7f5af267d7bc2db830b2709695c3f1c3c784c5385f2887"
+  },
+  "gpu_execution_supervision.json": {
+    "bytes": 209,
+    "sha256": "5fd0875ceac088c9eefd485f86ac50576e1789fb890397f972929c46e79d4488"
+  },
+  "gpu_memory_samples.json.gz": {
+    "bytes": 62964,
+    "sha256": "0911ef5452e3e52ecf8c1c2aa1f28fdb1171f84b5f03b1fc10da462c2865a65a"
+  },
+  "gpu_result.json": {
+    "bytes": 610456,
+    "sha256": "1efec19c55219beff5d6f189ad18e9d71ae44a5463119405ffe64204e968b428"
+  },
+  "gpu_setup_supervision.json": {
+    "bytes": 207,
+    "sha256": "e0057dbea16b204db66e04c8b1c33e4e2b541912cedeadf87c3d6624983d1b1f"
+  },
+  "gpu_submission.json": {
+    "bytes": 2012,
+    "sha256": "51fb4b59a3bdac6180d3ecb480167dfa423b69ecc8c4b80fd2424c3b24b75fc0"
+  }
+}

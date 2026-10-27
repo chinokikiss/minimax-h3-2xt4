@@ -1,0 +1,58 @@
+{
+  "status": "complete",
+  "full_pipeline": false,
+  "video_decoder_only": true,
+  "source_capsule_sha256": "168bf4446f17eb4a0714f5a8f4727d9c2cb8ddf78602868b0002481fad2a95d3",
+  "input": {
+    "file_sha256": "08a10be3efdda85ea6415c832eb2654101da5d5fabe54b6e34002071ee2dde25",
+    "tensor_sha256": "8fb3296f9dfc00641698e1a1aa26acb7f0fa98675b89b597dc95f10e64a9fa64",
+    "shape": [
+      1,
+      24,
+      107,
+      34,
+      60
+    ]
+  },
+  "hardware": [
+    {
+      "name": "Tesla T4",
+      "capability": [
+        7,
+        5
+      ],
+      "uuid": "0b5064c1-348d-4358-81a0-91250ace86df"
+    },
+    {
+      "name": "Tesla T4",
+      "capability": [
+        7,
+        5
+      ],
+      "uuid": "71b3f09e-da72-8acc-26c7-d5eab4360c81"
+    }
+  ],
+  "model_download_and_verification_seconds": 29.127012901000057,
+  "comparison_seconds": 1527.0673157590002,
+  "comparison_exit_code": 0,
+  "summary": {
+    "query": {
+      "samples": [
+        247.545035796,
+        248.594444676,
+        246.611794223
+      ],
+      "median_seconds": 247.545035796
+    },
+    "temporal": {
+      "samples": [
+        207.609775042,
+        210.570776049,
+        205.760739289
+      ],
+      "median_seconds": 207.609775042
+    }
+  },
+  "temporal_speedup_over_query": 1.1923573239551029,
+  "all_outputs_byte_exact": false
+}

@@ -1,0 +1,492 @@
+{
+  "hardware": {
+    "devices": [
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "0b5064c1-348d-4358-81a0-91250ace86df"
+      },
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "71b3f09e-da72-8acc-26c7-d5eab4360c81"
+      }
+    ],
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "kitchen": "0.2.37",
+    "tilelang": "0.1.13"
+  },
+  "summary": {
+    "query": {
+      "samples_seconds": [
+        247.545035796,
+        248.594444676,
+        246.611794223
+      ],
+      "median_seconds": 247.545035796,
+      "repeatable_output_sha256": true,
+      "peak_device_bytes": [
+        5527306240,
+        4669571072
+      ],
+      "median_worker_cuda_span_seconds": [
+        239.19258251953124,
+        239.0074782104493
+      ],
+      "mean_sampled_utilization": [
+        96.898017090467,
+        96.46352730130943
+      ]
+    },
+    "temporal": {
+      "samples_seconds": [
+        207.609775042,
+        210.570776049,
+        205.760739289
+      ],
+      "median_seconds": 207.609775042,
+      "repeatable_output_sha256": true,
+      "peak_device_bytes": [
+        5919473664,
+        5380505600
+      ],
+      "median_worker_cuda_span_seconds": [
+        204.079083984375,
+        171.70534600225093
+      ],
+      "mean_sampled_utilization": [
+        98.56864027485572,
+        82.39951595412029
+      ]
+    }
+  },
+  "cases": [
+    {
+      "mode": "query",
+      "repeat": 0,
+      "seconds": 247.545035796,
+      "workers": [
+        {
+          "rank": 0,
+          "commands": {
+            "decode_start": 1,
+            "video_pixels": 126,
+            "decode_complete": 1
+          },
+          "cuda_event_span_seconds": 239.19258251953124,
+          "thread_cpu_seconds": 242.26856850200002,
+          "command_wall_seconds": 242.365321368,
+          "cpu_reply_bytes": 3468165120,
+          "collectives": {
+            "broadcast": {
+              "calls": 126,
+              "operand_bytes": 997355520
+            },
+            "all_gather_into_tensor": {
+              "calls": 4662,
+              "operand_bytes": 97108623360
+            }
+          },
+          "peak_allocated_bytes": 3837926400,
+          "peak_reserved_bytes": 4204789760
+        },
+        {
+          "rank": 1,
+          "commands": {
+            "decode_start": 1,
+            "video_pixels": 126,
+            "decode_complete": 1
+          },
+          "cuda_event_span_seconds": 239.0074782104493,
+          "thread_cpu_seconds": 238.92275849000004,
+          "command_wall_seconds": 239.02409630400007,
+          "cpu_reply_bytes": 0,
+          "collectives": {
+            "broadcast": {
+              "calls": 126,
+              "operand_bytes": 997355520
+            },
+            "all_gather_into_tensor": {
+              "calls": 4662,
+              "operand_bytes": 97108623360
+            }
+          },
+          "peak_allocated_bytes": 3518363136,
+          "peak_reserved_bytes": 3946840064
+        }
+      ],
+      "nvml_samples": 1216,
+      "nvml_peak_device_bytes": [
+        5527306240,
+        4669571072
+      ],
+      "nvml_mean_utilization": [
+        96.89638157894737,
+        96.45805921052632
+      ]
+    },
+    {
+      "mode": "temporal",
+      "repeat": 0,
+      "seconds": 207.609775042,
+      "workers": [
+        {
+          "rank": 0,
+          "commands": {
+            "decode_start": 1,
+            "video_temporal_pair": 11,
+            "decode_complete": 1
+          },
+          "cuda_event_span_seconds": 204.079083984375,
+          "thread_cpu_seconds": 204.95887313899996,
+          "command_wall_seconds": 205.04030787,
+          "cpu_reply_bytes": 965099520,
+          "collectives": {},
+          "peak_allocated_bytes": 4156059136,
+          "peak_reserved_bytes": 4657774592
+        },
+        {
+          "rank": 1,
+          "commands": {
+            "decode_start": 1,
+            "video_temporal_pair": 11,
+            "decode_complete": 1
+          },
+          "cuda_event_span_seconds": 171.70534600225093,
+          "thread_cpu_seconds": 172.551413013,
+          "command_wall_seconds": 172.62042365399998,
+          "cpu_reply_bytes": 877363200,
+          "collectives": {},
+          "peak_allocated_bytes": 4156128768,
+          "peak_reserved_bytes": 4657774592
+        }
+      ],
+      "nvml_samples": 1018,
+      "nvml_peak_device_bytes": [
+        5919473664,
+        5380505600
+      ],
+      "nvml_mean_utilization": [
+        98.56876227897838,
+        82.79567779960708
+      ]
+    },
+    {
+      "mode": "temporal",
+      "repeat": 1,
+      "seconds": 210.570776049,
+      "workers": [
+        {
+          "rank": 0,
+          "commands": {
+            "decode_start": 1,
+            "video_temporal_pair": 11,
+            "decode_complete": 1
+          },
+          "cuda_event_span_seconds": 207.04776953125003,
+          "thread_cpu_seconds": 207.94129588899997,
+          "command_wall_seconds": 208.012867297,
+          "cpu_reply_bytes": 965099520,
+          "collectives": {},
+          "peak_allocated_bytes": 4156059136,
+          "peak_reserved_bytes": 4657774592
+        },
+        {
+          "rank": 1,
+          "commands": {
+            "decode_start": 1,
+            "video_temporal_pair": 11,
+            "decode_complete": 1
+          },
+          "cuda_event_span_seconds": 170.51802393425257,
+          "thread_cpu_seconds": 171.38182878199999,
+          "command_wall_seconds": 171.44196848600004,
+          "cpu_reply_bytes": 877363200,
+          "collectives": {},
+          "peak_allocated_bytes": 4156128768,
+          "peak_reserved_bytes": 4657774592
+        }
+      ],
+      "nvml_samples": 1032,
+      "nvml_peak_device_bytes": [
+        5919473664,
+        5380505600
+      ],
+      "nvml_mean_utilization": [
+        98.61434108527132,
+        80.99612403100775
+      ]
+    },
+    {
+      "mode": "query",
+      "repeat": 1,
+      "seconds": 248.594444676,
+      "workers": [
+        {
+          "rank": 0,
+          "commands": {
+            "decode_start": 1,
+            "video_pixels": 126,
+            "decode_complete": 1
+          },
+          "cuda_event_span_seconds": 240.34608453369148,
+          "thread_cpu_seconds": 243.42004701400003,
+          "command_wall_seconds": 243.51160539800009,
+          "cpu_reply_bytes": 3468165120,
+          "collectives": {
+            "broadcast": {
+              "calls": 126,
+              "operand_bytes": 997355520
+            },
+            "all_gather_into_tensor": {
+              "calls": 4662,
+              "operand_bytes": 97108623360
+            }
+          },
+          "peak_allocated_bytes": 3837926400,
+          "peak_reserved_bytes": 4204789760
+        },
+        {
+          "rank": 1,
+          "commands": {
+            "decode_start": 1,
+            "video_pixels": 126,
+            "decode_complete": 1
+          },
+          "cuda_event_span_seconds": 240.16219396972662,
+          "thread_cpu_seconds": 240.08533268399995,
+          "command_wall_seconds": 240.17765899599996,
+          "cpu_reply_bytes": 0,
+          "collectives": {
+            "broadcast": {
+              "calls": 126,
+              "operand_bytes": 997355520
+            },
+            "all_gather_into_tensor": {
+              "calls": 4662,
+              "operand_bytes": 97108623360
+            }
+          },
+          "peak_allocated_bytes": 3518363136,
+          "peak_reserved_bytes": 3946840064
+        }
+      ],
+      "nvml_samples": 1220,
+      "nvml_peak_device_bytes": [
+        5527306240,
+        4669571072
+      ],
+      "nvml_mean_utilization": [
+        96.98196721311476,
+        96.56475409836065
+      ]
+    },
+    {
+      "mode": "query",
+      "repeat": 2,
+      "seconds": 246.611794223,
+      "workers": [
+        {
+          "rank": 0,
+          "commands": {
+            "decode_start": 1,
+            "video_pixels": 126,
+            "decode_complete": 1
+          },
+          "cuda_event_span_seconds": 237.96504437255857,
+          "thread_cpu_seconds": 241.11566092200005,
+          "command_wall_seconds": 241.2235553030001,
+          "cpu_reply_bytes": 3468165120,
+          "collectives": {
+            "broadcast": {
+              "calls": 126,
+              "operand_bytes": 997355520
+            },
+            "all_gather_into_tensor": {
+              "calls": 4662,
+              "operand_bytes": 97108623360
+            }
+          },
+          "peak_allocated_bytes": 3837926400,
+          "peak_reserved_bytes": 4204789760
+        },
+        {
+          "rank": 1,
+          "commands": {
+            "decode_start": 1,
+            "video_pixels": 126,
+            "decode_complete": 1
+          },
+          "cuda_event_span_seconds": 237.78392327880857,
+          "thread_cpu_seconds": 237.69617466099996,
+          "command_wall_seconds": 237.80266503400006,
+          "cpu_reply_bytes": 0,
+          "collectives": {
+            "broadcast": {
+              "calls": 126,
+              "operand_bytes": 997355520
+            },
+            "all_gather_into_tensor": {
+              "calls": 4662,
+              "operand_bytes": 97108623360
+            }
+          },
+          "peak_allocated_bytes": 3518363136,
+          "peak_reserved_bytes": 3946840064
+        }
+      ],
+      "nvml_samples": 1210,
+      "nvml_peak_device_bytes": [
+        5527306240,
+        4669571072
+      ],
+      "nvml_mean_utilization": [
+        96.81570247933884,
+        96.36776859504133
+      ]
+    },
+    {
+      "mode": "temporal",
+      "repeat": 2,
+      "seconds": 205.760739289,
+      "workers": [
+        {
+          "rank": 0,
+          "commands": {
+            "decode_start": 1,
+            "video_temporal_pair": 11,
+            "decode_complete": 1
+          },
+          "cuda_event_span_seconds": 202.08345312499995,
+          "thread_cpu_seconds": 203.003787921,
+          "command_wall_seconds": 203.07825074700003,
+          "cpu_reply_bytes": 965099520,
+          "collectives": {},
+          "peak_allocated_bytes": 4156059136,
+          "peak_reserved_bytes": 4657774592
+        },
+        {
+          "rank": 1,
+          "commands": {
+            "decode_start": 1,
+            "video_temporal_pair": 11,
+            "decode_complete": 1
+          },
+          "cuda_event_span_seconds": 171.83145018987358,
+          "thread_cpu_seconds": 172.69773162599998,
+          "command_wall_seconds": 172.771180768,
+          "cpu_reply_bytes": 877363200,
+          "collectives": {},
+          "peak_allocated_bytes": 4156128768,
+          "peak_reserved_bytes": 4657774592
+        }
+      ],
+      "nvml_samples": 1008,
+      "nvml_peak_device_bytes": [
+        5919473664,
+        5380505600
+      ],
+      "nvml_mean_utilization": [
+        98.52281746031746,
+        83.40674603174604
+      ]
+    }
+  ],
+  "speedup": 1.1923573239551029,
+  "latency_reduction_percent": 16.132523371185826,
+  "accuracy": {
+    "reference": "First full Query output; Native control is cropped only",
+    "controls": [
+      {
+        "mode": "query",
+        "check": {
+          "sha256": "4c04b266fb9a5d2ee7e685bbccb8042c018cfda98282b4d6757e4293cdf357fc",
+          "finite": true,
+          "per_frame_max_abs": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.00044727325439453125,
+            0.00044727325439453125,
+            0.00044727325439453125,
+            0.00044727325439453125,
+            0.00044727325439453125,
+            0.00044727325439453125,
+            0.00044727325439453125,
+            0.00044727325439453125,
+            0.00044727325439453125
+          ],
+          "bit_exact": false,
+          "max_abs": 0.00044727325439453125
+        }
+      },
+      {
+        "mode": "temporal",
+        "check": {
+          "sha256": "639b59b3c2c256fe963b0a6c163b1a8b1dda4bb1ee88e0e66099366df10a3319",
+          "finite": true,
+          "per_frame_max_abs": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "bit_exact": true,
+          "max_abs": 0.0
+        }
+      }
+    ],
+    "all_finite": true,
+    "full_cross_method_max_abs": 0.0013418197631835938,
+    "nonzero_frames": 189,
+    "frames": 362,
+    "first_48_frames_max_abs": 0.0013418197631835938,
+    "remaining_frames_max_abs": 0.0013418197631835938
+  },
+  "evidence_sha256": {
+    "gpu_result.json": "1efec19c55219beff5d6f189ad18e9d71ae44a5463119405ffe64204e968b428",
+    "gpu_memory_samples.json.gz": "0911ef5452e3e52ecf8c1c2aa1f28fdb1171f84b5f03b1fc10da462c2865a65a"
+  },
+  "limits": [
+    "CUDA event spans include host gaps and are not exclusive kernel times.",
+    "Collective operand bytes are not physical PCIe traffic.",
+    "Allocator peaks persist from replica preparation until the next preparation.",
+    "NVML reports sampled whole-device usage, including parent context/allocations.",
+    "No full Native output, media review or generation-quality experiment."
+  ]
+}

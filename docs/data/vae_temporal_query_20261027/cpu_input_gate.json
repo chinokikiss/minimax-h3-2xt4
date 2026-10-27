@@ -1,0 +1,18 @@
+{
+  "status": "cpu_input_ready",
+  "full_pipeline": false,
+  "video_decoder_only": true,
+  "source_capsule_sha256": "168bf4446f17eb4a0714f5a8f4727d9c2cb8ddf78602868b0002481fad2a95d3",
+  "input": {
+    "file_sha256": "08a10be3efdda85ea6415c832eb2654101da5d5fabe54b6e34002071ee2dde25",
+    "tensor_sha256": "8fb3296f9dfc00641698e1a1aa26acb7f0fa98675b89b597dc95f10e64a9fa64",
+    "shape": [
+      1,
+      24,
+      107,
+      34,
+      60
+    ]
+  },
+  "cuda_execution": false
+}
