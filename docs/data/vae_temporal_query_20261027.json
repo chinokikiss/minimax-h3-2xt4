@@ -1,5 +1,5 @@
 {
-  "status": "local_qualified_kaggle_pending",
+  "status": "local_qualified_kaggle_cpu_submitted",
   "scope": "Video decoder only; no TE, DiT sampling or Audio VAE",
   "default_mode": "auto_query",
   "candidate_mode": "temporal",
@@ -24,7 +24,15 @@
     "all_byte_exact_to_native": true,
     "qualifies_t4_performance": false
   },
-  "kaggle_cpu": {"status": "not_submitted"},
+  "source_commit": "60af7e7c7af4cfe998ae55527ded95104e60d7aa",
+  "kaggle_cpu": {
+    "status": "accepted_final_artifacts_pending",
+    "kernel": "pamcks/h3-vae-temporal-cpu-20261027",
+    "version": 1,
+    "submitted_utc": "2026-10-27T04:29:06.476673+00:00",
+    "gpu_requested": false,
+    "final_collection_count": 0
+  },
   "kaggle_t4": {"status": "not_submitted", "repeats_per_backend": 3},
   "t4_speedup_claim": null,
   "evidence_directory": "D:/attention_eval/h3_temporal_vae_20261026"

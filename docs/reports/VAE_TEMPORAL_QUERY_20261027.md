@@ -1,8 +1,11 @@
 # Video VAE Temporal Parallel versus Query Parallel
 
 Status: optional Temporal decoding is implemented and locally qualified.
-The frozen-source CPU input/authentication gate and physical two-T4 comparison
-are pending. **No T4 speedup is claimed yet.** The default remains `auto`,
+The private frozen-source CPU input/authentication preflight was accepted as
+[version 1](https://www.kaggle.com/code/pamcks/h3-vae-temporal-cpu-20261027)
+at 2026-10-27 04:29 UTC. Its final artifacts have not been collected; the
+physical two-T4 comparison is gated on its passing receipts and has not been
+submitted. **No T4 speedup is claimed yet.** The default remains `auto`,
 which selects the existing Query path when compatible.
 
 ## Implementation
@@ -99,4 +102,13 @@ Implementation: `patches/temporal_vae.py`, `patches/video_decode_planner.py`,
 `patches/comfy_sampler.py` and `patches/comfy_tp_runtime.py`.
 Benchmark: `benchmarks/run_vae_temporal_compare.py` and
 `benchmarks/vae_decoder_service.py`.
+The immutable delivery is published at source commit
+`60af7e7c7af4cfe998ae55527ded95104e60d7aa`; distribution SHA256
+`519bc752462ac2be251dd637d7398de637a5c29c7b581fa28525dd254689896a`,
+capsule SHA256
+`168bf4446f17eb4a0714f5a8f4727d9c2cb8ddf78602868b0002481fad2a95d3`.
+Public source URL content was downloaded and hash-verified before submission.
+The rejected first local bundle was never submitted; both attempts are retained
+in the local evidence directory. Machine-readable status:
+[vae_temporal_query_20261027.json](../data/vae_temporal_query_20261027.json).
 Evidence: `D:/attention_eval/h3_temporal_vae_20261026/`.
