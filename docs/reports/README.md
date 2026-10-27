@@ -10,6 +10,9 @@ and the [Kitchen / TileLang short and long T4 matrix](KITCHEN_ATTENTION_T4_MATRI
 
 Measurements are version-bound. Read each report's hardware, software, shapes,
 numerical reference, and timing boundary before comparing results.
+
+- [Video VAE Temporal versus Query Parallel](VAE_TEMPORAL_QUERY_20261027.md) — optional Native clip pairing, real saved H3 latents,178 CPU checks and local trained equality; frozen CPU gate and physical T4 comparison pending
+
 The [zero-mount GitHub/HF/direct-pip migration](KAGGLE_LIGHT_DELIVERY_20261022.md)
 records the passed CPU gate, private input publication and replacement jobs.
 Current feature selection is described in the [technical guide](../guides/MiniMax_H3_TP2_Optimization_Technical_Guide.pdf).

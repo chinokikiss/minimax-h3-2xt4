@@ -1,0 +1,31 @@
+{
+  "status": "local_qualified_kaggle_pending",
+  "scope": "Video decoder only; no TE, DiT sampling or Audio VAE",
+  "default_mode": "auto_query",
+  "candidate_mode": "temporal",
+  "distribution_sha256": "519bc752462ac2be251dd637d7398de637a5c29c7b581fa28525dd254689896a",
+  "capsule_sha256": "168bf4446f17eb4a0714f5a8f4727d9c2cb8ddf78602868b0002481fad2a95d3",
+  "comfyui_commit": "d49e888586dd8ae012c0667b33466b815fee07f7",
+  "core_versions": {"comfy-kitchen": "0.2.37", "tilelang": "0.1.13"},
+  "input": {
+    "shape": [1, 24, 107, 34, 60],
+    "tensor_sha256": "8fb3296f9dfc00641698e1a1aa26acb7f0fa98675b89b597dc95f10e64a9fa64",
+    "output_width": 960,
+    "output_height": 544,
+    "output_frames": 362,
+    "fps": 24,
+    "native_clips": 21
+  },
+  "local_cpu": {"tests": 178, "failures": 0, "errors": 0, "skipped": 0},
+  "extracted_delivery_cpu": {"tests": 178, "failures": 0, "errors": 0, "skipped": 0},
+  "local_trained_correctness": {
+    "hardware": "RTX 5060 Ti, two logical ranks",
+    "cases": 8,
+    "all_byte_exact_to_native": true,
+    "qualifies_t4_performance": false
+  },
+  "kaggle_cpu": {"status": "not_submitted"},
+  "kaggle_t4": {"status": "not_submitted", "repeats_per_backend": 3},
+  "t4_speedup_claim": null,
+  "evidence_directory": "D:/attention_eval/h3_temporal_vae_20261026"
+}

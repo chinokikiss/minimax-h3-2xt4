@@ -118,8 +118,8 @@ def packet(value, device):
 
 
 def worker_reply(result, rank, command):
-    """Only rank 0 and explicit diagnostics own a returned CPU payload."""
-    if rank != 0 and command not in ('stats', 'idle_stats'):
+    """Rank 0, diagnostics and independent temporal owners return CPU payloads."""
+    if rank != 0 and command not in ('stats', 'idle_stats', 'video_temporal_pair'):
         return None
     return packet(result, 'cpu')
 
@@ -239,6 +239,7 @@ class RankRuntime:
             self.idle_stats['errors']+=1;self.stop_idle(keep=False)
 
     def _drop_vae(self):
+        self.vae_temporal_planner = None
         if self.vae_model is None and self.vae_kind is None and not getattr(self, 'vae_numeric_flags', None):
             return
         self.vae_model = None
@@ -253,7 +254,9 @@ class RankRuntime:
                 setattr(owner, name, value)
         self.vae_numeric_flags = None
 
-    def _prepare_vae(self, path, kind, activation_bytes, numeric_options=None):
+    def _prepare_vae(self, path, kind, activation_bytes, numeric_options=None, parallelism='query'):
+        if parallelism not in ('query', 'temporal'):
+            raise ValueError(parallelism)
         if kind != 'video':
             return {'accepted':False, 'reason':'Parallel VAE decoding is video-only; Audio VAE uses Native single-GPU decoding'}
         from patches.parallel_vae import checkpoint_plan, load_decode_weights
@@ -307,7 +310,13 @@ class RankRuntime:
                 if key in options:
                     self.vae_numeric_flags.append((owner, name, getattr(owner, name)))
                     setattr(owner, name, options[key])
-            self.vae_model = load_decode_weights(reader, names, kind, self.device)
+            if parallelism == 'query':
+                self.vae_model = load_decode_weights(reader, names, kind, self.device)
+            else:
+                self.vae_model = load_decode_weights(reader, names, kind, self.device, parallelism='temporal')
+                from patches.staged_vae import video_planning_template
+                from patches.video_decode_planner import make_planner
+                self.vae_temporal_planner = make_planner(video_planning_template(reader), self.vae_model._decode_pixels)
         except (torch.cuda.OutOfMemoryError, ValueError) as exc:
             error = str(exc)
         finally:
@@ -322,6 +331,7 @@ class RankRuntime:
                 reason=reason,admission=admission,monotonic=time.monotonic()))
             return {'accepted':False, 'reason':reason, 'admission':admission}
         self.vae_kind = kind
+        self.vae_parallelism = parallelism
         self.events.append(dict(phase='vae_prepare',kind=kind,accepted=True,
                                 checkpoint=reader.identity,admission=admission,monotonic=time.monotonic()))
         return {'accepted':True, 'kind':kind, 'admission':admission}
@@ -567,12 +577,28 @@ class RankRuntime:
                 return self._prepare_vae(*args, **kwargs)
             elif command == 'video_pixels':
                 from patches.parallel_vae import AlignedVideoDecode
-                if self.sample_active or self.vae_model is None or self.vae_kind != 'video':
+                if (self.sample_active or self.vae_model is None or self.vae_kind != 'video'
+                        or getattr(self, 'vae_parallelism', 'query') != 'query'):
                     raise RuntimeError('Parallel VAE decode requires its prepared stage')
                 z = packet(args[0], self.device)
                 if z.ndim != 5 or z.shape[1] != 24 or z.dtype != torch.float16:
                     raise ValueError('Aligned video requires FP16 [B,24,T,H,W] raw latents')
                 return AlignedVideoDecode(self.vae_model, z, self.comm, self.rank).run()
+            elif command == 'video_temporal_pair':
+                if (self.sample_active or self.vae_model is None or self.vae_kind != 'video'
+                        or getattr(self, 'vae_parallelism', None) != 'temporal'):
+                    raise RuntimeError('Temporal VAE decode requires its prepared stage')
+                if len(args[0]) != 2:
+                    raise ValueError('Temporal dispatch requires exactly two clip slots')
+                clip = args[0][self.rank]
+                if clip is None:
+                    return None
+                clip = packet(clip, self.device)
+                if clip.ndim != 5 or clip.shape[1] != 24 or clip.dtype != torch.float16:
+                    raise ValueError('Temporal video requires FP16 [B,24,T,H,W] raw latents')
+                # Full Native spatial tiling on each independent temporal clip.
+                # No attention patching or per-layer NCCL communication.
+                return self.vae_temporal_planner._adaptive_decode(clip)
             elif command == 'vae_release':
                 self._drop_vae()
             elif command == 'decode_start':
@@ -816,6 +842,8 @@ class PhysicalTPService:
                     records=[r[1] for r in results]
                     for record in records:record['parent_vae_idle']=dict(self.idle_vae_stats)
                     return records
+                if command == 'video_temporal_pair':
+                    return tuple(r[1] for r in results)
                 return results[0][1]
             except BaseException:
                 # A rank may be inside NCCL. Terminating both prevents a stale

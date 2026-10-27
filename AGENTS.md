@@ -22,3 +22,8 @@
 - Captured activations stay private on HF. Authenticate on Kaggle through HF_TOKEN (or the historical HF_token) Secrets; never include tokens in notebooks, archives, receipts or logs.
 - Both earlier GPU instances were stopped by the user. Qualify the new direct-pip/source bootstrap on CPU before GPU replacements. The separately authorized long E2E retry remains in scope.
 - For the current operator retry only, the user explicitly permits their temporary HF token in the private Kaggle submission instead of Secrets. Keep it out of public distributions, logs and receipts; do not broaden this exception to other credentials or jobs.
+
+## Authorized Temporal VAE benchmark exception — 2026-10-26
+
+- The user separately authorizes the supplied HF token inside this private Query-versus-Temporal Video VAE benchmark notebook only, including its CPU input-authentication preflight. Keep it out of public source archives, logs and receipts. Do not extend this exception to another job or credential.
+- Benchmark only the Video decoder with the saved real H3 latents; no TE/DiT sampling or Audio VAE parallelism. Preserve the default Query mode while Temporal is qualified.

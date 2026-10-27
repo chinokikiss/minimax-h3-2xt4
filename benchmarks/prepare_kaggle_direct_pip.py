@@ -39,7 +39,7 @@ def requirements(lock,base,minor):
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--distribution',type=Path,required=True)
     parser.add_argument('--source',type=Path,required=True);parser.add_argument('--output',type=Path,required=True)
-    parser.add_argument('--mode',choices=('cpu','e2e','operators','dit-profile','review-operators'),required=True)
+    parser.add_argument('--mode',choices=('cpu','e2e','operators','dit-profile','review-operators','vae-parallel'),required=True)
     parser.add_argument('--review-suite',action='store_true')
     parser.add_argument('--qualification',type=Path);args=parser.parse_args()
     out=args.output;out.mkdir(parents=True,exist_ok=True)
@@ -122,6 +122,7 @@ if importlib.util.find_spec('benchmarks.test_dit_temporaries') is not None:names
 if importlib.util.find_spec('benchmarks.test_dit_single_profile') is not None:names+=['benchmarks.test_dit_single_profile','benchmarks.test_video_decode_memory']
 if importlib.util.find_spec('benchmarks.test_tp2_bundle') is not None:names+=['benchmarks.test_tp2_bundle','benchmarks.test_worker_trace']
 if importlib.util.find_spec('benchmarks.test_tp2_disk_bake') is not None:names+=['benchmarks.test_tp2_disk_bake','benchmarks.test_h3_l1_turbo_e2e']
+if importlib.util.find_spec('benchmarks.test_temporal_vae') is not None:names+=['benchmarks.test_temporal_vae','benchmarks.test_temporal_delivery']
 result=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromNames(names))
 assert result.wasSuccessful()
 """

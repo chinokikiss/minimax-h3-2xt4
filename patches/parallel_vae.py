@@ -90,7 +90,7 @@ def checkpoint_plan(path, kind):
 
 @torch.inference_mode(False)
 @torch.no_grad()
-def load_decode_weights(reader, names, kind, device):
+def load_decode_weights(reader, names, kind, device, *, parallelism='query'):
     if kind != 'video':
         raise ValueError('Parallel VAE decoding is video-only; use Native single-GPU Audio VAE decoding')
     # Module.to inside inference_mode can turn a QuantizedTensor parameter
@@ -103,9 +103,12 @@ def load_decode_weights(reader, names, kind, device):
     model = model.to(device=device, dtype=torch.float16).eval().requires_grad_(False)
     from patches.h3_tensor_flow import prepare_video,policy_for
     prepare_video(model,policy_for(reader))
-    status=query_partitioning_status(model)
-    if not status['available']:
-        raise ValueError('Query partitioning unavailable: '+status['reason'])
+    if parallelism not in ('query', 'temporal'):
+        raise ValueError(parallelism)
+    if parallelism == 'query':
+        status=query_partitioning_status(model)
+        if not status['available']:
+            raise ValueError('Query partitioning unavailable: '+status['reason'])
     return model
 
 

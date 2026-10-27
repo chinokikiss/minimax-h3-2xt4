@@ -9,6 +9,12 @@ Runtime commands use `python -m tools.runtime.NAME`; historical builders and
 analysis helpers use `python -m tools.experiments.NAME`. Historical submissions
 remain unchanged and are not current setup templates.
 
+`run_vae_temporal_batch.py` and `run_vae_temporal_compare.py` implement the
+[decoder-only Temporal/Query comparison](../docs/reports/VAE_TEMPORAL_QUERY_20261027.md).
+They replay the private saved H3 video latent and load only the trained Video
+decoder. CPU source/input qualification precedes a bounded physical two-T4 run;
+local logical-rank correctness is checked by `qualify_temporal_vae.py`.
+
 `build_review_t4_delivery.py`, `run_review_cpu.py` and `run_review_t4.py`
 implement the [bounded T4 review experiment](../docs/reports/H3_REVIEW_T4_EXPERIMENT_20261024.md).
 Only four hash-verified public block shards are used, with seeded shape

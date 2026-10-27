@@ -142,14 +142,14 @@ class MiniMaxH3PostDecodePrefetch:
 
 
 class MiniMaxH3ParallelVAELoader:
-    DESCRIPTION='Demand-loaded H3 VAEs: encoders load only for reference encoding, decoders only for output. Video supports query parallelism; Audio decodes natively on one GPU in FP32.'
+    DESCRIPTION='Demand-loaded H3 VAEs: encoders load only for reference encoding, decoders only for output. Video supports query or temporal clip parallelism; Audio decodes natively on one GPU in FP32.'
     @classmethod
     def INPUT_TYPES(cls):
         import folder_paths
         return {'required':{
             'vae_name':(folder_paths.get_filename_list('vae'),),
             'session':('MINIMAX_TP2_SESSION',),
-            'decode_mode':(['auto', 'native'], {'default':'auto','tooltip':'Video: auto enables query parallelism when compatible. Audio always uses Native single-GPU decoding.'})}}
+            'decode_mode':(['auto', 'native', 'query', 'temporal'], {'default':'auto','tooltip':'Video: auto/query uses query parallelism; temporal assigns independent Native clips to two decoder replicas. Audio always uses Native single-GPU decoding.'})}}
     RETURN_TYPES = ('VAE',)
     FUNCTION = 'load'
     CATEGORY = 'MiniMax H3/TP2'

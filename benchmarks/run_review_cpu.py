@@ -19,7 +19,8 @@ NAMES=['test_pipeline_review','test_dit_temporaries','test_tp2_bundle',
     'test_h3_operator_enhancements','test_residency_policy','test_legacy_runtime',
     'test_frozen_kaggle_setup','test_direct_pip_delivery','test_h3_loading_stages',
     'test_idle_lifecycle','test_idle_identity','test_review_optimizations','test_review_t4',
-    'test_h3_configuration_defaults','test_te_loading','test_tp2_disk_bake','test_h3_l1_turbo_e2e']
+    'test_h3_configuration_defaults','test_te_loading','test_tp2_disk_bake','test_h3_l1_turbo_e2e',
+    'test_temporal_vae','test_temporal_delivery']
 
 
 def main():

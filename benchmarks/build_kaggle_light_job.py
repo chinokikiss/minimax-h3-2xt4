@@ -4,14 +4,50 @@ import ast
 import hashlib
 import json
 from pathlib import Path
+import textwrap
 from t4_notebook_watchdog import supervise_worker
 
 
+def private_auth_execution(execution):
+    """Only invoked after the CLI's task-specific private-auth scope check."""
+    from huggingface_hub import get_token
+    token=get_token()
+    if not token:raise RuntimeError('Normal local HF login is required; do not put a token in CLI arguments')
+    auth="""import runpy,kaggle_secrets
+pathlib.Path(__file__).unlink(missing_ok=True)
+temporary_hf_auth=[TEMPORARY_AUTH]
+class TemporaryPrivateHF:
+    def get_secret(self,name):
+        if name in ('HF_TOKEN','HF_token') and temporary_hf_auth:return temporary_hf_auth.pop()
+        raise KeyError(name)
+kaggle_secrets.UserSecretsClient=TemporaryPrivateHF
+os.environ.update(env)
+sys.path[:0]=env['PYTHONPATH'].split(os.pathsep)
+sys.argv=argv[2:]
+runpy.run_path(argv[2],run_name='__main__')
+""".replace('TEMPORARY_AUTH',repr(token))
+    del token
+    assert execution.count('os.execve(sys.executable,argv,env)')==1
+    return execution.replace('os.execve(sys.executable,argv,env)',auth)
+
+
+def execution_supervisor(execution, *, budget, output, private_auth=False):
+    if private_auth:execution=private_auth_execution(execution)
+    result=supervise_worker(execution,budget=budget,output=output)
+    if private_auth:
+        # Also remove the credential-bearing launcher if it fails before its
+        # self-unlink. The private notebook is the only retained auth surface.
+        result='try:\n'+textwrap.indent(result,'    ')+"\nfinally:\n    pathlib.Path("+repr(output)+").joinpath('bounded_worker.py').unlink(missing_ok=True)\n"
+    return result
+
+
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--mode',choices=('cpu','e2e','operators','dit-memory','dit-profile','review-operators'),required=True)
+    p=argparse.ArgumentParser();p.add_argument('--mode',choices=('cpu','e2e','operators','dit-memory','dit-profile','review-operators','vae-parallel'),required=True)
     p.add_argument('--review-suite',action='store_true',help='Qualify the review follow-up on a CPU instance')
     p.add_argument('--review-recovery',action='store_true',help='Retry only unfinished review LoRA timings; complete the previously unstarted trace')
     p.add_argument('--turbo-e2e',action='store_true',help='Current-default 0.5MP E2E with Native TP2 offline LoRA persisted to disk')
+    p.add_argument('--vae-compare-preflight',action='store_true',help='CPU-only authentication/hash gate for the private Video decoder input')
+    p.add_argument('--vae-input-qualification',type=Path,help='Matching CPU-only real-latent authentication receipt')
     p.add_argument('--publication',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
     p.add_argument('--qualification',type=Path);p.add_argument('--private-input',type=Path)
     p.add_argument('--temporary-private-auth',action='store_true',help='Explicit user-authorized temporary auth in a private operator submission only')
@@ -25,11 +61,14 @@ def main():
     if args.output.exists():raise FileExistsError('Preserve submitted notebooks')
     publication=json.loads(args.publication.read_text());assert publication['published']
     if args.mode!='cpu' and args.qualification is None:p.error('GPU jobs require the new direct-pip CPU receipt')
-    if args.mode=='operators' and args.private_input is None:p.error('Operator run requires a private HF capture locator')
+    if (args.mode in ('operators','vae-parallel') or args.vae_compare_preflight) and args.private_input is None:p.error('This run requires a private HF capture locator')
     if args.review_suite and args.mode!='cpu':p.error('--review-suite requires --mode cpu')
     if args.review_recovery and args.mode!='review-operators':p.error('--review-recovery requires --mode review-operators')
     if args.turbo_e2e and args.mode!='e2e':p.error('--turbo-e2e requires --mode e2e')
-    if args.temporary_private_auth and args.mode!='operators':p.error('Temporary auth is restricted to the private operator notebook')
+    if args.vae_compare_preflight and args.mode!='cpu':p.error('--vae-compare-preflight requires --mode cpu')
+    if args.mode=='vae-parallel' and args.vae_input_qualification is None:p.error('Video comparison requires its CPU input-authentication gate')
+    if args.temporary_private_auth and not (args.mode in ('operators','vae-parallel') or (args.mode=='cpu' and args.vae_compare_preflight)):
+        p.error('Temporary auth is restricted to the explicitly authorized private operator/Video comparison scopes')
     if not 60<=args.setup_budget<=900:p.error('Setup budget must be 60–900 seconds')
     if args.execution_budget is not None and not 30<=args.execution_budget<=4800:p.error('Invalid execution budget')
     if args.mode=='dit-memory' and (args.profile_source is None or args.profile_qualification is None):
@@ -52,6 +91,11 @@ def main():
             assert qualification.get('disk_bake_cpu',{}).get('passed'),'Fresh matching disk-bake CPU qualification required'
             assert qualification.get('review_suite',{}).get('passed')
     private=json.loads(args.private_input.read_text()) if args.private_input else None
+    if args.mode=='vae-parallel':
+        assert qualification.get('review_suite',{}).get('passed'),'Fresh decoder CPU review required'
+        gate=json.loads(args.vae_input_qualification.read_text())
+        assert gate['status']=='cpu_input_ready' and gate['source_capsule_sha256']==publication['capsule_sha256']
+        assert gate['input']['file_sha256']==private['sha256']
     args.output.mkdir(parents=True)
     prelude="""print('LIGHT_NOTEBOOK_START zero dataset/kernel mounts',flush=True)
 import json,pathlib
@@ -97,6 +141,19 @@ for name,value in PROFILE_FILES.items():
 """.replace('PROFILE_FILES',repr(profile_files)).replace('PROFILE_HASHES',repr(profile_hashes))
     if args.mode=='cpu':
         code+="assert receipt['status']=='cpu_ready'\n"
+        if args.vae_compare_preflight:
+            probe="""import json,os,pathlib,sys
+env=dict(os.environ);env.update(json.loads(pathlib.Path('/kaggle/working/light_setup/execution_env.json').read_text()))
+env.update(HF_HUB_DISABLE_XET='1',HF_HUB_DISABLE_PROGRESS_BARS='1')
+source=pathlib.Path('/kaggle/temp/h3_light_source')
+argv=[sys.executable,'-u',str(source/'benchmarks/run_vae_temporal_batch.py'),
+ '--source',str(source),'--distribution','/kaggle/temp/h3_light_distribution',
+ '--private-input','/kaggle/working/light_setup/private_input_locator.json',
+ '--output','/kaggle/working/vae_preflight','--cpu-preflight']
+os.execve(sys.executable,argv,env)
+"""
+            code+=execution_supervisor(probe,budget=180,output='/kaggle/working/vae_preflight_supervision',private_auth=args.temporary_private_auth)
+            code+="assert json.loads(pathlib.Path('/kaggle/working/vae_preflight/batch_results.json').read_text())['status']=='cpu_input_ready'\n"
         if profile_files:
             probe="""import json,os,pathlib,sys
 env=dict(os.environ);env.update(json.loads(pathlib.Path('/kaggle/working/light_setup/execution_env.json').read_text()))
@@ -143,28 +200,16 @@ argv=[sys.executable,'-u',str(source/'benchmarks/run_h3_l1_turbo_batch.py'),
  '--source',str(source),'--output','/kaggle/working/turbo_e2e']
 os.execve(sys.executable,argv,env)
 """
-        if args.temporary_private_auth:
-            from huggingface_hub import get_token
-            token=get_token()
-            if not token:raise RuntimeError('Normal local HF login is required; do not put a token in CLI arguments')
-            # Auth is confined to this private notebook, never the public
-            # source distribution or environment/qualification receipts.
-            auth="""import runpy,kaggle_secrets
-pathlib.Path(__file__).unlink(missing_ok=True)
-temporary_hf_auth=[TEMPORARY_AUTH]
-class TemporaryPrivateHF:
-    def get_secret(self,name):
-        if name in ('HF_TOKEN','HF_token') and temporary_hf_auth:return temporary_hf_auth.pop()
-        raise KeyError(name)
-kaggle_secrets.UserSecretsClient=TemporaryPrivateHF
-os.environ.update(env)
-sys.path[:0]=env['PYTHONPATH'].split(os.pathsep)
-sys.argv=argv[2:]
-runpy.run_path(argv[2],run_name='__main__')
-""".replace('TEMPORARY_AUTH',repr(token))
-            execution=execution.replace('os.execve(sys.executable,argv,env)',auth)
-            del token
-        code+=supervise_worker(execution,budget=args.execution_budget or (4800 if args.mode=='e2e' else 1200),output='/kaggle/working/light_execution_supervision')
+        if args.mode=='vae-parallel':
+            execution=execution[:execution.index('argv=')]+"""
+argv=[sys.executable,'-u',str(source/'benchmarks/run_vae_temporal_batch.py'),
+ '--source',str(source),'--distribution','/kaggle/temp/h3_light_distribution',
+ '--private-input','/kaggle/working/light_setup/private_input_locator.json',
+ '--output','/kaggle/working/vae_parallel']
+os.execve(sys.executable,argv,env)
+"""
+        code+=execution_supervisor(execution,budget=args.execution_budget or (4800 if args.mode=='e2e' else 1200),
+            output='/kaggle/working/light_execution_supervision',private_auth=args.temporary_private_auth)
         code+='''
 guard=json.loads(pathlib.Path('/kaggle/working/light_execution_supervision/supervision.json').read_text())
 if guard['status']!='worker_exited' or guard['exit_code']!=0:raise RuntimeError('Light execution failed; inspect artifacts')
@@ -177,6 +222,8 @@ if guard['status']!='worker_exited' or guard['exit_code']!=0:raise RuntimeError(
     ids['review-operators']='h3-review-operators-t4-20261024';titles['review-operators']='H3 Review Operators T4 20261024'
     if args.review_suite:ids['cpu']='h3-review-operators-cpu-20261024';titles['cpu']='H3 Review Operators CPU 20261024'
     if args.turbo_e2e:ids['e2e']='h3-l1-turbo-05mp-t4';titles['e2e']='H3 L1 Turbo 0.5MP T4 Disk Bake'
+    ids['vae-parallel']='h3-vae-query-temporal-t4-20261027';titles['vae-parallel']='H3 VAE Query Temporal T4 20261027'
+    if args.vae_compare_preflight:ids['cpu']='h3-vae-temporal-cpu-20261027';titles['cpu']='H3 VAE Temporal CPU 20261027'
     meta=dict(id='pamcks/'+ids[args.mode],title=titles[args.mode],code_file='experiment.ipynb',language='python',
         kernel_type='notebook',is_private=True,enable_gpu=args.mode!='cpu',enable_tpu=False,enable_internet=True,
         docker_image_pinning_type='original',dataset_sources=[],kernel_sources=[],competition_sources=[],model_sources=[])
@@ -194,6 +241,8 @@ if guard['status']!='worker_exited' or guard['exit_code']!=0:raise RuntimeError(
         review_suite=args.review_suite,
         review_recovery=args.review_recovery,
         turbo_e2e=args.turbo_e2e,
+        vae_compare_preflight=args.vae_compare_preflight,
+        vae_input_qualification_sha256=hashlib.sha256(args.vae_input_qualification.read_bytes()).hexdigest() if args.vae_input_qualification else None,
         profile_qualification_sha256=hashlib.sha256(args.profile_qualification.read_bytes()).hexdigest() if args.profile_qualification else None),indent=2))
     print(args.output)
 

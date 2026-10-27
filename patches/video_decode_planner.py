@@ -10,7 +10,7 @@ import torch
 from torch import nn
 
 
-def make_planner(model, decode_pixels):
+def make_planner(model, decode_pixels, *, decode_pair=None):
     from comfy.ldm.minimax.vae import MiniMaxH3VideoVAE
 
     class Planner(MiniMaxH3VideoVAE):
@@ -28,15 +28,41 @@ def make_planner(model, decode_pixels):
                 self.register_buffer(name, value.detach().to('cpu', copy=True),
                     persistent=name not in model._non_persistent_buffers_set)
             self.decode_pixels = decode_pixels
+            self.decode_pair = decode_pair
+            self.temporal_pairs = None
 
         def _decode_pixels(self, z):
             return self.decode_pixels(z)
+
+        def _adaptive_decode(self, z):
+            if self.decode_pair is None:
+                return super()._adaptive_decode(z)
+            if self.temporal_pairs is not None:
+                return self.temporal_pairs.decode(z)
+            # Native's one-frame route bypasses decode_temporal.
+            first, second = self.decode_pair((z, None))
+            if first is None or second is not None:
+                raise RuntimeError('Invalid single-clip temporal reply')
+            return first.to(device=z.device)
+
+        def decode_temporal(self, z, output_buffer=None):
+            if self.decode_pair is None:
+                return super().decode_temporal(z, output_buffer)
+            from patches.temporal_vae import TemporalClipPairs
+            pairs = self.temporal_pairs = TemporalClipPairs(self, z, self.decode_pair)
+            try:
+                result = super().decode_temporal(z, output_buffer)
+                pairs.finish()
+                return result
+            finally:
+                pairs.close()
+                self.temporal_pairs = None
 
     return Planner().eval().requires_grad_(False)
 
 
 @contextmanager
-def remote_video_planner(vae, service, decode_pixels, *, template=None):
+def remote_video_planner(vae, service, decode_pixels, *, template=None, decode_pair=None):
     """Swap only this VAE's patcher/model; never patch global model management.
 
     A staged VAE can supply a metadata-only template, avoiding a learned parent
@@ -59,7 +85,7 @@ def remote_video_planner(vae, service, decode_pixels, *, template=None):
     if template is None and any(t.device.type != 'cpu' for t in (*model.parameters(), *model.buffers())):
         yield None
         return
-    planner = make_planner(template if template is not None else model, decode_pixels)
+    planner = make_planner(template if template is not None else model, decode_pixels, decode_pair=decode_pair)
     planner_patcher = comfy.model_patcher.CoreModelPatcher(planner,
         load_device=parent.device, offload_device=torch.device('cpu'))
     management.archive_model_dtypes(planner)

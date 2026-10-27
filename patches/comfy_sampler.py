@@ -185,7 +185,7 @@ class ParallelDecodeHandoff(DecodeHandoff):
     """
     def __init__(self, vae, service, checkpoint, mode='auto'):
         super().__init__(vae, service)
-        if mode not in ('auto', 'native'):
+        if mode not in ('auto', 'native', 'query', 'temporal'):
             raise ValueError(mode)
         self.checkpoint, self.mode = str(checkpoint), mode
         self.last_strategy = 'native'
@@ -198,7 +198,7 @@ class ParallelDecodeHandoff(DecodeHandoff):
             from patches.staged_vae import StagedVAE
             template=None
             if (isinstance(self.vae,StagedVAE) and getattr(self.vae,'kind',None)=='video'
-                    and self.mode=='auto' and self.vae.vae_dtype==torch.float16
+                    and self.mode in ('auto', 'query', 'temporal') and self.vae.vae_dtype==torch.float16
                     and not getattr(self.vae.patcher,'patches',None)
                     and not getattr(self.vae.patcher,'forced_hooks',None)
                     and torch.device(self.vae.device).type=='cuda'):
@@ -224,13 +224,14 @@ class ParallelDecodeHandoff(DecodeHandoff):
                 getattr(self.vae.patcher, 'forced_hooks', None) or
                 torch.device(self.vae.device).type != 'cuda'):
             return self._native_decode(method, *args, **kwargs)
-        from patches.parallel_vae import query_partitioning_status
-        self.last_query_partitioning=(query_partitioning_status(model,checkpoint_reader=self.vae.reader)
-            if _metadata_model is not None else query_partitioning_status(model))
-        if not self.last_query_partitioning['available']:
-            self.last_fallback='Video VAE query-parallel unavailable: '+self.last_query_partitioning['reason']
-            logging.info('MiniMax video VAE using Native: %s',self.last_fallback)
-            return self._native_decode(method, *args, **kwargs)
+        if self.mode != 'temporal':
+            from patches.parallel_vae import query_partitioning_status
+            self.last_query_partitioning=(query_partitioning_status(model,checkpoint_reader=self.vae.reader)
+                if _metadata_model is not None else query_partitioning_status(model))
+            if not self.last_query_partitioning['available']:
+                self.last_fallback='Video VAE query-parallel unavailable: '+self.last_query_partitioning['reason']
+                logging.info('MiniMax video VAE using Native: %s',self.last_fallback)
+                return self._native_decode(method, *args, **kwargs)
         if type(model) is not MiniMaxH3VideoVAE:
             self.last_fallback = 'Remote planner requires the frozen Native Video VAE class'
             return self._native_decode(method, *args, **kwargs)
@@ -246,15 +247,20 @@ class ParallelDecodeHandoff(DecodeHandoff):
             def remote(z):
                 output = self.service.call('video_pixels', z)
                 return output.to(device=z.device)
+            def remote_pair(clips):
+                return self.service.call('video_temporal_pair', clips)
 
             from patches.video_decode_planner import remote_video_planner
-            with remote_video_planner(self.vae, self.service, remote,template=_metadata_model) as planner:
-                prepared = (self.service.call('vae_prepare', self.checkpoint, kind, int(memory), numeric)
+            temporal = self.mode == 'temporal'
+            with remote_video_planner(self.vae, self.service, remote,template=_metadata_model,
+                    decode_pair=remote_pair if temporal else None) as planner:
+                prepare_args = (self.checkpoint, kind, int(memory), numeric) + (('temporal',) if temporal else ())
+                prepared = (self.service.call('vae_prepare', *prepare_args)
                     if planner is not None else
                     {'accepted':False, 'reason':'Parent Video VAE could not offload to CPU'})
                 self.last_admission = prepared.get('admission')
                 if prepared['accepted']:
-                    self.last_strategy = 'native_aligned_query'
+                    self.last_strategy = 'native_temporal_pairs' if temporal else 'native_aligned_query'
                     try:
                         self.service.call('decode_start')
                         output = method(*args, **kwargs)

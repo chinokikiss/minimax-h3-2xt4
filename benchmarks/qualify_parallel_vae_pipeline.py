@@ -53,7 +53,8 @@ class LogicalVAEService:
             def run(rank):
                 out = self.ranks[rank].dispatch(command, args, kwargs)
                 return packet(out, 'cpu')
-            return self.comm.run([lambda r=r:run(r) for r in range(2)])[0]
+            results = self.comm.run([lambda r=r:run(r) for r in range(2)])
+            return tuple(results) if command == 'video_temporal_pair' else results[0]
 
     def close(self):
         self.call('close')
