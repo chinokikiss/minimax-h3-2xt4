@@ -1,0 +1,11 @@
+test_default_keeps_contiguous_rhs_and_direct_is_explicit (benchmarks.test_te_column_layout.ColumnLayout.test_default_keeps_contiguous_rhs_and_direct_is_explicit) ... ok
+test_full_range_int8_bound_and_signed_extremes (benchmarks.test_te_column_layout.ColumnLayout.test_full_range_int8_bound_and_signed_extremes) ... ok
+test_scope_restores_after_error_and_does_not_patch_global_helper (benchmarks.test_te_column_layout.ColumnLayout.test_scope_restores_after_error_and_does_not_patch_global_helper) ... ok
+test_shared_projection_outputs_exact_and_no_weight_cache (benchmarks.test_te_column_layout.ColumnLayout.test_shared_projection_outputs_exact_and_no_weight_cache) ... ok
+test_three_repetitions_balance_variant_positions (benchmarks.test_te_column_layout.ColumnLayout.test_three_repetitions_balance_variant_positions) ... ok
+test_view_preserves_storage_and_integer_results (benchmarks.test_te_column_layout.ColumnLayout.test_view_preserves_storage_and_integer_results) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.188s
+
+OK

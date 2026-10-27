@@ -43,7 +43,8 @@ def main():
     assert all(all(c['byte_exact'][name]['byte_exact'] and c['byte_exact'][name]['column_gemm_calls'] == 5
                    for name in ('legacy_copy', 'torch_view', 'kitchen_direct')) for c in local['cases'])
     log = (args.evidence / 'cpu_tests.log').read_text(encoding='utf-8')
-    assert re.search(r'Ran 19 tests', log) and log.rstrip().endswith('OK')
+    test_count = re.search(r'Ran (\d+) tests', log)
+    assert test_count and int(test_count.group(1)) >= 19 and log.rstrip().endswith('OK')
     files = {name: (ROOT / name).read_bytes() for name in SOURCES}
     credential = re.compile(rb'(?:hf_[A-Za-z0-9]{25,}|gh[pousr]_[A-Za-z0-9]{30,}|KGAT_[A-Za-z0-9_\-]{20,})')
     assert not any(credential.search(raw) for raw in files.values())
@@ -107,8 +108,8 @@ os.execve(sys.executable,argv,env)
                    bootstrap_sha256=hashlib.sha256(setup.encode()).hexdigest(),
                    unchanged_runtime_hashes=unchanged,
                    runtime_refactor=dict(path=patch_name, before=manifest['source_hashes'][patch_name],
-                       after=hashes[patch_name], semantics='Extract pinned column GEMM call; default remains legacy contiguous transpose'),
-                   local_cpu_tests=19, local_preview_sha256=hashlib.sha256((args.evidence / 'local_preview_final/rank0.json').read_bytes()).hexdigest(),
+                       after=hashes[patch_name], semantics='Column-only overlay; experiment explicitly selects each accumulator route'),
+                   local_cpu_tests=int(test_count.group(1)), local_preview_sha256=hashlib.sha256((args.evidence / 'local_preview_final/rank0.json').read_bytes()).hexdigest(),
                    dataset_mounts=0, kernel_mounts=0, private_auth=False,
                    setup_budget_seconds=300, execution_budget_seconds=900,
                    attention='kitchen_causal', lengths=[128, 353, 1306, 4096], warmups=5, repeats=9,

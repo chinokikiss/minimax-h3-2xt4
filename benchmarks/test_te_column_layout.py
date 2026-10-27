@@ -1,5 +1,6 @@
 """Numerical, aliasing and dispatch contracts for column-only layout changes."""
 import unittest
+from types import SimpleNamespace
 from unittest.mock import patch
 
 import torch
@@ -78,6 +79,41 @@ class ColumnLayout(unittest.TestCase):
         orders = [balanced_order(i) for i in range(3)]
         for position in range(3):
             self.assertEqual(len({order[position] for order in orders}), 3)
+
+    def test_runtime_guard_requires_the_qualified_device_and_geometry(self):
+        def tensor(shape, **changes):
+            values = dict(shape=shape, ndim=len(shape), is_cuda=True, dtype=torch.int8,
+                          device=torch.device('cuda:0'), is_contiguous=lambda: True)
+            values.update(changes)
+            return SimpleNamespace(**values)
+        codes = tensor((353, 5120))
+        with patch('torch.cuda.get_device_capability', return_value=(7, 5)):
+            for width in (512, 4096, 12800):
+                self.assertTrue(column._column_view_eligible(codes, tensor((width, 5120))))
+            for value in (tensor((8192, 5120)), tensor((4096, 5376)),
+                          tensor((4096, 5120), is_cuda=False),
+                          tensor((4096, 5120), dtype=torch.float16),
+                          tensor((4096, 5120), device=torch.device('cuda:1')),
+                          tensor((4096, 5120), is_contiguous=lambda: False)):
+                self.assertFalse(column._column_view_eligible(codes, value))
+            self.assertFalse(column._column_view_eligible(tensor((0, 5120)), tensor((4096, 5120))))
+        with patch('torch.cuda.get_device_capability', return_value=(12, 0)):
+            self.assertFalse(column._column_view_eligible(codes, tensor((4096, 5120))))
+
+    @torch.no_grad()
+    def test_qualified_dispatch_uses_original_storage_and_preserves_padding(self):
+        from comfy_kitchen.backends.eager import quantization as eager
+        codes = torch.randint(-127, 128, (33, 64), dtype=torch.int8)
+        weight = torch.randint(-127, 128, (32, 64), dtype=torch.int8)
+        expected = legacy_copy(codes, weight)
+        with patch.object(column, '_column_view_eligible', return_value=True), \
+                patch.object(eager, '_int8_matmul_accumulate', wraps=eager._int8_matmul_accumulate) as call:
+            actual = column._column_accumulate(codes, weight)
+            rhs = call.call_args.args[1]
+            self.assertEqual(rhs.data_ptr(), weight.data_ptr())
+            self.assertEqual(rhs.stride(), weight.T.stride())
+            self.assertFalse(rhs.is_contiguous())
+        self.assertTrue(torch.equal(actual, expected))
 
 
 if __name__ == '__main__':

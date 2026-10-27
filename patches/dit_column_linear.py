@@ -37,10 +37,24 @@ def _dequantize_eager(accumulator,row_scale,weight_scale,out_dtype):
     return output
 
 
+def _column_view_eligible(codes, weight):
+    """Physical-T4-qualified TP2 TE columns; other geometry keeps its layout."""
+    return (codes.is_cuda and weight.is_cuda and codes.device == weight.device
+            and codes.dtype == weight.dtype == torch.int8
+            and codes.ndim == weight.ndim == 2 and codes.shape[0] > 0
+            and codes.shape[1] == weight.shape[1] == 5120
+            and weight.shape[0] in (512, 4096, 12800)
+            and codes.is_contiguous() and weight.is_contiguous()
+            and torch.cuda.get_device_capability(codes.device) == (7, 5))
+
+
 def _column_accumulate(codes, weight):
-    """Pinned column GEMM; isolate weight layout from activation/scaling math."""
+    """Use a zero-copy RHS view for qualified SM75 columns, retaining all math."""
     from comfy_kitchen.backends.eager import quantization as eager
-    return eager._int8_matmul_accumulate(codes, weight.T.contiguous())
+    # The [K,N] column-major view enables the measured SM75 tensorop GEMM.
+    # Keep Kitchen's quantization, padding and INT32 accumulation unchanged.
+    rhs = weight.T if _column_view_eligible(codes, weight) else weight.T.contiguous()
+    return eager._int8_matmul_accumulate(codes, rhs)
 
 
 def shared_column_linears(x,projections,*,convrot=True,convrot_groupsize=256):

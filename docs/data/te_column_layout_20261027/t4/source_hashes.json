@@ -1,0 +1,7 @@
+{
+  "patches/dit_column_linear.py": "59cc19370fc82b02ea411016b63028b9106a13ac84ebd0f9a441f10ba9d7c2aa",
+  "benchmarks/te_column_layout.py": "a03a0b54791d9e8d59e04c1091ddebc2764c4da1f858a636320908f66f851604",
+  "benchmarks/test_te_column_layout.py": "1c448059989d5e5a050946fcccae30501566be2a264dbd8191af96d1b921cd9a",
+  "benchmarks/run_te_column_layout.py": "0d921d945e1bdbdb71c097406ea6b27b82011316ddb6f7a28d916e709a29dd0f",
+  "benchmarks/te_parallel_matrix.py": "92caf47684cef10d2e5fb539915fc2221ae5f809fe97bc909082205e194774e5"
+}

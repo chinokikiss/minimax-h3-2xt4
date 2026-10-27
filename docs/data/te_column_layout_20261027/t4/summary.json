@@ -1,0 +1,411 @@
+{
+  "status": "complete",
+  "physical_t4_qualification": true,
+  "topology": "current TP2 with actual NCCL",
+  "column_selection": "unchanged production selection",
+  "attention": "kitchen_causal",
+  "rows": [
+    {
+      "tokens": 128,
+      "variant": "legacy_copy",
+      "full_block_ms": 13.258441999937531,
+      "speedup_vs_legacy": 1.0,
+      "qkv_ms": 2.4069030000646308,
+      "gate_up_ms": 8.66949700002806,
+      "full_block_incremental_peak_bytes": [
+        79692288,
+        79692288
+      ]
+    },
+    {
+      "tokens": 128,
+      "variant": "torch_view",
+      "full_block_ms": 6.043686999987585,
+      "speedup_vs_legacy": 2.1937671490871,
+      "qkv_ms": 1.0437629999842102,
+      "gate_up_ms": 1.9106329999658556,
+      "full_block_incremental_peak_bytes": [
+        30540288,
+        30540288
+      ]
+    },
+    {
+      "tokens": 128,
+      "variant": "kitchen_direct",
+      "full_block_ms": 6.133710999961295,
+      "speedup_vs_legacy": 2.161569399018179,
+      "qkv_ms": 1.1106580000159738,
+      "gate_up_ms": 1.869091000003209,
+      "full_block_incremental_peak_bytes": [
+        30540288,
+        30540288
+      ]
+    },
+    {
+      "tokens": 353,
+      "variant": "legacy_copy",
+      "full_block_ms": 21.781363000059173,
+      "speedup_vs_legacy": 1.0,
+      "qkv_ms": 3.246651999916139,
+      "gate_up_ms": 13.564091999910488,
+      "full_block_incremental_peak_bytes": [
+        105396736,
+        105396736
+      ]
+    },
+    {
+      "tokens": 353,
+      "variant": "torch_view",
+      "full_block_ms": 10.544998000000305,
+      "speedup_vs_legacy": 2.0655635022461403,
+      "qkv_ms": 1.7794269999740209,
+      "gate_up_ms": 3.4784240000362843,
+      "full_block_incremental_peak_bytes": [
+        82919936,
+        82919936
+      ]
+    },
+    {
+      "tokens": 353,
+      "variant": "kitchen_direct",
+      "full_block_ms": 10.325518000058764,
+      "speedup_vs_legacy": 2.1094692779514994,
+      "qkv_ms": 1.7039570000179083,
+      "gate_up_ms": 3.537690000030125,
+      "full_block_incremental_peak_bytes": [
+        81332736,
+        81332736
+      ]
+    },
+    {
+      "tokens": 1306,
+      "variant": "legacy_copy",
+      "full_block_ms": 61.675142000012784,
+      "speedup_vs_legacy": 1.0,
+      "qkv_ms": 7.003810999890447,
+      "gate_up_ms": 34.15052200000446,
+      "full_block_incremental_peak_bytes": [
+        302851584,
+        302851584
+      ]
+    },
+    {
+      "tokens": 1306,
+      "variant": "torch_view",
+      "full_block_ms": 38.19841999995788,
+      "speedup_vs_legacy": 1.6145992949467751,
+      "qkv_ms": 3.275438000059694,
+      "gate_up_ms": 12.270051000086823,
+      "full_block_incremental_peak_bytes": [
+        302851584,
+        302851584
+      ]
+    },
+    {
+      "tokens": 1306,
+      "variant": "kitchen_direct",
+      "full_block_ms": 37.58020299994769,
+      "speedup_vs_legacy": 1.6411604269433733,
+      "qkv_ms": 3.0737680000356704,
+      "gate_up_ms": 12.100784999915959,
+      "full_block_incremental_peak_bytes": [
+        302786048,
+        302786048
+      ]
+    },
+    {
+      "tokens": 4096,
+      "variant": "legacy_copy",
+      "full_block_ms": 183.69225000003553,
+      "speedup_vs_legacy": 1.0,
+      "qkv_ms": 18.88229799999408,
+      "gate_up_ms": 94.0660989999742,
+      "full_block_incremental_peak_bytes": [
+        943734784,
+        943734784
+      ]
+    },
+    {
+      "tokens": 4096,
+      "variant": "torch_view",
+      "full_block_ms": 125.17125599993051,
+      "speedup_vs_legacy": 1.4675274169984962,
+      "qkv_ms": 9.6370769999794,
+      "gate_up_ms": 39.48889399998734,
+      "full_block_incremental_peak_bytes": [
+        943734784,
+        943734784
+      ]
+    },
+    {
+      "tokens": 4096,
+      "variant": "kitchen_direct",
+      "full_block_ms": 126.47381600004337,
+      "speedup_vs_legacy": 1.4524132805479084,
+      "qkv_ms": 9.598466999932498,
+      "gate_up_ms": 41.250384999898415,
+      "full_block_incremental_peak_bytes": [
+        943734784,
+        943734784
+      ]
+    }
+  ],
+  "profiles": [
+    {
+      "rank": 0,
+      "scopes": {
+        "legacy_copy": {
+          "cpu_scope_ms": 30.628790000000002,
+          "kernel_events": 132,
+          "families": {
+            "other": {
+              "events": 114,
+              "duration_sum_ms": 4.501859999999999
+            },
+            "int8_copy": {
+              "events": 7,
+              "duration_sum_ms": 6.460444
+            },
+            "int8_gemm": {
+              "events": 7,
+              "duration_sum_ms": 5.772455
+            },
+            "nccl": {
+              "events": 4,
+              "duration_sum_ms": 1.9014
+            }
+          },
+          "int8_copy_kernels": [
+            {
+              "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+              "duration_ms": 0.032767000000000004
+            },
+            {
+              "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1})",
+              "duration_ms": 0.793552
+            },
+            {
+              "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1})",
+              "duration_ms": 0.10095900000000001
+            },
+            {
+              "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1})",
+              "duration_ms": 0.100158
+            },
+            {
+              "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+              "duration_ms": 0.032607
+            },
+            {
+              "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1})",
+              "duration_ms": 2.6964569999999997
+            },
+            {
+              "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1})",
+              "duration_ms": 2.703944
+            }
+          ],
+          "limit": "Separate instrumented pass; sums include overlap/waiting, not exclusive latency shares"
+        },
+        "torch_view": {
+          "cpu_scope_ms": 12.522680000000001,
+          "kernel_events": 127,
+          "families": {
+            "other": {
+              "events": 114,
+              "duration_sum_ms": 4.47991
+            },
+            "int8_copy": {
+              "events": 2,
+              "duration_sum_ms": 0.064607
+            },
+            "int8_gemm": {
+              "events": 7,
+              "duration_sum_ms": 2.8590139999999997
+            },
+            "nccl": {
+              "events": 4,
+              "duration_sum_ms": 3.218428
+            }
+          },
+          "int8_copy_kernels": [
+            {
+              "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+              "duration_ms": 0.032286999999999996
+            },
+            {
+              "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+              "duration_ms": 0.03232
+            }
+          ],
+          "limit": "Separate instrumented pass; sums include overlap/waiting, not exclusive latency shares"
+        },
+        "kitchen_direct": {
+          "cpu_scope_ms": 11.060027,
+          "kernel_events": 117,
+          "families": {
+            "other": {
+              "events": 104,
+              "duration_sum_ms": 4.497506000000002
+            },
+            "int8_copy": {
+              "events": 2,
+              "duration_sum_ms": 0.06719800000000001
+            },
+            "int8_gemm": {
+              "events": 7,
+              "duration_sum_ms": 2.8368379999999997
+            },
+            "nccl": {
+              "events": 4,
+              "duration_sum_ms": 2.107412
+            }
+          },
+          "int8_copy_kernels": [
+            {
+              "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+              "duration_ms": 0.032159
+            },
+            {
+              "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+              "duration_ms": 0.035039
+            }
+          ],
+          "limit": "Separate instrumented pass; sums include overlap/waiting, not exclusive latency shares"
+        }
+      }
+    },
+    {
+      "rank": 1,
+      "scopes": {
+        "legacy_copy": {
+          "cpu_scope_ms": 30.66206,
+          "kernel_events": 132,
+          "families": {
+            "other": {
+              "events": 114,
+              "duration_sum_ms": 4.4972389999999995
+            },
+            "int8_copy": {
+              "events": 7,
+              "duration_sum_ms": 6.4821919999999995
+            },
+            "int8_gemm": {
+              "events": 7,
+              "duration_sum_ms": 5.78768
+            },
+            "nccl": {
+              "events": 4,
+              "duration_sum_ms": 1.834009
+            }
+          },
+          "int8_copy_kernels": [
+            {
+              "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+              "duration_ms": 0.032223
+            },
+            {
+              "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1})",
+              "duration_ms": 0.79371
+            },
+            {
+              "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1})",
+              "duration_ms": 0.101278
+            },
+            {
+              "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1})",
+              "duration_ms": 0.10003000000000001
+            },
+            {
+              "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+              "duration_ms": 0.032127
+            },
+            {
+              "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1})",
+              "duration_ms": 2.69978
+            },
+            {
+              "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1})",
+              "duration_ms": 2.723044
+            }
+          ],
+          "limit": "Separate instrumented pass; sums include overlap/waiting, not exclusive latency shares"
+        },
+        "torch_view": {
+          "cpu_scope_ms": 12.528569,
+          "kernel_events": 127,
+          "families": {
+            "other": {
+              "events": 114,
+              "duration_sum_ms": 4.549782
+            },
+            "int8_copy": {
+              "events": 2,
+              "duration_sum_ms": 0.06559899999999999
+            },
+            "int8_gemm": {
+              "events": 7,
+              "duration_sum_ms": 2.911073
+            },
+            "nccl": {
+              "events": 4,
+              "duration_sum_ms": 1.72489
+            }
+          },
+          "int8_copy_kernels": [
+            {
+              "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+              "duration_ms": 0.031872
+            },
+            {
+              "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+              "duration_ms": 0.033727
+            }
+          ],
+          "limit": "Separate instrumented pass; sums include overlap/waiting, not exclusive latency shares"
+        },
+        "kitchen_direct": {
+          "cpu_scope_ms": 11.093181000000001,
+          "kernel_events": 117,
+          "families": {
+            "other": {
+              "events": 104,
+              "duration_sum_ms": 4.513663000000001
+            },
+            "int8_copy": {
+              "events": 2,
+              "duration_sum_ms": 0.068255
+            },
+            "int8_gemm": {
+              "events": 7,
+              "duration_sum_ms": 2.905982
+            },
+            "nccl": {
+              "events": 4,
+              "duration_sum_ms": 1.693114
+            }
+          },
+          "int8_copy_kernels": [
+            {
+              "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+              "duration_ms": 0.03376
+            },
+            {
+              "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+              "duration_ms": 0.034495
+            }
+          ],
+          "limit": "Separate instrumented pass; sums include overlap/waiting, not exclusive latency shares"
+        }
+      }
+    }
+  ],
+  "all_int32_projection_and_full_block_checks_byte_exact": true,
+  "persistent_transposed_weight_cache_bytes": 0,
+  "limits": [
+    "Seeded trained-block inputs; not real full-TE distributions or generation quality.",
+    "Local unsharded eager-column/Native-attention smoke differs from physical TP2 paths.",
+    "No full TE, vision, embeddings, weight I/O or H3 generation was timed.",
+    "Hardware allocations and Torch versions differ; local timings cannot predict T4 speedups."
+  ]
+}

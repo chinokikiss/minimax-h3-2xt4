@@ -58,11 +58,16 @@ def summarize(folder):
         assert all(r['capability'] == [7, 5] and 'T4' in r['device'] for r in ranks)
         batch = load(folder / 'result.json')
         assert batch['status'] == 'complete' and batch['worker_exit_code'] == 0
+        assert all({c['tokens'] for c in rank['cases']} == {128, 353, 1306, 4096} for rank in ranks)
     lengths = [c['tokens'] for c in ranks[0]['cases']]
     rows = []
     for length in lengths:
         cases = [next(c for c in rank['cases'] if c['tokens'] == length) for rank in ranks]
         for case in cases:
+            assert set(case['byte_exact']) == set(case['full_block']) == set(VARIANTS)
+            assert set(case['projection_byte_exact']) == {
+                group + '/' + name for group in ('qkv', 'gate_up') for name in VARIANTS}
+            assert all(len(v['samples']) == 9 for v in case['full_block'].values())
             assert all(c['byte_exact'] and c['finite'] and c['column_gemm_calls'] == 5
                        for c in case['byte_exact'].values())
             assert all(case['projection_byte_exact'].values())
@@ -80,6 +85,10 @@ def summarize(folder):
     profiles = []
     for rank in ranks:
         assert rank['profile']['status'] == 'cuda_trace_saved'
+        probe = folder / rank['profile']['probe_file']
+        if not probe.exists():
+            probe = probe.with_suffix(probe.suffix + '.gz')
+        assert any(e.get('cat') == 'kernel' and e.get('ph') == 'X' for e in load(probe)['traceEvents'])
         trace = folder / rank['profile']['file']
         if not trace.exists():
             trace = trace.with_suffix(trace.suffix + '.gz')
@@ -100,12 +109,51 @@ def summarize(folder):
                         'Hardware allocations and Torch versions differ; local timings cannot predict T4 speedups.'])
 
 
+def plot(result, output):
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    labels = ('Contiguous transpose', 'Torch transpose view', 'Kitchen direct')
+    colors = ('#8c8c8c', '#2477ac', '#d47b2e')
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4), layout='constrained')
+    for name, label, color in zip(VARIANTS, labels, colors):
+        rows = [r for r in result['rows'] if r['variant'] == name]
+        axes[0].plot([r['tokens'] for r in rows], [r['full_block_ms'] for r in rows],
+                     marker='o', label=label, color=color)
+    axes[0].set(xscale='log', yscale='log', xlabel='Tokens', ylabel='Median wall time (ms)',
+                title='Resident TP2 block: slower owner')
+    axes[0].set_xticks((128, 353, 1306, 4096), ('128', '353', '1306', '4096'))
+    axes[0].legend(frameon=False, fontsize=8)
+    positions = np.arange(len(VARIANTS))
+    scopes = result['profiles'][0]['scopes']
+    for offset, family, label, color in ((-.19, 'int8_copy', 'INT8 copy/layout', '#a15763'),
+                                         (.19, 'int8_gemm', 'INT8 GEMM', '#328d8b')):
+        axes[1].bar(positions + offset,
+                    [scopes[name]['families'][family]['duration_sum_ms'] for name in VARIANTS],
+                    width=.36, label=label, color=color)
+    axes[1].set_xticks(positions, ('Transpose copy', 'Torch view', 'Kitchen direct'))
+    axes[1].set(ylabel='Kernel duration sum (ms)', title='S353 GPU0 profile: copy and GEMM work')
+    axes[1].legend(frameon=False, fontsize=8)
+    axes[1].text(.5, -.19, 'Separate profiled pass; sums are not critical-path shares.',
+                 transform=axes[1].transAxes, ha='center', fontsize=8)
+    for axis in axes:
+        axis.spines[['top', 'right']].set_visible(False)
+    fig.suptitle('Physical 2x T4 | trained TE block0 | all tested outputs byte-exact')
+    fig.savefig(output, dpi=160)
+    plt.close(fig)
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--input', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--plot', type=Path)
     args = parser.parse_args()
     result = summarize(args.input)
     args.output.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
+    if args.plot:
+        plot(result, args.plot)
     print(json.dumps(dict(status=result['status'], physical_t4=result['physical_t4_qualification'],
                           configurations=len(result['rows']))))

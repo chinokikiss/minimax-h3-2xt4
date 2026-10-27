@@ -13,7 +13,7 @@ numerical reference, and timing boundary before comparing results.
 
 - [TE attention and TP2 communication matrix](TE_ATTENTION_TP2_MATRIX_20261027.md) — complete physical 2×T4 matrix for all three TE backends; resident-block TP2 wins all tested shapes, with exact replay and CUDA trace evidence; full TE remains outside scope
 
-- [TE INT8 column layout ablation](TE_COLUMN_LAYOUT_20261027.md) — zero-cache transpose-view/direct-GEMM candidates; exact local checks passed, physical T4 batch submitted
+- [TE INT8 column layout ablation](TE_COLUMN_LAYOUT_20261027.md) — complete physical 2×T4 results: 1.47–2.19× resident-block speedup with exact outputs; guarded Torch transpose view promoted
 
 - [Video VAE Temporal versus Query Parallel](VAE_TEMPORAL_QUERY_20261027.md) — physical 2×T4 results: Temporal 207.61 s vs Query 247.55 s (1.192×), bounded pixel differences and measured memory/communication trade-offs; Temporal promoted to default
 

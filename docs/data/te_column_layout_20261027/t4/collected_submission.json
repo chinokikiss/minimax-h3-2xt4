@@ -1,0 +1,71 @@
+{
+  "kernel": "pamcks/h3-te-column-layout-t4-20261027",
+  "submitted_utc": "2026-10-27T06:55:10.834942+00:00",
+  "status": "accepted",
+  "returncode": 0,
+  "source_binding": {
+    "publication": {
+      "file": "519bc752462ac2be251dd637d7398de637a5c29c7b581fa28525dd254689896a.tar.gz",
+      "sha256": "519bc752462ac2be251dd637d7398de637a5c29c7b581fa28525dd254689896a",
+      "bytes": 18422007,
+      "capsule_sha256": "168bf4446f17eb4a0714f5a8f4727d9c2cb8ddf78602868b0002481fad2a95d3",
+      "source_files": 793,
+      "core_pins": 78,
+      "kaggle_mounts": 0,
+      "repository": "chinokikiss/minimax-h3-2xt4",
+      "commit": "60af7e7c7af4cfe998ae55527ded95104e60d7aa",
+      "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/60af7e7c7af4cfe998ae55527ded95104e60d7aa/runtime/kaggle_artifacts/519bc752462ac2be251dd637d7398de637a5c29c7b581fa28525dd254689896a.tar.gz",
+      "published": true
+    },
+    "supplemental_sources": {
+      "patches/dit_column_linear.py": "59cc19370fc82b02ea411016b63028b9106a13ac84ebd0f9a441f10ba9d7c2aa",
+      "benchmarks/te_column_layout.py": "a03a0b54791d9e8d59e04c1091ddebc2764c4da1f858a636320908f66f851604",
+      "benchmarks/test_te_column_layout.py": "1c448059989d5e5a050946fcccae30501566be2a264dbd8191af96d1b921cd9a",
+      "benchmarks/run_te_column_layout.py": "0d921d945e1bdbdb71c097406ea6b27b82011316ddb6f7a28d916e709a29dd0f",
+      "benchmarks/te_parallel_matrix.py": "92caf47684cef10d2e5fb539915fc2221ae5f809fe97bc909082205e194774e5"
+    },
+    "cpu_qualification_sha256": "b8817015239a39aab67d4ad5176ca79b380d347cafdaf9c280741b727ca82460",
+    "bootstrap_sha256": "3f4c9632991036b2b356cb5351124949d776e187f1594a7cab33c8d3d096da11",
+    "unchanged_runtime_hashes": {
+      "patches/tp_qwen3vl.py": "c877ebc93b68fe9a638ce47060f282b316f6a460693df2b40529e495938e398e",
+      "patches/h3_operator_policy.py": "2b6929e8ae5974a4d4e6798d6edd1050f7425fd21be7ba46c10f6c936f29c631",
+      "patches/h3_tensor_flow.py": "80272e276b10a9fa06f4accd6e62fa8ae373ebdb08a6edbc0615926f56145b07",
+      "patches/tilelang_group32_masked.py": "75aefd9f8e3516249f4b04b220fe97885577e01eccce4ede75b64460b2aba140",
+      "patches/kitchen_te_attention.py": "b6ca5a8b046dbbaf1026b30a1cd48516433cfc81d849efb562e00dffe40c93c5",
+      "patches/optimized_tp.py": "db2512ecfe7ca643405d1f37087f23b0fbbeeb2c2f06cad7b5780b466272cdd5",
+      "patches/tilelang_transport_p2.py": "2ba3032848a83049bdaf419b7deb50e165e75a3d1fe0820851761bc15e9e89fd",
+      "patches/tilelang_swiglu_quant.py": "d8a55c60949b881fc5b2d6f3c9bc9fdf025675fbb2498f9ee9dd38e6679cc265",
+      "patches/parallel_int8.py": "5895ffb189f200f6d9f3b1cd097f07a97789b37927eb63fe1d7f8f7d10234f1e"
+    },
+    "runtime_refactor": {
+      "path": "patches/dit_column_linear.py",
+      "before": "0f11be5ad4efcfc538295a5e473d5b76b4574eac06c4eae61035f416f45eb473",
+      "after": "59cc19370fc82b02ea411016b63028b9106a13ac84ebd0f9a441f10ba9d7c2aa",
+      "semantics": "Extract pinned column GEMM call; default remains legacy contiguous transpose"
+    },
+    "local_cpu_tests": 19,
+    "local_preview_sha256": "ff71d62bc9131648f58f80caca42f8fafef24886adb36d648be21e3dffe37f79",
+    "dataset_mounts": 0,
+    "kernel_mounts": 0,
+    "private_auth": false,
+    "setup_budget_seconds": 300,
+    "execution_budget_seconds": 900,
+    "attention": "kitchen_causal",
+    "lengths": [
+      128,
+      353,
+      1306,
+      4096
+    ],
+    "warmups": 5,
+    "repeats": 9,
+    "scope": "Column operator and current trained TP2 block; no full TE or H3 generation"
+  },
+  "final_collection_count": 1,
+  "earliest_final_collection_seconds": 1500,
+  "experiment_kind": "te_column_layout",
+  "result_relative": "te_layout/result.json",
+  "run_timeout_seconds": 1500,
+  "notebook_sha256": "39ecc99616ef71408bfcf0cb692baa1712fe0efa4b770b149a558e72642b839a",
+  "version": 1
+}
