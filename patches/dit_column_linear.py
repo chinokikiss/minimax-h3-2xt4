@@ -37,6 +37,12 @@ def _dequantize_eager(accumulator,row_scale,weight_scale,out_dtype):
     return output
 
 
+def _column_accumulate(codes, weight):
+    """Pinned column GEMM; isolate weight layout from activation/scaling math."""
+    from comfy_kitchen.backends.eager import quantization as eager
+    return eager._int8_matmul_accumulate(codes, weight.T.contiguous())
+
+
 def shared_column_linears(x,projections,*,convrot=True,convrot_groupsize=256):
     """Share deterministic eager rotation/quantization; keep each GEMM intact.
 
@@ -59,7 +65,7 @@ def shared_column_linears(x,projections,*,convrot=True,convrot_groupsize=256):
     for weight,weight_scale in projections:
         weight=weight.to(device=x.device).contiguous()
         scale=weight_scale.to(device=x.device,dtype=torch.float32).reshape(-1)
-        accumulator=eager._int8_matmul_accumulate(codes,weight.T.contiguous())
+        accumulator=_column_accumulate(codes,weight)
         output=_dequantize_eager(accumulator,row_scale,scale,x.dtype)
         del accumulator
         outputs.append(output.reshape(*x.shape[:-1],weight.shape[0]))
@@ -102,7 +108,7 @@ def _eager_column(x, weight, weight_scale, *, convrot, convrot_groupsize, out_dt
         from patches.optimized_tp import native_int_mm
         accumulator=native_int_mm(codes,weight)
     else:
-        accumulator = eager._int8_matmul_accumulate(codes, weight.T.contiguous())
+        accumulator = _column_accumulate(codes, weight)
     del codes
     # tilelang_exact is retained only as a private historical benchmark control;
     # column_linear and the runtime policy expose the direct route or fallback.

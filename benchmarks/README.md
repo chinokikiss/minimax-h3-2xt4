@@ -18,6 +18,14 @@ It uses two public TE shards and the existing CPU-qualified frozen core setup.
 finite outputs, exact replay, collective inventories and CUDA trace coverage.
 It reproduces the archived tables and figure offline, without Kaggle calls.
 
+`te_column_layout.py` and `run_te_column_layout.py` isolate the repeated INT8
+weight transpose from activation quantization, scaling, attention and transport.
+The [layout ablation](../docs/reports/TE_COLUMN_LAYOUT_20261027.md) compares the
+pinned copy, a Torch transpose view and the existing Kitchen direct GEMM.
+`build_te_column_layout_job.py` binds the explicit experiment to the frozen
+setup; `analyze_te_column_layout.py` reads final evidence offline. Runtime
+defaults stay unchanged until the physical T4 results qualify a replacement.
+
 `run_vae_temporal_batch.py` and `run_vae_temporal_compare.py` implement the
 [decoder-only Temporal/Query comparison](../docs/reports/VAE_TEMPORAL_QUERY_20261027.md).
 They replay the private saved H3 video latent and load only the trained Video

@@ -1,0 +1,263 @@
+{
+  "status": "complete",
+  "physical_t4_qualification": false,
+  "topology": "unsharded local smoke",
+  "column_selection": "forced pinned eager for local API preview",
+  "attention": "native",
+  "rows": [
+    {
+      "tokens": 128,
+      "variant": "legacy_copy",
+      "full_block_ms": 12.347500000032596,
+      "speedup_vs_legacy": 1.0,
+      "qkv_ms": 2.5170000008074567,
+      "gate_up_ms": 9.908300000461168,
+      "full_block_incremental_peak_bytes": [
+        155058688
+      ]
+    },
+    {
+      "tokens": 128,
+      "variant": "torch_view",
+      "full_block_ms": 4.815899999812245,
+      "speedup_vs_legacy": 2.563902905067377,
+      "qkv_ms": 1.0392999993200647,
+      "gate_up_ms": 1.335000000835862,
+      "full_block_incremental_peak_bytes": [
+        97649152
+      ]
+    },
+    {
+      "tokens": 128,
+      "variant": "kitchen_direct",
+      "full_block_ms": 4.447499999514548,
+      "speedup_vs_legacy": 2.776278808629645,
+      "qkv_ms": 0.7114000000001397,
+      "gate_up_ms": 1.6187999990506796,
+      "full_block_incremental_peak_bytes": [
+        97649152
+      ]
+    },
+    {
+      "tokens": 353,
+      "variant": "legacy_copy",
+      "full_block_ms": 16.56829999956244,
+      "speedup_vs_legacy": 1.0,
+      "qkv_ms": 2.4764999998296844,
+      "gate_up_ms": 11.319199998979457,
+      "full_block_incremental_peak_bytes": [
+        269933056
+      ]
+    },
+    {
+      "tokens": 353,
+      "variant": "torch_view",
+      "full_block_ms": 8.177400000931812,
+      "speedup_vs_legacy": 2.026108542773313,
+      "qkv_ms": 0.8818999995128252,
+      "gate_up_ms": 3.29779999992752,
+      "full_block_incremental_peak_bytes": [
+        269933056
+      ]
+    },
+    {
+      "tokens": 353,
+      "variant": "kitchen_direct",
+      "full_block_ms": 8.187900000848458,
+      "speedup_vs_legacy": 2.02351030152366,
+      "qkv_ms": 1.2796999999409309,
+      "gate_up_ms": 3.244700001232559,
+      "full_block_incremental_peak_bytes": [
+        269298176
+      ]
+    },
+    {
+      "tokens": 1306,
+      "variant": "legacy_copy",
+      "full_block_ms": 39.72760000033304,
+      "speedup_vs_legacy": 1.0,
+      "qkv_ms": 3.7492999999813037,
+      "gate_up_ms": 19.135200000164332,
+      "full_block_incremental_peak_bytes": [
+        999226880
+      ]
+    },
+    {
+      "tokens": 1306,
+      "variant": "torch_view",
+      "full_block_ms": 30.210400000214577,
+      "speedup_vs_legacy": 1.315030585495421,
+      "qkv_ms": 2.368199999182252,
+      "gate_up_ms": 11.326699999699485,
+      "full_block_incremental_peak_bytes": [
+        999226880
+      ]
+    },
+    {
+      "tokens": 1306,
+      "variant": "kitchen_direct",
+      "full_block_ms": 29.949300000225776,
+      "speedup_vs_legacy": 1.3264951100704707,
+      "qkv_ms": 2.2896000009495765,
+      "gate_up_ms": 10.986500001308741,
+      "full_block_incremental_peak_bytes": [
+        999226880
+      ]
+    },
+    {
+      "tokens": 4096,
+      "variant": "legacy_copy",
+      "full_block_ms": 115.08709999907296,
+      "speedup_vs_legacy": 1.0,
+      "qkv_ms": 9.125700000367942,
+      "gate_up_ms": 38.98930000104883,
+      "full_block_incremental_peak_bytes": [
+        3124772864
+      ]
+    },
+    {
+      "tokens": 4096,
+      "variant": "torch_view",
+      "full_block_ms": 105.97880000022997,
+      "speedup_vs_legacy": 1.0859445473889422,
+      "qkv_ms": 7.5450000003911555,
+      "gate_up_ms": 31.901599999400787,
+      "full_block_incremental_peak_bytes": [
+        3124772864
+      ]
+    },
+    {
+      "tokens": 4096,
+      "variant": "kitchen_direct",
+      "full_block_ms": 105.51350000059756,
+      "speedup_vs_legacy": 1.0907334132449513,
+      "qkv_ms": 7.536199998867232,
+      "gate_up_ms": 32.10589999980584,
+      "full_block_incremental_peak_bytes": [
+        3124772864
+      ]
+    }
+  ],
+  "profiles": [
+    {
+      "rank": 0,
+      "scopes": {
+        "legacy_copy": {
+          "cpu_scope_ms": 17.8355,
+          "kernel_events": 123,
+          "families": {
+            "other": {
+              "events": 109,
+              "duration_sum_ms": 4.212570000000001
+            },
+            "int8_copy": {
+              "events": 7,
+              "duration_sum_ms": 8.83633
+            },
+            "int8_gemm": {
+              "events": 7,
+              "duration_sum_ms": 2.919878
+            }
+          },
+          "int8_copy_kernels": [
+            {
+              "name": "_ZN2at6native27unrolled_elementwise_kernelIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE0_clEvEUlaE_St5arrayIPcLy2EELi4E23TrivialOffsetCalculatorILi1EjESB_NS0_6memory12LoadWithCastILi1EEENSC_13StoreWithCastILi1EEEEEviT_T0_T2_T3_T4_T5_",
+              "duration_ms": 0.012448
+            },
+            {
+              "name": "_ZN2at6native18elementwise_kernelILi128ELi4EZNS0_22gpu_kernel_impl_nocastIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE0_clEvEUlaE_EEvS4_RKT_EUliE_EEviT1_",
+              "duration_ms": 1.088533
+            },
+            {
+              "name": "_ZN2at6native18elementwise_kernelILi128ELi4EZNS0_22gpu_kernel_impl_nocastIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE0_clEvEUlaE_EEvS4_RKT_EUliE_EEviT1_",
+              "duration_ms": 0.118495
+            },
+            {
+              "name": "_ZN2at6native18elementwise_kernelILi128ELi4EZNS0_22gpu_kernel_impl_nocastIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE0_clEvEUlaE_EEvS4_RKT_EUliE_EEviT1_",
+              "duration_ms": 0.112062
+            },
+            {
+              "name": "_ZN2at6native27unrolled_elementwise_kernelIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE0_clEvEUlaE_St5arrayIPcLy2EELi4E23TrivialOffsetCalculatorILi1EjESB_NS0_6memory12LoadWithCastILi1EEENSC_13StoreWithCastILi1EEEEEviT_T0_T2_T3_T4_T5_",
+              "duration_ms": 0.012576
+            },
+            {
+              "name": "_ZN2at6native18elementwise_kernelILi128ELi4EZNS0_22gpu_kernel_impl_nocastIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE0_clEvEUlaE_EEvS4_RKT_EUliE_EEviT1_",
+              "duration_ms": 3.725948
+            },
+            {
+              "name": "_ZN2at6native18elementwise_kernelILi128ELi4EZNS0_22gpu_kernel_impl_nocastIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE0_clEvEUlaE_EEvS4_RKT_EUliE_EEviT1_",
+              "duration_ms": 3.766268
+            }
+          ],
+          "limit": "Separate instrumented pass; sums include overlap/waiting, not exclusive latency shares"
+        },
+        "torch_view": {
+          "cpu_scope_ms": 8.7279,
+          "kernel_events": 118,
+          "families": {
+            "other": {
+              "events": 109,
+              "duration_sum_ms": 4.229941999999999
+            },
+            "int8_copy": {
+              "events": 2,
+              "duration_sum_ms": 0.024800000000000003
+            },
+            "int8_gemm": {
+              "events": 7,
+              "duration_sum_ms": 2.332458
+            }
+          },
+          "int8_copy_kernels": [
+            {
+              "name": "_ZN2at6native27unrolled_elementwise_kernelIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE0_clEvEUlaE_St5arrayIPcLy2EELi4E23TrivialOffsetCalculatorILi1EjESB_NS0_6memory12LoadWithCastILi1EEENSC_13StoreWithCastILi1EEEEEviT_T0_T2_T3_T4_T5_",
+              "duration_ms": 0.012224
+            },
+            {
+              "name": "_ZN2at6native27unrolled_elementwise_kernelIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE0_clEvEUlaE_St5arrayIPcLy2EELi4E23TrivialOffsetCalculatorILi1EjESB_NS0_6memory12LoadWithCastILi1EEENSC_13StoreWithCastILi1EEEEEviT_T0_T2_T3_T4_T5_",
+              "duration_ms": 0.012576
+            }
+          ],
+          "limit": "Separate instrumented pass; sums include overlap/waiting, not exclusive latency shares"
+        },
+        "kitchen_direct": {
+          "cpu_scope_ms": 9.0347,
+          "kernel_events": 108,
+          "families": {
+            "other": {
+              "events": 99,
+              "duration_sum_ms": 4.588216
+            },
+            "int8_copy": {
+              "events": 2,
+              "duration_sum_ms": 0.025215
+            },
+            "int8_gemm": {
+              "events": 7,
+              "duration_sum_ms": 2.5246470000000003
+            }
+          },
+          "int8_copy_kernels": [
+            {
+              "name": "_ZN2at6native27unrolled_elementwise_kernelIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE0_clEvEUlaE_St5arrayIPcLy2EELi4E23TrivialOffsetCalculatorILi1EjESB_NS0_6memory12LoadWithCastILi1EEENSC_13StoreWithCastILi1EEEEEviT_T0_T2_T3_T4_T5_",
+              "duration_ms": 0.012607
+            },
+            {
+              "name": "_ZN2at6native27unrolled_elementwise_kernelIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE0_clEvEUlaE_St5arrayIPcLy2EELi4E23TrivialOffsetCalculatorILi1EjESB_NS0_6memory12LoadWithCastILi1EEENSC_13StoreWithCastILi1EEEEEviT_T0_T2_T3_T4_T5_",
+              "duration_ms": 0.012608000000000001
+            }
+          ],
+          "limit": "Separate instrumented pass; sums include overlap/waiting, not exclusive latency shares"
+        }
+      }
+    }
+  ],
+  "all_int32_projection_and_full_block_checks_byte_exact": true,
+  "persistent_transposed_weight_cache_bytes": 0,
+  "limits": [
+    "Seeded trained-block inputs; not real full-TE distributions or generation quality.",
+    "Local unsharded eager-column/Native-attention smoke differs from physical TP2 paths.",
+    "No full TE, vision, embeddings, weight I/O or H3 generation was timed.",
+    "Hardware allocations and Torch versions differ; local timings cannot predict T4 speedups."
+  ]
+}

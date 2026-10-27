@@ -1,0 +1,58 @@
+{
+  "benchmarks_run_te_column_layout.py.txt": {
+    "bytes": 17263,
+    "sha256": "0d921d945e1bdbdb71c097406ea6b27b82011316ddb6f7a28d916e709a29dd0f"
+  },
+  "benchmarks_te_column_layout.py.txt": {
+    "bytes": 1376,
+    "sha256": "a03a0b54791d9e8d59e04c1091ddebc2764c4da1f858a636320908f66f851604"
+  },
+  "benchmarks_te_parallel_matrix.py.txt": {
+    "bytes": 19856,
+    "sha256": "92caf47684cef10d2e5fb539915fc2221ae5f809fe97bc909082205e194774e5"
+  },
+  "benchmarks_test_te_column_layout.py.txt": {
+    "bytes": 4166,
+    "sha256": "1c448059989d5e5a050946fcccae30501566be2a264dbd8191af96d1b921cd9a"
+  },
+  "cpu_tests.txt": {
+    "bytes": 3276,
+    "sha256": "c840f73d4e5af5f1a81fb0819ecf631568aad02229e7c986557f8866175816f0"
+  },
+  "local_environment.json": {
+    "bytes": 426,
+    "sha256": "f22658f98239462ccc21e0a73cfb56e4448eaffc967f958225436e644dd73e3b"
+  },
+  "local_gemm_probe.json": {
+    "bytes": 13089,
+    "sha256": "27cc5de1f07b6fe7997cb3980cf92e62354a8c73b35e90af6ae4af27781c65bb"
+  },
+  "local_rank0.json": {
+    "bytes": 103752,
+    "sha256": "ff71d62bc9131648f58f80caca42f8fafef24886adb36d648be21e3dffe37f79"
+  },
+  "local_rank0_layout_trace.json.gz": {
+    "bytes": 60004,
+    "sha256": "6fdc855af75987636ac9eda86c6cf7748e4ab8e1c9f4e814f580c61fbfadbeb8"
+  },
+  "local_rank0_probe_trace.json.gz": {
+    "bytes": 1455,
+    "sha256": "51688c53ae5dcf9b99d86ba5674e01e66fdfbf44518fd52fa997af5f7204c4f0"
+  },
+  "local_summary.json": {
+    "bytes": 10087,
+    "sha256": "6c994d21a1833a9badc322e6a968db01e99becab292d1f0e0e396a919472758f"
+  },
+  "patches_dit_column_linear.py.txt": {
+    "bytes": 6435,
+    "sha256": "59cc19370fc82b02ea411016b63028b9106a13ac84ebd0f9a441f10ba9d7c2aa"
+  },
+  "source_binding.json": {
+    "bytes": 3306,
+    "sha256": "f6d3301604086ba822024c678bf61047394c3f33f6102a99a121e2a2cbfe6390"
+  },
+  "submission.json": {
+    "bytes": 3908,
+    "sha256": "dadafaf3bbf7c418df72d287123300337482b3978e7fd87bd48f2ee0a0c92e78"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "python": "3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)]",
+  "torch": "2.12.1+cu132",
+  "cuda": "13.2",
+  "kitchen": "0.2.37",
+  "tilelang": "0.1.13",
+  "device": "NVIDIA GeForce RTX 5060 Ti",
+  "capability": [
+    12,
+    0
+  ],
+  "interpreter": "C:\\ProgramData\\miniconda3\\envs\\comfyui\\python.exe",
+  "scope": "Local SM120 preview, not physical T4 qualification"
+}

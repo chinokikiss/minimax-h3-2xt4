@@ -8,6 +8,7 @@
 /docs/data/te_attention_tp2_matrix_20261027/** -text whitespace=cr-at-eol
 /docs/data/te_attention_tp2_matrix_20261027/attempt1_workers.txt -text -whitespace
 /docs/data/te_attention_tp2_matrix_20261027/attempt2_workers.txt -text -whitespace
+/docs/data/te_column_layout_20261027/** -text whitespace=cr-at-eol
 /docs/data/vae_temporal_query_20261027/** -text whitespace=cr-at-eol
 /docs/data/h3_optimization_*_20261026.json -text whitespace=cr-at-eol
 /docs/data/repository_sync_20261026.json -text whitespace=cr-at-eol
