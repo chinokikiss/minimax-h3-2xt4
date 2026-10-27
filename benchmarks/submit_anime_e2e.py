@@ -1,7 +1,6 @@
 """One CPU preflight then one explicitly authorized T4 E2E; never polling."""
 import argparse
 import ast
-import base64
 import datetime as dt
 import hashlib
 import json
@@ -11,6 +10,7 @@ import subprocess
 import sys
 
 from t4_notebook_watchdog import supervise_worker
+from private_reference_delivery import private_reference_prefix
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -19,6 +19,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--mode', choices=('cpu', 'gpu'), required=True)
     parser.add_argument('--evidence', type=Path, required=True)
+    parser.add_argument('--reference-delivery', choices=('staged', 'public_url'), default='public_url')
     parser.add_argument('--submit', action='store_true')
     args = parser.parse_args()
     publication = args.evidence/'source_publication.json'
@@ -70,26 +71,14 @@ os.chdir(src);os.execve(sys.executable,argv,env)
     plan_dir=args.evidence/'plan_files'
     if not plan_dir.exists():plan_dir=args.evidence.parent/'plan_files'
     references=json.loads((plan_dir/'l1_assets_identity.json').read_text())['images']
-    payload={}
-    for row in references:
-        raw=(plan_dir.parent/row['file']).read_bytes()
-        assert hashlib.sha256(raw).hexdigest()==row['sha256']
-        payload[row['file']]=base64.b64encode(raw).decode()
     destination='/kaggle/working/anime_inputs' if args.mode=='cpu' else '/kaggle/temp/h3_light_source/bench_assets/l1_current'
-    private_inputs='''import base64,hashlib,pathlib
-PRIVATE_REFERENCES=__REFERENCE_PAYLOAD__
-REFERENCE_ROWS=__REFERENCE_ROWS__
-refdir=pathlib.Path(__REFERENCE_DESTINATION__);refdir.mkdir(parents=True,exist_ok=True)
-for row in REFERENCE_ROWS:
- raw=base64.b64decode(PRIVATE_REFERENCES.pop(row['file']))
- assert len(raw)==row['bytes'] and hashlib.sha256(raw).hexdigest()==row['sha256']
- (refdir/row['file']).write_bytes(raw)
-del PRIVATE_REFERENCES,raw
-'''.replace('__REFERENCE_PAYLOAD__',repr(payload)).replace('__REFERENCE_ROWS__',repr(references)).replace('__REFERENCE_DESTINATION__',repr(destination))
-    code=private_inputs+code
+    if args.reference_delivery=='staged':
+        code=private_reference_prefix(references,plan_dir.parent,destination)+code
     ast.parse(code)
     notebook['cells'][0]['source'] = code.splitlines(keepends=True)
     notebook_path.write_text(json.dumps(notebook))
+    if notebook_path.stat().st_size >= 10 * 1024 * 1024:
+        raise ValueError('Private notebook exceeds the conservative 10 MiB delivery budget')
     meta_path = job/'kernel-metadata.json'
     meta = json.loads(meta_path.read_text())
     meta.update(id='pamcks/h3-anime-ref2va-'+('cpu-preflight' if args.mode=='cpu' else '8step-t4')+'-20261027',
@@ -97,7 +86,10 @@ del PRIVATE_REFERENCES,raw
     meta_path.write_text(json.dumps(meta, indent=2))
     binding = json.loads((job/'source_binding.json').read_text())
     binding.update(full_pipeline_authorized=True, workload_contract='anime_ref2va_8step', private_auth=False,
-                   reference_delivery='Exact bytes in private notebook only; absent from public source archive',
+                   reference_delivery=('Exact bytes in private notebook only; absent from public source archive'
+                       if args.reference_delivery=='staged' else 'Direct public URLs, mandatory original SHA256 verification'),
+                   reference_encoding='base85' if args.reference_delivery=='staged' else None,
+                   notebook_bytes=notebook_path.stat().st_size,
                    reference_sha256=[row['sha256'] for row in references])
     (job/'source_binding.json').write_text(json.dumps(binding, indent=2))
     if not args.submit:
@@ -117,7 +109,9 @@ del PRIVATE_REFERENCES,raw
     try:
         result = subprocess.run(command, capture_output=True, text=True, timeout=180)
         output = result.stdout + result.stderr
-        state.update(returncode=result.returncode,status='accepted' if result.returncode==0 else 'submission_failed')
+        state.update(returncode=result.returncode,status='accepted' if result.returncode==0 else 'acceptance_uncertain')
+        if result.returncode:
+            state['acceptance_reason']='CLI returned no successful acknowledgement; no automatic resubmission'
         version = re.search(r'Kernel version (\d+)', output)
         if version:state['version']=int(version.group(1))
         resolved = re.search(r'https://www\.kaggle\.com/code/([\w-]+/[\w-]+)', output)

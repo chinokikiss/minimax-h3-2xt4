@@ -1,0 +1,3 @@
+Your kernel title does not resolve to the specified id. This may result in surprising behavior. We suggest making your title something that resolves to the specified id. See https://en.wikipedia.org/wiki/Clean_URL#Slug for more information on how slugs are determined.
+Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.4), please consider upgrading to the latest version (2.2.5)
+Kernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/pamcks/h3-anime-ref2va-cpu-preflight-20261027

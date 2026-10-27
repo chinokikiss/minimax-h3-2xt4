@@ -1,0 +1,9 @@
+{
+  "status": "collected",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-anime-ref2va-cpu-preflight-20261027",
+  "output": "D:\\attention_eval\\h3_anime_e2e_20261027\\cpu_outputs",
+  "returncode": 0,
+  "files": 22,
+  "completed_utc": "2026-10-27T12:35:47.668843+00:00"
+}

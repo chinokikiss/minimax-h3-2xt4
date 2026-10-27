@@ -1,0 +1,17 @@
+{
+  "reason": "Include required pinned vendor LICENSE/NOTICE and stage exact private references",
+  "unchanged_runtime": true,
+  "changed": {
+    "benchmarks/build_anime_e2e_delivery.py": "6805b0e5b71e151584f7b0ba249c528d7e3be58e1c97ae2218ef67dcfc829ecd",
+    "benchmarks/qualify_anime_inputs.py": "7a5c06fc31765fe3fa60fcd7123358be6bc69bddb95f66fa8bbc21ab8eda3363",
+    "benchmarks/test_anime_e2e.py": "87b7a636a4f008a2ae2efd43eec1ad5c271d4dbbdab0c946e5dd5a4db18b4535",
+    "patches/kitchen_attention_native/vendor/LICENSE": "457609350489eb6ea2982cbd2d19695e54741dc9778c9140f89e7b4e5e64ba58",
+    "patches/kitchen_attention_native/vendor/NOTICE": "27a6b994dc3c6d5ff4ac589eb633e09e4627b0efd276b89dd9ea87f561991644",
+    "benchmarks/submit_anime_e2e.py": "91755f1429fe4babe2f2bf61e5c7cf93c13f651a217181d9f939e8b66f64b454"
+  },
+  "initial_cpu_preflight": {
+    "core_and_review_passed": true,
+    "new_tests_passed": 11,
+    "blocked_by": "Missing retained vendor LICENSE/NOTICE; no GPU used"
+  }
+}

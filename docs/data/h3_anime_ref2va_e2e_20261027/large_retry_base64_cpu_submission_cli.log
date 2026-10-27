@@ -1,0 +1,1 @@
+('Connection aborted.', ConnectionResetError(10054, '远程主机强迫关闭了一个现有的连接。'))
