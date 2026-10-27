@@ -1,0 +1,53 @@
+{
+  "status": "collected",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-anime-ref2va-8step-t4-20261027",
+  "output": "D:\\attention_eval\\h3_anime_e2e_20261027\\retry_cpu_v7\\gpu_outputs",
+  "returncode": 0,
+  "files": 27,
+  "completed_utc": "2026-10-27T15:06:43.056812+00:00",
+  "experiment": {
+    "status": "failed",
+    "error": "AssertionError()",
+    "stages": {
+      "vae_metadata": {
+        "start_ns": 1489887982606,
+        "end_ns": 1490350812715,
+        "status": "complete"
+      },
+      "reference_and_TE": {
+        "start_ns": 1490351608808,
+        "end_ns": 1645237722564,
+        "status": "complete"
+      },
+      "sampler": {
+        "start_ns": 1645768035368,
+        "end_ns": 2984520757814,
+        "status": "complete"
+      },
+      "video_decode": {
+        "start_ns": 2984683873315,
+        "end_ns": 3217666123321,
+        "status": "complete"
+      },
+      "audio_decode": {
+        "start_ns": 3217667602815,
+        "end_ns": 3220947920631,
+        "status": "complete"
+      },
+      "file_export": {
+        "start_ns": 3220949506961,
+        "end_ns": 3238348781957,
+        "status": "complete"
+      }
+    },
+    "completed_sampler_steps": 8,
+    "completed_denoiser_calls": 8,
+    "media": {
+      "video_bytes": 10114301,
+      "audio_bytes": 1296044
+    },
+    "quality_acceptance": "Pending review; collection does not establish generation quality"
+  },
+  "prior_input_hash_matches": {}
+}

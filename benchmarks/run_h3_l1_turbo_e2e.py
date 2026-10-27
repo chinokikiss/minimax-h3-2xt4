@@ -18,6 +18,7 @@ from patches import comfy_tp_runtime as rt
 from patches.h3_operator_policy import H3OperatorPolicy
 from patches.h3_tensor_flow import TensorFlowPolicy
 from patches.host_weight_cache import GiB
+from benchmarks.e2e_attention_validation import kitchen_denoiser_calls
 
 
 class CurrentRank(observation.ObservedRank):
@@ -92,12 +93,6 @@ def runtime_config(config):
     return rt.RuntimeConfig(te_path=config['paths']['te'],dit_path=config['paths']['dit'],
         lora_stack=(),bundle_offline_lora=False,
         operators=H3OperatorPolicy(),tensor_flow=TensorFlowPolicy('fp16'))
-
-
-def kitchen_denoiser_calls(benchmark):
-    # Video query-parallel decode can use Kitchen in these same workers too.
-    return sum(row.get('kind')=='kitchen/int8_attention' and row.get('command')=='denoise'
-               for row in benchmark['gpu'])
 
 
 def main():

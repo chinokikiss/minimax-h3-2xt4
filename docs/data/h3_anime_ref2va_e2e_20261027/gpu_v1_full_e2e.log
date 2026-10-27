@@ -1,0 +1,166 @@
+WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+WARNING WARNING WARNING
+If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.
+
+L1_STAGE_START vae_metadata
+L1_STAGE_END vae_metadata {'start_ns': 1489887982606, 'end_ns': 1490350812715, 'status': 'complete'}
+L1_STAGE_START reference_and_TE
+WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+WARNING WARNING WARNING
+If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.
+
+WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+WARNING WARNING WARNING
+If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.
+
+2026-10-27 14:33:57  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 14:33:57  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 14:34:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`2026-10-27 14:34:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+
+2026-10-27 14:34:04  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 14:34:04  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 14:34:07  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:34:07  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+NCCL version 2.31.2+cuda13.3
+2026-10-27 14:34:10  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 14:34:10  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 14:34:12  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:34:12  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:34:13  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 14:34:13  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 14:34:15  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:34:15  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:34:16  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 14:34:16  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 14:34:19  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:34:19  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:34:20  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1, 2]`
+2026-10-27 14:34:20  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1, 2]`
+2026-10-27 14:34:25  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:34:25  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:34:26  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 14:34:26  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 14:34:28  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:34:29  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:34:29  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 14:34:30  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 14:34:32  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:34:32  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:34:33  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 14:34:33  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 14:34:35  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:34:35  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+REF2VA_RANK_COMMAND 0 {'command': 'te', 'nfe': 0, 'start_ns': 1495370982457, 'enqueue_end_ns': 1645012907337, 'peak_allocated': 3467142144, 'peak_reserved': 5146411008}
+REF2VA_RANK_COMMAND 1 {'command': 'te', 'nfe': 0, 'start_ns': 1495372210667, 'enqueue_end_ns': 1645013137375, 'peak_allocated': 3247656960, 'peak_reserved': 4903141376}
+L1_STAGE_END reference_and_TE {'start_ns': 1490351608808, 'end_ns': 1645237722564, 'status': 'complete'}
+L1_STAGE_START sampler
+REF2VA_RANK_COMMAND 1 {'command': 'refine', 'nfe': 0, 'start_ns': 1647500618366, 'enqueue_end_ns': 1647877674244, 'peak_allocated': 92179456, 'peak_reserved': 138412032}
+REF2VA_RANK_COMMAND 0 {'command': 'refine', 'nfe': 0, 'start_ns': 1647496848519, 'enqueue_end_ns': 1660215157855, 'peak_allocated': 3866491904, 'peak_reserved': 4141875200}
+REF2VA_RANK_COMMAND 1 {'command': 'refine', 'nfe': 0, 'start_ns': 1660666049283, 'enqueue_end_ns': 1660681032814, 'peak_allocated': 92179456, 'peak_reserved': 138412032}
+REF2VA_RANK_COMMAND 0 {'command': 'refine', 'nfe': 0, 'start_ns': 1660679258397, 'enqueue_end_ns': 1660703247424, 'peak_allocated': 3866491904, 'peak_reserved': 4141875200}
+
+  0%|          | 0/8 [00:00<?, ?it/s]2026-10-27 14:36:24  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 14:36:24  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 14:36:30  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:36:30  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+REF2VA_LAYOUT 1 {'sequence_tokens': 59134, 'segments': [(0, 2392, 'text'), (2392, 3151, 'ref_img'), (3151, 3892, 'ref_img'), (3892, 4702, 'audio'), (4702, 59134, 'video')], 'query_shape': [1, 28, 59134, 128]}
+2026-10-27 14:36:32  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+REF2VA_LAYOUT 0 {'sequence_tokens': 59134, 'segments': [(0, 2392, 'text'), (2392, 3151, 'ref_img'), (3151, 3892, 'ref_img'), (3892, 4702, 'audio'), (4702, 59134, 'video')], 'query_shape': [1, 28, 59134, 128]}
+2026-10-27 14:36:32  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 14:36:34  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:36:34  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:36:35  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 14:36:35  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 14:36:38  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:36:38  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:36:39  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 14:36:39  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 14:36:41  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:36:41  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:36:42  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 14:36:42  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 14:36:45  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:36:45  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:36:46  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 14:36:46  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 14:36:49  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:36:49  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:36:50  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 14:36:50  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 14:36:53  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:36:53  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:36:54  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1, 2]`
+2026-10-27 14:36:54  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1, 2]`
+2026-10-27 14:36:58  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:36:59  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 14:36:59  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:36:59  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 14:37:00  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:37:01  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:37:01  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 14:37:01  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 14:37:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:37:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:37:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 14:37:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 14:37:05  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 14:37:05  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+REF2VA_RANK_COMMAND 1 {'command': 'denoise', 'nfe': 1, 'start_ns': 1661136033989, 'enqueue_end_ns': 1848538431084, 'peak_allocated': 11863366144, 'peak_reserved': 15363735552}
+REF2VA_RANK_COMMAND 0 {'command': 'denoise', 'nfe': 1, 'start_ns': 1661143776679, 'enqueue_end_ns': 1849975654391, 'peak_allocated': 13497051136, 'peak_reserved': 14847836160}
+L1_DENOISER_COMPLETE 1 [{'shape': [1, 24, 72, 42, 72], 'dtype': 'torch.float16', 'finite': True, 'minimum': -10.9609375, 'maximum': 12.09375, 'mean': 0.22374816238880157, 'rms': 2.155177593231201}, {'shape': [1, 32, 2, 405], 'dtype': 'torch.float16', 'finite': True, 'minimum': -6.578125, 'maximum': 5.453125, 'mean': -0.20023341476917267, 'rms': 1.5928975343704224}]
+L1_SAMPLER_STEP 1 8
+
+ 12%|█▎        | 1/8 [03:20<23:24, 200.63s/it]REF2VA_RANK_COMMAND 1 {'command': 'denoise', 'nfe': 2, 'start_ns': 1861756446311, 'enqueue_end_ns': 2010146702461, 'peak_allocated': 11863956480, 'peak_reserved': 15317598208}
+REF2VA_RANK_COMMAND 0 {'command': 'denoise', 'nfe': 2, 'start_ns': 1861752965167, 'enqueue_end_ns': 2019036364472, 'peak_allocated': 11273149440, 'peak_reserved': 14797504512}
+L1_DENOISER_COMPLETE 2 [{'shape': [1, 24, 72, 42, 72], 'dtype': 'torch.float16', 'finite': True, 'minimum': -8.78125, 'maximum': 8.5, 'mean': -0.007570582441985607, 'rms': 1.4396086931228638}, {'shape': [1, 32, 2, 405], 'dtype': 'torch.float16', 'finite': True, 'minimum': -7.27734375, 'maximum': 5.859375, 'mean': -0.1607658863067627, 'rms': 1.4718245267868042}]
+L1_SAMPLER_STEP 2 8
+
+ 25%|██▌       | 2/8 [06:02<17:45, 177.60s/it]REF2VA_RANK_COMMAND 0 {'command': 'denoise', 'nfe': 3, 'start_ns': 2023209882625, 'enqueue_end_ns': 2171169899496, 'peak_allocated': 11075360768, 'peak_reserved': 14717812736}
+REF2VA_RANK_COMMAND 1 {'command': 'denoise', 'nfe': 3, 'start_ns': 2023206611486, 'enqueue_end_ns': 2171170218794, 'peak_allocated': 11863956480, 'peak_reserved': 15317598208}
+L1_DENOISER_COMPLETE 3 [{'shape': [1, 24, 72, 42, 72], 'dtype': 'torch.float16', 'finite': True, 'minimum': -8.0703125, 'maximum': 8.40625, 'mean': 0.005233488976955414, 'rms': 1.4465324878692627}, {'shape': [1, 32, 2, 405], 'dtype': 'torch.float16', 'finite': True, 'minimum': -6.40625, 'maximum': 5.6484375, 'mean': -0.09197361022233963, 'rms': 1.3420929908752441}]
+L1_SAMPLER_STEP 3 8
+
+ 38%|███▊      | 3/8 [08:43<14:10, 170.01s/it]REF2VA_RANK_COMMAND 1 {'command': 'denoise', 'nfe': 4, 'start_ns': 2184196356291, 'enqueue_end_ns': 2331199378384, 'peak_allocated': 11863956480, 'peak_reserved': 15317598208}
+REF2VA_RANK_COMMAND 0 {'command': 'denoise', 'nfe': 4, 'start_ns': 2184192402281, 'enqueue_end_ns': 2331199535555, 'peak_allocated': 11075360768, 'peak_reserved': 14717812736}
+L1_DENOISER_COMPLETE 4 [{'shape': [1, 24, 72, 42, 72], 'dtype': 'torch.float16', 'finite': True, 'minimum': -8.8359375, 'maximum': 7.390625, 'mean': 0.013379966840147972, 'rms': 1.4266078472137451}, {'shape': [1, 32, 2, 405], 'dtype': 'torch.float16', 'finite': True, 'minimum': -5.5390625, 'maximum': 5.1328125, 'mean': -0.09849376231431961, 'rms': 1.2738897800445557}]
+L1_SAMPLER_STEP 4 8
+
+ 50%|█████     | 4/8 [11:23<11:04, 166.07s/it]REF2VA_RANK_COMMAND 1 {'command': 'denoise', 'nfe': 5, 'start_ns': 2344213386411, 'enqueue_end_ns': 2491270757145, 'peak_allocated': 11863956480, 'peak_reserved': 15317598208}
+REF2VA_RANK_COMMAND 0 {'command': 'denoise', 'nfe': 5, 'start_ns': 2344209583322, 'enqueue_end_ns': 2491273468721, 'peak_allocated': 11075360768, 'peak_reserved': 14722007040}
+L1_DENOISER_COMPLETE 5 [{'shape': [1, 24, 72, 42, 72], 'dtype': 'torch.float16', 'finite': True, 'minimum': -7.2734375, 'maximum': 7.625, 'mean': 0.020595259964466095, 'rms': 1.4011623859405518}, {'shape': [1, 32, 2, 405], 'dtype': 'torch.float16', 'finite': True, 'minimum': -5.015625, 'maximum': 5.0625, 'mean': -0.0685289204120636, 'rms': 1.2495067119598389}]
+L1_SAMPLER_STEP 5 8
+
+ 62%|██████▎   | 5/8 [14:03<08:11, 163.91s/it]REF2VA_RANK_COMMAND 1 {'command': 'denoise', 'nfe': 6, 'start_ns': 2504296672154, 'enqueue_end_ns': 2651228638215, 'peak_allocated': 11863956480, 'peak_reserved': 15317598208}
+REF2VA_RANK_COMMAND 0 {'command': 'denoise', 'nfe': 6, 'start_ns': 2504299727409, 'enqueue_end_ns': 2661088459439, 'peak_allocated': 11075360768, 'peak_reserved': 14717812736}
+L1_DENOISER_COMPLETE 6 [{'shape': [1, 24, 72, 42, 72], 'dtype': 'torch.float16', 'finite': True, 'minimum': -6.84765625, 'maximum': 7.2109375, 'mean': 0.02398720569908619, 'rms': 1.384698510169983}, {'shape': [1, 32, 2, 405], 'dtype': 'torch.float16', 'finite': True, 'minimum': -4.4609375, 'maximum': 5.1484375, 'mean': -0.04881035163998604, 'rms': 1.2106341123580933}]
+L1_SAMPLER_STEP 6 8
+
+ 75%|███████▌  | 6/8 [16:43<05:25, 162.56s/it]REF2VA_RANK_COMMAND 0 {'command': 'denoise', 'nfe': 7, 'start_ns': 2664230852980, 'enqueue_end_ns': 2810914164170, 'peak_allocated': 11075360768, 'peak_reserved': 14722007040}
+REF2VA_RANK_COMMAND 1 {'command': 'denoise', 'nfe': 7, 'start_ns': 2664234127444, 'enqueue_end_ns': 2810914288594, 'peak_allocated': 11863956480, 'peak_reserved': 15317598208}
+L1_DENOISER_COMPLETE 7 [{'shape': [1, 24, 72, 42, 72], 'dtype': 'torch.float16', 'finite': True, 'minimum': -6.515625, 'maximum': 6.625, 'mean': 0.02520221285521984, 'rms': 1.3772529363632202}, {'shape': [1, 32, 2, 405], 'dtype': 'torch.float16', 'finite': True, 'minimum': -4.28515625, 'maximum': 4.82421875, 'mean': -0.06334644556045532, 'rms': 1.1668661832809448}]
+L1_SAMPLER_STEP 7 8
+
+ 88%|████████▊ | 7/8 [19:22<02:41, 161.61s/it]REF2VA_RANK_COMMAND 0 {'command': 'denoise', 'nfe': 8, 'start_ns': 2823884873580, 'enqueue_end_ns': 2970646097045, 'peak_allocated': 11075360768, 'peak_reserved': 14722007040}
+REF2VA_RANK_COMMAND 1 {'command': 'denoise', 'nfe': 8, 'start_ns': 2823889810338, 'enqueue_end_ns': 2970646346697, 'peak_allocated': 11863956480, 'peak_reserved': 15317598208}
+L1_DENOISER_COMPLETE 8 [{'shape': [1, 24, 72, 42, 72], 'dtype': 'torch.float16', 'finite': True, 'minimum': -6.578125, 'maximum': 6.80078125, 'mean': 0.026797937229275703, 'rms': 1.3758453130722046}, {'shape': [1, 32, 2, 405], 'dtype': 'torch.float16', 'finite': True, 'minimum': -4.36328125, 'maximum': 4.6171875, 'mean': -0.06516335159540176, 'rms': 1.1594440937042236}]
+L1_SAMPLER_STEP 8 8
+
+100%|██████████| 8/8 [22:02<00:00, 161.03s/it]
+100%|██████████| 8/8 [22:02<00:00, 165.32s/it]
+L1_STAGE_END sampler {'start_ns': 1645768035368, 'end_ns': 2984520757814, 'status': 'complete'}
+L1_STAGE_START video_decode
+L1_STAGE_END video_decode {'start_ns': 2984683873315, 'end_ns': 3217666123321, 'status': 'complete'}
+L1_STAGE_START audio_decode
+L1_STAGE_END audio_decode {'start_ns': 3217667602815, 'end_ns': 3220947920631, 'status': 'complete'}
+L1_STAGE_START file_export
+L1_STAGE_END file_export {'start_ns': 3220949506961, 'end_ns': 3238348781957, 'status': 'complete'}
+Traceback (most recent call last):
+  File "/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_e2e.py", line 216, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_e2e.py", line 193, in main
+    assert kitchen_denoiser_calls(bench) == 50*config['steps']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+/usr/lib/python3.13/multiprocessing/resource_tracker.py:479: UserWarning: resource_tracker: There appear to be 2 leaked semaphore objects to clean up at shutdown: {'/mp-kzsn53io', '/mp-u8m1farg'}
+  warnings.warn(

@@ -1,6 +1,6 @@
 {
   "date": "2026-10-27",
-  "status": "cpu_v3_passed_gpu_v1_accepted_e2e_results_pending",
+  "status": "physical_2xt4_generation_completed_postexport_counter_assertion_reconciled",
   "full_pipeline_authorized": true,
   "automatic_polling": false,
   "automatic_retry": false,
@@ -206,7 +206,7 @@
         "cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03"
       ]
     },
-    "final_collection_count": 0,
+    "final_collection_count": 1,
     "earliest_final_collection_seconds": 5400,
     "experiment_kind": "anime_e2e",
     "result_relative": "turbo_e2e/generation/result.json",
@@ -216,7 +216,93 @@
     "requested_kernel": "pamcks/h3-anime-ref2va-8step-t4-20261027",
     "url": "https://www.kaggle.com/code/pamcks/h3-anime-ref2va-8step-t4-20261027"
   },
-  "generation_result": null,
+  "generation_result": {
+    "original_remote_status": "failed",
+    "original_remote_error": "AssertionError in post-export Kitchen attention count",
+    "reconciled_validation_status": "saved_e2e_checks_passed_observer_assertion_reconciled",
+    "hardware": {
+      "devices": [
+        {
+          "name": "Tesla T4",
+          "capability": [
+            7,
+            5
+          ],
+          "uuid": "afcaf21b-3156-3e49-1a08-31642996fd2f"
+        },
+        {
+          "name": "Tesla T4",
+          "capability": [
+            7,
+            5
+          ],
+          "uuid": "4e616812-a1ba-ede9-1020-05dfcfb5ddba"
+        }
+      ],
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "kitchen": "0.2.37",
+      "tilelang": "0.1.13"
+    },
+    "completed_sampler_steps": 8,
+    "completed_denoiser_calls": 8,
+    "sequence_tokens": 59134,
+    "query_shape_per_rank": [
+      1,
+      28,
+      59134,
+      128
+    ],
+    "decoded_shapes": {
+      "pixels": [
+        1,
+        243,
+        672,
+        1152,
+        3
+      ],
+      "waveform": [
+        1,
+        324000,
+        2
+      ]
+    },
+    "decode": {
+      "video": {
+        "strategy": "native_temporal_pairs",
+        "fallback": null
+      },
+      "audio": {
+        "strategy": "native",
+        "fallback": null
+      }
+    },
+    "all_recorded_tensors_finite": true,
+    "stage_seconds": {
+      "vae_metadata": 0.462830109,
+      "reference_and_TE": 154.886113756,
+      "sampler": 1338.752722446,
+      "video_decode": 232.982250006,
+      "audio_decode": 3.280317816,
+      "file_export": 17.399274996
+    },
+    "foreground_seconds": 1748.4622947,
+    "offline_bake_seconds": 434.87164853700006,
+    "execution_worker_seconds": 2886.644581539,
+    "denoiser_attention_per_rank": [
+      400,
+      400
+    ],
+    "late_temporal_calls_mistagged_per_rank": [
+      2016,
+      2016
+    ],
+    "media_hashes": {
+      "video.mp4": "2bb8eeb33b031946b356c0137b967d527878ff555a8b8f32a3629c7ec10393c3",
+      "audio.wav": "faa66c3f3cd0e4791c66a75aedb2de728b3d83c87ff018bc525a63e971ff3ec2"
+    },
+    "media_directory": "D:\\attention_eval\\h3_anime_e2e_20261027\\retry_cpu_v7\\gpu_outputs\\turbo_e2e\\generation"
+  },
   "evidence_directory": "D:\\attention_eval\\h3_anime_e2e_20261027",
   "new_reference_bytes_in_public_archive": false,
   "private_credentials_used": false,
@@ -439,7 +525,7 @@
     "original_bytes_unchanged": true
   },
   "latest_blocker": null,
-  "no_further_kaggle_requests": false,
+  "no_further_kaggle_requests": true,
   "notebook_status_list_live_log_requests": 0,
   "dataset_cli_creation_attempts": 2,
   "dataset_native_existence_check_note": "Each native datasets-create invocation performs its own existence check; no separate status or readiness polling was performed.",
@@ -468,7 +554,7 @@
       "matches_original_contract": true
     }
   ],
-  "pending": "One physical 2xT4 E2E; accepted submission only, hardware/execution results not yet collected",
+  "pending": "Full video/audio quality review; no dense-baseline equivalence or speedup claim",
   "previous_mirror_retry_source_identity": {
     "source_requests": 1,
     "scope": "Submission source identity only",
@@ -521,5 +607,68 @@
     "execution_budget_seconds": 4800,
     "setup_budget_seconds": 300,
     "notebook_timeout_seconds": 5400
+  },
+  "gpu_final_collection": {
+    "status": "collected",
+    "kaggle_requests": 1,
+    "kernel": "pamcks/h3-anime-ref2va-8step-t4-20261027",
+    "output": "D:\\attention_eval\\h3_anime_e2e_20261027\\retry_cpu_v7\\gpu_outputs",
+    "returncode": 0,
+    "files": 27,
+    "completed_utc": "2026-10-27T15:06:43.056812+00:00",
+    "experiment": {
+      "status": "failed",
+      "error": "AssertionError()",
+      "stages": {
+        "vae_metadata": {
+          "start_ns": 1489887982606,
+          "end_ns": 1490350812715,
+          "status": "complete"
+        },
+        "reference_and_TE": {
+          "start_ns": 1490351608808,
+          "end_ns": 1645237722564,
+          "status": "complete"
+        },
+        "sampler": {
+          "start_ns": 1645768035368,
+          "end_ns": 2984520757814,
+          "status": "complete"
+        },
+        "video_decode": {
+          "start_ns": 2984683873315,
+          "end_ns": 3217666123321,
+          "status": "complete"
+        },
+        "audio_decode": {
+          "start_ns": 3217667602815,
+          "end_ns": 3220947920631,
+          "status": "complete"
+        },
+        "file_export": {
+          "start_ns": 3220949506961,
+          "end_ns": 3238348781957,
+          "status": "complete"
+        }
+      },
+      "completed_sampler_steps": 8,
+      "completed_denoiser_calls": 8,
+      "media": {
+        "video_bytes": 10114301,
+        "audio_bytes": 1296044
+      },
+      "quality_acceptance": "Pending review; collection does not establish generation quality"
+    },
+    "prior_input_hash_matches": {}
+  },
+  "physical_t4_hardware_verified": true,
+  "local_observer_fix_tests": {
+    "passed": true,
+    "tests": 183,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 13.68800000000192,
+    "scope": "CPU contracts, not physical T4 qualification"
   }
 }

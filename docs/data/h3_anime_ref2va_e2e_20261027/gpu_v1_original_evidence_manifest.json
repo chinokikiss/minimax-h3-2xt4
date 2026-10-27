@@ -1,0 +1,17 @@
+{
+  "original_result_sha256": "02e8c39d933968e18889154a79e8079c3b06315e81a72b0c169cd493f291e223",
+  "original_result_bytes": 2028036,
+  "archive_sha256": "06d3403f9084d17a362088871e1da151ba6112f76e77845ab01d530b76983ade",
+  "archive_bytes": 124933,
+  "original_remote_status": "failed",
+  "local_reconciliation_file": "gpu_v1_postrun_validation.json",
+  "private_media_and_latents_preserved_in": "D:\\attention_eval\\h3_anime_e2e_20261027\\retry_cpu_v7\\gpu_outputs\\turbo_e2e\\generation",
+  "media_or_activation_payloads_published": false,
+  "bake_receipt_archive": {
+    "file": "gpu_v1_offline_disk_bake_receipt.json.gz",
+    "original_bytes": 664611,
+    "original_sha256": "a2f452fdb4b7c29bae52efd94599e57d94b4b9164e553fc1932c1dcdfcaed3fb",
+    "archive_bytes": 70454,
+    "archive_sha256": "9590c1139016c4a429e66d55bbe8145ee7d6a5fc94ae72147adede6ce00c5c99"
+  }
+}

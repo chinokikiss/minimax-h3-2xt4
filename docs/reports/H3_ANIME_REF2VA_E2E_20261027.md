@@ -1,12 +1,20 @@
 # Eight-step anime REF2VA E2E — 2026-10-27
 
-Status: **CPU preflight version 3 passed** and its final outputs were collected
-once. Kaggle then acknowledged **GPU E2E version 1** at
+Status: **generation completed on two physical SM75 Tesla T4 GPUs** in
+[GPU E2E version 1](https://www.kaggle.com/code/pamcks/h3-anime-ref2va-8step-t4-20261027).
+All eight sampling steps, both decoders and media export completed with finite
+outputs. The original notebook then failed a post-export observer assertion:
+Temporal VAE attention was mislabelled as denoising. The original failed result
+is preserved; a separate local validation reconciles the counter and passes all
+saved-output checks. No GPU rerun was required. Full visual/audio quality review
+and baseline equivalence remain open.
+
+**CPU preflight version 3 passed** and its final outputs were collected once.
+Kaggle then acknowledged **GPU E2E version 1** at
 [H3 Anime REF2VA 8Step T4](https://www.kaggle.com/code/pamcks/h3-anime-ref2va-8step-t4-20261027).
-The GPU notebook is private and requests T4 hardware; the frozen worker must
-verify two distinct physical SM75 T4 devices before model preparation.
-**Submission is accepted; physical execution and E2E results are pending.**
-No notebook execution status/list/live-log endpoint is queried.
+Its final outputs were collected once, with no notebook execution status/list/
+live-log polling. Video, audio and latent payloads remain private in the local
+evidence directory; public evidence contains metrics, hashes and receipts.
 
 The user's explicit request authorizes one full E2E generation for this workload,
 superseding the operator-only restriction for this run. Other experiments and
@@ -212,7 +220,7 @@ hashes/dimensions and the eight-step adapter's 208 target mappings. Its result
 is `cpu_input_ready` and its matching frozen setup receipt is `cpu_ready`.
 This qualifies the CPU setup/input path; it is not physical GPU validation.
 
-One bounded 2×T4 job has now been submitted to:
+The single bounded 2×T4 job completed these stages:
 
 1. Verify both distinct SM75 T4 owners and the retained environment/compiler.
 2. Fetch the immutable DiT shards and eight-step adapter, then bake offline on
@@ -232,6 +240,92 @@ mounts, exact embedded JPEG bytes and absence of credentials. The reference
 JPEG is inside the private notebook; that notebook is not copied to the public
 evidence archive. The GPU submission receipt, qualification receipts and public
 metadata are archived separately from reference payloads.
+
+### Physical execution results
+
+The worker verified two distinct Tesla T4 UUIDs, both compute capability 7.5.
+The actual environment was native Torch **2.11.0+cu128 / CUDA 12.8**, Kitchen
+**0.2.37** and TileLang **0.1.13**. The frozen ComfyUI source and legacy attention
+API were retained. The actual DiT sequence was **59,134 tokens** per rank, with
+Q shape `[1,28,59134,128]`: 2,392 text, 759+741 reference-image, 810 audio and
+54,432 generated-video tokens.
+
+| Recorded stage | Seconds | Scope |
+|---|---:|---|
+| Offline dual-GPU LoRA bake | 434.87 | All 208 targets; 21,237,118,728 bytes persisted to job disk |
+| Reference encoding and TE | 154.89 | Both exact reference images and the full prompt |
+| Eight-step sampler | 1,338.75 | All eight denoiser outputs and callbacks finite |
+| Temporal Video VAE | 232.98 | `native_temporal_pairs`, no fallback |
+| Native Audio VAE | 3.28 | Single-GPU Native, no fallback |
+| File export | 17.40 | MP4 with audio plus separate stereo WAV |
+| Recorded foreground interval | 1,748.46 | Reference/TE through export; excludes offline bake/downloads |
+| Whole execution worker | 2,886.64 | Includes downloads, bake, process setup/cleanup and final assertion failure |
+
+These are one-request observations with cold loading/compilation, not repeated
+steady-state benchmarks or a measured speedup. Denoiser command time on rank 0
+was 188.83 seconds on the first call and approximately 146.68–157.28 seconds on
+later calls. The recorded foreground interval was about **29 minutes 8 seconds**.
+
+PyTorch denoiser peak allocation was **12.57 GiB / 11.05 GiB** on ranks 0/1;
+peak reservation was **13.83 GiB / 14.31 GiB**. Sampled full-device usage reached
+approximately **15.00 GiB / 14.98 GiB**, including other CUDA allocations in the
+instance. This workload completed without an observed GPU OOM or cgroup OOM
+kill; the device figures show little spare memory for a larger workload.
+
+Each rank recorded 250 optimized TE column calls, 50 TE causal-attention calls,
+900 Scaled FP16 epilogues and 450 fused SwiGLU/quantization preparations. The
+saved rank state confirms disk-baked DiT weights, zero inference merges and no
+online LoRA attachment. Image-only reference preparation loaded no Audio encoder.
+
+### Post-export observer failure and reconciliation
+
+The original failure is `assert kitchen_denoiser_calls(bench) == 50*steps`,
+after successful file export. The observer updated its context for Query VAE
+`video_pixels` commands, but not Temporal `video_temporal_pair`. Consequently,
+the last `denoise/nfe8` label remained active during Temporal decoding. On
+**each rank**, the old filter counted **2,416** calls: the expected 400 DiT calls
+plus **2,016** later Video VAE calls. Including TE gives 2,466 total Kitchen calls.
+
+The saved event list contains a `command_gpu_span` completion marker for every
+denoiser command, appended after that command's operators. Restricting calls to
+their matching completed command intervals recovers exactly **50 calls in each
+of eight steps**, on both ranks. All 2,016 excess calls occur after the final
+denoiser completion marker. The Temporal RPC path in the frozen source explains
+the stale labels; this is an observer attribution defect.
+
+The benchmark observer now assigns context for every RPC and profiles Temporal
+decoder commands explicitly. The verifier uses completed command boundaries;
+it still counts genuine extra calls inside denoising and rejects missing or
+duplicate markers. Four targeted regressions and the complete **183-test CPU
+suite pass**. These changes affect benchmark instrumentation/validation only.
+The submitted frozen archive and operator implementations are preserved.
+
+`benchmarks/validate_anime_e2e_outputs.py` independently checked the unchanged
+saved T4 result, both ranks, all eight finite trajectories, every remaining
+integration assertion, exact output shapes, offline LoRA state and local media
+checks. Its separate result is
+`saved_e2e_checks_passed_observer_assertion_reconciled`. The original remote
+`status=failed` and traceback remain archived; no result JSON was rewritten and
+no new GPU job was submitted.
+
+### Exported media and review
+
+The local MP4 fully decodes through FFmpeg: **243 frames, 1152×672, 24 fps,
+10.125 seconds**, with an audio stream. The WAV contains **324,000 stereo samples
+at 32 kHz**, also 10.125 seconds. Its measured peak is 0.1483 full scale, RMS
+0.02318, and no exact PCM clipping was detected. These checks establish a valid,
+non-silent export, not audio semantics or baseline fidelity.
+
+The 12-frame contact sheet samples 0–10.08 seconds. The girl's purple hair,
+kimono and umbrella remain identifiable in those samples; the shrine is present
+and the white fox appears during the sequence. This is a sparse visual review;
+smooth motion, identity details, sound/music and prompt adherence still require
+full playback. No dense Native control generation was run.
+
+Private local media:
+`D:/attention_eval/h3_anime_e2e_20261027/retry_cpu_v7/gpu_outputs/turbo_e2e/generation/`.
+The files are `video.mp4`, `audio.wav` and recovery latents `decode_inputs.pt`.
+The preview is under `retry_cpu_v7/local_review/contact_sheet.jpg`.
 
 Acceptance requires eight completed denoiser outputs and sampling steps,
 finite sampled/decoded tensors, exact requested video dimensions/frame count,

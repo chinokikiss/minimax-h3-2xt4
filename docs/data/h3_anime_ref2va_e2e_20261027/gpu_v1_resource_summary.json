@@ -1,0 +1,8 @@
+{
+  "sampled_device_used_peak_bytes": {
+    "0": 16103243776,
+    "1": 16086466560
+  },
+  "samples": 3500,
+  "cgroup_oom_kill_increase": 0
+}

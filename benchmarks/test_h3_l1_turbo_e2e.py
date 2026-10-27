@@ -17,10 +17,10 @@ from benchmarks.turbo_e2e_contract import validate_header
 
 class TurboLongRun(unittest.TestCase):
     def test_decode_kitchen_calls_do_not_change_dit_acceptance_count(self):
-        rows=[dict(kind='kitchen/int8_attention',command='denoise') for _ in range(200)]
-        rows += [dict(kind='kitchen/int8_attention',command='video_pixels') for _ in range(32)]
-        rows += [dict(kind='command_gpu_span',command='denoise')]
-        self.assertEqual(kitchen_denoiser_calls(dict(gpu=rows)),200)
+        rows=[dict(kind='kitchen/int8_attention',command='denoise',nfe=1) for _ in range(200)]
+        rows += [dict(kind='command_gpu_span',command='denoise',nfe=1)]
+        rows += [dict(kind='kitchen/int8_attention',command='video_pixels',nfe=1) for _ in range(32)]
+        self.assertEqual(kitchen_denoiser_calls(dict(gpu=rows,commands=[dict(command='denoise',nfe=1)])),200)
 
     def test_current_defaults_and_offline_only_runtime(self):
         config = dict(offline_lora=True, disk_baked_lora=True, width=960, height=544,

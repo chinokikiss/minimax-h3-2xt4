@@ -150,6 +150,9 @@ class ObservedRank(BASE_RANK):
 
     def dispatch(self, command, args=(), kwargs=None):
         kwargs = dict(kwargs or {})
+        # Every RPC owns its events, including Temporal Video VAE. Leaving the
+        # previous denoise context active misattributes decoder attention.
+        self.context['command'] = command
         if self.memory_audit and command in ('begin_sample','end_sample','vae_prepare','vae_release',
                 'decode_start','decode_complete','close'):
             self.context['command']=command
@@ -173,7 +176,7 @@ class ObservedRank(BASE_RANK):
             result = super().dispatch(command, args, kwargs)
             result.update(benchmark_ready=ready, pending=pending, prefix_layers=len(w.entries) if w else 0)
             return result
-        if command in ('te','refine','denoise','video_pixels','audio_channels'):
+        if command in ('te','refine','denoise','video_pixels','video_temporal_pair','audio_channels'):
             if command == 'denoise':
                 self.context['nfe'] += 1
             self.context['command'] = command

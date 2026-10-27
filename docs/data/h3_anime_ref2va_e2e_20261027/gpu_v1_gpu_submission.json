@@ -50,7 +50,7 @@
       "cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03"
     ]
   },
-  "final_collection_count": 0,
+  "final_collection_count": 1,
   "earliest_final_collection_seconds": 5400,
   "experiment_kind": "anime_e2e",
   "result_relative": "turbo_e2e/generation/result.json",

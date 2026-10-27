@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_e2e.py", line 193, in main
+    assert kitchen_denoiser_calls(bench) == 50*config['steps']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

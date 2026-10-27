@@ -1,0 +1,35 @@
+{
+  "video": {
+    "decoded_frames": 243,
+    "fps": 24.0,
+    "width": 1152,
+    "height": 672,
+    "duration_seconds": 10.125,
+    "full_ffmpeg_decode_exit_code": 0
+  },
+  "audio": {
+    "channels": 2,
+    "sample_rate": 32000,
+    "sample_width": 2,
+    "frames": 324000,
+    "duration_seconds": 10.125,
+    "peak": 0.14825439453125,
+    "rms": 0.023183943703770638,
+    "exact_pcm_clip_fraction": 0.0,
+    "one_second_rms": [
+      0.01361825317144394,
+      0.015528851188719273,
+      0.016876861453056335,
+      0.013088621199131012,
+      0.01321770902723074,
+      0.01792719028890133,
+      0.01705712266266346,
+      0.030063044279813766,
+      0.03574094548821449,
+      0.03723069652915001,
+      0.04050011187791824
+    ]
+  },
+  "contact_sheet": "D:\\attention_eval\\h3_anime_e2e_20261027\\retry_cpu_v7\\local_review\\contact_sheet.jpg",
+  "scope": "Container/full-frame decode and waveform checks; not semantic/temporal quality equivalence"
+}
