@@ -1,0 +1,273 @@
+WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+WARNING WARNING WARNING
+If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.
+
+WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+WARNING WARNING WARNING
+If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.
+
+WARNING:root:H3 scaled FP16 transport unavailable (requires TP2 FP32, aligned local groups and vector FP32 weight scales); using native INT32 SUM
+TE_MATRIX_CASE 0 128 native single_gpu 29.06
+WARNING:root:H3 scaled FP16 transport unavailable (requires TP2 FP32, aligned local groups and vector FP32 weight scales); using native INT32 SUM
+TE_MATRIX_CASE 1 128 native single_gpu 28.783
+2026-10-27 05:49:41  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 05:49:41  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 05:49:44  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:49:44  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:49:45  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 05:49:45  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 05:49:46  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:49:46  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+01c3d5782f19:112:112 [0] NCCL INFO ENV/Plugin: Could not find: libnccl-env.so
+01c3d5782f19:112:112 [0] NCCL INFO Bootstrap: Using eth0:172.19.2.2<0>
+01c3d5782f19:112:112 [0] NCCL INFO cudaDriverVersion 13000
+01c3d5782f19:112:241 [0] NCCL INFO Socket handshake magic 0x564ab9f2fc4b9d6c (built-in default)
+01c3d5782f19:113:113 [1] NCCL INFO ENV/Plugin: Could not find: libnccl-env.so
+01c3d5782f19:113:113 [1] NCCL INFO cudaDriverVersion 13000
+01c3d5782f19:112:112 [0] NCCL INFO NCCL version 2.31.2+cuda13.3
+01c3d5782f19:112:112 [0] NCCL INFO NCCL git version unknown unknown
+01c3d5782f19:113:113 [1] NCCL INFO Bootstrap: Using eth0:172.19.2.2<0>
+01c3d5782f19:113:113 [1] NCCL INFO NCCL version 2.31.2+cuda13.3
+01c3d5782f19:113:113 [1] NCCL INFO NCCL git version unknown unknown
+01c3d5782f19:112:112 [0] NCCL INFO Comm config Blocking set to 1
+01c3d5782f19:113:113 [1] NCCL INFO Comm config Blocking set to 1
+01c3d5782f19:113:113 [1] NCCL INFO NET/Plugin: Could not find: libnccl-net.so
+01c3d5782f19:112:112 [0] NCCL INFO NET/Plugin: Could not find: libnccl-net.so
+01c3d5782f19:113:113 [1] NCCL INFO NET/IB : No device found.
+01c3d5782f19:112:112 [0] NCCL INFO NET/IB : No device found.
+01c3d5782f19:113:113 [1] NCCL INFO NET/IB : Using [RO]; OOB eth0:172.19.2.2<0>
+01c3d5782f19:112:112 [0] NCCL INFO NET/IB : Using [RO]; OOB eth0:172.19.2.2<0>
+01c3d5782f19:112:112 [0] NCCL INFO Failed to initialize NET plugin IB
+01c3d5782f19:113:113 [1] NCCL INFO Failed to initialize NET plugin IB
+01c3d5782f19:112:112 [0] NCCL INFO NET/Socket : Using [0]eth0:172.19.2.2<0>
+01c3d5782f19:113:113 [1] NCCL INFO NET/Socket : Using [0]eth0:172.19.2.2<0>
+01c3d5782f19:113:113 [1] NCCL INFO Initialized NET plugin Socket
+01c3d5782f19:112:112 [0] NCCL INFO Initialized NET plugin Socket
+01c3d5782f19:113:113 [1] NCCL INFO Assigned NET plugin Socket to comm
+01c3d5782f19:112:112 [0] NCCL INFO Assigned NET plugin Socket to comm
+01c3d5782f19:112:112 [0] NCCL INFO RMA/Plugin: Could not find: libnccl-rma.so
+01c3d5782f19:112:112 [0] NCCL INFO RMA/Plugin: Failed to initialize any plugin
+01c3d5782f19:113:113 [1] NCCL INFO RMA/Plugin: Could not find: libnccl-rma.so
+01c3d5782f19:113:113 [1] NCCL INFO RMA/Plugin: Failed to initialize any plugin
+01c3d5782f19:112:112 [0] NCCL INFO GIN/Plugin: Could not find: libnccl-gin.so
+01c3d5782f19:112:112 [0] NCCL INFO GIN/Plugin: Failed to initialize any GIN plugin
+01c3d5782f19:112:112 [0] NCCL INFO Using network Socket
+01c3d5782f19:113:113 [1] NCCL INFO GIN/Plugin: Could not find: libnccl-gin.so
+01c3d5782f19:113:113 [1] NCCL INFO GIN/Plugin: Failed to initialize any GIN plugin
+01c3d5782f19:113:113 [1] NCCL INFO Using network Socket
+01c3d5782f19:112:112 [0] NCCL INFO Loaded NVML from libnvidia-ml.so.1
+01c3d5782f19:113:113 [1] NCCL INFO Loaded NVML from libnvidia-ml.so.1
+01c3d5782f19:112:112 [0] NCCL INFO [Rank 0] ncclCommInitRankConfig comm 0x2fca6fc0 rank 0 nranks 2 cudaDev 0 nvmlDev 0 busId 40 commId 0x34c5293b33e29a7a - Init START
+01c3d5782f19:113:113 [1] NCCL INFO [Rank 1] ncclCommInitRankConfig comm 0x54bf6750 rank 1 nranks 2 cudaDev 1 nvmlDev 1 busId 50 commId 0x34c5293b33e29a7a - Init START
+01c3d5782f19:113:113 [1] NCCL INFO Socket handshake magic 0x564ab9f2fc4b9d6c (built-in default)
+01c3d5782f19:112:112 [0] NCCL INFO RAS client listening socket at ::1<28028>
+01c3d5782f19:113:113 [1] NCCL INFO RAS client listening socket at ::1<28028>
+01c3d5782f19:112:112 [0] NCCL INFO Bootstrap timings total 0.001910 (create 0.000041, send 0.000177, recv 0.000186, ring 0.000055, delay 0.000001)
+01c3d5782f19:113:113 [1] NCCL INFO Bootstrap timings total 0.001905 (create 0.000052, send 0.000168, recv 0.000245, ring 0.000037, delay 0.000002)
+01c3d5782f19:112:112 [0] NCCL INFO NCCL_P2P_DISABLE set by environment to 1
+01c3d5782f19:113:113 [1] NCCL INFO NCCL_P2P_DISABLE set by environment to 1
+01c3d5782f19:112:112 [0] NCCL INFO ncclTopoGetCpuAffinity: Affinity for GPU 0 is 0-3. (GPU affinity = 0-3 ; CPU affinity = 0-3).01c3d5782f19:113:113 [1] NCCL INFO ncclTopoGetCpuAffinity: Affinity for GPU 1 is 0-3. (GPU affinity = 0-3 ; CPU affinity = 0-3).
+
+01c3d5782f19:112:112 [0] NCCL INFO NVLS multicast support is not available on dev 0
+01c3d5782f19:113:113 [1] NCCL INFO NVLS multicast support is not available on dev 1
+01c3d5782f19:112:112 [0] NCCL INFO Rank 0: 1 Net devices
+01c3d5782f19:112:112 [0] NCCL INFO Rank 0: 0 CollNet devices
+01c3d5782f19:113:113 [1] NCCL INFO Rank 1: 1 Net devices
+01c3d5782f19:113:113 [1] NCCL INFO Rank 1: 0 CollNet devices
+01c3d5782f19:112:112 [0] NCCL INFO Local Net device counts across ranks: min 1 max 1
+01c3d5782f19:113:113 [1] NCCL INFO comm 0x54bf6750 rank 1 nRanks 2 nNodes 1 localRanks 2 localRank 1 MNNVL 0
+01c3d5782f19:112:112 [0] NCCL INFO Local CollNet device counts across ranks: min 0 max 0
+01c3d5782f19:113:113 [1] NCCL INFO NCCL_MAX_NCHANNELS set by environment to 4.
+01c3d5782f19:112:112 [0] NCCL INFO comm 0x2fca6fc0 rank 0 nRanks 2 nNodes 1 localRanks 2 localRank 0 MNNVL 0
+01c3d5782f19:113:113 [1] NCCL INFO NCCL_MIN_NCHANNELS set by environment to 4.
+01c3d5782f19:112:112 [0] NCCL INFO NCCL_MAX_NCHANNELS set by environment to 4.
+01c3d5782f19:112:112 [0] NCCL INFO NCCL_MIN_NCHANNELS set by environment to 4.
+01c3d5782f19:113:113 [1] NCCL INFO Trees [0] -1/-1/-1->1->0 [1] -1/-1/-1->1->0 [2] -1/-1/-1->1->0 [3] -1/-1/-1->1->0
+01c3d5782f19:112:112 [0] NCCL INFO Channel 00/04 : 0 1
+01c3d5782f19:112:112 [0] NCCL INFO Channel 01/04 : 0 1
+01c3d5782f19:113:113 [1] NCCL INFO P2P Chunksize set to 131072
+01c3d5782f19:112:112 [0] NCCL INFO Channel 02/04 : 0 1
+01c3d5782f19:112:112 [0] NCCL INFO Channel 03/04 : 0 1
+01c3d5782f19:112:112 [0] NCCL INFO Trees [0] 1/-1/-1->0->-1 [1] 1/-1/-1->0->-1 [2] 1/-1/-1->0->-1 [3] 1/-1/-1->0->-1
+01c3d5782f19:112:112 [0] NCCL INFO P2P Chunksize set to 131072
+01c3d5782f19:112:112 [0] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so
+01c3d5782f19:113:113 [1] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so
+01c3d5782f19:113:113 [1] NCCL INFO Check P2P Type isAllDirectP2p 0 directMode 0 isAllCudaP2p 1
+01c3d5782f19:112:112 [0] NCCL INFO Check P2P Type isAllDirectP2p 0 directMode 0 isAllCudaP2p 1
+01c3d5782f19:112:244 [0] NCCL INFO [Proxy Service] Device 0 CPU core 2
+01c3d5782f19:113:247 [0] NCCL INFO [Proxy Service UDS] Device 1 CPU core 1
+01c3d5782f19:112:246 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 0
+01c3d5782f19:112:244 [0] NCCL INFO proxy listening socket at 172.19.2.2<56765>
+01c3d5782f19:113:245 [0] NCCL INFO [Proxy Service] Device 1 CPU core 1
+01c3d5782f19:113:245 [1] NCCL INFO proxy listening socket at 172.19.2.2<48249>
+01c3d5782f19:112:112 [0] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so
+01c3d5782f19:113:113 [1] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so
+01c3d5782f19:113:113 [1] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
+01c3d5782f19:112:112 [0] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
+01c3d5782f19:113:113 [1] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 2 p2p channels per peer
+01c3d5782f19:113:113 [1] NCCL INFO symmetricSupport 1, cuMemEnable 1, globalGinSupport 0, cuMemGdrSupport 1, contiguousRanksPerHost 2, crossNicSupport 1
+01c3d5782f19:112:112 [0] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 2 p2p channels per peer
+01c3d5782f19:112:112 [0] NCCL INFO symmetricSupport 1, cuMemEnable 1, globalGinSupport 0, cuMemGdrSupport 1, contiguousRanksPerHost 2, crossNicSupport 1
+01c3d5782f19:112:112 [0] NCCL INFO CC Off, workFifoBytes 1048576
+01c3d5782f19:113:113 [1] NCCL INFO ncclCommInitRankConfig comm 0x54bf6750 rank 1 nranks 2 cudaDev 1 nvmlDev 1 busId 50 commId 0x01c3d5782f19:112:112 [0] NCCL INFO ncclCommInitRankConfig comm 0x2fca6fc0 rank 0 nranks 2 cudaDev 0 nvmlDev 0 busId 40 commId 0x34c5293b33e29a7a - Init COMPLETE
+34c5293b33e29a7a - Init COMPLETE
+01c3d5782f19:112:112 [0] NCCL INFO Init timings - ncclCommInitRankConfig: rank 0 nranks 2 total 0.68 (kernels 0.62, alloc 0.02, bootstrap 0.00, allgathers 0.00, topo 0.03, graphs 0.00, connections 0.01, rest 0.00)
+01c3d5782f19:113:113 [1] NCCL INFO Init timings - ncclCommInitRankConfig: rank 1 nranks 2 total 0.68 (kernels 0.62, alloc 0.02, bootstrap 0.00, allgathers 0.00, topo 0.03, graphs 0.00, connections 0.01, rest 0.00)
+01c3d5782f19:112:112 [0] NCCL INFO Symmetric VA size=16GB
+01c3d5782f19:113:113 [1] NCCL INFO Symmetric VA size=16GB
+01c3d5782f19:112:112 [0] NCCL INFO Channel 00 : 0[0] -> 1[1] via SHM/direct
+01c3d5782f19:113:113 [1] NCCL INFO Channel 00 : 1[1] -> 0[0] via SHM/direct
+01c3d5782f19:113:113 [1] NCCL INFO Channel 01 : 1[1] -> 0[0] via SHM/direct
+01c3d5782f19:113:113 [1] NCCL INFO Channel 02 : 1[1] -> 0[0] via SHM/direct
+01c3d5782f19:113:113 [1] NCCL INFO Channel 03 : 1[1] -> 0[0] via SHM/direct
+01c3d5782f19:112:112 [0] NCCL INFO Channel 01 : 0[0] -> 1[1] via SHM/direct
+01c3d5782f19:112:112 [0] NCCL INFO Channel 02 : 0[0] -> 1[1] via SHM/direct
+01c3d5782f19:112:112 [0] NCCL INFO Channel 03 : 0[0] -> 1[1] via SHM/direct
+01c3d5782f19:112:112 [0] NCCL INFO Connected all rings, use ring PXN 0 GDR 1
+01c3d5782f19:113:113 [1] NCCL INFO Connected all rings, use ring PXN 0 GDR 1
+2026-10-27 05:49:48  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 05:49:48  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 05:49:49  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:49:49  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:49:50  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 05:49:50  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 05:49:51  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:49:51  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:49:52  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 05:49:52  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 05:49:54  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:49:54  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:49:54  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1, 2]`
+2026-10-27 05:49:54  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1, 2]`
+2026-10-27 05:49:57  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:49:58  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:49:58  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 05:49:58  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 05:50:00  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:50:00  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:50:00  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 05:50:00  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 05:50:02  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:50:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:50:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 05:50:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 05:50:05  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:50:05  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+TE_MATRIX_CASE 1 128 native tp2_nccl 23.953
+TE_MATRIX_CASE 0 128 native tp2_nccl 23.978
+2026-10-27 05:50:06  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[4, 5, 6, 7, 8]`
+2026-10-27 05:50:10  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:50:10  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[6]`
+2026-10-27 05:50:15  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+TE_MATRIX_CASE 0 128 tilelang_group32 single_gpu 29.272
+TE_MATRIX_CASE 1 128 tilelang_group32 single_gpu 33.512
+2026-10-27 05:50:17  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[4, 5, 6, 7, 8]`
+2026-10-27 05:50:17  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[4, 5, 6, 7, 8]`
+2026-10-27 05:50:20  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:50:20  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:50:21  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[6]`
+2026-10-27 05:50:21  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[6]`
+2026-10-27 05:50:25  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 05:50:25  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+TE_MATRIX_CASE 1 128 tilelang_group32 tp2_nccl 24.148
+TE_MATRIX_CASE 0 128 tilelang_group32 tp2_nccl 24.156
+TE_MATRIX_CASE 0 128 kitchen_causal single_gpu 29.616
+TE_MATRIX_CASE 1 128 kitchen_causal single_gpu 29.152
+TE_MATRIX_CASE 1 128 kitchen_causal tp2_nccl 13.351
+TE_MATRIX_CASE 0 128 kitchen_causal tp2_nccl 13.339
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/kaggle/working/te_sources/te_parallel_matrix.py", line 340, in <module>
+[rank1]:     worker(parser.parse_args())
+[rank1]:     ~~~~~~^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/kaggle/working/te_sources/te_parallel_matrix.py", line 317, in worker
+[rank1]:     case['padding_'+kind] = difference(attention(block, *qkv, value), padding_reference)
+[rank1]:                                        ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/kaggle/working/te_sources/te_parallel_matrix.py", line 152, in attention
+[rank1]:     return native_attention(q, k, v, mask) if value is None else value
+[rank1]:            ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+[rank1]:   File "/kaggle/working/te_sources/te_parallel_matrix.py", line 145, in native_attention
+[rank1]:     return optimized_attention_for_device(q.device, mask=True, small_input=True)(
+[rank1]:            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+[rank1]:         q, k, v, q.shape[1], mask=mask, skip_reshape=True, enable_gqa=q.shape[1] != k.shape[1])
+[rank1]:         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]:   File "/kaggle/temp/h3_light_source/ComfyUI/comfy/ldm/modules/attention.py", line 233, in wrapper
+[rank1]:     return func(*args, **kwargs)
+[rank1]:   File "/kaggle/temp/h3_light_source/ComfyUI/comfy/ldm/modules/attention.py", line 600, in attention_pytorch
+[rank1]:     out = comfy.ops.scaled_dot_product_attention(q, k, v, attn_mask=mask, dropout_p=0.0, is_causal=False, **sdpa_extra)
+[rank1]:   File "/kaggle/temp/h3_light_source/ComfyUI/comfy/ops.py", line 97, in scaled_dot_product_attention
+[rank1]:     return torch.nn.functional.scaled_dot_product_attention(q, k, v, *args, **kwargs)
+[rank1]:            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank1]: RuntimeError: invalid dtype for bias - should match query's dtype
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/kaggle/working/te_sources/te_parallel_matrix.py", line 340, in <module>
+[rank0]:     worker(parser.parse_args())
+[rank0]:     ~~~~~~^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/kaggle/working/te_sources/te_parallel_matrix.py", line 317, in worker
+[rank0]:     case['padding_'+kind] = difference(attention(block, *qkv, value), padding_reference)
+[rank0]:                                        ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/kaggle/working/te_sources/te_parallel_matrix.py", line 152, in attention
+[rank0]:     return native_attention(q, k, v, mask) if value is None else value
+[rank0]:            ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+[rank0]:   File "/kaggle/working/te_sources/te_parallel_matrix.py", line 145, in native_attention
+[rank0]:     return optimized_attention_for_device(q.device, mask=True, small_input=True)(
+[rank0]:            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+[rank0]:         q, k, v, q.shape[1], mask=mask, skip_reshape=True, enable_gqa=q.shape[1] != k.shape[1])
+[rank0]:         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/kaggle/temp/h3_light_source/ComfyUI/comfy/ldm/modules/attention.py", line 233, in wrapper
+[rank0]:     return func(*args, **kwargs)
+[rank0]:   File "/kaggle/temp/h3_light_source/ComfyUI/comfy/ldm/modules/attention.py", line 600, in attention_pytorch
+[rank0]:     out = comfy.ops.scaled_dot_product_attention(q, k, v, attn_mask=mask, dropout_p=0.0, is_causal=False, **sdpa_extra)
+[rank0]:   File "/kaggle/temp/h3_light_source/ComfyUI/comfy/ops.py", line 97, in scaled_dot_product_attention
+[rank0]:     return torch.nn.functional.scaled_dot_product_attention(q, k, v, *args, **kwargs)
+[rank0]:            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]: RuntimeError: invalid dtype for bias - should match query's dtype
+W1027 05:50:31.344000 106 torch/distributed/elastic/multiprocessing/api.py:1012] Sending process 113 closing signal SIGTERM
+E1027 05:50:31.460000 106 torch/distributed/elastic/multiprocessing/api.py:986] failed (exitcode: 1) local_rank: 0 (pid: 112) of binary: /usr/bin/python3
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/usr/local/lib/python3.13/dist-packages/torch/distributed/run.py", line 994, in <module>
+    main()
+    ~~~~^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 362, in wrapper
+    return f(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/torch/distributed/run.py", line 990, in main
+    run(args)
+    ~~~^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/distributed/run.py", line 981, in run
+    elastic_launch(
+    ~~~~~~~~~~~~~~~
+        config=config,
+        ~~~~~~~~~~~~~~
+        entrypoint=cmd,
+        ~~~~~~~~~~~~~~~
+    )(*cmd_args)
+    ~^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/distributed/launcher/api.py", line 170, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/usr/local/lib/python3.13/dist-packages/torch/distributed/launcher/api.py", line 317, in launch_agent
+    raise ChildFailedError(
+    ...<2 lines>...
+    )
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+/kaggle/working/te_sources/te_parallel_matrix.py FAILED
+------------------------------------------------------------
+Failures:
+[1]:
+  time      : 2026-10-27_05:50:31
+  host      : 01c3d5782f19
+  rank      : 1 (local_rank: 1)
+  exitcode  : 1 (pid: 113)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2026-10-27_05:50:31
+  host      : 01c3d5782f19
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 112)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================

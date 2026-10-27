@@ -20,6 +20,7 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--qualified',type=Path,required=True)
     parser.add_argument('--evidence',type=Path,required=True)
+    parser.add_argument('--resume-from',type=Path,help='Retain fully validated points from a collected previous attempt')
     parser.add_argument('--submit',action='store_true')
     args=parser.parse_args();args.evidence.mkdir(parents=True,exist_ok=True)
     job=args.evidence/'gpu_job'
@@ -29,10 +30,24 @@ def main():
     cpu=json.loads(cpu_path.read_text())
     assert cpu['status']=='cpu_ready' and cpu['capsule_sha256']==pub['capsule_sha256']
     assert cpu['review_suite']['passed'] and cpu['core_pins']['comfy-kitchen']=='0.2.37' and cpu['core_pins']['tilelang']=='0.1.13'
-    defaults=json.loads((args.evidence/'defaults_cpu.json').read_text())
-    smoke=json.loads((args.evidence/'local_single_smoke.json').read_text())
+    checks_dir=args.resume_from or args.evidence
+    defaults_path=checks_dir/'defaults_cpu_final.json'
+    if not defaults_path.exists():defaults_path=checks_dir/'defaults_cpu.json'
+    defaults=json.loads(defaults_path.read_text())
+    smoke=json.loads((checks_dir/'local_single_smoke.json').read_text())
     assert defaults['passed'] and smoke['status']=='passed'
-    assert all(item['public_shard_byte_exact'] for item in json.loads((args.evidence/'local_asset_identity.json').read_text()))
+    assert all(item['public_shard_byte_exact'] for item in json.loads((checks_dir/'local_asset_identity.json').read_text()))
+    lengths=[128,353,1306,4096];resume=None
+    if args.resume_from:
+        from te_parallel_matrix import completed_lengths
+        rank_paths=[args.resume_from/f'gpu_outputs/te_matrix/rank{rank}.json' for rank in (0,1)]
+        skipped=completed_lengths([json.loads(path.read_text()) for path in rank_paths])
+        assert skipped,'No complete previous point to resume'
+        lengths=[n for n in lengths if n not in skipped];assert lengths,'No unfinished points'
+        resume=dict(kernel=json.loads((args.resume_from/'gpu_submission.json').read_text())['kernel'],
+            skipped_lengths=skipped,previous_rank_sha256=[hashlib.sha256(path.read_bytes()).hexdigest() for path in rank_paths],
+            note='Retained points belong to the previous allocation; comparisons remain paired within each allocation')
+        assert json.loads((args.evidence/'local_padding_smoke.json').read_text())['status']=='passed'
     files={name:(ROOT/'benchmarks'/name).read_bytes() for name in NAMES}
     for value in files.values():ast.parse(value)
     credential=re.compile(rb'(?:hf_[A-Za-z0-9]{25,}|gh[pousr]_[A-Za-z0-9]{30,}|KGAT_[A-Za-z0-9_\-]{20,})')
@@ -48,7 +63,8 @@ def main():
         check=subprocess.run([sys.executable,'-m','unittest','discover','-s',str(ROOT/'benchmarks'),
             '-p','test_te_parallel_matrix.py','-v'],stdout=log,stderr=subprocess.STDOUT,cwd=ROOT)
     assert check.returncode==0,'New TE harness CPU checks failed'
-    local=dict(passed=True,tests=6,source_hashes=hashes,defaults_cpu=defaults,single_gpu_smoke=smoke)
+    count=int(re.search(r'Ran (\d+) tests?',(args.evidence/'harness_cpu.log').read_text()).group(1))
+    local=dict(passed=True,tests=count,source_hashes=hashes,defaults_cpu=defaults,single_gpu_smoke=smoke)
     (args.evidence/'harness_cpu.json').write_text(json.dumps(local,indent=2))
     setup=(args.qualified/'gpu_outputs/light_setup/bounded_worker.py').read_text()
     assert setup.count("'--mode','vae-parallel'")==1
@@ -68,9 +84,9 @@ for name,encoded in FILES.items():
 (SUPP/'source_hashes.json').write_text(json.dumps(HASHES,indent=2))
 env=dict(os.environ);env.update(json.loads(pathlib.Path('/kaggle/working/light_setup/execution_env.json').read_text()))
 src='/kaggle/temp/h3_light_source';env['PYTHONPATH']=src+os.pathsep+env.get('PYTHONPATH','');os.chdir(src)
-argv=[sys.executable,'-u',str(SUPP/'run_te_parallel_batch.py'),'--source',src,'--output','/kaggle/working/te_matrix']
+argv=[sys.executable,'-u',str(SUPP/'run_te_parallel_batch.py'),'--source',src,'--output','/kaggle/working/te_matrix','--lengths',*LENGTH_ARGUMENTS]
 os.execve(sys.executable,argv,env)
-'''.replace('SOURCE_FILES',repr({name:base64.b64encode(raw).decode() for name,raw in files.items()})).replace('SOURCE_HASHES',repr(hashes))
+'''.replace('SOURCE_FILES',repr({name:base64.b64encode(raw).decode() for name,raw in files.items()})).replace('SOURCE_HASHES',repr(hashes)).replace('LENGTH_ARGUMENTS',repr([str(n) for n in lengths]))
     code+=supervise_worker(execution,budget=900,output='/kaggle/working/te_supervision')
     code+="\nguard=json.loads(pathlib.Path('/kaggle/working/te_supervision/supervision.json').read_text())\nassert guard['status']=='worker_exited' and guard['exit_code']==0\n"
     ast.parse(code);job.mkdir()
@@ -85,7 +101,7 @@ os.execve(sys.executable,argv,env)
     binding=dict(publication=pub,supplemental_sources=hashes,cpu_qualification_sha256=hashlib.sha256(cpu_path.read_bytes()).hexdigest(),
         local_harness_qualification=local,bootstrap_sha256=hashlib.sha256(setup.encode()).hexdigest(),
         frozen_capsule_modified=False,te_runtime_unchanged=True,te_runtime_hashes=runtime_hashes,private_auth=False,
-        dataset_mounts=0,kernel_mounts=0,setup_budget_seconds=300,execution_budget_seconds=900)
+        dataset_mounts=0,kernel_mounts=0,setup_budget_seconds=300,execution_budget_seconds=900,executed_lengths=lengths,resume=resume)
     (job/'source_binding.json').write_text(json.dumps(binding,indent=2))
     print('Built:',job,flush=True)
     if not args.submit:return
@@ -100,6 +116,8 @@ os.execve(sys.executable,argv,env)
             '--accelerator','NvidiaTeslaT4','-t','1500'],capture_output=True,text=True,timeout=180)
         output=result.stdout+result.stderr
         state.update(returncode=result.returncode,status='accepted' if result.returncode==0 else 'submission_failed')
+        version=re.search(r'Kernel version (\d+)',output)
+        if version:state['version']=int(version.group(1))
     except subprocess.TimeoutExpired:
         output='Submission acknowledgement timed out; no automatic retry.'
         state.update(returncode=-1,status='acceptance_uncertain')

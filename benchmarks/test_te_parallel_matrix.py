@@ -7,10 +7,29 @@ import unittest
 
 import torch
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from te_parallel_matrix import BACKENDS, LENGTHS, CollectiveReplay, fp32_attention, merge_shards, single_gpu_turn
+from te_parallel_matrix import BACKENDS, LENGTHS, CollectiveReplay, completed_lengths, fp32_attention, merge_shards, padding_masks, single_gpu_turn
 
 
 class TEParallelContracts(unittest.TestCase):
+    def test_additive_padding_control_matches_query_dtype(self):
+        allowed=torch.ones(4,4,dtype=torch.bool).tril();allowed[:,-1]=False
+        for dtype in (torch.float16,torch.float32):
+            masks=padding_masks(allowed,dtype)
+            self.assertIs(masks['boolean'],allowed)
+            self.assertEqual(masks['additive'].dtype,dtype)
+            self.assertTrue(torch.isfinite(masks['additive']).all())
+            self.assertTrue(torch.equal(masks['additive']==0,allowed))
+
+    def test_resume_requires_complete_valid_paired_points(self):
+        from copy import deepcopy
+        cases=[dict(tokens=128,backend=backend,topology=topology,block_vs_native_fp16_flow={'finite':True},
+            attention_vs_fp32={'finite':True},replay_byte_exact_to_nccl=True,output_sha256=backend)
+            for backend in BACKENDS for topology in ('single_gpu','tp2_nccl')]
+        ranks=[dict(uuid=str(rank),device='Tesla T4',capability=[7,5],cases=deepcopy(cases)) for rank in (0,1)]
+        self.assertEqual(completed_lengths(ranks),[128])
+        ranks[1]['cases'].pop()
+        self.assertEqual(completed_lengths(ranks),[])
+
     def test_inventory_and_global_native_threshold(self):
         from patches.h3_operator_policy import H3OperatorPolicy
         self.assertEqual(set(BACKENDS), {'native', 'tilelang_group32', 'kitchen_causal'})

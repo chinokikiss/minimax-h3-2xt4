@@ -1,0 +1,39 @@
+{
+  "status": "passed",
+  "hardware": "NVIDIA GeForce RTX 5060 Ti",
+  "scope": "Local API/dtype smoke only, no T4 performance claim",
+  "cases": [
+    {
+      "heads": 64,
+      "kv_heads": 8,
+      "mask": "boolean",
+      "mask_dtype": "torch.bool",
+      "query_dtype": "torch.float16",
+      "finite": true
+    },
+    {
+      "heads": 64,
+      "kv_heads": 8,
+      "mask": "additive",
+      "mask_dtype": "torch.float16",
+      "query_dtype": "torch.float16",
+      "finite": true
+    },
+    {
+      "heads": 32,
+      "kv_heads": 4,
+      "mask": "boolean",
+      "mask_dtype": "torch.bool",
+      "query_dtype": "torch.float16",
+      "finite": true
+    },
+    {
+      "heads": 32,
+      "kv_heads": 4,
+      "mask": "additive",
+      "mask_dtype": "torch.float16",
+      "query_dtype": "torch.float16",
+      "finite": true
+    }
+  ]
+}

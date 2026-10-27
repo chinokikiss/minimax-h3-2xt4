@@ -1,0 +1,373 @@
+"""Trained TE block/attention comparison and exact collective-result replay.
+
+The replay is an offline causal ablation for identical fixed inputs. It is not
+a deployable no-communication TP implementation or a full-TE latency model.
+"""
+import argparse
+from contextlib import contextmanager, nullcontext
+from datetime import timedelta
+import hashlib
+import json
+import os
+from pathlib import Path
+import statistics
+import time
+
+import torch
+
+BACKENDS = ('native', 'tilelang_group32', 'kitchen_causal')
+LENGTHS = (128, 353, 1306, 4096)
+COLUMNS = ('q_proj', 'k_proj', 'v_proj', 'gate_proj', 'up_proj')
+ROWS = ('o_proj', 'down_proj')
+
+
+def padding_masks(allowed, dtype):
+    """Keep Native's finite additive mask in the query's floating dtype."""
+    if allowed.dtype != torch.bool or not dtype.is_floating_point:
+        raise ValueError('Boolean allowed mask and floating query dtype required')
+    additive = torch.zeros_like(allowed, dtype=dtype).masked_fill_(~allowed, torch.finfo(dtype).min/4)
+    return {'boolean':allowed, 'additive':additive}
+
+
+def completed_lengths(ranks):
+    """Retain only complete paired physical-T4 points, including replay checks."""
+    if len(ranks) != 2 or len({r['uuid'] for r in ranks}) != 2:
+        raise ValueError('Two distinct physical owners required')
+    if not all(r['capability'] == [7,5] and 'T4' in r['device'] for r in ranks):
+        raise ValueError('Physical T4 results required')
+    expected = {(backend, topology) for backend in BACKENDS for topology in ('single_gpu','tp2_nccl')}
+    completed = []
+    for length in LENGTHS:
+        paired = [[c for c in r['cases'] if c['tokens'] == length] for r in ranks]
+        if not all(len(rows) == len(expected) and {(c['backend'],c['topology']) for c in rows} == expected for rows in paired):
+            continue
+        if not all(c['block_vs_native_fp16_flow']['finite'] and c['attention_vs_fp32']['finite']
+                and (c['topology'] != 'tp2_nccl' or c.get('replay_byte_exact_to_nccl')) for rows in paired for c in rows):
+            continue
+        if length == 353 and not all(c.get('padding_boolean',{}).get('finite') and c.get('padding_additive',{}).get('finite') for rows in paired for c in rows):
+            continue
+        if any(next(c for c in paired[0] if c['backend']==backend and c['topology']=='tp2_nccl')['output_sha256'] !=
+               next(c for c in paired[1] if c['backend']==backend and c['topology']=='tp2_nccl')['output_sha256'] for backend in BACKENDS):
+            raise ValueError('Previous TP2 owners disagree')
+        completed.append(length)
+    return completed
+
+
+def merge_shards(left, right):
+    if left.keys() != right.keys():
+        raise ValueError('Different rank tensor inventories')
+    result = {}
+    for name, value in left.items():
+        module, field = name.split('.')
+        if module in COLUMNS:
+            result[name] = torch.cat((value, right[name]), 0)
+        elif module in ROWS and field == 'weight':
+            result[name] = torch.cat((value, right[name]), 1)
+        else:
+            if not torch.equal(value, right[name]):
+                raise ValueError('Replicated tensor differs: '+name)
+            result[name] = value
+    return result
+
+
+class CollectiveReplay:
+    """Capture completed collective results, then copy them for fixed-input replay."""
+    def __init__(self, comm):
+        self.comm, self.mode, self.entries, self.index = comm, 'normal', [], 0
+
+    def __getattr__(self, name):
+        return getattr(self.comm, name)
+
+    def begin(self, mode):
+        if mode not in ('normal', 'capture', 'replay'):
+            raise ValueError(mode)
+        if mode == 'capture':
+            self.entries.clear()
+        self.mode, self.index = mode, 0
+
+    def finish(self):
+        if self.mode == 'replay' and self.index != len(self.entries):
+            raise RuntimeError('Replay did not consume every collective')
+        self.mode = 'normal'
+
+    def _call(self, name, outputs, inputs, operation, function):
+        signature = (name, operation, tuple((tuple(t.shape), str(t.dtype)) for t in outputs))
+        if self.mode == 'normal':
+            return function()
+        if self.mode == 'replay':
+            if self.index >= len(self.entries) or self.entries[self.index]['signature'] != signature:
+                raise RuntimeError('Collective replay signature/order differs')
+            for tensor, saved in zip(outputs, self.entries[self.index]['values']):
+                tensor.copy_(saved)
+            self.index += 1
+            return None
+        events = None
+        if outputs[0].is_cuda:
+            events = (torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True))
+            events[0].record()
+        start = time.monotonic_ns()
+        result = function()
+        end = time.monotonic_ns()
+        if events:
+            events[1].record()
+        self.entries.append(dict(signature=signature, values=[t.clone() for t in outputs],
+            operand_bytes=sum(t.numel()*t.element_size() for t in inputs),
+            start_ns=start, host_call_ns=end-start, events=events))
+        return result
+
+    def all_reduce(self, tensor, op=None, **kwargs):
+        return self._call('all_reduce', [tensor], [tensor], str(op),
+            lambda: self.comm.all_reduce(tensor, op=op, **kwargs))
+
+    def all_gather(self, outputs, tensor, **kwargs):
+        return self._call('all_gather', list(outputs), [tensor], None,
+            lambda: self.comm.all_gather(outputs, tensor, **kwargs))
+
+    def all_gather_into_tensor(self, output, tensor, **kwargs):
+        return self._call('all_gather_into_tensor', [output], [tensor], None,
+            lambda: self.comm.all_gather_into_tensor(output, tensor, **kwargs))
+
+    def diagnostic(self):
+        rows = []
+        for entry in self.entries:
+            events = entry['events']
+            rows.append(dict(operation=entry['signature'][0], reduction=entry['signature'][1],
+                output_shapes=[list(t.shape) for t in entry['values']],
+                output_dtypes=[str(t.dtype) for t in entry['values']], operand_bytes=entry['operand_bytes'],
+                start_ns=entry['start_ns'], host_call_ns=entry['host_call_ns'],
+                cuda_span_ms=events[0].elapsed_time(events[1]) if events else None))
+        return dict(collectives=rows, replay_cache_bytes=sum(t.numel()*t.element_size()
+                    for e in self.entries for t in e['values']))
+
+
+def difference(actual, reference):
+    actual, reference = actual.detach().float().cpu(), reference.detach().float().cpu()
+    delta = actual-reference
+    return dict(finite=bool(torch.isfinite(actual).all()), max_abs=float(delta.abs().max()),
+        relative_l2=float(delta.norm()/reference.norm().clamp_min(1e-20)), byte_exact=torch.equal(actual, reference))
+
+
+def measure(function, *, warmups=3, repeats=7):
+    for _ in range(warmups):
+        value = function()
+    del value
+    torch.cuda.synchronize()
+    torch.cuda.reset_peak_memory_stats()
+    rows = []
+    for _ in range(repeats):
+        start, end = torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)
+        begin, cpu = time.perf_counter(), time.thread_time()
+        start.record()
+        value = function()
+        end.record();end.synchronize()
+        rows.append(dict(wall_ms=1000*(time.perf_counter()-begin), cuda_span_ms=start.elapsed_time(end),
+                         thread_cpu_ms=1000*(time.thread_time()-cpu)))
+        del value
+    return dict(samples=rows, median_wall_ms=statistics.median(r['wall_ms'] for r in rows),
+        median_cuda_span_ms=statistics.median(r['cuda_span_ms'] for r in rows),
+        peak_allocated_bytes=torch.cuda.max_memory_allocated(), peak_reserved_bytes=torch.cuda.max_memory_reserved())
+
+
+def native_attention(q, k, v, mask):
+    # All matrix lengths are >=128: even the 32-head shard exceeds Native's
+    # 1024*128-element policy threshold, so its normal wrapper selects exactly
+    # the same SDPA backend/GQA policy as TPTransformerBlockINT8.forward.
+    from comfy.ldm.modules.attention import optimized_attention_for_device
+    assert q.numel() >= 1024*128
+    return optimized_attention_for_device(q.device, mask=True, small_input=True)(
+        q, k, v, q.shape[1], mask=mask, skip_reshape=True, enable_gqa=q.shape[1] != k.shape[1])
+
+
+def attention(block, q, k, v, mask):
+    from patches.h3_operator_policy import te_attention
+    value = te_attention(block, q, k, v, mask)
+    return native_attention(q, k, v, mask) if value is None else value
+
+
+def fp32_attention(q, k, v, mask):
+    """Bounded query chunks, original floating operands, TF32 disabled."""
+    q, k, v = q.float(), k.float(), v.float()
+    k, v = [t.repeat_interleave(q.shape[1]//t.shape[1], dim=1) for t in (k, v)]
+    result = []
+    for start in range(0, q.shape[2], 128):
+        scores = q[:, :, start:start+128] @ k.transpose(-1, -2) / q.shape[-1]**.5
+        part=mask[..., start:start+128, :]
+        if part.dtype == torch.bool:scores.masked_fill_(~part, -torch.inf)
+        else:scores.add_(part.float())
+        result.append((scores.softmax(-1) @ v).cpu())
+    return torch.cat(result, 2).transpose(1, 2).reshape(q.shape[0], q.shape[2], -1)
+
+
+@contextmanager
+def captured_attention():
+    from unittest.mock import patch
+    from patches import h3_operator_policy as policy
+    previous, inputs = policy.te_attention, []
+    def capture(block, q, k, v, mask):
+        inputs[:] = [t.detach().clone() for t in (q, k, v)]
+        return previous(block, q, k, v, mask)
+    with patch.object(policy, 'te_attention', capture):
+        yield inputs
+
+
+def make_block(state, rank, world, device):
+    from patches.tp_qwen3vl import TPTransformerBlockINT8
+    from patches.h3_tensor_flow import TensorFlowPolicy, prepare_tp
+    with torch.device('meta'):
+        block = TPTransformerBlockINT8(rank=rank, world_size=world, device='meta')
+    block.load_state_dict(state, strict=True, assign=True)
+    block = block.to(device).eval().requires_grad_(False)
+    return prepare_tp(block, 'te', TensorFlowPolicy('fp16'))
+
+
+@contextmanager
+def single_gpu_turn(rank, barrier):
+    """Serialize the two single-GPU controls using a CPU-only barrier."""
+    if rank == 1:barrier()
+    try:
+        yield
+    finally:
+        if rank == 0:barrier()
+        barrier()
+
+
+def profile_replay_control(block, x, mask, freqs, comm, barrier, control, output, rank):
+    """Gate CUDA coverage before saving a separately warmed TP2 attribution pass."""
+    from torch.profiler import profile, ProfilerActivity, record_function
+    activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA]
+    probe_path=output/f'rank{rank}_probe_trace.json'
+    with profile(activities=activities) as probe:
+        with record_function('TE/minimal_cuda_probe'):
+            probe_value=x+1
+            torch.cuda.synchronize()
+    probe.export_chrome_trace(str(probe_path));del probe_value
+    def kernels(path):
+        return [e for e in json.loads(path.read_text()).get('traceEvents',[]) if e.get('cat')=='kernel' and e.get('ph')=='X']
+    available=torch.tensor([bool(kernels(probe_path))],dtype=torch.int32)
+    comm.comm.all_reduce(available,op=comm.comm.ReduceOp.MIN,group=control)
+    if not available.item():
+        return dict(status='blocked',reason='Minimal probe contains no CUDA kernel events; no kernel attribution',probe_file=probe_path.name)
+    run=lambda:block(x,attention_mask=mask,freqs_cis=freqs)
+    comm.begin('capture');reference=run();torch.cuda.synchronize();comm.finish()
+    barrier();torch.cuda.synchronize()
+    with profile(activities=activities) as trace:
+        with record_function('TE/tp2_actual_collectives'):
+            actual=run();torch.cuda.synchronize()
+        with record_function('TE/tp2_exact_collective_result_replay'):
+            comm.begin('replay');replayed=run();torch.cuda.synchronize();comm.finish()
+    assert torch.equal(actual,reference) and torch.equal(replayed,reference)
+    path=output/f'rank{rank}_tp2_trace.json';trace.export_chrome_trace(str(path))
+    events=kernels(path);nccl=[e for e in events if 'nccl' in e.get('name','').lower()]
+    comm.entries.clear()
+    return dict(status='cuda_trace_saved' if events and nccl else 'blocked',
+        reason=None if events and nccl else 'Full trace lacks CUDA/NCCL coverage',
+        file=path.name,probe_file=probe_path.name,kernel_events=len(events),nccl_kernel_events=len(nccl),
+        nccl_kernel_duration_sum_ms=sum(e.get('dur',0) for e in nccl)/1000,
+        limit='Profiled control only; durations include rank waiting and cannot be subtracted from steady-state timings')
+
+
+def worker(args):
+    import torch.distributed as dist
+    from safetensors.torch import load_file
+    from patches import optimized_tp, tp_qwen3vl
+    from patches.h3_operator_policy import H3OperatorPolicy, configure_block
+    from comfy.text_encoders.llama import precompute_freqs_cis
+    rank = int(os.environ['LOCAL_RANK']);torch.cuda.set_device(rank)
+    torch.set_num_threads(2);torch.set_grad_enabled(False)
+    torch.backends.cuda.matmul.allow_tf32 = torch.backends.cudnn.allow_tf32 = False
+    dist.init_process_group('nccl', timeout=timedelta(seconds=300))
+    control_group = dist.new_group(backend='gloo', timeout=timedelta(seconds=300))
+    barrier = lambda: dist.barrier(group=control_group)
+    optimized_tp.enable()
+    comm = CollectiveReplay(dist);tp_qwen3vl.dist = comm
+    states = [load_file(str(args.assets/f'te.block00.rank{r}.safetensors')) for r in (0, 1)]
+    single = make_block(merge_shards(*states), 0, 1, torch.device('cuda', rank))
+    tp = make_block(states[rank], rank, 2, torch.device('cuda', rank))
+    del states
+    record = dict(status='running', rank=rank, device=torch.cuda.get_device_name(rank),
+        uuid=str(torch.cuda.get_device_properties(rank).uuid), capability=list(torch.cuda.get_device_capability(rank)),
+        scope='Resident trained TE block0; seeded inputs, not full TE or captured activation distribution',
+        lengths=args.lengths, backends=BACKENDS, cases=[], mask_contract='Native FP16 finite additive causal mask, shape [S,S], finfo.min/4',
+        accuracy_reference='Chunked FP32 attention on the same Q/K/V; full-block Native SDPA is a separate FP16-flow control')
+    assert record['capability'] == [7, 5] and 'T4' in record['device']
+    path = args.output/f'rank{rank}.json'
+    def save():path.write_text(json.dumps(record, indent=2))
+    save()
+    try:
+        for length in args.lengths:
+            generator = torch.Generator().manual_seed(20261027+length)
+            x = (torch.randn(1, length, 5120, generator=generator)/64).half().cuda(rank)
+            mask = torch.empty((length, length), dtype=x.dtype, device=x.device).fill_(torch.finfo(x.dtype).min/4).triu_(1)
+            freqs = precompute_freqs_cis(128, torch.arange(length, device=x.device).unsqueeze(0), 1000000., device=x.device)
+            block_reference, references = {}, {}
+            for backend in BACKENDS:
+                for name, block in (('single_gpu', single), ('tp2_nccl', tp)):
+                    configure_block(block, 'te', H3OperatorPolicy(te_attention=backend))
+                    barrier();torch.cuda.synchronize()
+                    with single_gpu_turn(rank, barrier) if name == 'single_gpu' else nullcontext():
+                        run = lambda: block(x, attention_mask=mask, freqs_cis=freqs)
+                        timing = measure(run)
+                        output = run().cpu()
+                        if backend == 'native':block_reference[name] = output
+                        check = difference(output, block_reference[name])
+                        assert check['finite']
+                        case = dict(tokens=length, backend=backend, topology=name, block=timing,
+                            block_vs_native_fp16_flow=check,
+                            output_sha256=hashlib.sha256(output.view(torch.uint8).numpy()).hexdigest())
+                        if name == 'tp2_nccl':
+                            case['block_vs_single_gpu_same_backend'] = difference(output, single_output)
+                        else:single_output = output
+                        with captured_attention() as qkv:
+                            if name == 'tp2_nccl':comm.begin('capture')
+                            captured = run()
+                        torch.cuda.synchronize()
+                        if name == 'tp2_nccl':
+                            comm.finish();case['diagnostic'] = comm.diagnostic()
+                            def replay():
+                                comm.begin('replay')
+                                value = run()
+                                comm.finish()
+                                return value
+                            barrier();torch.cuda.synchronize()
+                            replayed = replay()
+                            assert torch.equal(replayed, captured), 'Replay must reproduce the actual TP2 output exactly'
+                            del replayed, captured
+                            case['collective_result_replay'] = measure(replay)
+                            case['replay_byte_exact_to_nccl'] = True
+                            comm.entries.clear()
+                        else:del captured
+                        case['attention'] = measure(lambda: attention(block, *qkv, mask))
+                        if backend == 'native':references[name] = fp32_attention(*qkv, mask)
+                        candidate = attention(block, *qkv, mask)
+                        case['attention_vs_fp32'] = difference(candidate, references[name])
+                        record['cases'].append(case);save()
+                        # One padding/additive-mask control, not a second timing matrix.
+                        if length == 353:
+                            allowed = mask == 0;allowed[..., -17:] = False
+                            padding_reference = fp32_attention(*qkv, allowed)
+                            for kind, value in padding_masks(allowed, qkv[0].dtype).items():
+                                case['padding_'+kind] = difference(attention(block, *qkv, value), padding_reference)
+                        del qkv, candidate
+                        save()
+                        print('TE_MATRIX_CASE', rank, length, backend, name, round(timing['median_wall_ms'], 3), flush=True)
+            del block_reference, references, single_output
+        length=353
+        x=(torch.randn(1,length,5120,generator=torch.Generator().manual_seed(20261027+length))/64).half().cuda(rank)
+        mask=torch.empty((length,length),dtype=x.dtype,device=x.device).fill_(torch.finfo(x.dtype).min/4).triu_(1)
+        freqs=precompute_freqs_cis(128,torch.arange(length,device=x.device).unsqueeze(0),1000000.,device=x.device)
+        configure_block(tp,'te',H3OperatorPolicy(te_attention='kitchen_causal'))
+        record['profile']=profile_replay_control(tp,x,mask,freqs,comm,barrier,control_group,args.output,rank)
+        record['status'] = 'complete'
+    except BaseException as error:
+        record.update(status='failed',error=repr(error))
+        raise
+    finally:
+        save();dist.destroy_process_group()
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--assets', type=Path, required=True)
+    parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--lengths',type=int,nargs='+',choices=LENGTHS,default=LENGTHS)
+    worker(parser.parse_args())

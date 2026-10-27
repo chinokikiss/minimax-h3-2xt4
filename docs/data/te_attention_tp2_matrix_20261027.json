@@ -1,9 +1,9 @@
 {
   "date": "2026-10-27",
-  "status": "accepted_final_artifacts_pending",
+  "status": "retry_accepted_final_artifacts_pending",
   "kernel": "pamcks/h3-te-attention-tp2-matrix-20261027",
-  "version": 1,
-  "submitted_utc": "2026-10-27T05:47:55.116628+00:00",
+  "version": 2,
+  "submitted_utc": "2026-10-27T06:05:10.191682+00:00",
   "final_collection_count": 0,
   "scope": "Resident trained TE block and attention; not full TE/H3, vision, embedding or weight streaming",
   "input_distribution": "Seeded residuals through trained block0; not captured H3 activations",
@@ -52,7 +52,7 @@
     "seconds": 12.70299999999952,
     "scope": "CPU contracts, not physical T4 qualification"
   },
-  "local_harness_cpu_tests": 6,
+  "local_harness_cpu_tests": 8,
   "local_smoke": {
     "status": "passed",
     "hardware": "NVIDIA GeForce RTX 5060 Ti",
@@ -91,9 +91,9 @@
     ]
   },
   "supplemental_source_hashes": {
-    "te_parallel_matrix.py": "479692333c526a88391516e7d889e7e01ebb361d7ef51de315af78a5b9dc0dbb",
-    "run_te_parallel_batch.py": "4e5a7cb1e509758e087b6cf0cbd593ff8ec5d52ab4e86fd92238c16da9ceb0ae",
-    "test_te_parallel_matrix.py": "cb8c2ccdabf70f534a6cf8d67b3f5944bd4d10a37685e57c6fa1fa057b37cc8f"
+    "te_parallel_matrix.py": "92caf47684cef10d2e5fb539915fc2221ae5f809fe97bc909082205e194774e5",
+    "run_te_parallel_batch.py": "0b5ac58b21e599c4bd383b4546a6bf77f411d17b2248d37d357d581fff578c45",
+    "test_te_parallel_matrix.py": "892bf9db715ae9bb421207ca26790718de6395a1f18843b6d1c48c36e2270db3"
   },
   "unchanged_te_runtime_hashes": {
     "patches/tp_qwen3vl.py": "c877ebc93b68fe9a638ce47060f282b316f6a460693df2b40529e495938e398e",
@@ -134,5 +134,38 @@
   "automatic_retry": false,
   "physical_t4_results": null,
   "evidence_directory": "D:\\attention_eval\\h3_te_parallel_20261027",
-  "submission_receipt_sha256": "aefe0a23f417b41e03b1482e7302113d38f571fe204971068ba89503c5cbbf2d"
+  "submission_receipt_sha256": "0c666d651ffb217db5316bf3c801afca25ae7302096ec93a510c8c6be255f697",
+  "executed_lengths": [
+    353,
+    1306,
+    4096
+  ],
+  "retained_lengths": [
+    128
+  ],
+  "attempts": [
+    {
+      "version": 1,
+      "status": "failed",
+      "complete_lengths": [
+        128
+      ],
+      "complete_configurations_per_rank": 6,
+      "final_collection_count": 1,
+      "error": "FP32 additive diagnostic bias with FP16 queries; pinned T4 SDPA rejects dtype mismatch"
+    },
+    {
+      "version": 2,
+      "status": "accepted_final_artifacts_pending",
+      "executed_lengths": [
+        353,
+        1306,
+        4096
+      ],
+      "final_collection_count": 0
+    }
+  ],
+  "recovery": "Match additive control dtype to query; keep Native finite sentinel; retain complete previous points with allocation identity",
+  "attempt_evidence_manifest": "te_attention_tp2_matrix_20261027/manifest.json",
+  "active_evidence_directory": "D:\\attention_eval\\h3_te_parallel_20261027\\retry_v2"
 }

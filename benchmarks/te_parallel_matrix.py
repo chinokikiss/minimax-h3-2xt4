@@ -21,6 +21,38 @@ COLUMNS = ('q_proj', 'k_proj', 'v_proj', 'gate_proj', 'up_proj')
 ROWS = ('o_proj', 'down_proj')
 
 
+def padding_masks(allowed, dtype):
+    """Keep Native's finite additive mask in the query's floating dtype."""
+    if allowed.dtype != torch.bool or not dtype.is_floating_point:
+        raise ValueError('Boolean allowed mask and floating query dtype required')
+    additive = torch.zeros_like(allowed, dtype=dtype).masked_fill_(~allowed, torch.finfo(dtype).min/4)
+    return {'boolean':allowed, 'additive':additive}
+
+
+def completed_lengths(ranks):
+    """Retain only complete paired physical-T4 points, including replay checks."""
+    if len(ranks) != 2 or len({r['uuid'] for r in ranks}) != 2:
+        raise ValueError('Two distinct physical owners required')
+    if not all(r['capability'] == [7,5] and 'T4' in r['device'] for r in ranks):
+        raise ValueError('Physical T4 results required')
+    expected = {(backend, topology) for backend in BACKENDS for topology in ('single_gpu','tp2_nccl')}
+    completed = []
+    for length in LENGTHS:
+        paired = [[c for c in r['cases'] if c['tokens'] == length] for r in ranks]
+        if not all(len(rows) == len(expected) and {(c['backend'],c['topology']) for c in rows} == expected for rows in paired):
+            continue
+        if not all(c['block_vs_native_fp16_flow']['finite'] and c['attention_vs_fp32']['finite']
+                and (c['topology'] != 'tp2_nccl' or c.get('replay_byte_exact_to_nccl')) for rows in paired for c in rows):
+            continue
+        if length == 353 and not all(c.get('padding_boolean',{}).get('finite') and c.get('padding_additive',{}).get('finite') for rows in paired for c in rows):
+            continue
+        if any(next(c for c in paired[0] if c['backend']==backend and c['topology']=='tp2_nccl')['output_sha256'] !=
+               next(c for c in paired[1] if c['backend']==backend and c['topology']=='tp2_nccl')['output_sha256'] for backend in BACKENDS):
+            raise ValueError('Previous TP2 owners disagree')
+        completed.append(length)
+    return completed
+
+
 def merge_shards(left, right):
     if left.keys() != right.keys():
         raise ValueError('Different rank tensor inventories')
@@ -255,14 +287,14 @@ def worker(args):
     record = dict(status='running', rank=rank, device=torch.cuda.get_device_name(rank),
         uuid=str(torch.cuda.get_device_properties(rank).uuid), capability=list(torch.cuda.get_device_capability(rank)),
         scope='Resident trained TE block0; seeded inputs, not full TE or captured activation distribution',
-        lengths=LENGTHS, backends=BACKENDS, cases=[], mask_contract='Native FP16 finite additive causal mask, shape [S,S], finfo.min/4',
+        lengths=args.lengths, backends=BACKENDS, cases=[], mask_contract='Native FP16 finite additive causal mask, shape [S,S], finfo.min/4',
         accuracy_reference='Chunked FP32 attention on the same Q/K/V; full-block Native SDPA is a separate FP16-flow control')
     assert record['capability'] == [7, 5] and 'T4' in record['device']
     path = args.output/f'rank{rank}.json'
     def save():path.write_text(json.dumps(record, indent=2))
     save()
     try:
-        for length in LENGTHS:
+        for length in args.lengths:
             generator = torch.Generator().manual_seed(20261027+length)
             x = (torch.randn(1, length, 5120, generator=generator)/64).half().cuda(rank)
             mask = torch.empty((length, length), dtype=x.dtype, device=x.device).fill_(torch.finfo(x.dtype).min/4).triu_(1)
@@ -308,15 +340,15 @@ def worker(args):
                         if backend == 'native':references[name] = fp32_attention(*qkv, mask)
                         candidate = attention(block, *qkv, mask)
                         case['attention_vs_fp32'] = difference(candidate, references[name])
+                        record['cases'].append(case);save()
                         # One padding/additive-mask control, not a second timing matrix.
                         if length == 353:
                             allowed = mask == 0;allowed[..., -17:] = False
                             padding_reference = fp32_attention(*qkv, allowed)
-                            for kind in ('boolean', 'additive'):
-                                value = allowed if kind == 'boolean' else torch.zeros_like(allowed, dtype=torch.float32).masked_fill_(~allowed, -torch.inf)
+                            for kind, value in padding_masks(allowed, qkv[0].dtype).items():
                                 case['padding_'+kind] = difference(attention(block, *qkv, value), padding_reference)
                         del qkv, candidate
-                        record['cases'].append(case);save()
+                        save()
                         print('TE_MATRIX_CASE', rank, length, backend, name, round(timing['median_wall_ms'], 3), flush=True)
             del block_reference, references, single_output
         length=353
@@ -337,4 +369,5 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--assets', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--lengths',type=int,nargs='+',choices=LENGTHS,default=LENGTHS)
     worker(parser.parse_args())

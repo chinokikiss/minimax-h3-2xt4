@@ -1,8 +1,39 @@
 # TE attention and TP2 communication — 2026-10-27
 
-Status: [private T4 job, version 1](https://www.kaggle.com/code/pamcks/h3-te-attention-tp2-matrix-20261027)
-accepted at 2026-10-27 05:47:55 UTC. Final artifacts have not been collected.
-**No new T4 speedup or communication-cost result is claimed yet.**
+Status: [private T4 job](https://www.kaggle.com/code/pamcks/h3-te-attention-tp2-matrix-20261027)
+version 1 failed in an extra mask control after completing all S128 points on
+both physical T4s. Its final artifacts were collected once. The corrected
+version 2 has been accepted; its final artifacts have not been collected.
+**The full matrix is pending; no overall TE speedup conclusion is claimed.**
+
+## Version 1 failure and bounded recovery
+
+The S353 padding diagnostic constructed an FP32 additive bias for FP16 Q/K/V.
+The pinned T4 Native SDPA backend rejected it with
+`invalid dtype for bias - should match query's dtype`. The primary matrix
+already used the Native FP16 finite causal mask; the mismatch was introduced
+by the extra benchmark control. Production code and library versions are
+unchanged.
+
+The correction constructs additive padding masks in the query's dtype, with
+the Native finite sentinel `finfo.min/4`. New CPU tests verify the dtype and
+resume validation. All eight harness tests pass, together with four local
+Native mask smoke cases covering Q64/KV8 and Q32/KV4, boolean and FP16 additive
+masks. The local smoke is an API check, not T4 performance validation.
+
+All six S128 configurations per owner were complete, finite and matched the
+required exact collective-replay contract. Their TP2 output hashes also agree
+between owners. Version 2 therefore executes **only S353, S1306 and S4096**:
+18 configurations per owner, with no duplicate S128 measurements. Existing
+points retain the original allocation's GPU identities; the retry records its
+own allocation. Within-shape speedup comparisons stay paired on the same
+hardware allocation. Cross-allocation differences are not attributed to this
+mask fix. Performance checkpoints are now saved before extra mask diagnostics.
+
+The [attempt evidence](../data/te_attention_tp2_matrix_20261027/manifest.json)
+retains version 1 sources, per-rank results, traceback, collection receipt and
+the version 2 submission/qualification. There was one final collection and one
+new version submission in response to the reported failure, with no polling.
 
 The question is whether the current TE's smaller per-rank compute is outweighed
 by real NCCL communication. Historical scripts estimated transport time; those
@@ -97,7 +128,7 @@ termination result.
 The passing frozen CPU environment/API receipt and immutable source bundle from
 the VAE comparison are reused. All ten relevant TE runtime/operator source
 hashes are checked against that bundle; none changed. The new three-module
-experiment is embedded as separately hashed supplemental source, with six CPU
+experiment is embedded as separately hashed supplemental source, with eight CPU
 contract tests passing on those exact bytes before submission. The Temporal
 default promotion is separate: this TE-only job never loads a VAE.
 

@@ -1,0 +1,55 @@
+{
+  "passed": true,
+  "tests": 8,
+  "source_hashes": {
+    "te_parallel_matrix.py": "92caf47684cef10d2e5fb539915fc2221ae5f809fe97bc909082205e194774e5",
+    "run_te_parallel_batch.py": "0b5ac58b21e599c4bd383b4546a6bf77f411d17b2248d37d357d581fff578c45",
+    "test_te_parallel_matrix.py": "892bf9db715ae9bb421207ca26790718de6395a1f18843b6d1c48c36e2270db3"
+  },
+  "defaults_cpu": {
+    "passed": true,
+    "tests": 179,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 12.70299999999952,
+    "scope": "CPU contracts, not physical T4 qualification"
+  },
+  "single_gpu_smoke": {
+    "status": "passed",
+    "hardware": "NVIDIA GeForce RTX 5060 Ti",
+    "scope": "Single unsharded block smoke only; no TP2 or T4 performance claim",
+    "cases": [
+      {
+        "backend": "native",
+        "block_finite": true,
+        "block_shape": [
+          1,
+          128,
+          5120
+        ],
+        "attention": {
+          "finite": true,
+          "max_abs": 3.0353665351867676e-05,
+          "relative_l2": 0.00020785685046575963,
+          "byte_exact": false
+        }
+      },
+      {
+        "backend": "kitchen_causal",
+        "block_finite": true,
+        "block_shape": [
+          1,
+          128,
+          5120
+        ],
+        "attention": {
+          "finite": true,
+          "max_abs": 0.011570509523153305,
+          "relative_l2": 0.042990606278181076,
+          "byte_exact": false
+        }
+      }
+    ]
+  }
+}

@@ -11,7 +11,7 @@ and the [Kitchen / TileLang short and long T4 matrix](KITCHEN_ATTENTION_T4_MATRI
 Measurements are version-bound. Read each report's hardware, software, shapes,
 numerical reference, and timing boundary before comparing results.
 
-- [TE attention and TP2 communication matrix](TE_ATTENTION_TP2_MATRIX_20261027.md) — all three current TE backends, trained resident-block single-GPU / real NCCL / exact-result replay controls; T4 job submitted
+- [TE attention and TP2 communication matrix](TE_ATTENTION_TP2_MATRIX_20261027.md) — all three TE backends; v1 extra mask diagnostic fixed, complete S128 points retained, v2 submitted for unfinished shapes
 
 - [Video VAE Temporal versus Query Parallel](VAE_TEMPORAL_QUERY_20261027.md) — physical 2×T4 results: Temporal 207.61 s vs Query 247.55 s (1.192×), bounded pixel differences and measured memory/communication trade-offs; Temporal promoted to default
 

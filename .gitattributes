@@ -5,6 +5,7 @@
 /docs/data/kitchen*_20261025.json -text whitespace=cr-at-eol
 /docs/data/kitchen_dense_sm75_20261025/** -text whitespace=cr-at-eol
 /docs/data/te_causal_precision_20261026/** -text whitespace=cr-at-eol
+/docs/data/te_attention_tp2_matrix_20261027/** -text whitespace=cr-at-eol
 /docs/data/vae_temporal_query_20261027/** -text whitespace=cr-at-eol
 /docs/data/h3_optimization_*_20261026.json -text whitespace=cr-at-eol
 /docs/data/repository_sync_20261026.json -text whitespace=cr-at-eol

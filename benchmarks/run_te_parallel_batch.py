@@ -18,6 +18,7 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--source',type=Path,required=True)
     parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--lengths',type=int,nargs='+',choices=(128,353,1306,4096),default=(128,353,1306,4096))
     args=parser.parse_args();args.output.mkdir(parents=True,exist_ok=True)
     state=dict(status='starting',full_h3_pipeline=False,full_te_encoder=False,trained_block=0,
         inputs='Seeded FP16 residuals /64; not real captured TE activations',cases=[])
@@ -60,7 +61,8 @@ def main():
         state['assets']=dict(repository=plan['repository'],revision=plan['revision'],objects=objects,seconds=time.monotonic()-started)
         state['status']='operator_matrix';save()
         command=[sys.executable,'-m','torch.distributed.run','--standalone','--nproc_per_node=2',
-            str(Path(__file__).with_name('te_parallel_matrix.py')),'--assets',str(assets),'--output',str(args.output)]
+            str(Path(__file__).with_name('te_parallel_matrix.py')),'--assets',str(assets),'--output',str(args.output),
+            '--lengths',*[str(n) for n in args.lengths]]
         with (args.output/'workers.log').open('w') as stream:
             process=subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
             for line in process.stdout:
@@ -70,10 +72,10 @@ def main():
         state['worker_exit_code']=code
         ranks=[json.loads((args.output/f'rank{rank}.json').read_text()) for rank in (0,1)]
         state['ranks']=ranks
-        if code or not all(r['status']=='complete' and len(r['cases'])==24 for r in ranks):
+        if code or not all(r['status']=='complete' and len(r['cases'])==6*len(args.lengths) for r in ranks):
             raise RuntimeError('TE workers did not complete the matrix')
         comparisons=[]
-        for length in (128,353,1306,4096):
+        for length in args.lengths:
             for backend in ('native','tilelang_group32','kitchen_causal'):
                 rows=[[next(c for c in r['cases'] if c['tokens']==length and c['backend']==backend and c['topology']==topology)
                     for topology in ('single_gpu','tp2_nccl')] for r in ranks]
@@ -85,7 +87,7 @@ def main():
                     tp2_slower_owner_median_ms=tp,replay_slower_owner_median_ms=replay,
                     speedup_vs_gpu0=single[0]/tp,speedup_vs_gpu1=single[1]/tp,
                     replay_latency_reduction_ms=tp-replay))
-        state.update(status='complete',comparisons=comparisons,
+        state.update(status='complete',executed_lengths=args.lengths,comparisons=comparisons,
             conclusion_scope='Resident block compute/communication only; no end-to-end TE or weight-streaming speedup claim')
     except BaseException as error:
         state.update(status='failed',error=repr(error));(args.output/'exception.txt').write_text(traceback.format_exc());raise

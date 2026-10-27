@@ -1,0 +1,19 @@
+{
+  "status": "collected",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-te-attention-tp2-matrix-20261027",
+  "output": "D:\\attention_eval\\h3_te_parallel_20261027\\gpu_outputs",
+  "returncode": 0,
+  "files": 24,
+  "completed_utc": "2026-10-27T05:59:12.957320+00:00",
+  "experiment": {
+    "status": "failed",
+    "error": "RuntimeError('TE workers did not complete the matrix')",
+    "stages": null,
+    "completed_sampler_steps": 0,
+    "completed_denoiser_calls": 0,
+    "media": null,
+    "quality_acceptance": "Pending review; collection does not establish generation quality"
+  },
+  "prior_input_hash_matches": {}
+}
