@@ -1,0 +1,301 @@
+WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+WARNING WARNING WARNING
+If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.
+
+WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+WARNING WARNING WARNING
+If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.
+
+WARNING:root:H3 scaled FP16 transport unavailable (requires TP2 FP32, aligned local groups and vector FP32 weight scales); using native INT32 SUM
+TE_MATRIX_CASE 0 353 native single_gpu 47.287
+WARNING:root:H3 scaled FP16 transport unavailable (requires TP2 FP32, aligned local groups and vector FP32 weight scales); using native INT32 SUM
+TE_MATRIX_CASE 1 353 native single_gpu 46.355
+2026-10-27 06:07:02  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:07:02  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:07:06  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:06  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:07  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:07:07  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:07:09  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:09  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+ba3976eb71ed:113:113 [0] NCCL INFO ENV/Plugin: Could not find: libnccl-env.so
+ba3976eb71ed:113:113 [0] NCCL INFO Bootstrap: Using eth0:172.19.2.2<0>
+ba3976eb71ed:113:242 [0] NCCL INFO Socket handshake magic 0x564ab9f2fc4b9d6c (built-in default)
+ba3976eb71ed:113:113 [0] NCCL INFO cudaDriverVersion 13000
+ba3976eb71ed:114:114 [1] NCCL INFO ENV/Plugin: Could not find: libnccl-env.so
+ba3976eb71ed:114:114 [1] NCCL INFO cudaDriverVersion 13000
+ba3976eb71ed:113:113 [0] NCCL INFO NCCL version 2.31.2+cuda13.3
+ba3976eb71ed:113:113 [0] NCCL INFO NCCL git version unknown unknown
+ba3976eb71ed:114:114 [1] NCCL INFO Bootstrap: Using eth0:172.19.2.2<0>
+ba3976eb71ed:114:114 [1] NCCL INFO NCCL version 2.31.2+cuda13.3
+ba3976eb71ed:114:114 [1] NCCL INFO NCCL git version unknown unknown
+ba3976eb71ed:113:113 [0] NCCL INFO Comm config Blocking set to 1
+ba3976eb71ed:114:114 [1] NCCL INFO Comm config Blocking set to 1
+ba3976eb71ed:114:114 [1] NCCL INFO NET/Plugin: Could not find: libnccl-net.so
+ba3976eb71ed:113:113 [0] NCCL INFO NET/Plugin: Could not find: libnccl-net.so
+ba3976eb71ed:114:114 [1] NCCL INFO NET/IB : No device found.
+ba3976eb71ed:113:113 [0] NCCL INFO NET/IB : No device found.
+ba3976eb71ed:113:113 [0] NCCL INFO NET/IB : Using [RO]; OOB eth0:172.19.2.2<0>
+ba3976eb71ed:114:114 [1] NCCL INFO NET/IB : Using [RO]; OOB eth0:172.19.2.2<0>
+ba3976eb71ed:113:113 [0] NCCL INFO Failed to initialize NET plugin IB
+ba3976eb71ed:114:114 [1] NCCL INFO Failed to initialize NET plugin IB
+ba3976eb71ed:114:114 [1] NCCL INFO NET/Socket : Using [0]eth0:172.19.2.2<0>
+ba3976eb71ed:113:113 [0] NCCL INFO NET/Socket : Using [0]eth0:172.19.2.2<0>
+ba3976eb71ed:113:113 [0] NCCL INFO Initialized NET plugin Socket
+ba3976eb71ed:114:114 [1] NCCL INFO Initialized NET plugin Socket
+ba3976eb71ed:114:114 [1] NCCL INFO Assigned NET plugin Socket to comm
+ba3976eb71ed:113:113 [0] NCCL INFO Assigned NET plugin Socket to comm
+ba3976eb71ed:114:114 [1] NCCL INFO RMA/Plugin: Could not find: libnccl-rma.so
+ba3976eb71ed:114:114 [1] NCCL INFO RMA/Plugin: Failed to initialize any plugin
+ba3976eb71ed:113:113 [0] NCCL INFO RMA/Plugin: Could not find: libnccl-rma.so
+ba3976eb71ed:113:113 [0] NCCL INFO RMA/Plugin: Failed to initialize any plugin
+ba3976eb71ed:114:114 [1] NCCL INFO GIN/Plugin: Could not find: libnccl-gin.so
+ba3976eb71ed:114:114 [1] NCCL INFO GIN/Plugin: Failed to initialize any GIN plugin
+ba3976eb71ed:114:114 [1] NCCL INFO Using network Socket
+ba3976eb71ed:113:113 [0] NCCL INFO GIN/Plugin: Could not find: libnccl-gin.so
+ba3976eb71ed:114:114 [1] NCCL INFO Loaded NVML from libnvidia-ml.so.1
+ba3976eb71ed:113:113 [0] NCCL INFO GIN/Plugin: Failed to initialize any GIN plugin
+ba3976eb71ed:113:113 [0] NCCL INFO Using network Socket
+ba3976eb71ed:113:113 [0] NCCL INFO Loaded NVML from libnvidia-ml.so.1
+ba3976eb71ed:113:113 [0] NCCL INFO [Rank 0] ncclCommInitRankConfig comm 0x55dadf00 rank 0 nranks 2 cudaDev 0 nvmlDev 0 busId 40 ba3976eb71ed:114:114 [1] NCCL INFO [Rank 1] ncclCommInitRankConfig comm 0x3baad750 rank 1 nranks 2 cudaDev 1 nvmlDev 1 busId 50 commId 0x81bf3d1437eb9e2 - Init START
+commId 0x81bf3d1437eb9e2 - Init START
+ba3976eb71ed:114:114 [1] NCCL INFO Socket handshake magic 0x564ab9f2fc4b9d6c (built-in default)
+ba3976eb71ed:113:113 [0] NCCL INFO RAS client listening socket at ::1<28028>
+ba3976eb71ed:114:114 [1] NCCL INFO RAS client listening socket at ::1<28028>
+ba3976eb71ed:114:114 [1] NCCL INFO Bootstrap timings total 0.002305 (create 0.000055, send 0.000105, recv 0.000172, ring 0.00005ba3976eb71ed:113:113 [0] NCCL INFO Bootstrap timings total 0.002296 (create 0.000047, send 0.000139, recv 0.000216, ring 0.000122, delay 0.000001)
+8, delay 0.000002)
+ba3976eb71ed:113:113 [0] NCCL INFO NCCL_P2P_DISABLE set by environment to 1
+ba3976eb71ed:114:114 [1] NCCL INFO NCCL_P2P_DISABLE set by environment to 1
+ba3976eb71ed:114:114 [1] NCCL INFO ncclTopoGetCpuAffinity: Affinity for GPU 1 is 0-3. (GPU affinity = 0-3 ; CPU affinity = 0-3).ba3976eb71ed:113:113 [0] NCCL INFO ncclTopoGetCpuAffinity: Affinity for GPU 0 is 0-3. (GPU affinity = 0-3 ; CPU affinity = 0-3).
+ba3976eb71ed:113:113 [0] NCCL INFO NVLS multicast support is not available on dev 0
+
+ba3976eb71ed:114:114 [1] NCCL INFO NVLS multicast support is not available on dev 1
+ba3976eb71ed:113:113 [0] NCCL INFO Rank 0: 1 Net devices
+ba3976eb71ed:113:113 [0] NCCL INFO Rank 0: 0 CollNet devices
+ba3976eb71ed:114:114 [1] NCCL INFO Rank 1: 1 Net devices
+ba3976eb71ed:114:114 [1] NCCL INFO Rank 1: 0 CollNet devices
+ba3976eb71ed:114:114 [1] NCCL INFO comm 0x3baad750 rank 1 nRanks 2 nNodes 1 localRanks 2 localRank 1 MNNVL 0
+ba3976eb71ed:113:113 [0] NCCL INFO Local Net device counts across ranks: min 1 max 1
+ba3976eb71ed:113:113 [0] NCCL INFO Local CollNet device counts across ranks: min 0 max 0
+ba3976eb71ed:113:113 [0] NCCL INFO comm 0x55dadf00 rank 0 nRanks 2 nNodes 1 localRanks 2 localRank 0 MNNVL 0
+ba3976eb71ed:113:113 [0] NCCL INFO NCCL_MAX_NCHANNELS set by environment to 4.
+ba3976eb71ed:113:113 [0] NCCL INFO NCCL_MIN_NCHANNELS set by environment to 4.
+ba3976eb71ed:113:113 [0] NCCL INFO Channel 00/04 : 0 1
+ba3976eb71ed:114:114 [1] NCCL INFO NCCL_MAX_NCHANNELS set by environment to 4.
+ba3976eb71ed:113:113 [0] NCCL INFO Channel 01/04 : 0 1
+ba3976eb71ed:113:113 [0] NCCL INFO Channel 02/04 : 0 1
+ba3976eb71ed:114:114 [1] NCCL INFO NCCL_MIN_NCHANNELS set by environment to 4.
+ba3976eb71ed:113:113 [0] NCCL INFO Channel 03/04 : 0 1
+ba3976eb71ed:113:113 [0] NCCL INFO Trees [0] 1/-1/-1->0->-1 [1] 1/-1/-1->0->-1 [2] 1/-1/-1->0->-1 [3] 1/-1/-1->0->-1
+ba3976eb71ed:113:113 [0] NCCL INFO P2P Chunksize set to 131072
+ba3976eb71ed:114:114 [1] NCCL INFO Trees [0] -1/-1/-1->1->0 [1] -1/-1/-1->1->0 [2] -1/-1/-1->1->0 [3] -1/-1/-1->1->0
+ba3976eb71ed:114:114 [1] NCCL INFO P2P Chunksize set to 131072
+ba3976eb71ed:114:114 [1] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so
+ba3976eb71ed:113:113 [0] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so
+ba3976eb71ed:113:113 [0] NCCL INFO Check P2P Type isAllDirectP2p 0 directMode 0 isAllCudaP2p 1
+ba3976eb71ed:114:114 [1] NCCL INFO Check P2P Type isAllDirectP2p 0 directMode 0 isAllCudaP2p 1
+ba3976eb71ed:113:245 [0] NCCL INFO [Proxy Service] Device 0 CPU core 2
+ba3976eb71ed:113:245 [0] NCCL INFO proxy listening socket at 172.19.2.2<50179>
+ba3976eb71ed:114:246 [0] NCCL INFO [Proxy Service] Device 1 CPU core 1
+ba3976eb71ed:113:247 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 0
+ba3976eb71ed:114:246 [1] NCCL INFO proxy listening socket at 172.19.2.2<59907>
+ba3976eb71ed:114:248 [0] NCCL INFO [Proxy Service UDS] Device 1 CPU core 3
+ba3976eb71ed:113:113 [0] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so
+ba3976eb71ed:114:114 [1] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so
+ba3976eb71ed:113:113 [0] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
+ba3976eb71ed:114:114 [1] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
+ba3976eb71ed:114:114 [1] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 2 p2p channels per peer
+ba3976eb71ed:114:114 [1] NCCL INFO symmetricSupport 1, cuMemEnable 1, globalGinSupport 0, cuMemGdrSupport 1, contiguousRanksPerHost 2, crossNicSupport 1
+ba3976eb71ed:113:113 [0] NCCL INFO 4 coll channels, 4 collnet channels, 0 nvls channels, 4 p2p channels, 2 p2p channels per peer
+ba3976eb71ed:113:113 [0] NCCL INFO symmetricSupport 1, cuMemEnable 1, globalGinSupport 0, cuMemGdrSupport 1, contiguousRanksPerHost 2, crossNicSupport 1
+ba3976eb71ed:113:113 [0] NCCL INFO CC Off, workFifoBytes 1048576
+ba3976eb71ed:114:114 [1] NCCL INFO ncclCommInitRankConfig comm 0x3baad750 rank 1 nranks 2 cudaDev 1 nvmlDev 1 busId 50 commId 0x81bf3d1437eb9e2 - Init COMPLETE
+ba3976eb71ed:114:114 [1] NCCL INFO Init timings - ncclCommInitRankConfig: rank 1 nranks 2 total 0.76 (kernels 0.70, alloc 0.02, bootstrap 0.00, allgathers 0.00, topo 0.02, graphs 0.00, connections 0.01, rest 0.00)
+ba3976eb71ed:113:113 [0] NCCL INFO ncclCommInitRankConfig comm 0x55dadf00 rank 0 nranks 2 cudaDev 0 nvmlDev 0 busId 40 commId 0x81bf3d1437eb9e2 - Init COMPLETE
+ba3976eb71ed:113:113 [0] NCCL INFO Init timings - ncclCommInitRankConfig: rank 0 nranks 2 total 0.76 (kernels 0.70, alloc 0.02, bootstrap 0.00, allgathers 0.01, topo 0.02, graphs 0.00, connections 0.01, rest 0.00)
+ba3976eb71ed:113:113 [0] NCCL INFO Symmetric VA size=16GB
+ba3976eb71ed:114:114 [1] NCCL INFO Symmetric VA size=16GB
+ba3976eb71ed:114:114 [1] NCCL INFO Channel 00 : 1[1] -> 0[0] via SHM/direct
+ba3976eb71ed:113:113 [0] NCCL INFO Channel 00 : 0[0] -> 1[1] via SHM/direct
+ba3976eb71ed:113:113 [0] NCCL INFO Channel 01 : 0[0] -> 1[1] via SHM/direct
+ba3976eb71ed:114:114 [1] NCCL INFO Channel 01 : 1[1] -> 0[0] via SHM/direct
+ba3976eb71ed:114:114 [1] NCCL INFO Channel 02 : 1[1] -> 0[0] via SHM/direct
+ba3976eb71ed:114:114 [1] NCCL INFO Channel 03 : 1[1] -> 0[0] via SHM/direct
+ba3976eb71ed:113:113 [0] NCCL INFO Channel 02 : 0[0] -> 1[1] via SHM/direct
+ba3976eb71ed:113:113 [0] NCCL INFO Channel 03 : 0[0] -> 1[1] via SHM/direct
+ba3976eb71ed:114:114 [1] NCCL INFO Connected all rings, use ring PXN 0 GDR 1
+ba3976eb71ed:113:113 [0] NCCL INFO Connected all rings, use ring PXN 0 GDR 1
+2026-10-27 06:07:10  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 06:07:10  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 06:07:12  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:12  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:12  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:07:12  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:07:14  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:14  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:14  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 06:07:15  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 06:07:16  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:16  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:17  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1, 2]`
+2026-10-27 06:07:17  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1, 2]`
+2026-10-27 06:07:20  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:21  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:21  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 06:07:23  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:23  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 06:07:23  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:24  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:07:24  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:07:25  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:25  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:26  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 06:07:26  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 06:07:28  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:28  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+TE_MATRIX_CASE 1 353 native tp2_nccl 30.152
+TE_MATRIX_CASE 0 353 native tp2_nccl 30.152
+2026-10-27 06:07:29  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[4, 5, 6, 7, 8]`
+2026-10-27 06:07:33  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:34  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[6]`
+2026-10-27 06:07:39  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+TE_MATRIX_CASE 0 353 tilelang_group32 single_gpu 47.835
+TE_MATRIX_CASE 1 353 tilelang_group32 single_gpu 47.353
+2026-10-27 06:07:41  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[4, 5, 6, 7, 8]`
+2026-10-27 06:07:41  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[4, 5, 6, 7, 8]`
+2026-10-27 06:07:45  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:45  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:46  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[6]`
+2026-10-27 06:07:46  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[6]`
+2026-10-27 06:07:51  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:51  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+TE_MATRIX_CASE 1 353 tilelang_group32 tp2_nccl 23.476
+TE_MATRIX_CASE 0 353 tilelang_group32 tp2_nccl 23.461
+TE_MATRIX_CASE 0 353 kitchen_causal single_gpu 47.75
+TE_MATRIX_CASE 1 353 kitchen_causal single_gpu 47.655
+TE_MATRIX_CASE 0 353TE_MATRIX_CASE kitchen_causal  tp2_nccl1  23.131353
+ kitchen_causal tp2_nccl 23.137
+TE_MATRIX_CASE 0 1306 native single_gpu 128.862
+TE_MATRIX_CASE 1 1306 native single_gpu 125.505
+2026-10-27 06:07:59  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`2026-10-27 06:07:59  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+
+2026-10-27 06:07:59  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:07:59  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:00  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:08:00  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:08:00  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:00  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:00  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 06:08:00  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 06:08:01  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:01  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:01  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:08:01  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:08:01  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:01  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:02  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 06:08:02  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 06:08:02  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:02  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:02  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1, 2]`
+2026-10-27 06:08:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1, 2]`
+2026-10-27 06:08:04  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:05  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:05  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 06:08:05  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:05  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 06:08:05  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:05  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:08:06  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:06  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:08:06  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:06  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 06:08:06  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:06  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 06:08:06  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+TE_MATRIX_CASE 1 1306 native tp2_nccl 64.326
+TE_MATRIX_CASE 0 1306 native tp2_nccl 64.378
+2026-10-27 06:08:09  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[4, 5, 6, 7, 8]`
+2026-10-27 06:08:13  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:14  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[6]`
+2026-10-27 06:08:19  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+TE_MATRIX_CASE 0 1306 tilelang_group32 single_gpu 130.428
+TE_MATRIX_CASE 1 1306 tilelang_group32 single_gpu 129.031
+2026-10-27 06:08:24  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[4, 5, 6, 7, 8]`
+2026-10-27 06:08:24  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[4, 5, 6, 7, 8]`
+2026-10-27 06:08:28  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:28  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:28  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[6]`
+2026-10-27 06:08:28  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[6]`
+2026-10-27 06:08:34  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:34  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+TE_MATRIX_CASE 0 1306 tilelang_group32 tp2_nccl 65.629
+TE_MATRIX_CASE 1 1306 tilelang_group32 tp2_nccl 65.726
+TE_MATRIX_CASE 0 1306 kitchen_causal single_gpu 128.996
+TE_MATRIX_CASE 1 1306 kitchen_causal single_gpu 126.365
+TE_MATRIX_CASE 0 1306 kitchen_causal tp2_nccl 64.32
+TE_MATRIX_CASE 1 1306 kitchen_causal tp2_nccl 64.303
+TE_MATRIX_CASE 0 4096 native single_gpu 404.483
+TE_MATRIX_CASE 1 4096 native single_gpu 407.358
+2026-10-27 06:08:56  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:08:56  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:08:56  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:56  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:57  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:08:57  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:08:57  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:57  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:57  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 06:08:58  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 06:08:58  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:58  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:58  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:08:58  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:08:58  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:58  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:59  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 06:08:59  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 06:08:59  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:08:59  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:09:00  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1, 2]`
+2026-10-27 06:09:00  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1, 2]`
+2026-10-27 06:09:01  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:09:01  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:09:02  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 06:09:02  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:09:02  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-27 06:09:02  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:09:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:09:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:09:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-27 06:09:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:09:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 06:09:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-27 06:09:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:09:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+TE_MATRIX_CASE 1 4096 native tp2_nccl 205.901
+TE_MATRIX_CASE 0 4096 native tp2_nccl 205.709
+2026-10-27 06:09:10  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[4, 5, 6, 7, 8]`
+2026-10-27 06:09:14  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:09:15  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[6]`
+2026-10-27 06:09:19  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+TE_MATRIX_CASE 0 4096 tilelang_group32 single_gpu 438.348
+TE_MATRIX_CASE 1 4096 tilelang_group32 single_gpu 429.024
+2026-10-27 06:09:34  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[4, 5, 6, 7, 8]`
+2026-10-27 06:09:34  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[4, 5, 6, 7, 8]`
+2026-10-27 06:09:38  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:09:38  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:09:39  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[6]`
+2026-10-27 06:09:39  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[6]`
+2026-10-27 06:09:43  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-27 06:09:43  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+TE_MATRIX_CASE 1 4096 tilelang_group32 tp2_nccl 222.39
+TE_MATRIX_CASE 0 4096 tilelang_group32 tp2_nccl 222.391
+TE_MATRIX_CASE 0 4096 kitchen_causal single_gpu 407.155
+TE_MATRIX_CASE 1 4096 kitchen_causal single_gpu 401.814
+TE_MATRIX_CASE 1 4096 kitchen_causal tp2_nccl 204.014
+TE_MATRIX_CASE 0 4096 kitchen_causal tp2_nccl 204.052
+/usr/local/lib/python3.13/dist-packages/torch/profiler/profiler.py:224: UserWarning: Warning: Profiler clears events at the end of each cycle.Only events from the current cycle will be reported.To keep events across cycles, set acc_events=True.
+  _warn_once(
+/usr/local/lib/python3.13/dist-packages/torch/profiler/profiler.py:224: UserWarning: Warning: Profiler clears events at the end of each cycle.Only events from the current cycle will be reported.To keep events across cycles, set acc_events=True.
+  _warn_once(

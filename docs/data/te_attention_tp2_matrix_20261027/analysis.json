@@ -1,0 +1,1418 @@
+{
+  "status": "complete",
+  "scope": "Resident unsharded/TP2 adapter block; not Native full-encoder latency",
+  "rows": [
+    {
+      "tokens": 128,
+      "backend": "native",
+      "attempt": 1,
+      "uuid": [
+        "947a0cb1-986b-8a6f-39b1-0df812e273b2",
+        "e7a851ea-86be-138f-f21d-3c88b1840ebc"
+      ],
+      "single_gpu_ms": [
+        29.05991099999028,
+        28.783175000000938
+      ],
+      "tp2_ms": 23.9777150000009,
+      "replay_ms": 12.851294999904894,
+      "speedup_vs_single": [
+        1.2119549756926042,
+        1.200413592371077
+      ],
+      "replay_delta_ms": 11.126420000096005,
+      "replay_delta_percent": 46.40317061110947,
+      "attention_single_gpu_ms": [
+        0.27385999999296473,
+        0.2865060000090125
+      ],
+      "attention_tp2_ms": [
+        0.4158100000495324,
+        0.26170399996772176
+      ],
+      "attention_relative_l2_percent": [
+        0.020853965543210506,
+        0.021001423010602593
+      ],
+      "attention_max_abs": 3.0741095542907715e-05,
+      "tp2_vs_unsharded_block_relative_l2_percent": [
+        0.03679322253447026,
+        0.03679322253447026
+      ],
+      "collective_operand_bytes_per_rank": [
+        2622464,
+        2622464
+      ],
+      "collective_entry_skew_ms": [
+        7.536619,
+        7.443746,
+        6.795788,
+        6.635724
+      ],
+      "peak_allocated_bytes_per_rank": [
+        848595968,
+        848595968
+      ],
+      "samples": {
+        "single": [
+          [
+            45.2101580000317,
+            29.77178300000105,
+            29.05991099999028,
+            28.8577640000085,
+            29.115262000004805,
+            28.965148999986923,
+            28.642504999993434
+          ],
+          [
+            41.91038300001537,
+            29.290559000003213,
+            28.783175000000938,
+            28.612012999985836,
+            29.02820599996403,
+            28.553654000006645,
+            28.45254199996816
+          ]
+        ],
+        "tp2": [
+          [
+            24.016672000016115,
+            23.9872889999333,
+            23.9777150000009,
+            23.99660599996878,
+            23.934088999908454,
+            23.51319499996407,
+            16.228474999934406
+          ],
+          [
+            23.95263799996883,
+            23.955057999955898,
+            23.988156999962484,
+            23.99068800002624,
+            23.93178399995577,
+            23.545574000081615,
+            16.23111100002461
+          ]
+        ]
+      }
+    },
+    {
+      "tokens": 128,
+      "backend": "tilelang_group32",
+      "attempt": 1,
+      "uuid": [
+        "947a0cb1-986b-8a6f-39b1-0df812e273b2",
+        "e7a851ea-86be-138f-f21d-3c88b1840ebc"
+      ],
+      "single_gpu_ms": [
+        29.27206600008958,
+        33.511721999957444
+      ],
+      "tp2_ms": 24.156396999956087,
+      "replay_ms": 12.882378999961475,
+      "speedup_vs_single": [
+        1.2117728484153822,
+        1.387281472481942
+      ],
+      "replay_delta_ms": 11.274017999994612,
+      "replay_delta_percent": 46.67094186279149,
+      "attention_single_gpu_ms": [
+        0.4344640000226718,
+        0.4413489999706144
+      ],
+      "attention_tp2_ms": [
+        0.48289400001522154,
+        0.3909210000756502
+      ],
+      "attention_relative_l2_percent": [
+        2.272978611290455,
+        2.1218545734882355
+      ],
+      "attention_max_abs": 0.006502464413642883,
+      "tp2_vs_unsharded_block_relative_l2_percent": [
+        0.036370259476825595,
+        0.036370259476825595
+      ],
+      "collective_operand_bytes_per_rank": [
+        2622464,
+        2622464
+      ],
+      "collective_entry_skew_ms": [
+        2.222966,
+        2.184246,
+        2.130226,
+        2.119115
+      ],
+      "peak_allocated_bytes_per_rank": [
+        834303488,
+        834303488
+      ],
+      "samples": {
+        "single": [
+          [
+            44.92329899994729,
+            31.204117000015685,
+            29.493796999986444,
+            29.271339000047192,
+            29.104699999948025,
+            29.27206600008958,
+            29.07877500001632
+          ],
+          [
+            33.511721999957444,
+            33.551256000009744,
+            33.52609800003847,
+            33.521102000008796,
+            33.46811199992317,
+            33.22611600003711,
+            29.49335699997846
+          ]
+        ],
+        "tp2": [
+          [
+            24.240199000018947,
+            24.103949000050306,
+            24.156396999956087,
+            24.144247999970503,
+            24.214349999965634,
+            24.20337900002778,
+            24.11889899997277
+          ],
+          [
+            24.245901000085723,
+            24.10924299999806,
+            24.133735999953387,
+            24.14753200002906,
+            24.2146100000582,
+            24.219997000045623,
+            24.107791999995243
+          ]
+        ]
+      }
+    },
+    {
+      "tokens": 128,
+      "backend": "kitchen_causal",
+      "attempt": 1,
+      "uuid": [
+        "947a0cb1-986b-8a6f-39b1-0df812e273b2",
+        "e7a851ea-86be-138f-f21d-3c88b1840ebc"
+      ],
+      "single_gpu_ms": [
+        29.616144999977223,
+        29.15243500001452
+      ],
+      "tp2_ms": 13.350874999900952,
+      "replay_ms": 13.168366000058995,
+      "speedup_vs_single": [
+        2.218292434031248,
+        2.183559879051433
+      ],
+      "replay_delta_ms": 0.18250899984195712,
+      "replay_delta_percent": 1.3670190144339687,
+      "attention_single_gpu_ms": [
+        0.3630580000617556,
+        0.34300300001177675
+      ],
+      "attention_tp2_ms": [
+        0.495703000069625,
+        0.36288199999034987
+      ],
+      "attention_relative_l2_percent": [
+        4.496392980217934,
+        4.292107373476028
+      ],
+      "attention_max_abs": 0.01391695812344551,
+      "tp2_vs_unsharded_block_relative_l2_percent": [
+        0.03667331766337156,
+        0.03667331766337156
+      ],
+      "collective_operand_bytes_per_rank": [
+        2622464,
+        2622464
+      ],
+      "collective_entry_skew_ms": [
+        0.05547,
+        0.018865,
+        0.052373,
+        0.06073
+      ],
+      "peak_allocated_bytes_per_rank": [
+        834303488,
+        834303488
+      ],
+      "samples": {
+        "single": [
+          [
+            26.964582000005066,
+            32.6470170000448,
+            31.341541999950095,
+            30.05252000002656,
+            29.333052999959364,
+            29.616144999977223,
+            29.512712000041574
+          ],
+          [
+            30.14408599995022,
+            29.56616100004794,
+            29.15243500001452,
+            28.797922999956427,
+            28.796722000038244,
+            28.901894999989963,
+            29.227832999936254
+          ]
+        ],
+        "tp2": [
+          [
+            12.91250700001001,
+            13.083839000046282,
+            13.279624999995576,
+            13.339205999955084,
+            13.545999000029951,
+            13.565903999960938,
+            13.668665999944096
+          ],
+          [
+            12.89763900001617,
+            13.095688000021255,
+            13.274135999949976,
+            13.350874999900952,
+            13.531044999922415,
+            13.566758000024493,
+            13.676715000087825
+          ]
+        ]
+      }
+    },
+    {
+      "tokens": 353,
+      "backend": "native",
+      "attempt": 2,
+      "uuid": [
+        "15a75c77-28f4-c7c6-b4a6-dfa936dd9678",
+        "69c0a814-0953-51c8-ff38-dbc3f5ace7dd"
+      ],
+      "single_gpu_ms": [
+        47.28738099998964,
+        46.35462099997767
+      ],
+      "tp2_ms": 30.151926999963052,
+      "replay_ms": 22.048088999952142,
+      "speedup_vs_single": [
+        1.5683037770702875,
+        1.5373684408308124
+      ],
+      "replay_delta_ms": 8.10383800001091,
+      "replay_delta_percent": 26.876683536746558,
+      "attention_single_gpu_ms": [
+        0.6739020000168239,
+        0.7033770000361983
+      ],
+      "attention_tp2_ms": [
+        0.7643509999866183,
+        0.721570999985488
+      ],
+      "attention_relative_l2_percent": [
+        0.021095726697240025,
+        0.021252071019262075
+      ],
+      "attention_max_abs": 3.038346767425537e-05,
+      "tp2_vs_unsharded_block_relative_l2_percent": [
+        0.03593204019125551,
+        0.03593204019125551
+      ],
+      "collective_operand_bytes_per_rank": [
+        7232264,
+        7232264
+      ],
+      "collective_entry_skew_ms": [
+        8.103549,
+        7.904541,
+        7.8322,
+        7.858202
+      ],
+      "peak_allocated_bytes_per_rank": [
+        913522176,
+        913522176
+      ],
+      "samples": {
+        "single": [
+          [
+            58.81533400003036,
+            57.79690700001083,
+            49.103598999977294,
+            47.28738099998964,
+            46.603775999983554,
+            46.911074999968605,
+            46.492407000016556
+          ],
+          [
+            57.49131700002863,
+            46.98400600000241,
+            46.88386899999841,
+            46.04823300002181,
+            46.21325000005072,
+            46.33016000002499,
+            46.35462099997767
+          ]
+        ],
+        "tp2": [
+          [
+            37.141268999960175,
+            30.151926999963052,
+            30.125925999982428,
+            30.150047000006452,
+            30.244143999993867,
+            30.158734999986336,
+            30.11526000000231
+          ],
+          [
+            37.14012699998648,
+            30.151823999972294,
+            30.13167000000294,
+            30.13834900002621,
+            30.26678600002697,
+            30.176842000003035,
+            30.108230999985608
+          ]
+        ]
+      }
+    },
+    {
+      "tokens": 353,
+      "backend": "tilelang_group32",
+      "attempt": 2,
+      "uuid": [
+        "15a75c77-28f4-c7c6-b4a6-dfa936dd9678",
+        "69c0a814-0953-51c8-ff38-dbc3f5ace7dd"
+      ],
+      "single_gpu_ms": [
+        47.83473099996627,
+        47.35324699998955
+      ],
+      "tp2_ms": 23.47585600000457,
+      "replay_ms": 21.94674700001542,
+      "speedup_vs_single": [
+        2.0376139212967126,
+        2.017104168639488
+      ],
+      "replay_delta_ms": 1.5291089999891483,
+      "replay_delta_percent": 6.513538845990752,
+      "attention_single_gpu_ms": [
+        0.9889510000107293,
+        1.0969209999984741
+      ],
+      "attention_tp2_ms": [
+        0.7377390000442574,
+        0.7835210000166626
+      ],
+      "attention_relative_l2_percent": [
+        2.5701094418764114,
+        2.475079894065857
+      ],
+      "attention_max_abs": 0.010541578754782677,
+      "tp2_vs_unsharded_block_relative_l2_percent": [
+        0.03541430342011154,
+        0.03541430342011154
+      ],
+      "collective_operand_bytes_per_rank": [
+        7232264,
+        7232264
+      ],
+      "collective_entry_skew_ms": [
+        26.944195,
+        26.314036,
+        23.798043,
+        23.140399
+      ],
+      "peak_allocated_bytes_per_rank": [
+        871994368,
+        871994368
+      ],
+      "samples": {
+        "single": [
+          [
+            61.578513999961615,
+            47.89851200001749,
+            47.55526400003873,
+            47.1268549999877,
+            47.192130999974324,
+            47.83473099996627,
+            47.986175999994884
+          ],
+          [
+            59.83757199999218,
+            47.961486000019704,
+            47.27408899998409,
+            47.34682700001258,
+            47.5749310000424,
+            47.35324699998955,
+            47.32004999999617
+          ]
+        ],
+        "tp2": [
+          [
+            37.703587000009975,
+            32.543236999970304,
+            23.600649999991674,
+            23.461355999984335,
+            23.07645199999797,
+            23.001214999965214,
+            22.88553799996862
+          ],
+          [
+            37.66749699997263,
+            32.6067840000519,
+            23.61401199999591,
+            23.47585600000457,
+            23.05647000002864,
+            22.996225000042614,
+            22.949293000010584
+          ]
+        ]
+      }
+    },
+    {
+      "tokens": 353,
+      "backend": "kitchen_causal",
+      "attempt": 2,
+      "uuid": [
+        "15a75c77-28f4-c7c6-b4a6-dfa936dd9678",
+        "69c0a814-0953-51c8-ff38-dbc3f5ace7dd"
+      ],
+      "single_gpu_ms": [
+        47.749748999990516,
+        47.65499500001624
+      ],
+      "tp2_ms": 23.13737700001184,
+      "replay_ms": 22.2034760000156,
+      "speedup_vs_single": [
+        2.0637494474834415,
+        2.0596541690958254
+      ],
+      "replay_delta_ms": 0.93390099999624,
+      "replay_delta_percent": 4.036330479447874,
+      "attention_single_gpu_ms": [
+        0.7053799999994226,
+        0.7056240000338221
+      ],
+      "attention_tp2_ms": [
+        0.5070540000247092,
+        0.5060590000312004
+      ],
+      "attention_relative_l2_percent": [
+        2.3685500025749207,
+        2.3888757452368736
+      ],
+      "attention_max_abs": 0.005967755801975727,
+      "tp2_vs_unsharded_block_relative_l2_percent": [
+        0.03593319561332464,
+        0.03593319561332464
+      ],
+      "collective_operand_bytes_per_rank": [
+        7232264,
+        7232264
+      ],
+      "collective_entry_skew_ms": [
+        1.651455,
+        1.603941,
+        1.64264,
+        1.577211
+      ],
+      "peak_allocated_bytes_per_rank": [
+        872156160,
+        872156160
+      ],
+      "samples": {
+        "single": [
+          [
+            47.711235999997825,
+            48.51349300002994,
+            47.749748999990516,
+            47.75926199999958,
+            47.88550899996835,
+            47.61971300001733,
+            47.34896399997979
+          ],
+          [
+            48.522695000031035,
+            47.86811100001387,
+            46.87116000002334,
+            47.65499500001624,
+            47.74939600002881,
+            47.18628899996702,
+            47.61722900002496
+          ]
+        ],
+        "tp2": [
+          [
+            24.39430899994477,
+            23.738498999989588,
+            23.130756000000474,
+            22.50375599999188,
+            22.646624000003612,
+            23.006742000006852,
+            23.292618000027687
+          ],
+          [
+            24.431361000040397,
+            23.747920999994676,
+            23.13737700001184,
+            22.557463999987704,
+            22.61200899999949,
+            22.979650999957357,
+            23.29971099999284
+          ]
+        ]
+      }
+    },
+    {
+      "tokens": 1306,
+      "backend": "native",
+      "attempt": 2,
+      "uuid": [
+        "15a75c77-28f4-c7c6-b4a6-dfa936dd9678",
+        "69c0a814-0953-51c8-ff38-dbc3f5ace7dd"
+      ],
+      "single_gpu_ms": [
+        128.8615490000211,
+        125.50470500002575
+      ],
+      "tp2_ms": 64.37816699997256,
+      "replay_ms": 60.92677200001617,
+      "speedup_vs_single": [
+        2.001634327365612,
+        1.9494917430637508
+      ],
+      "replay_delta_ms": 3.451394999956392,
+      "replay_delta_percent": 5.361126544590595,
+      "attention_single_gpu_ms": [
+        7.124786000019867,
+        6.855892999965363
+      ],
+      "attention_tp2_ms": [
+        3.9120120000006864,
+        3.8905099999624326
+      ],
+      "attention_relative_l2_percent": [
+        0.021320166706573218,
+        0.02140681608580053
+      ],
+      "attention_max_abs": 3.0837953090667725e-05,
+      "tp2_vs_unsharded_block_relative_l2_percent": [
+        0.03529439854901284,
+        0.03529439854901284
+      ],
+      "collective_operand_bytes_per_rank": [
+        26757328,
+        26757328
+      ],
+      "collective_entry_skew_ms": [
+        3.889828,
+        3.783753,
+        3.777094,
+        3.684762
+      ],
+      "peak_allocated_bytes_per_rank": [
+        1269317120,
+        1269317120
+      ],
+      "samples": {
+        "single": [
+          [
+            128.0850719999762,
+            125.6756249999853,
+            129.10623700003043,
+            128.93843699998797,
+            126.36895999997932,
+            128.8615490000211,
+            129.87463700000035
+          ],
+          [
+            127.00665400001299,
+            129.0380240000104,
+            124.98661000000766,
+            124.4894470000304,
+            123.29386499999373,
+            125.50470500002575,
+            129.76765199999818
+          ]
+        ],
+        "tp2": [
+          [
+            85.64802299997609,
+            71.01988199997322,
+            63.58528399999841,
+            63.84283900001719,
+            64.37816699997256,
+            65.42171000000963,
+            64.25805700001774
+          ],
+          [
+            85.60240700001032,
+            70.78106199998047,
+            64.04293299999608,
+            63.497228000017,
+            64.3256810000139,
+            65.30304099999285,
+            64.20317100003103
+          ]
+        ]
+      }
+    },
+    {
+      "tokens": 1306,
+      "backend": "tilelang_group32",
+      "attempt": 2,
+      "uuid": [
+        "15a75c77-28f4-c7c6-b4a6-dfa936dd9678",
+        "69c0a814-0953-51c8-ff38-dbc3f5ace7dd"
+      ],
+      "single_gpu_ms": [
+        130.42796000002,
+        129.03054200000952
+      ],
+      "tp2_ms": 65.72648700000627,
+      "replay_ms": 61.0127389999775,
+      "speedup_vs_single": [
+        1.9844048564471055,
+        1.9631437475122808
+      ],
+      "replay_delta_ms": 4.713748000028772,
+      "replay_delta_percent": 7.171763188907879,
+      "attention_single_gpu_ms": [
+        9.15281900000764,
+        8.852320000016789
+      ],
+      "attention_tp2_ms": [
+        4.620326999997815,
+        4.706478999992214
+      ],
+      "attention_relative_l2_percent": [
+        2.8113124892115593,
+        2.6963625103235245
+      ],
+      "attention_max_abs": 0.009218160063028336,
+      "tp2_vs_unsharded_block_relative_l2_percent": [
+        0.035234319511801004,
+        0.035234319511801004
+      ],
+      "collective_operand_bytes_per_rank": [
+        26757328,
+        26757328
+      ],
+      "collective_entry_skew_ms": [
+        3.126244,
+        2.971712,
+        2.531639,
+        2.528722
+      ],
+      "peak_allocated_bytes_per_rank": [
+        1125099008,
+        1124647936
+      ],
+      "samples": {
+        "single": [
+          [
+            130.42796000002,
+            132.40645700000186,
+            130.09272299996155,
+            133.6906900000372,
+            129.3902119999757,
+            133.73854599996093,
+            129.09776600002942
+          ],
+          [
+            132.41071600003806,
+            128.85972999998785,
+            130.90499500003716,
+            128.78619899998967,
+            128.55015799999592,
+            132.54828899999893,
+            129.03054200000952
+          ]
+        ],
+        "tp2": [
+          [
+            65.73814699999048,
+            65.16989800002193,
+            65.06595799999104,
+            67.00708100004249,
+            66.7693759999679,
+            65.62876499998538,
+            65.4271040000367
+          ],
+          [
+            65.90550099997472,
+            65.2884510000149,
+            64.96785199999522,
+            66.84411699995962,
+            66.86401700000033,
+            65.72648700000627,
+            65.36081299998386
+          ]
+        ]
+      }
+    },
+    {
+      "tokens": 1306,
+      "backend": "kitchen_causal",
+      "attempt": 2,
+      "uuid": [
+        "15a75c77-28f4-c7c6-b4a6-dfa936dd9678",
+        "69c0a814-0953-51c8-ff38-dbc3f5ace7dd"
+      ],
+      "single_gpu_ms": [
+        128.99627599995256,
+        126.36535399997229
+      ],
+      "tp2_ms": 64.31962500005284,
+      "replay_ms": 60.83302799999046,
+      "speedup_vs_single": [
+        2.005550809723262,
+        1.9646469331851433
+      ],
+      "replay_delta_ms": 3.4865970000623747,
+      "replay_delta_percent": 5.420735895241165,
+      "attention_single_gpu_ms": [
+        5.318710999972609,
+        5.19156299998258
+      ],
+      "attention_tp2_ms": [
+        2.668207999988681,
+        2.7486239999916506
+      ],
+      "attention_relative_l2_percent": [
+        2.6103079319000244,
+        2.5747759267687798
+      ],
+      "attention_max_abs": 0.007054396905004978,
+      "tp2_vs_unsharded_block_relative_l2_percent": [
+        0.03510090755298734,
+        0.03510090755298734
+      ],
+      "collective_operand_bytes_per_rank": [
+        26757328,
+        26757328
+      ],
+      "collective_entry_skew_ms": [
+        3.72461,
+        3.633128,
+        3.490249,
+        3.44071
+      ],
+      "peak_allocated_bytes_per_rank": [
+        1125099008,
+        1125131264
+      ],
+      "samples": {
+        "single": [
+          [
+            130.40500300002122,
+            128.09325000000626,
+            125.7433170000013,
+            129.63949400000274,
+            129.4856540000069,
+            125.13724199999388,
+            128.99627599995256
+          ],
+          [
+            128.78462499998022,
+            128.10062899995955,
+            124.92207899998675,
+            125.80580400003782,
+            131.85479699995994,
+            126.36535399997229,
+            125.05896800001892
+          ]
+        ],
+        "tp2": [
+          [
+            64.31962500005284,
+            64.51403099998743,
+            64.02099000001726,
+            64.32049099998949,
+            63.424586000053296,
+            62.65978300001507,
+            66.15043100003959
+          ],
+          [
+            64.30335800001785,
+            64.55136599998923,
+            64.07521799997085,
+            64.47726700002931,
+            63.42266999996582,
+            62.54858500000182,
+            66.01207300002443
+          ]
+        ]
+      }
+    },
+    {
+      "tokens": 4096,
+      "backend": "native",
+      "attempt": 2,
+      "uuid": [
+        "15a75c77-28f4-c7c6-b4a6-dfa936dd9678",
+        "69c0a814-0953-51c8-ff38-dbc3f5ace7dd"
+      ],
+      "single_gpu_ms": [
+        404.48277000001553,
+        407.3576530000764
+      ],
+      "tp2_ms": 205.90100500010067,
+      "replay_ms": 200.4493749999483,
+      "speedup_vs_single": [
+        1.9644526261531252,
+        1.978415078643629
+      ],
+      "replay_delta_ms": 5.451630000152363,
+      "replay_delta_percent": 2.64769470170857,
+      "attention_single_gpu_ms": [
+        58.62779800003182,
+        58.945169000026
+      ],
+      "attention_tp2_ms": [
+        29.53506300002573,
+        30.290143999991415
+      ],
+      "attention_relative_l2_percent": [
+        0.021437069517560303,
+        0.02148455969290808
+      ],
+      "attention_max_abs": 3.074854612350464e-05,
+      "tp2_vs_unsharded_block_relative_l2_percent": [
+        0.03454674151726067,
+        0.03454674151726067
+      ],
+      "collective_operand_bytes_per_rank": [
+        83918848,
+        83918848
+      ],
+      "collective_entry_skew_ms": [
+        11.978886,
+        11.955462,
+        11.906939,
+        11.768813
+      ],
+      "peak_allocated_bytes_per_rank": [
+        2402698752,
+        2403292672
+      ],
+      "samples": {
+        "single": [
+          [
+            406.4044169999761,
+            402.0759119999866,
+            405.3259699999785,
+            412.14784999999665,
+            403.2044649999875,
+            403.7129729999833,
+            404.48277000001553
+          ],
+          [
+            408.65535399996133,
+            407.3576530000764,
+            399.40036999996664,
+            411.014813999941,
+            401.7612449999888,
+            408.22060300001795,
+            406.44582700008414
+          ]
+        ],
+        "tp2": [
+          [
+            205.7087150000143,
+            205.25652200001332,
+            205.27454599994144,
+            206.44868400006544,
+            205.11340299992753,
+            206.60108699996727,
+            208.44352400001753
+          ],
+          [
+            205.90100500010067,
+            205.27687799994965,
+            205.22286799996436,
+            206.18580899997596,
+            205.11599600001773,
+            206.64323699998022,
+            208.60038600005737
+          ]
+        ]
+      }
+    },
+    {
+      "tokens": 4096,
+      "backend": "tilelang_group32",
+      "attempt": 2,
+      "uuid": [
+        "15a75c77-28f4-c7c6-b4a6-dfa936dd9678",
+        "69c0a814-0953-51c8-ff38-dbc3f5ace7dd"
+      ],
+      "single_gpu_ms": [
+        438.3475280000084,
+        429.0238110000928
+      ],
+      "tp2_ms": 222.39080899998953,
+      "replay_ms": 216.24176199998146,
+      "speedup_vs_single": [
+        1.971068543574699,
+        1.9291436230177705
+      ],
+      "replay_delta_ms": 6.149047000008068,
+      "replay_delta_percent": 2.764973529103155,
+      "attention_single_gpu_ms": [
+        81.46028700002717,
+        81.44118200004868
+      ],
+      "attention_tp2_ms": [
+        42.209734000039134,
+        41.28103799996552
+      ],
+      "attention_relative_l2_percent": [
+        3.0493127182126045,
+        2.9491599649190903
+      ],
+      "attention_max_abs": 0.010873585939407349,
+      "tp2_vs_unsharded_block_relative_l2_percent": [
+        0.03468545328360051,
+        0.03468545328360051
+      ],
+      "collective_operand_bytes_per_rank": [
+        83918848,
+        83918848
+      ],
+      "collective_entry_skew_ms": [
+        0.13812,
+        0.120528,
+        0.057569,
+        0.059037
+      ],
+      "peak_allocated_bytes_per_rank": [
+        1993003520,
+        1992548864
+      ],
+      "samples": {
+        "single": [
+          [
+            438.3475280000084,
+            435.5070039999873,
+            437.5540009999668,
+            442.9546989999835,
+            436.5247419999605,
+            438.8886110000385,
+            443.77566900004695
+          ],
+          [
+            427.2443070000236,
+            427.10577299999386,
+            442.407641999921,
+            428.7833490000139,
+            429.3771379999498,
+            429.0238110000928,
+            440.6219280000414
+          ]
+        ],
+        "tp2": [
+          [
+            221.32501399994453,
+            220.35387799996897,
+            222.28809900002489,
+            222.39080899998953,
+            223.40912899994692,
+            223.03595899995798,
+            223.55438499994307
+          ],
+          [
+            221.32277599996542,
+            220.53929100002279,
+            222.23791799990522,
+            222.38977799997883,
+            223.32893300006162,
+            223.07658099998662,
+            223.48719399997208
+          ]
+        ]
+      }
+    },
+    {
+      "tokens": 4096,
+      "backend": "kitchen_causal",
+      "attempt": 2,
+      "uuid": [
+        "15a75c77-28f4-c7c6-b4a6-dfa936dd9678",
+        "69c0a814-0953-51c8-ff38-dbc3f5ace7dd"
+      ],
+      "single_gpu_ms": [
+        407.1546399999306,
+        401.8142469999475
+      ],
+      "tp2_ms": 204.0515809999306,
+      "replay_ms": 201.7103739999584,
+      "speedup_vs_single": [
+        1.9953515577028003,
+        1.969179778127199
+      ],
+      "replay_delta_ms": 2.3412069999722007,
+      "replay_delta_percent": 1.1473603823598884,
+      "attention_single_gpu_ms": [
+        37.266888999965886,
+        38.270814000043174
+      ],
+      "attention_tp2_ms": [
+        19.261848000041937,
+        19.390793000070516
+      ],
+      "attention_relative_l2_percent": [
+        2.8821537271142006,
+        2.7829336002469063
+      ],
+      "attention_max_abs": 0.00650583952665329,
+      "tp2_vs_unsharded_block_relative_l2_percent": [
+        0.034506936208344996,
+        0.034506936208344996
+      ],
+      "collective_operand_bytes_per_rank": [
+        83918848,
+        83918848
+      ],
+      "collective_entry_skew_ms": [
+        6.195492,
+        6.144865,
+        6.019618,
+        5.976727
+      ],
+      "peak_allocated_bytes_per_rank": [
+        1993003520,
+        1992548864
+      ],
+      "samples": {
+        "single": [
+          [
+            404.06777400005467,
+            407.1546399999306,
+            406.0608140000568,
+            408.90413400006764,
+            406.7504160000226,
+            409.205826999937,
+            408.21534600001996
+          ],
+          [
+            403.8355479999609,
+            401.8142469999475,
+            400.6952890000548,
+            399.1677740000341,
+            404.3989420000571,
+            395.97923399992396,
+            405.18874300005336
+          ]
+        ],
+        "tp2": [
+          [
+            205.766232999963,
+            203.48593599999276,
+            203.08234100002664,
+            203.51406500003577,
+            204.19922600001428,
+            204.0515809999306,
+            204.29004099992198
+          ],
+          [
+            205.71637399996234,
+            203.48936299990328,
+            203.03620499998942,
+            203.59565799992652,
+            204.1708719999633,
+            204.01438899989444,
+            204.25152000007074
+          ]
+        ]
+      }
+    }
+  ],
+  "all_48_block_attention_cases_finite": true,
+  "replay_exact_all_12_tp2_configurations": true,
+  "finite_padding_controls": 24,
+  "tp2_faster_than_both_unsharded_controls": true,
+  "profiles": [
+    {
+      "rank": 0,
+      "probe_kernel_events": 1,
+      "scopes": {
+        "TE/tp2_actual_collectives": {
+          "cpu_scope_ms": 31.523194,
+          "kernel_events": 132,
+          "kernel_duration_sum_ms": 20.606417999999998,
+          "families": {
+            "other": {
+              "events": 114,
+              "duration_sum_ms": 4.674566000000001
+            },
+            "int8_copy": {
+              "events": 7,
+              "duration_sum_ms": 7.391818
+            },
+            "int8_gemm": {
+              "events": 7,
+              "duration_sum_ms": 6.713790999999999
+            },
+            "nccl": {
+              "events": 4,
+              "duration_sum_ms": 1.8262429999999998
+            }
+          },
+          "top_kernel_names": [
+            {
+              "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1})",
+              "events": 5,
+              "duration_sum_ms": 7.31803
+            },
+            {
+              "name": "volta_igemm_int8_128x128_ldg4_nn",
+              "events": 5,
+              "duration_sum_ms": 5.626754999999999
+            },
+            {
+              "name": "ncclDevKernel_AllReduce_f16_RING(ncclDevKernelArgsStorage<4096ul>)",
+              "events": 2,
+              "duration_sum_ms": 1.787844
+            },
+            {
+              "name": "void cutlass::Kernel2<cutlass_75_tensorop_i8816gemm_s8_128x128_tn_align16>(cutlass_75_tensorop_i8816gemm_s8_128x128_tn_align16::Params)",
+              "events": 2,
+              "duration_sum_ms": 1.087036
+            },
+            {
+              "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+              "events": 20,
+              "duration_sum_ms": 0.77559
+            },
+            {
+              "name": "main_kernel",
+              "events": 9,
+              "duration_sum_ms": 0.7473700000000001
+            },
+            {
+              "name": "void at::native::vectorized_elementwise_kernel<4, at::native::float16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::float16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul>)",
+              "events": 17,
+              "duration_sum_ms": 0.61937
+            },
+            {
+              "name": "void at::native::vectorized_elementwise_kernel<4, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul> >(int, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul>)",
+              "events": 5,
+              "duration_sum_ms": 0.530671
+            }
+          ]
+        },
+        "TE/tp2_exact_collective_result_replay": {
+          "cpu_scope_ms": 21.412971000000002,
+          "kernel_events": 128,
+          "kernel_duration_sum_ms": 20.651571,
+          "families": {
+            "other": {
+              "events": 114,
+              "duration_sum_ms": 4.763137999999998
+            },
+            "int8_copy": {
+              "events": 7,
+              "duration_sum_ms": 8.265166
+            },
+            "int8_gemm": {
+              "events": 7,
+              "duration_sum_ms": 7.623267000000001
+            }
+          },
+          "top_kernel_names": [
+            {
+              "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1})",
+              "events": 5,
+              "duration_sum_ms": 8.191696
+            },
+            {
+              "name": "volta_igemm_int8_128x128_ldg4_nn",
+              "events": 5,
+              "duration_sum_ms": 6.392812
+            },
+            {
+              "name": "void cutlass::Kernel2<cutlass_75_tensorop_i8816gemm_s8_128x128_tn_align16>(cutlass_75_tensorop_i8816gemm_s8_128x128_tn_align16::Params)",
+              "events": 2,
+              "duration_sum_ms": 1.2304549999999999
+            },
+            {
+              "name": "main_kernel",
+              "events": 9,
+              "duration_sum_ms": 0.817223
+            },
+            {
+              "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+              "events": 20,
+              "duration_sum_ms": 0.7854779999999999
+            },
+            {
+              "name": "void at::native::vectorized_elementwise_kernel<4, at::native::float16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::float16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul>)",
+              "events": 17,
+              "duration_sum_ms": 0.618122
+            },
+            {
+              "name": "void at::native::vectorized_elementwise_kernel<4, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul> >(int, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul>)",
+              "events": 5,
+              "duration_sum_ms": 0.531631
+            },
+            {
+              "name": "void at::native::(anonymous namespace)::vectorized_layer_norm_kernel<float, float, true>(int, float, float const*, float const*, float const*, float*, float*, float*)",
+              "events": 4,
+              "duration_sum_ms": 0.273205
+            }
+          ]
+        }
+      }
+    },
+    {
+      "rank": 1,
+      "probe_kernel_events": 1,
+      "scopes": {
+        "TE/tp2_actual_collectives": {
+          "cpu_scope_ms": 31.238046999999998,
+          "kernel_events": 132,
+          "kernel_duration_sum_ms": 20.362342000000005,
+          "families": {
+            "other": {
+              "events": 114,
+              "duration_sum_ms": 4.588274999999999
+            },
+            "int8_copy": {
+              "events": 7,
+              "duration_sum_ms": 6.860138
+            },
+            "int8_gemm": {
+              "events": 7,
+              "duration_sum_ms": 6.167294
+            },
+            "nccl": {
+              "events": 4,
+              "duration_sum_ms": 2.7466350000000004
+            }
+          },
+          "top_kernel_names": [
+            {
+              "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1})",
+              "events": 5,
+              "duration_sum_ms": 6.791917
+            },
+            {
+              "name": "volta_igemm_int8_128x128_ldg4_nn",
+              "events": 5,
+              "duration_sum_ms": 5.153278
+            },
+            {
+              "name": "ncclDevKernel_AllReduce_f16_RING(ncclDevKernelArgsStorage<4096ul>)",
+              "events": 2,
+              "duration_sum_ms": 1.818567
+            },
+            {
+              "name": "void cutlass::Kernel2<cutlass_75_tensorop_i8816gemm_s8_128x128_tn_align16>(cutlass_75_tensorop_i8816gemm_s8_128x128_tn_align16::Params)",
+              "events": 2,
+              "duration_sum_ms": 1.014016
+            },
+            {
+              "name": "ncclDevKernel_AllReduce_f32_RING(ncclDevKernelArgsStorage<4096ul>)",
+              "events": 2,
+              "duration_sum_ms": 0.928068
+            },
+            {
+              "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+              "events": 20,
+              "duration_sum_ms": 0.7686480000000001
+            },
+            {
+              "name": "main_kernel",
+              "events": 9,
+              "duration_sum_ms": 0.7130689999999998
+            },
+            {
+              "name": "void at::native::vectorized_elementwise_kernel<4, at::native::float16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::float16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul>)",
+              "events": 17,
+              "duration_sum_ms": 0.623116
+            }
+          ]
+        },
+        "TE/tp2_exact_collective_result_replay": {
+          "cpu_scope_ms": 20.842958,
+          "kernel_events": 128,
+          "kernel_duration_sum_ms": 19.998545,
+          "families": {
+            "other": {
+              "events": 114,
+              "duration_sum_ms": 4.765131
+            },
+            "int8_copy": {
+              "events": 7,
+              "duration_sum_ms": 7.968424
+            },
+            "int8_gemm": {
+              "events": 7,
+              "duration_sum_ms": 7.264990000000001
+            }
+          },
+          "top_kernel_names": [
+            {
+              "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#2}::operator()() const::{lambda(signed char)#1} const&)::{lambda(int)#1})",
+              "events": 5,
+              "duration_sum_ms": 7.8943140000000005
+            },
+            {
+              "name": "volta_igemm_int8_128x128_ldg4_nn",
+              "events": 5,
+              "duration_sum_ms": 6.041892000000001
+            },
+            {
+              "name": "void cutlass::Kernel2<cutlass_75_tensorop_i8816gemm_s8_128x128_tn_align16>(cutlass_75_tensorop_i8816gemm_s8_128x128_tn_align16::Params)",
+              "events": 2,
+              "duration_sum_ms": 1.223098
+            },
+            {
+              "name": "main_kernel",
+              "events": 9,
+              "duration_sum_ms": 0.80135
+            },
+            {
+              "name": "void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, 4, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1> >(int, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#7}::operator()() const::{lambda(float)#1}, std::array<char*, 2ul>, TrivialOffsetCalculator<1, unsigned int>, TrivialOffsetCalculator<1, unsigned int>, at::native::memory::LoadWithCast<1>, at::native::memory::StoreWithCast<1>)",
+              "events": 20,
+              "duration_sum_ms": 0.7873039999999998
+            },
+            {
+              "name": "void at::native::vectorized_elementwise_kernel<4, at::native::float16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul> >(int, at::native::float16_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda(float)#1}, std::array<char*, 2ul>)",
+              "events": 17,
+              "duration_sum_ms": 0.617902
+            },
+            {
+              "name": "void at::native::vectorized_elementwise_kernel<4, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul> >(int, at::native::BinaryFunctor<float, float, float, at::native::binary_internal::MulFunctor<float> >, std::array<char*, 3ul>)",
+              "events": 5,
+              "duration_sum_ms": 0.530319
+            },
+            {
+              "name": "volta_sgemm_128x64_nn",
+              "events": 1,
+              "duration_sum_ms": 0.292087
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "profiler_tools": {
+    "nsys": null,
+    "ncu": "/usr/local/cuda/bin/ncu"
+  },
+  "limits": [
+    "S128 and the other lengths use separate allocations; per-length controls remain paired.",
+    "Single GPU uses the TP block adapter at world_size=1; it is not Native ComfyUI whole-layer/stage timing.",
+    "world_size gates differ: TP2 enables fused quantization/transport unavailable to world_size=1.",
+    "Backend order is fixed and short-shape NCCL/rank skew varies; block-level backend rankings are not isolated attention gains.",
+    "Replay includes cached GPU copies/cache footprint and is not a pure wire-time or speedup upper bound.",
+    "Profiled kernel sums include waiting/overlap and cannot be subtracted from unprofiled wall time.",
+    "Seeded block0 inputs are not a real full-TE distribution or generation-quality test.",
+    "Nsight Systems is absent; Nsight Compute exists but was not invoked. No hardware-counter stall attribution."
+  ]
+}

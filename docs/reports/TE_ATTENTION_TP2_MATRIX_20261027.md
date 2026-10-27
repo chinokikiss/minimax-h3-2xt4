@@ -1,10 +1,146 @@
 # TE attention and TP2 communication — 2026-10-27
 
-Status: [private T4 job](https://www.kaggle.com/code/pamcks/h3-te-attention-tp2-matrix-20261027)
-version 1 failed in an extra mask control after completing all S128 points on
-both physical T4s. Its final artifacts were collected once. The corrected
-version 2 has been accepted; its final artifacts have not been collected.
-**The full matrix is pending; no overall TE speedup conclusion is claimed.**
+Status: **complete on physical 2×Tesla T4, SM75**. The corrected
+[private job](https://www.kaggle.com/code/pamcks/h3-te-attention-tp2-matrix-20261027)
+version 2 completed S353/S1306/S4096; S128 is retained from version 1.
+Both workers exited with code 0, and final artifacts were collected once per
+attempt. The second experiment took 208.00 seconds, excluding provider startup
+and setup. No full H3 generation was run.
+
+**NCCL did not erase TP2's gain in this resident-block experiment.** All twelve
+backend/length combinations were faster with TP2 than on either unsharded
+control. This does not establish a speedup for the complete Native ComfyUI TE:
+the control is the TP block adapter at `world_size=1`, and TP2 also enables
+fused paths unavailable to that control. Weight streaming, vision, embeddings
+and full-stage scheduling are outside the measurement.
+
+## Measured results and decision
+
+Wall times below are medians of seven samples after three warm-ups. Both
+physical single-GPU controls are shown; TP2 and replay use the slower owner's
+median. S128 uses allocation 1; all other lengths use allocation 2. Each row's
+controls share an allocation. Raw samples, including early outliers, remain in
+the [offline analysis](../data/te_attention_tp2_matrix_20261027/analysis.json).
+
+| Tokens | Attention | Single GPU0 / GPU1, ms | TP2, ms | Exact-result replay, ms |
+|---:|---|---:|---:|---:|
+| 128 | Native SDPA | 29.060 / 28.783 | 23.978 | 12.851 |
+| 128 | Group32 Masked | 29.272 / 33.512 | 24.156 | 12.882 |
+| 128 | Kitchen causal | 29.616 / 29.152 | 13.351 | 13.168 |
+| 353 | Native SDPA | 47.287 / 46.355 | 30.152 | 22.048 |
+| 353 | Group32 Masked | 47.835 / 47.353 | 23.476 | 21.947 |
+| 353 | Kitchen causal | 47.750 / 47.655 | 23.137 | 22.203 |
+| 1306 | Native SDPA | 128.862 / 125.505 | 64.378 | 60.927 |
+| 1306 | Group32 Masked | 130.428 / 129.031 | 65.726 | 61.013 |
+| 1306 | Kitchen causal | 128.996 / 126.365 | 64.320 | 60.833 |
+| 4096 | Native SDPA | 404.483 / 407.358 | 205.901 | 200.449 |
+| 4096 | Group32 Masked | 438.348 / 429.024 | 222.391 | 216.242 |
+| 4096 | Kitchen causal | 407.155 / 401.814 | 204.052 | 201.710 |
+
+At S1306, TP2 saves roughly half the block latency for all three backends.
+Native and Kitchen full-block medians differ by only 0.059 ms; this batch does
+not establish a reliable block-level advantage between them at that shape.
+The fixed Native→Group32→Kitchen order and changing rank readiness particularly
+affect the shorter shapes. For example, Native S128's matched collective entry
+skew reaches 7.54 ms in the diagnostic pass. The first Group32 S353 TP2 samples
+are 37.70/32.54 ms before settling near 23 ms. All seven samples are retained;
+short-shape whole-block rankings cannot be assigned entirely to attention.
+
+The attention-only result is clearer:
+
+| Tokens | Native SDPA, ms | Group32 Masked, ms | Kitchen causal, ms |
+|---:|---:|---:|---:|
+| 128 | 0.416 | 0.483 | 0.496 |
+| 353 | 0.764 | 0.784 | 0.507 |
+| 1306 | 3.912 | 4.706 | 2.749 |
+| 4096 | 30.290 | 42.210 | 19.391 |
+
+These are slower-owner TP2 attention-call medians, including wrapper preparation
+and launches. Kitchen is fastest for S353 and longer; Native wins S128.
+Group32 offers no speed advantage in this matrix. Keep all three implementations
+available and retain the current TE default; no full-TE quality or semantic
+selection is justified by these seeded inputs alone.
+
+![Physical T4 block, attention and collective-replay comparisons](../data/te_attention_tp2_matrix_20261027/comparison.png)
+
+### Communication and profiler evidence
+
+Each block performs exactly **four AllReduce calls per rank**: two FP32 MAX
+reductions of `[S,1]` row scales and two power-of-two scaled FP16 SUM reductions
+of `[S,5120]`. There is **no activation AllGather** in this path. Total collective
+operand bytes per rank are `20488*S`: 2.62/7.23/26.76/83.92 MB for
+S128/S353/S1306/S4096. These are input operand sizes, not measured PCIe traffic.
+
+Actual and replayed block outputs are byte-exact for all twelve configurations;
+both owners' actual output hashes also agree. Kitchen's observed real-minus-
+replay deltas are 0.183/0.934/3.487/2.341 ms across the four lengths. Replay
+retains GPU copies of cached collective results, changes the cache footprint,
+and is timed separately. Its delta is neither pure network time nor a bound on
+an achievable communication-free implementation. At the same short shapes,
+Native/Group32 show much larger deltas because readiness/skew is not stationary.
+
+Both owners' minimal CUDA probes exported kernel coverage before the real
+S353 Kitchen trace. Each full trace contains 132 actual-pass kernels and 128
+replay kernels; the former contains four NCCL kernels, the latter none. The
+analyzer counts CPU `user_annotation` scopes only, excluding identically named
+GPU annotations to avoid double-counting.
+
+| Actual S353 profile family | GPU0 duration sum, ms | GPU1 duration sum, ms | Kernels per rank |
+|---|---:|---:|---:|
+| INT8 copy/layout | 7.392 | 6.860 | 7 |
+| INT8 GEMM | 6.714 | 6.167 | 7 |
+| NCCL | 1.826 | 2.747 | 4 |
+| Other | 4.675 | 4.588 | 114 |
+| Total | 20.606 | 20.362 | 132 |
+
+These duration sums include waiting and overlap; they are not exclusive
+critical-path shares and must not be subtracted from unprofiled medians.
+The separately instrumented CPU scopes are 31.52/31.24 ms; they are not the
+steady-state timing quoted above.
+
+The strongest next optimization candidate is **repeated column-weight layout
+conversion**. Five large signed-byte copy kernels account for 7.318/6.792 ms
+of those copy sums. Their CPU correlations lead to `aten::copy_`;
+`patches/dit_column_linear.py::shared_column_linears` explicitly materializes
+`weight.T.contiguous()` for Q/K/V and Gate/Up in its eager INT8 GEMM path.
+Prepacking/caching that layout, or qualifying a TE column GEMM that consumes
+the stored layout directly, deserves a controlled ablation. This trace does
+not establish guaranteed savings, bandwidth saturation or hardware stall causes.
+
+Nsight Systems was absent. Nsight Compute was present at
+`/usr/local/cuda/bin/ncu` but was not invoked. The archived evidence is Torch
+profiler CUDA/NCCL traces; no Nsight or hardware-counter attribution is claimed.
+
+### Numerical and memory observations
+
+All 48 retained rank/topology/backend/length case records have finite attention
+and block outputs; all 24 extra padding controls are finite. The following
+relative L2 percentages describe attention outputs against an FP32 QK/softmax/PV
+oracle on the same Q/K/V, with the range spanning the two TP2 owners:
+
+| Tokens | Native SDPA | Group32 Masked | Kitchen causal |
+|---:|---:|---:|---:|
+| 128 | 0.02085–0.02100% | 2.122–2.273% | 4.292–4.496% |
+| 353 | 0.02110–0.02125% | 2.475–2.570% | 2.369–2.389% |
+| 1306 | 0.02132–0.02141% | 2.696–2.811% | 2.575–2.610% |
+| 4096 | 0.02144–0.02148% | 2.949–3.049% | 2.783–2.882% |
+
+Group32 is more accurate than Kitchen at S128, but not consistently so at the
+longer lengths. These seeded trained-block inputs cannot establish actual TE
+distribution error, prompt semantics or generation quality. Same-backend TP2
+versus unsharded block relative L2 is 0.0345–0.0368%, with maximum absolute
+difference 0.0001220703125. That comparison includes different GEMM shapes,
+quantization/transport paths and rounding; the block reference uses FP16 flow,
+not Native FP32 tensor-flow ground truth.
+
+At S4096, TP2 per-rank peak allocated memory is about 2.238 GiB for Native and
+1.856 GiB for Group32/Kitchen. The harness keeps both unsharded and TP2 control
+models resident. These peaks are useful only within this harness and cannot be
+used as full-encoder residency requirements.
+
+Actual software: Torch 2.11.0+cu128 / CUDA 12.8, Kitchen 0.2.37, TileLang 0.1.13.
+Both allocations' physical GPU UUIDs are retained per row in the offline
+analysis. The frozen runtime and attention API were unchanged.
 
 ## Version 1 failure and bounded recovery
 
@@ -32,8 +168,8 @@ mask fix. Performance checkpoints are now saved before extra mask diagnostics.
 
 The [attempt evidence](../data/te_attention_tp2_matrix_20261027/manifest.json)
 retains version 1 sources, per-rank results, traceback, collection receipt and
-the version 2 submission/qualification. There was one final collection and one
-new version submission in response to the reported failure, with no polling.
+the version 2 submission/qualification, completed results and compressed CUDA
+traces. Each attempt had one final collection, with no status/list/log polling.
 
 The question is whether the current TE's smaller per-rank compute is outweighed
 by real NCCL communication. Historical scripts estimated transport time; those
@@ -146,6 +282,12 @@ private credentials. One bounded submission uses a 300-second setup cap,
 polling or automatic replacement is configured.
 
 Sources: `benchmarks/build_te_parallel_job.py`, `run_te_parallel_batch.py`,
-`te_parallel_matrix.py`, `test_te_parallel_matrix.py`.
+`te_parallel_matrix.py`, `test_te_parallel_matrix.py` and the offline analyzer
+`analyze_te_parallel_results.py`. Reproduce without network access:
+
+```powershell
+python benchmarks/analyze_te_parallel_results.py --evidence docs/data/te_attention_tp2_matrix_20261027 --output docs/data/te_attention_tp2_matrix_20261027/analysis.json --plot docs/data/te_attention_tp2_matrix_20261027/comparison.png
+```
+
 Evidence: `D:/attention_eval/h3_te_parallel_20261027/`.
 Machine-readable [status and source bindings](../data/te_attention_tp2_matrix_20261027.json).

@@ -1,10 +1,10 @@
 {
   "date": "2026-10-27",
-  "status": "retry_accepted_final_artifacts_pending",
+  "status": "complete",
   "kernel": "pamcks/h3-te-attention-tp2-matrix-20261027",
   "version": 2,
   "submitted_utc": "2026-10-27T06:05:10.191682+00:00",
-  "final_collection_count": 0,
+  "final_collection_count": 1,
   "scope": "Resident trained TE block and attention; not full TE/H3, vision, embedding or weight streaming",
   "input_distribution": "Seeded residuals through trained block0; not captured H3 activations",
   "backends": [
@@ -24,7 +24,8 @@
     "kv_heads": 8,
     "head_dim": 128,
     "intermediate": 25600,
-    "controls": "Physical GPU0 and GPU1, serialized through CPU Gloo barriers"
+    "controls": "Physical GPU0 and GPU1, serialized through CPU Gloo barriers",
+    "implementation": "Current TPTransformerBlockINT8 adapter at world_size=1; not Native ComfyUI full-layer/stage"
   },
   "tp2_per_rank": {
     "hidden": 5120,
@@ -132,9 +133,88 @@
   "execution_budget_seconds": 900,
   "automatic_polling": false,
   "automatic_retry": false,
-  "physical_t4_results": null,
+  "physical_t4_results": {
+    "status": "complete",
+    "unique_backend_length_configurations": 12,
+    "retained_case_records": 48,
+    "hardware_attempt2": [
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "15a75c77-28f4-c7c6-b4a6-dfa936dd9678"
+      },
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "69c0a814-0953-51c8-ff38-dbc3f5ace7dd"
+      }
+    ],
+    "hardware_attempt1": [
+      {
+        "rank": 0,
+        "device": "Tesla T4",
+        "uuid": "947a0cb1-986b-8a6f-39b1-0df812e273b2",
+        "capability": [
+          7,
+          5
+        ]
+      },
+      {
+        "rank": 1,
+        "device": "Tesla T4",
+        "uuid": "e7a851ea-86be-138f-f21d-3c88b1840ebc",
+        "capability": [
+          7,
+          5
+        ]
+      }
+    ],
+    "versions": {
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "kitchen": "0.2.37",
+      "tilelang": "0.1.13"
+    },
+    "profiler_tools": {
+      "nsys": null,
+      "ncu": "/usr/local/cuda/bin/ncu"
+    },
+    "profiler": "Torch profiler with CPU/CUDA; both-owner minimal probe and actual/replay coverage passed",
+    "nsight_systems": "absent",
+    "nsight_compute": "installed but not invoked",
+    "worker_exit_code": 0,
+    "full_te_encoder": false,
+    "full_h3_pipeline": false,
+    "input_distribution": "Seeded residuals through trained block0; not captured H3 activations",
+    "analysis": "te_attention_tp2_matrix_20261027/analysis.json",
+    "figure": "te_attention_tp2_matrix_20261027/comparison.png",
+    "conclusion": "All 12 current TP2 adapter configurations faster than both paired unsharded adapter controls; no full Native TE speedup claim",
+    "decision": "Retain current TE default and all attention choices; whole-stage latency and generation quality not established",
+    "validation": {
+      "all_48_block_attention_cases_finite": true,
+      "replay_exact_all_12_tp2_configurations": true,
+      "finite_padding_controls": 24,
+      "tp2_faster_than_both_unsharded_controls": true
+    },
+    "limitations": [
+      "S128 and the other lengths use separate allocations; per-length controls remain paired.",
+      "Single GPU uses the TP block adapter at world_size=1; it is not Native ComfyUI whole-layer/stage timing.",
+      "world_size gates differ: TP2 enables fused quantization/transport unavailable to world_size=1.",
+      "Backend order is fixed and short-shape NCCL/rank skew varies; block-level backend rankings are not isolated attention gains.",
+      "Replay includes cached GPU copies/cache footprint and is not a pure wire-time or speedup upper bound.",
+      "Profiled kernel sums include waiting/overlap and cannot be subtracted from unprofiled wall time.",
+      "Seeded block0 inputs are not a real full-TE distribution or generation-quality test.",
+      "Nsight Systems is absent; Nsight Compute exists but was not invoked. No hardware-counter stall attribution."
+    ]
+  },
   "evidence_directory": "D:\\attention_eval\\h3_te_parallel_20261027",
-  "submission_receipt_sha256": "0c666d651ffb217db5316bf3c801afca25ae7302096ec93a510c8c6be255f697",
+  "submission_receipt_sha256": "26318112a5a513ed1739ce36707b958aaa6736db3c22d897e3eb4f21f54fece9",
   "executed_lengths": [
     353,
     1306,
@@ -156,16 +236,21 @@
     },
     {
       "version": 2,
-      "status": "accepted_final_artifacts_pending",
+      "status": "complete",
       "executed_lengths": [
         353,
         1306,
         4096
       ],
-      "final_collection_count": 0
+      "final_collection_count": 1,
+      "complete_configurations_per_rank": 18,
+      "worker_exit_code": 0
     }
   ],
   "recovery": "Match additive control dtype to query; keep Native finite sentinel; retain complete previous points with allocation identity",
   "attempt_evidence_manifest": "te_attention_tp2_matrix_20261027/manifest.json",
-  "active_evidence_directory": "D:\\attention_eval\\h3_te_parallel_20261027\\retry_v2"
+  "active_evidence_directory": "D:\\attention_eval\\h3_te_parallel_20261027\\retry_v2",
+  "total_final_collections_across_attempts": 2,
+  "collected_utc": "2026-10-27T06:11:20.368858+00:00",
+  "analysis_source_sha256": "7e8d8317c11322c0ca6464bb99e1310e3855d5c9230ab5b6921f96cd66485ab9"
 }

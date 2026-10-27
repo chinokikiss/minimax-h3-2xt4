@@ -115,7 +115,7 @@
       "note": "Retained points belong to the previous allocation; comparisons remain paired within each allocation"
     }
   },
-  "final_collection_count": 0,
+  "final_collection_count": 1,
   "earliest_final_collection_seconds": 1500,
   "experiment_kind": "te_parallel_matrix",
   "result_relative": "te_matrix/result.json",

@@ -14,6 +14,9 @@ implement the [TE attention/communication comparison](../docs/reports/TE_ATTENTI
 The resident trained-block matrix measures single-GPU and actual NCCL TP2,
 with exact fixed-input collective-result replay as a separate causal ablation.
 It uses two public TE shards and the existing CPU-qualified frozen core setup.
+`analyze_te_parallel_results.py` merges retained points by allocation and verifies
+finite outputs, exact replay, collective inventories and CUDA trace coverage.
+It reproduces the archived tables and figure offline, without Kaggle calls.
 
 `run_vae_temporal_batch.py` and `run_vae_temporal_compare.py` implement the
 [decoder-only Temporal/Query comparison](../docs/reports/VAE_TEMPORAL_QUERY_20261027.md).

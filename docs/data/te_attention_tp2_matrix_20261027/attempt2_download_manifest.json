@@ -1,0 +1,110 @@
+{
+  "h3-te-attention-tp2-matrix-20261027.log": {
+    "bytes": 7890,
+    "sha256": "f351383ac0b3037dd79457fed5da648e79b91b9b388373c8eb22241e319ad8c2"
+  },
+  "light_setup\\api_probe.log": {
+    "bytes": 1420,
+    "sha256": "16401c525113952b9f12881dd4803be748019d8aa892a98da31d95f79f04a26d"
+  },
+  "light_setup\\bounded_worker.py": {
+    "bytes": 1985,
+    "sha256": "3f4c9632991036b2b356cb5351124949d776e187f1594a7cab33c8d3d096da11"
+  },
+  "light_setup\\cpu_qualification.json": {
+    "bytes": 112205,
+    "sha256": "00488beaa0b44c5fa381520b08ca61c1f1557c8faa1be3f796286fce3a286d2e"
+  },
+  "light_setup\\delivery_binding.json": {
+    "bytes": 676,
+    "sha256": "bf738449775c458ed954da4fdb73d3a3a31a02cdda938ec7739c2e9c28ff8c90"
+  },
+  "light_setup\\direct-core.txt": {
+    "bytes": 5811,
+    "sha256": "f67dca5cc9543d06bcca19426bda0914306d6e143f8712037e84ee54f30e8eee"
+  },
+  "light_setup\\direct_pip.log": {
+    "bytes": 15657,
+    "sha256": "6c5dac4e9b522e895d08a7e59ba7cc2d21924eda3f99ef686391326da0a3336a"
+  },
+  "light_setup\\execution_env.json": {
+    "bytes": 449,
+    "sha256": "53f8cbaa42b4a30ef25583746477a1d1570f37b3f30affd13d09ffcec0dd7911"
+  },
+  "light_setup\\notebook_worker.log": {
+    "bytes": 211,
+    "sha256": "a236037b442479f19c7968c83a44398e1f9c04babd0ba7e40eb7071543ebf739"
+  },
+  "light_setup\\runtime_profile.json": {
+    "bytes": 27855,
+    "sha256": "fb2c2512300010c032bc9c2a3dc28f2e534102c9fb89171861508158e03af13f"
+  },
+  "light_setup\\setup_receipt.json": {
+    "bytes": 120858,
+    "sha256": "fc077e8ed3f6110769bcebc90be960057b1ec9dd4970f2a2e9fcbd059101112b"
+  },
+  "light_setup\\supervision.json": {
+    "bytes": 207,
+    "sha256": "0fef81b23a58f8b034689b4901de9568bb0a539d2199e5a007b197dbb6d358ff"
+  },
+  "te_matrix\\rank0.json": {
+    "bytes": 94325,
+    "sha256": "5ed91d34f556af216360c4f33cceeff63e7847b4bf8ba26e6454c1f9b55925db"
+  },
+  "te_matrix\\rank0_probe_trace.json": {
+    "bytes": 12929,
+    "sha256": "7952b917cc53ed7d1889da680c5fd6f1e5f21236646c335249f12614ee5d04d5"
+  },
+  "te_matrix\\rank0_tp2_trace.json": {
+    "bytes": 663390,
+    "sha256": "2838faf80c1f519387fad59ada06503af92be0feef1da2b0c48e9ecfe18fdec0"
+  },
+  "te_matrix\\rank1.json": {
+    "bytes": 94317,
+    "sha256": "305db14f2dd73f599c524d2ccd9372cabf08d66be70a6f808c532820ec427b5b"
+  },
+  "te_matrix\\rank1_probe_trace.json": {
+    "bytes": 12940,
+    "sha256": "05018e097a99dfba4e0524ee40758b3299b79406564023c58f7c512f6cb3ad2e"
+  },
+  "te_matrix\\rank1_tp2_trace.json": {
+    "bytes": 657140,
+    "sha256": "cf5c912151f3dbb6d88b81e6b7a4cf2b0057b05dc13f08240e6f3fd4863ebb74"
+  },
+  "te_matrix\\result.json": {
+    "bytes": 218764,
+    "sha256": "d27c27305631a6104fd8ef3da69126d6d8fc3443c95a9c0a027de0e795ec7695"
+  },
+  "te_matrix\\workers.log": {
+    "bytes": 30606,
+    "sha256": "d809588ce80c63e396e998c020ca5f32de735e84dff16880d9280189b37f87a7"
+  },
+  "te_sources\\run_te_parallel_batch.py": {
+    "bytes": 6338,
+    "sha256": "0b5ac58b21e599c4bd383b4546a6bf77f411d17b2248d37d357d581fff578c45"
+  },
+  "te_sources\\source_hashes.json": {
+    "bytes": 295,
+    "sha256": "d607da84825e0aeb5bf5f0fb7273dd3061d300eda5d53d145b5e9777457f113a"
+  },
+  "te_sources\\test_te_parallel_matrix.py": {
+    "bytes": 5497,
+    "sha256": "892bf9db715ae9bb421207ca26790718de6395a1f18843b6d1c48c36e2270db3"
+  },
+  "te_sources\\te_parallel_matrix.py": {
+    "bytes": 19856,
+    "sha256": "92caf47684cef10d2e5fb539915fc2221ae5f809fe97bc909082205e194774e5"
+  },
+  "te_supervision\\bounded_worker.py": {
+    "bytes": 43407,
+    "sha256": "7967fab39840789644364b089f99a2afda8b7b06dc4d1dd5ceb17fbbe6c1c4f2"
+  },
+  "te_supervision\\notebook_worker.log": {
+    "bytes": 2086,
+    "sha256": "3df0415f195eb07460dd8c011e6090d019d6e7a8f907a44befe4d80b6e17311d"
+  },
+  "te_supervision\\supervision.json": {
+    "bytes": 208,
+    "sha256": "5d14f215de1501d4cab472cd3b888c2e9a7e37815d300961a7f6f9ccf08044b0"
+  }
+}
