@@ -1,4 +1,4 @@
-"""One 0.5 MP Turbo REF2VA request with current defaults and disk-baked TP2 weights."""
+"""One explicit Turbo REF2VA request with current defaults and disk-baked TP2 weights."""
 import argparse
 from dataclasses import asdict
 import gc
@@ -31,6 +31,12 @@ class CurrentRank(observation.ObservedRank):
                 self.backends[_label]+=1
                 return _fn(*args,**kwargs)
             setattr(module,name,observe)
+        from patches import dit_column_linear as column
+        original=column._column_accumulate
+        def column_accumulate(codes,weight):
+            if column._column_view_eligible(codes,weight):self.backends['TE/column_view']+=1
+            return original(codes,weight)
+        column._column_accumulate=column_accumulate
 
     def __init__(self,*args):
         super().__init__(*args)
@@ -97,6 +103,9 @@ def kitchen_denoiser_calls(benchmark):
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--config',type=Path,required=True)
     args=parser.parse_args();config=json.loads(args.config.read_text());sys.argv=sys.argv[:1]
+    if config.get('workload_contract')=='anime_ref2va_8step':
+        from benchmarks.anime_e2e_contract import validate
+        validate(config,config['reference_images'])
     output=Path(config['output']);output.mkdir(parents=True,exist_ok=True)
     state=dict(status='starting',config=config,stages={},denoiser_outputs=[],sampler_steps=[])
     def save():(output/'result.json').write_text(json.dumps(state,indent=2,default=str))
@@ -166,6 +175,9 @@ def main():
         pixels=stage('video_decode',lambda:decoders['video'].decode(video).cpu())
         waveform=stage('audio_decode',lambda:decoders['audio'].decode(audio).cpu())
         assert decoders['audio'].last_strategy=='native'
+        if config.get('workload_contract')=='anime_ref2va_8step':
+            shape=list(pixels.shape[-4:])
+            assert shape[:3]==[config['frames'],config['height'],config['width']], 'Requested video shape changed'
         state['decoded_shapes']=dict(pixels=list(pixels.shape),waveform=list(waveform.shape))
         state['media']=stage('file_export',lambda:observation.export_media(pixels,waveform,output))
         state['foreground_seconds']=(time.monotonic_ns()-state['trigger_ns'])/1e9
@@ -184,6 +196,8 @@ def main():
             assert calls.get('current/fused_swiglu_quant') and calls.get('current/scaled_fp16_epilogue')
             assert not any(v for k,v in calls.items() if k.startswith('LoRA/'))
             assert max(c['peak_allocated'] for c in bench['commands'] if c['command']=='denoise')<14.5*GiB
+            if config.get('workload_contract')=='anime_ref2va_8step':
+                assert calls.get('TE/column_view')==250, 'Expected five optimized columns in each of 50 TE layers'
         state.update(status='complete',quality_acceptance='Pending visual/audio review; no dense Native comparison or generation-equivalence claim')
     except BaseException as error:
         state.update(status='failed',error=repr(error));(output/'exception.txt').write_text(traceback.format_exc())

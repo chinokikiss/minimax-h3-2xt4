@@ -120,6 +120,10 @@ def main():
         images = []
         for row in references:
             path = source / 'bench_assets/l1_current' / row['file']
+            if row.get('url'):
+                from benchmarks.qualify_anime_inputs import download_image
+                path.parent.mkdir(parents=True, exist_ok=True)
+                if not path.exists():download_image(row, path.parent)
             if path.stat().st_size != row['bytes'] or sha(path) != row['sha256']:
                 raise ValueError('Frozen reference image mismatch')
             images.append(str(path))
