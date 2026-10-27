@@ -1,11 +1,13 @@
 # Video VAE Temporal Parallel versus Query Parallel
 
 Status: optional Temporal decoding is implemented and locally qualified.
-The private frozen-source CPU input/authentication preflight was accepted as
-[version 1](https://www.kaggle.com/code/pamcks/h3-vae-temporal-cpu-20261027)
-at 2026-10-27 04:29 UTC. Its final artifacts have not been collected; the
-physical two-T4 comparison is gated on its passing receipts and has not been
-submitted. **No T4 speedup is claimed yet.** The default remains `auto`,
+The private frozen-source [CPU preflight, version 1](https://www.kaggle.com/code/pamcks/h3-vae-temporal-cpu-20261027)
+passed, including all 178 tests, core imports/legacy API checks, private-input
+authentication and exact file/tensor hashes. Its final artifacts were collected
+once at 2026-10-27 04:41 UTC. The gated
+[two-T4 comparison, version 1](https://www.kaggle.com/code/pamcks/h3-vae-query-temporal-t4-20261027)
+was accepted at 04:41:42 UTC; no GPU results have been collected.
+**No T4 speedup is claimed yet.** The default remains `auto`,
 which selects the existing Query path when compatible.
 
 ## Implementation
@@ -97,6 +99,17 @@ private benchmark notebook and its CPU input-authentication gate.
   Nsight trace or a concurrent/full-pipeline deployment benchmark.
 - One bounded CPU submission precedes one bounded GPU submission. There is no
   status/list/live-log polling, automatic replacement or full-H3 retry.
+
+The Kaggle CPU environment used Python 3.13.15, native Torch 2.11.0+cpu,
+Torchvision 0.26.0+cpu, Torchaudio 2.11.0+cpu and NumPy 2.1.3. The exact
+Kitchen 0.2.37 / TileLang 0.1.13 overlay passed imports and signatures.
+Setup took 141.22 seconds; the regression suite took 32.51 seconds. This
+qualifies the CPU setup/contracts only. The GPU job records its own native
+CUDA platform and requires two distinct T4/SM75 UUIDs before decoding.
+It has a 300-second setup bound, 2700-second comparison bound and
+3300-second notebook limit, with zero dataset/kernel-output mounts. Provider
+startup is excluded from the internal bounds. Submission acceptance does not
+establish actual execution or successful completion.
 
 Implementation: `patches/temporal_vae.py`, `patches/video_decode_planner.py`,
 `patches/comfy_sampler.py` and `patches/comfy_tp_runtime.py`.

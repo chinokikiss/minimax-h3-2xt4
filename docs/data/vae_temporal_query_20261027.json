@@ -1,14 +1,23 @@
 {
-  "status": "local_qualified_kaggle_cpu_submitted",
+  "status": "kaggle_cpu_passed_t4_submitted",
   "scope": "Video decoder only; no TE, DiT sampling or Audio VAE",
   "default_mode": "auto_query",
   "candidate_mode": "temporal",
   "distribution_sha256": "519bc752462ac2be251dd637d7398de637a5c29c7b581fa28525dd254689896a",
   "capsule_sha256": "168bf4446f17eb4a0714f5a8f4727d9c2cb8ddf78602868b0002481fad2a95d3",
   "comfyui_commit": "d49e888586dd8ae012c0667b33466b815fee07f7",
-  "core_versions": {"comfy-kitchen": "0.2.37", "tilelang": "0.1.13"},
+  "core_versions": {
+    "comfy-kitchen": "0.2.37",
+    "tilelang": "0.1.13"
+  },
   "input": {
-    "shape": [1, 24, 107, 34, 60],
+    "shape": [
+      1,
+      24,
+      107,
+      34,
+      60
+    ],
     "tensor_sha256": "8fb3296f9dfc00641698e1a1aa26acb7f0fa98675b89b597dc95f10e64a9fa64",
     "output_width": 960,
     "output_height": 544,
@@ -16,8 +25,18 @@
     "fps": 24,
     "native_clips": 21
   },
-  "local_cpu": {"tests": 178, "failures": 0, "errors": 0, "skipped": 0},
-  "extracted_delivery_cpu": {"tests": 178, "failures": 0, "errors": 0, "skipped": 0},
+  "local_cpu": {
+    "tests": 178,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "extracted_delivery_cpu": {
+    "tests": 178,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
   "local_trained_correctness": {
     "hardware": "RTX 5060 Ti, two logical ranks",
     "cases": 8,
@@ -26,14 +45,76 @@
   },
   "source_commit": "60af7e7c7af4cfe998ae55527ded95104e60d7aa",
   "kaggle_cpu": {
-    "status": "accepted_final_artifacts_pending",
+    "status": "passed",
     "kernel": "pamcks/h3-vae-temporal-cpu-20261027",
     "version": 1,
     "submitted_utc": "2026-10-27T04:29:06.476673+00:00",
     "gpu_requested": false,
-    "final_collection_count": 0
+    "final_collection_count": 1,
+    "collected_utc": "2026-10-27T04:41:06.844049+00:00",
+    "tests": {
+      "passed": true,
+      "tests": 178,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 32.50937961200003,
+      "scope": "CPU contracts, not physical T4 qualification"
+    },
+    "setup_seconds": 141.221495931,
+    "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]",
+    "platform_versions": {
+      "torch": "2.11.0+cpu",
+      "torchvision": "0.26.0+cpu",
+      "torchaudio": "2.11.0+cpu",
+      "numpy": "2.1.3"
+    },
+    "core_versions": {
+      "comfy-kitchen": "0.2.37",
+      "tilelang": "0.1.13"
+    },
+    "input_gate": {
+      "status": "cpu_input_ready",
+      "full_pipeline": false,
+      "video_decoder_only": true,
+      "source_capsule_sha256": "168bf4446f17eb4a0714f5a8f4727d9c2cb8ddf78602868b0002481fad2a95d3",
+      "input": {
+        "file_sha256": "08a10be3efdda85ea6415c832eb2654101da5d5fabe54b6e34002071ee2dde25",
+        "tensor_sha256": "8fb3296f9dfc00641698e1a1aa26acb7f0fa98675b89b597dc95f10e64a9fa64",
+        "shape": [
+          1,
+          24,
+          107,
+          34,
+          60
+        ]
+      },
+      "cuda_execution": false
+    },
+    "private_launcher_removed": true,
+    "final_artifact_credential_scan": "passed",
+    "evidence_sha256": {
+      "cpu_submission.json": "4c728579b96f418db929e88f686fd17c5ae0c76b12ae65016fab473332216a8f",
+      "cpu_submission_collection_status.json": "e4340841292a666b2bc0fac2180fc93f8ffd11aafdc85218ca0de6d36f3625a7",
+      "cpu_outputs/light_setup/setup_receipt.json": "b8817015239a39aab67d4ad5176ca79b380d347cafdaf9c280741b727ca82460",
+      "cpu_outputs/light_setup/api_probe.log": "e5900b029eaaff7664c772d6aec92634e63fb1e9124e059a28dbcdf1c7e212d4",
+      "cpu_outputs/vae_preflight/batch_results.json": "3f925c77df76ac1501e86be6f95c278f3159042981b5d820eb9bf8a9926e5c01",
+      "cpu_outputs/download_manifest.json": "36aca0aaefa2d7250366096b36fcd4a64981b5e225007d83f96cd868ff3870c8"
+    }
   },
-  "kaggle_t4": {"status": "not_submitted", "repeats_per_backend": 3},
+  "kaggle_t4": {
+    "status": "accepted_final_artifacts_pending",
+    "repeats_per_backend": 3,
+    "kernel": "pamcks/h3-vae-query-temporal-t4-20261027",
+    "version": 1,
+    "submitted_utc": "2026-10-27T04:41:42.737138+00:00",
+    "final_collection_count": 0,
+    "setup_budget_seconds": 300,
+    "execution_budget_seconds": 2700,
+    "notebook_limit_seconds": 3300,
+    "kaggle_mounts": 0,
+    "submission_receipt_sha256": "b4e7928d86402c3220e44aaf596fb6ef6e02fc958ac561ad4717a06cbaf75a0c"
+  },
   "t4_speedup_claim": null,
   "evidence_directory": "D:/attention_eval/h3_temporal_vae_20261026"
 }
