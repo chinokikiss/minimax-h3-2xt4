@@ -113,12 +113,38 @@ CPU setup/API qualification precedes any T4 submission. Existing native-cu128
 source and core pins are retained. No status/list/live-log polling is scheduled.
 Physical override results are pending; no new cu128 override speedup is claimed.
 
-CPU preflight version 1 was accepted at
+CPU preflight version 1 passed at
 [H3 cu128 Dispatch CPU 20261028](https://www.kaggle.com/code/pamcks/h3-cu128-dispatch-cpu-20261028).
 It binds capsule `e91e0aba28007e0b996b7107a474d7a840eba683b0e9db5889c2fd44bb175b5d`.
-The prepared GPU matrix contains 29 isolated cases. Its VAE cases retain the
+The five operator contracts and all 179 CPU review tests passed. The native
+CPU host used Python 3.13.15 and Torch 2.11.0+cpu, with Kitchen 0.2.37 and
+TileLang 0.1.13. This qualifies imports, signatures and contracts; it does not
+qualify the CUDA implementation. Returned source hashes match the published
+capsule and the four added experiment files.
+
+The one final-output collection transferred eight artifacts before an SSL EOF.
+The remaining qualification receipts were recovered from the same signed final
+artifact CDN URL using Windows curl. No second Kaggle API collection, status,
+list or live-log request was made. The original interrupted collection receipt
+is preserved alongside a separate final-verification receipt.
+
+The GPU matrix contains 29 isolated cases. Its VAE cases retain the
 Native per-output-channel scale shape, bias, and O/FC2 residual epilogue inputs;
-encoder norm/padding inputs use channels-last storage. No GPU job is submitted
-until matching native/core and operator CPU receipts pass.
+encoder norm/padding inputs use channels-last storage. After both matching CPU
+gates passed, version 1 was accepted at
+[H3 cu128 Dispatch T4 20261028](https://www.kaggle.com/code/pamcks/h3-cu128-dispatch-t4-20261028)
+on 2026-10-28 at 07:09:16 UTC (15:09:16 Beijing time). Acceptance is not evidence
+that a T4 has started or that a candidate passed. No physical results have been
+collected yet, and production defaults remain unchanged.
+
+Before submission, a local notebook guard incorrectly rejected historical
+launcher filenames embedded in the CPU receipt's source-hash map. The guard
+now examines AST string constants, allowing that JSON provenance while rejecting
+executable launcher payloads. Direct and nested launcher rejection and receipt
+acceptance were checked locally. The failed draft is preserved; that failure
+occurred before the Kaggle push, so no duplicate GPU submission was created.
+
+Sanitized qualification and submission evidence is recorded in
+[`progress.json`](../data/h3_cu128_dispatch_20261028/progress.json).
 
 Evidence root: `D:/attention_eval/h3_cu128_dispatch_20261028`.

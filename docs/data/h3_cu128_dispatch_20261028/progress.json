@@ -1,0 +1,87 @@
+{
+  "cpu": {
+    "status": "cpu_ready",
+    "api": {
+      "torch": "2.11.0+cpu",
+      "cuda": null,
+      "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]",
+      "kitchen": "0.2.37",
+      "tilelang": "0.1.13",
+      "core_imports": "passed",
+      "attention_signature": "(q: 'torch.Tensor', k: 'torch.Tensor', v: 'torch.Tensor', *, scale: 'float | None' = None, attn_mask: 'torch.Tensor | None' = None) -> 'torch.Tensor'",
+      "linear_signature": "(x: torch.Tensor, weight: torch.Tensor, weight_scale: torch.Tensor, bias: torch.Tensor | None = None, out_dtype: torch.dtype | None = None, convrot: bool = False, convrot_groupsize: int = 256, input_act: str | None = None, input_act_weight: torch.Tensor | None = None, input_act_eps: float = 0.0, residual: torch.Tensor | None = None, residual_scale: torch.Tensor | None = None) -> torch.Tensor"
+    },
+    "capsule_sha256": "e91e0aba28007e0b996b7107a474d7a840eba683b0e9db5889c2fd44bb175b5d",
+    "review_suite": {
+      "passed": true,
+      "tests": 179,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 40.273263579,
+      "scope": "CPU contracts, not physical T4 qualification"
+    },
+    "operator": {
+      "status": "cu128_dispatch_cpu_ready",
+      "full_pipeline": false,
+      "model_downloads": 0,
+      "fixture": "Synthetic per-operator inputs at actual TP2/VAE shapes; not generation quality validation",
+      "capsule_sha256": "e91e0aba28007e0b996b7107a474d7a840eba683b0e9db5889c2fd44bb175b5d",
+      "tests": 5,
+      "cases": 29
+    },
+    "receipt_sha256": "84d64b8582a5c6ad98e6d5bb71da4bfcc1eb9b3fd41236db67b4fc481d8da661",
+    "artifact_recovery": "Existing signed artifact CDN URL resumed with Windows curl after CLI SSL EOF; no additional Kaggle status/list/output API calls"
+  },
+  "gpu": {
+    "kernel": "pamcks/h3-cu128-dispatch-t4-20261028",
+    "status": "accepted",
+    "submitted_utc": "2026-10-28T07:09:16.288973+00:00",
+    "version": 1,
+    "url": "https://www.kaggle.com/code/pamcks/h3-cu128-dispatch-t4-20261028",
+    "source_binding": {
+      "mode": "e2e",
+      "publication": {
+        "file": "4376af68ef093c2042f0b10d067aec42fc61ceee000e8ec4a0ba8cbf2d19a5df.tar.gz",
+        "sha256": "4376af68ef093c2042f0b10d067aec42fc61ceee000e8ec4a0ba8cbf2d19a5df",
+        "bytes": 18588102,
+        "capsule_sha256": "e91e0aba28007e0b996b7107a474d7a840eba683b0e9db5889c2fd44bb175b5d",
+        "source_files": 844,
+        "core_pins": 78,
+        "kaggle_mounts": 0,
+        "repository": "chinokikiss/minimax-h3-2xt4",
+        "commit": "c2ebd86fa189e73553f3a803ba6d7c6993c26bf0",
+        "published": true,
+        "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/c2ebd86fa189e73553f3a803ba6d7c6993c26bf0/runtime/kaggle_artifacts/4376af68ef093c2042f0b10d067aec42fc61ceee000e8ec4a0ba8cbf2d19a5df.tar.gz"
+      },
+      "qualification_sha256": "84d64b8582a5c6ad98e6d5bb71da4bfcc1eb9b3fd41236db67b4fc481d8da661",
+      "kaggle_dataset_sources": [],
+      "kaggle_kernel_sources": [],
+      "temporary_private_auth": false,
+      "profile_hashes": {},
+      "setup_budget": 600,
+      "execution_budget": null,
+      "dit_lifetimes": false,
+      "dit_attention": "kitchen",
+      "review_suite": false,
+      "review_recovery": false,
+      "turbo_e2e": false,
+      "vae_compare_preflight": false,
+      "vae_ab_bake": false,
+      "dit_pair": false,
+      "dit_pair_retry": false,
+      "pair_qualification_sha256": null,
+      "vae_input_qualification_sha256": null,
+      "profile_qualification_sha256": null,
+      "experiment": "Explicit cu128 dispatch candidates",
+      "full_pipeline": false,
+      "model_downloads": 0,
+      "operator_qualification_sha256": "d53948095acc43022db0e5bd0897dd4557b35168355834f1307197f695171c84"
+    },
+    "notebook_sha256": "c418a57bd13f3e2692ebe8e82d7a846a6ed32431ba97bba161216ed943fa3a09",
+    "final_collection_count": 0,
+    "run_timeout_seconds": 2100,
+    "result_relative": "cu128_dispatch/result.json"
+  },
+  "builder_guard_fix": "CPU provenance filenames are JSON receipt data, not executable launcher strings. AST guard preserves full receipt and rejects direct/nested launcher payloads. Previous local failure occurred before submission; draft preserved."
+}
