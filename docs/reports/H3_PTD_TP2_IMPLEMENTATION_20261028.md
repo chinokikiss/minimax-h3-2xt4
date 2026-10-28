@@ -37,11 +37,36 @@ Unrelated dirty-worktree attention/VAE changes are excluded from this delivery.
 
 ## Kaggle state
 
-CPU API preflight **version 1 accepted**:
+CPU API preflight notebook:
 [H3 PTD TP2 CPU 20261028](https://www.kaggle.com/code/pamcks/h3-ptd-tp2-cpu-20261028).
-Acceptance is not a test pass. At this report's submission checkpoint, final
-outputs have not been collected and no new PTD T4 numerical result exists.
-No Kaggle status/list or live-log endpoint was polled.
+
+**Version 1 failed; version 2 accepted for retry.** One final output collection
+retrieved version 1 after the user reported completion. Its pinned core API
+probe and all 111 base tests passed. The review suite ran 179 tests, with 177
+passing and two import errors. Both errors came from the newly added relative
+`from .ptd_nodes ...` import: the existing audio-loader and tensor-flow-loader
+tests execute the node file under temporary module names which are not
+registered packages. The failure occurred before the PTD API probe, any
+checkpoint download, baking or GPU execution. It is not evidence of a T4
+operator, numerical or dependency-version failure.
+
+Fix commit `ed0c269b2c41f1eb4a96600753129cff553fb678` places PTD graph nodes in
+`patches.ptd.nodes` and imports registration through that absolute package.
+The former custom-node module remains a compatibility export. The existing
+tests are retained unchanged. A new test executes node registration under
+three temporary loader names and verifies both Native and PTD node mappings.
+Four targeted CPU import/identity tests pass locally with GPUs hidden, also
+when executed against the rebuilt frozen source capsule. These are import
+contracts, not GPU/numerical qualification. The CPU PTD gate now runs the
+registration and disabled-object identity tests explicitly.
+
+Version 2 was submitted once to the same notebook, using source archive SHA256
+`ea02a71b3ef189ada79e75ebd38318901a6b4627ac97381ead7451b3145a967a`
+and capsule SHA256
+`3ff7894465f9a0cabb33442d6befb5063ed2fd90d3c18a2aa8179a3d1fc6c0b2`.
+The frozen Native source archive and dependency-lock digests are explicitly
+recorded unchanged. The new CPU result and PTD T4 qualification remain pending.
+No Kaggle status/list or live-log endpoint was polled. No GPU job was submitted.
 
 The new GPU job builder requires both matching frozen-setup and PTD CPU API
 receipts before submitting its bounded T4 fixture. The prepared GPU experiment

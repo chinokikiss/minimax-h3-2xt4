@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/kaggle/temp/h3_light_source/benchmarks/prepare_kaggle_direct_pip.py", line 131, in main
+    run([sys.executable,str(args.source/'benchmarks/run_review_cpu.py'),
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        '--output',str(out/'review_cpu_tests.json')],'review_cpu_tests',env,180)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/kaggle/temp/h3_light_source/benchmarks/prepare_kaggle_direct_pip.py", line 61, in run
+    raise RuntimeError(label+' failed, exit '+str(result.returncode))
+RuntimeError: review_cpu_tests failed, exit 1

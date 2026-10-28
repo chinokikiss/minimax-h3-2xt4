@@ -1,0 +1,9 @@
+test_old_loader_auto_selection_is_normalized_to_native_for_audio (benchmarks.test_native_audio_decode.NativeAudioDecode.test_old_loader_auto_selection_is_normalized_to_native_for_audio) ... ok
+test_loader_default_and_explicit_legacy_recreate_session (benchmarks.test_h3_tensor_flow.TensorFlowContracts.test_loader_default_and_explicit_legacy_recreate_session) ... ok
+test_node_registration_under_dynamic_loader_names (benchmarks.test_ptd_tp2.AdapterContracts.test_node_registration_under_dynamic_loader_names) ... ok
+test_disabled_returns_native_model_sampler_and_sigmas_by_identity (benchmarks.test_ptd_tp2.AdapterContracts.test_disabled_returns_native_model_sampler_and_sigmas_by_identity) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.028s
+
+OK

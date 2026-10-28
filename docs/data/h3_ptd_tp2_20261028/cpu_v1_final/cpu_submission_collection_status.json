@@ -1,0 +1,9 @@
+{
+  "status": "collected",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-ptd-tp2-cpu-20261028",
+  "output": "D:\\attention_eval\\h3_ptd_refasymopd_20261028\\validation_v1\\cpu_final",
+  "returncode": 0,
+  "files": 15,
+  "completed_utc": "2026-10-28T14:07:54.700330+00:00"
+}
