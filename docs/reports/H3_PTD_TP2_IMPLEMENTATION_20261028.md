@@ -40,7 +40,7 @@ Unrelated dirty-worktree attention/VAE changes are excluded from this delivery.
 CPU API preflight notebook:
 [H3 PTD TP2 CPU 20261028](https://www.kaggle.com/code/pamcks/h3-ptd-tp2-cpu-20261028).
 
-**CPU version 2 passed; T4 version 1 failed before denoising; queued retry CPU version 3 accepted.** One final output collection
+**Queued retry CPU version 3 passed; T4 version 2 accepted. T4 version 1 failed before denoising.** One final output collection
 retrieved version 1 after the user reported completion. Its pinned core API
 probe and all 111 base tests passed. The review suite ran 179 tests, with 177
 passing and two import errors. Both errors came from the newly added relative
@@ -99,8 +99,8 @@ with one event-owned window; the explicit rebuild option remains. CPU contracts
 cover append ordering, identity protection, host reservation transfer through
 the ready event, one-time final drainage, head restoration after exceptions,
 and byte-equivalent Native refiner weight loading/folding on tiny fixtures.
-Physical queue/rebuild execution and performance remain unqualified pending
-the new source-bound preflight and T4 comparison. No status/list or live-log
+The new source-bound CPU preflight has passed. Physical queue/rebuild
+execution and performance remain unqualified pending the T4 comparison. No status/list or live-log
 endpoint was polled.
 
 Queue implementation commit `b6d094d391ecaec4dc89feacb32abe23b912f0ad` is
@@ -112,8 +112,19 @@ version 3 once, bound to source archive SHA256
 `744018ae08fdffc2a8fb5b69b0a28be2b5fdb3d81347ed3c20a8063784372b33`
 and capsule SHA256
 `595eddf8be6f4cecd46d67a9792d49283488e29d9de2933fca8c367c6dead6bf`.
-No final output has yet been collected for version 3, and no revised T4 job
-has been submitted. See the [queue preflight evidence](../data/h3_ptd_tp2_20261028/queue_preflight/README.md).
+One final output collection confirmed CPU version 3 passed: 111/111 base
+tests, 179/179 review tests, 2/2 registration/disabled-identity contracts and
+7/7 queue contracts. Both setup and PTD receipts match the capsule above;
+no weights were fetched. Kitchen 0.2.37 and TileLang 0.1.13 API checks passed
+on Kaggle native CPU Torch 2.11.0+cpu.
+
+Kaggle accepted T4 version 2 once, using these source-bound receipts. It is
+GPU-enabled with the T4 accelerator requested, zero input mounts and a
+2,500-second notebook timeout (600-second setup and 1,800-second supervised
+experiment budgets). Acceptance does not establish actual hardware
+allocation, successful execution or performance. No final GPU output has
+yet been collected. See [CPU evidence](../data/h3_ptd_tp2_20261028/cpu_v3_final/)
+and the [T4 submission](../data/h3_ptd_tp2_20261028/t4_v2_queue/).
 
 The physical comparison will reuse one baked bank in **rebuild, queue, queue,
 rebuild** order. It requires byte-identical seeded video/audio outputs and
