@@ -4,14 +4,15 @@ import torch
 
 
 @lru_cache(maxsize=32)
-def kernel(rows,heads,dim,rot_dim,input_dtype,output_dtype,epsilon,arch='sm_75'):
+def kernel(rows,heads,dim,rot_dim,input_dtype,output_dtype,epsilon,arch='sm_75',frequency_dtype='float32'):
     import tilelang
     import tilelang.language as T
     if rows<1 or heads<1 or heads%4 or dim!=128 or not 0<rot_dim<=dim or rot_dim%2:
         raise ValueError('H3 full-head RMS and even rotary prefix required')
+    if frequency_dtype not in ('float16','float32'):raise ValueError('Explicit native frequency storage required')
     half=rot_dim//2;width=heads*dim
     @T.prim_func
-    def main(P:T.Tensor((rows,3*width),input_dtype),F:T.Tensor((rows,half,2,2),'float32'),
+    def main(P:T.Tensor((rows,3*width),input_dtype),F:T.Tensor((rows,half,2,2),frequency_dtype),
              GQ:T.Tensor((dim,),'float32'),GK:T.Tensor((dim,),'float32'),
              Q:T.Tensor((rows,heads,dim),output_dtype),K:T.Tensor((rows,heads,dim),output_dtype)):
         with T.Kernel(rows,heads//4,threads=128) as (row,head_tile):
@@ -34,10 +35,12 @@ def kernel(rows,heads,dim,rot_dim,input_dtype,output_dtype,epsilon,arch='sm_75')
             for h,d in T.Parallel(4,dim):
                 if d<rot_dim:
                     pair=d%half;side=d//half;other=T.if_then_else(d<half,d+half,d-half)
-                    a=T.call_pure_extern('float32','__fmul_rn',qn[h,d],F[row,pair,side,side])
-                    b=T.call_pure_extern('float32','__fmul_rn',kn[h,d],F[row,pair,side,side])
-                    Q[row,head_tile*4+h,d]=T.cast(T.call_pure_extern('float32','__fmaf_rn',qn[h,other],F[row,pair,side,1-side],a),output_dtype)
-                    K[row,head_tile*4+h,d]=T.cast(T.call_pure_extern('float32','__fmaf_rn',kn[h,other],F[row,pair,side,1-side],b),output_dtype)
+                    diagonal=T.cast(F[row,pair,side,side],'float32')
+                    off_diagonal=T.cast(F[row,pair,side,1-side],'float32')
+                    a=T.call_pure_extern('float32','__fmul_rn',qn[h,d],diagonal)
+                    b=T.call_pure_extern('float32','__fmul_rn',kn[h,d],diagonal)
+                    Q[row,head_tile*4+h,d]=T.cast(T.call_pure_extern('float32','__fmaf_rn',qn[h,other],off_diagonal,a),output_dtype)
+                    K[row,head_tile*4+h,d]=T.cast(T.call_pure_extern('float32','__fmaf_rn',kn[h,other],off_diagonal,b),output_dtype)
                 else:
                     Q[row,head_tile*4+h,d]=T.cast(qn[h,d],output_dtype);K[row,head_tile*4+h,d]=T.cast(kn[h,d],output_dtype)
     return tilelang.compile(main,out_idx=[4,5],target={'kind':'cuda','arch':arch},
@@ -59,4 +62,5 @@ def execute(packed,freqs,q_gain,k_gain,*,heads=28,dim=128,epsilon=1e-6,out_dtype
     gains=[g.to(device=packed.device,dtype=torch.float32).reshape(dim).contiguous() for g in (q_gain,k_gain)]
     rows=packed.shape[0];rot_dim=freqs.shape[-3]*2
     return kernel(rows,heads,dim,rot_dim,str(packed.dtype).removeprefix('torch.'),
-        str(out_dtype).removeprefix('torch.'),float(epsilon),'sm_75')(packed,freqs.float().reshape(rows,rot_dim//2,2,2),*gains)
+        str(out_dtype).removeprefix('torch.'),float(epsilon),'sm_75',str(freqs.dtype).removeprefix('torch.'))(
+            packed,freqs.reshape(rows,rot_dim//2,2,2),*gains)

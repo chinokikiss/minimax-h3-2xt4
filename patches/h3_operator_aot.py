@@ -53,7 +53,7 @@ def plan(rows,rank,policy,stage='dit'):
             add('tilelang_transport_tradeoffs','fp16_codec',rows,out_width,shift)
             add('tilelang_transport_p2','epilogue',rows,out_width,'fp16',shift)
     if stage=='dit' and getattr(policy,'dit_rms_rope','native')=='tilelang_fp32':
-        add('tilelang_fp32_rms_rope','kernel',rows,28,128,128,'float16','float16',1e-6,'sm_75')
+        add('tilelang_fp32_rms_rope','kernel',rows,28,128,128,'float16','float16',1e-6,'sm_75','float16')
     return calls
 
 

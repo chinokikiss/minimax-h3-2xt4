@@ -69,7 +69,7 @@ class Operators(unittest.TestCase):
             shape=(33,10752),is_contiguous=lambda:True)
         table=torch.full((1,33,1,64,2,2),.125,dtype=torch.float16)
         freqs=SimpleNamespace(device='cuda:0',dtype=table.dtype,ndim=6,shape=table.shape,
-            is_contiguous=lambda:True,float=table.float)
+            is_contiguous=lambda:True,reshape=table.reshape)
         with patch('torch.cuda.get_device_capability',return_value=(7,5)):
             self.assertTrue(supported(packed,freqs,28,128))
         gain=SimpleNamespace();gain.to=lambda **kw:gain;gain.reshape=lambda *a:gain;gain.contiguous=lambda:gain
@@ -77,8 +77,8 @@ class Operators(unittest.TestCase):
         with patch('patches.tilelang_fp32_rms_rope.supported',return_value=True), \
              patch('patches.tilelang_fp32_rms_rope.kernel',return_value=lambda *a:captured.append(a)):
             execute(packed,freqs,gain,gain)
-        self.assertEqual(captured[0][1].dtype,torch.float32)
-        self.assertTrue(torch.equal(captured[0][1],table.float().reshape(33,64,2,2)))
+        self.assertEqual(captured[0][1].dtype,torch.float16)
+        self.assertTrue(torch.equal(captured[0][1],table.reshape(33,64,2,2)))
 
     def test_aot_dispatch_is_capability_gated_and_once_per_shape(self):
         from unittest.mock import Mock
@@ -104,7 +104,7 @@ class Operators(unittest.TestCase):
             self.assertIn(('tilelang_row_quant','quantizer',quantizer.call_args.args),p)
         gain=SimpleNamespace();gain.to=lambda **kw:gain;gain.reshape=lambda *a:gain;gain.contiguous=lambda:gain
         packed=SimpleNamespace(shape=(59134,10752),dtype=torch.float16,device='cuda:0')
-        freqs=SimpleNamespace(shape=(1,59134,1,64,2,2),float=lambda:SimpleNamespace(reshape=lambda *a:None))
+        freqs=SimpleNamespace(shape=(1,59134,1,64,2,2),dtype=torch.float16,reshape=lambda *a:None)
         with patch.object(rope,'supported',return_value=True),patch.object(rope,'kernel',return_value=lambda *a:None) as kernel:
             rope.execute(packed,freqs,gain,gain)
             self.assertIn(('tilelang_fp32_rms_rope','kernel',kernel.call_args.args),p)
