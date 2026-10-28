@@ -51,11 +51,11 @@ class Operators(unittest.TestCase):
         from patches.h3_operator_policy import H3OperatorPolicy
         calls=plan(59134,1,H3OperatorPolicy(dit_rms_rope='tilelang_fp32'))
         self.assertEqual(len(calls),12)
-        self.assertIn(('tilelang_row_quant','quantizer',(59134,3584,7168,3584)),calls)
+        self.assertIn(('tilelang_row_quant','quantizer',(59134,3584,7168,3584,'fast')),calls)
         self.assertTrue(all(c[2][0]==59134 for c in calls))
         te=plan(2392,1,H3OperatorPolicy(),'te')
         self.assertEqual(len(te),12)
-        self.assertIn(('tilelang_row_quant','quantizer',(2392,4096,8192,4096)),te)
+        self.assertIn(('tilelang_row_quant','quantizer',(2392,4096,8192,4096,'fast')),te)
         self.assertEqual(plan(1797,0,H3OperatorPolicy(),'video'),[])
         with self.assertRaises(ValueError):plan(0,1,H3OperatorPolicy())
 
@@ -73,6 +73,24 @@ class Operators(unittest.TestCase):
         service.call.assert_called_once_with('prepare_dit',59134)
         del service.operator_aot;service.call.reset_mock();model._aot_shapes.clear()
         model.prepare_payload(payload);service.call.assert_not_called()
+
+    def test_aot_cache_keys_match_actual_runtime_consumers(self):
+        from patches import tilelang_row_quant as row,tilelang_fp32_rms_rope as rope
+        from patches.h3_operator_aot import plan
+        from patches.h3_operator_policy import H3OperatorPolicy
+        p=plan(59134,0,H3OperatorPolicy(dit_rms_rope='tilelang_fp32'))
+        x=SimpleNamespace(is_cuda=True,dtype=torch.float32,device='cuda:0',ndim=2,
+            shape=(59134,7168),is_contiguous=lambda:True)
+        m=SimpleNamespace(shape=(59134,1),dtype=torch.float32,device='cuda:0')
+        with patch('torch.cuda.get_device_capability',return_value=(7,5)),patch.object(row,'quantizer',return_value=lambda *a:None) as quantizer:
+            row.quantize(x,m)
+            self.assertIn(('tilelang_row_quant','quantizer',quantizer.call_args.args),p)
+        gain=SimpleNamespace();gain.to=lambda **kw:gain;gain.reshape=lambda *a:gain;gain.contiguous=lambda:gain
+        packed=SimpleNamespace(shape=(59134,10752),dtype=torch.float16,device='cuda:0')
+        freqs=SimpleNamespace(shape=(1,59134,1,64,2,2),reshape=lambda *a:None)
+        with patch.object(rope,'supported',return_value=True),patch.object(rope,'kernel',return_value=lambda *a:None) as kernel:
+            rope.execute(packed,freqs,gain,gain)
+            self.assertIn(('tilelang_fp32_rms_rope','kernel',kernel.call_args.args),p)
 
 
 import benchmarks.test_tp2_disk_bake as bake_fixtures

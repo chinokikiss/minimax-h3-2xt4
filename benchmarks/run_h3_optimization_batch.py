@@ -60,7 +60,8 @@ def main():
         assert len(devices)==2 and len({d['uuid'] for d in devices})==2 and all('T4' in d['name'] and d['capability']==[7,5] for d in devices)
         assert torch.__version__=='2.11.0+cu128' and torch.version.cuda=='12.8'
         state['hardware']=dict(devices=devices,torch=str(torch.__version__),cuda=torch.version.cuda,
-            kitchen=md.version('comfy-kitchen'),tilelang=md.version('tilelang'))
+            kitchen=md.version('comfy-kitchen'),tilelang=md.version('tilelang'),
+            driver=subprocess.check_output(['nvidia-smi','--query-gpu=driver_version','--format=csv,noheader'],text=True,timeout=10).splitlines())
         compiler=Path(shutil.which('nvcc') or '').resolve();assert compiler.is_file()
         version=subprocess.check_output([str(compiler),'--version'],text=True,timeout=10)
         assert 'release 12.8' in version

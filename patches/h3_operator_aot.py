@@ -44,10 +44,10 @@ def plan(rows,rank,policy,stage='dit'):
         from patches.tilelang_transport_tradeoffs import shift_for
         add('tilelang_row_quant','packing_kernel',rows,attn_width,2,rank)
         add('tilelang_row_quant','maximum_kernel',rows,attn_width,attn_width*2,rank*attn_width)
-        add('tilelang_row_quant','quantizer',rows,attn_width,attn_width*2,rank*attn_width)
+        add('tilelang_row_quant','quantizer',rows,attn_width,attn_width*2,rank*attn_width,'fast')
         if policy.fc2_quantizer=='fused_stored':
             add('tilelang_swiglu_quant','fused_kernel',rows,mlp_width,'float16','sm_75','stored')
-            add('tilelang_row_quant','quantizer',rows,mlp_width,mlp_width,0)
+            add('tilelang_row_quant','quantizer',rows,mlp_width,mlp_width,0,'fast')
         for local_k in (attn_width,mlp_width):
             shift=shift_for(local_k)
             add('tilelang_transport_tradeoffs','fp16_codec',rows,out_width,shift)
@@ -62,14 +62,14 @@ def prepare(rows,rank,policy,stage='dit'):
     if not torch.cuda.is_available() or torch.cuda.get_device_capability()!=(7,5):
         return dict(status='unsupported_device',rows=rows,rank=rank)
     if version('tilelang')!='0.1.13':raise RuntimeError('Pinned TileLang required')
-    start=time.monotonic();steps=[];sources={}
+    build_environment=environment();start=time.monotonic();steps=[];sources={}
     for module,name,args in plan(rows,rank,policy,stage):
         mod=import_module('patches.'+module);fn=getattr(mod,name)
         before=fn.cache_info();begin=time.monotonic();fn(*args);after=fn.cache_info()
         steps.append(dict(module=module,function=name,args=args,seconds=time.monotonic()-begin,
             compiled=after.misses>before.misses))
         sources[module]=hashlib.sha256(Path(mod.__file__).read_bytes()).hexdigest()
-    key=dict(stage=stage,rows=rows,rank=rank,policy=vars(policy),sources=sources,environment=environment())
+    key=dict(stage=stage,rows=rows,rank=rank,policy=vars(policy),sources=sources,environment=build_environment)
     return dict(status='prepared',stage=stage,rows=rows,rank=rank,seconds=time.monotonic()-start,steps=steps,
         identity_sha256=hashlib.sha256(json.dumps(key,sort_keys=True).encode()).hexdigest(),
         environment=key['environment'],

@@ -59,4 +59,4 @@ def execute(packed,freqs,q_gain,k_gain,*,heads=28,dim=128,epsilon=1e-6,out_dtype
     gains=[g.to(device=packed.device,dtype=torch.float32).reshape(dim).contiguous() for g in (q_gain,k_gain)]
     rows=packed.shape[0];rot_dim=freqs.shape[-3]*2
     return kernel(rows,heads,dim,rot_dim,str(packed.dtype).removeprefix('torch.'),
-        str(out_dtype).removeprefix('torch.'),float(epsilon))(packed,freqs.reshape(rows,rot_dim//2,2,2),*gains)
+        str(out_dtype).removeprefix('torch.'),float(epsilon),'sm_75')(packed,freqs.reshape(rows,rot_dim//2,2,2),*gains)
