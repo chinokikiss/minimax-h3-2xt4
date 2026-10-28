@@ -70,6 +70,7 @@ os.execve(sys.executable,argv,env)
     timeout=1000 if args.mode=='cpu' else 2500
     state=dict(kernel=metadata['id'],status='submitting',submitted_utc=dt.datetime.now(dt.timezone.utc).isoformat(),
         source_binding=binding,final_collection_count=0,run_timeout_seconds=timeout,
+        earliest_final_collection_seconds=timeout,
         result_relative='ptd_qualification/result.json',
         notebook_sha256=hashlib.sha256(notebook_path.read_bytes()).hexdigest())
     receipt=args.evidence/(args.mode+'_submission.json')

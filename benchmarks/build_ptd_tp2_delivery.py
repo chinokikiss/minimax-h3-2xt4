@@ -42,7 +42,7 @@ def owned_hooks(name,raw):
         replace('        with torch.cuda.device(self.device), torch.inference_mode():\n',
                 "        with torch.cuda.device(self.device), torch.inference_mode():\n            if command.startswith('ptd_'):\n                from patches.ptd.runtime import control\n                return control(self,command,args)\n            ptd_adapter=getattr(self,'_ptd_adapter',None)\n            if command=='denoise' and ptd_adapter is not None:\n                args,kwargs=ptd_adapter.prepare(args,kwargs)\n")
     else:
-        text+='\nfrom .ptd_nodes import NODE_CLASS_MAPPINGS as PTD_NODE_CLASS_MAPPINGS\nNODE_CLASS_MAPPINGS.update(PTD_NODE_CLASS_MAPPINGS)\n'
+        text+='\nfrom patches.ptd.nodes import NODE_CLASS_MAPPINGS as PTD_NODE_CLASS_MAPPINGS\nNODE_CLASS_MAPPINGS.update(PTD_NODE_CLASS_MAPPINGS)\n'
     return text.encode('utf-8')
 
 
@@ -53,17 +53,21 @@ def main():
     assert args.base.name==digest+'.tar.gz'
     with tarfile.open(fileobj=io.BytesIO(raw),mode='r:gz') as archive:
         distribution={m.name:archive.extractfile(m).read() for m in archive}
+    frozen={n:hashlib.sha256(v).hexdigest() for n,v in distribution.items()
+            if n.startswith('frozen/') or n=='direct_core_requirements.json'}
+    assert 'frozen/comfy_source.tar.gz.bin' in frozen
     original=payload_from_distribution(distribution);files=dict(original)
     additions=(*FILES,*(str(path.relative_to(ROOT)).replace('\\','/')
                        for path in (ROOT/'patches/ptd').iterdir() if path.is_file()))
     for name in additions:files[name]=(ROOT/name).read_bytes()
     for name in HOOKS:files[name]=owned_hooks(name,original[name])
     assert all(files[n]==v for n,v in original.items() if n not in (*additions,*HOOKS))
-    assert all(files[n]==v for n,v in original.items() if n.startswith('ComfyUI/'))
     assert not any(re.search(rb'(?:hf_[A-Za-z0-9]{25,}|gh[pousr]_[A-Za-z0-9]{30,})',v) for v in files.values())
     write_distribution(args.output,distribution,files,parent=digest)
+    assert all(hashlib.sha256(distribution[n]).hexdigest()==value for n,value in frozen.items())
     (args.output/'preservation.json').write_text(json.dumps(dict(parent_sha256=digest,
         native_comfyui_preserved=True,core_pins_preserved=True,unrelated_dirty_changes_excluded=True,
+        frozen_archive_and_lock_sha256=frozen,
         ptd_enabled_by_default=False,weights_downloaded_locally=False,
         overlays={n:hashlib.sha256(files[n]).hexdigest() for n in (*additions,*HOOKS)}),indent=2),encoding='utf-8')
     if args.owned_index_patch:

@@ -104,8 +104,13 @@ def main():
             assert adapt_model(native_forward,None,None,PTDOptions())==(native_forward,None)
             assert 'adapter' in inspect.signature(create_model).parameters
             assert 'include_download' in inspect.signature(disk_plan).parameters
+            contracts=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromNames([
+                'benchmarks.test_ptd_tp2.AdapterContracts.test_node_registration_under_dynamic_loader_names',
+                'benchmarks.test_ptd_tp2.AdapterContracts.test_disabled_returns_native_model_sampler_and_sigmas_by_identity']))
+            assert contracts.wasSuccessful()
             # Setup/API admission only. No checkpoint download or GPU quota.
-            state.update(status='ptd_cpu_ready',core_api_imports=True,no_weights_fetched=True)
+            state.update(status='ptd_cpu_ready',core_api_imports=True,no_weights_fetched=True,
+                         registration_contract_tests=contracts.testsRun)
             return
         import torch
         import importlib.metadata as md

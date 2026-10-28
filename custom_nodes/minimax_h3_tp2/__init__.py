@@ -179,5 +179,5 @@ NODE_CLASS_MAPPINGS = {'MiniMaxH3TP2Loader':MiniMaxH3TP2Loader,
     'MiniMaxH3PostDecodePrefetch':MiniMaxH3PostDecodePrefetch,
     'MiniMaxH3ParallelVAELoader':MiniMaxH3ParallelVAELoader}
 
-from .ptd_nodes import NODE_CLASS_MAPPINGS as PTD_NODE_CLASS_MAPPINGS
+from patches.ptd.nodes import NODE_CLASS_MAPPINGS as PTD_NODE_CLASS_MAPPINGS
 NODE_CLASS_MAPPINGS.update(PTD_NODE_CLASS_MAPPINGS)

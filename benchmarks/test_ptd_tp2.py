@@ -129,6 +129,20 @@ class SamplerContracts(unittest.TestCase):
 
 
 class AdapterContracts(unittest.TestCase):
+    def test_node_registration_under_dynamic_loader_names(self):
+        root=Path(__file__).resolve().parents[1]
+        for name in ('native_audio_loader','h3_default_loader','comfy_dynamic_ptd_fixture'):
+            with self.subTest(module_name=name):
+                # Match Comfy/test loaders which execute a module without
+                # registering that temporary package name in sys.modules.
+                spec=importlib.util.spec_from_file_location(name,root/'custom_nodes/minimax_h3_tp2/__init__.py')
+                node=importlib.util.module_from_spec(spec);spec.loader.exec_module(node)
+                self.assertIn('MiniMaxH3TP2Loader',node.NODE_CLASS_MAPPINGS)
+                self.assertIn('MiniMaxH3ParallelVAELoader',node.NODE_CLASS_MAPPINGS)
+                self.assertIn('MiniMaxH3TP2PTDAdapter',node.NODE_CLASS_MAPPINGS)
+                inputs=node.NODE_CLASS_MAPPINGS['MiniMaxH3TP2PTDAdapter'].INPUT_TYPES()['required']
+                self.assertFalse(inputs['enabled'][1]['default'])
+
     def test_disabled_returns_native_model_sampler_and_sigmas_by_identity(self):
         from patches.ptd.runtime import adapt_model,PTDOptions
         native = object()
