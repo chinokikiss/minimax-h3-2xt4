@@ -16,7 +16,8 @@ def cases():
     for batch in (1,4):
         for label,n,k,act in (('qkv',6144,2048,'rms_norm'),('out',2048,2048,None),
                              ('fc1',16384,2048,'rms_norm'),('fc2',2048,8192,'swiglu')):
-            rows.append(dict(kind='linear',label=f'vae_b{batch}_{label}',m=batch*1797,n=n,k=k,act=act))
+            rows.append(dict(kind='linear',label=f'vae_b{batch}_{label}',m=batch*1797,n=n,k=k,act=act,
+                             bias=True,residual=label in ('out','fc2')))
     # Include the known sensitive Turing row-count band as isolated probes.
     for m in (1,2,96,97,127,128,129,257):
         rows.append(dict(kind='linear',label=f'te_m{m}',m=m,n=512,k=5120,act=None))
@@ -102,9 +103,12 @@ def execute(case,out):
     if kind=='linear':
         m,n,k=case['m'],case['n'],case['k'];act=case['act']
         x=rand(m,k*(2 if act=='swiglu' else 1));w=torch.randint(-127,128,(n,k),device='cuda',dtype=torch.int8)
-        scale=torch.full((n,),.001,device='cuda',dtype=torch.float32)
+        scale=torch.full((n,1),.001,device='cuda',dtype=torch.float32)
         kwargs=dict(out_dtype=torch.float16,convrot=True,convrot_groupsize=256,input_act=act,
-                    input_act_weight=rand(k).add_(1) if act=='rms_norm' else None,input_act_eps=1e-5)
+                    input_act_weight=rand(k).add_(1) if act=='rms_norm' else None,input_act_eps=1e-5,
+                    bias=rand(n) if case.get('bias') else None,
+                    residual=rand(m,n) if case.get('residual') else None,
+                    residual_scale=rand(n).add_(.5) if case.get('residual') else None)
         candidate=Candidate(('int8_linear',));fn=lambda:candidate.call('int8_linear',x,w,scale,**kwargs)
         baseline=ck.registry.get_implementation('int8_linear',backend='eager')
         ref=lambda:baseline(x,w,scale,**kwargs)
@@ -154,7 +158,8 @@ def execute(case,out):
         ref=lambda:_dequantize_eager(acc,rows,weights,torch.float16)
         fn=lambda:dequantize(acc,rows,weights,torch.float16);candidate=None
     elif kind=='normpad':
-        c=case['channels'];x=rand(1,c,17,32,32);weight=rand(c).add_(1);bias=rand(c)
+        c=case['channels'];x=rand(1,c,17,32,32).contiguous(memory_format=torch.channels_last_3d)
+        weight=rand(c).add_(1);bias=rand(c)
         args=(x,weight,bias,32,1e-6,[1,1,1,1,2],True)
         candidate=Candidate(('group_norm_silu_pad3d',));fn=lambda:candidate.call('group_norm_silu_pad3d',*args)
         eager=ck.registry.get_implementation('group_norm_silu_pad3d',backend='eager');ref=lambda:eager(*args)
