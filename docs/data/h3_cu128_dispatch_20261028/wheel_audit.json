@@ -1,0 +1,22 @@
+{
+  "wheel_sha256": "03cca0d10c314aaa13bff8f9422d03974221a344162b23d4f10d27eb2a35d0e8",
+  "extension_sha256": "d19debb2fbc197aa26f73496ca30513386fae424a03e28ee2697afde1fb8f988",
+  "elf_needed": [
+    "libdl.so.2",
+    "libpthread.so.0",
+    "librt.so.1",
+    "libstdc++.so.6",
+    "libm.so.6",
+    "libgcc_s.so.1",
+    "libc.so.6",
+    "ld-linux-x86-64.so.2"
+  ],
+  "library_name_strings": [
+    "libcublasLt.so",
+    "libcublasLt.so.13"
+  ],
+  "ptx_versions": [
+    ".version 9.0"
+  ],
+  "note": "Library-name strings may be runtime dlopen candidates, not DT_NEEDED. Actual library mappings must be recorded on T4."
+}
