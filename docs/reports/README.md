@@ -2,6 +2,8 @@
 
 [Documentation index](../README.md)
 
+[All-stage operator preparation, scoped cu128 defaults and pipelined bake](H3_OPERATORS_AOT_BAKE_BATCH_20261028.md) records the implementation, exact AOT scope and source-bound T4 batch; post-change physical results remain pending.
+
 [TE causal prefix invariance and FP32 precision](TE_CAUSAL_PREFIX_PRECISION_20261026.md)
 records the current Kitchen default's numerical contract on both physical T4s.
 

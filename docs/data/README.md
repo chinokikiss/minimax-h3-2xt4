@@ -7,6 +7,7 @@ captures, traces, model weights, and private provider capabilities are not inclu
 
 | Record | Scope |
 |---|---|
+| [All-stage AOT / scoped defaults / bake batch](h3_optimization_batch_20261028/progress.json) | Source-bound CPU qualification, default custom-kernel preparation, 27 isolated operator cases and six-layer bake AB/BA; post-change T4 results pending |
 | [Optimization technique catalogue](h3_optimization_techniques_20261026.json) | Canonical130-technique mechanism/benefit/contract content and97 source identities; no benchmark observations |
 | [Technique coverage matrix](h3_optimization_coverage_20261026.json) | Complete mapping of64 runtime modules,52 previous audit items and retained native attention kernels |
 | [TE causal/precision raw evidence](te_causal_precision_20261026/manifest.json) | Two physical T4s: 168 precision cases,336 prefix comparisons,144 fixed-packed controls, exact submitted sources and one-shot final collection |
