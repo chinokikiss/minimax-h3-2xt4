@@ -4,6 +4,32 @@ import hashlib
 import json
 from pathlib import Path
 import shutil
+import time
+
+
+def transient(error):
+    """Retry transport/service failures only; never retry an identity failure."""
+    response = getattr(error, 'response', None)
+    code = getattr(response, 'status_code', None)
+    if code is not None:
+        return code in (408, 429, 500, 502, 503, 504)
+    import requests
+    import httpx
+    return isinstance(error, (requests.ConnectionError, requests.Timeout,
+                              httpx.TransportError, TimeoutError, ConnectionError))
+
+
+def recover(operation, *, label, sleep=time.sleep):
+    for attempt in range(3):
+        try:
+            return operation(attempt)
+        except Exception as error:
+            if attempt == 2 or not transient(error):
+                raise
+            # Bounded model-download recovery, never a Kaggle status request.
+            print('ASSET_DOWNLOAD_RECOVER', label, attempt + 1,
+                  type(error).__name__, getattr(getattr(error, 'response', None), 'status_code', None), flush=True)
+            sleep((2, 5)[attempt])
 
 
 def sha(path):
@@ -12,7 +38,8 @@ def sha(path):
 
 def download(row, directory):
     from huggingface_hub import hf_hub_download
-    path=Path(hf_hub_download(row['repository'],row['file'],revision=row['revision'],token=False,local_dir=str(directory)))
+    path=Path(recover(lambda attempt: hf_hub_download(row['repository'],row['file'],revision=row['revision'],
+        token=False,local_dir=str(directory),etag_timeout=30,force_download=attempt>0),label=row['file']))
     if path.stat().st_size!=row['bytes'] or sha(path)!=row['sha256']:
         raise ValueError('Immutable checkpoint mismatch: '+row['file'])
     return path
@@ -40,8 +67,9 @@ def stage(source, scratch):
     from checkpoint_ranges import assemble
     auxiliary=assets['auxiliary']['dit'];original=assets['source_identity']['dit']
     url='https://huggingface.co/'+assets['model_repository']+'/resolve/'+assets['model_revision']+'/'+original['remote_file']
-    def read(start,end):
+    def read_once(start,end):
         with requests.get(url,params={'download':'true','offset':str(start)},headers={'Range':f'bytes={start}-{end-1}'},stream=True,timeout=(15,90)) as response:
+            response.raise_for_status()
             if response.status_code!=206 or response.headers.get('Content-Range')!=f'bytes {start}-{end-1}/{original["bytes"]}':
                 raise ValueError('Immutable auxiliary range mismatch')
             data=bytearray()
@@ -49,6 +77,8 @@ def stage(source, scratch):
                 data.extend(chunk)
                 if len(data)>end-start:raise ValueError('Oversized auxiliary range')
             return data
+    def read(start,end):
+        return recover(lambda attempt: read_once(start,end),label=f'dit_aux:{start}:{end}')
     path=scratch/'dit_aux.safetensors';assemble(auxiliary,path,read)
     from patches.tp2_bundle import DESCRIPTOR
     descriptor=scratch/'dit_bundle.json'

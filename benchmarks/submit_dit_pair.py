@@ -12,6 +12,7 @@ import sys
 def main():
     p=argparse.ArgumentParser();p.add_argument('--mode',choices=('cpu','gpu'),required=True)
     p.add_argument('--publication',type=Path,required=True);p.add_argument('--evidence',type=Path,required=True)
+    p.add_argument('--retry',action='store_true')
     p.add_argument('--qualification',type=Path);p.add_argument('--pair-qualification',type=Path);p.add_argument('--submit',action='store_true');args=p.parse_args()
     args.evidence.mkdir(parents=True,exist_ok=True);job=args.evidence/(args.mode+'_job')
     argv=[sys.executable,str(Path(__file__).with_name('build_kaggle_light_job.py')),'--mode','cpu' if args.mode=='cpu' else 'e2e',
@@ -20,6 +21,7 @@ def main():
     else:
         if not args.qualification or not args.pair_qualification:p.error('Both matching CPU receipts required')
         argv+=['--qualification',str(args.qualification),'--pair-qualification',str(args.pair_qualification),'--execution-budget','4800']
+    if args.retry:argv+=['--dit-pair-retry']
     subprocess.run(argv,check=True)
     if not args.submit:return
     metadata=json.loads((job/'kernel-metadata.json').read_text());binding=json.loads((job/'source_binding.json').read_text())

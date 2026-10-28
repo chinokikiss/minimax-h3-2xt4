@@ -42,7 +42,7 @@ def main():
         if args.cpu_preflight:
             import unittest
             from dit_pair_contract import fixture,identity
-            result=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromNames(['benchmarks.test_dit_pair']))
+            result=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromNames(['benchmarks.test_dit_pair','benchmarks.test_dit_download']))
             assert result.wasSuccessful()
             plan=json.loads((source.parent/'h3_light_distribution/delivery_manifest.json').read_text())
             state.update(status='pair_cpu_ready',tests=result.testsRun,input_identity=identity(fixture()),

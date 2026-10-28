@@ -10,7 +10,7 @@ from build_kaggle_light_delivery import payload_from_distribution,write_distribu
 
 ROOT=Path(__file__).resolve().parents[1]
 FILES=('dit_pair_contract.py','profile_dit_pair.py','analyze_dit_pair.py','run_dit_pair_batch.py','test_dit_pair.py',
-       'gpu_memory_overhead.py','build_kaggle_light_job.py')
+       'gpu_memory_overhead.py','build_kaggle_light_job.py','tp2_public_dit_assets.py','test_dit_download.py')
 
 
 def main():

@@ -50,6 +50,7 @@ def main():
     p.add_argument('--vae-input-qualification',type=Path,help='Matching CPU-only real-latent authentication receipt')
     p.add_argument('--vae-ab-bake',action='store_true',help='Private Dataset VAE checkpoint replay and bake-only profile; CPU gate or two T4s')
     p.add_argument('--dit-pair',action='store_true',help='CPU gate or two consecutive 59134-token DiT calls; no full pipeline')
+    p.add_argument('--dit-pair-retry',action='store_true',help='Separate download-recovery retry, retaining native CUDA 12.8')
     p.add_argument('--pair-qualification',type=Path)
     p.add_argument('--publication',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
     p.add_argument('--qualification',type=Path);p.add_argument('--private-input',type=Path)
@@ -61,6 +62,7 @@ def main():
     p.add_argument('--dit-lifetimes',action='store_true',help='Enable paired full-shape column gates before the DiT-only lifetime profile')
     p.add_argument('--dit-attention',choices=('kitchen','tilelang_scalar'),default='kitchen')
     args=p.parse_args()
+    if args.dit_pair_retry and not args.dit_pair:p.error('--dit-pair-retry requires --dit-pair')
     if args.output.exists():raise FileExistsError('Preserve submitted notebooks')
     publication=json.loads(args.publication.read_text());assert publication['published']
     if args.mode!='cpu' and args.qualification is None:p.error('GPU jobs require the new direct-pip CPU receipt')
@@ -282,6 +284,9 @@ if guard['status']!='worker_exited' or guard['exit_code']!=0:raise RuntimeError(
     if args.dit_pair:
         ids[args.mode]='h3-dit-pair-cpu-20261028' if args.mode=='cpu' else 'h3-dit-pair-59134-t4-20261028'
         titles[args.mode]='H3 DiT Pair CPU 20261028' if args.mode=='cpu' else 'H3 DiT Pair 59134 T4 20261028'
+        if args.dit_pair_retry:
+            ids[args.mode]='h3-dit-pair-retry-cpu-20261028' if args.mode=='cpu' else 'h3-dit-pair-retry-59134-t4-20261028'
+            titles[args.mode]='H3 DiT Pair Retry CPU 20261028' if args.mode=='cpu' else 'H3 DiT Pair Retry 59134 T4 20261028'
     meta=dict(id='pamcks/'+ids[args.mode],title=titles[args.mode],code_file='experiment.ipynb',language='python',
         kernel_type='notebook',is_private=True,enable_gpu=args.mode!='cpu',enable_tpu=False,enable_internet=True,
         docker_image_pinning_type='original',dataset_sources=[],kernel_sources=[],competition_sources=[],model_sources=[])
@@ -303,6 +308,7 @@ if guard['status']!='worker_exited' or guard['exit_code']!=0:raise RuntimeError(
         vae_compare_preflight=args.vae_compare_preflight,
         vae_ab_bake=args.vae_ab_bake,
         dit_pair=args.dit_pair,
+        dit_pair_retry=args.dit_pair_retry,
         pair_qualification_sha256=hashlib.sha256(args.pair_qualification.read_bytes()).hexdigest() if args.pair_qualification else None,
         vae_input_qualification_sha256=hashlib.sha256(args.vae_input_qualification.read_bytes()).hexdigest() if args.vae_input_qualification else None,
         profile_qualification_sha256=hashlib.sha256(args.profile_qualification.read_bytes()).hexdigest() if args.profile_qualification else None),indent=2))
