@@ -47,7 +47,7 @@ def kernel(rows,heads,dim,rot_dim,input_dtype,output_dtype,epsilon,arch='sm_75')
 def supported(packed,freqs,heads,dim):
     return (packed.is_cuda and packed.ndim==2 and packed.dtype in (torch.float16,torch.float32)
         and packed.is_contiguous() and packed.shape[1]==3*heads*dim and dim==128 and heads==28
-        and freqs.device==packed.device and freqs.dtype==torch.float32 and freqs.is_contiguous()
+        and freqs.device==packed.device and freqs.dtype in (torch.float16,torch.float32) and freqs.is_contiguous()
         and freqs.ndim==6 and freqs.shape[:3]==(1,packed.shape[0],1)
         and freqs.shape[-2:]==(2,2) and 0<freqs.shape[-3]*2<=dim
         and torch.cuda.get_device_capability(packed.device)==(7,5))
@@ -59,4 +59,4 @@ def execute(packed,freqs,q_gain,k_gain,*,heads=28,dim=128,epsilon=1e-6,out_dtype
     gains=[g.to(device=packed.device,dtype=torch.float32).reshape(dim).contiguous() for g in (q_gain,k_gain)]
     rows=packed.shape[0];rot_dim=freqs.shape[-3]*2
     return kernel(rows,heads,dim,rot_dim,str(packed.dtype).removeprefix('torch.'),
-        str(out_dtype).removeprefix('torch.'),float(epsilon),'sm_75')(packed,freqs.reshape(rows,rot_dim//2,2,2),*gains)
+        str(out_dtype).removeprefix('torch.'),float(epsilon),'sm_75')(packed,freqs.float().reshape(rows,rot_dim//2,2,2),*gains)

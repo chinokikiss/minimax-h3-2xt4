@@ -20,12 +20,15 @@ def rope(case,out,state):
     if case.get('stress'):
         packed[0].zero_();packed[1].fill_(1e-7);packed[2,::128]=65504.
     angle=torch.randn(1,s,1,rot//2,device='cuda')*.3;c=angle.cos();v=angle.sin()
-    freqs=torch.stack((c,-v,v,c),-1).reshape(1,s,1,rot//2,2,2)
+    # The native FP16 flow stores the table in FP16, then promotes it for
+    # FP32 RMS-RoPE. Preserve that boundary rather than an ideal FP32 table.
+    freqs=torch.stack((c,-v,v,c),-1).reshape(1,s,1,rot//2,2,2).to(dtype)
+    state['frequency_storage_dtype']=str(freqs.dtype)
     qg=torch.rand(128,device='cuda')+.5;kg=torch.rand(128,device='cuda')+.5
     def reference():
         q,k,_=packed.split(3584,-1)
         q,k=rms_rope_split_half(q.view(1,s,28,128).float(),k.view(1,s,28,128).float(),
-            freqs,qg,kg,epsilon=1e-6,rot_dim=rot)
+            freqs.float(),qg,kg,epsilon=1e-6,rot_dim=rot)
         return q[0].to(output_dtype),k[0].to(output_dtype)
     fn=lambda:execute(packed,freqs,qg,kg,out_dtype=output_dtype)
     begin=time.monotonic();value=fn();torch.cuda.synchronize();state['cold_candidate_seconds']=time.monotonic()-begin
@@ -66,7 +69,7 @@ def execute_plan(calls):
             output=quantize(*inputs,width=args[1],start=args[3],division=args[4])
         elif module=='tilelang_fp32_rms_rope':
             from patches.tilelang_fp32_rms_rope import execute
-            output=execute(inputs[0],inputs[1].reshape(1,rows,1,64,2,2),inputs[2],inputs[3])
+            output=execute(inputs[0],inputs[1].reshape(1,rows,1,64,2,2).half(),inputs[2],inputs[3])
         else:output=fn(*inputs)
         torch.cuda.synchronize();del output,inputs
 
