@@ -14,8 +14,11 @@ class H3OperatorPolicy:
     scalar_score_workspace_mib: int = 96
     fc2_quantizer: str = 'fused_stored'
     column_linear_backend: str = 'cuda_int8_tilelang'
+    dit_rms_rope: str = 'native'
+    aot_precompile: bool = True
 
     def __post_init__(self):
+        if self.dit_rms_rope not in ('native','tilelang_fp32'):raise ValueError('Unknown DiT RMS-RoPE backend')
         if self.te_attention not in ('kitchen_causal','tilelang_group32','native'):raise ValueError('Unknown TE attention')
         if self.dit_attention not in ('kitchen','tilelang_dense','tilelang_drop','tilelang_scalar','native'):
             raise ValueError('Unknown DiT attention')

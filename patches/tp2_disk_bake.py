@@ -4,7 +4,7 @@ Each affected full-width matrix is merged/quantized once, then split into both
 owners. Whole layers are assigned to separate GPU processes. Inference never
 loads the adapters or remerges evicted blocks. Base shards remain immutable.
 """
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 import hashlib
 import json
 import multiprocessing as mp
@@ -117,7 +117,45 @@ class DiskBakedReader(BundleReader):
         return self.shard_readers[stem]
 
 
-def _bake_layers(base_path, stack, output, layers, device, recipe_sha):
+def _persist_layer(states,index,targets,output,plan,recipe_sha):
+    """Own immutable CPU states until both payloads and manifests are durable."""
+    records={}
+    for rank,state in enumerate(states):
+        stem=f'dit.block{index:02d}.rank{rank}'
+        path=output/(stem+'.safetensors');partial=path.with_name(path.name+'.partial')
+        save_file(state,str(partial))
+        with partial.open('r+b') as stream:os.fsync(stream.fileno())
+        partial.replace(path)
+        proof=dict(format=SHARD,kind='dit',index=index,rank=rank,recipe_sha256=recipe_sha,
+            state_sha256=state_proof(state),base_state_sha256=plan[stem]['state_sha256'],
+            file_sha256=sha(path),native_verified_targets=targets)
+        manifest=output/(stem+'.json');atomic_json(manifest,proof)
+        records[stem]=dict(state_sha256=proof['state_sha256'],base_state_sha256=proof['base_state_sha256'],
+            file_sha256=proof['file_sha256'],manifest_sha256=sha(manifest),bytes=path.stat().st_size)
+    print('TP2_DISK_LAYER_DURABLE',index,flush=True)
+    return records
+
+
+class _LayerSource:
+    """One admitted layer; production/reference get independent tensor copies."""
+    def __init__(self,reader,index,states):
+        self.reader,self.index,self.states=reader,index,states
+        self.header=reader.header;self.cache={}
+
+    def read_tensor(self,name):
+        target=self.reader._target(name)
+        if target is None or target[0]!=self.index:return self.reader.read_tensor(name)
+        if name not in self.cache:
+            _,local,suffix=target
+            if suffix=='comfy_quant':return self.reader.read_tensor(name)
+            from patches.tp2_bundle import join_matrix
+            value=join_matrix(self.states[0][local+'.'+suffix],self.states[1][local+'.'+suffix],
+                              local,scale=suffix=='weight_scale')
+            self.cache[name]=value.to(CheckpointReader.DTYPES[self.header[name]['dtype']])
+        return self.cache[name].clone()
+
+
+def _bake_layers(base_path, stack, output, layers, device, recipe_sha, *, pipeline=True):
     from patches.h3_lora import H3LoRAStore
     from patches.offline_lora import merged_weight
     from patches.offline_lora_reference import verify_weight
@@ -130,48 +168,51 @@ def _bake_layers(base_path, stack, output, layers, device, recipe_sha):
     active = {t for _, _, mapping in store.sources for t, (_, _, strength) in mapping.items() if strength}
     output = Path(output)
     records, verified = {}, []
-    for index in layers:
-        targets = [f'blocks.{index}.{name}' for name in DIT_LINEAR if f'blocks.{index}.{name}' in active]
-        states = []
-        for rank in (0, 1):
-            source = reader._shard(index, rank)
-            state = {name: source.read_tensor(name) for name in source.header if name != '__metadata__'}
-            expected = reader.plan['blocks'][f'dit.block{index:02d}.rank{rank}']['state_sha256']
-            if state_proof(state) != expected:
-                raise ValueError('Base shard differs from Native state proof')
-            states.append(state)
-        for target in targets:
-            q, scale = merged_weight(reader, store, target, device)
-            verify_weight(reader, store, target, q, scale, device)
-            local = DIT_LINEAR[target.split('.', 2)[2]]
+    writer=ThreadPoolExecutor(max_workers=1,thread_name_prefix='h3-bake-write') if pipeline else None
+    pending=None
+    try:
+        for index in layers:
+            targets = [f'blocks.{index}.{name}' for name in DIT_LINEAR if f'blocks.{index}.{name}' in active]
+            states = []
             for rank in (0, 1):
-                states[rank][local + '.weight'] = split_matrix(q, local, rank)
-                if scale is not None:
-                    states[rank][local + '.weight_scale'] = split_matrix(scale, local, rank, scale=True)
-            del q, scale
-            verified.append(target)
-            print('TP2_DISK_BAKED', device, target, flush=True)
-        for rank, state in enumerate(states):
-            stem = f'dit.block{index:02d}.rank{rank}'
-            path = output / (stem + '.safetensors')
-            partial = path.with_name(path.name + '.partial')
-            save_file(state, str(partial))
-            with partial.open('r+b') as stream:
-                os.fsync(stream.fileno())
-            partial.replace(path)
-            proof = dict(format=SHARD, kind='dit', index=index, rank=rank, recipe_sha256=recipe_sha,
-                state_sha256=state_proof(state),
-                base_state_sha256=reader.plan['blocks'][stem]['state_sha256'],
-                file_sha256=sha(path), native_verified_targets=targets)
-            manifest = output / (stem + '.json')
-            atomic_json(manifest, proof)
-            records[stem] = dict(state_sha256=proof['state_sha256'], base_state_sha256=proof['base_state_sha256'],
-                file_sha256=proof['file_sha256'], manifest_sha256=sha(manifest), bytes=path.stat().st_size)
-        del states, state
-        print('TP2_DISK_LAYER_COMPLETE', device, index, flush=True)
+                source = reader._shard(index, rank)
+                state = {name: source.read_tensor(name) for name in source.header if name != '__metadata__'}
+                expected = reader.plan['blocks'][f'dit.block{index:02d}.rank{rank}']['state_sha256']
+                if state_proof(state) != expected:
+                    raise ValueError('Base shard differs from Native state proof')
+                states.append(state)
+            snapshot=_LayerSource(reader,index,states) if pipeline else reader
+            for target in targets:
+                q, scale = merged_weight(snapshot, store, target, device)
+                verify_weight(snapshot, store, target, q, scale, device)
+                if pipeline:snapshot.cache.clear()
+                local = DIT_LINEAR[target.split('.', 2)[2]]
+                for rank in (0, 1):
+                    states[rank][local + '.weight'] = split_matrix(q, local, rank)
+                    if scale is not None:
+                        states[rank][local + '.weight_scale'] = split_matrix(scale, local, rank, scale=True)
+                del q, scale
+                verified.append(target)
+                print('TP2_DISK_BAKED', device, target, flush=True)
+            del snapshot
+            if writer is None:
+                records.update(_persist_layer(states,index,targets,output,reader.plan['blocks'],recipe_sha))
+            else:
+                # One outstanding layer plus the next in production: bounded ownership.
+                if pending is not None:records.update(pending.result())
+                pending=writer.submit(_persist_layer,states,index,targets,output,reader.plan['blocks'],recipe_sha)
+            del states, state
+            print('TP2_DISK_LAYER_QUEUED' if writer else 'TP2_DISK_LAYER_COMPLETE', device, index, flush=True)
+        if pending is not None:records.update(pending.result())
+    finally:
+        if writer is not None:writer.shutdown(wait=True,cancel_futures=True)
     store.check()
     reader.check()
     return dict(shards=records, verified_targets=verified)
+
+
+def _bake_layers_serial(*args):
+    return _bake_layers(*args,pipeline=False)
 
 
 def _write_auxiliary(reader, store, targets, path, device):
@@ -200,7 +241,7 @@ def _write_auxiliary(reader, store, targets, path, device):
         os.fsync(stream.fileno())
 
 
-def bake(base_descriptor, lora_stack, output, *, devices=('cuda:0', 'cuda:1')):
+def bake(base_descriptor, lora_stack, output, *, devices=('cuda:0', 'cuda:1'), pipeline=True):
     """Atomic publication; persistent files contain weights, never adapters."""
     from patches.h3_lora import H3LoRAStore
     from importlib.metadata import version
@@ -229,11 +270,12 @@ def bake(base_descriptor, lora_stack, output, *, devices=('cuda:0', 'cuda:1')):
     active = {t for _, _, mapping in store.sources for t, (_, _, strength) in mapping.items() if strength}
     shards, verified = {}, []
     partitions = [list(range(i, 50, len(devices))) for i in range(len(devices))]
+    worker=_bake_layers if pipeline else _bake_layers_serial
     if len(devices) == 1:
-        results = [_bake_layers(str(base.path), tuple(lora_stack), str(partial), partitions[0], devices[0], recipe_sha)]
+        results = [worker(str(base.path), tuple(lora_stack), str(partial), partitions[0], devices[0], recipe_sha)]
     else:
         with ProcessPoolExecutor(max_workers=len(devices), mp_context=mp.get_context('spawn')) as pool:
-            jobs = [pool.submit(_bake_layers, str(base.path), tuple(lora_stack), str(partial), layers, device, recipe_sha)
+            jobs = [pool.submit(worker, str(base.path), tuple(lora_stack), str(partial), layers, device, recipe_sha)
                     for layers, device in zip(partitions, devices)]
             results = [job.result() for job in jobs]
     for result in results:

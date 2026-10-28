@@ -233,6 +233,8 @@ def prepare_video(model, policy):
     Encoder GN -> SiLU -> Conv is not homogeneous: retain that Native FP16
     computation rather than incorrectly folding a scale through SiLU.
     """
+    from patches.h3_vae_operators import install
+    install(model)
     if not policy.enabled:return model
     if hasattr(model, 'tensor_flow'):raise ValueError('Video tensor flow already prepared')
     model.tensor_flow = policy

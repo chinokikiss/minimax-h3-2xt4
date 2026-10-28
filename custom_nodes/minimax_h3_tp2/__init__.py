@@ -47,7 +47,9 @@ class MiniMaxH3TP2Loader:
                         'command_timeout_seconds':('INT',{'default':1500,'min':1,'max':3600,'tooltip':'Per-command worker deadline, including cold weight preparation.'}),
                         'rank_checkpoint_dir':('STRING',{'default':'','tooltip':'Optional verified contiguous rank-block directory; empty retains ordinary checkpoint reads.'}),
                         'lora_selective_qkv_b':('BOOLEAN',{'default':True,'tooltip':'Owned QKV B for supported online rank128 adapters; byte-exact and faster on tested T4 fixtures. Inactive offline; unsupported shapes retain full B. Not long-sequence online admission.'}),
-                        'column_linear_backend':(['cuda_int8_tilelang','preallocated'],{'default':'cuda_int8_tilelang','tooltip':'Measured direct INT8 GEMM + ordered TileLang epilogue on aligned SM75 DiT columns. Other shapes/devices fall back. Preallocated remains the fallback/control.'})}}
+                        'column_linear_backend':(['cuda_int8_tilelang','preallocated'],{'default':'cuda_int8_tilelang','tooltip':'Measured direct INT8 GEMM + ordered TileLang epilogue on aligned SM75 DiT columns. Other shapes/devices fall back. Preallocated remains the fallback/control.'}),
+                        'dit_rms_rope':(['native','tilelang_fp32'],{'default':'native','tooltip':'Explicit FP32 fused RMS-RoPE candidate. Native remains default pending T4 numerical qualification.'}),
+                        'aot_precompile':('BOOLEAN',{'default':True,'tooltip':'Prepare the exact selected TE/DiT custom kernels before execution. Shipped Kitchen/Torch kernels are already compiled. Preparation time is separate from steady state.'})}}
     RETURN_TYPES = ('MODEL', 'CLIP', 'MINIMAX_TP2_SESSION')
     FUNCTION = 'load'
     CATEGORY = 'MiniMax H3/TP2'
@@ -65,7 +67,7 @@ class MiniMaxH3TP2Loader:
              vision_residual_exponent=0,video_residual_exponent=0,video_decode_reserve_gib=2.,
              prefetch_lifecycle=True,memory_pressure_aware=True,dit_reserve_gib=9.,
              command_timeout_seconds=1500,rank_checkpoint_dir='',
-             lora_selective_qkv_b=True,column_linear_backend='cuda_int8_tilelang',**retired_options):
+             lora_selective_qkv_b=True,column_linear_backend='cuda_int8_tilelang',dit_rms_rope='native',aot_precompile=True,**retired_options):
         global _service
         from patches.h3_configuration import check_retired_loader_options
         check_retired_loader_options(retired_options)
@@ -103,7 +105,8 @@ class MiniMaxH3TP2Loader:
                 dit_attention=dit_attention,
                 row_linear_backend=row_linear_backend,
                 scalar_score_workspace_mib=int(scalar_score_workspace_mib),
-                fc2_quantizer=fc2_quantizer,column_linear_backend=column_linear_backend))
+                fc2_quantizer=fc2_quantizer,column_linear_backend=column_linear_backend,
+                dit_rms_rope=dit_rms_rope,aot_precompile=aot_precompile))
         with _lock:
             if _service is None or _service.closed or _service.config != config:
                 if _service is not None:

@@ -181,6 +181,11 @@ class TPTransformerBlockINT8(nn.Module):
             getattr(self, name).load_shard_from_full(sd[key + '.weight'], sd[key + '.weight_scale'])
 
     def forward(self, x, attention_mask=None, freqs_cis=None):
+        policy=getattr(self,'operator_policy',None)
+        if (getattr(policy,'aot_precompile',False) and x.is_cuda and x.dtype==torch.float16
+                and torch.cuda.get_device_capability(x.device)==(7,5)):
+            from patches.h3_operator_aot import prepare
+            prepare(x.numel()//x.shape[-1],self.rank,policy,'te')
         # 1. Self Attention
         residual = x
         # Native ComfyUI casts norm weights to the activation dtype. The

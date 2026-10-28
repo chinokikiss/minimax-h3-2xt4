@@ -112,6 +112,11 @@ def execute(case,out):
         candidate=Candidate(('int8_linear',));fn=lambda:candidate.call('int8_linear',x,w,scale,**kwargs)
         baseline=ck.registry.get_implementation('int8_linear',backend='eager')
         ref=lambda:baseline(x,w,scale,**kwargs)
+        if case.get('pipeline_default'):
+            from patches.h3_vae_operators import scope
+            import comfy.quant_ops
+            def fn():
+                with scope():return comfy.quant_ops.ck.int8_linear(x,w,scale,**kwargs)
     elif kind=='rope':
         length=case['length'];layout=case['layout']
         if layout=='te':
@@ -150,6 +155,11 @@ def execute(case,out):
             name='rms_rope_split_half';candidate=Candidate((name,'rms_rope_split_half_'))
         fn=lambda:candidate.call(name,*args,**kwargs)
         ref_impl=ck.registry.get_implementation(name,backend='eager');ref=lambda:ref_impl(*args,**kwargs)
+        if case.get('pipeline_default'):
+            from patches.h3_vae_operators import scope
+            import comfy.quant_ops
+            def fn():
+                with scope():return getattr(comfy.quant_ops.ck,name)(*args,**kwargs)
     elif kind=='dequant':
         from patches.dit_column_linear import _dequantize_eager
         from patches.tilelang_column_epilogue import dequantize
@@ -157,26 +167,38 @@ def execute(case,out):
         rows=torch.rand((m,1),device='cuda')*.0001;weights=torch.rand((n,),device='cuda')*.0001
         ref=lambda:_dequantize_eager(acc,rows,weights,torch.float16)
         fn=lambda:dequantize(acc,rows,weights,torch.float16);candidate=None
+        if case.get('pipeline_default'):
+            from patches.dit_column_linear import _dequantize_column
+            from types import SimpleNamespace
+            fn=lambda:_dequantize_column(acc,rows,weights,torch.float16,SimpleNamespace(shape=(n,5120)))
     elif kind=='normpad':
         c=case['channels'];x=rand(1,c,17,32,32).contiguous(memory_format=torch.channels_last_3d)
         weight=rand(c).add_(1);bias=rand(c)
         args=(x,weight,bias,32,1e-6,[1,1,1,1,2],True)
         candidate=Candidate(('group_norm_silu_pad3d',));fn=lambda:candidate.call('group_norm_silu_pad3d',*args)
         eager=ck.registry.get_implementation('group_norm_silu_pad3d',backend='eager');ref=lambda:eager(*args)
+        if case.get('pipeline_default'):
+            from patches.h3_vae_operators import scope
+            import comfy.quant_ops
+            def fn():
+                with scope():return comfy.quant_ops.ck.group_norm_silu_pad3d(*args)
     else:
         c=case['channels'];x=rand(1,c,7,16,16).contiguous(memory_format=torch.channels_last_3d)
         weight=rand(c,c,3,3,3);args=(x,weight,None,None,[1,1,1])
         candidate=Candidate(('fp16_conv3d',));fn=lambda:candidate.call('fp16_conv3d',*args)
         ref=lambda:torch.nn.functional.conv3d(x,weight,stride=1)
         state['native_fp16_accumulation_optin']=bool(getattr(torch.backends.cuda.matmul,'allow_fp16_accumulation',False))
-    reference=ref()
+    start=time.monotonic();reference=ref();torch.cuda.synchronize()
+    state['first_reference_seconds']=time.monotonic()-start
     with extension_calls(backend,state['extension_calls']):
         if kind=='rope' and case['layout']=='vae':
             inplace=packed.clone();iq,ik,_=inplace.chunk(3,-1)
             value=candidate.call('rms_rope_split_half_',iq,ik,matrix,args[3],**kwargs)
             state['inplace_error_vs_functional_eager']=error(value,reference)
             del value,inplace,iq,ik
-        value=fn();torch.cuda.synchronize();state['error_vs_eager']=error(value,reference);del value
+        start=time.monotonic();value=fn();torch.cuda.synchronize()
+        state['first_candidate_seconds']=time.monotonic()-start
+        state['error_vs_eager']=error(value,reference);del value
         state['candidate']=timed(fn);state['trace']=profile(fn,out/'candidate_trace.json')
     state['baseline']=timed(ref)
     state['speedup']=state['baseline']['median_ms']/state['candidate']['median_ms']

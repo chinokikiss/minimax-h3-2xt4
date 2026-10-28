@@ -60,6 +60,7 @@ class RemoteDenoiser(nn.Module):
     def __init__(self, service):
         super().__init__()
         self.service = service
+        self._aot_shapes=set()
         flow=getattr(service.config,'tensor_flow',None)
         if flow is not None and flow.enabled:self.dtype=flow.dtype
         self.register_buffer('device_anchor', torch.zeros(1), persistent=False)
@@ -69,6 +70,15 @@ class RemoteDenoiser(nn.Module):
         if flow is not None and flow.enabled and context.shape[-1]==self.hidden_size:
             return context.to(flow.dtype)
         return packet(self.service.call('refine', context), context.device)
+
+    def prepare_payload(self,payload):
+        if not getattr(self.service,'operator_aot',False):return
+        layout=(payload or {}).get('layout')
+        if layout is None or not getattr(getattr(self.service.config,'operators',None),'aot_precompile',False):return
+        rows=layout.seq_len
+        if rows not in self._aot_shapes:
+            self.service.call('prepare_dit',rows)
+            self._aot_shapes.add(rows)
 
     def forward(self, x, timestep, context=None, control=None, transformer_options=None, **kwargs):
         if control is not None:
@@ -84,6 +94,7 @@ class RemoteDenoiser(nn.Module):
         if wrappers:
             raise ValueError('Additional model wrappers require TP qualification')
         options.pop('wrappers', None)
+        self.prepare_payload(kwargs.get('minimax_payload'))
         result = self.service.call('denoise', x, timestep, context=context,
             control=None, transformer_options=options, **kwargs)
         device = x[0].device if isinstance(x, list) else x.device
@@ -112,7 +123,9 @@ def create_model(service, device='cuda:0'):
                         cross.to(device=kwargs['device'],dtype=torch.float32))
                 # Retain Native layout construction, references, masks and tags.
                 # The proxy recognizes the already-refined hidden width.
-                return super().extra_conds(**kwargs)
+                out=super().extra_conds(**kwargs)
+                self.diffusion_model.prepare_payload(out['minimax_payload'].cond)
+                return out
         base_class=ScaledConditioningH3
     native = base_class(config, device=torch.device(device))
     native.diffusion_model = RemoteDenoiser(service)

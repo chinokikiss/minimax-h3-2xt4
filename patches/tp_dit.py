@@ -267,11 +267,18 @@ class TPDiTBlockINT8(nn.Module):
         v = v.view(S, self.heads_per_rank, self.head_dim)
 
         if rope_freqs is not None:
-            if flow is not None:q,k=q.float(),k.float()
-            q, k = comfy_kitchen.rms_rope_split_half(q[None], k[None], rope_freqs.float() if flow is not None else rope_freqs,
-                self.q_norm.weight, self.k_norm.weight, epsilon=self.q_norm.eps,
-                rot_dim=rope_freqs.shape[-3] * 2)
-            q, k = q[0], k[0]
+            from patches.tilelang_fp32_rms_rope import supported,execute
+            policy=getattr(self,'operator_policy',None)
+            if (flow is not None and getattr(policy,'dit_rms_rope','native')=='tilelang_fp32'
+                    and supported(qkv,rope_freqs,self.heads_per_rank,self.head_dim)):
+                q,k=execute(qkv,rope_freqs,self.q_norm.weight,self.k_norm.weight,
+                    heads=self.heads_per_rank,dim=self.head_dim,epsilon=self.q_norm.eps,out_dtype=flow.dtype)
+            else:
+                if flow is not None:q,k=q.float(),k.float()
+                q, k = comfy_kitchen.rms_rope_split_half(q[None], k[None], rope_freqs.float() if flow is not None else rope_freqs,
+                    self.q_norm.weight, self.k_norm.weight, epsilon=self.q_norm.eps,
+                    rot_dim=rope_freqs.shape[-3] * 2)
+                q, k = q[0], k[0]
         else:
             q, k = self.q_norm(q), self.k_norm(k)
         if flow is not None:q,k=q.to(flow.dtype),k.to(flow.dtype)

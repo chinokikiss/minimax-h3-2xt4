@@ -4,6 +4,7 @@ from importlib.metadata import PackageNotFoundError,version
 
 def _uses_tilelang(policy):
     return (policy.te_attention=='tilelang_group32' or policy.dit_attention.startswith('tilelang_')
+            or getattr(policy,'dit_rms_rope','native')=='tilelang_fp32'
             or policy.row_linear_backend.startswith('tilelang_')
             or getattr(policy,'column_linear_backend','preallocated')!='preallocated')
 

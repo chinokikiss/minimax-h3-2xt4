@@ -554,6 +554,11 @@ class RankRuntime:
                     self.cache.prefetch(tp_specs(self.readers['dit'],'dit',self.rank,
                         self.config.layers)[:self.config.cpu_lookahead])
                 return output
+            elif command == 'prepare_dit':
+                from patches.h3_operator_aot import prepare
+                result=prepare(int(args[0]),self.rank,self.config.operators)
+                self.events.append(dict(phase='dit_aot',**result))
+                return result
             elif command in ('refine', 'denoise'):
                 if not self.sample_active:
                     raise RuntimeError('Denoising requires a Native sampler session')
@@ -688,6 +693,7 @@ def _worker(rank, config, budget, port, connection):
 
 class PhysicalTPService:
     """Two persistent NCCL processes. One in-flight command, bounded deadline."""
+    operator_aot = True
     def __init__(self, config):
         from patches.legacy_runtime import validate_imported_source
         validate_imported_source()

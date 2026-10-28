@@ -45,15 +45,18 @@ def download(row, directory):
     return path
 
 
-def stage(source, scratch):
+def stage(source, scratch, *, layers=None):
     source,scratch=Path(source),Path(scratch)
     scratch.mkdir(exist_ok=False)
     assets=json.loads((source/'bundle_assets.json').read_text())
     root=scratch/'base_bundle';root.mkdir()
     for path in (source/'bundle_provenance').glob('*.json'):shutil.copy2(path,root/path.name)
     assert sha(root/'bundle.json')==assets['publication']['bundle_sha256']
-    objects=[(n,row) for n,row in assets['objects'].items() if n.startswith('dit.')]
-    assert len(objects)==100
+    selected=None if layers is None else {f'dit.block{i:02d}.rank{r}.safetensors' for i in layers for r in (0,1)}
+    if layers is not None and (not layers or any(type(i) is not int or not 0<=i<50 for i in layers)):
+        raise ValueError('Explicit trained DiT layer subset required')
+    objects=[(n,row) for n,row in assets['objects'].items() if n.startswith('dit.') and (selected is None or n in selected)]
+    assert len(objects)==(100 if selected is None else len(selected))
     needed=2*sum(row['bytes'] for _,row in objects)+assets['auxiliary']['dit']['bytes']+5*2**30
     if shutil.disk_usage(scratch).free<needed:raise OSError('Insufficient disk for immutable base plus persisted bake')
     def one(item):

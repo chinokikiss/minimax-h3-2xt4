@@ -57,6 +57,16 @@ def _column_accumulate(codes, weight):
     return eager._int8_matmul_accumulate(codes, rhs)
 
 
+def _dequantize_column(accumulator,row_scale,weight_scale,out_dtype,weight):
+    """Use the byte-qualified TE epilogue without changing shared preparation."""
+    if (accumulator.is_cuda and torch.cuda.get_device_capability(accumulator.device)==(7,5)
+            and weight.shape[1]==5120 and weight.shape[0] in (512,4096,12800)
+            and out_dtype==torch.float16):
+        from patches.tilelang_column_epilogue import dequantize
+        return dequantize(accumulator,row_scale,weight_scale,out_dtype)
+    return _dequantize_eager(accumulator,row_scale,weight_scale,out_dtype)
+
+
 def shared_column_linears(x,projections,*,convrot=True,convrot_groupsize=256):
     """Share deterministic eager rotation/quantization; keep each GEMM intact.
 
@@ -80,7 +90,7 @@ def shared_column_linears(x,projections,*,convrot=True,convrot_groupsize=256):
         weight=weight.to(device=x.device).contiguous()
         scale=weight_scale.to(device=x.device,dtype=torch.float32).reshape(-1)
         accumulator=_column_accumulate(codes,weight)
-        output=_dequantize_eager(accumulator,row_scale,scale,x.dtype)
+        output=_dequantize_column(accumulator,row_scale,scale,x.dtype,weight)
         del accumulator
         outputs.append(output.reshape(*x.shape[:-1],weight.shape[0]))
     return tuple(outputs)
@@ -132,6 +142,6 @@ def _eager_column(x, weight, weight_scale, *, convrot, convrot_groupsize, out_dt
         return output.reshape(*shape[:-1],weight.shape[0])
     # One destination, no retained list of FP16 chunks or final cat copy.
     # Keep the full INT8 GEMM and eager's two FP32 multiplication boundaries.
-    output=_dequantize_eager(accumulator,row_scale,weight_scale,out_dtype)
+    output=_dequantize_column(accumulator,row_scale,weight_scale,out_dtype,weight)
     del accumulator, row_scale
     return output.reshape(*shape[:-1], weight.shape[0])
