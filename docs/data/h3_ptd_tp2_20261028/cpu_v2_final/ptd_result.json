@@ -1,0 +1,10 @@
+{
+  "status": "ptd_cpu_ready",
+  "capsule_sha256": "3ff7894465f9a0cabb33442d6befb5063ed2fd90d3c18a2aa8179a3d1fc6c0b2",
+  "full_pipeline": false,
+  "no_local_lora_download": true,
+  "scope": "2 trained blocks, both refiners, full head banks, all 8 hops",
+  "core_api_imports": true,
+  "no_weights_fetched": true,
+  "registration_contract_tests": 2
+}

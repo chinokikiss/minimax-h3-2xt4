@@ -40,7 +40,7 @@ Unrelated dirty-worktree attention/VAE changes are excluded from this delivery.
 CPU API preflight notebook:
 [H3 PTD TP2 CPU 20261028](https://www.kaggle.com/code/pamcks/h3-ptd-tp2-cpu-20261028).
 
-**Version 1 failed; version 2 accepted for retry.** One final output collection
+**CPU version 2 passed; T4 version 1 submitted.** One final output collection
 retrieved version 1 after the user reported completion. Its pinned core API
 probe and all 111 base tests passed. The review suite ran 179 tests, with 177
 passing and two import errors. Both errors came from the newly added relative
@@ -65,8 +65,17 @@ Version 2 was submitted once to the same notebook, using source archive SHA256
 and capsule SHA256
 `3ff7894465f9a0cabb33442d6befb5063ed2fd90d3c18a2aa8179a3d1fc6c0b2`.
 The frozen Native source archive and dependency-lock digests are explicitly
-recorded unchanged. The new CPU result and PTD T4 qualification remain pending.
-No Kaggle status/list or live-log endpoint was polled. No GPU job was submitted.
+recorded unchanged. One final output collection confirmed CPU version 2:
+111/111 base tests, 179/179 review tests and 2/2 explicit PTD registration and
+disabled-object identity checks passed. The setup status is `cpu_ready` and
+the PTD status is `ptd_cpu_ready`, with no weights fetched. These receipts are
+bound to the same source capsule as the GPU submission.
+
+[H3 PTD TP2 T4 20261028](https://www.kaggle.com/code/pamcks/h3-ptd-tp2-t4-20261028)
+version 1 was accepted with the Tesla T4 accelerator selection. Its actual
+hardware admission and numerical results remain pending. This is one bounded
+two-T4 qualification submission, with zero dataset/kernel mounts and no
+credentials. No Kaggle status/list or live-log endpoint was polled.
 
 The new GPU job builder requires both matching frozen-setup and PTD CPU API
 receipts before submitting its bounded T4 fixture. The prepared GPU experiment
