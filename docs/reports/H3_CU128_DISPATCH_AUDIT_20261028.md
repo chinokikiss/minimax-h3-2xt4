@@ -113,4 +113,12 @@ CPU setup/API qualification precedes any T4 submission. Existing native-cu128
 source and core pins are retained. No status/list/live-log polling is scheduled.
 Physical override results are pending; no new cu128 override speedup is claimed.
 
+CPU preflight version 1 was accepted at
+[H3 cu128 Dispatch CPU 20261028](https://www.kaggle.com/code/pamcks/h3-cu128-dispatch-cpu-20261028).
+It binds capsule `e91e0aba28007e0b996b7107a474d7a840eba683b0e9db5889c2fd44bb175b5d`.
+The prepared GPU matrix contains 29 isolated cases. Its VAE cases retain the
+Native per-output-channel scale shape, bias, and O/FC2 residual epilogue inputs;
+encoder norm/padding inputs use channels-last storage. No GPU job is submitted
+until matching native/core and operator CPU receipts pass.
+
 Evidence root: `D:/attention_eval/h3_cu128_dispatch_20261028`.
