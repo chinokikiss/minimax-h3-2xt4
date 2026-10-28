@@ -1,0 +1,43 @@
+{
+  "parent_sha256": "11a4a8a485ec680e8f17eb0a791798683bf544905a0ced6a3081ed54c3a4105d",
+  "native_comfyui_preserved": true,
+  "core_pins_preserved": true,
+  "unrelated_dirty_changes_excluded": true,
+  "frozen_archive_and_lock_sha256": {
+    "direct_core_requirements.json": "50eb673de9cb28e6b17a4c59997793eb3ed2df68d7da6a8d2fe9d5761aef9db3",
+    "frozen/comfy_source.tar.gz.bin": "97cb93348993c7ff9a1390680ca4509d2880712707ae5bb249a1f4b2e8a92ebc",
+    "frozen/constraints-local-conda.txt": "5a94152799828ea794a0f84ddd925df76967a89692b24a13f3ee16b3b254f573",
+    "frozen/frozen_kaggle_setup.py": "fd6c168e576e8b654803408380985260d1f38c651e5698644d6cb27674ecc318",
+    "frozen/local_conda.json": "e3a07afb8cb79e6f45c9c0118debc4bd4008c022d2652e0891273dac2db07aa3",
+    "frozen/requirements-local-conda.txt": "81e4f75c02676e0bdb7e35cb5ad3746465053935a23e764be7c385d46585c3f7"
+  },
+  "ptd_enabled_by_default": false,
+  "weights_downloaded_locally": false,
+  "overlays": {
+    "patches/h3_operator_aot.py": "1ac398569548bd613f10b59a40b77dca76faaf08cf4813750f3f3fa450f87265",
+    "benchmarks/case_h3_optimization.py": "98a1a0a1a9c27bf456960a799c06c2b6b2c0286198a5f86392740e33d1a558e5",
+    "patches/weight_residency.py": "82a7ada5b4108b0b865070c33d75f70246dd19f9c291bb907b56aff07399ad9f",
+    "benchmarks/test_h3_optimization_batch.py": "cd805883fba7d511dd3f4e425ae85841d6fe44aad5ee0a4fe5d8adaa48bf2971",
+    "benchmarks/test_ptd_tp2.py": "85d79934e2da6fafbb320f804ec4e33f3d779dda40637e4da82f4c5fdbf2eefd",
+    "benchmarks/test_ptd_queue.py": "f2426bdef95a6e284665aeb998f441f8567f447a786982744d6386a344cb920b",
+    "benchmarks/ptd_worker_probe.py": "7d29540db98afb08551507220e45f27110bcb38610502f53c335ec6549ab8612",
+    "benchmarks/ptd_t4_assets.py": "fe8f4bec2b2a1f36f635c0562d1955f7d641598b2967ba72635e76c71f3d51e2",
+    "benchmarks/run_ptd_tp2_t4.py": "0cc0a688494e3f6a2ca153893c7422cde01f0025c738354798ba7123405259ed",
+    "custom_nodes/minimax_h3_tp2/ptd_nodes.py": "f24bfe7184f027dabed86c84d35b321bd14c9f8f5ea87c80a90f0b767a065b4e",
+    "patches/ptd/bank.py": "da2226445c1e391d68df318795c50765c8b0b124f7e5bab8a66d9dc8435301a4",
+    "patches/ptd/checkpoint.py": "70af882dd1a36dea38c4e01dac38d1e029ac955832214a9c1f52bb44a012bf68",
+    "patches/ptd/LICENSE": "3733abdbdcf808bdd34e30446340e9993780f7c3f9990a03e22ddfc7ab3e7d66",
+    "patches/ptd/mapping.py": "61526c23b3eaf6251be398b42451cbdb40ae061aad8351678f9ea3800d36a621",
+    "patches/ptd/nodes.py": "4c3250cb55728d46de953df48cc9c49ad9bd27ec70fe28f0554c9d83359567e3",
+    "patches/ptd/NOTICE": "1646c64d83794c42bed4701f95a40ba18c0250eb21549ff5db6b9459df296cfd",
+    "patches/ptd/queue.py": "eddde3d7e233d9254a2f60d6677d9379c8c9ff85f1df3fb200bbc95210061b1b",
+    "patches/ptd/reference_sources.json": "406110a73c078b45c750d21e668d5ad275c4b33a75028f031940303b434411ec",
+    "patches/ptd/runtime.py": "98670697ffded7a6934f9cab34f963170a1e8b7a92e65a5d88124c2771f378da",
+    "patches/ptd/sampler.py": "e91262733d1272884ab258a8e118fbc692d74b8450dea70b883a182633e4f223",
+    "patches/ptd/schedule.py": "6597d540128d22af46a4fabb7ded0eca700c113f5376589dc84f42423aca40e9",
+    "patches/ptd/__init__.py": "d5b0f7f0ccc6077db67f43abc56ff1d8a06e5b054a0a08e90c361abc29f4a219",
+    "patches/comfy_sampler.py": "4fefc8ceba5bc3883df77f4d4a204382986f65ef2c3431e403831159aa8e04ab",
+    "patches/comfy_tp_runtime.py": "8b39f72cdf45be96de6df3179a0978a0d68117bffe3f0e756ac2790ecad979fa",
+    "custom_nodes/minimax_h3_tp2/__init__.py": "35b1dd64defc1954c8d1743b0339e02a448f2a4ea483a2417828863808396fd0"
+  }
+}

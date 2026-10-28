@@ -1,0 +1,168 @@
+{
+  "status": "failed",
+  "capsule_sha256": "3ff7894465f9a0cabb33442d6befb5063ed2fd90d3c18a2aa8179a3d1fc6c0b2",
+  "full_pipeline": false,
+  "no_local_lora_download": true,
+  "scope": "2 trained blocks, both refiners, full head banks, all 8 hops",
+  "hardware": {
+    "devices": [
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "f1ce1d55-37d7-dddd-7f11-7d4d55eafc7d"
+      },
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "bf9538e7-dd5f-aa0e-8f29-2fdaf2995fb1"
+      }
+    ],
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "kitchen": "0.2.37",
+    "tilelang": "0.1.13"
+  },
+  "contract_tests": 12,
+  "subset_provenance": {
+    "release": {
+      "repo": "taobao-content-ai/MiniMax-H3-PTD-RefAsymOPD-LoRAs",
+      "revision": "d1f88c89c352e7751b56b5f32c7b657fb3e0f2c5",
+      "file": "MiniMax-H3-Ref2VA-PTD-RefAsymOPD-8Step.safetensors",
+      "bytes": 11112893024,
+      "sha256": "6796802b9150110a3cd7f66891c9e6190502a432c30b0fa1aa299724cfc15cc3"
+    },
+    "source_url": "https://huggingface.co/taobao-content-ai/MiniMax-H3-PTD-RefAsymOPD-LoRAs/resolve/d1f88c89c352e7751b56b5f32c7b657fb3e0f2c5/MiniMax-H3-Ref2VA-PTD-RefAsymOPD-8Step.safetensors",
+    "source_header_sha256": "9ce1188fff969a4ae93979e6ac3f60f2ea27edda8ab547e8bf844c7dab365856",
+    "ranges": [
+      {
+        "start": 0,
+        "stop": 8,
+        "sha256": "469435c784e5ca1aeac4b1f7343aa8509e31e478d6df6d6055c0d94e1df7c67c"
+      },
+      {
+        "start": 8,
+        "stop": 76384,
+        "sha256": "9ce1188fff969a4ae93979e6ac3f60f2ea27edda8ab547e8bf844c7dab365856"
+      },
+      {
+        "start": 76384,
+        "stop": 55134816,
+        "sha256": "1af7df60357591352abd7a33e02d78929a05c1a3031f07453a820025c5770a14"
+      },
+      {
+        "start": 55134816,
+        "stop": 121195104,
+        "sha256": "4a8bdaf68c8aac4ab3789709ec1e432e2b5b5bb64f20b38f8758333a66293173"
+      },
+      {
+        "start": 121195104,
+        "stop": 157895264,
+        "sha256": "1e0b60dab4d1fda5365d3297ce843f29d88f65af4a9aba7a9c3680d1d6ba7b15"
+      },
+      {
+        "start": 157895264,
+        "stop": 216615520,
+        "sha256": "f09f8918a80b826180357be08b362c5f2e71689ef95e246fe172868c06a30d67"
+      },
+      {
+        "start": 216615520,
+        "stop": 282675808,
+        "sha256": "1d338e825f620b4665ea9d1bec1be9060aa0816388616f1ee86f0710673414dc"
+      },
+      {
+        "start": 282675808,
+        "stop": 345066080,
+        "sha256": "0c23aa015a72e456c93f4e17d54b1d084245a01e4f14b85c0befa753d3744642"
+      },
+      {
+        "start": 345066080,
+        "stop": 370756192,
+        "sha256": "3df2099d5084021586f2b6ba78e2f824dc8db7507d06ec2ed9d61258943693c3"
+      },
+      {
+        "start": 370756192,
+        "stop": 429476448,
+        "sha256": "05948948f3b5056d1ca644d97907b0e78801c45b8855c3fa1ebaf66239bc5576"
+      },
+      {
+        "start": 429476448,
+        "stop": 495536736,
+        "sha256": "ef6ea8c3673281324ecb711b1975a9806d0c3093e8af8c180e79d27b5c036e8d"
+      },
+      {
+        "start": 495536736,
+        "stop": 557927008,
+        "sha256": "de51639f00c299ebe0f655a39069d68264146104e3e4404a5c0593a68ce306dd"
+      },
+      {
+        "start": 557927008,
+        "stop": 583617120,
+        "sha256": "e9f7540b860f2b090eb0da6b1064f7163a49d74358c2bf108783e70cbdacf66a"
+      },
+      {
+        "start": 583617120,
+        "stop": 642337376,
+        "sha256": "8280b22adf92a91e85b3aa586f799182754be56f1ceef66a17025c9b3071bb94"
+      },
+      {
+        "start": 642337376,
+        "stop": 708397664,
+        "sha256": "cdc4858ce273976e45c51d2d655e7dd9a4d999633240cdf2e3ab50fd42237490"
+      },
+      {
+        "start": 708397664,
+        "stop": 770787936,
+        "sha256": "1337b4e326ab22b9e5d40c71bed205834050825af436f1126a045fb62b9db485"
+      },
+      {
+        "start": 770787936,
+        "stop": 796478048,
+        "sha256": "911efe8aa5fbafb0d111d5747e0268bddce8ab3288d040837e4a61693661d3e1"
+      },
+      {
+        "start": 796478048,
+        "stop": 855198304,
+        "sha256": "f04da0d9ce36b86154eefecdcec815647928fec4bd9034fd73ce574c29c6fd6c"
+      },
+      {
+        "start": 855198304,
+        "stop": 895568480,
+        "sha256": "a8a6e3ad9061d79a984b18e62c9a9ac2199d7b6394ea4a7157c6461b8f7a3644"
+      }
+    ],
+    "selected_tensors": 52,
+    "full_release_sha256_verified": false,
+    "subset_sha256": "b6cd35e72fab87e65e2f601bb5c16e0350508fc2021b10b28789df6bfb6aa2aa",
+    "subset_bytes": 895498632,
+    "deployment_allowed": false
+  },
+  "disk_plan": {
+    "required_free_bytes": 35301910888,
+    "free_bytes": 1121383043072,
+    "estimated_expert_bytes": 31006943592,
+    "shared_base_auxiliary": true,
+    "output": "/tmp/h3_ptd_qualification_20261028/bank",
+    "layers": 2,
+    "full_model": false
+  },
+  "bake_seconds": 280.662308962,
+  "verified_targets_per_hop": [
+    16,
+    16,
+    16,
+    16,
+    16,
+    16,
+    16,
+    16
+  ],
+  "baked_bytes": 18636426752,
+  "deployment_fixture_rejected": true,
+  "error": "RuntimeError('Traceback (most recent call last):\\n  File \"/kaggle/temp/h3_light_source/patches/comfy_tp_runtime.py\", line 684, in _worker\\n    with native_scope():result = runtime.dispatch(command, args, kwargs)\\n                                 ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"/kaggle/temp/h3_light_source/patches/comfy_tp_runtime.py\", line 502, in dispatch\\n    args,kwargs=ptd_adapter.prepare(args,kwargs)\\n                ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\\n  File \"/kaggle/temp/h3_light_source/patches/ptd/runtime.py\", line 95, in prepare\\n    self.runtime._phase(\\'dit\\')\\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^\\n  File \"/kaggle/temp/h3_light_source/patches/comfy_tp_runtime.py\", line 466, in _phase\\n    else:self.window = ResidencyWindow(specs, (), self.device,\\n                       ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^\\n        max_weight_bytes=(self.config.te_weight_bytes or self.config.weight_bytes)\\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n    ...<3 lines>...\\n        lookahead=self.config.gpu_lookahead,cpu_lookahead=self.config.cpu_lookahead,\\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n        retain_keys=[s.key for s in specs] if kind == \\'dit\\' else ())\\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"/kaggle/temp/h3_light_source/patches/weight_residency.py\", line 196, in __init__\\n    raise ValueError(\\'Every preparation must fit the pinned budget\\')\\nValueError: Every preparation must fit the pinned budget\\n')"
+}

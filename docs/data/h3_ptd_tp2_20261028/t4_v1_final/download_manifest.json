@@ -1,0 +1,74 @@
+{
+  "h3-ptd-tp2-t4-20261028.log": {
+    "bytes": 31885,
+    "sha256": "5261b1a7513c0c432d88e627c717e519c5ba3322268ae1309e3455e26830e900"
+  },
+  "light_setup\\api_probe.log": {
+    "bytes": 1420,
+    "sha256": "16401c525113952b9f12881dd4803be748019d8aa892a98da31d95f79f04a26d"
+  },
+  "light_setup\\bounded_worker.py": {
+    "bytes": 1896,
+    "sha256": "1b76a4eb9392a6ba74b9af320660d10bc432d30ac1aac99d0f067268086b6b48"
+  },
+  "light_setup\\cpu_qualification.json": {
+    "bytes": 119910,
+    "sha256": "434dea79344ff3c8bdf9301b8003db60a0dab47a90a0651b9b3bd8cf8324e9a3"
+  },
+  "light_setup\\delivery_binding.json": {
+    "bytes": 596,
+    "sha256": "00731d3870074c63124f032ea1517b088d070beb3a8829973e8a54a88f74fb8a"
+  },
+  "light_setup\\direct-core.txt": {
+    "bytes": 5811,
+    "sha256": "f67dca5cc9543d06bcca19426bda0914306d6e143f8712037e84ee54f30e8eee"
+  },
+  "light_setup\\direct_pip.log": {
+    "bytes": 15653,
+    "sha256": "9a2c82191fc67cb1dcfefeddaed3eadec931710eeab11e4cd5998a72f5d7d0ca"
+  },
+  "light_setup\\execution_env.json": {
+    "bytes": 449,
+    "sha256": "53f8cbaa42b4a30ef25583746477a1d1570f37b3f30affd13d09ffcec0dd7911"
+  },
+  "light_setup\\notebook_worker.log": {
+    "bytes": 212,
+    "sha256": "8f465dd08f6a77c8b5b074d41cf263f0d9ced14a1a2d9b41e951e4e8a398924f"
+  },
+  "light_setup\\runtime_profile.json": {
+    "bytes": 27855,
+    "sha256": "fb2c2512300010c032bc9c2a3dc28f2e534102c9fb89171861508158e03af13f"
+  },
+  "light_setup\\setup_receipt.json": {
+    "bytes": 128848,
+    "sha256": "ce7925232bf126a3c31273d4f32a8b69b122de58bbefacf24f104d863aedb74c"
+  },
+  "light_setup\\supervision.json": {
+    "bytes": 207,
+    "sha256": "215c10bf4a28867e19c38e1e4c9f2497832809c77412dbef080c01d7bbf420e5"
+  },
+  "ptd_qualification\\exception.txt": {
+    "bytes": 2862,
+    "sha256": "22491724e370cc4c01827818975c6c693fb89a5e1963642301223f5dcacf36bd"
+  },
+  "ptd_qualification\\result.json": {
+    "bytes": 6674,
+    "sha256": "4e9eee548322ef0ba181742041c66169e5c4485a3520a3741e9677d459229ef2"
+  },
+  "ptd_qualification\\unused_te.safetensors": {
+    "bytes": 16,
+    "sha256": "9bbcbf73561f6bc5d0a17ea6a2081feed2d1304e87602d8c502d9a5c4bd85576"
+  },
+  "ptd_supervision\\bounded_worker.py": {
+    "bytes": 377,
+    "sha256": "c53523555a312f04ac74e692ec4063865c67fd20e2205831a44a410a93870526"
+  },
+  "ptd_supervision\\notebook_worker.log": {
+    "bytes": 14126,
+    "sha256": "c37d205ed01d01424cff5cd0bb941c58e623f34149177c38b750b4e7c83d283f"
+  },
+  "ptd_supervision\\supervision.json": {
+    "bytes": 203,
+    "sha256": "c7ed814ccad5335a5c6651b3e9154a39e1d478cf83d1cb5ff5a8c1cd970c98a5"
+  }
+}

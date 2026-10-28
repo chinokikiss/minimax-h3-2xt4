@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "tests": 19,
+  "resources": {
+    "refiner_bound": 3194093568,
+    "block_bound": 197395456,
+    "weight_bytes": 6442450944,
+    "cache_bytes": 4294967296,
+    "pinned_bytes": 4294967296,
+    "host_bytes": 21474836480,
+    "reserve_bytes": 4294967296
+  },
+  "weights_downloaded": false,
+  "gpu_execution": false
+}

@@ -1,0 +1,43 @@
+Traceback (most recent call last):
+  File "/kaggle/temp/h3_light_source/benchmarks/run_ptd_tp2_t4.py", line 151, in main
+    state['smoke']=smoke(base,bank,args.output)
+                   ~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/kaggle/temp/h3_light_source/benchmarks/run_ptd_tp2_t4.py", line 58, in smoke
+    final=sample_ptd(Denoiser(),noise,controller.sigmas.float(),controller=controller)
+  File "/usr/local/lib/python3.13/dist-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "/kaggle/temp/h3_light_source/patches/ptd/sampler.py", line 91, in sample_ptd
+    denoised = model(state,grid[hop].expand(first.shape[0]),**extra_args)
+  File "/kaggle/temp/h3_light_source/benchmarks/run_ptd_tp2_t4.py", line 47, in __call__
+    values=service.call('denoise',list(state.unbind()),sigma.float()*1000,
+        context=torch.zeros(1,4,5120,dtype=torch.float16),
+        minimax_payload={'layout':layout,'ptd_text_states':text,'seed':20261028},
+        transformer_options={})
+  File "/kaggle/temp/h3_light_source/patches/comfy_tp_runtime.py", line 853, in call
+    results = [self._receive(c) for c in self.connections]
+               ~~~~~~~~~~~~~^^^
+  File "/kaggle/temp/h3_light_source/patches/comfy_tp_runtime.py", line 836, in _receive
+    raise RuntimeError(result[1])
+RuntimeError: Traceback (most recent call last):
+  File "/kaggle/temp/h3_light_source/patches/comfy_tp_runtime.py", line 684, in _worker
+    with native_scope():result = runtime.dispatch(command, args, kwargs)
+                                 ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/kaggle/temp/h3_light_source/patches/comfy_tp_runtime.py", line 502, in dispatch
+    args,kwargs=ptd_adapter.prepare(args,kwargs)
+                ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/kaggle/temp/h3_light_source/patches/ptd/runtime.py", line 95, in prepare
+    self.runtime._phase('dit')
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/kaggle/temp/h3_light_source/patches/comfy_tp_runtime.py", line 466, in _phase
+    else:self.window = ResidencyWindow(specs, (), self.device,
+                       ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+        max_weight_bytes=(self.config.te_weight_bytes or self.config.weight_bytes)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        lookahead=self.config.gpu_lookahead,cpu_lookahead=self.config.cpu_lookahead,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        retain_keys=[s.key for s in specs] if kind == 'dit' else ())
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/kaggle/temp/h3_light_source/patches/weight_residency.py", line 196, in __init__
+    raise ValueError('Every preparation must fit the pinned budget')
+ValueError: Every preparation must fit the pinned budget

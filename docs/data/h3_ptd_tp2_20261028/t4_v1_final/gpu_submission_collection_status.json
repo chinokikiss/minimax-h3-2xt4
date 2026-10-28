@@ -1,0 +1,19 @@
+{
+  "status": "collected",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-ptd-tp2-t4-20261028",
+  "output": "D:\\attention_eval\\h3_ptd_refasymopd_20261028\\validation_v2\\gpu_final",
+  "returncode": 0,
+  "files": 18,
+  "completed_utc": "2026-10-28T14:35:43.527869+00:00",
+  "experiment": {
+    "status": "failed",
+    "error": "RuntimeError('Traceback (most recent call last):\\n  File \"/kaggle/temp/h3_light_source/patches/comfy_tp_runtime.py\", line 684, in _worker\\n    with native_scope():result = runtime.dispatch(command, args, kwargs)\\n                                 ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"/kaggle/temp/h3_light_source/patches/comfy_tp_runtime.py\", line 502, in dispatch\\n    args,kwargs=ptd_adapter.prepare(args,kwargs)\\n                ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\\n  File \"/kaggle/temp/h3_light_source/patches/ptd/runtime.py\", line 95, in prepare\\n    self.runtime._phase(\\'dit\\')\\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^\\n  File \"/kaggle/temp/h3_light_source/patches/comfy_tp_runtime.py\", line 466, in _phase\\n    else:self.window = ResidencyWindow(specs, (), self.device,\\n                       ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^\\n        max_weight_bytes=(self.config.te_weight_bytes or self.config.weight_bytes)\\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n    ...<3 lines>...\\n        lookahead=self.config.gpu_lookahead,cpu_lookahead=self.config.cpu_lookahead,\\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n        retain_keys=[s.key for s in specs] if kind == \\'dit\\' else ())\\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"/kaggle/temp/h3_light_source/patches/weight_residency.py\", line 196, in __init__\\n    raise ValueError(\\'Every preparation must fit the pinned budget\\')\\nValueError: Every preparation must fit the pinned budget\\n')",
+    "stages": null,
+    "completed_sampler_steps": 0,
+    "completed_denoiser_calls": 0,
+    "media": null,
+    "quality_acceptance": "Pending review; collection does not establish generation quality"
+  },
+  "prior_input_hash_matches": {}
+}

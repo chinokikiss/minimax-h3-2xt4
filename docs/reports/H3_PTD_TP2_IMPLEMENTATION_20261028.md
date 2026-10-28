@@ -40,7 +40,7 @@ Unrelated dirty-worktree attention/VAE changes are excluded from this delivery.
 CPU API preflight notebook:
 [H3 PTD TP2 CPU 20261028](https://www.kaggle.com/code/pamcks/h3-ptd-tp2-cpu-20261028).
 
-**CPU version 2 passed; T4 version 1 submitted.** One final output collection
+**CPU version 2 passed; T4 version 1 failed before denoising; queued retry CPU version 3 accepted.** One final output collection
 retrieved version 1 after the user reported completion. Its pinned core API
 probe and all 111 base tests passed. The review suite ran 179 tests, with 177
 passing and two import errors. Both errors came from the newly added relative
@@ -102,6 +102,27 @@ and byte-equivalent Native refiner weight loading/folding on tiny fixtures.
 Physical queue/rebuild execution and performance remain unqualified pending
 the new source-bound preflight and T4 comparison. No status/list or live-log
 endpoint was polled.
+
+Queue implementation commit `b6d094d391ecaec4dc89feacb32abe23b912f0ad` is
+pushed on the isolated branch. The rebuilt extracted frozen source passed
+19/19 PTD/queue CPU contracts and 179/179 review regression tests locally,
+with GPUs hidden and no trained LoRA download. Its Native source and exact
+core dependency-lock hashes are preserved. Kaggle accepted CPU preflight
+version 3 once, bound to source archive SHA256
+`744018ae08fdffc2a8fb5b69b0a28be2b5fdb3d81347ed3c20a8063784372b33`
+and capsule SHA256
+`595eddf8be6f4cecd46d67a9792d49283488e29d9de2933fca8c367c6dead6bf`.
+No final output has yet been collected for version 3, and no revised T4 job
+has been submitted. See the [queue preflight evidence](../data/h3_ptd_tp2_20261028/queue_preflight/README.md).
+
+The physical comparison will reuse one baked bank in **rebuild, queue, queue,
+rebuild** order. It requires byte-identical seeded video/audio outputs and
+FP32 carried state, records hop-selection and denoiser RPC timing separately,
+and persists worker CPU/default-stream intervals plus window wait/H2D events
+and memory peaks. AOT preparation is separate. CUDA default-stream intervals
+include waits and are not Nsight kernel attribution. Pageable refiner
+transfers and real budget pressure can still stall; this implementation does
+not establish zero-bubble execution.
 
 The new GPU job builder requires both matching frozen-setup and PTD CPU API
 receipts before submitting its bounded T4 fixture. The prepared GPU experiment

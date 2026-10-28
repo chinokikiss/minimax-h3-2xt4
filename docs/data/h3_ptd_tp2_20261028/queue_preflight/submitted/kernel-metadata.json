@@ -1,0 +1,16 @@
+{
+  "id": "pamcks/h3-ptd-tp2-cpu-20261028",
+  "title": "H3 PTD TP2 CPU 20261028",
+  "code_file": "experiment.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "docker_image_pinning_type": "original",
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": [],
+  "model_sources": []
+}

@@ -1,0 +1,39 @@
+test_append_preserves_active_entry_and_rejects_rebinding_atomically (benchmarks.test_ptd_queue.QueueContracts.test_append_preserves_active_entry_and_rejects_rebinding_atomically) ... ok
+test_expert_queue_keeps_shell_window_and_appends_only_the_next_hop (benchmarks.test_ptd_queue.QueueContracts.test_expert_queue_keeps_shell_window_and_appends_only_the_next_hop) ... ok
+test_final_layer_uses_native_math_and_restores_heads_after_failure (benchmarks.test_ptd_queue.QueueContracts.test_final_layer_uses_native_math_and_restores_heads_after_failure) ... ok
+test_finish_drains_once_before_releasing_auxiliary_owners (benchmarks.test_ptd_queue.QueueContracts.test_finish_drains_once_before_releasing_auxiliary_owners) ... ok
+test_pageable_reservation_is_owned_until_ready_without_double_pinning (benchmarks.test_ptd_queue.QueueContracts.test_pageable_reservation_is_owned_until_ready_without_double_pinning) ... ok
+test_refiner_matches_fresh_native_loading_and_fp16_folding (benchmarks.test_ptd_queue.QueueContracts.test_refiner_matches_fresh_native_loading_and_fp16_folding) ... ok
+test_resident_or_pageable_group_is_not_rejected_by_a_pin_only_bound (benchmarks.test_ptd_queue.QueueContracts.test_resident_or_pageable_group_is_not_rejected_by_a_pin_only_bound) ... ok
+test_disabled_returns_native_model_sampler_and_sigmas_by_identity (benchmarks.test_ptd_tp2.AdapterContracts.test_disabled_returns_native_model_sampler_and_sigmas_by_identity) ... ok
+test_expert_identity_order_cleanup_and_base_restore (benchmarks.test_ptd_tp2.AdapterContracts.test_expert_identity_order_cleanup_and_base_restore) ... ok
+test_native_aot_uses_partial_96_rotation (benchmarks.test_ptd_tp2.AdapterContracts.test_native_aot_uses_partial_96_rotation) ... ok
+test_node_registration_under_dynamic_loader_names (benchmarks.test_ptd_tp2.AdapterContracts.test_node_registration_under_dynamic_loader_names) ... ok
+test_pruned_approximation_requires_explicit_consent (benchmarks.test_ptd_tp2.AdapterContracts.test_pruned_approximation_requires_explicit_consent) ... ok
+test_raw_te_payload_retains_fp32_outliers (benchmarks.test_ptd_tp2.AdapterContracts.test_raw_te_payload_retains_fp32_outliers) ... ok
+test_full_head_bias_fusion_and_independent_audio_weights (benchmarks.test_ptd_tp2.CheckpointContracts.test_full_head_bias_fusion_and_independent_audio_weights) ... ok
+test_independent_qkv_and_gate_order_every_hop (benchmarks.test_ptd_tp2.CheckpointContracts.test_independent_qkv_and_gate_order_every_hop) ... ok
+test_unknown_keys_incomplete_pair_bad_shapes_and_mutation_fail (benchmarks.test_ptd_tp2.CheckpointContracts.test_unknown_keys_incomplete_pair_bad_shapes_and_mutation_fail) ... ok
+test_audio_chord_and_native_clock_agree_at_all_knots (benchmarks.test_ptd_tp2.SamplerContracts.test_audio_chord_and_native_clock_agree_at_all_knots) ... ok
+test_bad_grid_partial_denoise_and_mask_rejected (benchmarks.test_ptd_tp2.SamplerContracts.test_bad_grid_partial_denoise_and_mask_rejected) ... ok
+test_exact_eight_call_recurrence_and_fp32_carry (benchmarks.test_ptd_tp2.SamplerContracts.test_exact_eight_call_recurrence_and_fp32_carry) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 1.015s
+
+OK
+{
+  "passed": true,
+  "tests": 19,
+  "resources": {
+    "refiner_bound": 3194093568,
+    "block_bound": 197395456,
+    "weight_bytes": 6442450944,
+    "cache_bytes": 4294967296,
+    "pinned_bytes": 4294967296,
+    "host_bytes": 21474836480,
+    "reserve_bytes": 4294967296
+  },
+  "weights_downloaded": false,
+  "gpu_execution": false
+}
