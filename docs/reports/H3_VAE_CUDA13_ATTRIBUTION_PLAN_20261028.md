@@ -106,6 +106,11 @@ Submissions and final collection are one-shot, without status/log polling.
 
 Local harness tests pass. Linux CUDA13 installation/import qualification and
 physical T4 results remain pending until the corresponding receipts exist.
+CPU version 1 was accepted at
+[H3 VAE CUDA13 CPU](https://www.kaggle.com/code/pamcks/h3-vae-cuda13-cpu-20261028).
+The accepted URL is recorded as the authoritative job identity. The VAE GPU
+experiment has not been submitted; it requires the successful CUDA13 CPU
+receipt first.
 
 Evidence root: `D:/attention_eval/h3_vae_cuda13_20261028`.
 

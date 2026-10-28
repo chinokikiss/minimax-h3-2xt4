@@ -47,3 +47,18 @@ and qualify its isolated CUDA 13 stack on CPU before GPU submission.
 
 Local raw evidence: `D:/attention_eval/h3_dit_pair_59134_20261028/gpu_outputs`.
 Recovery evidence: `D:/attention_eval/h3_dit_pair_retry_20261028`.
+
+## Submission record
+
+The recovery CPU qualification passed on Kaggle: all seven pair/download
+tests, the 179-test review suite and the disk-bake CPU contracts. The initial
+final-artifact transfer hit an SSL EOF. Three fixed final files were then
+resumed directly from the already-issued CDN location, without another
+Kaggle status/list/log request. Original failure receipts remain preserved.
+
+The CPU receipt and source binding match the recovery capsule
+`f3f6b1d14fa4647caf15c496cf366651ab8337629d564d746510482134976b75`.
+GPU version 1 was accepted at
+[H3 DiT Pair Retry 59134 T4](https://www.kaggle.com/code/pamcks/h3-dit-pair-retry-59134-t4-20261028).
+No result is claimed before final GPU artifacts are collected. There is no
+automatic status or live-log polling.

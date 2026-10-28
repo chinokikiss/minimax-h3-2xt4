@@ -58,7 +58,7 @@ os.execve(sys.executable,argv,env)
         code+="assert json.loads(pathlib.Path('/kaggle/working/vae_cuda13/result.json').read_text())['status']=='complete'\n"
     ast.parse(code);notebook['cells'][0]['source']=code.splitlines(keepends=True);path.write_text(json.dumps(notebook))
     metadata=json.loads((job/'kernel-metadata.json').read_text())
-    metadata.update(id='pamcks/h3-vae-cu13-'+('cpu' if args.mode=='cpu' else 'ablation-t4')+'-20261028',
+    metadata.update(id='pamcks/h3-vae-cuda13-'+('cpu' if args.mode=='cpu' else 'ablation-t4')+'-20261028',
         title='H3 VAE CUDA13 '+('CPU' if args.mode=='cpu' else 'Ablation T4')+' 20261028',
         dataset_sources=['pamcks/h3-vae-ab-latents-20261028'])
     (job/'kernel-metadata.json').write_text(json.dumps(metadata,indent=2))
@@ -82,7 +82,9 @@ os.execve(sys.executable,argv,env)
         match=re.search(r'Kernel version (\d+)',output)
         if match:state['version']=int(match.group(1))
         url=re.search(r'https://www\.kaggle\.com/code/[\w-]+/[\w-]+',output)
-        if url:state['url']=url.group(0)
+        if url:
+            state['url']=url.group(0)
+            state['kernel']=url.group(0).split('/code/',1)[1]
     except subprocess.TimeoutExpired:
         output='Submission acknowledgement timed out; do not retry automatically.';state.update(status='acceptance_uncertain',returncode=-1)
     (args.evidence/(args.mode+'_submission_cli.log')).write_text(output)
