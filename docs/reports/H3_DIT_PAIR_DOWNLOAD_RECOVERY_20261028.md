@@ -60,5 +60,9 @@ The CPU receipt and source binding match the recovery capsule
 `f3f6b1d14fa4647caf15c496cf366651ab8337629d564d746510482134976b75`.
 GPU version 1 was accepted at
 [H3 DiT Pair Retry 59134 T4](https://www.kaggle.com/code/pamcks/h3-dit-pair-retry-59134-t4-20261028).
-No result is claimed before final GPU artifacts are collected. There is no
-automatic status or live-log polling.
+Final GPU artifacts were collected once. Both calls completed with byte-identical,
+finite outputs, full 50-block coverage on both ranks, complete allocator
+histories and clean worker exits. The measured RPC times are 229.158 and
+176.148 seconds with identical intrusive observers. See the
+[results and profiling limitations](H3_DIT_PAIR_VAE_CUDA13_RESULTS_20261028.md).
+There is no automatic status or live-log polling.

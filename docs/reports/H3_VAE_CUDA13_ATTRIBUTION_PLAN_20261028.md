@@ -119,9 +119,12 @@ The original failed-transfer receipt is preserved alongside the resume proof.
 
 GPU version 1 was subsequently accepted at
 [H3 VAE CUDA13 Ablation T4](https://www.kaggle.com/code/pamcks/h3-vae-cuda13-ablation-t4-20261028).
-Physical T4 execution, CUDA dispatch, capture and timing results remain pending.
-CPU imports and SM75 build flags alone do not establish GPU compatibility or
-performance. No polling or full H3 generation is scheduled.
+Physical T4 execution subsequently completed all 30 cases. Strict CUDA linear
+dispatch and profiler capture passed on both SM75 GPUs. See the
+[measured results and corrected trace attribution](H3_DIT_PAIR_VAE_CUDA13_RESULTS_20261028.md)
+for the controlled linear/attention effects and scope limitations. This is
+block-level validation; no full H3 generation was run and no status polling
+was scheduled.
 
 Evidence root: `D:/attention_eval/h3_vae_cuda13_20261028`.
 

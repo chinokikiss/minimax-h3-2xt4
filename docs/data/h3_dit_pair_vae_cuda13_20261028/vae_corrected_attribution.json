@@ -1,0 +1,2249 @@
+{
+  "status": "complete",
+  "scope": "30 real-input VAE block replays; no full decoder timing or quality claim",
+  "correction": "Only Chrome category kernel counts as a kernel. gpu_user_annotation ranges are excluded; do not use the submitted CUDA_EVENTS count as a launch count.",
+  "aggregates": [
+    {
+      "batch": 1,
+      "median_of_three_layer_medians_ms": {
+        "eager/sdpa": 40.300926208496094,
+        "cuda/sdpa": 10.712479591369629,
+        "eager/kitchen": 39.830623626708984,
+        "cuda/kitchen": 9.509632110595703,
+        "fp16_native/sdpa": 14.522144317626953
+      },
+      "cuda_vs_eager_speedup_fixed_kitchen": 4.188450527158606,
+      "cuda_int8_latency_reduction_vs_fp16": 0.34516336550567617
+    },
+    {
+      "batch": 4,
+      "median_of_three_layer_medians_ms": {
+        "eager/sdpa": 166.85910034179688,
+        "cuda/sdpa": 50.12326431274414,
+        "eager/kitchen": 162.1116180419922,
+        "cuda/kitchen": 45.80342483520508,
+        "fp16_native/sdpa": 63.04966354370117
+      },
+      "cuda_vs_eager_speedup_fixed_kitchen": 3.539290317814645,
+      "cuda_int8_latency_reduction_vs_fp16": 0.273534190972206
+    }
+  ],
+  "cases": [
+    {
+      "device": 0,
+      "batch": 4,
+      "layer": 0,
+      "linear": "eager",
+      "attention": "sdpa",
+      "gpu_median_ms": 161.4885711669922,
+      "wall_median_ms": 161.57935299997916,
+      "peak_allocated": 4023827456,
+      "profile": {
+        "complete": true,
+        "kernel_count": 106,
+        "kernel_work_ms": 158.602786,
+        "kernel_union_ms": 158.602787109375,
+        "copy_or_memset_count": 3,
+        "copy_or_memset_work_ms": 1.211911,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 24,
+            "kernel_work_ms": 26.939931999999995
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 2,
+            "kernel_work_ms": 2.5121089999999997
+          },
+          "VAE_ATTENTION/sdpa": {
+            "kernel_count": 1,
+            "kernel_work_ms": 12.621887000000001
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 24,
+            "kernel_work_ms": 10.545447999999999
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 29,
+            "kernel_work_ms": 65.53549699999999
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 26,
+            "kernel_work_ms": 40.44791299999999
+          }
+        },
+        "kernel_families": {
+          "other": {
+            "kernel_count": 12,
+            "kernel_work_ms": 7.012017
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 4,
+            "kernel_work_ms": 3.498584
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 85,
+            "kernel_work_ms": 54.006486999999986
+          },
+          "legacy_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 81.463811
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 12.621887000000001
+          }
+        }
+      },
+      "trace": "gpu0_b4_layer0_eager_sdpa.json"
+    },
+    {
+      "device": 0,
+      "batch": 4,
+      "layer": 0,
+      "linear": "cuda",
+      "attention": "sdpa",
+      "gpu_median_ms": 48.358238220214844,
+      "wall_median_ms": 48.41266000005362,
+      "peak_allocated": 3102530560,
+      "profile": {
+        "complete": true,
+        "kernel_count": 18,
+        "kernel_work_ms": 47.531541000000004,
+        "kernel_union_ms": 47.531541015625,
+        "copy_or_memset_count": 0,
+        "copy_or_memset_work_ms": 0.0,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 2,
+            "kernel_work_ms": 5.267892
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 2,
+            "kernel_work_ms": 2.513741
+          },
+          "VAE_ATTENTION/sdpa": {
+            "kernel_count": 1,
+            "kernel_work_ms": 11.987275
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 4,
+            "kernel_work_ms": 3.231614
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 2,
+            "kernel_work_ms": 11.652402
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 7,
+            "kernel_work_ms": 12.878616999999998
+          }
+        },
+        "kernel_families": {
+          "ConvRot_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 2.526379
+          },
+          "SM75_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 21.722085
+          },
+          "other": {
+            "kernel_count": 1,
+            "kernel_work_ms": 2.274482
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 11.987275
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 5,
+            "kernel_work_ms": 4.651649
+          },
+          "other_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 2.711465
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 1,
+            "kernel_work_ms": 1.6582059999999998
+          }
+        }
+      },
+      "trace": "gpu0_b4_layer0_cuda_sdpa.json"
+    },
+    {
+      "device": 0,
+      "batch": 4,
+      "layer": 0,
+      "linear": "eager",
+      "attention": "kitchen",
+      "gpu_median_ms": 162.1116180419922,
+      "wall_median_ms": 162.2019100000216,
+      "peak_allocated": 4028021760,
+      "profile": {
+        "complete": true,
+        "kernel_count": 110,
+        "kernel_work_ms": 158.032853,
+        "kernel_union_ms": 158.0328544921875,
+        "copy_or_memset_count": 3,
+        "copy_or_memset_work_ms": 1.2138630000000001,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 24,
+            "kernel_work_ms": 26.981564000000002
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 3,
+            "kernel_work_ms": 2.9754270000000003
+          },
+          "VAE_ATTENTION/kitchen": {
+            "kernel_count": 4,
+            "kernel_work_ms": 7.642021
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 24,
+            "kernel_work_ms": 10.734279000000003
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 29,
+            "kernel_work_ms": 69.54837699999999
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 26,
+            "kernel_work_ms": 40.151185000000005
+          }
+        },
+        "kernel_families": {
+          "other": {
+            "kernel_count": 15,
+            "kernel_work_ms": 8.61013
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 4,
+            "kernel_work_ms": 3.575096
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 86,
+            "kernel_work_ms": 55.02057800000001
+          },
+          "legacy_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 84.779908
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 6.047141
+          }
+        }
+      },
+      "trace": "gpu0_b4_layer0_eager_kitchen.json"
+    },
+    {
+      "device": 0,
+      "batch": 4,
+      "layer": 0,
+      "linear": "cuda",
+      "attention": "kitchen",
+      "gpu_median_ms": 45.80342483520508,
+      "wall_median_ms": 45.861774000059086,
+      "peak_allocated": 3102530560,
+      "profile": {
+        "complete": true,
+        "kernel_count": 22,
+        "kernel_work_ms": 43.832539000000004,
+        "kernel_union_ms": 43.8325400390625,
+        "copy_or_memset_count": 0,
+        "copy_or_memset_work_ms": 0.0,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 2,
+            "kernel_work_ms": 5.486958
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 3,
+            "kernel_work_ms": 3.0985300000000002
+          },
+          "VAE_ATTENTION/kitchen": {
+            "kernel_count": 4,
+            "kernel_work_ms": 7.908157
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 4,
+            "kernel_work_ms": 3.5797660000000002
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 2,
+            "kernel_work_ms": 11.286553
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 7,
+            "kernel_work_ms": 12.472574999999999
+          }
+        },
+        "kernel_families": {
+          "ConvRot_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 2.7327440000000003
+          },
+          "SM75_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 21.366889
+          },
+          "other": {
+            "kernel_count": 4,
+            "kernel_work_ms": 4.053389
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 6.247328
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 6,
+            "kernel_work_ms": 5.071351
+          },
+          "other_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 2.7555269999999994
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 1,
+            "kernel_work_ms": 1.605311
+          }
+        }
+      },
+      "trace": "gpu0_b4_layer0_cuda_kitchen.json"
+    },
+    {
+      "device": 0,
+      "batch": 4,
+      "layer": 17,
+      "linear": "cuda",
+      "attention": "sdpa",
+      "gpu_median_ms": 50.12326431274414,
+      "wall_median_ms": 50.1838460000954,
+      "peak_allocated": 3102530560,
+      "profile": {
+        "complete": true,
+        "kernel_count": 18,
+        "kernel_work_ms": 49.354482000000004,
+        "kernel_union_ms": 49.3544814453125,
+        "copy_or_memset_count": 0,
+        "copy_or_memset_work_ms": 0.0,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 2,
+            "kernel_work_ms": 5.3211580000000005
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 2,
+            "kernel_work_ms": 2.635107
+          },
+          "VAE_ATTENTION/sdpa": {
+            "kernel_count": 1,
+            "kernel_work_ms": 13.333422
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 4,
+            "kernel_work_ms": 3.3272850000000003
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 2,
+            "kernel_work_ms": 11.273723999999998
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 7,
+            "kernel_work_ms": 13.463786
+          }
+        },
+        "kernel_families": {
+          "ConvRot_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 2.532229
+          },
+          "SM75_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 22.080357
+          },
+          "other": {
+            "kernel_count": 1,
+            "kernel_work_ms": 2.396297
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 13.333422
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 5,
+            "kernel_work_ms": 4.635125
+          },
+          "other_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 2.734914
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 1,
+            "kernel_work_ms": 1.6421379999999999
+          }
+        }
+      },
+      "trace": "gpu0_b4_layer17_cuda_sdpa.json"
+    },
+    {
+      "device": 0,
+      "batch": 4,
+      "layer": 17,
+      "linear": "eager",
+      "attention": "kitchen",
+      "gpu_median_ms": 161.48927307128906,
+      "wall_median_ms": 161.56532800005152,
+      "peak_allocated": 4028021760,
+      "profile": {
+        "complete": true,
+        "kernel_count": 110,
+        "kernel_work_ms": 160.80747399999998,
+        "kernel_union_ms": 160.807474609375,
+        "copy_or_memset_count": 3,
+        "copy_or_memset_work_ms": 1.2155269999999998,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 24,
+            "kernel_work_ms": 27.106679
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 3,
+            "kernel_work_ms": 2.993539
+          },
+          "VAE_ATTENTION/kitchen": {
+            "kernel_count": 4,
+            "kernel_work_ms": 8.181113
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 24,
+            "kernel_work_ms": 11.218685
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 29,
+            "kernel_work_ms": 69.88987099999999
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 26,
+            "kernel_work_ms": 41.417587
+          }
+        },
+        "kernel_families": {
+          "other": {
+            "kernel_count": 15,
+            "kernel_work_ms": 8.725772
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 4,
+            "kernel_work_ms": 3.7663230000000003
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 86,
+            "kernel_work_ms": 55.58645100000001
+          },
+          "legacy_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 86.19920499999999
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 6.529723
+          }
+        }
+      },
+      "trace": "gpu0_b4_layer17_eager_kitchen.json"
+    },
+    {
+      "device": 0,
+      "batch": 4,
+      "layer": 17,
+      "linear": "cuda",
+      "attention": "kitchen",
+      "gpu_median_ms": 46.07980728149414,
+      "wall_median_ms": 46.14574600009291,
+      "peak_allocated": 3102530560,
+      "profile": {
+        "complete": true,
+        "kernel_count": 22,
+        "kernel_work_ms": 44.154771000000004,
+        "kernel_union_ms": 44.15477099609375,
+        "copy_or_memset_count": 0,
+        "copy_or_memset_work_ms": 0.0,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 2,
+            "kernel_work_ms": 5.525134
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 3,
+            "kernel_work_ms": 3.104607
+          },
+          "VAE_ATTENTION/kitchen": {
+            "kernel_count": 4,
+            "kernel_work_ms": 7.905085999999999
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 4,
+            "kernel_work_ms": 3.578423
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 2,
+            "kernel_work_ms": 11.27148
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 7,
+            "kernel_work_ms": 12.770040999999999
+          }
+        },
+        "kernel_families": {
+          "ConvRot_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 2.714375
+          },
+          "SM75_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 21.637636
+          },
+          "other": {
+            "kernel_count": 4,
+            "kernel_work_ms": 4.0571
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 6.245056
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 6,
+            "kernel_work_ms": 5.097399
+          },
+          "other_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 2.7717819999999995
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 1,
+            "kernel_work_ms": 1.631423
+          }
+        }
+      },
+      "trace": "gpu0_b4_layer17_cuda_kitchen.json"
+    },
+    {
+      "device": 0,
+      "batch": 4,
+      "layer": 17,
+      "linear": "eager",
+      "attention": "sdpa",
+      "gpu_median_ms": 168.39382934570312,
+      "wall_median_ms": 168.49873699993623,
+      "peak_allocated": 4028021760,
+      "profile": {
+        "complete": true,
+        "kernel_count": 106,
+        "kernel_work_ms": 168.39553699999996,
+        "kernel_union_ms": 168.3955361328125,
+        "copy_or_memset_count": 3,
+        "copy_or_memset_work_ms": 1.2133819999999997,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 24,
+            "kernel_work_ms": 28.74078399999999
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 2,
+            "kernel_work_ms": 3.041505
+          },
+          "VAE_ATTENTION/sdpa": {
+            "kernel_count": 1,
+            "kernel_work_ms": 15.322276
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 24,
+            "kernel_work_ms": 10.719809999999999
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 29,
+            "kernel_work_ms": 69.97436799999997
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 26,
+            "kernel_work_ms": 40.59679400000001
+          }
+        },
+        "kernel_families": {
+          "other": {
+            "kernel_count": 12,
+            "kernel_work_ms": 7.539874
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 4,
+            "kernel_work_ms": 3.5930459999999997
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 85,
+            "kernel_work_ms": 55.84314099999999
+          },
+          "legacy_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 86.0972
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 15.322276
+          }
+        }
+      },
+      "trace": "gpu0_b4_layer17_eager_sdpa.json"
+    },
+    {
+      "device": 0,
+      "batch": 4,
+      "layer": 35,
+      "linear": "cuda",
+      "attention": "kitchen",
+      "gpu_median_ms": 44.279361724853516,
+      "wall_median_ms": 44.330212999966534,
+      "peak_allocated": 3102530560,
+      "profile": {
+        "complete": true,
+        "kernel_count": 22,
+        "kernel_work_ms": 44.99771400000001,
+        "kernel_union_ms": 44.99771484375,
+        "copy_or_memset_count": 0,
+        "copy_or_memset_work_ms": 0.0,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 2,
+            "kernel_work_ms": 5.489457000000001
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 3,
+            "kernel_work_ms": 3.0366419999999996
+          },
+          "VAE_ATTENTION/kitchen": {
+            "kernel_count": 4,
+            "kernel_work_ms": 7.541224000000001
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 4,
+            "kernel_work_ms": 3.28339
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 2,
+            "kernel_work_ms": 11.898671
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 7,
+            "kernel_work_ms": 13.748329999999997
+          }
+        },
+        "kernel_families": {
+          "ConvRot_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 2.597579
+          },
+          "SM75_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 22.695252
+          },
+          "other": {
+            "kernel_count": 4,
+            "kernel_work_ms": 3.990191
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 5.904617
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 6,
+            "kernel_work_ms": 5.193303
+          },
+          "other_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 2.836071
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 1,
+            "kernel_work_ms": 1.780701
+          }
+        }
+      },
+      "trace": "gpu0_b4_layer35_cuda_kitchen.json"
+    },
+    {
+      "device": 0,
+      "batch": 4,
+      "layer": 35,
+      "linear": "eager",
+      "attention": "sdpa",
+      "gpu_median_ms": 166.85910034179688,
+      "wall_median_ms": 166.95016199992097,
+      "peak_allocated": 4028021760,
+      "profile": {
+        "complete": true,
+        "kernel_count": 106,
+        "kernel_work_ms": 161.42849900000004,
+        "kernel_union_ms": 161.42850146484375,
+        "copy_or_memset_count": 3,
+        "copy_or_memset_work_ms": 1.2143110000000001,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 24,
+            "kernel_work_ms": 26.206080999999998
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 2,
+            "kernel_work_ms": 2.696265
+          },
+          "VAE_ATTENTION/sdpa": {
+            "kernel_count": 1,
+            "kernel_work_ms": 15.235843999999998
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 24,
+            "kernel_work_ms": 10.510022
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 29,
+            "kernel_work_ms": 66.070314
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 26,
+            "kernel_work_ms": 40.709973000000005
+          }
+        },
+        "kernel_families": {
+          "other": {
+            "kernel_count": 12,
+            "kernel_work_ms": 7.130890999999999
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 4,
+            "kernel_work_ms": 3.7322430000000004
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 85,
+            "kernel_work_ms": 54.630327000000015
+          },
+          "legacy_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 80.699194
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 15.235843999999998
+          }
+        }
+      },
+      "trace": "gpu0_b4_layer35_eager_sdpa.json"
+    },
+    {
+      "device": 0,
+      "batch": 4,
+      "layer": 35,
+      "linear": "cuda",
+      "attention": "sdpa",
+      "gpu_median_ms": 50.158592224121094,
+      "wall_median_ms": 50.21443500004352,
+      "peak_allocated": 3102530560,
+      "profile": {
+        "complete": true,
+        "kernel_count": 18,
+        "kernel_work_ms": 48.668063000000004,
+        "kernel_union_ms": 48.6680625,
+        "copy_or_memset_count": 0,
+        "copy_or_memset_work_ms": 0.0,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 2,
+            "kernel_work_ms": 5.484112
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 2,
+            "kernel_work_ms": 2.5914989999999998
+          },
+          "VAE_ATTENTION/sdpa": {
+            "kernel_count": 1,
+            "kernel_work_ms": 12.420579
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 4,
+            "kernel_work_ms": 3.334204
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 2,
+            "kernel_work_ms": 11.95422
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 7,
+            "kernel_work_ms": 12.883449
+          }
+        },
+        "kernel_families": {
+          "ConvRot_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 2.629003
+          },
+          "SM75_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 22.21561
+          },
+          "other": {
+            "kernel_count": 1,
+            "kernel_work_ms": 2.3526239999999996
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 12.420579
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 5,
+            "kernel_work_ms": 4.658913
+          },
+          "other_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 2.7278160000000002
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 1,
+            "kernel_work_ms": 1.663518
+          }
+        }
+      },
+      "trace": "gpu0_b4_layer35_cuda_sdpa.json"
+    },
+    {
+      "device": 0,
+      "batch": 4,
+      "layer": 35,
+      "linear": "eager",
+      "attention": "kitchen",
+      "gpu_median_ms": 164.75193786621094,
+      "wall_median_ms": 164.82467400010137,
+      "peak_allocated": 4028021760,
+      "profile": {
+        "complete": true,
+        "kernel_count": 110,
+        "kernel_work_ms": 168.26268199999996,
+        "kernel_union_ms": 168.2626806640625,
+        "copy_or_memset_count": 3,
+        "copy_or_memset_work_ms": 1.214311,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 24,
+            "kernel_work_ms": 30.396039999999996
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 3,
+            "kernel_work_ms": 3.4038969999999997
+          },
+          "VAE_ATTENTION/kitchen": {
+            "kernel_count": 4,
+            "kernel_work_ms": 8.777706
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 24,
+            "kernel_work_ms": 11.248886999999996
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 29,
+            "kernel_work_ms": 72.86412
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 26,
+            "kernel_work_ms": 41.57203199999999
+          }
+        },
+        "kernel_families": {
+          "other": {
+            "kernel_count": 15,
+            "kernel_work_ms": 9.302876
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 4,
+            "kernel_work_ms": 3.6938449999999996
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 86,
+            "kernel_work_ms": 56.923041
+          },
+          "legacy_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 91.419448
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 6.923471999999999
+          }
+        }
+      },
+      "trace": "gpu0_b4_layer35_eager_kitchen.json"
+    },
+    {
+      "device": 0,
+      "batch": 4,
+      "layer": 0,
+      "linear": "fp16_native",
+      "attention": "sdpa",
+      "gpu_median_ms": 62.20966339111328,
+      "wall_median_ms": 62.30272599998443,
+      "peak_allocated": 5304625664,
+      "profile": {
+        "complete": true,
+        "kernel_count": 13,
+        "kernel_work_ms": 59.764500999999996,
+        "kernel_union_ms": 59.7645009765625,
+        "copy_or_memset_count": 0,
+        "copy_or_memset_work_ms": 0.0,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 2,
+            "kernel_work_ms": 8.270417
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 2,
+            "kernel_work_ms": 2.6802960000000002
+          },
+          "VAE_ATTENTION/native_sdpa": {
+            "kernel_count": 1,
+            "kernel_work_ms": 12.981871
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 2,
+            "kernel_work_ms": 3.109567
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 2,
+            "kernel_work_ms": 19.045679
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 4,
+            "kernel_work_ms": 13.676670999999999
+          }
+        },
+        "kernel_families": {
+          "other": {
+            "kernel_count": 3,
+            "kernel_work_ms": 2.942914
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 4,
+            "kernel_work_ms": 39.124359
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 12.981871
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 5,
+            "kernel_work_ms": 4.715357
+          }
+        }
+      },
+      "trace": "gpu0_b4_layer0_fp16_sdpa.json"
+    },
+    {
+      "device": 0,
+      "batch": 4,
+      "layer": 17,
+      "linear": "fp16_native",
+      "attention": "sdpa",
+      "gpu_median_ms": 63.929664611816406,
+      "wall_median_ms": 64.02638199995181,
+      "peak_allocated": 5304625664,
+      "profile": {
+        "complete": true,
+        "kernel_count": 13,
+        "kernel_work_ms": 60.041546,
+        "kernel_union_ms": 60.04154736328125,
+        "copy_or_memset_count": 0,
+        "copy_or_memset_work_ms": 0.0,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 2,
+            "kernel_work_ms": 8.473003
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 2,
+            "kernel_work_ms": 2.6925190000000003
+          },
+          "VAE_ATTENTION/native_sdpa": {
+            "kernel_count": 1,
+            "kernel_work_ms": 13.057514
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 2,
+            "kernel_work_ms": 3.104414
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 2,
+            "kernel_work_ms": 18.531734
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 4,
+            "kernel_work_ms": 14.182362
+          }
+        },
+        "kernel_families": {
+          "other": {
+            "kernel_count": 3,
+            "kernel_work_ms": 2.957889
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 4,
+            "kernel_work_ms": 39.322241999999996
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 13.057514
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 5,
+            "kernel_work_ms": 4.703901000000001
+          }
+        }
+      },
+      "trace": "gpu0_b4_layer17_fp16_sdpa.json"
+    },
+    {
+      "device": 0,
+      "batch": 4,
+      "layer": 35,
+      "linear": "fp16_native",
+      "attention": "sdpa",
+      "gpu_median_ms": 63.04966354370117,
+      "wall_median_ms": 63.2145639999635,
+      "peak_allocated": 5304625664,
+      "profile": {
+        "complete": true,
+        "kernel_count": 13,
+        "kernel_work_ms": 62.424606,
+        "kernel_union_ms": 62.42460546875,
+        "copy_or_memset_count": 0,
+        "copy_or_memset_work_ms": 0.0,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 2,
+            "kernel_work_ms": 8.461838
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 2,
+            "kernel_work_ms": 2.725639
+          },
+          "VAE_ATTENTION/native_sdpa": {
+            "kernel_count": 1,
+            "kernel_work_ms": 13.584802
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 2,
+            "kernel_work_ms": 3.235068
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 2,
+            "kernel_work_ms": 20.099001
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 4,
+            "kernel_work_ms": 14.318258
+          }
+        },
+        "kernel_families": {
+          "other": {
+            "kernel_count": 3,
+            "kernel_work_ms": 2.993057
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 4,
+            "kernel_work_ms": 41.023232
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 13.584802
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 5,
+            "kernel_work_ms": 4.823515
+          }
+        }
+      },
+      "trace": "gpu0_b4_layer35_fp16_sdpa.json"
+    },
+    {
+      "device": 1,
+      "batch": 1,
+      "layer": 0,
+      "linear": "cuda",
+      "attention": "sdpa",
+      "gpu_median_ms": 10.371456146240234,
+      "wall_median_ms": 10.410815999989609,
+      "peak_allocated": 2612896768,
+      "profile": {
+        "complete": true,
+        "kernel_count": 18,
+        "kernel_work_ms": 10.090830999999998,
+        "kernel_union_ms": 10.090830078125,
+        "copy_or_memset_count": 0,
+        "copy_or_memset_work_ms": 0.0,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 2,
+            "kernel_work_ms": 1.0402349999999998
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 2,
+            "kernel_work_ms": 0.529813
+          },
+          "VAE_ATTENTION/sdpa": {
+            "kernel_count": 1,
+            "kernel_work_ms": 2.501036
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 4,
+            "kernel_work_ms": 0.728336
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 2,
+            "kernel_work_ms": 2.4553730000000002
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 7,
+            "kernel_work_ms": 2.836038
+          }
+        },
+        "kernel_families": {
+          "ConvRot_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.526518
+          },
+          "SM75_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 4.570207
+          },
+          "other": {
+            "kernel_count": 1,
+            "kernel_work_ms": 0.472534
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 2.501036
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 5,
+            "kernel_work_ms": 1.090153
+          },
+          "other_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.596246
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 1,
+            "kernel_work_ms": 0.334137
+          }
+        }
+      },
+      "trace": "gpu1_b1_layer0_cuda_sdpa.json"
+    },
+    {
+      "device": 1,
+      "batch": 1,
+      "layer": 0,
+      "linear": "eager",
+      "attention": "kitchen",
+      "gpu_median_ms": 40.52860641479492,
+      "wall_median_ms": 40.583110999932615,
+      "peak_allocated": 3023395840,
+      "profile": {
+        "complete": true,
+        "kernel_count": 105,
+        "kernel_work_ms": 37.252353000000014,
+        "kernel_union_ms": 37.2523525390625,
+        "copy_or_memset_count": 4,
+        "copy_or_memset_work_ms": 0.7931999999999999,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 24,
+            "kernel_work_ms": 7.12071
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.7195690000000001
+          },
+          "VAE_ATTENTION/kitchen": {
+            "kernel_count": 4,
+            "kernel_work_ms": 1.748443
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 24,
+            "kernel_work_ms": 2.6323270000000005
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 24,
+            "kernel_work_ms": 15.589939000000003
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 26,
+            "kernel_work_ms": 9.441364999999996
+          }
+        },
+        "kernel_families": {
+          "other": {
+            "kernel_count": 14,
+            "kernel_work_ms": 1.6672620000000002
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 4,
+            "kernel_work_ms": 0.730672
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 82,
+            "kernel_work_ms": 15.727756999999995
+          },
+          "legacy_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 17.794307
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 1.332355
+          }
+        }
+      },
+      "trace": "gpu1_b1_layer0_eager_kitchen.json"
+    },
+    {
+      "device": 1,
+      "batch": 1,
+      "layer": 0,
+      "linear": "cuda",
+      "attention": "kitchen",
+      "gpu_median_ms": 9.687583923339844,
+      "wall_median_ms": 9.730427000022246,
+      "peak_allocated": 2612896768,
+      "profile": {
+        "complete": true,
+        "kernel_count": 22,
+        "kernel_work_ms": 9.431196000000002,
+        "kernel_union_ms": 9.4311962890625,
+        "copy_or_memset_count": 0,
+        "copy_or_memset_work_ms": 0.0,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 2,
+            "kernel_work_ms": 1.05665
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.635891
+          },
+          "VAE_ATTENTION/kitchen": {
+            "kernel_count": 4,
+            "kernel_work_ms": 1.556096
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 4,
+            "kernel_work_ms": 0.734865
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 2,
+            "kernel_work_ms": 2.489932
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 7,
+            "kernel_work_ms": 2.9577620000000007
+          }
+        },
+        "kernel_families": {
+          "ConvRot_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.534612
+          },
+          "SM75_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 4.669503000000001
+          },
+          "other": {
+            "kernel_count": 4,
+            "kernel_work_ms": 0.837743
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 1.194983
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 6,
+            "kernel_work_ms": 1.212231
+          },
+          "other_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.62594
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 1,
+            "kernel_work_ms": 0.356184
+          }
+        }
+      },
+      "trace": "gpu1_b1_layer0_cuda_kitchen.json"
+    },
+    {
+      "device": 1,
+      "batch": 1,
+      "layer": 0,
+      "linear": "eager",
+      "attention": "sdpa",
+      "gpu_median_ms": 38.99852752685547,
+      "wall_median_ms": 39.0520569999353,
+      "peak_allocated": 3023395840,
+      "profile": {
+        "complete": true,
+        "kernel_count": 101,
+        "kernel_work_ms": 36.524677,
+        "kernel_union_ms": 36.52467724609375,
+        "copy_or_memset_count": 4,
+        "copy_or_memset_work_ms": 0.795119,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 24,
+            "kernel_work_ms": 6.966223
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 2,
+            "kernel_work_ms": 0.519989
+          },
+          "VAE_ATTENTION/sdpa": {
+            "kernel_count": 1,
+            "kernel_work_ms": 2.428141
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 24,
+            "kernel_work_ms": 2.525163
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 24,
+            "kernel_work_ms": 15.288510999999998
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 26,
+            "kernel_work_ms": 8.796650000000001
+          }
+        },
+        "kernel_families": {
+          "other": {
+            "kernel_count": 11,
+            "kernel_work_ms": 1.138857
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 4,
+            "kernel_work_ms": 0.6737470000000001
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 81,
+            "kernel_work_ms": 15.097027000000002
+          },
+          "legacy_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 17.186905
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 2.428141
+          }
+        }
+      },
+      "trace": "gpu1_b1_layer0_eager_sdpa.json"
+    },
+    {
+      "device": 1,
+      "batch": 1,
+      "layer": 17,
+      "linear": "eager",
+      "attention": "kitchen",
+      "gpu_median_ms": 38.595359802246094,
+      "wall_median_ms": 38.650824000001194,
+      "peak_allocated": 3023395840,
+      "profile": {
+        "complete": true,
+        "kernel_count": 105,
+        "kernel_work_ms": 37.637444000000016,
+        "kernel_union_ms": 37.63744384765625,
+        "copy_or_memset_count": 4,
+        "copy_or_memset_work_ms": 0.793999,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 24,
+            "kernel_work_ms": 7.275398
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.696434
+          },
+          "VAE_ATTENTION/kitchen": {
+            "kernel_count": 4,
+            "kernel_work_ms": 1.6061100000000001
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 24,
+            "kernel_work_ms": 2.6618630000000003
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 24,
+            "kernel_work_ms": 15.788178
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 26,
+            "kernel_work_ms": 9.609461000000001
+          }
+        },
+        "kernel_families": {
+          "other": {
+            "kernel_count": 14,
+            "kernel_work_ms": 1.606304
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 4,
+            "kernel_work_ms": 0.7339690000000001
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 82,
+            "kernel_work_ms": 15.849039000000001
+          },
+          "legacy_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 18.214079
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 1.234053
+          }
+        }
+      },
+      "trace": "gpu1_b1_layer17_eager_kitchen.json"
+    },
+    {
+      "device": 1,
+      "batch": 1,
+      "layer": 17,
+      "linear": "cuda",
+      "attention": "kitchen",
+      "gpu_median_ms": 9.087871551513672,
+      "wall_median_ms": 9.140934000015477,
+      "peak_allocated": 2612896768,
+      "profile": {
+        "complete": true,
+        "kernel_count": 22,
+        "kernel_work_ms": 10.720279,
+        "kernel_union_ms": 10.720279296875,
+        "copy_or_memset_count": 0,
+        "copy_or_memset_work_ms": 0.0,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 2,
+            "kernel_work_ms": 1.249029
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.7147360000000001
+          },
+          "VAE_ATTENTION/kitchen": {
+            "kernel_count": 4,
+            "kernel_work_ms": 1.8227449999999998
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 4,
+            "kernel_work_ms": 0.8415499999999999
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 2,
+            "kernel_work_ms": 2.948352
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 7,
+            "kernel_work_ms": 3.1438669999999997
+          }
+        },
+        "kernel_families": {
+          "ConvRot_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.635506
+          },
+          "SM75_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 5.33742
+          },
+          "other": {
+            "kernel_count": 4,
+            "kernel_work_ms": 0.95726
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 1.413089
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 6,
+            "kernel_work_ms": 1.2966120000000003
+          },
+          "other_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.659185
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 1,
+            "kernel_work_ms": 0.421207
+          }
+        }
+      },
+      "trace": "gpu1_b1_layer17_cuda_kitchen.json"
+    },
+    {
+      "device": 1,
+      "batch": 1,
+      "layer": 17,
+      "linear": "eager",
+      "attention": "sdpa",
+      "gpu_median_ms": 40.43939208984375,
+      "wall_median_ms": 40.492236999966735,
+      "peak_allocated": 3023395840,
+      "profile": {
+        "complete": true,
+        "kernel_count": 101,
+        "kernel_work_ms": 37.28143800000001,
+        "kernel_union_ms": 37.2814375,
+        "copy_or_memset_count": 4,
+        "copy_or_memset_work_ms": 0.791982,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 24,
+            "kernel_work_ms": 6.879472000000001
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 2,
+            "kernel_work_ms": 0.529428
+          },
+          "VAE_ATTENTION/sdpa": {
+            "kernel_count": 1,
+            "kernel_work_ms": 2.521613
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 24,
+            "kernel_work_ms": 2.576683
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 24,
+            "kernel_work_ms": 15.410722000000002
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 26,
+            "kernel_work_ms": 9.36352
+          }
+        },
+        "kernel_families": {
+          "other": {
+            "kernel_count": 11,
+            "kernel_work_ms": 1.1590469999999997
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 4,
+            "kernel_work_ms": 0.7037950000000001
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 81,
+            "kernel_work_ms": 15.381215999999998
+          },
+          "legacy_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 17.515767
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 2.521613
+          }
+        }
+      },
+      "trace": "gpu1_b1_layer17_eager_sdpa.json"
+    },
+    {
+      "device": 1,
+      "batch": 1,
+      "layer": 17,
+      "linear": "cuda",
+      "attention": "sdpa",
+      "gpu_median_ms": 10.712479591369629,
+      "wall_median_ms": 10.757047999959468,
+      "peak_allocated": 2612896768,
+      "profile": {
+        "complete": true,
+        "kernel_count": 18,
+        "kernel_work_ms": 10.570914,
+        "kernel_union_ms": 10.5709140625,
+        "copy_or_memset_count": 0,
+        "copy_or_memset_work_ms": 0.0,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 2,
+            "kernel_work_ms": 1.125256
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 2,
+            "kernel_work_ms": 0.5610449999999999
+          },
+          "VAE_ATTENTION/sdpa": {
+            "kernel_count": 1,
+            "kernel_work_ms": 2.703463
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 4,
+            "kernel_work_ms": 0.7345119999999999
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 2,
+            "kernel_work_ms": 2.487692
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 7,
+            "kernel_work_ms": 2.958946
+          }
+        },
+        "kernel_families": {
+          "ConvRot_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.5468379999999999
+          },
+          "SM75_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 4.723324000000001
+          },
+          "other": {
+            "kernel_count": 1,
+            "kernel_work_ms": 0.5033179999999999
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 2.703463
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 5,
+            "kernel_work_ms": 1.111464
+          },
+          "other_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.626995
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 1,
+            "kernel_work_ms": 0.355512
+          }
+        }
+      },
+      "trace": "gpu1_b1_layer17_cuda_sdpa.json"
+    },
+    {
+      "device": 1,
+      "batch": 1,
+      "layer": 35,
+      "linear": "eager",
+      "attention": "sdpa",
+      "gpu_median_ms": 40.300926208496094,
+      "wall_median_ms": 40.37351299996317,
+      "peak_allocated": 3023395840,
+      "profile": {
+        "complete": true,
+        "kernel_count": 101,
+        "kernel_work_ms": 37.376054999999994,
+        "kernel_union_ms": 37.37605615234375,
+        "copy_or_memset_count": 4,
+        "copy_or_memset_work_ms": 0.7935840000000001,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 24,
+            "kernel_work_ms": 6.957166999999999
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 2,
+            "kernel_work_ms": 0.5957960000000001
+          },
+          "VAE_ATTENTION/sdpa": {
+            "kernel_count": 1,
+            "kernel_work_ms": 2.676712
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 24,
+            "kernel_work_ms": 2.572779
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 24,
+            "kernel_work_ms": 15.443294999999999
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 26,
+            "kernel_work_ms": 9.130306000000001
+          }
+        },
+        "kernel_families": {
+          "other": {
+            "kernel_count": 11,
+            "kernel_work_ms": 1.222758
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 4,
+            "kernel_work_ms": 0.691569
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 81,
+            "kernel_work_ms": 15.305314999999997
+          },
+          "legacy_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 17.479701000000002
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 2.676712
+          }
+        }
+      },
+      "trace": "gpu1_b1_layer35_eager_sdpa.json"
+    },
+    {
+      "device": 1,
+      "batch": 1,
+      "layer": 35,
+      "linear": "cuda",
+      "attention": "sdpa",
+      "gpu_median_ms": 11.12771224975586,
+      "wall_median_ms": 11.173958000085804,
+      "peak_allocated": 2612896768,
+      "profile": {
+        "complete": true,
+        "kernel_count": 18,
+        "kernel_work_ms": 10.685611000000002,
+        "kernel_union_ms": 10.68561083984375,
+        "copy_or_memset_count": 0,
+        "copy_or_memset_work_ms": 0.0,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 2,
+            "kernel_work_ms": 1.1067909999999999
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 2,
+            "kernel_work_ms": 0.553523
+          },
+          "VAE_ATTENTION/sdpa": {
+            "kernel_count": 1,
+            "kernel_work_ms": 2.681603
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 4,
+            "kernel_work_ms": 0.7651979999999999
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 2,
+            "kernel_work_ms": 2.611364
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 7,
+            "kernel_work_ms": 2.967132
+          }
+        },
+        "kernel_families": {
+          "ConvRot_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.561395
+          },
+          "SM75_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 4.815057
+          },
+          "other": {
+            "kernel_count": 1,
+            "kernel_work_ms": 0.496884
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 2.681603
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 5,
+            "kernel_work_ms": 1.133287
+          },
+          "other_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.623921
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 1,
+            "kernel_work_ms": 0.373464
+          }
+        }
+      },
+      "trace": "gpu1_b1_layer35_cuda_sdpa.json"
+    },
+    {
+      "device": 1,
+      "batch": 1,
+      "layer": 35,
+      "linear": "eager",
+      "attention": "kitchen",
+      "gpu_median_ms": 39.830623626708984,
+      "wall_median_ms": 39.88393099996301,
+      "peak_allocated": 3023395840,
+      "profile": {
+        "complete": true,
+        "kernel_count": 105,
+        "kernel_work_ms": 36.772158,
+        "kernel_union_ms": 36.7721572265625,
+        "copy_or_memset_count": 4,
+        "copy_or_memset_work_ms": 0.7916630000000001,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 24,
+            "kernel_work_ms": 7.068011000000001
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.7122719999999999
+          },
+          "VAE_ATTENTION/kitchen": {
+            "kernel_count": 4,
+            "kernel_work_ms": 1.5558720000000001
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 24,
+            "kernel_work_ms": 2.5957540000000003
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 24,
+            "kernel_work_ms": 15.487131999999999
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 26,
+            "kernel_work_ms": 9.353117000000003
+          }
+        },
+        "kernel_families": {
+          "other": {
+            "kernel_count": 14,
+            "kernel_work_ms": 1.6036780000000002
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 4,
+            "kernel_work_ms": 0.707697
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 82,
+            "kernel_work_ms": 15.584508000000005
+          },
+          "legacy_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 17.681644
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 1.194631
+          }
+        }
+      },
+      "trace": "gpu1_b1_layer35_eager_kitchen.json"
+    },
+    {
+      "device": 1,
+      "batch": 1,
+      "layer": 35,
+      "linear": "cuda",
+      "attention": "kitchen",
+      "gpu_median_ms": 9.509632110595703,
+      "wall_median_ms": 9.549418999995396,
+      "peak_allocated": 2612896768,
+      "profile": {
+        "complete": true,
+        "kernel_count": 22,
+        "kernel_work_ms": 10.444764999999997,
+        "kernel_union_ms": 10.4447646484375,
+        "copy_or_memset_count": 0,
+        "copy_or_memset_work_ms": 0.0,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 2,
+            "kernel_work_ms": 1.183815
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.68904
+          },
+          "VAE_ATTENTION/kitchen": {
+            "kernel_count": 4,
+            "kernel_work_ms": 1.733563
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 4,
+            "kernel_work_ms": 0.810062
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 2,
+            "kernel_work_ms": 2.791908
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 7,
+            "kernel_work_ms": 3.236377
+          }
+        },
+        "kernel_families": {
+          "ConvRot_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.6013959999999999
+          },
+          "SM75_INT8_GEMM": {
+            "kernel_count": 4,
+            "kernel_work_ms": 5.23771
+          },
+          "other": {
+            "kernel_count": 4,
+            "kernel_work_ms": 0.918603
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 1.340004
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 6,
+            "kernel_work_ms": 1.2728989999999998
+          },
+          "other_quantization": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.673522
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 1,
+            "kernel_work_ms": 0.40063099999999996
+          }
+        }
+      },
+      "trace": "gpu1_b1_layer35_cuda_kitchen.json"
+    },
+    {
+      "device": 1,
+      "batch": 1,
+      "layer": 0,
+      "linear": "fp16_native",
+      "attention": "sdpa",
+      "gpu_median_ms": 17.360960006713867,
+      "wall_median_ms": 17.412885999988248,
+      "peak_allocated": 4972760576,
+      "profile": {
+        "complete": true,
+        "kernel_count": 13,
+        "kernel_work_ms": 17.224947999999998,
+        "kernel_union_ms": 17.22494775390625,
+        "copy_or_memset_count": 0,
+        "copy_or_memset_work_ms": 0.0,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 2,
+            "kernel_work_ms": 2.2465119999999996
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 2,
+            "kernel_work_ms": 0.696274
+          },
+          "VAE_ATTENTION/native_sdpa": {
+            "kernel_count": 1,
+            "kernel_work_ms": 3.6686900000000002
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 2,
+            "kernel_work_ms": 0.879501
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 2,
+            "kernel_work_ms": 5.861957
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 4,
+            "kernel_work_ms": 3.872014
+          }
+        },
+        "kernel_families": {
+          "other": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.778
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 4,
+            "kernel_work_ms": 11.482126000000001
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 3.6686900000000002
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 5,
+            "kernel_work_ms": 1.296132
+          }
+        }
+      },
+      "trace": "gpu1_b1_layer0_fp16_sdpa.json"
+    },
+    {
+      "device": 1,
+      "batch": 1,
+      "layer": 17,
+      "linear": "fp16_native",
+      "attention": "sdpa",
+      "gpu_median_ms": 14.441375732421875,
+      "wall_median_ms": 14.49144199989405,
+      "peak_allocated": 4972760576,
+      "profile": {
+        "complete": true,
+        "kernel_count": 13,
+        "kernel_work_ms": 14.301562000000002,
+        "kernel_union_ms": 14.3015615234375,
+        "copy_or_memset_count": 0,
+        "copy_or_memset_work_ms": 0.0,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 2,
+            "kernel_work_ms": 1.901109
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 2,
+            "kernel_work_ms": 0.61381
+          },
+          "VAE_ATTENTION/native_sdpa": {
+            "kernel_count": 1,
+            "kernel_work_ms": 3.129593
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 2,
+            "kernel_work_ms": 0.751662
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 2,
+            "kernel_work_ms": 4.860562
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 4,
+            "kernel_work_ms": 3.044826
+          }
+        },
+        "kernel_families": {
+          "other": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.6893919999999999
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 4,
+            "kernel_work_ms": 9.32974
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 3.129593
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 5,
+            "kernel_work_ms": 1.152837
+          }
+        }
+      },
+      "trace": "gpu1_b1_layer17_fp16_sdpa.json"
+    },
+    {
+      "device": 1,
+      "batch": 1,
+      "layer": 35,
+      "linear": "fp16_native",
+      "attention": "sdpa",
+      "gpu_median_ms": 14.522144317626953,
+      "wall_median_ms": 14.566622999950596,
+      "peak_allocated": 4972760576,
+      "profile": {
+        "complete": true,
+        "kernel_count": 13,
+        "kernel_work_ms": 13.992405000000002,
+        "kernel_union_ms": 13.99240380859375,
+        "copy_or_memset_count": 0,
+        "copy_or_memset_work_ms": 0.0,
+        "excluded_gpu_annotations": 6,
+        "unmatched_kernel_count": 0,
+        "phases": {
+          "VAE_LINEAR_SITE/qkv": {
+            "kernel_count": 2,
+            "kernel_work_ms": 1.832809
+          },
+          "norm_RoPE_layout_or_outer": {
+            "kernel_count": 2,
+            "kernel_work_ms": 0.5986160000000001
+          },
+          "VAE_ATTENTION/native_sdpa": {
+            "kernel_count": 1,
+            "kernel_work_ms": 2.977916
+          },
+          "VAE_LINEAR_SITE/attention_out": {
+            "kernel_count": 2,
+            "kernel_work_ms": 0.715735
+          },
+          "VAE_LINEAR_SITE/fc1": {
+            "kernel_count": 2,
+            "kernel_work_ms": 4.68084
+          },
+          "VAE_LINEAR_SITE/fc2": {
+            "kernel_count": 4,
+            "kernel_work_ms": 3.1864889999999995
+          }
+        },
+        "kernel_families": {
+          "other": {
+            "kernel_count": 3,
+            "kernel_work_ms": 0.6709360000000002
+          },
+          "FP16_GEMM_or_rotation": {
+            "kernel_count": 4,
+            "kernel_work_ms": 9.167952999999999
+          },
+          "attention_core": {
+            "kernel_count": 1,
+            "kernel_work_ms": 2.977916
+          },
+          "elementwise_or_layout": {
+            "kernel_count": 5,
+            "kernel_work_ms": 1.1756000000000002
+          }
+        }
+      },
+      "trace": "gpu1_b1_layer35_fp16_sdpa.json"
+    }
+  ],
+  "counterfactuals": [
+    {
+      "batch": 1,
+      "layer": 0,
+      "linear_cuda_saving_with_sdpa_ms": 28.627071380615234,
+      "linear_cuda_saving_with_kitchen_ms": 30.841022491455078,
+      "attention_kitchen_saving_with_eager_ms": -1.5300788879394531,
+      "attention_kitchen_saving_with_cuda_ms": 0.6838722229003906,
+      "interaction_ms": -2.2139511108398438,
+      "cuda_int8_over_fp16_ratio": 0.5580096906849299,
+      "scope": "Positive saving favors the changed backend; all other CUDA13 registry dispatch held constant"
+    },
+    {
+      "batch": 1,
+      "layer": 17,
+      "linear_cuda_saving_with_sdpa_ms": 29.72691249847412,
+      "linear_cuda_saving_with_kitchen_ms": 29.507488250732422,
+      "attention_kitchen_saving_with_eager_ms": 1.8440322875976562,
+      "attention_kitchen_saving_with_cuda_ms": 1.624608039855957,
+      "interaction_ms": 0.21942424774169922,
+      "cuda_int8_over_fp16_ratio": 0.6292940312542924,
+      "scope": "Positive saving favors the changed backend; all other CUDA13 registry dispatch held constant"
+    },
+    {
+      "batch": 1,
+      "layer": 35,
+      "linear_cuda_saving_with_sdpa_ms": 29.173213958740234,
+      "linear_cuda_saving_with_kitchen_ms": 30.32099151611328,
+      "attention_kitchen_saving_with_eager_ms": 0.4703025817871094,
+      "attention_kitchen_saving_with_cuda_ms": 1.6180801391601562,
+      "interaction_ms": -1.1477775573730469,
+      "cuda_int8_over_fp16_ratio": 0.6548366344943238,
+      "scope": "Positive saving favors the changed backend; all other CUDA13 registry dispatch held constant"
+    },
+    {
+      "batch": 4,
+      "layer": 0,
+      "linear_cuda_saving_with_sdpa_ms": 113.13033294677734,
+      "linear_cuda_saving_with_kitchen_ms": 116.30819320678711,
+      "attention_kitchen_saving_with_eager_ms": -0.623046875,
+      "attention_kitchen_saving_with_cuda_ms": 2.5548133850097656,
+      "interaction_ms": -3.1778602600097656,
+      "cuda_int8_over_fp16_ratio": 0.7362750791181446,
+      "scope": "Positive saving favors the changed backend; all other CUDA13 registry dispatch held constant"
+    },
+    {
+      "batch": 4,
+      "layer": 17,
+      "linear_cuda_saving_with_sdpa_ms": 118.27056503295898,
+      "linear_cuda_saving_with_kitchen_ms": 115.40946578979492,
+      "attention_kitchen_saving_with_eager_ms": 6.9045562744140625,
+      "attention_kitchen_saving_with_cuda_ms": 4.04345703125,
+      "interaction_ms": 2.8610992431640625,
+      "cuda_int8_over_fp16_ratio": 0.7207891291357879,
+      "scope": "Positive saving favors the changed backend; all other CUDA13 registry dispatch held constant"
+    },
+    {
+      "batch": 4,
+      "layer": 35,
+      "linear_cuda_saving_with_sdpa_ms": 116.70050811767578,
+      "linear_cuda_saving_with_kitchen_ms": 120.47257614135742,
+      "attention_kitchen_saving_with_eager_ms": 2.1071624755859375,
+      "attention_kitchen_saving_with_cuda_ms": 5.879230499267578,
+      "interaction_ms": -3.7720680236816406,
+      "cuda_int8_over_fp16_ratio": 0.7022933864534022,
+      "scope": "Positive saving favors the changed backend; all other CUDA13 registry dispatch held constant"
+    }
+  ],
+  "limitations": [
+    "Profile work times are single diagnostic captures, separate from seven warmed measurements.",
+    "SM75 GEMM kernel names establish selected kernels, not measured occupancy or stall counters.",
+    "FP16 uses a different checkpoint. No accuracy equivalence or full-video speedup was tested.",
+    "Other registry operations use the same CUDA13 automatic dispatch within the factorial."
+  ]
+}
