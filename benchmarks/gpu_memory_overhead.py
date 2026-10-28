@@ -64,6 +64,7 @@ class MemoryAudit:
         self.markers=[];self.shapes=[];self.shape_dropped=0;self.static_tables=[]
         self.chunks=[];self.index=0;self.active=False;self.begin_segments=[]
         self.handles=[]
+        self.history_limit=50000
         if install_wrappers:self.install()
 
     def _segments(self,snapshot,intern=None):
@@ -85,7 +86,7 @@ class MemoryAudit:
         self.nfe=self.runtime.context.get('nfe',0)
         self.markers=[];self.shapes=[];self.shape_dropped=0;self.static_tables=[]
         self.begin_segments=self._segments(torch.cuda.memory._snapshot())
-        kwargs=dict(enabled='all',context='all',stacks='python',max_entries=50000,
+        kwargs=dict(enabled='all',context='all',stacks='python',max_entries=self.history_limit,
                     device=self.device,clear_history=True,global_record_annotations=True)
         signature=inspect.signature(torch.cuda.memory._record_memory_history).parameters
         torch.cuda.memory._record_memory_history(**{k:v for k,v in kwargs.items() if k in signature})
@@ -205,7 +206,7 @@ class MemoryAudit:
             final_segments=segments,events=compact,stacks=stacks,
             allocator_settings=snapshot.get('allocator_settings'),
             external_annotations=snapshot.get('external_annotations',[]),
-            history_limit=50000,history_limit_reached=len(events)>=50000,
+            history_limit=self.history_limit,history_limit_reached=len(events)>=self.history_limit,
             interpretation='free_requested is host release; free_completed is allocator-observed CUDA reuse eligibility. '
                 'Reserved inactive storage remains cached. Known static categories are storage-deduplicated; other allocated includes inputs, activations and library scratch.')
         filename=f'{self.index:03d}_{self.command}_nfe{payload["nfe"]}.json.gz'

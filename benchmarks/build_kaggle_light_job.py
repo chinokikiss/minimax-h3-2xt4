@@ -49,6 +49,8 @@ def main():
     p.add_argument('--vae-compare-preflight',action='store_true',help='CPU-only authentication/hash gate for the private Video decoder input')
     p.add_argument('--vae-input-qualification',type=Path,help='Matching CPU-only real-latent authentication receipt')
     p.add_argument('--vae-ab-bake',action='store_true',help='Private Dataset VAE checkpoint replay and bake-only profile; CPU gate or two T4s')
+    p.add_argument('--dit-pair',action='store_true',help='CPU gate or two consecutive 59134-token DiT calls; no full pipeline')
+    p.add_argument('--pair-qualification',type=Path)
     p.add_argument('--publication',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
     p.add_argument('--qualification',type=Path);p.add_argument('--private-input',type=Path)
     p.add_argument('--temporary-private-auth',action='store_true',help='Explicit user-authorized temporary auth in a private operator submission only')
@@ -62,6 +64,10 @@ def main():
     if args.output.exists():raise FileExistsError('Preserve submitted notebooks')
     publication=json.loads(args.publication.read_text());assert publication['published']
     if args.mode!='cpu' and args.qualification is None:p.error('GPU jobs require the new direct-pip CPU receipt')
+    if args.dit_pair:
+        if args.mode not in ('cpu','e2e'):p.error('--dit-pair requires cpu or e2e setup')
+        if args.vae_ab_bake or args.turbo_e2e or args.private_input or args.temporary_private_auth:p.error('DiT pair is a standalone fixture job without private auth')
+        if args.mode=='e2e' and not args.pair_qualification:p.error('DiT pair requires its CPU fixture qualification')
     if args.vae_ab_bake and args.mode not in ('cpu','e2e'):p.error('--vae-ab-bake requires cpu or e2e setup')
     if args.vae_ab_bake and (args.temporary_private_auth or args.private_input):p.error('VAE A/B uses a private Dataset, without embedded HF credentials')
     if args.vae_ab_bake and args.mode=='e2e' and not args.vae_input_qualification:p.error('VAE A/B requires its CPU Dataset gate')
@@ -95,6 +101,11 @@ def main():
             assert qualification.get('disk_bake_cpu',{}).get('passed'),'Fresh matching disk-bake CPU qualification required'
             assert qualification.get('review_suite',{}).get('passed')
     private=json.loads(args.private_input.read_text()) if args.private_input else None
+    if args.dit_pair and args.mode=='e2e':
+        gate=json.loads(args.pair_qualification.read_text())
+        assert gate['status']=='pair_cpu_ready' and gate['source_capsule_sha256']==publication['capsule_sha256']
+        assert gate['input_identity']['tokens']==59134
+        assert qualification.get('review_suite',{}).get('passed') and qualification.get('disk_bake_cpu',{}).get('passed')
     if args.vae_ab_bake and args.mode=='e2e':
         gate=json.loads(args.vae_input_qualification.read_text())
         assert gate['status']=='cpu_input_ready' and gate['source_capsule_sha256']==publication['capsule_sha256']
@@ -150,6 +161,16 @@ for name,value in PROFILE_FILES.items():
 """.replace('PROFILE_FILES',repr(profile_files)).replace('PROFILE_HASHES',repr(profile_hashes))
     if args.mode=='cpu':
         code+="assert receipt['status']=='cpu_ready'\n"
+        if args.dit_pair:
+            probe="""import json,os,pathlib,sys
+env=dict(os.environ);env.update(json.loads(pathlib.Path('/kaggle/working/light_setup/execution_env.json').read_text()))
+source=pathlib.Path('/kaggle/temp/h3_light_source')
+argv=[sys.executable,'-u',str(source/'benchmarks/run_dit_pair_batch.py'),
+ '--source',str(source),'--output','/kaggle/working/dit_pair_preflight','--cpu-preflight']
+os.execve(sys.executable,argv,env)
+"""
+            code+=execution_supervisor(probe,budget=180,output='/kaggle/working/dit_pair_preflight_supervision')
+            code+="assert json.loads(pathlib.Path('/kaggle/working/dit_pair_preflight/batch_results.json').read_text())['status']=='pair_cpu_ready'\n"
         if args.vae_ab_bake:
             probe="""import json,os,pathlib,sys
 env=dict(os.environ);env.update(json.loads(pathlib.Path('/kaggle/working/light_setup/execution_env.json').read_text()))
@@ -225,6 +246,12 @@ argv=[sys.executable,'-u',str(source/'benchmarks/run_vae_bake_batch.py'),
  '--source',str(source),'--output','/kaggle/working/vae_bake']
 os.execve(sys.executable,argv,env)
 """
+        if args.dit_pair:
+            execution=execution[:execution.index('argv=')]+"""
+argv=[sys.executable,'-u',str(source/'benchmarks/run_dit_pair_batch.py'),
+ '--source',str(source),'--output','/kaggle/working/dit_pair']
+os.execve(sys.executable,argv,env)
+"""
         if args.mode=='vae-parallel':
             execution=execution[:execution.index('argv=')]+"""
 argv=[sys.executable,'-u',str(source/'benchmarks/run_vae_temporal_batch.py'),
@@ -252,6 +279,9 @@ if guard['status']!='worker_exited' or guard['exit_code']!=0:raise RuntimeError(
     if args.vae_ab_bake:
         ids[args.mode]='h3-vae-bake-cpu-20261028' if args.mode=='cpu' else 'h3-vae-checkpoints-bake-t4-20261028'
         titles[args.mode]='H3 VAE Bake CPU 20261028' if args.mode=='cpu' else 'H3 VAE Checkpoints Bake T4 20261028'
+    if args.dit_pair:
+        ids[args.mode]='h3-dit-pair-cpu-20261028' if args.mode=='cpu' else 'h3-dit-pair-59134-t4-20261028'
+        titles[args.mode]='H3 DiT Pair CPU 20261028' if args.mode=='cpu' else 'H3 DiT Pair 59134 T4 20261028'
     meta=dict(id='pamcks/'+ids[args.mode],title=titles[args.mode],code_file='experiment.ipynb',language='python',
         kernel_type='notebook',is_private=True,enable_gpu=args.mode!='cpu',enable_tpu=False,enable_internet=True,
         docker_image_pinning_type='original',dataset_sources=[],kernel_sources=[],competition_sources=[],model_sources=[])
@@ -272,6 +302,8 @@ if guard['status']!='worker_exited' or guard['exit_code']!=0:raise RuntimeError(
         turbo_e2e=args.turbo_e2e,
         vae_compare_preflight=args.vae_compare_preflight,
         vae_ab_bake=args.vae_ab_bake,
+        dit_pair=args.dit_pair,
+        pair_qualification_sha256=hashlib.sha256(args.pair_qualification.read_bytes()).hexdigest() if args.pair_qualification else None,
         vae_input_qualification_sha256=hashlib.sha256(args.vae_input_qualification.read_bytes()).hexdigest() if args.vae_input_qualification else None,
         profile_qualification_sha256=hashlib.sha256(args.profile_qualification.read_bytes()).hexdigest() if args.profile_qualification else None),indent=2))
     print(args.output)
