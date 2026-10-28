@@ -1,0 +1,13 @@
+{
+  "commit": "80039fbc88618a9ce1ea2023e41ea6c235869213",
+  "branch": "codex/h3-ptd-refasymopd",
+  "distribution_sha256": "d29b4d1c8d831a688e96eec7b16e11abf17e83a91c226b1819151614bb4e9f1d",
+  "capsule_sha256": "35c4e226685c5f152f924bf9ad2749de1476801f76ae1f6867098c3fe8f20680",
+  "native_comfyui_byte_preserved": true,
+  "frozen_environment_byte_preserved": true,
+  "ast_parsed_python_files": 633,
+  "reference_mapping_schedule_verbatim": true,
+  "local_lora_payload_downloaded": false,
+  "local_gpu_execution": false,
+  "t4_numerical_qualification": "pending"
+}
