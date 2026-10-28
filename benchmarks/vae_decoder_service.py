@@ -74,9 +74,30 @@ def decoder_worker(rank, config, budget, port, connection):
             if command == 'vae_prepare':
                 torch.cuda.reset_peak_memory_stats(rank)
             if decode:
+                tile_calls = []
                 start, end = torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)
                 start.record()
             result = runtime.dispatch(command, args, kwargs)
+            attention = None
+            if command == 'vae_prepare' and result.get('accepted'):
+                from patches.parallel_vae import query_partitioning_status
+                attention = query_partitioning_status(runtime.vae_model)
+                planner = getattr(runtime, 'vae_temporal_planner', None)
+                if planner is not None:
+                    original_decode = planner.decode_pixels
+                    def observe_tiles(z):
+                        tile = dict(shape=list(z.shape), success=False)
+                        tile_calls.append(tile)
+                        try:
+                            value = original_decode(z)
+                            tile['success'] = True
+                            return value
+                        except torch.cuda.OutOfMemoryError:
+                            tile['oom'] = True
+                            raise
+                    planner.decode_pixels = observe_tiles
+            if command == 'vae_prepare':
+                tile_calls = []
             if decode:
                 end.record()
                 end.synchronize()
@@ -86,7 +107,8 @@ def decoder_worker(rank, config, budget, port, connection):
                 thread_cpu_ns=time.thread_time_ns()-cpu, gpu_span_ms=start.elapsed_time(end) if decode else None,
                 reply_bytes=reply.numel()*reply.element_size() if isinstance(reply, torch.Tensor) else 0,
                 collectives=runtime.comm.counts, peak_allocated=torch.cuda.max_memory_allocated(rank),
-                peak_reserved=torch.cuda.max_memory_reserved(rank)))
+                peak_reserved=torch.cuda.max_memory_reserved(rank), attention=attention,
+                native_tiles=list(tile_calls) if decode else [], runtime_events=list(runtime.events)))
             connection.send((sequence, reply))
             if command == 'close':
                 break
@@ -106,11 +128,12 @@ def decoder_worker(rank, config, budget, port, connection):
 
 class DecoderService(PhysicalTPService):
     """No TE/DiT objects. Keep replicas resident only within a benchmark phase."""
-    def __init__(self):
+    def __init__(self, *, host_bytes=16 * GiB, timeout_seconds=600):
         import torch.multiprocessing as mp
         import torch.distributed as dist
         self.config = RuntimeConfig('unused', 'unused', cross_request_te=False,
-                                    prefetch_lifecycle=False, timeout_seconds=600)
+                                    prefetch_lifecycle=False, timeout_seconds=timeout_seconds,
+                                    host_bytes=host_bytes)
         self.lock, self.sequence, self.closed = threading.RLock(), 0, False
         self.idle_held, self.idle_vae_thread = False, None
         self.idle_vae_names, self.idle_vae_cancel = None, threading.Event()
@@ -119,9 +142,9 @@ class DecoderService(PhysicalTPService):
         self.resident_mode = None
         self.parent_commands = []
         context = mp.get_context('spawn')
-        self.budget = HostBudget(16 * GiB, context=context, pressure_aware=True)
+        self.budget = HostBudget(host_bytes, context=context, pressure_aware=True)
         self.store = dist.TCPStore('127.0.0.1', 0, 3, True,
-                                   timedelta(seconds=600), wait_for_workers=False)
+                                   timedelta(seconds=timeout_seconds), wait_for_workers=False)
         self.connections, self.processes = [], []
         try:
             for rank in (0, 1):

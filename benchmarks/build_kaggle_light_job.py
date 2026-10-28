@@ -48,6 +48,7 @@ def main():
     p.add_argument('--turbo-e2e',action='store_true',help='Current-default 0.5MP E2E with Native TP2 offline LoRA persisted to disk')
     p.add_argument('--vae-compare-preflight',action='store_true',help='CPU-only authentication/hash gate for the private Video decoder input')
     p.add_argument('--vae-input-qualification',type=Path,help='Matching CPU-only real-latent authentication receipt')
+    p.add_argument('--vae-ab-bake',action='store_true',help='Private Dataset VAE checkpoint replay and bake-only profile; CPU gate or two T4s')
     p.add_argument('--publication',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
     p.add_argument('--qualification',type=Path);p.add_argument('--private-input',type=Path)
     p.add_argument('--temporary-private-auth',action='store_true',help='Explicit user-authorized temporary auth in a private operator submission only')
@@ -61,6 +62,9 @@ def main():
     if args.output.exists():raise FileExistsError('Preserve submitted notebooks')
     publication=json.loads(args.publication.read_text());assert publication['published']
     if args.mode!='cpu' and args.qualification is None:p.error('GPU jobs require the new direct-pip CPU receipt')
+    if args.vae_ab_bake and args.mode not in ('cpu','e2e'):p.error('--vae-ab-bake requires cpu or e2e setup')
+    if args.vae_ab_bake and (args.temporary_private_auth or args.private_input):p.error('VAE A/B uses a private Dataset, without embedded HF credentials')
+    if args.vae_ab_bake and args.mode=='e2e' and not args.vae_input_qualification:p.error('VAE A/B requires its CPU Dataset gate')
     if (args.mode in ('operators','vae-parallel') or args.vae_compare_preflight) and args.private_input is None:p.error('This run requires a private HF capture locator')
     if args.review_suite and args.mode!='cpu':p.error('--review-suite requires --mode cpu')
     if args.review_recovery and args.mode!='review-operators':p.error('--review-recovery requires --mode review-operators')
@@ -91,6 +95,11 @@ def main():
             assert qualification.get('disk_bake_cpu',{}).get('passed'),'Fresh matching disk-bake CPU qualification required'
             assert qualification.get('review_suite',{}).get('passed')
     private=json.loads(args.private_input.read_text()) if args.private_input else None
+    if args.vae_ab_bake and args.mode=='e2e':
+        gate=json.loads(args.vae_input_qualification.read_text())
+        assert gate['status']=='cpu_input_ready' and gate['source_capsule_sha256']==publication['capsule_sha256']
+        assert gate['input_sha256']=='08a10be3efdda85ea6415c832eb2654101da5d5fabe54b6e34002071ee2dde25'
+        assert qualification.get('review_suite',{}).get('passed')
     if args.mode=='vae-parallel':
         assert qualification.get('review_suite',{}).get('passed'),'Fresh decoder CPU review required'
         gate=json.loads(args.vae_input_qualification.read_text())
@@ -141,6 +150,16 @@ for name,value in PROFILE_FILES.items():
 """.replace('PROFILE_FILES',repr(profile_files)).replace('PROFILE_HASHES',repr(profile_hashes))
     if args.mode=='cpu':
         code+="assert receipt['status']=='cpu_ready'\n"
+        if args.vae_ab_bake:
+            probe="""import json,os,pathlib,sys
+env=dict(os.environ);env.update(json.loads(pathlib.Path('/kaggle/working/light_setup/execution_env.json').read_text()))
+source=pathlib.Path('/kaggle/temp/h3_light_source')
+argv=[sys.executable,'-u',str(source/'benchmarks/run_vae_bake_batch.py'),
+ '--source',str(source),'--output','/kaggle/working/vae_bake_preflight','--cpu-preflight']
+os.execve(sys.executable,argv,env)
+"""
+            code+=execution_supervisor(probe,budget=240,output='/kaggle/working/vae_bake_preflight_supervision')
+            code+="assert json.loads(pathlib.Path('/kaggle/working/vae_bake_preflight/result.json').read_text())['status']=='cpu_input_ready'\n"
         if args.vae_compare_preflight:
             probe="""import json,os,pathlib,sys
 env=dict(os.environ);env.update(json.loads(pathlib.Path('/kaggle/working/light_setup/execution_env.json').read_text()))
@@ -200,6 +219,12 @@ argv=[sys.executable,'-u',str(source/'benchmarks/run_h3_l1_turbo_batch.py'),
  '--source',str(source),'--output','/kaggle/working/turbo_e2e']
 os.execve(sys.executable,argv,env)
 """
+        if args.vae_ab_bake:
+            execution=execution[:execution.index('argv=')]+"""
+argv=[sys.executable,'-u',str(source/'benchmarks/run_vae_bake_batch.py'),
+ '--source',str(source),'--output','/kaggle/working/vae_bake']
+os.execve(sys.executable,argv,env)
+"""
         if args.mode=='vae-parallel':
             execution=execution[:execution.index('argv=')]+"""
 argv=[sys.executable,'-u',str(source/'benchmarks/run_vae_temporal_batch.py'),
@@ -224,16 +249,20 @@ if guard['status']!='worker_exited' or guard['exit_code']!=0:raise RuntimeError(
     if args.turbo_e2e:ids['e2e']='h3-l1-turbo-05mp-t4';titles['e2e']='H3 L1 Turbo 0.5MP T4 Disk Bake'
     ids['vae-parallel']='h3-vae-query-temporal-t4-20261027';titles['vae-parallel']='H3 VAE Query Temporal T4 20261027'
     if args.vae_compare_preflight:ids['cpu']='h3-vae-temporal-cpu-20261027';titles['cpu']='H3 VAE Temporal CPU 20261027'
+    if args.vae_ab_bake:
+        ids[args.mode]='h3-vae-bake-cpu-20261028' if args.mode=='cpu' else 'h3-vae-checkpoints-bake-t4-20261028'
+        titles[args.mode]='H3 VAE Bake CPU 20261028' if args.mode=='cpu' else 'H3 VAE Checkpoints Bake T4 20261028'
     meta=dict(id='pamcks/'+ids[args.mode],title=titles[args.mode],code_file='experiment.ipynb',language='python',
         kernel_type='notebook',is_private=True,enable_gpu=args.mode!='cpu',enable_tpu=False,enable_internet=True,
         docker_image_pinning_type='original',dataset_sources=[],kernel_sources=[],competition_sources=[],model_sources=[])
+    if args.vae_ab_bake:meta['dataset_sources']=['pamcks/h3-vae-ab-latents-20261028']
     if args.mode!='cpu':meta['machine_shape']='NvidiaTeslaT4'
     notebook=dict(nbformat=4,nbformat_minor=5,metadata=dict(kernelspec=dict(name='python3',language='python',display_name='Python 3')),
         cells=[dict(id='light-delivery',cell_type='code',execution_count=None,metadata={},outputs=[],source=code.splitlines(keepends=True))])
     (args.output/'experiment.ipynb').write_text(json.dumps(notebook));(args.output/'kernel-metadata.json').write_text(json.dumps(meta,indent=2))
     (args.output/'source_binding.json').write_text(json.dumps(dict(mode=args.mode,publication=publication,
         qualification_sha256=hashlib.sha256(args.qualification.read_bytes()).hexdigest() if qualification else None,
-        kaggle_dataset_sources=[],kaggle_kernel_sources=[],temporary_private_auth=args.temporary_private_auth,
+        kaggle_dataset_sources=meta['dataset_sources'],kaggle_kernel_sources=[],temporary_private_auth=args.temporary_private_auth,
         profile_hashes=profile_hashes,setup_budget=args.setup_budget,
         execution_budget=args.execution_budget,
         dit_lifetimes=args.dit_lifetimes,
@@ -242,6 +271,7 @@ if guard['status']!='worker_exited' or guard['exit_code']!=0:raise RuntimeError(
         review_recovery=args.review_recovery,
         turbo_e2e=args.turbo_e2e,
         vae_compare_preflight=args.vae_compare_preflight,
+        vae_ab_bake=args.vae_ab_bake,
         vae_input_qualification_sha256=hashlib.sha256(args.vae_input_qualification.read_bytes()).hexdigest() if args.vae_input_qualification else None,
         profile_qualification_sha256=hashlib.sha256(args.profile_qualification.read_bytes()).hexdigest() if args.profile_qualification else None),indent=2))
     print(args.output)
