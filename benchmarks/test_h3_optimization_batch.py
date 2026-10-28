@@ -106,7 +106,7 @@ class Operators(unittest.TestCase):
             self.assertIn(('tilelang_row_quant','quantizer',quantizer.call_args.args),p)
         gain=SimpleNamespace();gain.to=lambda **kw:gain;gain.reshape=lambda *a:gain;gain.contiguous=lambda:gain
         packed=SimpleNamespace(shape=(59134,10752),dtype=torch.float16,device='cuda:0')
-        freqs=SimpleNamespace(shape=(1,59134,1,64,2,2),dtype=torch.float16,reshape=lambda *a:None)
+        freqs=SimpleNamespace(shape=(1,59134,1,48,2,2),dtype=torch.float16,reshape=lambda *a:None)
         with patch.object(rope,'supported',return_value=True),patch.object(rope,'kernel',return_value=lambda *a:None) as kernel:
             rope.execute(packed,freqs,gain,gain)
             self.assertIn(('tilelang_fp32_rms_rope','kernel',kernel.call_args.args),p)

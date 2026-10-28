@@ -1,0 +1,23 @@
+{
+  "local_reference": "C:\\Users\\Administrator\\Downloads\\MiniMax-H3-PTD-RefAsymOPD-LoRAs\\comfyui_node\\ComfyUI-MiniMaxH3-PTD",
+  "local_sha256": {
+    "delta.py": "cea6b28ae3fdda5d0d335d94ab1384d72d6b0ea48c57e8c698f6da150dc16843",
+    "heads.py": "b880e2f005cf6c4fba9186cbf009ec22566a134669c0ff3909f68c4c0c1bdae3",
+    "loader.py": "adf17fef1cf0daef19ad295d5b188f378b4f884ed9e68257c25cd5ecd9147c13",
+    "mapping.py": "61526c23b3eaf6251be398b42451cbdb40ae061aad8351678f9ea3800d36a621",
+    "nodes.py": "a236b86763049d022f8d494669102e644e7e0f65931c8618f734a77f6e75936d",
+    "patcher.py": "b97863bd9185f2a11b297ff1b8e0f66588e8b2674d1999a6141b071f1ebd5ea9",
+    "sampler.py": "bdc311d80102a27d791f3ae67cdcaf94fcbf57bc636c77b8a1beac0272eb9dd2",
+    "schedule.py": "6597d540128d22af46a4fabb7ded0eca700c113f5376589dc84f42423aca40e9",
+    "__init__.py": "3f211bb4a6e567406f2b11ec663a1f322ad7db0f8d5287faf4f86e60af7a9e03"
+  },
+  "upstream_revision": "65e593ff0cb0e68f885caa412cdd1c4c6cb08e6b",
+  "release": {
+    "repo": "taobao-content-ai/MiniMax-H3-PTD-RefAsymOPD-LoRAs",
+    "revision": "d1f88c89c352e7751b56b5f32c7b657fb3e0f2c5",
+    "file": "MiniMax-H3-Ref2VA-PTD-RefAsymOPD-8Step.safetensors",
+    "bytes": 11112893024,
+    "sha256": "6796802b9150110a3cd7f66891c9e6190502a432c30b0fa1aa299724cfc15cc3"
+  },
+  "local_weight_payload_downloaded": false
+}

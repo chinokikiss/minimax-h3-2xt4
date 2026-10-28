@@ -101,7 +101,7 @@ class RemoteDenoiser(nn.Module):
         return packet(result, device)
 
 
-def create_model(service, device='cuda:0'):
+def create_model(service, device='cuda:0', *, adapter=None):
     import comfy.model_base
     import comfy.model_patcher
     import comfy.patcher_extension
@@ -111,7 +111,7 @@ def create_model(service, device='cuda:0'):
     flow=getattr(service.config,'tensor_flow',None)
     config.set_inference_dtype(flow.dtype if flow is not None and flow.enabled else torch.float32, None)
     base_class=comfy.model_base.MiniMaxH3
-    if flow is not None and flow.enabled:
+    if (flow is not None and flow.enabled) or adapter is not None:
         class ScaledConditioningH3(base_class):
             def extra_conds(self, **kwargs):
                 # Native casts unnormalized TE states to inference dtype before
@@ -124,11 +124,12 @@ def create_model(service, device='cuda:0'):
                 # Retain Native layout construction, references, masks and tags.
                 # The proxy recognizes the already-refined hidden width.
                 out=super().extra_conds(**kwargs)
+                if adapter is not None:out=adapter.conditions(out,kwargs)
                 self.diffusion_model.prepare_payload(out['minimax_payload'].cond)
                 return out
         base_class=ScaledConditioningH3
     native = base_class(config, device=torch.device(device))
-    native.diffusion_model = RemoteDenoiser(service)
+    native.diffusion_model = RemoteDenoiser(service) if adapter is None else adapter.denoiser(service)
     patcher = comfy.model_patcher.ModelPatcher(native, torch.device(device), torch.device('cpu'))
 
     def sample_session(executor, *args, **kwargs):
@@ -140,12 +141,15 @@ def create_model(service, device='cuda:0'):
         with service.lock:
             if hasattr(service,'release_staged_encoders'):service.release_staged_encoders()
             reclaim_parent_models(active_patcher.load_device)
-            service.call('begin_sample')
+            if adapter is not None:adapter.begin()
             try:
-                return executor(*args, **kwargs)
+                service.call('begin_sample')
+                try:
+                    return executor(*args, **kwargs)
+                finally:
+                    if not service.closed:service.call('end_sample')
             finally:
-                if not service.closed:
-                    service.call('end_sample')
+                if adapter is not None and not service.closed:adapter.end()
     patcher.add_wrapper_with_key(comfy.patcher_extension.WrappersMP.OUTER_SAMPLE,
         'minimax_tp2_session', sample_session)
     return patcher

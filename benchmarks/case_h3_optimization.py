@@ -57,7 +57,7 @@ def execute_plan(calls):
         elif module=='tilelang_transport_p2':
             inputs=(torch.zeros(rows,args[1],device='cuda',dtype=torch.float16),torch.ones(rows,1,device='cuda'),torch.ones(args[1],device='cuda'))
         elif module=='tilelang_fp32_rms_rope':
-            inputs=(torch.zeros(rows,10752,device='cuda',dtype=torch.float16),torch.zeros(rows,64,2,2,device='cuda',dtype=getattr(torch,args[8])),torch.ones(128,device='cuda'),torch.ones(128,device='cuda'))
+            inputs=(torch.zeros(rows,10752,device='cuda',dtype=torch.float16),torch.zeros(rows,args[3]//2,2,2,device='cuda',dtype=getattr(torch,args[8])),torch.ones(128,device='cuda'),torch.ones(128,device='cuda'))
         else:raise ValueError(module)
         # Exercise runtime consumers too: lru_cache distinguishes omitted defaults
         # from explicitly passed arguments, so factory-only checks are insufficient.
@@ -69,7 +69,7 @@ def execute_plan(calls):
             output=quantize(*inputs,width=args[1],start=args[3],division=args[4])
         elif module=='tilelang_fp32_rms_rope':
             from patches.tilelang_fp32_rms_rope import execute
-            output=execute(inputs[0],inputs[1].reshape(1,rows,1,64,2,2),inputs[2],inputs[3])
+            output=execute(inputs[0],inputs[1].reshape(1,rows,1,args[3]//2,2,2),inputs[2],inputs[3])
         else:output=fn(*inputs)
         torch.cuda.synchronize();del output,inputs
 

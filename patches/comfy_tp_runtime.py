@@ -494,6 +494,12 @@ class RankRuntime:
         if store is not None and command not in ('close','stats','idle_stop','idle_release'):store.check()
         kwargs = kwargs or {}
         with torch.cuda.device(self.device), torch.inference_mode():
+            if command.startswith('ptd_'):
+                from patches.ptd.runtime import control
+                return control(self,command,args)
+            ptd_adapter=getattr(self,'_ptd_adapter',None)
+            if command=='denoise' and ptd_adapter is not None:
+                args,kwargs=ptd_adapter.prepare(args,kwargs)
             if self.config.idle_residency:
                 if command=='idle_begin':return {'accepted':self.start_idle()}
                 if command=='idle_stop':

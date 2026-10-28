@@ -4,6 +4,8 @@
 
 These documents record proposed mechanisms and planned experiments. Inclusion here does not mean a feature is enabled or qualified.
 
+- [Optional PTD RefAsymOPD TP2 adaptation](H3_PTD_TP2_ADAPTATION.md) — eight per-hop offline INT8 expert sets, Native adapters, explicit pruned-base approximation and bounded T4 qualification
+
 - [Bounded streaming and stage overlap](ZERO_BUBBLE_STREAMING_ARCHITECTURE.md) — reviewed 2026-10-21; replaces unsupported zero-bubble guarantees with an ownership-safe, phased plan
 - [TE compressed-weight streaming proposal](H3_TE_COMPRESSED_WEIGHT_STREAMING_PROPOSAL.md) — reviewed 2026-10-21; pre-fold artifacts, equivalent RAW controls, bounded CPU replay and frozen-stack gates
 
