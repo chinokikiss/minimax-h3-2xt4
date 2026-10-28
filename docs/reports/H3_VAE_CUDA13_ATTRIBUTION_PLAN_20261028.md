@@ -104,13 +104,24 @@ anything locally. `build_vae_cuda13_delivery.py` extends the immutable source;
 matching native/core CPU receipt and the matching CUDA13 CPU receipt.
 Submissions and final collection are one-shot, without status/log polling.
 
-Local harness tests pass. Linux CUDA13 installation/import qualification and
-physical T4 results remain pending until the corresponding receipts exist.
-CPU version 1 was accepted at
+Linux CUDA13 CPU qualification passed on 2026-10-28. Actual imports report
+Torch 2.11.0+cu130, torchvision 0.26.0+cu130, torchaudio 2.11.0+cu130,
+NumPy 2.1.3, Kitchen 0.2.37 and TileLang 0.1.13. Compiled architecture flags
+include SM75. All four ablation contract tests and the 179-test review suite
+passed; the native base environment remained unchanged. The input hash,
+platform lock and frozen capsule match the submitted source.
+
+CPU version 1:
 [H3 VAE CUDA13 CPU](https://www.kaggle.com/code/pamcks/h3-vae-cuda13-cpu-20261028).
-The accepted URL is recorded as the authoritative job identity. The VAE GPU
-experiment has not been submitted; it requires the successful CUDA13 CPU
-receipt first.
+The final CLI artifact transfer encountered SSL EOF; fixed final CDN files
+were resumed using Windows curl without another status/list/log API request.
+The original failed-transfer receipt is preserved alongside the resume proof.
+
+GPU version 1 was subsequently accepted at
+[H3 VAE CUDA13 Ablation T4](https://www.kaggle.com/code/pamcks/h3-vae-cuda13-ablation-t4-20261028).
+Physical T4 execution, CUDA dispatch, capture and timing results remain pending.
+CPU imports and SM75 build flags alone do not establish GPU compatibility or
+performance. No polling or full H3 generation is scheduled.
 
 Evidence root: `D:/attention_eval/h3_vae_cuda13_20261028`.
 
