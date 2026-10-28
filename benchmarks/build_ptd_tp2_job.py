@@ -63,6 +63,7 @@ os.execve(sys.executable,argv,env)
     binding=json.loads((job/'source_binding.json').read_text())
     binding.update(full_pipeline=False,private_inputs=False,credentials=False,
         fixture_layers=2,fixture_hops=8,production_bank=False,
+        handoff_order=['rebuild','queue','queue','rebuild'] if args.mode=='gpu' else None,
         ptd_qualification_sha256=hashlib.sha256(args.ptd_qualification.read_bytes()).hexdigest()
             if args.ptd_qualification else None)
     (job/'source_binding.json').write_text(json.dumps(binding,indent=2),encoding='utf-8')

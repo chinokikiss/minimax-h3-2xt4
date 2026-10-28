@@ -51,9 +51,35 @@ Unchanged auxiliary weights remain shared with the immutable base. Each hop
 stores only its adapted token-refiner projections and its effective video and
 audio heads as an overlay. No LoRA factors or CPU remerges are needed during
 sampling. Eight experts live on disk; the ordinary residency window holds
-only the active expert's working set on GPU. Hop changes drain the old window,
-invalidate CPU cache identities, and construct a fresh reader. Sampling exit
-restores the ordinary base reader and removes the scoped audio-output hook.
+only the bounded working set on GPU. `hop_handoff=queue` retains one Native
+shell and window, appending the next expert's refiner, shared projection,
+DiT blocks and full output heads to the ordered plan. Old unique groups retire
+after their last recorded CUDA use; preparation/H2D of future groups can overlap
+the current tail. Readers carry distinct hop identities and reuse the admitted
+base's immutable metadata. Overlay hashing is deferred to the CPU preparation
+that first consumes it, with unchanged-file checks before and after hashing.
+
+There is no unconditional window close, device synchronization, GC or allocator
+flush at a queued hop boundary. The ordinary byte/free-memory guards still
+apply, including event waits or a guarded foreground reclaim under pressure.
+Sampling exit drains once before releasing auxiliary CPU ownership and restores
+the ordinary base reader. `hop_handoff=rebuild` retains the original explicit
+teardown/reconstruction path for comparison.
+
+```mermaid
+flowchart LR
+  R0[Hop 0 refiner] --> P0[Shared projection] --> B0[Hop 0 blocks] --> H0[Hop 0 heads]
+  H0 --> R1[Hop 1 refiner] --> P1[Shared projection] --> B1[Hop 1 blocks]
+  B0 -. bounded CPU prepare and H2D lookahead .-> R1
+  H0 -. last-use event .-> Retire[Retire old unique groups]
+```
+
+Per-hop refiner preparation loads the baked matrices into the existing Native
+FP32 projection format and applies the same output-weight division as Native
+FP16-fix construction. Shared norms keep their already-folded epsilon once.
+Large pageable refiner groups transfer their host-cache reservation to the
+window until H2D completes, avoiding a second multi-GB pinned copy. This does
+not promise asynchronous DMA from pageable storage or zero idle time.
 
 ## Details that must survive adaptation
 
@@ -101,15 +127,18 @@ restores the ordinary base reader and removes the scoped audio-output hook.
 | `use_hop_refiner` | true | False is a deliberate base-refiner ablation |
 | `use_pdd_heads` | true | False is a deliberate base-output-head ablation |
 | `audio_chord_correction` | true | False is a deliberate audio-clock ablation |
+| `hop_handoff` | queue | Persistent bounded queue; rebuild is the explicit teardown comparison |
 | `stream_weights` | true | False requests a resident **active** expert, with VRAM admission |
 | Sampler `enabled` | true | When false, returns connected Native sampler/sigmas by identity |
 
-The last three algorithmic ablations do not implement the trained PTD recipe.
+Refiner/head/audio algorithmic ablations do not implement the trained PTD recipe.
 They exist for controlled experiments, not as quality-equivalent settings.
 The model remains private to the adapter; disabling it does not mutate the
 original MODEL or change global Native functions. Disabling the PTD sampler
 requires reconnecting the original Native MODEL too; a PTD MODEL deliberately
 rejects calls outside its PTD sampler.
+The resident-expert ablation (`stream_weights=False`) requires the explicit
+`rebuild` handoff. Queue mode keeps ordinary group-by-group streaming.
 
 ## Storage and delivery
 
@@ -144,7 +173,13 @@ range receipts explicitly state that a subset hash does **not** verify the
 complete release's SHA256. This fixture bank is prohibited from production
 admission. It performs all eight Native TP2 denoiser calls on small seeded
 operator inputs, validates finite outputs and ordered expert selection, and
-separates AOT preparation from hop execution. It does not execute TE, VAE or a
+separates AOT preparation from hop execution. The handoff experiment reuses one
+bake in rebuild/queue/queue/rebuild order, hashes both stream outputs at every
+hop and the final FP32 carry, and checks stable shell/window identities in
+queue mode. It records selection RPC time, denoiser RPC time, benchmark-only
+worker wall/thread CPU spans and peak CUDA/host memory. Default-stream CUDA
+intervals include waits and idle gaps; they are not a kernel-time breakdown or
+a substitute for a Nsight trace. It does not execute TE, VAE or a
 complete H3 generation and does not measure output quality.
 
 The adaptation audit also found the AOT RMS-RoPE plan used 128 rotary features

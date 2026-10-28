@@ -17,7 +17,9 @@ from build_kaggle_light_delivery import payload_from_distribution, write_distrib
 ROOT=Path(__file__).resolve().parents[1]
 HOOKS=('patches/comfy_sampler.py','patches/comfy_tp_runtime.py','custom_nodes/minimax_h3_tp2/__init__.py')
 FILES=('patches/h3_operator_aot.py','benchmarks/case_h3_optimization.py',
+       'patches/weight_residency.py',
        'benchmarks/test_h3_optimization_batch.py','benchmarks/test_ptd_tp2.py',
+       'benchmarks/test_ptd_queue.py','benchmarks/ptd_worker_probe.py',
        'benchmarks/ptd_t4_assets.py','benchmarks/run_ptd_tp2_t4.py',
        'custom_nodes/minimax_h3_tp2/ptd_nodes.py')
 
@@ -41,6 +43,10 @@ def owned_hooks(name,raw):
     elif name=='patches/comfy_tp_runtime.py':
         replace('        with torch.cuda.device(self.device), torch.inference_mode():\n',
                 "        with torch.cuda.device(self.device), torch.inference_mode():\n            if command.startswith('ptd_'):\n                from patches.ptd.runtime import control\n                return control(self,command,args)\n            ptd_adapter=getattr(self,'_ptd_adapter',None)\n            if command=='denoise' and ptd_adapter is not None:\n                args,kwargs=ptd_adapter.prepare(args,kwargs)\n")
+        replace("            if not command.startswith('idle_'):torch.cuda.synchronize(rank)\n",
+                "            ptd = getattr(runtime, '_ptd_adapter', None)\n            queued_reply = (ptd is not None and ptd.options.hop_handoff == 'queue'\n                and command in ('ptd_configure','ptd_hop','ptd_state','denoise'))\n            if not command.startswith('idle_') and not queued_reply:torch.cuda.synchronize(rank)\n")
+        replace("            elif command == 'end_sample':\n                self._drop_model()\n",
+                "            elif command == 'end_sample':\n                if ptd_adapter is not None and ptd_adapter.queue is not None:\n                    ptd_adapter.queue.finish()\n                self._drop_model()\n")
     else:
         text+='\nfrom patches.ptd.nodes import NODE_CLASS_MAPPINGS as PTD_NODE_CLASS_MAPPINGS\nNODE_CLASS_MAPPINGS.update(PTD_NODE_CLASS_MAPPINGS)\n'
     return text.encode('utf-8')

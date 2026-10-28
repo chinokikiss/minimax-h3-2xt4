@@ -8,6 +8,7 @@ import multiprocessing as mp
 import os
 from pathlib import Path
 import shutil
+import threading
 
 import torch
 from safetensors import safe_open
@@ -276,19 +277,29 @@ class PTDBank:
         if any(signature(path) != expected for path, expected in self.signatures.items()):
             raise RuntimeError('PTD bank changed during sampling')
 
-    def reader(self, hop, *, refiner=True, heads=True):
+    def reader(self, hop, *, refiner=True, heads=True, base_reader=None, lazy_overlay=False):
         self.check()
-        return HopReader(self, hop, refiner=refiner, heads=heads)
+        return HopReader(self, hop, refiner=refiner, heads=heads,
+                         base_reader=base_reader, lazy_overlay=lazy_overlay)
 
 
 class HopReader(BundleReader):
     """Adapt the validated Native bundle loader; no online remerge on eviction."""
     _shard = DiskBakedReader._shard
 
-    def __init__(self, bank, hop, *, refiner=True, heads=True):
+    def __init__(self, bank, hop, *, refiner=True, heads=True, base_reader=None, lazy_overlay=False):
         if type(hop) is not int or not 0 <= hop < 8:
             raise ValueError('PTD hop must be 0-7')
-        super().__init__(bank.base)
+        if base_reader is None:
+            super().__init__(bank.base)
+        else:
+            if type(base_reader) is not BundleReader or base_reader.path != bank.base:
+                raise ValueError('Queued reader needs the already admitted immutable base')
+            base_reader.check()
+            self.__dict__.update(base_reader.__dict__)
+            self.read_lock, self.prepare_lock = threading.RLock(), threading.Lock()
+            self.verified, self.state_verified, self.shard_readers = {}, {}, {}
+            self.stats = dict(base_reader.stats)
         self.bank, self.hop = bank, hop
         self.root, receipt = bank.hops[hop]
         self.recipe_sha256 = bank.recipe_sha
@@ -300,9 +311,14 @@ class HopReader(BundleReader):
                 raise ValueError('PTD expert base tensor proof mismatch')
             self.plan['blocks'][stem] = dict(old, state_sha256=row['state_sha256'])
         overlay = self.root / receipt['auxiliary']['file']
-        if overlay.resolve().parent != self.root or sha(overlay) != receipt['auxiliary']['sha256']:
+        if overlay.resolve().parent != self.root:
             raise ValueError('PTD auxiliary overlay hash mismatch')
         self.overlay = CheckpointReader(overlay)
+        self.overlay_sha = receipt['auxiliary']['sha256']
+        self.overlay_verified = False
+        self.overlay_lock = threading.Lock()
+        if not lazy_overlay:
+            self._verify_overlay()
         self.refiner_enabled, self.heads_enabled = refiner, heads
         self.identity = (*self.identity, FORMAT, bank.recipe_sha, hop, bool(refiner), bool(heads))
 
@@ -317,7 +333,17 @@ class HopReader(BundleReader):
         self._check_roots()
         enabled = self.refiner_enabled if name.startswith('token_refiner.') else self.heads_enabled
         if enabled and name in self.overlay.header and name != '__metadata__':
+            self._verify_overlay()
             if rows or columns:
                 raise ValueError('PTD overlay exposes whole native tensors')
             return self.overlay.read_tensor(name)
         return super().read_tensor(name, rows=rows, columns=columns)
+
+    def _verify_overlay(self):
+        with self.overlay_lock:
+            if not self.overlay_verified:
+                if sha(self.overlay.path) != self.overlay_sha:
+                    raise ValueError('PTD auxiliary overlay hash mismatch')
+                if signature(self.overlay.path) != self.overlay.signature:
+                    raise RuntimeError('PTD overlay changed during validation')
+                self.overlay_verified = True

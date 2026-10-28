@@ -171,7 +171,7 @@ class AdapterContracts(unittest.TestCase):
         from patches.ptd.runtime import WorkerAdapter,PTDOptions
         from patches.tp2_bundle import BundleReader
         base=object.__new__(BundleReader)
-        base.path=Path('/tmp/base');base.header={'adaln_t_table':{}}
+        base.path=Path('/tmp/base').resolve();base.header={'adaln_t_table':{}}
         runtime=SimpleNamespace(readers={'dit':base},config=SimpleNamespace(lora_stack=(),layers=2))
         bank=SimpleNamespace(base=base.path,layers=2)
         with patch('patches.ptd.runtime.PTDBank',return_value=bank):
@@ -188,7 +188,7 @@ class AdapterContracts(unittest.TestCase):
     def test_expert_identity_order_cleanup_and_base_restore(self):
         from patches.ptd.runtime import WorkerAdapter,PTDOptions
         from patches.tp2_bundle import BundleReader
-        base=object.__new__(BundleReader);base.path=Path('/tmp/base');base.header={'adaln_t_table':{}}
+        base=object.__new__(BundleReader);base.path=Path('/tmp/base').resolve();base.header={'adaln_t_table':{}}
         operations=SimpleNamespace(); flow=SimpleNamespace()
         cache_calls=[]; dropped=[]
         runtime=SimpleNamespace(readers={'dit':base},rank=0,sample_active=False,
@@ -199,7 +199,7 @@ class AdapterContracts(unittest.TestCase):
             reader=lambda hop,**kwargs:SimpleNamespace(identity=('fixture',hop)))
         with patch('patches.ptd.runtime.PTDBank',return_value=bank), \
                 patch('patches.ptd.runtime.tp_specs',side_effect=lambda reader,*a:[reader.identity]):
-            adapter=WorkerAdapter(runtime,'unused',PTDOptions(enabled=True,allow_pruned_adaln=True))
+            adapter=WorkerAdapter(runtime,'unused',PTDOptions(enabled=True,allow_pruned_adaln=True,hop_handoff='rebuild'))
             self.assertEqual(runtime.readers['dit'].identity,('fixture',0))
             with self.assertRaises(ValueError):adapter.select(0,float(bank.sigmas[0]))
             runtime.sample_active=True

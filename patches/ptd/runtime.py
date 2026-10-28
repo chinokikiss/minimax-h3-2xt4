@@ -23,10 +23,15 @@ class PTDOptions:
     audio_chord_correction: bool = True
     stream_weights: bool = True
     allow_fixture: bool = False
+    hop_handoff: str = 'queue'
 
     def __post_init__(self):
-        if any(type(value) is not bool for value in vars(self).values()):
+        if any(type(value) is not bool for key,value in vars(self).items() if key != 'hop_handoff'):
             raise ValueError('PTD options require explicit booleans')
+        if self.hop_handoff not in ('queue','rebuild'):
+            raise ValueError('Unknown PTD hop handoff')
+        if self.enabled and not self.stream_weights and self.hop_handoff == 'queue':
+            raise ValueError('Resident-expert ablation requires hop_handoff=rebuild')
 
 
 def audio_sigma(time, ratio=.25):
@@ -68,6 +73,7 @@ class WorkerAdapter:
         self.hop = None
         self.calls = []
         self.head_hook = None
+        self.queue = None
         self.select(0, float(self.bank.sigmas[0]), preparing=True)
 
     def select(self, hop, sigma, *, preparing=False):
@@ -77,22 +83,39 @@ class WorkerAdapter:
             raise ValueError('PTD requires ordered, exactly-once hop evaluation inside the sampling session')
         self.bank.check()
         if self.hop != hop:
-            if self.head_hook is not None:
-                self.head_hook.remove(); self.head_hook = None
-            self.runtime._drop_model()
-            reader = self.bank.reader(hop, refiner=self.options.use_hop_refiner, heads=self.options.use_pdd_heads)
-            reader.operator_policy = self.runtime.config.operators
-            reader.tensor_flow = self.runtime.config.tensor_flow
-            self.runtime.readers['dit'] = reader
-            specs = tp_specs(reader, 'dit', self.runtime.rank, self.runtime.config.layers)
-            self.runtime.cache.begin_request(specs, discard_unwanted=True)
+            if self.options.hop_handoff == 'queue':
+                if self.queue is not None:
+                    self.queue.select(hop)
+                elif preparing and hop == 0:
+                    reader = self.bank.reader(0, refiner=self.options.use_hop_refiner,
+                        heads=self.options.use_pdd_heads,base_reader=self.original,lazy_overlay=True)
+                    reader.operator_policy = self.runtime.config.operators
+                    reader.tensor_flow = self.runtime.config.tensor_flow
+                    self.runtime.readers['dit'] = reader
+                else:
+                    raise RuntimeError('The initial expert must execute before selecting the next one')
+            else:
+                if self.head_hook is not None:
+                    self.head_hook.remove(); self.head_hook = None
+                self.runtime._drop_model()
+                reader = self.bank.reader(hop, refiner=self.options.use_hop_refiner, heads=self.options.use_pdd_heads)
+                reader.operator_policy = self.runtime.config.operators
+                reader.tensor_flow = self.runtime.config.tensor_flow
+                self.runtime.readers['dit'] = reader
+                specs = tp_specs(reader, 'dit', self.runtime.rank, self.runtime.config.layers)
+                self.runtime.cache.begin_request(specs, discard_unwanted=True)
             self.hop = hop
         return dict(hop=hop, sigma=sigma, identity=self.runtime.readers['dit'].identity)
 
     def prepare(self, args, kwargs):
+        if not self.runtime.sample_active:
+            raise ValueError('PTD denoising requires the sampling session')
         if self.hop != len(self.calls):
             raise ValueError('Select the next PTD hop before calling the denoiser; CFG must be 1')
         self.runtime._phase('dit')
+        if self.options.hop_handoff == 'queue' and self.queue is None:
+            from .queue import ExpertQueue
+            self.queue = ExpertQueue(self)
         sigma = float(args[1].flatten()[0]) / 1000.
         expected = float(self.bank.sigmas[self.hop])
         if abs(sigma - expected) > 2e-6:
@@ -116,17 +139,25 @@ class WorkerAdapter:
             factor = chord if self.options.audio_chord_correction else 1.
             # Match the reference's head-output multiplication BEFORE the
             # Native latent-storage cast, not a folded weight multiplication.
-            self.head_hook = self.runtime.model.final_layer.audio_out.register_forward_hook(
-                lambda module, inputs, output: output * factor)
+            if self.queue is not None:
+                self.queue.final.audio_factor = factor
+            else:
+                self.head_hook = self.runtime.model.final_layer.audio_out.register_forward_hook(
+                    lambda module, inputs, output: output * factor)
         self.calls.append(self.hop)
         self.runtime.events.append(dict(phase='ptd_hop', hop=self.hop, sigma=expected,
-            refiner_each_hop=True, online_lora=False, pruned_adaln_approximation=self.options.allow_pruned_adaln))
+            refiner_each_hop=True, online_lora=False,hop_handoff=self.options.hop_handoff,
+            pruned_adaln_approximation=self.options.allow_pruned_adaln))
         return args, kwargs
 
     def close(self):
         if self.head_hook is not None:
             self.head_hook.remove(); self.head_hook = None
-        self.runtime._drop_model()
+        if self.queue is not None:self.queue.finish()
+        if (self.options.hop_handoff == 'rebuild' or any(getattr(self.runtime,name,None) is not None
+                for name in ('model','window','preprocessing'))):
+            self.runtime._drop_model()
+        self.queue = None
         self.runtime.readers['dit'] = self.original
         if hasattr(self, 'original_config'):
             self.runtime.config = self.original_config
@@ -146,7 +177,8 @@ def control(runtime, command, args):
     if command == 'ptd_hop':
         return adapter.select(*args)
     if command == 'ptd_state':
-        return dict(hop=adapter.hop, calls=adapter.calls)
+        return dict(hop=adapter.hop, calls=adapter.calls,
+                    queue=adapter.queue.state() if adapter.queue is not None else None)
     if command == 'ptd_release':
         if runtime.sample_active:
             raise ValueError('End the sample before releasing its PTD adapter')

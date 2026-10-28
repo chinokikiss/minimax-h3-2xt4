@@ -146,6 +146,9 @@ class WeightSpec:
     # it directly: a second multi-GB pinned copy defeats host headroom. CUDA
     # may stage pageable transfers synchronously; ready still fences use.
     resident_backing: bool = False
+    # Transfer a budgeted pageable cache entry directly, instead of making
+    # another large pinned copy. Ownership lasts through the copy-ready event.
+    pin_backing: bool = True
 
 
 @dataclass
@@ -159,6 +162,7 @@ class _Entry:
     active: bool = False
     copy_reported: bool = False
     host_reservation: int = 0
+    pinned: bool = True
 
 
 class ResidencyWindow:
@@ -192,7 +196,8 @@ class ResidencyWindow:
             raise ValueError('Invalid residency budget or lookahead')
         self.max_weight_bytes = int(max_weight_bytes)
         self.pinned_bytes = int(pinned_bytes)
-        if any(s.max_bytes <= 0 or s.max_bytes > pinned_bytes for s in specs):
+        if any(s.max_bytes <= 0 or (not s.resident_backing and s.pin_backing
+                                   and s.max_bytes > pinned_bytes) for s in specs):
             raise ValueError('Every preparation must fit the pinned budget')
         self.reserve_bytes = int(reserve_bytes)
         self.lookahead = int(lookahead)
@@ -337,16 +342,41 @@ class ResidencyWindow:
         # PyTorch's pinned allocator rounds each tensor to a power of two.
         # Twice payload is a conservative allocation bound, not just qdata.
         return (sum(self._staging_bytes(self.specs[k]) for k in self.pending)
-                + sum(e.host_reservation for e in self.entries.values() if e.host is not None)
-                + sum(e.host_reservation for e in self.retired if e.host is not None)
+                + sum(e.host_reservation for e in self.entries.values() if e.host is not None and e.pinned)
+                + sum(e.host_reservation for e in self.retired if e.host is not None and e.pinned)
                 if self.host_cache is not None else
                 sum(self._staging_bytes(self.specs[k]) for k in self.pending)
-                + sum(2*e.size for e in self.entries.values() if e.host is not None)
-                + sum(2*e.size for e in self.retired if e.host is not None))
+                + sum(2*e.size for e in self.entries.values() if e.host is not None and e.pinned)
+                + sum(2*e.size for e in self.retired if e.host is not None and e.pinned))
 
     @staticmethod
     def _staging_bytes(spec):
-        return 0 if spec.resident_backing else 2*spec.max_bytes
+        return 0 if spec.resident_backing or not spec.pin_backing else 2*spec.max_bytes
+
+    def append_plan(self, specs, keys):
+        """Append immutable future groups without draining the existing queue.
+
+        Owner-thread only. Active/retired entries retain their CUDA fences;
+        admission and the existing CPU/GPU lookahead still limit materialization.
+        This registers metadata, never an entire expert's resident allocation.
+        """
+        specs, keys = tuple(specs), tuple(keys)
+        if self.closed or self.idle_mode:
+            raise RuntimeError('Append requires an open foreground window')
+        additions = {s.key:s for s in specs}
+        if len(additions) != len(specs):
+            raise ValueError('Duplicate appended specification keys')
+        for key, spec in additions.items():
+            if key in self.specs and self.specs[key] is not spec:
+                raise ValueError('An admitted weight identity cannot be rebound')
+            if spec.max_bytes <= 0 or (not spec.resident_backing and spec.pin_backing
+                                      and spec.max_bytes > self.pinned_bytes):
+                raise ValueError('Appended preparation exceeds its budget')
+        if any(key not in self.specs and key not in additions for key in keys):
+            raise ValueError('Unknown appended weight use')
+        self.specs.update(additions)
+        self.uses += keys
+        self.remaining.update(keys)
 
     def extend_uses(self, keys):
         """Append one actual invocation, without predicting the sampler's NFE.
@@ -368,7 +398,11 @@ class ResidencyWindow:
     def _prepare(self, spec, *, cancel_event=None, speculative=False):
         begin = time.perf_counter()
         try:
-            module = (spec.prepare() if spec.resident_backing else
+            if not spec.resident_backing and not spec.pin_backing and self.host_cache is not None:
+                module, lease = self.host_cache.take(spec)
+                self.host_reservations[spec.key] = lease
+            else:
+                module = (spec.prepare() if spec.resident_backing or not spec.pin_backing else
                       self.host_cache.pin(spec,cancel_event=cancel_event,speculative=speculative)
                           if self.host_cache is not None and cancel_event is not None else
                       self.host_cache.pin(spec) if self.host_cache is not None else
@@ -590,7 +624,8 @@ class ResidencyWindow:
                     child.device = self.device
             ready.record()
         self.entries[key] = _Entry(module, host, size, ready, start,
-                                  host_reservation=self.host_reservations.pop(key, 0))
+                                  host_reservation=self.host_reservations.pop(key, 0),
+                                  pinned=not self.specs[key].resident_backing and self.specs[key].pin_backing)
         del self.pending[key]
         self.idle_pending.discard(key)
         self.stats['loads'][str(key)] = self.stats['loads'].get(str(key), 0) + 1

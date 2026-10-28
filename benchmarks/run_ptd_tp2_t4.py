@@ -1,7 +1,9 @@
 """Bounded PTD qualification, not a complete H3 generation or quality test."""
 import argparse
-from contextlib import closing
+from contextlib import closing, contextmanager
+import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import sys
@@ -9,7 +11,20 @@ import time
 import traceback
 
 
-def smoke(base, bank, output):
+def resource_plan(base=None, *, header=None):
+    from types import SimpleNamespace
+    from patches.tp2_bundle import BundleReader
+    from patches.rank_local_int8 import rank_block_bytes
+    reader=BundleReader(base) if header is None else SimpleNamespace(header=header)
+    refiner=sum(math.prod(info['shape'])*4 for name,info in reader.header.items()
+        if name.startswith(('condition_proj.','token_refiner.')))+2**20
+    block=max(rank_block_bytes(reader,'dit',i,r)+2**20 for i in (0,1) for r in (0,1))
+    return dict(refiner_bound=refiner,block_bound=block,weight_bytes=max(6*2**30,refiner+2*block),
+        cache_bytes=max(4*2**30,refiner+block),pinned_bytes=max(4*2**30,2*block),
+        host_bytes=20*2**30,reserve_bytes=4*2**30)
+
+
+def smoke(base, bank, output, handoff, resources):
     import torch
     from safetensors.torch import save_file
     from comfy.nested_tensor import NestedTensor
@@ -20,21 +35,35 @@ def smoke(base, bank, output):
     # The TE is deliberately never executed. An empty, valid file satisfies
     # the service's metadata contract without downloading another model.
     te = output/'unused_te.safetensors'; save_file({}, str(te))
-    config = RuntimeConfig(str(te), str(base), layers=2, weight_bytes=2*2**30,
-        host_bytes=12*2**30, cache_bytes=2*2**30, pinned_bytes=2*2**30,
-        reserve_bytes=4*2**30, cross_request_te=False, cross_model_cpu=False, timeout_seconds=420)
+    config = RuntimeConfig(str(te), str(base), layers=2,
+        **{key:value for key,value in resources.items() if key.endswith('_bytes')},
+        cross_request_te=False,cross_model_cpu=False,timeout_seconds=420)
     generator = torch.Generator().manual_seed(20261028)
     noise = NestedTensor([torch.randn(1,24,1,4,4,generator=generator),
                           torch.randn(1,32,2,8,generator=generator)])
     text = torch.randn(1,4,5120,generator=generator)*10
     layout = PackedLayout(4,1,4,4,8)
-    timings = []
-    with closing(PhysicalTPService(config)) as service:
-        controller = Controller(service,bank,PTDOptions(enabled=True,allow_fixture=True,allow_pruned_adaln=True))
+    timings, handoffs, queue_states, hashes = [], [], [], []
+    class TimedController(Controller):
+        @contextmanager
+        def activate(self,hop,sigma):
+            begin=time.perf_counter()
+            with super().activate(hop,sigma):
+                handoffs.append(time.perf_counter()-begin)
+                yield
+    from unittest.mock import patch
+    import patches.comfy_tp_runtime as runtime
+    from ptd_worker_probe import worker
+    os.environ['H3_PTD_PROBE_DIR']=str(output)
+    with patch.object(runtime,'_worker',worker), closing(PhysicalTPService(config)) as service:
+        controller = TimedController(service,bank,PTDOptions(enabled=True,allow_fixture=True,
+            allow_pruned_adaln=True,hop_handoff=handoff))
         # Compilation is explicit and separate from expert execution. The
         # real H3 rotation is 96/128, not the historical 128/128 rehearsal.
         start=time.monotonic(); aot=service.call('prepare_dit',layout.seq_len)
         preparation=time.monotonic()-start
+        (output/'preparation.json').write_text(json.dumps(dict(aot=aot,seconds=preparation,
+            resources=resources,hop_handoff=handoff),indent=2),encoding='utf-8')
         controller.begin()
         try:
             service.call('begin_sample')
@@ -51,6 +80,9 @@ def smoke(base, bank, output):
                         if len(values)!=2 or any(not torch.isfinite(v).all() for v in values):
                             raise ValueError('Nonfinite PTD denoiser output')
                         timings.append(time.monotonic()-begin)
+                        hashes.append([hashlib.sha256(value.contiguous().view(torch.uint8).numpy().tobytes()).hexdigest()
+                                       for value in values])
+                        queue_states.append(service.call('ptd_state')['queue'])
                         # Native FLOW_AV x0 convention, retained around the
                         # actual TP2 Native body rather than replacing it.
                         return NestedTensor([x-sigma.float().reshape((-1,)+(1,)*(x.ndim-1))*v
@@ -60,6 +92,9 @@ def smoke(base, bank, output):
                     raise ValueError('Nonfinite PTD FP32 state carry')
                 selected=service.call('ptd_state')
                 assert selected['calls']==list(range(8))
+                if handoff=='queue':
+                    assert len({state['window_id'] for state in queue_states})==1
+                    assert len({state['shell_id'] for state in queue_states})==1
                 stats=service.call('stats')
             finally:
                 if not service.closed: service.call('end_sample')
@@ -67,7 +102,11 @@ def smoke(base, bank, output):
             if not service.closed: controller.end()
         # Restoration must let the ordinary reader be used after the sample.
         restored=service.call('stats')
-    return dict(status='complete',hops=selected['calls'],hop_seconds=timings,
+        assert all(len(row['ptd_probe']['spans'])==16 and all(span['default_stream_interval_ms'] is not None
+            for span in row['ptd_probe']['spans']) for row in restored), 'Incomplete worker metric capture'
+    return dict(status='complete',hop_handoff=handoff,hops=selected['calls'],hop_seconds=timings,
+        selection_seconds=handoffs,hop_output_sha256=hashes,queue_states=queue_states,
+        final_sha256=[hashlib.sha256(v.contiguous().view(torch.uint8).numpy().tobytes()).hexdigest() for v in final.unbind()],
         aot_wall_seconds=preparation,aot_rank0=aot,rank_stats=stats,restored_stats=restored,
         final_shapes=[list(v.shape) for v in final.unbind()],finite=True,
         real_trained_layers=2,seeded_operator_inputs=True,raw_te_fp32_payload=True,
@@ -106,11 +145,14 @@ def main():
             assert 'include_download' in inspect.signature(disk_plan).parameters
             contracts=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromNames([
                 'benchmarks.test_ptd_tp2.AdapterContracts.test_node_registration_under_dynamic_loader_names',
-                'benchmarks.test_ptd_tp2.AdapterContracts.test_disabled_returns_native_model_sampler_and_sigmas_by_identity']))
+                'benchmarks.test_ptd_tp2.AdapterContracts.test_disabled_returns_native_model_sampler_and_sigmas_by_identity',
+                'benchmarks.test_ptd_queue']))
             assert contracts.wasSuccessful()
+            assets=json.loads((source/'bundle_assets.json').read_text())
+            state['resources']=resource_plan(header=assets['auxiliary']['dit']['native_header'])
             # Setup/API admission only. No checkpoint download or GPU quota.
             state.update(status='ptd_cpu_ready',core_api_imports=True,no_weights_fetched=True,
-                         registration_contract_tests=contracts.testsRun)
+                         registration_contract_tests=2,queue_contract_tests=contracts.testsRun-2)
             return
         import torch
         import importlib.metadata as md
@@ -122,16 +164,21 @@ def main():
             kitchen=md.version('comfy-kitchen'),tilelang=md.version('tilelang'))
         assert torch.version.cuda=='12.8'
         os.environ.update(HF_HUB_DISABLE_XET='1',HF_HUB_DISABLE_PROGRESS_BARS='1',
-            OMP_NUM_THREADS='2',MKL_NUM_THREADS='2',MALLOC_ARENA_MAX='2')
+            OMP_NUM_THREADS='2',MKL_NUM_THREADS='2',MALLOC_ARENA_MAX='2',MINIMAX_H3_PROFILE_DETAILS='1')
         torch.set_num_threads(2)
         result=unittest.TextTestRunner(verbosity=2).run(
-            unittest.defaultTestLoader.loadTestsFromName('benchmarks.test_ptd_tp2'))
+            unittest.defaultTestLoader.loadTestsFromNames(['benchmarks.test_ptd_tp2','benchmarks.test_ptd_queue']))
         assert result.wasSuccessful(); state['contract_tests']=result.testsRun
         state['status']='staging_public_subset';save()
         from tp2_public_dit_assets import stage
         from ptd_t4_assets import fetch_subset
         scratch=Path('/tmp/h3_ptd_qualification_20261028');scratch.mkdir(exist_ok=False)
         base=stage(source,scratch/'base',layers=(0,1))
+        state['resources']=resource_plan(base)
+        for device in (0,1):
+            free,_=torch.cuda.mem_get_info(device)
+            assert free>=state['resources']['weight_bytes']+state['resources']['reserve_bytes'], 'Required group cannot fit on T4'
+        save()  # Resource admission precedes PTD download and baking.
         checkpoint=fetch_subset(scratch/'adapter')
         state['subset_provenance']=json.loads((scratch/'adapter/provenance.json').read_text())
         from patches.ptd.bank import bake,disk_plan,PTDBank
@@ -148,7 +195,15 @@ def main():
         else: raise AssertionError('Fixture bank was incorrectly admitted for deployment')
         torch.cuda.empty_cache()
         state['status']='eight_hop_native_tp2_smoke';save()
-        state['smoke']=smoke(base,bank,args.output)
+        state['smoke_cases']=[]
+        for index,handoff in enumerate(('rebuild','queue','queue','rebuild')):
+            output=args.output/f'{index}_{handoff}';output.mkdir()
+            value=smoke(base,bank,output,handoff,state['resources'])
+            state['smoke_cases'].append(value);save()
+            first=state['smoke_cases'][0]
+            assert value['hop_output_sha256']==first['hop_output_sha256'], 'Handoff changed a denoiser output'
+            assert value['final_sha256']==first['final_sha256'], 'Handoff changed the FP32 trajectory'
+        state['handoff_outputs_byte_exact']=True
         state['status']='complete'
     except BaseException as exc:
         state.update(status='failed',error=repr(exc))

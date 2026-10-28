@@ -68,14 +68,17 @@ class MiniMaxH3TP2PTDAdapter:
             'use_hop_refiner':('BOOLEAN',{'default':True}),
             'use_pdd_heads':('BOOLEAN',{'default':True}),
             'audio_chord_correction':('BOOLEAN',{'default':True}),
+            'hop_handoff':(['queue','rebuild'],{'default':'queue',
+                'tooltip':'Queue keeps one shell/window and retires weights by CUDA event. Rebuild is the explicit comparison path.'}),
             'stream_weights':('BOOLEAN',{'default':True,
                 'tooltip':'Stream one active expert. Disabling requests resident active-expert weights and requires VRAM admission.'})}}
 
     def apply(self,model,session,bank,enabled=False,allow_pruned_adaln=False,
-              use_hop_refiner=True,use_pdd_heads=True,audio_chord_correction=True,stream_weights=True):
+              use_hop_refiner=True,use_pdd_heads=True,audio_chord_correction=True,stream_weights=True,hop_handoff='queue'):
         from patches.ptd.runtime import PTDOptions,adapt_model
         options=PTDOptions(enabled=enabled,allow_pruned_adaln=allow_pruned_adaln,use_hop_refiner=use_hop_refiner,
-            use_pdd_heads=use_pdd_heads,audio_chord_correction=audio_chord_correction,stream_weights=stream_weights)
+            use_pdd_heads=use_pdd_heads,audio_chord_correction=audio_chord_correction,
+            stream_weights=stream_weights,hop_handoff=hop_handoff)
         return adapt_model(model,session,bank,options)
 
 

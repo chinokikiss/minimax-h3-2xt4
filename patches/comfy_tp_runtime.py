@@ -582,6 +582,8 @@ class RankRuntime:
                 self.calls += 1
                 return self.model(*args, **kwargs)
             elif command == 'end_sample':
+                if ptd_adapter is not None and ptd_adapter.queue is not None:
+                    ptd_adapter.queue.finish()
                 self._drop_model()
                 self.sample_active = False
             elif command == 'vae_prepare':
@@ -679,7 +681,10 @@ def _worker(rank, config, budget, port, connection):
             sequence, command, args, kwargs = connection.recv()
             result = runtime.dispatch(command, args, kwargs)
             result = worker_reply(result, rank, command)
-            if not command.startswith('idle_'):torch.cuda.synchronize(rank)
+            ptd = getattr(runtime, '_ptd_adapter', None)
+            queued_reply = (ptd is not None and ptd.options.hop_handoff == 'queue'
+                and command in ('ptd_configure','ptd_hop','ptd_state','denoise'))
+            if not command.startswith('idle_') and not queued_reply:torch.cuda.synchronize(rank)
             connection.send((sequence, result))
             if command == 'close':
                 break

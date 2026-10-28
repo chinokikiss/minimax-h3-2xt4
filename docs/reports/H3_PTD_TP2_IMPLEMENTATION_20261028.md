@@ -72,10 +72,36 @@ the PTD status is `ptd_cpu_ready`, with no weights fetched. These receipts are
 bound to the same source capsule as the GPU submission.
 
 [H3 PTD TP2 T4 20261028](https://www.kaggle.com/code/pamcks/h3-ptd-tp2-t4-20261028)
-version 1 was accepted with the Tesla T4 accelerator selection. Its actual
-hardware admission and numerical results remain pending. This is one bounded
-two-T4 qualification submission, with zero dataset/kernel mounts and no
-credentials. No Kaggle status/list or live-log endpoint was polled.
+version 1 ran on two distinct physical Tesla T4 devices, SM75, native Torch
+2.11.0+cu128/CUDA 12.8, Kitchen 0.2.37 and TileLang 0.1.13. One final collection
+after the user reported failure found:
+
+* All 12 original PTD contracts passed.
+* The 895,498,632-byte trained subset downloaded on T4 only.
+* Eight reduced expert banks completed in 280.6623 seconds, with 16 independently
+  Native-verified merge targets per hop: **128 successful target checks**.
+* Written shard/overlay payload was 18,636,426,752 bytes; fixture banks were
+  rejected by deployment admission as intended.
+* The first denoiser call failed during window construction:
+  `ValueError: Every preparation must fit the pinned budget`.
+
+The harness configured only 2 GiB for weights and pinning. The Native FP32
+refiner group exceeds that. Additionally, the window applied its pin-only guard
+to already-resident pageable auxiliary groups which do not request a pinned
+copy. The failure is not a measured CUDA OOM or a hop-switch performance result:
+no complete denoiser call or hop transition executed.
+
+The retry fixes that guard while retaining GPU admission, derives minimum
+weight/cache/pinning budgets from the actual Native header/meta block schema
+before PTD download/baking, and uses a 6 GiB minimum GPU window. Native code and
+dependency pins are preserved. Its queued handoff replaces repeated teardown
+with one event-owned window; the explicit rebuild option remains. CPU contracts
+cover append ordering, identity protection, host reservation transfer through
+the ready event, one-time final drainage, head restoration after exceptions,
+and byte-equivalent Native refiner weight loading/folding on tiny fixtures.
+Physical queue/rebuild execution and performance remain unqualified pending
+the new source-bound preflight and T4 comparison. No status/list or live-log
+endpoint was polled.
 
 The new GPU job builder requires both matching frozen-setup and PTD CPU API
 receipts before submitting its bounded T4 fixture. The prepared GPU experiment
@@ -92,7 +118,9 @@ quality comparison. No private inputs or credentials are needed.
    **170.18 GiB**, requiring **184.53 GiB free** including download and reserve,
    plus any base storage not already present. Full-bank admission must fail
    before download on smaller disks. The reduced T4 qualification does not
-   establish that a full bank fits the provider's `/tmp` capacity.
+   establish future provider capacity. The failed T4 instance reported about
+   1.02 TiB free in its `/tmp` filesystem, so this instance's reported capacity
+   exceeded the full-bank estimate; that is not a guarantee for later jobs.
 2. The supplied reference itself labels the `.999` schedule endpoint as
    unverified against the Diffusers scheduler. Pruned AdaLN adds a separate
    approximation. Generation quality remains unqualified.
