@@ -83,5 +83,62 @@
     "run_timeout_seconds": 2100,
     "result_relative": "cu128_dispatch/result.json"
   },
-  "builder_guard_fix": "CPU provenance filenames are JSON receipt data, not executable launcher strings. AST guard preserves full receipt and rejects direct/nested launcher payloads. Previous local failure occurred before submission; draft preserved."
+  "builder_guard_fix": "CPU provenance filenames are JSON receipt data, not executable launcher strings. AST guard preserves full receipt and rejects direct/nested launcher payloads. Previous local failure occurred before submission; draft preserved.",
+  "gpu_final": {
+    "status": "operator_blockers_found",
+    "counts": {
+      "unsupported_dtype_confirmed": 1,
+      "failed": 1,
+      "executed_not_quality_qualified": 27
+    },
+    "hardware": {
+      "devices": [
+        {
+          "name": "Tesla T4",
+          "capability": [
+            7,
+            5
+          ],
+          "uuid": "2724c87f-a636-bb76-ed40-4c84b0f38635"
+        },
+        {
+          "name": "Tesla T4",
+          "capability": [
+            7,
+            5
+          ],
+          "uuid": "2292c5b5-2042-14f8-f879-8e71fb634e61"
+        }
+      ],
+      "driver": [
+        "580.178.04",
+        "580.178.04"
+      ],
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8"
+    },
+    "verified_actual_kernel_traces": 27,
+    "required_artifacts_verified": 122,
+    "result_sha256": "01290e8454abbc2eea4d0854c3671fc65c4e05c7ce6ad62e25a4cdff2d489d6e",
+    "collection": "One Kaggle final-output API call; SSL-interrupted final CDN downloads resumed without further Kaggle API calls",
+    "supervisor": {
+      "status": "worker_exited",
+      "deadline_seconds": 1200,
+      "scope": "Notebook cell execution only; provider startup/mounting excluded",
+      "worker_pid": 98,
+      "exit_code": 0,
+      "seconds": 79.83580282700001
+    },
+    "corrected_conv_adapter": {
+      "cpu_contracts": {
+        "passed": true,
+        "tests": 6,
+        "scope": "Local CPU signature contracts only; corrected convolution adapter not re-run on T4"
+      },
+      "physical_validation": "Pending; no new GPU job submitted",
+      "production_defaults_changed": false
+    },
+    "analysis_sha256": "f663fe02278265973dc099bfa3f407a55dd38f9cadc4ffd1c279d32bd521fb9c",
+    "updated_utc": "2026-10-28T07:24:31.751536+00:00"
+  }
 }

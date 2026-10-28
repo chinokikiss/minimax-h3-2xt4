@@ -5,6 +5,23 @@ from patches.kitchen_cu128_candidate import _register,ALIAS,Candidate
 
 
 class CandidateContract(unittest.TestCase):
+    def test_public_conv_defaults_bind_to_pinned_backend_signature(self):
+        import inspect
+        import comfy_kitchen as ck
+        signature=inspect.signature(ck.backends.cuda.fp16_conv3d)
+        def implementation(**kwargs):return signature.bind(**kwargs).arguments
+        candidate=Candidate.__new__(Candidate)
+        candidate.ck=SimpleNamespace(fp16_conv3d=ck.fp16_conv3d,
+            registry=SimpleNamespace(get_implementation=lambda *args,**kwargs:implementation))
+        candidate.operations={'fp16_conv3d'}
+        for stride in (1,(1,1,1),[1,1,1]):
+            with self.subTest(stride=stride):
+                values=candidate.call('fp16_conv3d',None,None,stride=stride)
+                self.assertNotIn('out',values)
+                self.assertEqual(values['stride'],[1,1,1])
+        with self.assertRaisesRegex(ValueError,'separate out variant'):
+            candidate.call('fp16_conv3d',None,None,out=object())
+
     def test_public_linear_default_dtype_is_preserved(self):
         import torch
         def public(x,out_dtype=None):return None

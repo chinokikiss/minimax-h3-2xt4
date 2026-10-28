@@ -1,0 +1,1818 @@
+{
+  "status": "operator_blockers_found",
+  "hardware": {
+    "devices": [
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "2724c87f-a636-bb76-ed40-4c84b0f38635"
+      },
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "2292c5b5-2042-14f8-f879-8e71fb634e61"
+      }
+    ],
+    "driver": [
+      "580.178.04",
+      "580.178.04"
+    ],
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8"
+  },
+  "core_pins": {
+    "kitchen": "0.2.37",
+    "tilelang": "0.1.13"
+  },
+  "capsule_sha256": "e91e0aba28007e0b996b7107a474d7a840eba683b0e9db5889c2fd44bb175b5d",
+  "distribution": {
+    "file": "4376af68ef093c2042f0b10d067aec42fc61ceee000e8ec4a0ba8cbf2d19a5df.tar.gz",
+    "sha256": "4376af68ef093c2042f0b10d067aec42fc61ceee000e8ec4a0ba8cbf2d19a5df",
+    "bytes": 18588102,
+    "capsule_sha256": "e91e0aba28007e0b996b7107a474d7a840eba683b0e9db5889c2fd44bb175b5d",
+    "source_files": 844,
+    "core_pins": 78,
+    "kaggle_mounts": 0,
+    "repository": "chinokikiss/minimax-h3-2xt4",
+    "commit": "c2ebd86fa189e73553f3a803ba6d7c6993c26bf0",
+    "published": true,
+    "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/c2ebd86fa189e73553f3a803ba6d7c6993c26bf0/runtime/kaggle_artifacts/4376af68ef093c2042f0b10d067aec42fc61ceee000e8ec4a0ba8cbf2d19a5df.tar.gz"
+  },
+  "result_sha256": "01290e8454abbc2eea4d0854c3671fc65c4e05c7ce6ad62e25a4cdff2d489d6e",
+  "counts": {
+    "unsupported_dtype_confirmed": 1,
+    "failed": 1,
+    "executed_not_quality_qualified": 27
+  },
+  "verified_actual_kernel_traces": 27,
+  "measurement": "Two warmups, five CUDA-event samples, fixed candidate-then-eager order; one separate candidate trace per case",
+  "limits": "Synthetic operator inputs; no full pipeline, trained-weight error, generation-quality qualification, Nsight Systems/Compute or observer-off comparison",
+  "cases": [
+    {
+      "label": "dit_rope_fp32",
+      "device": 0,
+      "exit_code": 0,
+      "status": "unsupported_dtype_confirmed",
+      "case": {
+        "kind": "rope",
+        "label": "dit_rope_fp32",
+        "layout": "dit",
+        "length": 59134
+      },
+      "reason": "No backend can handle 'rms_rope_split_half': h3_cu128_candidate_cuda: q: dtype torch.float32 not in {torch.float16, torch.bfloat16}",
+      "after_global_enable_implementation": "comfy_kitchen.backends.eager.rope.rms_rope_split_half",
+      "global_cuda_unchanged": true,
+      "extension_calls": {}
+    },
+    {
+      "label": "encoder_conv_optin",
+      "device": 0,
+      "exit_code": 1,
+      "status": "failed",
+      "error": "TypeError(\"fp16_conv3d() got an unexpected keyword argument 'out'\")"
+    },
+    {
+      "label": "encoder_normpad_c1024",
+      "device": 1,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "normpad",
+        "label": "encoder_normpad_c1024",
+        "channels": 1024
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.0078125,
+        "relative_rmse": 0.0004530098813120276
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "group_norm_silu_pad3d": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          8.750335693359375,
+          8.738944053649902,
+          8.734272003173828,
+          8.726400375366211,
+          8.71513557434082
+        ],
+        "median_ms": 8.734272003173828,
+        "peak_allocated": 227840000
+      },
+      "candidate": {
+        "gpu_ms": [
+          1.5094399452209473,
+          1.4944640398025513,
+          1.4977600574493408,
+          1.4581760168075562,
+          1.4839359521865845
+        ],
+        "median_ms": 1.4944640398025513,
+        "peak_allocated": 125764096
+      },
+      "speedup": 5.844417644420404,
+      "trace": {
+        "relative_path": "cu128_dispatch/encoder_normpad_c1024/candidate_trace.json",
+        "sha256": "98c460544ded201f61a8b1da6bb9616d5070a16d8e1c9fd4f159a0942ed316fa",
+        "kernel_count": 3,
+        "kernel_work_ms": 1.30041,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "encoder_normpad_c128",
+      "device": 0,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "normpad",
+        "label": "encoder_normpad_c128",
+        "channels": 128
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.0078125,
+        "relative_rmse": 0.00046300439862534404
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "group_norm_silu_pad3d": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          1.221343994140625,
+          1.215872049331665,
+          1.2139840126037598,
+          1.228991985321045,
+          1.2615679502487183
+        ],
+        "median_ms": 1.221343994140625,
+        "peak_allocated": 28480512
+      },
+      "candidate": {
+        "gpu_ms": [
+          0.3928320109844208,
+          0.3461439907550812,
+          0.39526399970054626,
+          0.3338240087032318,
+          0.3092480003833771
+        ],
+        "median_ms": 0.3461439907550812,
+        "peak_allocated": 15725056
+      },
+      "speedup": 3.528427552581155,
+      "trace": {
+        "relative_path": "cu128_dispatch/encoder_normpad_c128/candidate_trace.json",
+        "sha256": "66fa73185e4f95a59bf176dc629623367acc0ed6d32ceb7e371ea18240bb4018",
+        "kernel_count": 3,
+        "kernel_work_ms": 0.150461,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "te_dequant_12800",
+      "device": 1,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "dequant",
+        "label": "te_dequant_12800",
+        "m": 2392,
+        "n": 12800
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": true,
+        "max_abs": 0.0,
+        "relative_rmse": 0.0
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {},
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          4.112864017486572,
+          4.089216232299805,
+          4.093535900115967,
+          4.089791774749756,
+          4.105247974395752
+        ],
+        "median_ms": 4.093535900115967,
+        "peak_allocated": 489942528
+      },
+      "candidate": {
+        "gpu_ms": [
+          0.8207359910011292,
+          0.804639995098114,
+          0.7936319708824158,
+          0.7915199995040894,
+          0.8275200128555298
+        ],
+        "median_ms": 0.804639995098114,
+        "peak_allocated": 245001728
+      },
+      "speedup": 5.087412911431056,
+      "trace": {
+        "relative_path": "cu128_dispatch/te_dequant_12800/candidate_trace.json",
+        "sha256": "d6b87355fc4915dd52f754ea13eb05c825a7dc95f0a522cfc56f9aa9d8b31d87",
+        "kernel_count": 1,
+        "kernel_work_ms": 0.724604,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "te_dequant_4096",
+      "device": 0,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "dequant",
+        "label": "te_dequant_4096",
+        "m": 2392,
+        "n": 4096
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": true,
+        "max_abs": 0.0,
+        "relative_rmse": 0.0
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {},
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          1.3840320110321045,
+          1.3794879913330078,
+          1.382912039756775,
+          1.4056639671325684,
+          1.3752959966659546
+        ],
+        "median_ms": 1.382912039756775,
+        "peak_allocated": 158754304
+      },
+      "candidate": {
+        "gpu_ms": [
+          0.35094401240348816,
+          0.30537599325180054,
+          0.296671986579895,
+          0.3277119994163513,
+          0.3030720055103302
+        ],
+        "median_ms": 0.30537599325180054,
+        "peak_allocated": 79062528
+      },
+      "speedup": 4.528555192013677,
+      "trace": {
+        "relative_path": "cu128_dispatch/te_dequant_4096/candidate_trace.json",
+        "sha256": "1d0e5d6840095ca2d9d446a5008eedce11feefd506979eecde9a9f2609137344",
+        "kernel_count": 1,
+        "kernel_work_ms": 0.229886,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "te_dequant_512",
+      "device": 1,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "dequant",
+        "label": "te_dequant_512",
+        "m": 2392,
+        "n": 512
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": true,
+        "max_abs": 0.0,
+        "relative_rmse": 0.0
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {},
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          0.24822400510311127,
+          0.24483199417591095,
+          0.23615999519824982,
+          0.22899200022220612,
+          0.22169600427150726
+        ],
+        "median_ms": 0.23615999519824982,
+        "peak_allocated": 19607040
+      },
+      "candidate": {
+        "gpu_ms": [
+          0.1111999973654747,
+          0.0880960002541542,
+          0.08195199817419052,
+          0.17958399653434753,
+          0.09603200107812881
+        ],
+        "median_ms": 0.09603200107812881,
+        "peak_allocated": 9809408
+      },
+      "speedup": 2.4591801956320474,
+      "trace": {
+        "relative_path": "cu128_dispatch/te_dequant_512/candidate_trace.json",
+        "sha256": "bbab879df3919358fc3f031a8e1e1073819c63f12f8fef9e078da1d44b394b3e",
+        "kernel_count": 1,
+        "kernel_work_ms": 0.023936,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "te_m1",
+      "device": 0,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "te_m1",
+        "m": 1,
+        "n": 512,
+        "k": 5120,
+        "act": null
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.001953125,
+        "relative_rmse": 0.0003701605601236224
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "int8_linear_m1": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          1.2502080202102661,
+          1.2297919988632202,
+          1.3075200319290161,
+          1.323583960533142,
+          1.2712960243225098
+        ],
+        "median_ms": 1.2712960243225098,
+        "peak_allocated": 14310912
+      },
+      "candidate": {
+        "gpu_ms": [
+          0.25014400482177734,
+          0.24326400458812714,
+          0.22409600019454956,
+          0.21884800493717194,
+          0.29209598898887634
+        ],
+        "median_ms": 0.24326400458812714,
+        "peak_allocated": 11292160
+      },
+      "speedup": 5.225993161112983,
+      "trace": {
+        "relative_path": "cu128_dispatch/te_m1/candidate_trace.json",
+        "sha256": "4114681173f6e16f13c1824805c325e1da76873e46728e830392bb28658df6f1",
+        "kernel_count": 2,
+        "kernel_work_ms": 0.030719999999999997,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "te_m127",
+      "device": 0,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "te_m127",
+        "m": 127,
+        "n": 512,
+        "k": 5120,
+        "act": null
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.0009765625,
+        "relative_rmse": 4.274892035027733e-06
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise": 9,
+        "cutlass_turing_int8_dequant": 9,
+        "cutlass_turing_int8_dequant/returned_True": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          1.2637120485305786,
+          1.2794560194015503,
+          1.2360639572143555,
+          1.239840030670166,
+          1.2250880002975464
+        ],
+        "median_ms": 1.239840030670166,
+        "peak_allocated": 18200064
+      },
+      "candidate": {
+        "gpu_ms": [
+          0.445279985666275,
+          0.44358399510383606,
+          0.419295996427536,
+          0.41648000478744507,
+          0.4138239920139313
+        ],
+        "median_ms": 0.419295996427536,
+        "peak_allocated": 14656000
+      },
+      "speedup": 2.956956520533911,
+      "trace": {
+        "relative_path": "cu128_dispatch/te_m127/candidate_trace.json",
+        "sha256": "073788684249bf455d3af8c55abf559890b7f53b3d34fe3e536f14a5d0830189",
+        "kernel_count": 3,
+        "kernel_work_ms": 0.146047,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "te_m127_n12800",
+      "device": 1,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "te_m127_n12800",
+        "m": 127,
+        "n": 12800,
+        "k": 5120,
+        "act": null
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.001953125,
+        "relative_rmse": 5.381490154832136e-06
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise": 9,
+        "cutlass_turing_int8_dequant": 9,
+        "cutlass_turing_int8_dequant/returned_True": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          8.488384246826172,
+          8.498656272888184,
+          8.464927673339844,
+          8.451359748840332,
+          8.447551727294922
+        ],
+        "median_ms": 8.464927673339844,
+        "peak_allocated": 153490944
+      },
+      "candidate": {
+        "gpu_ms": [
+          1.2083200216293335,
+          1.228991985321045,
+          1.1762559413909912,
+          1.1676160097122192,
+          1.1830400228500366
+        ],
+        "median_ms": 1.1830400228500366,
+        "peak_allocated": 85942784
+      },
+      "speedup": 7.155233559171706,
+      "trace": {
+        "relative_path": "cu128_dispatch/te_m127_n12800/candidate_trace.json",
+        "sha256": "dadceb4cea79bee013c92e0a55b359cf9b657ba5f16e29d85e99b76c0b95a24c",
+        "kernel_count": 3,
+        "kernel_work_ms": 0.855677,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "te_m127_n4096",
+      "device": 0,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "te_m127_n4096",
+        "m": 127,
+        "n": 4096,
+        "k": 5120,
+        "act": null
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.001953125,
+        "relative_rmse": 5.564558250625851e-06
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise": 9,
+        "cutlass_turing_int8_dequant": 9,
+        "cutlass_turing_int8_dequant/returned_True": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          3.080575942993164,
+          2.9888319969177246,
+          2.974015951156616,
+          2.973088026046753,
+          3.1168320178985596
+        ],
+        "median_ms": 2.9888319969177246,
+        "peak_allocated": 57659904
+      },
+      "candidate": {
+        "gpu_ms": [
+          0.80348801612854,
+          0.8043839931488037,
+          0.8128640055656433,
+          0.8021119832992554,
+          0.846560001373291
+        ],
+        "median_ms": 0.8043839931488037,
+        "peak_allocated": 34711040
+      },
+      "speedup": 3.715678111914912,
+      "trace": {
+        "relative_path": "cu128_dispatch/te_m127_n4096/candidate_trace.json",
+        "sha256": "e3eb4ea334c6e359f0c9a889f373a440769f45e127c623c1dbbf2ec655bf288b",
+        "kernel_count": 3,
+        "kernel_work_ms": 0.499868,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "te_m128",
+      "device": 1,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "te_m128",
+        "m": 128,
+        "n": 512,
+        "k": 5120,
+        "act": null
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.0009765625,
+        "relative_rmse": 4.2584565562719945e-06
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise": 9,
+        "cutlass_turing_int8_dequant": 9,
+        "cutlass_turing_int8_dequant/returned_True": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          1.2663040161132812,
+          1.3380800485610962,
+          1.2730560302734375,
+          1.333631992340088,
+          1.3621759414672852
+        ],
+        "median_ms": 1.333631992340088,
+        "peak_allocated": 17566208
+      },
+      "candidate": {
+        "gpu_ms": [
+          0.49187201261520386,
+          0.46672001481056213,
+          0.5448960065841675,
+          0.4624960124492645,
+          0.46726399660110474
+        ],
+        "median_ms": 0.46726399660110474,
+        "peak_allocated": 14682624
+      },
+      "speedup": 2.8541295756595315,
+      "trace": {
+        "relative_path": "cu128_dispatch/te_m128/candidate_trace.json",
+        "sha256": "3714ed51e117d85f49899bdcad78b47170ca3de7e896aba0c2e9971fb748c1d3",
+        "kernel_count": 3,
+        "kernel_work_ms": 0.145279,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "te_m129",
+      "device": 0,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "te_m129",
+        "m": 129,
+        "n": 512,
+        "k": 5120,
+        "act": null
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.0009765625,
+        "relative_rmse": 4.243393505021231e-06
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise": 9,
+        "cublas_gemm_int8": 9,
+        "dequantize_int8_linear": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          1.0438719987869263,
+          1.1188160181045532,
+          1.0944000482559204,
+          0.995199978351593,
+          0.9904639720916748
+        ],
+        "median_ms": 1.0438719987869263,
+        "peak_allocated": 23203840
+      },
+      "candidate": {
+        "gpu_ms": [
+          0.5342079997062683,
+          0.501695990562439,
+          0.492576003074646,
+          0.48214399814605713,
+          0.481440007686615
+        ],
+        "median_ms": 0.492576003074646,
+        "peak_allocated": 18904064
+      },
+      "speedup": 2.119210014842594,
+      "trace": {
+        "relative_path": "cu128_dispatch/te_m129/candidate_trace.json",
+        "sha256": "b87adf85a247c297f11cf7510f8ee8efaee2da32c1ab59c016432bbf7b17a823",
+        "kernel_count": 4,
+        "kernel_work_ms": 0.191455,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "te_m2",
+      "device": 1,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "te_m2",
+        "m": 2,
+        "n": 512,
+        "k": 5120,
+        "act": null
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": true,
+        "max_abs": 0.0,
+        "relative_rmse": 0.0
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise": 9,
+        "int8_gemv_dequant": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          1.3305599689483643,
+          1.2787840366363525,
+          1.3530240058898926,
+          1.3249599933624268,
+          1.3161920309066772
+        ],
+        "median_ms": 1.3249599933624268,
+        "peak_allocated": 14332416
+      },
+      "candidate": {
+        "gpu_ms": [
+          0.4607999920845032,
+          0.4630720019340515,
+          0.45046401023864746,
+          0.37964800000190735,
+          0.3891200125217438
+        ],
+        "median_ms": 0.45046401023864746,
+        "peak_allocated": 11328000
+      },
+      "speedup": 2.9413226434238053,
+      "trace": {
+        "relative_path": "cu128_dispatch/te_m2/candidate_trace.json",
+        "sha256": "dac825a9fe69e82d9330aa4800b76c767daaa390823a36d0c9e6516aa666f1b3",
+        "kernel_count": 3,
+        "kernel_work_ms": 0.035840000000000004,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "te_m257",
+      "device": 1,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "te_m257",
+        "m": 257,
+        "n": 512,
+        "k": 5120,
+        "act": null
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.0009765625,
+        "relative_rmse": 5.803737167298095e-06
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise": 9,
+        "cublas_gemm_int8": 9,
+        "dequantize_int8_linear": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          1.32806396484375,
+          1.3329600095748901,
+          1.293023943901062,
+          1.3101119995117188,
+          1.3362239599227905
+        ],
+        "median_ms": 1.32806396484375,
+        "peak_allocated": 27786752
+      },
+      "candidate": {
+        "gpu_ms": [
+          0.6749439835548401,
+          0.5989760160446167,
+          0.6190080046653748,
+          0.6495680212974548,
+          0.5815359950065613
+        ],
+        "median_ms": 0.6190080046653748,
+        "peak_allocated": 22322688
+      },
+      "speedup": 2.14547139105524,
+      "trace": {
+        "relative_path": "cu128_dispatch/te_m257/candidate_trace.json",
+        "sha256": "4cdff8e1e54bb95ab2cb0ff50b8539eb5a53d66a2bb3b2f044aa03eb64664cf6",
+        "kernel_count": 4,
+        "kernel_work_ms": 0.31622200000000006,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "te_m96",
+      "device": 0,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "te_m96",
+        "m": 96,
+        "n": 512,
+        "k": 5120,
+        "act": null
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.0009765625,
+        "relative_rmse": 4.793360858457163e-06
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise": 9,
+        "cutlass_turing_int8_dequant": 9,
+        "cutlass_turing_int8_dequant/returned_True": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          1.261855959892273,
+          1.225823998451233,
+          1.2306879758834839,
+          1.2405439615249634,
+          1.2354559898376465
+        ],
+        "median_ms": 1.2354559898376465,
+        "peak_allocated": 16648704
+      },
+      "candidate": {
+        "gpu_ms": [
+          0.460671991109848,
+          0.42399999499320984,
+          0.4419200122356415,
+          0.41999998688697815,
+          0.4119360148906708
+        ],
+        "median_ms": 0.42399999499320984,
+        "peak_allocated": 13830656
+      },
+      "speedup": 2.913811331194548,
+      "trace": {
+        "relative_path": "cu128_dispatch/te_m96/candidate_trace.json",
+        "sha256": "8d5ea6adad7d4f909d8bcbc2a468569712a52dbee1a7f7a4805054d0be476e91",
+        "kernel_count": 3,
+        "kernel_work_ms": 0.14271899999999998,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "te_m97",
+      "device": 1,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "te_m97",
+        "m": 97,
+        "n": 512,
+        "k": 5120,
+        "act": null
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.0009765625,
+        "relative_rmse": 4.781309598911321e-06
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise": 9,
+        "cutlass_turing_int8_dequant": 9,
+        "cutlass_turing_int8_dequant/returned_True": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          1.2595200538635254,
+          1.2579200267791748,
+          1.4935359954833984,
+          1.2463040351867676,
+          1.2447359561920166
+        ],
+        "median_ms": 1.2579200267791748,
+        "peak_allocated": 17554944
+      },
+      "candidate": {
+        "gpu_ms": [
+          0.46108800172805786,
+          0.43212801218032837,
+          0.4338879883289337,
+          0.42800000309944153,
+          0.4259519875049591
+        ],
+        "median_ms": 0.43212801218032837,
+        "peak_allocated": 13857280
+      },
+      "speedup": 2.910989316411732,
+      "trace": {
+        "relative_path": "cu128_dispatch/te_m97/candidate_trace.json",
+        "sha256": "1f9fef87437241313e00e084d8320ccd622fc6fbfc49c4f7d56f0752ae6e9f4e",
+        "kernel_count": 3,
+        "kernel_work_ms": 0.138658,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "te_m97_n12800",
+      "device": 1,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "te_m97_n12800",
+        "m": 97,
+        "n": 12800,
+        "k": 5120,
+        "act": null
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.001953125,
+        "relative_rmse": 5.110989150125533e-06
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise": 9,
+        "cutlass_turing_int8_dequant": 9,
+        "cutlass_turing_int8_dequant/returned_True": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          8.477727890014648,
+          8.425567626953125,
+          8.489791870117188,
+          8.4136962890625,
+          8.448224067687988
+        ],
+        "median_ms": 8.448224067687988,
+        "peak_allocated": 152108544
+      },
+      "candidate": {
+        "gpu_ms": [
+          1.384992003440857,
+          1.218559980392456,
+          1.2276480197906494,
+          1.2988799810409546,
+          1.3490240573883057
+        ],
+        "median_ms": 1.2988799810409546,
+        "peak_allocated": 83177984
+      },
+      "speedup": 6.504237643971826,
+      "trace": {
+        "relative_path": "cu128_dispatch/te_m97_n12800/candidate_trace.json",
+        "sha256": "47c65808ed4a685f445ea4e09af8764a61395cc57ce9911c0875f9917d15c0e4",
+        "kernel_count": 3,
+        "kernel_work_ms": 0.887963,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "te_m97_n4096",
+      "device": 0,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "te_m97_n4096",
+        "m": 97,
+        "n": 4096,
+        "k": 5120,
+        "act": null
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.001953125,
+        "relative_rmse": 5.540096481126966e-06
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise": 9,
+        "cutlass_turing_int8_dequant": 9,
+        "cutlass_turing_int8_dequant/returned_True": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          3.003232002258301,
+          2.975071907043457,
+          3.00982403755188,
+          2.990623950958252,
+          3.034303903579712
+        ],
+        "median_ms": 3.003232002258301,
+        "peak_allocated": 56799744
+      },
+      "candidate": {
+        "gpu_ms": [
+          0.8056960105895996,
+          0.7905920147895813,
+          0.7972800135612488,
+          0.89273601770401,
+          0.762719988822937
+        ],
+        "median_ms": 0.7972800135612488,
+        "peak_allocated": 33512960
+      },
+      "speedup": 3.7668472195152876,
+      "trace": {
+        "relative_path": "cu128_dispatch/te_m97_n4096/candidate_trace.json",
+        "sha256": "5ca2207351ef8474ddd476f8122e5d07ade031269338c35a2d7ae7aac88af21f",
+        "kernel_count": 3,
+        "kernel_work_ms": 0.482524,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "te_rope_gqa",
+      "device": 0,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "rope",
+        "label": "te_rope_gqa",
+        "layout": "te",
+        "length": 2392
+      },
+      "error_vs_eager": [
+        {
+          "finite": true,
+          "byte_exact": false,
+          "max_abs": 0.00048828125,
+          "relative_rmse": 3.0194510145520326e-06
+        },
+        {
+          "finite": true,
+          "byte_exact": false,
+          "max_abs": 0.000244140625,
+          "relative_rmse": 2.031601979979314e-06
+        }
+      ],
+      "after_global_enable_implementation": "comfy_kitchen.backends.cuda.apply_rope_split_half",
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "apply_rope": 18
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          1.8583359718322754,
+          1.8503999710083008,
+          1.850559949874878,
+          1.841312050819397,
+          1.8320000171661377
+        ],
+        "median_ms": 1.8503999710083008,
+        "peak_allocated": 105979904
+      },
+      "candidate": {
+        "gpu_ms": [
+          0.7173119783401489,
+          0.7047039866447449,
+          0.7743359804153442,
+          0.7063680291175842,
+          0.7143359780311584
+        ],
+        "median_ms": 0.7143359780311584,
+        "peak_allocated": 68583424
+      },
+      "speedup": 2.5903776764938313,
+      "trace": {
+        "relative_path": "cu128_dispatch/te_rope_gqa/candidate_trace.json",
+        "sha256": "ba4a216ef65e8f460de419b81ee9cb6650c8f3976426345d11d6d06f673a7cec",
+        "kernel_count": 2,
+        "kernel_work_ms": 0.587194,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "vae_b1_fc1",
+      "device": 0,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "vae_b1_fc1",
+        "m": 1797,
+        "n": 16384,
+        "k": 2048,
+        "act": "rms_norm",
+        "bias": true,
+        "residual": false
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.08203125,
+        "relative_rmse": 0.0027619374450296164
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise_convrot64": 9,
+        "cutlass_turing_int8_dequant": 9,
+        "cutlass_turing_int8_dequant/returned_True": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          20.686304092407227,
+          20.468128204345703,
+          20.469215393066406,
+          20.447391510009766,
+          20.448352813720703
+        ],
+        "median_ms": 20.468128204345703,
+        "peak_allocated": 651326976
+      },
+      "candidate": {
+        "gpu_ms": [
+          4.064288139343262,
+          4.05075216293335,
+          4.043519973754883,
+          4.019167900085449,
+          4.016160011291504
+        ],
+        "median_ms": 4.043519973754883,
+        "peak_allocated": 230008320
+      },
+      "speedup": 5.06195798146105,
+      "trace": {
+        "relative_path": "cu128_dispatch/vae_b1_fc1/candidate_trace.json",
+        "sha256": "ebe97b4724e20a90ad44e041af2e3b5f9ff549ea13d39227e28fd8ff928f6b75",
+        "kernel_count": 2,
+        "kernel_work_ms": 3.815423,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "vae_b1_fc2",
+      "device": 1,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "vae_b1_fc2",
+        "m": 1797,
+        "n": 2048,
+        "k": 8192,
+        "act": "swiglu",
+        "bias": true,
+        "residual": true
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.0009765625,
+        "relative_rmse": 0.00019958718621637672
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise": 9,
+        "cublas_gemm_int8": 9,
+        "dequantize_int8_linear": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          11.567168235778809,
+          11.555520057678223,
+          11.556415557861328,
+          11.563167572021484,
+          11.558112144470215
+        ],
+        "median_ms": 11.558112144470215,
+        "peak_allocated": 213880320
+      },
+      "candidate": {
+        "gpu_ms": [
+          4.285888195037842,
+          4.276512145996094,
+          4.259903907775879,
+          4.291264057159424,
+          4.236224174499512
+        ],
+        "median_ms": 4.276512145996094,
+        "peak_allocated": 176856576
+      },
+      "speedup": 2.7026959704280404,
+      "trace": {
+        "relative_path": "cu128_dispatch/vae_b1_fc2/candidate_trace.json",
+        "sha256": "c134ede045a5190947ff4b8df4f5cf29bbc6794c496d30f01502f50cd9443362",
+        "kernel_count": 7,
+        "kernel_work_ms": 4.118251,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "vae_b1_out",
+      "device": 1,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "vae_b1_out",
+        "m": 1797,
+        "n": 2048,
+        "k": 2048,
+        "act": null,
+        "bias": true,
+        "residual": true
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.012359619140625,
+        "relative_rmse": 0.001646058983169496
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise_convrot64": 9,
+        "cublas_gemm_int8": 9,
+        "dequantize_int8_linear": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          3.4256958961486816,
+          3.420736074447632,
+          3.420095920562744,
+          3.4280319213867188,
+          3.426624059677124
+        ],
+        "median_ms": 3.4256958961486816,
+        "peak_allocated": 116651520
+      },
+      "candidate": {
+        "gpu_ms": [
+          1.2316160202026367,
+          1.2182400226593018,
+          1.2298239469528198,
+          1.2313599586486816,
+          1.220031976699829
+        ],
+        "median_ms": 1.2298239469528198,
+        "peak_allocated": 72267264
+      },
+      "speedup": 2.785517312975288,
+      "trace": {
+        "relative_path": "cu128_dispatch/vae_b1_out/candidate_trace.json",
+        "sha256": "9b397aa13727b9b0822c248e7cab860112521ac9b10016241c126d5b79a34ee9",
+        "kernel_count": 4,
+        "kernel_work_ms": 1.0545890000000002,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "vae_b1_qkv",
+      "device": 0,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "vae_b1_qkv",
+        "m": 1797,
+        "n": 6144,
+        "k": 2048,
+        "act": "rms_norm",
+        "bias": true,
+        "residual": false
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.08984375,
+        "relative_rmse": 0.0027557918801903725
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise_convrot64": 9,
+        "cutlass_turing_int8_dequant": 9,
+        "cutlass_turing_int8_dequant/returned_True": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          8.257535934448242,
+          8.239456176757812,
+          8.225791931152344,
+          8.25926399230957,
+          8.222816467285156
+        ],
+        "median_ms": 8.239456176757812,
+        "peak_allocated": 261162496
+      },
+      "candidate": {
+        "gpu_ms": [
+          1.8678079843521118,
+          1.820512056350708,
+          1.8063679933547974,
+          1.8345600366592407,
+          1.7978880405426025
+        ],
+        "median_ms": 1.820512056350708,
+        "peak_allocated": 99554816
+      },
+      "speedup": 4.525900363040795,
+      "trace": {
+        "relative_path": "cu128_dispatch/vae_b1_qkv/candidate_trace.json",
+        "sha256": "28d5cd6026b6eff94dffd1efd3faec2189c565724b258667c88a1faa0d889dbf",
+        "kernel_count": 2,
+        "kernel_work_ms": 1.623073,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "vae_b4_fc1",
+      "device": 0,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "vae_b4_fc1",
+        "m": 7188,
+        "n": 16384,
+        "k": 2048,
+        "act": "rms_norm",
+        "bias": true,
+        "residual": false
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.10546875,
+        "relative_rmse": 0.002757988404482603
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise_convrot64": 9,
+        "cutlass_turing_int8_dequant": 9,
+        "cutlass_turing_int8_dequant/returned_True": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          48.09113693237305,
+          47.287200927734375,
+          48.858272552490234,
+          48.52073669433594,
+          48.43772888183594
+        ],
+        "median_ms": 48.43772888183594,
+        "peak_allocated": 1762861568
+      },
+      "candidate": {
+        "gpu_ms": [
+          15.214367866516113,
+          15.210176467895508,
+          15.18716812133789,
+          15.210944175720215,
+          15.190943717956543
+        ],
+        "median_ms": 15.210176467895508,
+        "peak_allocated": 793895424
+      },
+      "speedup": 3.1845606120398826,
+      "trace": {
+        "relative_path": "cu128_dispatch/vae_b4_fc1/candidate_trace.json",
+        "sha256": "d0589ce41a6304258e78ad7e4989c5fd77e471fba9c55dc32838905cbfc71900",
+        "kernel_count": 2,
+        "kernel_work_ms": 8.966454,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "vae_b4_fc2",
+      "device": 1,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "vae_b4_fc2",
+        "m": 7188,
+        "n": 2048,
+        "k": 8192,
+        "act": "swiglu",
+        "bias": true,
+        "residual": true
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.0009765625,
+        "relative_rmse": 0.0001999176893150434
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise": 9,
+        "cublas_gemm_int8": 9,
+        "dequantize_int8_linear": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          33.279518127441406,
+          32.5162239074707,
+          30.741119384765625,
+          28.76697540283203,
+          27.18400001525879
+        ],
+        "median_ms": 30.741119384765625,
+        "peak_allocated": 765817344
+      },
+      "candidate": {
+        "gpu_ms": [
+          15.951871871948242,
+          15.950048446655273,
+          15.932607650756836,
+          15.950976371765137,
+          15.932928085327148
+        ],
+        "median_ms": 15.950048446655273,
+        "peak_allocated": 618508800
+      },
+      "speedup": 1.9273370540270705,
+      "trace": {
+        "relative_path": "cu128_dispatch/vae_b4_fc2/candidate_trace.json",
+        "sha256": "94064a5c0e0bfeb59f70d16e4d1ffc2add9d47a8d69b24560377c54753dbce1c",
+        "kernel_count": 7,
+        "kernel_work_ms": 15.967246999999999,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "vae_b4_out",
+      "device": 1,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "vae_b4_out",
+        "m": 7188,
+        "n": 2048,
+        "k": 2048,
+        "act": null,
+        "bias": true,
+        "residual": true
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.01171875,
+        "relative_rmse": 0.0016916649183258414
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise_convrot64": 9,
+        "cublas_gemm_int8": 9,
+        "dequantize_int8_linear": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          11.653951644897461,
+          11.617152214050293,
+          11.622176170349121,
+          11.074527740478516,
+          10.275967597961426
+        ],
+        "median_ms": 11.617152214050293,
+        "peak_allocated": 414650880
+      },
+      "candidate": {
+        "gpu_ms": [
+          4.251711845397949,
+          4.146399974822998,
+          4.170207977294922,
+          4.130176067352295,
+          4.14358377456665
+        ],
+        "median_ms": 4.146399974822998,
+        "peak_allocated": 237900288
+      },
+      "speedup": 2.8017442322472057,
+      "trace": {
+        "relative_path": "cu128_dispatch/vae_b4_out/candidate_trace.json",
+        "sha256": "f2f020c532bb6aaa3048e201082aa1591f7738931c2e75d7ecaf4b3aec887f5a",
+        "kernel_count": 4,
+        "kernel_work_ms": 4.041143,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "vae_b4_qkv",
+      "device": 0,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "linear",
+        "label": "vae_b4_qkv",
+        "m": 7188,
+        "n": 6144,
+        "k": 2048,
+        "act": "rms_norm",
+        "bias": true,
+        "residual": false
+      },
+      "error_vs_eager": {
+        "finite": true,
+        "byte_exact": false,
+        "max_abs": 0.0859375,
+        "relative_rmse": 0.0027519669383764267
+      },
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "quantize_int8_rowwise_convrot64": 9,
+        "cutlass_turing_int8_dequant": 9,
+        "cutlass_turing_int8_dequant/returned_True": 9
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          25.0020809173584,
+          24.996448516845703,
+          25.012287139892578,
+          24.995519638061523,
+          24.991296768188477
+        ],
+        "median_ms": 24.996448516845703,
+        "peak_allocated": 978465280
+      },
+      "candidate": {
+        "gpu_ms": [
+          6.772928237915039,
+          6.682271957397461,
+          6.597087860107422,
+          6.590367794036865,
+          6.586336135864258
+        ],
+        "median_ms": 6.597087860107422,
+        "peak_allocated": 330445312
+      },
+      "speedup": 3.789012522934427,
+      "trace": {
+        "relative_path": "cu128_dispatch/vae_b4_qkv/candidate_trace.json",
+        "sha256": "e9ad370a0dfce6d5627f088bcf65c85d6b224cd26e6beb6915e2adba54c6a782",
+        "kernel_count": 2,
+        "kernel_work_ms": 5.492058,
+        "gpu_annotation_count": 1
+      }
+    },
+    {
+      "label": "vae_rope_partial",
+      "device": 1,
+      "exit_code": 0,
+      "status": "executed_not_quality_qualified",
+      "case": {
+        "kind": "rope",
+        "label": "vae_rope_partial",
+        "layout": "vae",
+        "length": 1797
+      },
+      "error_vs_eager": [
+        {
+          "finite": true,
+          "byte_exact": false,
+          "max_abs": 0.001953125,
+          "relative_rmse": 2.315274741704343e-06
+        },
+        {
+          "finite": true,
+          "byte_exact": false,
+          "max_abs": 0.001953125,
+          "relative_rmse": 2.264332806589664e-06
+        }
+      ],
+      "inplace_error_vs_functional_eager": [
+        {
+          "finite": true,
+          "byte_exact": false,
+          "max_abs": 0.001953125,
+          "relative_rmse": 2.315274741704343e-06
+        },
+        {
+          "finite": true,
+          "byte_exact": false,
+          "max_abs": 0.001953125,
+          "relative_rmse": 2.264332806589664e-06
+        }
+      ],
+      "after_global_enable_implementation": "comfy_kitchen.backends.cuda.rms_rope_split_half_",
+      "global_cuda_unchanged": true,
+      "extension_calls": {
+        "rms_rope": 10
+      },
+      "loaded_cuda_libraries": [
+        "/kaggle/temp/h3_direct_overlay/comfy_kitchen/backends/cuda/_C.abi3.so",
+        "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libcublasLt.so.12.8.4.1",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublas.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cublas/lib/libcublasLt.so.12",
+        "/usr/local/lib/python3.13/dist-packages/nvidia/cuda_runtime/lib/libcudart.so.12",
+        "/usr/local/nvidia/lib64/libcuda.so.580.178.04"
+      ],
+      "baseline": {
+        "gpu_ms": [
+          2.673919916152954,
+          2.683232069015503,
+          2.665152072906494,
+          2.658143997192383,
+          2.6762239933013916
+        ],
+        "median_ms": 2.673919916152954,
+        "peak_allocated": 113303040
+      },
+      "candidate": {
+        "gpu_ms": [
+          0.7469760179519653,
+          0.7024639844894409,
+          0.717631995677948,
+          0.6922240257263184,
+          0.6912320256233215
+        ],
+        "median_ms": 0.7024639844894409,
+        "peak_allocated": 76270080
+      },
+      "speedup": 3.806486845153194,
+      "trace": {
+        "relative_path": "cu128_dispatch/vae_rope_partial/candidate_trace.json",
+        "sha256": "c66b1e80b3aa35d9fbc79b1a5114c8388cda2da2be49f5bee58afc9a52bdef71",
+        "kernel_count": 1,
+        "kernel_work_ms": 0.548061,
+        "gpu_annotation_count": 1
+      }
+    }
+  ]
+}

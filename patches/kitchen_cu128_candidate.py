@@ -47,6 +47,13 @@ class Candidate:
         if name=='int8_linear' and values['out_dtype'] is None:
             import torch
             values['out_dtype']=torch.bfloat16
+        if name=='fp16_conv3d':
+            # The public wrapper consumes out and canonicalizes stride before
+            # dispatching to the five-argument backend function.
+            if values.pop('out',None) is not None:
+                raise ValueError('Candidate fp16_conv3d does not qualify the separate out variant')
+            stride=values['stride']
+            values['stride']=[stride]*3 if isinstance(stride,int) else list(stride)
         impl=self.ck.registry.get_implementation(name,backend=ALIAS,kwargs=values)
         return impl(**values)
 

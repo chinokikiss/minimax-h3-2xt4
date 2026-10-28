@@ -1,5 +1,11 @@
 # H3 cu128 fallback audit and isolated repair candidates
 
+The physical cu128 probe has returned: **27 executed candidates, one expected
+FP32 constraint rejection, and one convolution adapter failure**. All 27 saved
+candidate kernel traces were verified offline. CUDA13 is unnecessary for the
+specific INT8 linear, FP16 RoPE and encoder norm/pad paths tested here. This is
+an operator compatibility/performance result, not full-pipeline quality approval.
+
 ## Answer to the proposed one-line fix
 
 `ck.registry.enable('cuda')` removes the frozen ComfyUI version guard in the
@@ -37,7 +43,10 @@ particular entry point works on the tested stack; it does not qualify the
 entire public CUDA backend. The separate CUDA13 VAE results support testing
 fused linears but do not prove that a cu128 registry override is safe.
 
-## Corrections to the proposed table
+## Pre-probe source audit and corrections to the proposed table
+
+This table records the source audit that motivated the experiment. Physical
+results and the remaining qualification limits are reported below.
 
 | Stage | Verified cu128 behavior | Does global enable fully fix it? | Scoped candidate |
 | --- | --- | --- | --- |
@@ -111,7 +120,7 @@ full-pipeline accuracy or generation-quality qualification.
 
 CPU setup/API qualification precedes any T4 submission. Existing native-cu128
 source and core pins are retained. No status/list/live-log polling is scheduled.
-Physical override results are pending; no new cu128 override speedup is claimed.
+The physical override results are reported in the final section below.
 
 CPU preflight version 1 passed at
 [H3 cu128 Dispatch CPU 20261028](https://www.kaggle.com/code/pamcks/h3-cu128-dispatch-cpu-20261028).
@@ -134,8 +143,8 @@ encoder norm/padding inputs use channels-last storage. After both matching CPU
 gates passed, version 1 was accepted at
 [H3 cu128 Dispatch T4 20261028](https://www.kaggle.com/code/pamcks/h3-cu128-dispatch-t4-20261028)
 on 2026-10-28 at 07:09:16 UTC (15:09:16 Beijing time). Acceptance is not evidence
-that a T4 has started or that a candidate passed. No physical results have been
-collected yet, and production defaults remain unchanged.
+that a T4 has started or that a candidate passed. The subsequently collected
+physical results are reported below; production defaults remain unchanged.
 
 Before submission, a local notebook guard incorrectly rejected historical
 launcher filenames embedded in the CPU receipt's source-hash map. The guard
@@ -148,3 +157,103 @@ Sanitized qualification and submission evidence is recorded in
 [`progress.json`](../data/h3_cu128_dispatch_20261028/progress.json).
 
 Evidence root: `D:/attention_eval/h3_cu128_dispatch_20261028`.
+
+## Physical T4 cu128 results
+
+The returned hardware receipt confirms two distinct Tesla T4 devices, SM75,
+driver 580.178.04, Torch 2.11.0+cu128 and CUDA 12.8, with Kitchen 0.2.37 and
+TileLang 0.1.13. The operator supervisor exited cleanly after **79.84 seconds**;
+setup took 85.61 seconds separately. The batch status is `operator_blockers_found`
+because the convolution diagnostic failed before reaching its backend kernel.
+The other 28 cases terminated as intended, including the FP32 rejection.
+
+All 122 expected evidence files were recovered. The Kaggle CLI's one collection
+again hit SSL EOF; remaining files were fetched from its existing final CDN URL.
+No status/list/live-log polling or second Kaggle output API call was made.
+All 27 successful cases have actual Chrome `cat=kernel` events, matching stored
+kernel counts, names and durations. GPU annotations are counted separately.
+The global CUDA registry disable flag remained unchanged.
+
+The following are medians of five warmed CUDA-event measurements, in milliseconds:
+
+| Operator / shape | Eager reference | Explicit candidate | Speedup |
+| --- | ---: | ---: | ---: |
+| VAE B1 QKV, M1797 / K2048 / N6144 | 8.239 | 1.821 | 4.53x |
+| VAE B1 FC1, M1797 / K2048 / N16384 | 20.468 | 4.044 | 5.06x |
+| VAE B4 QKV, M7188 / K2048 / N6144 | 24.996 | 6.597 | 3.79x |
+| VAE B4 FC1, M7188 / K2048 / N16384 | 48.438 | 15.210 | 3.18x |
+| VAE B4 output projection, M7188 / K2048 / N2048 | 11.617 | 4.146 | 2.80x |
+| VAE B4 FC2, M7188 / K8192 / N2048 | 30.741 | 15.950 | 1.93x |
+| TE split-half RoPE, 2392 tokens, Q/K heads32/4 | 1.850 | 0.714 | 2.59x |
+| VAE RMSNorm + partial RoPE, 1797 tokens | 2.674 | 0.702 | 3.81x |
+| TE dequantization, M2392 / N512 | 0.236 | 0.096 | 2.46x |
+| TE dequantization, M2392 / N4096 | 1.383 | 0.305 | 4.53x |
+| TE dequantization, M2392 / N12800 | 4.094 | 0.805 | 5.09x |
+| Encoder norm + SiLU + padding, C128 | 1.221 | 0.346 | 3.53x |
+| Encoder norm + SiLU + padding, C1024 | 8.734 | 1.494 | 5.84x |
+
+All 20 tested public INT8 linears executed, including the TE M97/M127 boundary
+cases at N4096/N12800. VAE linears span 1.93–5.06x and TE standalone linears
+2.12–7.16x against generic Kitchen eager. These TE results do **not** compare
+against H3's shared QKV/Gate/Up quantization and existing private GEMM policy.
+They do not justify replacing that policy wholesale.
+
+Profiler and extension evidence establish which paths actually ran:
+
+- VAE QKV/FC1 each use two candidate kernels: fused ConvRot/norm/quantization
+  followed by the SM75 INT8 TensorOp GEMM visitor. The extension reported
+  `cutlass_turing_int8_dequant/returned_True` on all nine observed calls per case.
+- Residual-bearing VAE output/FC2 use the cuBLAS INT8 path and separate epilogue
+  operations: four/seven kernels respectively. Selecting CUDA does not fuse
+  every residual/SwiGLU branch into one GEMM kernel.
+- TE GQA RoPE executes two kernels; VAE functional RMS-RoPE executes one, with
+  the in-place packed-QKV variant checked separately. Encoder norm/pad executes
+  the three statistics/apply kernels through `_C.group_norm_silu_pad3d`.
+- Each TileLang TE dequantization executes one kernel. At N12800, isolated
+  peak allocated memory is 245,001,728 bytes versus 489,942,528 eager; these
+  values include operands and the retained reference, not full TE residency.
+- Library maps contain cuBLAS/cuBLASLt12 and cudart12, with no mapped
+  cuBLAS/cuBLASLt13. This demonstrates the tested paths on cu128; it does not
+  qualify every operation exported by the wheel.
+
+All executed outputs were finite. The three TE dequantization cases are
+**byte-exact** against the existing eager scale-first multiplication order.
+Other candidates change rounding: VAE QKV/FC1 relative RMSE is about 0.275–0.276%,
+VAE output projection about 0.165–0.169%, and FC2 about 0.020%. TE RoPE and VAE
+RMS-RoPE have relative RMSE below 3.1e-6 on this fixture; norm/pad is about 0.046%.
+These synthetic measurements identify numerical differences, not their impact
+on real H3 video quality. The fused quantization/norm and GEMM/epilogue branches
+were changed together, so their individual error contributions remain unisolated.
+
+Two limitations are now established rather than inferred:
+
+1. **DiT FP32 RMS-RoPE still selects eager after global CUDA enable.** Explicit
+   dispatch rejects FP32 Q. Preserve the FP32 numerical island; this needs a
+   separately validated FP32 fused implementation rather than a registry flag.
+2. **Convolution remains unqualified.** The probe adapter incorrectly forwarded
+   the public wrapper's `out=None` to the five-argument backend function. This
+   was a diagnostic adapter bug, not evidence of a failing cu128 convolution
+   kernel or a production ComfyUI API regression. The adapter now consumes
+   `out=None`, normalizes stride exactly as the public wrapper does, and rejects
+   the separate output-buffer variant. Six local CPU contracts pass, including
+   binding to the pinned backend signature. The corrected adapter has not run
+   on T4. Native's independent FP16 accumulation opt-in remains disabled.
+
+The next integration priority is the byte-exact TE dequantization epilogue,
+followed by scoped TE/VAE RoPE and encoder norm/pad dispatch with real-input
+checks. VAE fused linears are promising but need captured-input/block accuracy
+validation before production promotion. Keep the existing DiT linear route and
+FP32 RMS-RoPE. A blanket `ck.registry.enable('cuda')` is still inappropriate.
+
+This is an initial compatibility probe: two warmups, five samples, fixed
+candidate-then-eager order, and both GPUs running separate cases. CUDA-event
+elapsed times include possible host enqueue gaps; GPU clocks were not locked.
+The separate profiler capture has different timing overhead. No Nsight Systems
+or Compute capture, full decode, pipeline throughput or visual-quality result
+is implied. Compilation and profiler/export work are outside warmed timings.
+
+Full case samples, numerical deltas, extension counts and trace hashes are in
+[`analysis.json`](../data/h3_cu128_dispatch_20261028/analysis.json), with the
+29-case timing table in [`timings.csv`](../data/h3_cu128_dispatch_20261028/timings.csv).
+`benchmarks/analyze_cu128_dispatch.py` regenerates these offline from the
+preserved raw artifacts, without contacting Kaggle.
