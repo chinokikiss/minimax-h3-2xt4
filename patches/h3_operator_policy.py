@@ -14,7 +14,7 @@ class H3OperatorPolicy:
     scalar_score_workspace_mib: int = 96
     fc2_quantizer: str = 'fused_stored'
     column_linear_backend: str = 'cuda_int8_tilelang'
-    dit_rms_rope: str = 'native'
+    dit_rms_rope: str = 'tilelang_fp32'
     aot_precompile: bool = True
 
     def __post_init__(self):

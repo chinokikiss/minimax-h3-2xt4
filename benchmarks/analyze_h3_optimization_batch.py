@@ -49,7 +49,7 @@ def analyze(root):
     devices=result.get('hardware',{}).get('devices',[])
     physical_t4=(len(devices)==2 and all('T4' in d['name'] and d['capability']==[7,5] for d in devices)
         and len({d['uuid'] for d in devices})==2)
-    micro=[];aot=[];blockers=[]
+    micro=[];aot=[];blockers=[];dispatch_findings=[]
     for item in result.get('micro_cases',[]):
         value=item['result'];case=value.get('case',{});trace=value.get('trace',{})
         row=dict(label=item['label'],device=item['device'],status=value['status'],exit_code=item['exit_code'],
@@ -58,9 +58,15 @@ def analyze(root):
             kernel_count=trace.get('kernel_count'),kernel_names=trace.get('names'),
             candidate_peak_allocated=value.get('candidate',{}).get('peak_allocated'),
             baseline_peak_allocated=value.get('baseline',{}).get('peak_allocated'),
-            error=value.get('error'),extension_calls=value.get('extension_calls'),
+            error=value.get('error',value.get('error_vs_eager')),extension_calls=value.get('extension_calls'),
+            global_cuda_unchanged=value.get('global_cuda_unchanged'),
+            frequency_storage_dtype=value.get('frequency_storage_dtype'),
+            loaded_cuda_libraries=value.get('loaded_cuda_libraries'),
             first_candidate_seconds=value.get('first_candidate_seconds',value.get('cold_candidate_seconds')))
         micro.append(row)
+        declined={k:v for k,v in (value.get('extension_calls') or {}).items() if k.endswith('/returned_False') and v}
+        if declined:dispatch_findings.append(dict(label=item['label'],declined=declined,
+            reason='Extension declined; returned values/timing include its fallback. Do not count this as accelerated extension qualification.'))
         if item['exit_code']!=0:blockers.append(dict(label=item['label'],error=value.get('error_message',value.get('error'))))
         if case.get('kind')=='aot':
             cache=root/'operator_batch'/item['label']/'compiled_cache.tar.gz'
@@ -93,7 +99,7 @@ def analyze(root):
     if not physical_t4:blockers.append(dict(label='hardware',error='Two physical T4s not established'))
     if len(micro)!=result['case_count']:blockers.append(dict(label='micro_cases',error='Case count incomplete'))
     return dict(status=result['status'],physical_two_t4=physical_t4,capsule_sha256=result['capsule_sha256'],
-        hardware=result.get('hardware'),micro_cases=micro,aot=aot,bake=bake,blockers=blockers,
+        hardware=result.get('hardware'),micro_cases=micro,aot=aot,bake=bake,blockers=blockers,dispatch_findings=dispatch_findings,
         scope='Operator-only synthetic activation fixtures and six real trained bake layers; no full generation or quality acceptance',
         timing_contract='Two warmups/five GPU-event samples for micro timings. AOT compilation/first-use rehearsal are separate. Bake timings include observers.',
         phase_contract='Per-thread phase sums are inclusive unless explicitly marked exclusive; do not add overlapping worker/thread times into a critical path.')

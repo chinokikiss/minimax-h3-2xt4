@@ -49,6 +49,8 @@ class Operators(unittest.TestCase):
     def test_aot_plan_has_rank_specific_exact_shapes_and_no_tensor_execution(self):
         from patches.h3_operator_aot import plan
         from patches.h3_operator_policy import H3OperatorPolicy
+        self.assertEqual(H3OperatorPolicy().dit_rms_rope,'tilelang_fp32')
+        self.assertEqual(H3OperatorPolicy(dit_rms_rope='native').dit_rms_rope,'native')
         calls=plan(59134,1,H3OperatorPolicy(dit_rms_rope='tilelang_fp32'))
         self.assertEqual(len(calls),12)
         self.assertIn(('tilelang_row_quant','quantizer',(59134,3584,7168,3584,'fast')),calls)

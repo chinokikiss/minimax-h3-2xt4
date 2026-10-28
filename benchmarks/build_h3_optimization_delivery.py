@@ -29,7 +29,7 @@ def owned_changes(name,text):
         nonlocal text
         assert text.count(old)==1,(name,old[:60]);text=text.replace(old,new)
     if name.endswith('h3_operator_policy.py'):
-        replace("    column_linear_backend: str = 'cuda_int8_tilelang'\n", "    column_linear_backend: str = 'cuda_int8_tilelang'\n    dit_rms_rope: str = 'native'\n    aot_precompile: bool = True\n")
+        replace("    column_linear_backend: str = 'cuda_int8_tilelang'\n", "    column_linear_backend: str = 'cuda_int8_tilelang'\n    dit_rms_rope: str = 'tilelang_fp32'\n    aot_precompile: bool = True\n")
         replace('    def __post_init__(self):\n',"    def __post_init__(self):\n        if self.dit_rms_rope not in ('native','tilelang_fp32'):raise ValueError('Unknown DiT RMS-RoPE backend')\n")
     elif name.endswith('comfy_tp_runtime.py'):
         replace('    """Two persistent NCCL processes. One in-flight command, bounded deadline."""\n',
@@ -54,10 +54,10 @@ def owned_changes(name,text):
         line=next(row for row in text.splitlines(True) if row.lstrip().startswith("'column_linear_backend':"))
         assert line.rstrip().endswith('}}')
         replace(line,line.rstrip()[:-2]+",\n"+
-            "                        'dit_rms_rope':(['native','tilelang_fp32'],{'default':'native','tooltip':'Explicit FP32 fused RMS-RoPE candidate. Native remains default pending T4 numerical qualification.'}),\n"+
+            "                        'dit_rms_rope':(['native','tilelang_fp32'],{'default':'tilelang_fp32','tooltip':'Default: T4-qualified FP32 fused RMS-RoPE for supported packed QKV. Native remains an explicit choice and unsupported-layout/device fallback.'}),\n"+
             "                        'aot_precompile':('BOOLEAN',{'default':True,'tooltip':'Prepare the exact selected TE/DiT custom kernels before execution. Shipped Kitchen/Torch kernels are already compiled. Preparation time is separate from steady state.'})}}\n")
         replace("column_linear_backend='cuda_int8_tilelang',**retired_options):",
-                "column_linear_backend='cuda_int8_tilelang',dit_rms_rope='native',aot_precompile=True,**retired_options):")
+                "column_linear_backend='cuda_int8_tilelang',dit_rms_rope='tilelang_fp32',aot_precompile=True,**retired_options):")
         replace('fc2_quantizer=fc2_quantizer,column_linear_backend=column_linear_backend))',
                 'fc2_quantizer=fc2_quantizer,column_linear_backend=column_linear_backend,\n                dit_rms_rope=dit_rms_rope,aot_precompile=aot_precompile))')
     else:raise ValueError(name)
@@ -80,7 +80,7 @@ def main():
         frozen_comfyui_and_core_pins_preserved=True,unrelated_dirty_changes_not_copied=True,
         overlays={n:hashlib.sha256(files[n]).hexdigest() for n in (*FILES,*DIRTY)},
         defaults='Scoped VAE CUDA INT8; exact TE TileLang epilogue; all-selected-custom-op preparation; pipelined bake',
-        fp32_rope='Implemented explicit candidate, Native default until physical qualification'),indent=2))
+        fp32_rope='Qualified physical SM75 default, with explicit Native and unsupported-contract fallbacks'),indent=2))
     if args.owned_index_patch:
         changes=[]
         for name in DIRTY:

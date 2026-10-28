@@ -1,10 +1,11 @@
 # H3 scoped defaults, all-stage operator preparation and bake batch
 
-Status: implemented. The final exact capsule passed 179 regression tests and 27
-optimization contracts both locally and in Kaggle CPU version 2. The single
-[T4 batch, version 1](https://www.kaggle.com/code/pamcks/h3-operators-aot-bake-t4-20261028)
-was accepted on 2026-10-28 at 09:59 UTC. Physical post-change timings and numerical
-results are pending; notebook acceptance is not hardware qualification.
+Status: physical two-T4 batch complete. All 27 cases executed and the six-layer
+bake AB/BA comparison completed. All 154 artifacts were downloaded once and
+verified. The corrected convolution adapter still takes a slower internal
+fallback and stays disabled. The qualified FP32 RMS-RoPE operator is promoted
+to the guarded SM75 default; Native remains selectable. This is operator and
+bake qualification, without a full H3 generation or visual-quality claim.
 
 ## Integrated defaults
 
@@ -16,7 +17,7 @@ results are pending; notebook acceptance is not hardware qualification.
 | TE dequantization | TileLang ordered epilogue on SM75 K5120, N512/4096/12800, FP16 output | Byte-exact against existing scale-first eager epilogue in the preceding T4 probe |
 | Offline disk bake | Bounded pipelined writer and reuse of an admitted CPU layer snapshot | Native merge/reference formulas, full-width ConvRot quantization and persisted proof schema unchanged |
 | Operator preparation | Enabled by default for selected TE/DiT custom operators at exact shapes | Scheduling/compilation change; no attention/quantization arithmetic change |
-| Dedicated DiT FP32 RMS-RoPE | Implemented explicit `tilelang_fp32` choice; `native` remains default pending physical numerical qualification | FP32 reduction, gains and rotation; final FP16 storage boundary retained |
+| Dedicated DiT FP32 RMS-RoPE | `tilelang_fp32` is the guarded SM75 default after this physical qualification; `native` remains explicit and unsupported-contract fallback | FP32 reduction, gains and rotation; final FP16 storage boundary retained |
 
 No global `ck.registry.enable('cuda')` is installed. The VAE adapter uses
 context-local activation and restores the module proxy after decode/encode,
@@ -152,7 +153,8 @@ byte identity for a differently ordered reduction. The batch checks finiteness
 and numerical budgets against the existing eager FP32 island before promotion.
 The previous rejection by Kitchen's FP32 dtype constraint remains correct; H3
 calls its own supported implementation explicitly rather than altering that
-constraint. Native remains the selected default until T4 results are reviewed.
+constraint. The guarded fused implementation becomes the default after the
+physical results below; unsupported layouts/devices retain Native.
 
 Local SM120 checks are arithmetic previews only: the final direct-FP16-table
 fixtures produce FP32 relative RMSE about 4.2–4.5e-8 and FP16 relative RMSE about
@@ -189,6 +191,138 @@ This is a **six-layer scheduling comparison**, not a new complete 50-layer bake,
 208-target T4 qualification or measurement of the parent auxiliary tail. No full
 H3 generation, TE/DiT denoising trajectory or visual-quality test is run.
 
+## Physical results and decisions
+
+The [version-1 notebook](https://www.kaggle.com/code/pamcks/h3-operators-aot-bake-t4-20261028)
+ran on two distinct Tesla T4 devices, SM75, driver 580.178.04,
+Torch 2.11.0+cu128, Kitchen 0.2.37 and TileLang 0.1.13. Loaded library evidence shows
+cuBLAS 12/cuDART 12, without a CUDA 13 substitution. Every operator case has an
+actual CUDA trace: 23 candidate traces plus four AOT rehearsal traces. Eight
+additional compressed bake traces each contain 37 kernels and a completed
+worker flush check. These are Torch/CUPTI Chrome traces, not Nsight Compute
+hardware-counter measurements.
+
+![Measured operator latency, allocation peaks and six-layer baking results](../data/h3_optimization_batch_20261028/operator_bake_results.png)
+
+### FP32 RMS-RoPE
+
+The reference is the existing FP32 RMS/gain/rotation island with the native
+FP16 table/storage boundaries, rather than an all-FP32 replacement of H3.
+Numbers below are medians of five CUDA-event samples after two warmups. They
+include dispatch gaps inside the event interval; they are not kernel-only times.
+
+| Rows | Existing ms | Fused ms | Speedup | Existing / fused peak GiB |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | 0.471 | 0.092 | 5.15x | <0.001 / <0.001 |
+| 33 | 0.464 | 0.104 | 4.48x | 0.00294 / 0.00114 |
+| 261 | 0.582 | 0.167 | 3.48x | 0.0232 / 0.0090 |
+| 4097 | 7.372 | 1.662 | 4.43x | 0.365 / 0.143 |
+| 51220 | 68.499 | 10.635 | 6.44x | 4.555 / 1.771 |
+| 59134 | 78.942 | 12.811 | 6.16x | 5.259 / 2.044 |
+
+Each fused candidate trace has **one RMS-RoPE kernel**. At 59,134 rows its isolated
+trace kernel duration is 10.271 ms; at 51,220 it is 8.641 ms. The eliminated eager
+materializations explain the measured allocation reduction: packed input and
+final Q/K remain, while separate FP32 Q/K promotions, normalized outputs and
+rotation temporaries are no longer materialized. Peak allocation includes the
+fixture inputs/outputs and is not a predicted full-DiT VRAM peak. FC1 or other
+stages can become the peak after this change.
+
+All eight cases pass the declared numerical/finiteness budgets. FP16-output
+relative RMSE is at most 3.75e-6; strict FP32 input/output is at most 4.44e-8.
+The additional cases include partial rotation, zero/tiny inputs and 65504
+outliers. These seeded fixtures establish operator behavior; they do not establish
+real-trajectory or generation quality. The arithmetic implementation, exact SM75
+layout guards and Native fallback are unchanged by default promotion.
+
+### Default VAE and TE dispatch
+
+| Path | Physical speedup | Trace / numerical evidence | Decision |
+| --- | ---: | --- | --- |
+| VAE INT8 QKV/FC1 | 3.04-4.46x | Two kernels per call; accepted Turing CUTLASS dequantization in all nine extension calls; relative RMSE about 0.275-0.276% against eager | Keep scoped default |
+| VAE INT8 O/FC2 | 1.69-2.81x | Four/seven kernels; CUDA quantization + cuBLAS INT8 + dequantization; relative RMSE about 0.165-0.169% / 0.020% | Keep scoped default |
+| TE dequant N512/4096/12800 | 2.35/4.36/4.57x | One kernel, byte-exact eager output for all three widths | Keep default |
+| VAE partial RMS-RoPE | 3.51x | One CUDA RMS-RoPE kernel; relative RMSE <=2.32e-6 | Keep scoped default |
+| Encoder norm/SiLU/pad C128/C1024 | 3.48/5.66x | Three kernels including layout work; relative RMSE about 0.045-0.046% | Keep scoped default |
+| Corrected FP16 Conv Adapter | 0.62x | CUTLASS returns False in 9/9 calls; actual trace uses cuDNN plus copies | Keep disabled |
+
+For the convolution fixture, native cuDNN is 0.283 ms and the adapter path is
+0.459 ms. The API repair is successful and output is byte-exact, but the extension
+declines this geometry. Its backend prepares a candidate destination/layout,
+then falls back to `F.conv3d(...).contiguous(channels_last_3d)`. The observed
+cuDNN/copy trace supports fallback overhead, not successful FP16-accumulation
+acceleration. This does not establish that every possible convolution geometry
+is unsupported. Enabling the global CUDA registry does not force an internal
+extension to accept a shape.
+
+All VAE/TE cases leave the global CUDA registry unchanged. The VAE gains are
+against the former eager paths, and the TE results measure the epilogue rather
+than a complete block or an attention backend. Full VAE decode and quality were
+not replayed in this batch.
+
+### AOT and remaining first-use cost
+
+| Stage/rank | Preparation s | Compile calls during preparation | Compile calls first/second execution | First/second rehearsal s |
+| --- | ---: | ---: | ---: | ---: |
+| TE0 | 26.790 | 12 | 0 /0 | 3.493 /0.0130 |
+| TE1 | 27.058 | 12 | 0 /0 | 3.352 /0.0129 |
+| DiT0 | 28.430 | 12 | 0 /0 | 3.797 /0.2543 |
+| DiT1 | 28.113 | 12 | 0 /0 | 3.828 /0.2555 |
+
+Four retained cache archives contain twelve compiled shared libraries and twelve
+CUDA binaries each. Preparation binds their source, shape, rank, policy and
+compiler/runtime identity. This proves no additional TileLang compilation in the
+tested runtime consumers after preparation. It does not prove absence of library
+initialization, allocator expansion or lazy module loading: first rehearsal
+still costs 3.35-3.83 s. That residual cost is not attributed to a specific cause
+without a first-use host trace. Rehearsals allocate zero fixtures and synchronize
+each operator; neither column is DiT denoiser latency. Compilation cost is moved
+outside sampling and remains part of total startup when a matching cache is absent.
+
+### Offline baking
+
+| AB/BA pair | Serial s | Pipelined s | Speedup |
+| --- | ---: | ---: | ---: |
+| Serial then pipeline | 45.232 | 33.242 | 1.361x |
+| Pipeline then serial | 38.978 | 34.229 | 1.139x |
+
+The pooled ratio is 1.248x, about 19.9% less measured wall time. Timing includes
+fresh worker-process startup and observers. All twelve shard payload hashes,
+manifest hashes and tensor-state proofs match across all four runs. Each mode
+also matches the twelve prior physical-T4 tensor-state proofs and independently
+verifies 24 Native targets. No formula, full-width quantization or durability
+check was removed.
+
+Each GPU worker peaks at 1.875 GiB in both modes. Host RSS increases from
+1.93-1.97 GiB to 2.29-2.31 GiB per worker, consistent with a bounded extra CPU layer.
+Per worker, checkpoint-read time drops from 3.22-3.36 s to 1.37-1.51 s. The writer
+overlaps 4.02-5.89 s of merge/verification **host spans**. Hashing still contends
+for CPU/memory bandwidth: state-hash wall time rises from 6.16-6.41 s to 8.68-9.40 s,
+and output-file hashing from 3.21-3.33 s to 4.05-4.68 s. Fsync varies from 4.88-11.79 s
+between serial trials and 5.88-10.32 s in pipelined trials, so all improvement cannot
+be assigned to overlap alone.
+
+The serial control disables snapshot reuse and writer pipelining together.
+Their individual causal contributions were not isolated by a 2x2 ablation. Keep
+the combined pipelined default, with the existing bounded ownership, checks and
+serial control. These six layers do not measure the full 50-layer bake, auxiliary
+tail, input download time or whole-pipeline latency. No full-bake speedup is
+extrapolated.
+
+![Measured producer and persistence host spans for rank zero](../data/h3_optimization_batch_20261028/bake_host_timeline.png)
+
+The timeline uses the first serial/pipelined pair for rank0. Each lane is a
+measured host envelope. In the serial case, persistence shares the main thread;
+in the pipelined case, the writer overlaps later production. Unplotted gaps
+include source admission and other work. The full source data also retains
+rank1 and the reversed-order pair.
+
+Aggregate values, kernel names, phase boundaries and dispatch rejection are in
+the [analysis JSON](../data/h3_optimization_batch_20261028/analysis.json) and
+[timing CSV](../data/h3_optimization_batch_20261028/micro_timings.csv). The
+[artifact manifest](../data/h3_optimization_batch_20261028/gpu_artifact_manifest.json)
+binds all 154 retained raw files under the local evidence root.
+
 ## Source, qualification and delivery
 
 The source archive is
@@ -196,7 +330,7 @@ The source archive is
 binding capsule
 `9398ba6958b1b5a88b957b32b505d864195c39727ecad58743e0c14a767a3de0`.
 It preserves the frozen ComfyUI d49e888 legacy API and all core wheel pins,
-including Kitchen0.2.37 and TileLang0.1.13. Kaggle retains native Torch/cu128.
+including Kitchen 0.2.37 and TileLang 0.1.13. Kaggle retains native Torch/cu128.
 No upstream update, environment upgrade or local conda modification is involved.
 
 The exact extracted capsule passes 179 existing CPU regression tests and 27
@@ -213,7 +347,7 @@ the same operator contracts before GPU submission. CPU version 1 had already
 passed 179+26 tests but was superseded before any GPU submission to correct the
 native FP16 frequency-table boundary. The final CPU receipt has the new capsule
 hash and 179+27 tests; neither receipt is rewritten to stand for another source.
-One bounded GPU notebook runs the complete batch. No status/list/live-log polling, automatic duplicate
+One bounded GPU notebook completed the batch. No status/list/live-log polling, automatic duplicate
 submission, private activations, HF credentials or Dataset mounts are used.
 
 The submitted source is pinned to commit
@@ -221,7 +355,18 @@ The submitted source is pinned to commit
 Dataset/kernel-output mounts. Setup is bounded separately; operator/bake
 execution has a 2700-second watchdog inside the 3300-second notebook limit.
 The GPU receipt is recorded in the [progress evidence](../data/h3_optimization_batch_20261028/progress.json).
-There is no scheduled status checker or automatic duplicate submission.
+There is no scheduled status checker or automatic duplicate submission. The
+single final GPU retrieval returned all 154 files; their sizes and SHA256 hashes
+were rechecked locally against the download manifest.
+
+The tested immutable source retains its original Native RMS-RoPE default; the
+eight numerical cases and DiT AOT rehearsals explicitly select the guarded
+fused operator. After this qualification, the policy default, loader default/UI
+and a contract assertion are updated. No arithmetic or dispatch guard changes.
+A fresh isolated source comparison confirms these are the only three changed
+payload files, and the promoted defaults pass the same 179+27 local CPU checks.
+This promotion is not represented as a second physical run or a new full-pipeline
+qualification; the original submission, receipts and archive remain unchanged.
 
 Evidence root: `D:/attention_eval/h3_optimization_batch_20261028`.
 
@@ -237,3 +382,5 @@ After the single final GPU collection, analyze only retained files:
 The summary retains per-thread inclusive/exclusive phase boundaries and labels
 writer/merge overlap as host spans. It does not infer GPU utilization from those
 host spans or extrapolate six-layer results into a full 50-layer bake speedup.
+`benchmarks/plot_h3_optimization_batch.py` regenerates both figures from this
+analysis and the retained worker events without executing any GPU workload.

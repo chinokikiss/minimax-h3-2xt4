@@ -1,6 +1,6 @@
 {
-  "status": "t4_batch_accepted_results_pending",
-  "physical_t4_after_change": false,
+  "status": "physical_t4_complete",
+  "physical_t4_after_change": true,
   "source_publication": {
     "file": "64fab3da8877917c135183495803db141ec6856844333ecbcdff826ff2a43559.tar.gz",
     "sha256": "64fab3da8877917c135183495803db141ec6856844333ecbcdff826ff2a43559",
@@ -151,7 +151,7 @@
       "private_inputs": false,
       "operator_qualification_sha256": "4183da4e59a136e0d901f2a8871337c83a592ebb48e5f8cfba422e12a52324ff"
     },
-    "final_collection_count": 0,
+    "final_collection_count": 1,
     "earliest_final_collection_seconds": 3300,
     "run_timeout_seconds": 3300,
     "result_relative": "operator_batch/result.json",
@@ -195,7 +195,7 @@
       ]
     ],
     "aot_scope": "Active default FP16 custom kernels; prebuilt Kitchen/Torch kernels and library warmup identified separately",
-    "fp32_rms_rope_default": "native until physical numerical qualification"
+    "fp32_rms_rope_default": "tilelang_fp32 promoted after physical numerical qualification"
   },
   "evidence_root": "D:\\attention_eval\\h3_optimization_batch_20261028",
   "kaggle_cpu": {
@@ -234,6 +234,176 @@
     "operator_receipt_sha256": "4183da4e59a136e0d901f2a8871337c83a592ebb48e5f8cfba422e12a52324ff",
     "source_hashes_match_publication": true
   },
-  "final_collection_policy": "One final artifact collection per submitted CPU version; no GPU collection yet, no status/list/live-log polling",
-  "analysis_script": "benchmarks/analyze_h3_optimization_batch.py"
+  "final_collection_policy": "One final artifact collection for each submitted version; GPU version 1 collected once; no status/list/live-log polling",
+  "analysis_script": "benchmarks/analyze_h3_optimization_batch.py",
+  "gpu_collection": {
+    "status": "collected",
+    "kaggle_requests": 1,
+    "kernel": "pamcks/h3-operators-aot-bake-t4-20261028",
+    "output": "D:\\attention_eval\\h3_optimization_batch_20261028\\final\\gpu_outputs",
+    "returncode": 0,
+    "files": 154,
+    "completed_utc": "2026-10-28T10:12:06.501705+00:00",
+    "experiment": {
+      "status": "complete",
+      "error": null,
+      "stages": null,
+      "completed_sampler_steps": 0,
+      "completed_denoiser_calls": 0,
+      "media": null,
+      "quality_acceptance": "Pending review; collection does not establish generation quality"
+    },
+    "prior_input_hash_matches": {}
+  },
+  "physical_result": {
+    "hardware": {
+      "devices": [
+        {
+          "name": "Tesla T4",
+          "capability": [
+            7,
+            5
+          ],
+          "uuid": "3b78472a-e5e0-d250-fedb-d5ac84270bb6"
+        },
+        {
+          "name": "Tesla T4",
+          "capability": [
+            7,
+            5
+          ],
+          "uuid": "0fde24f9-0e9d-ff6c-fdee-a2f7343b8e7f"
+        }
+      ],
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "kitchen": "0.2.37",
+      "tilelang": "0.1.13",
+      "driver": [
+        "580.178.04",
+        "580.178.04"
+      ]
+    },
+    "completed_cases": 27,
+    "execution_blockers": [],
+    "dispatch_findings": [
+      {
+        "label": "encoder_conv_optin",
+        "declined": {
+          "cutlass_fp16_conv3d/returned_False": 9
+        },
+        "reason": "Extension declined; returned values/timing include its fallback. Do not count this as accelerated extension qualification."
+      }
+    ],
+    "raw_files": 154,
+    "all_artifact_sizes_and_sha256_rechecked": true,
+    "candidate_traces": 23,
+    "aot_traces": 4,
+    "bake_flushed_traces": 8,
+    "fp32_rope_59134": {
+      "label": "fp32_rope_59134",
+      "device": 0,
+      "status": "passed_operator_budget",
+      "exit_code": 0,
+      "kind": "rope",
+      "candidate_ms": 12.811136245727539,
+      "baseline_ms": 78.9417953491211,
+      "speedup": 6.161966732298851,
+      "kernel_count": 1,
+      "kernel_names": [
+        "main_kernel"
+      ],
+      "candidate_peak_allocated": 2195055104,
+      "baseline_peak_allocated": 5646588416,
+      "error": [
+        {
+          "finite": true,
+          "byte_exact": false,
+          "max_abs": 0.00390625,
+          "relative_rmse": 3.3506569252494955e-06
+        },
+        {
+          "finite": true,
+          "byte_exact": false,
+          "max_abs": 0.00390625,
+          "relative_rmse": 3.2419075068901293e-06
+        }
+      ],
+      "extension_calls": null,
+      "global_cuda_unchanged": null,
+      "frequency_storage_dtype": "torch.float16",
+      "loaded_cuda_libraries": null,
+      "first_candidate_seconds": 2.379499857999974
+    },
+    "aot_execution_compile_counts": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ]
+    ],
+    "bake_pairs": [
+      {
+        "trial": 0,
+        "serial_seconds": 45.23240423300001,
+        "pipeline_seconds": 33.2423157070001,
+        "speedup": 1.360687523446962
+      },
+      {
+        "trial": 1,
+        "serial_seconds": 38.978076392999924,
+        "pipeline_seconds": 34.22900480299995,
+        "speedup": 1.1387440744284727
+      }
+    ],
+    "bake_pooled_speedup": 1.2480929673448282,
+    "all_12_shard_payload_and_manifest_hashes_equal_across_four_runs": true
+  },
+  "post_qualification_default_promotion": {
+    "source_delta": {
+      "changed_files": [
+        "custom_nodes/minimax_h3_tp2/__init__.py",
+        "patches/h3_operator_policy.py",
+        "benchmarks/test_h3_optimization_batch.py"
+      ],
+      "tested_capsule": "9398ba6958b1b5a88b957b32b505d864195c39727ecad58743e0c14a767a3de0",
+      "promoted_capsule": "d8d90ce4830998fa17a9634a435e92552ea9083db8ed342ef91a0369fd7fcf6a",
+      "arithmetic_changed": false,
+      "requires_new_hardware_run": false,
+      "basis": "Only default selection/UI and contract assertions changed; same guarded operator executed on physical T4"
+    },
+    "local_regression": {
+      "passed": true,
+      "tests": 179,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 13.906000000002678,
+      "scope": "CPU contracts, not physical T4 qualification"
+    },
+    "local_operator": {
+      "status": "optimization_cpu_ready",
+      "capsule_sha256": "d8d90ce4830998fa17a9634a435e92552ea9083db8ed342ef91a0369fd7fcf6a",
+      "full_pipeline": false,
+      "micro_cases": [],
+      "case_count": 27,
+      "model_scope": "Six selected trained layers for bake AB/BA; no TE/DiT generation",
+      "private_inputs": false,
+      "tests": 27
+    },
+    "dedicated_rms_rope": "tilelang_fp32 guarded SM75 default; Native explicit and unsupported-contract fallback",
+    "fp16_conv_adapter": "Disabled: tested shape declined 9/9 calls; fallback slower",
+    "full_pipeline_qualification": false
+  }
 }
