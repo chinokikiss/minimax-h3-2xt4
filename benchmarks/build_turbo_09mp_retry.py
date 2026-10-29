@@ -27,6 +27,8 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--previous',type=Path,required=True)
     p.add_argument('--evidence',type=Path,required=True);p.add_argument('--control-commit',required=True)
     p.add_argument('--reference-directory',type=Path,required=True);p.add_argument('--reference-mirror',type=Path,required=True)
+    p.add_argument('--megapixels',choices=('0.9','0.85'),default='0.9')
+    p.add_argument('--failed-result',type=Path)
     p.add_argument('--submit',action='store_true');args=p.parse_args()
     assert re.fullmatch('[0-9a-f]{40}',args.control_commit)
     previous=args.previous.resolve();args.evidence.mkdir(parents=True,exist_ok=True)
@@ -37,11 +39,13 @@ def main():
     assert setup['status']=='cpu_ready' and setup['review_suite']['passed'] and setup['disk_bake_cpu']['passed']
     assert gate['status']=='turbo_challenge_cpu_ready' and gate['lora_targets']==208
     assert setup['capsule_sha256']==gate['capsule_sha256']==pub['capsule_sha256']
-    failed=json.loads((previous/'kaggle/gpu_final/turbo_1mp_e2e/generation/result.json').read_text())
+    failed_path=args.failed_result or previous/'kaggle/gpu_final/turbo_1mp_e2e/generation/result.json'
+    failed=json.loads(failed_path.read_text(encoding='utf-8'))
     assert failed['status']=='failed' and 'out of memory' in failed['error'].lower()
+    width,height,tag,slug={'0.9':(1280,704,'09mp','0-9mp'),'0.85':(1216,704,'085mp','0-85mp')}[args.megapixels]
     plan=json.loads((previous/'delivery/plan.json').read_text());assert (plan['width'],plan['height'])==(1344,768)
-    plan.update(width=1280,height=704,name='turbo_09mp_10s',
-        source_note='Explicitly authorized 0.9MP retry after GPU OOM; no new CPU smoke, same regular Turbo inputs/settings')
+    plan.update(width=width,height=height,name=f'turbo_{tag}_10s',
+        source_note=f'Explicitly authorized {args.megapixels}MP retry after GPU OOM; no new CPU smoke, same regular Turbo inputs/settings')
     validate(plan)
     payload=subprocess.check_output(['git','show',args.control_commit+':'+MODULE],cwd=ROOT)
     assert payload.replace(b'\r\n',b'\n')==(ROOT/MODULE).read_bytes().replace(b'\r\n',b'\n')
@@ -50,7 +54,8 @@ def main():
         control_commit=args.control_commit,qualified_parent_capsule_sha256=pub['capsule_sha256'],
         scope='Benchmark-only canvas/export validation; production runtime/operators/core unchanged',
         cpu_smoke_skipped_by_explicit_user_request=True,
-        original_cpu_qualification_sha256=hashlib.sha256(setup_path.read_bytes()).hexdigest())
+        original_cpu_qualification_sha256=hashlib.sha256(setup_path.read_bytes()).hexdigest(),
+        prior_failed_result_sha256=hashlib.sha256(failed_path.read_bytes()).hexdigest())
     plan['geometry_retry_provenance']=overlay
     (args.evidence/'request.json').write_text(json.dumps(plan,indent=2))
     job=args.evidence/'gpu_job'
@@ -82,14 +87,14 @@ effective=dict(manifest['source_hashes']);effective[binding['path']]=binding['sh
 argv=[sys.executable,'-u',str(source/'benchmarks/run_h3_l1_turbo_batch.py'),'--source',str(source),
  '--output',str(out),'--plan',str(out/'retry_request.json'),'--scratch','/tmp/h3_turbo_09mp_10s_20261029','--e2e-timeout','5400']
 os.execve(sys.executable,argv,env)
-""".replace('OVERLAY',repr(overlay)).replace('PAYLOAD',repr(base64.b85encode(payload).decode())).replace('REQUEST',repr(json.dumps(plan)))
-    code+=supervise_worker(execution,budget=7200,output='/kaggle/working/turbo_09mp_supervision')
-    code+="assert json.loads(pathlib.Path('/kaggle/working/turbo_09mp_e2e/batch_results.json').read_text())['status']=='complete'\n"
+""".replace('turbo_09mp',f'turbo_{tag}').replace('OVERLAY',repr(overlay)).replace('PAYLOAD',repr(base64.b85encode(payload).decode())).replace('REQUEST',repr(json.dumps(plan)))
+    code+=supervise_worker(execution,budget=7200,output=f'/kaggle/working/turbo_{tag}_supervision')
+    code+=f"assert json.loads(pathlib.Path('/kaggle/working/turbo_{tag}_e2e/batch_results.json').read_text())['status']=='complete'\n"
     ast.parse(code);assert not re.search(r'(?:hf_[A-Za-z0-9]{25,}|gh[pousr]_[A-Za-z0-9]{30,})',code)
     nb['cells'][0]['source']=code.splitlines(keepends=True);nbpath.write_text(json.dumps(nb),encoding='utf-8')
     assert nbpath.stat().st_size<9_900_000
     meta=json.loads((job/'kernel-metadata.json').read_text())
-    meta.update(id='pamcks/h3-turbo-0-9mp-10s-t4-20261029',title='H3 Turbo 0.9MP 10s T4 20261029')
+    meta.update(id=f'pamcks/h3-turbo-{slug}-10s-t4-20261029',title=f'H3 Turbo {args.megapixels}MP 10s T4 20261029')
     assert meta['is_private'] and meta['dataset_sources']==meta['kernel_sources']==[]
     (job/'kernel-metadata.json').write_text(json.dumps(meta,indent=2))
     binding=json.loads((job/'source_binding.json').read_text())
@@ -100,7 +105,7 @@ os.execve(sys.executable,argv,env)
     if not args.submit:return
     state=dict(kernel=meta['id'],status='submitting',submitted_utc=dt.datetime.now(dt.timezone.utc).isoformat(),
         source_binding=binding,run_timeout_seconds=8100,earliest_final_collection_seconds=8100,
-        final_collection_count=0,result_relative='turbo_09mp_e2e/batch_results.json',
+        final_collection_count=0,result_relative=f'turbo_{tag}_e2e/batch_results.json',
         notebook_sha256=hashlib.sha256(nbpath.read_bytes()).hexdigest())
     receipt=args.evidence/'gpu_submission.json'
     with receipt.open('x') as f:json.dump(state,f,indent=2)

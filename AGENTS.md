@@ -20,6 +20,11 @@
 - Preserve the qualified source capsule and core setup; record a content-hashed benchmark-only canvas/export-validation overlay separately. Do not fabricate a fresh CPU receipt for that overlay or change production operators, dependency versions, model/LoRA, prompts, references, seed or sampler settings.
 - Retain failed-job artifacts and receipts. No status/live-log polling or automatic duplicate submission.
 
+## Authorized 0.85 MP resolution retry — 2026-10-29
+
+- After the 0.9 MP OOM, the user requests another direct GPU retry, finally selecting approximately 0.85 MP (1216×704). Skip a new CPU smoke test and reuse the successful unchanged runtime/core qualification with the separately hashed benchmark contract overlay.
+- Keep the 10-second regular Turbo workload, offline bake, model/LoRA, references, seed, sampler and dependency pins unchanged. Retain prior failure artifacts and submit only one GPU job; no status/live-log polling.
+
 ## Authorized Kaggle exception — 2026-10-21
 
 - The user explicitly permits Kaggle's native Torch rather than reproducing the local Windows Torch/CUDA package stack. Keep its matching native Python/NumPy/Torchvision/Torchaudio/CUDA environment and record actual versions; do not modify the local conda environment or original snapshot.

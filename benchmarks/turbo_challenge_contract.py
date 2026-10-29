@@ -4,7 +4,7 @@ import hashlib
 
 NAME='turbo_1mp_10s'
 PROMPT_SHA='e2ebe6a75563a0184ef5fa99299acef24ee3170855774761c44d6714fb2f7754'
-CANVASES=frozenset(((1344,768),(1280,704)))
+CANVASES=frozenset(((1344,768),(1280,704),(1216,704)))
 
 
 def from_previous(previous):
