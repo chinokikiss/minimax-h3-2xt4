@@ -1,6 +1,6 @@
 """User-authorized direct GPU retry, reusing CPU-qualified runtime/core bytes.
 
-Only the benchmark canvas contract is overlaid after qualified setup. Its hash
+Only selected benchmark files are overlaid after qualified setup. Their hashes
 is recorded separately; the old CPU receipt is never relabelled as new source.
 """
 import argparse
@@ -29,6 +29,7 @@ def main():
     p.add_argument('--reference-directory',type=Path,required=True);p.add_argument('--reference-mirror',type=Path,required=True)
     p.add_argument('--megapixels',choices=('0.9','0.85','0.8'),default='0.9')
     p.add_argument('--failed-result',type=Path)
+    p.add_argument('--failure-kind',choices=('oom','download'),default='oom')
     p.add_argument('--submit',action='store_true');args=p.parse_args()
     assert re.fullmatch('[0-9a-f]{40}',args.control_commit)
     previous=args.previous.resolve();args.evidence.mkdir(parents=True,exist_ok=True)
@@ -41,22 +42,33 @@ def main():
     assert setup['capsule_sha256']==gate['capsule_sha256']==pub['capsule_sha256']
     failed_path=args.failed_result or previous/'kaggle/gpu_final/turbo_1mp_e2e/generation/result.json'
     failed=json.loads(failed_path.read_text(encoding='utf-8'))
-    assert failed['status']=='failed' and 'out of memory' in failed['error'].lower()
+    assert failed['status']=='failed'
+    if args.failure_kind=='oom':assert 'out of memory' in failed['error'].lower()
+    else:assert '503' in failed['error'] and 'HfHubHTTPError' in failed['error']
     width,height,tag,slug={'0.9':(1280,704,'09mp','0-9mp'),'0.85':(1216,704,'085mp','0-85mp'),
         '0.8':(1184,672,'08mp','0-8mp')}[args.megapixels]
     plan=json.loads((previous/'delivery/plan.json').read_text());assert (plan['width'],plan['height'])==(1344,768)
     plan.update(width=width,height=height,name=f'turbo_{tag}_10s',
-        source_note=f'Explicitly authorized {args.megapixels}MP retry after GPU OOM; no new CPU smoke, same regular Turbo inputs/settings')
+        source_note=f'Explicitly authorized {args.megapixels}MP retry after {args.failure_kind} failure; no new CPU smoke, same regular Turbo inputs/settings')
     validate(plan)
     payload=subprocess.check_output(['git','show',args.control_commit+':'+MODULE],cwd=ROOT)
     assert payload.replace(b'\r\n',b'\n')==(ROOT/MODULE).read_bytes().replace(b'\r\n',b'\n')
     ast.parse(payload)
+    additions=[]
+    if args.failure_kind=='download':
+        module='benchmarks/run_h3_l1_turbo_batch.py'
+        extra=subprocess.check_output(['git','show',args.control_commit+':'+module],cwd=ROOT)
+        assert extra.replace(b'\r\n',b'\n')==(ROOT/module).read_bytes().replace(b'\r\n',b'\n')
+        ast.parse(extra)
+        additions.append(dict(path=module,original_sha256=setup['source_hashes'][module],
+            sha256=hashlib.sha256(extra).hexdigest(),payload_b85=base64.b85encode(extra).decode()))
     overlay=dict(path=MODULE,original_sha256=setup['source_hashes'][MODULE],sha256=hashlib.sha256(payload).hexdigest(),
         control_commit=args.control_commit,qualified_parent_capsule_sha256=pub['capsule_sha256'],
-        scope='Benchmark-only canvas/export validation; production runtime/operators/core unchanged',
+        scope='Benchmark canvas/export validation and optional bounded download retries; production runtime/operators/core unchanged',
         cpu_smoke_skipped_by_explicit_user_request=True,
         original_cpu_qualification_sha256=hashlib.sha256(setup_path.read_bytes()).hexdigest(),
-        prior_failed_result_sha256=hashlib.sha256(failed_path.read_bytes()).hexdigest())
+        prior_failed_result_sha256=hashlib.sha256(failed_path.read_bytes()).hexdigest(),
+        failure_kind=args.failure_kind,additional_files=[{k:v for k,v in item.items() if k!='payload_b85'} for item in additions])
     plan['geometry_retry_provenance']=overlay
     (args.evidence/'request.json').write_text(json.dumps(plan,indent=2))
     job=args.evidence/'gpu_job'
@@ -83,12 +95,16 @@ target=source/binding['path'];assert hashlib.sha256(target.read_bytes()).hexdige
 payload=base64.b85decode(PAYLOAD);assert hashlib.sha256(payload).hexdigest()==binding['sha256']
 target.write_bytes(payload)
 effective=dict(manifest['source_hashes']);effective[binding['path']]=binding['sha256']
+for item in ADDITIONAL:
+ target=source/item['path'];assert hashlib.sha256(target.read_bytes()).hexdigest()==item['original_sha256']
+ value=base64.b85decode(item['payload_b85']);assert hashlib.sha256(value).hexdigest()==item['sha256']
+ target.write_bytes(value);effective[item['path']]=item['sha256']
 (out/'source_overlay.json').write_text(json.dumps(dict(binding=binding,effective_source_hashes=effective),indent=2))
 (out/'retry_request.json').write_text(REQUEST)
 argv=[sys.executable,'-u',str(source/'benchmarks/run_h3_l1_turbo_batch.py'),'--source',str(source),
  '--output',str(out),'--plan',str(out/'retry_request.json'),'--scratch','/tmp/h3_turbo_09mp_10s_20261029','--e2e-timeout','5400']
 os.execve(sys.executable,argv,env)
-""".replace('turbo_09mp',f'turbo_{tag}').replace('OVERLAY',repr(overlay)).replace('PAYLOAD',repr(base64.b85encode(payload).decode())).replace('REQUEST',repr(json.dumps(plan)))
+""".replace('turbo_09mp',f'turbo_{tag}').replace('ADDITIONAL',repr(additions)).replace('OVERLAY',repr(overlay)).replace('PAYLOAD',repr(base64.b85encode(payload).decode())).replace('REQUEST',repr(json.dumps(plan)))
     code+=supervise_worker(execution,budget=7200,output=f'/kaggle/working/turbo_{tag}_supervision')
     code+=f"assert json.loads(pathlib.Path('/kaggle/working/turbo_{tag}_e2e/batch_results.json').read_text())['status']=='complete'\n"
     ast.parse(code);assert not re.search(r'(?:hf_[A-Za-z0-9]{25,}|gh[pousr]_[A-Za-z0-9]{30,})',code)

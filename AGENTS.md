@@ -27,8 +27,14 @@
 
 ## Authorized 0.8 MP resolution retry — 2026-10-29
 
-- After the 0.85 MP OOM, the user explicitly requests one 0.8 MP direct GPU retry (1184×672) and skipping the CPU smoke test. Reuse the successful unchanged runtime/core qualification with a separately hashed benchmark-only contract overlay; do not relabel the old qualification.
+- After reporting a 0.85 MP failure, the user initially requested one 0.8 MP direct GPU retry (1184×672) and skipping the CPU smoke test. This request was superseded before GPU submission: final artifacts showed HF HTTP 503, not OOM, and the user requested 0.85 MP again.
 - Preserve the ten-second regular Turbo workload, offline LoRA bake, inputs, sampler, source and core pins. Retain the previous failure artifacts and receipts. No status/live-log polling or automatic duplicate submission.
+
+## Authorized 0.85 MP download-failure retry — 2026-10-29
+
+- The user requests retrying 0.85 MP after the collected HTTP 503 weight-download failure. No 0.8 MP job was submitted. Keep skipping CPU smoke, reusing the unchanged qualified runtime/core.
+- Benchmark-only download handling may retry transient HTTP/transport failures up to three attempts with bounded backoff, preserve partial files, and retain exact revisions, byte sizes and SHA256 validation. Record this additional benchmark overlay separately; production operators and dependency pins remain unchanged.
+- Preserve the prior failed version and submit one new version only. No Kaggle status/live-log polling.
 
 ## Authorized Kaggle exception — 2026-10-21
 

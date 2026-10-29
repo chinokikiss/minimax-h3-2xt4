@@ -19,6 +19,26 @@ def sha(path):
         return hashlib.file_digest(stream, 'sha256').hexdigest()
 
 
+def download_with_retry(operation, name, on_retry, *, sleep=time.sleep):
+    """Resume transient HF transfers; never retry integrity or authorization errors."""
+    import httpx
+    import requests
+    for attempt in range(3):
+        try:
+            return operation()
+        except Exception as error:
+            status = getattr(getattr(error, 'response', None), 'status_code', None)
+            transient = (status in (408, 429, 500, 502, 503, 504) or
+                (status is None and isinstance(error, (httpx.TransportError,
+                    requests.ConnectionError, requests.Timeout, ConnectionError, TimeoutError))))
+            if not transient or attempt == 2:
+                raise
+            delay = (5, 15)[attempt]
+            on_retry(dict(file=name, failed_attempt=attempt+1, http_status=status,
+                error_type=type(error).__name__, backoff_seconds=delay))
+            sleep(delay)
+
+
 def release_owned_dit_payloads(scratch, root):
     scratch, root = Path(scratch).resolve(), Path(root).resolve()
     if not root.is_relative_to(scratch) or not (scratch / '.owned_by_turbo_e2e').is_file():
@@ -138,8 +158,13 @@ def main():
         state['reference_images'] = references
         save()
         from huggingface_hub import hf_hub_download
+        def record_download_retry(event):
+            state.setdefault('download_retries', []).append(event)
+            print('TP2_DOWNLOAD_RETRY', json.dumps(event), flush=True)
         def download(repo, revision, name, expected, directory):
-            path = Path(hf_hub_download(repo, name, revision=revision, token=False, local_dir=str(directory)))
+            path = Path(download_with_retry(
+                lambda: hf_hub_download(repo, name, revision=revision, token=False, local_dir=str(directory)),
+                name, record_download_retry))
             if path.stat().st_size != expected['bytes'] or sha(path) != expected['sha256']:
                 raise ValueError('Immutable weight checksum mismatch: ' + name)
             return path
