@@ -1,0 +1,92 @@
+{
+  "kernel": "pamcks/h3-ptd-cpu-schedule-cpu-20261029",
+  "status": "accepted",
+  "submitted_utc": "2026-10-29T01:56:49.759927+00:00",
+  "source_binding": {
+    "mode": "cpu",
+    "publication": {
+      "published": true,
+      "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/c9bad18ca3ed9a51818b4e321b9339c2fb7e7548/runtime/kaggle_artifacts/18bff57659f4259f30df2db5d58f90954843463074753b67c3a0a68566914bdc.tar.gz",
+      "commit": "c9bad18ca3ed9a51818b4e321b9339c2fb7e7548",
+      "sha256": "18bff57659f4259f30df2db5d58f90954843463074753b67c3a0a68566914bdc",
+      "bytes": 18650446,
+      "capsule_sha256": "835c47888ca5210eb99d9e979632d7845c49c5e826a07384077b175fc537b42d",
+      "zero_mounts": true,
+      "publication_verified": "Git push plus HTTP HEAD; runtime checks full size and SHA256"
+    },
+    "qualification_sha256": null,
+    "kaggle_dataset_sources": [],
+    "kaggle_kernel_sources": [],
+    "temporary_private_auth": false,
+    "profile_hashes": {},
+    "setup_budget": 600,
+    "execution_budget": null,
+    "dit_lifetimes": false,
+    "dit_attention": "kitchen",
+    "review_suite": true,
+    "review_recovery": false,
+    "turbo_e2e": false,
+    "vae_compare_preflight": false,
+    "vae_ab_bake": false,
+    "dit_pair": false,
+    "dit_pair_retry": false,
+    "pair_qualification_sha256": null,
+    "vae_input_qualification_sha256": null,
+    "profile_qualification_sha256": null,
+    "full_pipeline": false,
+    "private_inputs": false,
+    "credentials": false,
+    "fixture_layers": 2,
+    "fixture_hops": 8,
+    "production_bank": false,
+    "handoff_order": null,
+    "ptd_qualification_sha256": null,
+    "cpu_scheduling": true,
+    "scheduling_cases": [
+      [
+        "queue_baseline",
+        {}
+      ],
+      [
+        "future_cache",
+        {
+          "future_cache": true
+        }
+      ],
+      [
+        "future_refiner",
+        {
+          "future_cache": true,
+          "prefetch_refiner": true
+        }
+      ],
+      [
+        "future_refiner_baked",
+        {
+          "future_cache": true,
+          "prefetch_refiner": true,
+          "baked_refiner": true
+        }
+      ],
+      [
+        "future_refiner_repeat",
+        {
+          "future_cache": true,
+          "prefetch_refiner": true
+        }
+      ],
+      [
+        "queue_baseline_repeat",
+        {}
+      ]
+    ]
+  },
+  "final_collection_count": 0,
+  "run_timeout_seconds": 1000,
+  "earliest_final_collection_seconds": 1000,
+  "result_relative": "ptd_qualification/result.json",
+  "notebook_sha256": "b235b2b4d931672b3108db242391c617ece8c57baa55be839f2d111087f7787f",
+  "returncode": 0,
+  "version": 2,
+  "url": "https://www.kaggle.com/code/pamcks/h3-ptd-cpu-schedule-cpu-20261029"
+}

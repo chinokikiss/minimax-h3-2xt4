@@ -1,0 +1,8 @@
+{
+  "returncode": 1,
+  "diagnostic": "Authentication required to call the Kaggle API",
+  "acceptance_received": false,
+  "notebook_sha256": "3b49bbb46d451c49bf18356728f1b1bed7be412ecdc56f7bfa062dd205580524",
+  "retry_authorized_by_user": true,
+  "retry_notebook_identical": true
+}

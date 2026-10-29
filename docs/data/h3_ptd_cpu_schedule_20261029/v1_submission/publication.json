@@ -1,0 +1,10 @@
+{
+  "published": true,
+  "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/accbdca635fede4662251810aff0354c5b76bc94/runtime/kaggle_artifacts/2a22aec1ec976e9e9b60e6cf65919182d3eed77f76fe1016304e487f734a2f07.tar.gz",
+  "commit": "accbdca635fede4662251810aff0354c5b76bc94",
+  "sha256": "2a22aec1ec976e9e9b60e6cf65919182d3eed77f76fe1016304e487f734a2f07",
+  "bytes": 18649916,
+  "capsule_sha256": "e79f94c5400b87fa156b6511acab7c1fdd576917143935ba4d98b73eb9104b02",
+  "zero_mounts": true,
+  "publication_verified": "Git push plus HTTP HEAD; runtime checks full size and SHA256"
+}

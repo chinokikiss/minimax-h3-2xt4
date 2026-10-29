@@ -1,0 +1,92 @@
+{
+  "kernel": "pamcks/h3-ptd-cpu-schedule-t4-20261029",
+  "status": "accepted",
+  "submitted_utc": "2026-10-29T02:06:57.856689+00:00",
+  "source_binding": {
+    "mode": "e2e",
+    "publication": {
+      "published": true,
+      "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/c9bad18ca3ed9a51818b4e321b9339c2fb7e7548/runtime/kaggle_artifacts/18bff57659f4259f30df2db5d58f90954843463074753b67c3a0a68566914bdc.tar.gz",
+      "commit": "c9bad18ca3ed9a51818b4e321b9339c2fb7e7548",
+      "sha256": "18bff57659f4259f30df2db5d58f90954843463074753b67c3a0a68566914bdc",
+      "bytes": 18650446,
+      "capsule_sha256": "835c47888ca5210eb99d9e979632d7845c49c5e826a07384077b175fc537b42d",
+      "zero_mounts": true,
+      "publication_verified": "Git push plus HTTP HEAD; runtime checks full size and SHA256"
+    },
+    "qualification_sha256": "ce3aa440c27730c5c3c65ce358c3cf7aa73f70a71adb0722c7106f13b0c831f5",
+    "kaggle_dataset_sources": [],
+    "kaggle_kernel_sources": [],
+    "temporary_private_auth": false,
+    "profile_hashes": {},
+    "setup_budget": 600,
+    "execution_budget": null,
+    "dit_lifetimes": false,
+    "dit_attention": "kitchen",
+    "review_suite": false,
+    "review_recovery": false,
+    "turbo_e2e": false,
+    "vae_compare_preflight": false,
+    "vae_ab_bake": false,
+    "dit_pair": false,
+    "dit_pair_retry": false,
+    "pair_qualification_sha256": null,
+    "vae_input_qualification_sha256": null,
+    "profile_qualification_sha256": null,
+    "full_pipeline": false,
+    "private_inputs": false,
+    "credentials": false,
+    "fixture_layers": 2,
+    "fixture_hops": 8,
+    "production_bank": false,
+    "handoff_order": null,
+    "ptd_qualification_sha256": "59c4702416c7e2a260c7fe7c7c51faef09d4232db7f0869a6337ef252217feb4",
+    "cpu_scheduling": true,
+    "scheduling_cases": [
+      [
+        "queue_baseline",
+        {}
+      ],
+      [
+        "future_cache",
+        {
+          "future_cache": true
+        }
+      ],
+      [
+        "future_refiner",
+        {
+          "future_cache": true,
+          "prefetch_refiner": true
+        }
+      ],
+      [
+        "future_refiner_baked",
+        {
+          "future_cache": true,
+          "prefetch_refiner": true,
+          "baked_refiner": true
+        }
+      ],
+      [
+        "future_refiner_repeat",
+        {
+          "future_cache": true,
+          "prefetch_refiner": true
+        }
+      ],
+      [
+        "queue_baseline_repeat",
+        {}
+      ]
+    ]
+  },
+  "final_collection_count": 0,
+  "run_timeout_seconds": 2500,
+  "earliest_final_collection_seconds": 2500,
+  "result_relative": "ptd_qualification/result.json",
+  "notebook_sha256": "3b49bbb46d451c49bf18356728f1b1bed7be412ecdc56f7bfa062dd205580524",
+  "returncode": 0,
+  "version": 1,
+  "url": "https://www.kaggle.com/code/pamcks/h3-ptd-cpu-schedule-t4-20261029"
+}

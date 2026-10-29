@@ -1,0 +1,17 @@
+{
+  "id": "pamcks/h3-ptd-cpu-schedule-t4-20261029",
+  "title": "H3 PTD CPU Schedule T4 20261029",
+  "code_file": "experiment.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "docker_image_pinning_type": "original",
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": [],
+  "model_sources": [],
+  "machine_shape": "NvidiaTeslaT4"
+}

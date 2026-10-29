@@ -1,0 +1,79 @@
+{
+  "mode": "cpu",
+  "publication": {
+    "published": true,
+    "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/accbdca635fede4662251810aff0354c5b76bc94/runtime/kaggle_artifacts/2a22aec1ec976e9e9b60e6cf65919182d3eed77f76fe1016304e487f734a2f07.tar.gz",
+    "commit": "accbdca635fede4662251810aff0354c5b76bc94",
+    "sha256": "2a22aec1ec976e9e9b60e6cf65919182d3eed77f76fe1016304e487f734a2f07",
+    "bytes": 18649916,
+    "capsule_sha256": "e79f94c5400b87fa156b6511acab7c1fdd576917143935ba4d98b73eb9104b02",
+    "zero_mounts": true,
+    "publication_verified": "Git push plus HTTP HEAD; runtime checks full size and SHA256"
+  },
+  "qualification_sha256": null,
+  "kaggle_dataset_sources": [],
+  "kaggle_kernel_sources": [],
+  "temporary_private_auth": false,
+  "profile_hashes": {},
+  "setup_budget": 600,
+  "execution_budget": null,
+  "dit_lifetimes": false,
+  "dit_attention": "kitchen",
+  "review_suite": true,
+  "review_recovery": false,
+  "turbo_e2e": false,
+  "vae_compare_preflight": false,
+  "vae_ab_bake": false,
+  "dit_pair": false,
+  "dit_pair_retry": false,
+  "pair_qualification_sha256": null,
+  "vae_input_qualification_sha256": null,
+  "profile_qualification_sha256": null,
+  "full_pipeline": false,
+  "private_inputs": false,
+  "credentials": false,
+  "fixture_layers": 2,
+  "fixture_hops": 8,
+  "production_bank": false,
+  "handoff_order": null,
+  "ptd_qualification_sha256": null,
+  "cpu_scheduling": true,
+  "scheduling_cases": [
+    [
+      "queue_baseline",
+      {}
+    ],
+    [
+      "future_cache",
+      {
+        "future_cache": true
+      }
+    ],
+    [
+      "future_refiner",
+      {
+        "future_cache": true,
+        "prefetch_refiner": true
+      }
+    ],
+    [
+      "future_refiner_baked",
+      {
+        "future_cache": true,
+        "prefetch_refiner": true,
+        "baked_refiner": true
+      }
+    ],
+    [
+      "future_refiner_repeat",
+      {
+        "future_cache": true,
+        "prefetch_refiner": true
+      }
+    ],
+    [
+      "queue_baseline_repeat",
+      {}
+    ]
+  ]
+}

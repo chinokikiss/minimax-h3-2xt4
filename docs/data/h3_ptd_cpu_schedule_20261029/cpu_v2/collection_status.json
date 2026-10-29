@@ -1,0 +1,15 @@
+{
+  "status": "transport_recovery_incomplete",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-ptd-cpu-schedule-cpu-20261029",
+  "output": "D:\\attention_eval\\h3_ptd_cpu_schedule_20261029\\validation_v2\\cpu_final",
+  "returncode": 1,
+  "files": 20,
+  "completed_utc": "2026-10-29T02:02:16.404340+00:00",
+  "transport_attempts": 2,
+  "transport_retry_reason": "Connection drop during final output transfer",
+  "experiment": {
+    "status": "ptd_cpu_ready",
+    "error": null
+  }
+}

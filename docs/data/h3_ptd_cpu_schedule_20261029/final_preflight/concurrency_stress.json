@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "tests": 600,
+  "cycles": 100,
+  "seconds": 21.452999999999975,
+  "gpu_execution": false,
+  "weights_downloaded": false,
+  "scope": "Repeated CPU concurrency/ownership contracts; no hardware performance qualification"
+}
