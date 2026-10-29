@@ -1,0 +1,12 @@
+{
+  "file": "8d64c9a531ac7eb89e8156472ad901297d8d4df058bb00e73337ae71228634d6.tar.gz",
+  "sha256": "8d64c9a531ac7eb89e8156472ad901297d8d4df058bb00e73337ae71228634d6",
+  "bytes": 18702276,
+  "capsule_sha256": "21abe7dd91f284eed9626bb018c6abf66adf1c066b2f76662d72ce53d46d41a1",
+  "source_files": 900,
+  "core_pins": 78,
+  "kaggle_mounts": 0,
+  "published": true,
+  "commit": "d7c7528515d2a7961de5e6f961232d81d21cdc8b",
+  "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/d7c7528515d2a7961de5e6f961232d81d21cdc8b/runtime/kaggle_artifacts/8d64c9a531ac7eb89e8156472ad901297d8d4df058bb00e73337ae71228634d6.tar.gz"
+}

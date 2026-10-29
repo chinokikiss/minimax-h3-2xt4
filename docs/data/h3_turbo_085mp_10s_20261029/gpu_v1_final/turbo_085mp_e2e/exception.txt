@@ -1,0 +1,68 @@
+Traceback (most recent call last):
+  File "/kaggle/temp/h3_direct_overlay/huggingface_hub/utils/_http.py", line 761, in hf_raise_for_status
+    response.raise_for_status()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/local/lib/python3.13/dist-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Server error '503 Service Unavailable' for url 'https://us.gcp.cdn.hf.co/xet-bridge-us/6aca1c91285b7e7c4d5d8eda/8ab38a348766032c6e3f7effb3855b2f56687b5bd19496941eea11a9c2a9b283?[signed-download-query-redacted]'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_batch.py", line 219, in main
+    te = prepare_kind('te')
+  File "/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_batch.py", line 162, in prepare_kind
+    rows.append(future.result())
+                ~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/concurrent/futures/_base.py", line 453, in result
+    return self.__get_result()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/concurrent/futures/_base.py", line 402, in __get_result
+    raise self._exception
+  File "/usr/lib/python3.13/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_batch.py", line 156, in one
+    path = download(assets['publication']['repo'], assets['publication']['commit'], name, expected, root)
+  File "/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_batch.py", line 142, in download
+    path = Path(hf_hub_download(repo, name, revision=revision, token=False, local_dir=str(directory)))
+                ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/kaggle/temp/h3_direct_overlay/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/kaggle/temp/h3_direct_overlay/huggingface_hub/file_download.py", line 976, in hf_hub_download
+    return _hf_hub_download_to_local_dir(
+        # Destination
+    ...<16 lines>...
+        dry_run=dry_run,
+    )
+  File "/kaggle/temp/h3_direct_overlay/huggingface_hub/file_download.py", line 1427, in _hf_hub_download_to_local_dir
+    _download_to_tmp_and_move(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        incomplete_path=paths.incomplete_path(etag),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<8 lines>...
+        tqdm_class=tqdm_class,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/kaggle/temp/h3_direct_overlay/huggingface_hub/file_download.py", line 1858, in _download_to_tmp_and_move
+    http_get(
+    ~~~~~~~~^
+        url_to_download,
+        ^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        tqdm_class=tqdm_class,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/kaggle/temp/h3_direct_overlay/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/kaggle/temp/h3_direct_overlay/huggingface_hub/file_download.py", line 379, in http_get
+    hf_raise_for_status(response)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/kaggle/temp/h3_direct_overlay/huggingface_hub/utils/_http.py", line 877, in hf_raise_for_status
+    raise _format(HfHubHTTPError, str(e), response) from e
+huggingface_hub.errors.HfHubHTTPError: Server error '503 Service Unavailable' for url 'https://us.gcp.cdn.hf.co/xet-bridge-us/6aca1c91285b7e7c4d5d8eda/8ab38a348766032c6e3f7effb3855b2f56687b5bd19496941eea11a9c2a9b283?[signed-download-query-redacted]'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503
+
+upstream connect error or disconnect/reset before headers. reset reason: connection timeout

@@ -35,3 +35,5 @@
 /docs/data/h3_turbo_085mp_10s_20261029/**/*.log -text -whitespace
 
 /docs/data/h3_turbo_09mp_10s_20261029/gpu_v1_final/**/exception.txt -text -whitespace
+
+/docs/data/h3_turbo_085mp_10s_20261029/gpu_v1_final/**/exception.txt -text -whitespace

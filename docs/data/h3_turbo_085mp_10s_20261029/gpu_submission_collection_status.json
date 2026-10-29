@@ -1,0 +1,19 @@
+{
+  "status": "collected",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-turbo-0-85mp-10s-t4-20261029",
+  "output": "D:\\attention_eval\\h3_turbo_085mp_10s_20261029\\kaggle\\gpu_final",
+  "returncode": 0,
+  "files": 21,
+  "completed_utc": "2026-10-29T15:01:40.727712+00:00",
+  "experiment": {
+    "status": "failed",
+    "error": "HfHubHTTPError: Server error '503 Service Unavailable' for url 'https://us.gcp.cdn.hf.co/xet-bridge-us/6aca1c91285b7e7c4d5d8eda/8ab38a348766032c6e3f7effb3855b2f56687b5bd19496941eea11a9c2a9b283?[signed-download-query-redacted]'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503\n\nupstream connect error or disconnect/reset before headers. reset reason: connection timeout",
+    "stages": null,
+    "completed_sampler_steps": 0,
+    "completed_denoiser_calls": 0,
+    "media": null,
+    "quality_acceptance": "Pending review; collection does not establish generation quality"
+  },
+  "prior_input_hash_matches": {}
+}

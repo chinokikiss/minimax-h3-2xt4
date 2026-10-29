@@ -1,0 +1,465 @@
+[{"stream_name":"stderr","time":8.438590364,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.438670554,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.438679908,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.438684075,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":9.12975829,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":9.129797496,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":9.129802219,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":9.129821514,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":10.581402494,"data":"LIGHT_NOTEBOOK_START zero dataset/kernel mounts\n"}
+,{"stream_name":"stdout","time":10.58272978,"data":"T4_SUPERVISOR notebook_cell_started\n"}
+,{"stream_name":"stdout","time":10.688387448,"data":"LIGHT_SOURCE_DOWNLOAD_START\n"}
+,{"stream_name":"stdout","time":11.984977246,"data":"LIGHT_SOURCE_READY\n"}
+,{"stream_name":"stdout","time":12.091297003,"data":"LIGHT_SETUP_STAGE frozen_source\n"}
+,{"stream_name":"stdout","time":15.538660373999999,"data":"LIGHT_SETUP_STAGE direct_pip\n"}
+,{"stream_name":"stdout","time":64.082990204,"data":"LIGHT_SETUP_STAGE api_probe\n"}
+,{"stream_name":"stdout","time":72.089147801,"data":"LIGHT_SETUP_HEARTBEAT api_probe 60\n"}
+,{"stream_name":"stdout","time":88.861358153,"data":"LIGHT_SETUP_FINAL ready_for_device_gate\n"}
+,{"stream_name":"stdout","time":88.924910207,"data":"T4_SUPERVISOR_FINAL {\"status\": \"worker_exited\", \"deadline_seconds\": 600, \"scope\": \"Notebook cell execution only; provider startup/mounting excluded\", \"worker_pid\": 50, \"exit_code\": 0, \"seconds\": 78.339480444}\n"}
+,{"stream_name":"stdout","time":89.318886416,"data":"T4_SUPERVISOR notebook_cell_started\n"}
+,{"stream_name":"stdout","time":91.880139151,"data":"TURBO_STAGE download_dit_tp2\n"}
+,{"stream_name":"stdout","time":92.518012369,"data":"Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.\n"}
+,{"stream_name":"stdout","time":117.114872158,"data":"TP2_DOWNLOAD_VERIFIED dit 10 /100\n"}
+,{"stream_name":"stdout","time":132.529969284,"data":"TP2_DOWNLOAD_VERIFIED dit 20 /100\n"}
+,{"stream_name":"stdout","time":149.558307409,"data":"TURBO_HEARTBEAT download_dit_tp2\n"}
+,{"stream_name":"stdout","time":154.032747949,"data":"TP2_DOWNLOAD_VERIFIED dit 30 /100\n"}
+,{"stream_name":"stdout","time":169.783384403,"data":"TP2_DOWNLOAD_VERIFIED dit 40 /100\n"}
+,{"stream_name":"stdout","time":183.690430435,"data":"TP2_DOWNLOAD_VERIFIED dit 50 /100\n"}
+,{"stream_name":"stdout","time":201.662739683,"data":"TP2_DOWNLOAD_VERIFIED dit 60 /100\n"}
+,{"stream_name":"stdout","time":209.551411958,"data":"TURBO_HEARTBEAT download_dit_tp2\n"}
+,{"stream_name":"stdout","time":217.495726681,"data":"TP2_DOWNLOAD_VERIFIED dit 70 /100\n"}
+,{"stream_name":"stdout","time":234.562394369,"data":"TP2_DOWNLOAD_VERIFIED dit 80 /100\n"}
+,{"stream_name":"stdout","time":259.559756619,"data":"TP2_DOWNLOAD_VERIFIED dit 90 /100\n"}
+,{"stream_name":"stdout","time":269.551563072,"data":"TURBO_HEARTBEAT download_dit_tp2\n"}
+,{"stream_name":"stdout","time":275.752453162,"data":"TP2_DOWNLOAD_VERIFIED dit 100 /100\n"}
+,{"stream_name":"stdout","time":275.754176647,"data":"TURBO_STAGE assemble_dit_auxiliary\n"}
+,{"stream_name":"stdout","time":308.234818045,"data":"TURBO_STAGE download_replacement_turbo\n"}
+,{"stream_name":"stdout","time":329.55183182,"data":"TURBO_HEARTBEAT download_replacement_turbo\n"}
+,{"stream_name":"stdout","time":330.414237618,"data":"TURBO_STAGE offline_disk_bake\n"}
+,{"stream_name":"stdout","time":363.89279972,"data":"TP2_DISK_BAKED cuda:1 blocks.1.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":363.893489864,"data":"TP2_DISK_BAKED cuda:0 blocks.0.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":364.160740891,"data":"TP2_DISK_BAKED cuda:0 blocks.0.attn.out_proj\n"}
+,{"stream_name":"stdout","time":364.166547424,"data":"TP2_DISK_BAKED cuda:1 blocks.1.attn.out_proj\n"}
+,{"stream_name":"stdout","time":365.257746425,"data":"TP2_DISK_BAKED cuda:1 blocks.1.mlp.fc1\n"}
+,{"stream_name":"stdout","time":365.279460793,"data":"TP2_DISK_BAKED cuda:0 blocks.0.mlp.fc1\n"}
+,{"stream_name":"stdout","time":365.809008789,"data":"TP2_DISK_BAKED cuda:1 blocks.1.mlp.fc2\n"}
+,{"stream_name":"stdout","time":365.814235024,"data":"TP2_DISK_LAYER_QUEUED cuda:1 1\n"}
+,{"stream_name":"stdout","time":365.824208004,"data":"TP2_DISK_BAKED cuda:0 blocks.0.mlp.fc2\n"}
+,{"stream_name":"stdout","time":365.828606514,"data":"TP2_DISK_LAYER_QUEUED cuda:0 0\n"}
+,{"stream_name":"stdout","time":374.742837198,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":374.747258315,"data":"TP2_DISK_LAYER_DURABLE 1\n"}
+,{"stream_name":"stdout","time":375.737746209,"data":"TP2_DISK_BAKED cuda:1 blocks.3.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":375.74839948,"data":"TP2_DISK_BAKED cuda:0 blocks.2.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":376.022736784,"data":"TP2_DISK_BAKED cuda:1 blocks.3.attn.out_proj\n"}
+,{"stream_name":"stdout","time":376.024675754,"data":"TP2_DISK_BAKED cuda:0 blocks.2.attn.out_proj\n"}
+,{"stream_name":"stdout","time":377.121864113,"data":"TP2_DISK_BAKED cuda:1 blocks.3.mlp.fc1\n"}
+,{"stream_name":"stdout","time":377.13029018,"data":"TP2_DISK_BAKED cuda:0 blocks.2.mlp.fc1\n"}
+,{"stream_name":"stdout","time":377.656585305,"data":"TP2_DISK_BAKED cuda:1 blocks.3.mlp.fc2\n"}
+,{"stream_name":"stdout","time":377.657776405,"data":"TP2_DISK_LAYER_QUEUED cuda:1 3\n"}
+,{"stream_name":"stdout","time":377.661680874,"data":"TP2_DISK_BAKED cuda:0 blocks.2.mlp.fc2\n"}
+,{"stream_name":"stdout","time":377.66483369,"data":"TP2_DISK_LAYER_QUEUED cuda:0 2\n"}
+,{"stream_name":"stdout","time":384.624436211,"data":"TP2_DISK_BAKED cuda:0 blocks.4.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":384.714915319,"data":"TP2_DISK_BAKED cuda:1 blocks.5.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":385.055760382,"data":"TP2_DISK_BAKED cuda:0 blocks.4.attn.out_proj\n"}
+,{"stream_name":"stdout","time":385.192746082,"data":"TP2_DISK_BAKED cuda:1 blocks.5.attn.out_proj\n"}
+,{"stream_name":"stdout","time":386.27978641,"data":"TP2_DISK_LAYER_DURABLE 3\n"}
+,{"stream_name":"stdout","time":386.452465653,"data":"TP2_DISK_BAKED cuda:0 blocks.4.mlp.fc1\n"}
+,{"stream_name":"stdout","time":386.55653369,"data":"TP2_DISK_BAKED cuda:1 blocks.5.mlp.fc1\n"}
+,{"stream_name":"stdout","time":386.70400008,"data":"TP2_DISK_LAYER_DURABLE 2\n"}
+,{"stream_name":"stdout","time":387.095712862,"data":"TP2_DISK_BAKED cuda:0 blocks.4.mlp.fc2\n"}
+,{"stream_name":"stdout","time":387.099858383,"data":"TP2_DISK_LAYER_QUEUED cuda:0 4\n"}
+,{"stream_name":"stdout","time":387.132723566,"data":"TP2_DISK_BAKED cuda:1 blocks.5.mlp.fc2\n"}
+,{"stream_name":"stdout","time":387.135258985,"data":"TP2_DISK_LAYER_QUEUED cuda:1 5\n"}
+,{"stream_name":"stdout","time":389.553678392,"data":"TURBO_HEARTBEAT offline_disk_bake\n"}
+,{"stream_name":"stdout","time":394.280121456,"data":"TP2_DISK_LAYER_DURABLE 4\n"}
+,{"stream_name":"stdout","time":394.298671439,"data":"TP2_DISK_LAYER_DURABLE 5\n"}
+,{"stream_name":"stdout","time":396.13165362,"data":"TP2_DISK_BAKED cuda:0 blocks.6.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":396.180900204,"data":"TP2_DISK_BAKED cuda:1 blocks.7.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":396.413727596,"data":"TP2_DISK_BAKED cuda:0 blocks.6.attn.out_proj\n"}
+,{"stream_name":"stdout","time":396.461973742,"data":"TP2_DISK_BAKED cuda:1 blocks.7.attn.out_proj\n"}
+,{"stream_name":"stdout","time":397.555341791,"data":"TP2_DISK_BAKED cuda:0 blocks.6.mlp.fc1\n"}
+,{"stream_name":"stdout","time":397.566493892,"data":"TP2_DISK_BAKED cuda:1 blocks.7.mlp.fc1\n"}
+,{"stream_name":"stdout","time":398.106774627,"data":"TP2_DISK_BAKED cuda:1 blocks.7.mlp.fc2\n"}
+,{"stream_name":"stdout","time":398.109953859,"data":"TP2_DISK_LAYER_QUEUED cuda:1 7\n"}
+,{"stream_name":"stdout","time":398.111248421,"data":"TP2_DISK_BAKED cuda:0 blocks.6.mlp.fc2\n"}
+,{"stream_name":"stdout","time":398.11435706,"data":"TP2_DISK_LAYER_QUEUED cuda:0 6\n"}
+,{"stream_name":"stdout","time":404.489059042,"data":"TP2_DISK_LAYER_DURABLE 7\n"}
+,{"stream_name":"stdout","time":405.825391012,"data":"TP2_DISK_LAYER_DURABLE 6\n"}
+,{"stream_name":"stdout","time":407.309801687,"data":"TP2_DISK_BAKED cuda:1 blocks.9.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":407.314686062,"data":"TP2_DISK_BAKED cuda:0 blocks.8.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":407.595789893,"data":"TP2_DISK_BAKED cuda:1 blocks.9.attn.out_proj\n"}
+,{"stream_name":"stdout","time":407.59983629,"data":"TP2_DISK_BAKED cuda:0 blocks.8.attn.out_proj\n"}
+,{"stream_name":"stdout","time":408.690493915,"data":"TP2_DISK_BAKED cuda:0 blocks.8.mlp.fc1\n"}
+,{"stream_name":"stdout","time":408.701675034,"data":"TP2_DISK_BAKED cuda:1 blocks.9.mlp.fc1\n"}
+,{"stream_name":"stdout","time":409.223544999,"data":"TP2_DISK_BAKED cuda:0 blocks.8.mlp.fc2\n"}
+,{"stream_name":"stdout","time":409.226561094,"data":"TP2_DISK_LAYER_QUEUED cuda:0 8\n"}
+,{"stream_name":"stdout","time":409.243128846,"data":"TP2_DISK_BAKED cuda:1 blocks.9.mlp.fc2\n"}
+,{"stream_name":"stdout","time":409.248494179,"data":"TP2_DISK_LAYER_QUEUED cuda:1 9\n"}
+,{"stream_name":"stdout","time":418.328997514,"data":"TP2_DISK_LAYER_DURABLE 9\n"}
+,{"stream_name":"stdout","time":418.430117594,"data":"TP2_DISK_LAYER_DURABLE 8\n"}
+,{"stream_name":"stdout","time":419.165695235,"data":"TP2_DISK_BAKED cuda:0 blocks.10.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":419.182036102,"data":"TP2_DISK_BAKED cuda:1 blocks.11.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":419.469199728,"data":"TP2_DISK_BAKED cuda:1 blocks.11.attn.out_proj\n"}
+,{"stream_name":"stdout","time":419.474059961,"data":"TP2_DISK_BAKED cuda:0 blocks.10.attn.out_proj\n"}
+,{"stream_name":"stdout","time":420.591597277,"data":"TP2_DISK_BAKED cuda:1 blocks.11.mlp.fc1\n"}
+,{"stream_name":"stdout","time":420.598436094,"data":"TP2_DISK_BAKED cuda:0 blocks.10.mlp.fc1\n"}
+,{"stream_name":"stdout","time":421.175608774,"data":"TP2_DISK_BAKED cuda:1 blocks.11.mlp.fc2\n"}
+,{"stream_name":"stdout","time":421.180767702,"data":"TP2_DISK_LAYER_QUEUED cuda:1 11\n"}
+,{"stream_name":"stdout","time":421.196469825,"data":"TP2_DISK_BAKED cuda:0 blocks.10.mlp.fc2\n"}
+,{"stream_name":"stdout","time":421.198432363,"data":"TP2_DISK_LAYER_QUEUED cuda:0 10\n"}
+,{"stream_name":"stdout","time":429.552040204,"data":"TP2_DISK_LAYER_DURABLE 11\n"}
+,{"stream_name":"stdout","time":429.562727253,"data":"TP2_DISK_LAYER_DURABLE 10\n"}
+,{"stream_name":"stdout","time":430.904704315,"data":"TP2_DISK_BAKED cuda:1 blocks.13.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":430.92020216,"data":"TP2_DISK_BAKED cuda:0 blocks.12.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":431.190595283,"data":"TP2_DISK_BAKED cuda:1 blocks.13.attn.out_proj\n"}
+,{"stream_name":"stdout","time":431.208435186,"data":"TP2_DISK_BAKED cuda:0 blocks.12.attn.out_proj\n"}
+,{"stream_name":"stdout","time":432.319701464,"data":"TP2_DISK_BAKED cuda:1 blocks.13.mlp.fc1\n"}
+,{"stream_name":"stdout","time":432.343996453,"data":"TP2_DISK_BAKED cuda:0 blocks.12.mlp.fc1\n"}
+,{"stream_name":"stdout","time":432.869255608,"data":"TP2_DISK_BAKED cuda:1 blocks.13.mlp.fc2\n"}
+,{"stream_name":"stdout","time":432.872751288,"data":"TP2_DISK_LAYER_QUEUED cuda:1 13\n"}
+,{"stream_name":"stdout","time":432.88017206,"data":"TP2_DISK_BAKED cuda:0 blocks.12.mlp.fc2\n"}
+,{"stream_name":"stdout","time":432.890332775,"data":"TP2_DISK_LAYER_QUEUED cuda:0 12\n"}
+,{"stream_name":"stdout","time":439.624221318,"data":"TP2_DISK_LAYER_DURABLE 12\n"}
+,{"stream_name":"stdout","time":439.638755702,"data":"TP2_DISK_LAYER_DURABLE 13\n"}
+,{"stream_name":"stdout","time":441.749773854,"data":"TP2_DISK_BAKED cuda:1 blocks.15.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":441.758273821,"data":"TP2_DISK_BAKED cuda:0 blocks.14.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":442.030881363,"data":"TP2_DISK_BAKED cuda:1 blocks.15.attn.out_proj\n"}
+,{"stream_name":"stdout","time":442.042308109,"data":"TP2_DISK_BAKED cuda:0 blocks.14.attn.out_proj\n"}
+,{"stream_name":"stdout","time":443.12307718,"data":"TP2_DISK_BAKED cuda:0 blocks.14.mlp.fc1\n"}
+,{"stream_name":"stdout","time":443.125940117,"data":"TP2_DISK_BAKED cuda:1 blocks.15.mlp.fc1\n"}
+,{"stream_name":"stdout","time":443.671576532,"data":"TP2_DISK_BAKED cuda:0 blocks.14.mlp.fc2\n"}
+,{"stream_name":"stdout","time":443.675375436,"data":"TP2_DISK_BAKEDTP2_DISK_LAYER_QUEUED cuda:0 14\n"}
+,{"stream_name":"stdout","time":443.677349349,"data":"TP2_DISK_LAYER_QUEUED cuda:1 15\n"}
+,{"stream_name":"stdout","time":449.553318685,"data":"TURBO_HEARTBEAT offline_disk_bake\n"}
+,{"stream_name":"stdout","time":450.584108961,"data":"TP2_DISK_LAYER_DURABLE 14\n"}
+,{"stream_name":"stdout","time":450.597197709,"data":"TP2_DISK_LAYER_DURABLE 15\n"}
+,{"stream_name":"stdout","time":452.487113424,"data":"TP2_DISK_BAKED cuda:0 blocks.16.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":452.616453791,"data":"TP2_DISK_BAKED cuda:1 blocks.17.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":452.771794655,"data":"TP2_DISK_BAKED cuda:0 blocks.16.attn.out_proj\n"}
+,{"stream_name":"stdout","time":452.906980255,"data":"TP2_DISK_BAKED cuda:1 blocks.17.attn.out_proj\n"}
+,{"stream_name":"stdout","time":453.85454228,"data":"TP2_DISK_BAKED cuda:0 blocks.16.mlp.fc1\n"}
+,{"stream_name":"stdout","time":454.023825175,"data":"TP2_DISK_BAKED cuda:1 blocks.17.mlp.fc1\n"}
+,{"stream_name":"stdout","time":454.402742178,"data":"TP2_DISK_BAKED cuda:0 blocks.16.mlp.fc2\n"}
+,{"stream_name":"stdout","time":454.403505836,"data":"TP2_DISK_LAYER_QUEUED cuda:0 16\n"}
+,{"stream_name":"stdout","time":454.578353817,"data":"TP2_DISK_BAKED cuda:1 blocks.17.mlp.fc2\n"}
+,{"stream_name":"stdout","time":454.58016724,"data":"TP2_DISK_LAYER_QUEUED cuda:1 17\n"}
+,{"stream_name":"stdout","time":461.169692598,"data":"TP2_DISK_LAYER_DURABLE 16\n"}
+,{"stream_name":"stdout","time":461.206025617,"data":"TP2_DISK_LAYER_DURABLE 17\n"}
+,{"stream_name":"stdout","time":463.232993365,"data":"TP2_DISK_BAKED cuda:0 blocks.18.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":463.250748544,"data":"TP2_DISK_BAKED cuda:1 blocks.19.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":463.507104927,"data":"TP2_DISK_BAKED cuda:0 blocks.18.attn.out_proj\n"}
+,{"stream_name":"stdout","time":463.531299373,"data":"TP2_DISK_BAKED cuda:1 blocks.19.attn.out_proj\n"}
+,{"stream_name":"stdout","time":464.597637533,"data":"TP2_DISK_BAKED cuda:0 blocks.18.mlp.fc1\n"}
+,{"stream_name":"stdout","time":464.650919919,"data":"TP2_DISK_BAKED cuda:1 blocks.19.mlp.fc1\n"}
+,{"stream_name":"stdout","time":465.14355179,"data":"TP2_DISK_BAKED cuda:0 blocks.18.mlp.fc2\n"}
+,{"stream_name":"stdout","time":465.147048862,"data":"TP2_DISK_LAYER_QUEUED cuda:0 18\n"}
+,{"stream_name":"stdout","time":465.210492411,"data":"TP2_DISK_BAKED cuda:1 blocks.19.mlp.fc2\n"}
+,{"stream_name":"stdout","time":465.21239715,"data":"TP2_DISK_LAYER_QUEUED cuda:1 19\n"}
+,{"stream_name":"stdout","time":472.345566738,"data":"TP2_DISK_LAYER_DURABLE 19\n"}
+,{"stream_name":"stdout","time":472.510265909,"data":"TP2_DISK_LAYER_DURABLE 18\n"}
+,{"stream_name":"stdout","time":473.490145698,"data":"TP2_DISK_BAKED cuda:0 blocks.20.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":473.757930931,"data":"TP2_DISK_BAKED cuda:0 blocks.20.attn.out_proj\n"}
+,{"stream_name":"stdout","time":474.607801169,"data":"TP2_DISK_BAKED cuda:1 blocks.21.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":474.829988525,"data":"TP2_DISK_BAKED cuda:0 blocks.20.mlp.fc1\n"}
+,{"stream_name":"stdout","time":474.902553813,"data":"TP2_DISK_BAKED cuda:1 blocks.21.attn.out_proj\n"}
+,{"stream_name":"stdout","time":475.399106824,"data":"TP2_DISK_BAKED cuda:0 blocks.20.mlp.fc2\n"}
+,{"stream_name":"stdout","time":475.409310142,"data":"TP2_DISK_LAYER_QUEUED cuda:0 20\n"}
+,{"stream_name":"stdout","time":475.970340163,"data":"TP2_DISK_BAKED cuda:1 blocks.21.mlp.fc1\n"}
+,{"stream_name":"stdout","time":476.475752327,"data":"TP2_DISK_BAKED cuda:1 blocks.21.mlp.fc2\n"}
+,{"stream_name":"stdout","time":476.479403562,"data":"TP2_DISK_LAYER_QUEUED cuda:1 21\n"}
+,{"stream_name":"stdout","time":479.934530915,"data":"TP2_DISK_LAYER_DURABLE 20\n"}
+,{"stream_name":"stdout","time":481.452782436,"data":"TP2_DISK_LAYER_DURABLE 21\n"}
+,{"stream_name":"stdout","time":484.395738388,"data":"TP2_DISK_BAKED cuda:0 blocks.22.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":484.505367299,"data":"TP2_DISK_BAKED cuda:1 blocks.23.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":484.692596168,"data":"TP2_DISK_BAKED cuda:0 blocks.22.attn.out_proj\n"}
+,{"stream_name":"stdout","time":484.794501797,"data":"TP2_DISK_BAKED cuda:1 blocks.23.attn.out_proj\n"}
+,{"stream_name":"stdout","time":485.825204333,"data":"TP2_DISK_BAKED cuda:0 blocks.22.mlp.fc1\n"}
+,{"stream_name":"stdout","time":485.888486683,"data":"TP2_DISK_BAKED cuda:1 blocks.23.mlp.fc1\n"}
+,{"stream_name":"stdout","time":486.376216203,"data":"TP2_DISK_BAKED cuda:0 blocks.22.mlp.fc2\n"}
+,{"stream_name":"stdout","time":486.381168552,"data":"TP2_DISK_LAYER_QUEUED cuda:0 22\n"}
+,{"stream_name":"stdout","time":486.445184133,"data":"TP2_DISK_BAKED cuda:1 blocks.23.mlp.fc2\n"}
+,{"stream_name":"stdout","time":486.449278068,"data":"TP2_DISK_LAYER_QUEUED cuda:1 23\n"}
+,{"stream_name":"stdout","time":493.346120487,"data":"TP2_DISK_LAYER_DURABLE 23\n"}
+,{"stream_name":"stdout","time":493.380589748,"data":"TP2_DISK_LAYER_DURABLE 22\n"}
+,{"stream_name":"stdout","time":495.275325438,"data":"TP2_DISK_BAKED cuda:1 blocks.25.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":495.27930147,"data":"TP2_DISK_BAKED cuda:0 blocks.24.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":495.563338423,"data":"TP2_DISK_BAKED cuda:1 blocks.25.attn.out_proj\n"}
+,{"stream_name":"stdout","time":495.565287797,"data":"TP2_DISK_BAKED cuda:0 blocks.24.attn.out_proj\n"}
+,{"stream_name":"stdout","time":496.713481114,"data":"TP2_DISK_BAKED cuda:1 blocks.25.mlp.fc1\n"}
+,{"stream_name":"stdout","time":496.729944074,"data":"TP2_DISK_BAKED cuda:0 blocks.24.mlp.fc1\n"}
+,{"stream_name":"stdout","time":497.290875266,"data":"TP2_DISK_BAKED cuda:1 blocks.25.mlp.fc2\n"}
+,{"stream_name":"stdout","time":497.295127787,"data":"TP2_DISK_LAYER_QUEUED cuda:1 25\n"}
+,{"stream_name":"stdout","time":497.320928162,"data":"TP2_DISK_BAKED cuda:0 blocks.24.mlp.fc2\n"}
+,{"stream_name":"stdout","time":497.321025436,"data":"TP2_DISK_LAYER_QUEUED cuda:0 24\n"}
+,{"stream_name":"stdout","time":504.312774965,"data":"TP2_DISK_LAYER_DURABLE 25\n"}
+,{"stream_name":"stdout","time":504.328971885,"data":"TP2_DISK_LAYER_DURABLE 24\n"}
+,{"stream_name":"stdout","time":506.257636045,"data":"TP2_DISK_BAKED cuda:1 blocks.27.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":506.294469207,"data":"TP2_DISK_BAKED cuda:0 blocks.26.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":506.54457841,"data":"TP2_DISK_BAKED cuda:1 blocks.27.attn.out_proj\n"}
+,{"stream_name":"stdout","time":506.569717509,"data":"TP2_DISK_BAKED cuda:0 blocks.26.attn.out_proj\n"}
+,{"stream_name":"stdout","time":507.665766775,"data":"TP2_DISK_BAKED cuda:0 blocks.26.mlp.fc1\n"}
+,{"stream_name":"stdout","time":507.67187355,"data":"TP2_DISK_BAKED cuda:1 blocks.27.mlp.fc1\n"}
+,{"stream_name":"stdout","time":508.218661364,"data":"TP2_DISK_BAKED cuda:0 blocks.26.mlp.fc2\n"}
+,{"stream_name":"stdout","time":508.223793302,"data":"TP2_DISK_LAYER_QUEUED cuda:0 26\n"}
+,{"stream_name":"stdout","time":508.227600753,"data":"TP2_DISK_BAKED cuda:1 blocks.27.mlp.fc2\n"}
+,{"stream_name":"stdout","time":508.228518577,"data":"TP2_DISK_LAYER_QUEUED cuda:1 27\n"}
+,{"stream_name":"stdout","time":509.552954245,"data":"TURBO_HEARTBEAT offline_disk_bake\n"}
+,{"stream_name":"stdout","time":515.474987216,"data":"TP2_DISK_LAYER_DURABLE 27\n"}
+,{"stream_name":"stdout","time":515.480266685,"data":"TP2_DISK_LAYER_DURABLE 26\n"}
+,{"stream_name":"stdout","time":517.517820903,"data":"TP2_DISK_BAKED cuda:1 blocks.29.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":517.517868878,"data":"TP2_DISK_BAKED cuda:0 blocks.28.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":517.805774536,"data":"TP2_DISK_BAKED cuda:0 blocks.28.attn.out_proj\n"}
+,{"stream_name":"stdout","time":517.810108572,"data":"TP2_DISK_BAKED cuda:1 blocks.29.attn.out_proj\n"}
+,{"stream_name":"stdout","time":518.921144134,"data":"TP2_DISK_BAKED cuda:1 blocks.29.mlp.fc1\n"}
+,{"stream_name":"stdout","time":518.9243842,"data":"TP2_DISK_BAKED cuda:0 blocks.28.mlp.fc1\n"}
+,{"stream_name":"stdout","time":519.484995906,"data":"TP2_DISK_BAKED cuda:0 blocks.28.mlp.fc2\n"}
+,{"stream_name":"stdout","time":519.488988388,"data":"TP2_DISK_LAYER_QUEUED cuda:0 28\n"}
+,{"stream_name":"stdout","time":519.491024092,"data":"TP2_DISK_BAKED cuda:1 blocks.29.mlp.fc2\n"}
+,{"stream_name":"stdout","time":519.492966928,"data":"TP2_DISK_LAYER_QUEUED cuda:1 29\n"}
+,{"stream_name":"stdout","time":526.331321617,"data":"TP2_DISK_LAYER_DURABLE 28\n"}
+,{"stream_name":"stdout","time":526.332935316,"data":"TP2_DISK_LAYER_DURABLE 29\n"}
+,{"stream_name":"stdout","time":528.331128527,"data":"TP2_DISK_BAKED cuda:1 blocks.31.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":528.37419069,"data":"TP2_DISK_BAKED cuda:0 blocks.30.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":528.609540522,"data":"TP2_DISK_BAKED cuda:1 blocks.31.attn.out_proj\n"}
+,{"stream_name":"stdout","time":528.64952358,"data":"TP2_DISK_BAKED cuda:0 blocks.30.attn.out_proj\n"}
+,{"stream_name":"stdout","time":529.705652762,"data":"TP2_DISK_BAKED cuda:1 blocks.31.mlp.fc1\n"}
+,{"stream_name":"stdout","time":529.751848458,"data":"TP2_DISK_BAKED cuda:0 blocks.30.mlp.fc1\n"}
+,{"stream_name":"stdout","time":530.246457888,"data":"TP2_DISK_BAKED cuda:1 blocks.31.mlp.fc2\n"}
+,{"stream_name":"stdout","time":530.2490299,"data":"TP2_DISK_LAYER_QUEUED cuda:1 31\n"}
+,{"stream_name":"stdout","time":530.312459616,"data":"TP2_DISK_BAKED cuda:0 blocks.30.mlp.fc2\n"}
+,{"stream_name":"stdout","time":530.317777372,"data":"TP2_DISK_LAYER_QUEUED cuda:0 30\n"}
+,{"stream_name":"stdout","time":537.243306099,"data":"TP2_DISK_LAYER_DURABLE 31\n"}
+,{"stream_name":"stdout","time":537.25586286,"data":"TP2_DISK_LAYER_DURABLE 30\n"}
+,{"stream_name":"stdout","time":539.301588438,"data":"TP2_DISK_BAKED cuda:1 blocks.33.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":539.326804856,"data":"TP2_DISK_BAKED cuda:0 blocks.32.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":539.590659197,"data":"TP2_DISK_BAKED cuda:1 blocks.33.attn.out_proj\n"}
+,{"stream_name":"stdout","time":539.615277171,"data":"TP2_DISK_BAKED cuda:0 blocks.32.attn.out_proj\n"}
+,{"stream_name":"stdout","time":540.727134552,"data":"TP2_DISK_BAKED cuda:1 blocks.33.mlp.fc1\n"}
+,{"stream_name":"stdout","time":540.759724941,"data":"TP2_DISK_BAKED cuda:0 blocks.32.mlp.fc1\n"}
+,{"stream_name":"stdout","time":541.343012252,"data":"TP2_DISK_BAKED cuda:0 blocks.32.mlp.fc2\n"}
+,{"stream_name":"stdout","time":541.345785587,"data":"TP2_DISK_LAYER_QUEUED cuda:0 32\n"}
+,{"stream_name":"stdout","time":541.366331493,"data":"TP2_DISK_BAKED cuda:1 blocks.33.mlp.fc2\n"}
+,{"stream_name":"stdout","time":541.371114576,"data":"TP2_DISK_LAYER_QUEUED cuda:1 33\n"}
+,{"stream_name":"stdout","time":548.306402373,"data":"TP2_DISK_LAYER_DURABLE 33\n"}
+,{"stream_name":"stdout","time":548.307900946,"data":"TP2_DISK_LAYER_DURABLE 32\n"}
+,{"stream_name":"stdout","time":551.309334274,"data":"TP2_DISK_BAKED cuda:0 blocks.34.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":551.414716931,"data":"TP2_DISK_BAKED cuda:1 blocks.35.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":551.614574114,"data":"TP2_DISK_BAKED cuda:0 blocks.34.attn.out_proj\n"}
+,{"stream_name":"stdout","time":551.736553251,"data":"TP2_DISK_BAKED cuda:1 blocks.35.attn.out_proj\n"}
+,{"stream_name":"stdout","time":552.703682032,"data":"TP2_DISK_BAKED cuda:0 blocks.34.mlp.fc1\n"}
+,{"stream_name":"stdout","time":552.910821667,"data":"TP2_DISK_BAKED cuda:1 blocks.35.mlp.fc1\n"}
+,{"stream_name":"stdout","time":553.269687493,"data":"TP2_DISK_BAKED cuda:0 blocks.34.mlp.fc2\n"}
+,{"stream_name":"stdout","time":553.271935088,"data":"TP2_DISK_LAYER_QUEUED cuda:0 34\n"}
+,{"stream_name":"stdout","time":553.513102576,"data":"TP2_DISK_BAKED cuda:1 blocks.35.mlp.fc2\n"}
+,{"stream_name":"stdout","time":553.515851299,"data":"TP2_DISK_LAYER_QUEUED cuda:1 35\n"}
+,{"stream_name":"stdout","time":558.606728563,"data":"TP2_DISK_LAYER_DURABLE 34\n"}
+,{"stream_name":"stdout","time":559.825391107,"data":"TP2_DISK_LAYER_DURABLE 35\n"}
+,{"stream_name":"stdout","time":561.242703688,"data":"TP2_DISK_BAKED cuda:0 blocks.36.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":561.546860994,"data":"TP2_DISK_BAKED cuda:0 blocks.36.attn.out_proj\n"}
+,{"stream_name":"stdout","time":562.257795473,"data":"TP2_DISK_BAKED cuda:1 blocks.37.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":562.535100563,"data":"TP2_DISK_BAKED cuda:1 blocks.37.attn.out_proj\n"}
+,{"stream_name":"stdout","time":562.674958551,"data":"TP2_DISK_BAKED cuda:0 blocks.36.mlp.fc1\n"}
+,{"stream_name":"stdout","time":563.222826056,"data":"TP2_DISK_BAKED cuda:0 blocks.36.mlp.fc2\n"}
+,{"stream_name":"stdout","time":563.228149552,"data":"TP2_DISK_LAYER_QUEUED cuda:0 36\n"}
+,{"stream_name":"stdout","time":563.609403567,"data":"TP2_DISK_BAKED cuda:1 blocks.37.mlp.fc1\n"}
+,{"stream_name":"stdout","time":564.100296803,"data":"TP2_DISK_BAKED cuda:1 blocks.37.mlp.fc2\n"}
+,{"stream_name":"stdout","time":564.101440424,"data":"TP2_DISK_LAYER_QUEUED cuda:1 37\n"}
+,{"stream_name":"stdout","time":567.841430675,"data":"TP2_DISK_LAYER_DURABLE 36\n"}
+,{"stream_name":"stdout","time":569.403599239,"data":"TP2_DISK_LAYER_DURABLE 37\n"}
+,{"stream_name":"stdout","time":569.553272607,"data":"TURBO_HEARTBEAT offline_disk_bake\n"}
+,{"stream_name":"stdout","time":572.134134745,"data":"TP2_DISK_BAKED cuda:1 blocks.39.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":572.38178473,"data":"TP2_DISK_BAKED cuda:0 blocks.38.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":572.407994839,"data":"TP2_DISK_BAKED cuda:1 blocks.39.attn.out_proj\n"}
+,{"stream_name":"stdout","time":572.658116263,"data":"TP2_DISK_BAKED cuda:0 blocks.38.attn.out_proj\n"}
+,{"stream_name":"stdout","time":573.54031694,"data":"TP2_DISK_BAKED cuda:1 blocks.39.mlp.fc1\n"}
+,{"stream_name":"stdout","time":573.752066614,"data":"TP2_DISK_BAKED cuda:0 blocks.38.mlp.fc1\n"}
+,{"stream_name":"stdout","time":574.08493594,"data":"TP2_DISK_BAKED cuda:1 blocks.39.mlp.fc2\n"}
+,{"stream_name":"stdout","time":574.087238322,"data":"TP2_DISK_LAYER_QUEUED cuda:1 39\n"}
+,{"stream_name":"stdout","time":574.319535637,"data":"TP2_DISK_BAKED cuda:0 blocks.38.mlp.fc2\n"}
+,{"stream_name":"stdout","time":574.323971164,"data":"TP2_DISK_LAYER_QUEUED cuda:0 38\n"}
+,{"stream_name":"stdout","time":578.56528514,"data":"TP2_DISK_LAYER_DURABLE 39\n"}
+,{"stream_name":"stdout","time":580.108082045,"data":"TP2_DISK_LAYER_DURABLE 38\n"}
+,{"stream_name":"stdout","time":582.575710836,"data":"TP2_DISK_BAKED cuda:0 blocks.40.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":582.882754623,"data":"TP2_DISK_BAKED cuda:0 blocks.40.attn.out_proj\n"}
+,{"stream_name":"stdout","time":583.118035315,"data":"TP2_DISK_BAKED cuda:1 blocks.41.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":583.416742573,"data":"TP2_DISK_BAKED cuda:1 blocks.41.attn.out_proj\n"}
+,{"stream_name":"stdout","time":583.993553081,"data":"TP2_DISK_BAKED cuda:0 blocks.40.mlp.fc1\n"}
+,{"stream_name":"stdout","time":584.545515889,"data":"TP2_DISK_BAKED cuda:1 blocks.41.mlp.fc1\n"}
+,{"stream_name":"stdout","time":584.554143885,"data":"TP2_DISK_BAKED cuda:0 blocks.40.mlp.fc2\n"}
+,{"stream_name":"stdout","time":584.555557467,"data":"TP2_DISK_LAYER_QUEUED cuda:0 40\n"}
+,{"stream_name":"stdout","time":585.961005238,"data":"TP2_DISK_BAKED cuda:1 blocks.41.mlp.fc2\n"}
+,{"stream_name":"stdout","time":585.965159219,"data":"TP2_DISK_LAYER_QUEUED cuda:1 41\n"}
+,{"stream_name":"stdout","time":589.38392469,"data":"TP2_DISK_LAYER_DURABLE 40\n"}
+,{"stream_name":"stdout","time":590.984406635,"data":"TP2_DISK_LAYER_DURABLE 41\n"}
+,{"stream_name":"stdout","time":592.064066292,"data":"TP2_DISK_BAKED cuda:0 blocks.42.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":592.348519102,"data":"TP2_DISK_BAKED cuda:0 blocks.42.attn.out_proj\n"}
+,{"stream_name":"stdout","time":593.47073456,"data":"TP2_DISK_BAKED cuda:0 blocks.42.mlp.fc1\n"}
+,{"stream_name":"stdout","time":593.578858455,"data":"TP2_DISK_BAKED cuda:1 blocks.43.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":593.861160297,"data":"TP2_DISK_BAKED cuda:1 blocks.43.attn.out_proj\n"}
+,{"stream_name":"stdout","time":594.030293468,"data":"TP2_DISK_BAKED cuda:0 blocks.42.mlp.fc2\n"}
+,{"stream_name":"stdout","time":594.034000726,"data":"TP2_DISK_LAYER_QUEUED cuda:0 42\n"}
+,{"stream_name":"stdout","time":594.902736566,"data":"TP2_DISK_BAKED cuda:1 blocks.43.mlp.fc1\n"}
+,{"stream_name":"stdout","time":595.465733569,"data":"TP2_DISK_BAKED cuda:1 blocks.43.mlp.fc2\n"}
+,{"stream_name":"stdout","time":595.467717565,"data":"TP2_DISK_LAYER_QUEUED cuda:1 43\n"}
+,{"stream_name":"stdout","time":599.039263818,"data":"TP2_DISK_LAYER_DURABLE 42\n"}
+,{"stream_name":"stdout","time":600.239025795,"data":"TP2_DISK_LAYER_DURABLE 43\n"}
+,{"stream_name":"stdout","time":601.914118506,"data":"TP2_DISK_BAKED cuda:0 blocks.44.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":602.201445774,"data":"TP2_DISK_BAKED cuda:0 blocks.44.attn.out_proj\n"}
+,{"stream_name":"stdout","time":603.008248023,"data":"TP2_DISK_BAKED cuda:1 blocks.45.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":603.304658616,"data":"TP2_DISK_BAKED cuda:1 blocks.45.attn.out_proj\n"}
+,{"stream_name":"stdout","time":603.316512871,"data":"TP2_DISK_BAKED cuda:0 blocks.44.mlp.fc1\n"}
+,{"stream_name":"stdout","time":603.862402508,"data":"TP2_DISK_BAKED cuda:0 blocks.44.mlp.fc2\n"}
+,{"stream_name":"stdout","time":603.865897537,"data":"TP2_DISK_LAYER_QUEUED cuda:0 44\n"}
+,{"stream_name":"stdout","time":604.363572466,"data":"TP2_DISK_BAKED cuda:1 blocks.45.mlp.fc1\n"}
+,{"stream_name":"stdout","time":605.289351783,"data":"TP2_DISK_BAKED cuda:1 blocks.45.mlp.fc2\n"}
+,{"stream_name":"stdout","time":605.295102492,"data":"TP2_DISK_LAYER_QUEUED cuda:1 45\n"}
+,{"stream_name":"stdout","time":608.667614142,"data":"TP2_DISK_LAYER_DURABLE 44\n"}
+,{"stream_name":"stdout","time":609.973559518,"data":"TP2_DISK_LAYER_DURABLE 45\n"}
+,{"stream_name":"stdout","time":611.455257898,"data":"TP2_DISK_BAKED cuda:0 blocks.46.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":611.712315521,"data":"TP2_DISK_BAKED cuda:0 blocks.46.attn.out_proj\n"}
+,{"stream_name":"stdout","time":612.789899887,"data":"TP2_DISK_BAKED cuda:0 blocks.46.mlp.fc1\n"}
+,{"stream_name":"stdout","time":613.017568222,"data":"TP2_DISK_BAKED cuda:1 blocks.47.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":613.330809981,"data":"TP2_DISK_BAKED cuda:1 blocks.47.attn.out_proj\n"}
+,{"stream_name":"stdout","time":613.370915098,"data":"TP2_DISK_BAKED cuda:0 blocks.46.mlp.fc2\n"}
+,{"stream_name":"stdout","time":613.373206859,"data":"TP2_DISK_LAYER_QUEUED cuda:0 46\n"}
+,{"stream_name":"stdout","time":614.385615943,"data":"TP2_DISK_BAKED cuda:1 blocks.47.mlp.fc1\n"}
+,{"stream_name":"stdout","time":614.952731414,"data":"TP2_DISK_BAKED cuda:1 blocks.47.mlp.fc2\n"}
+,{"stream_name":"stdout","time":614.956991323,"data":"TP2_DISK_LAYER_QUEUED cuda:1 47\n"}
+,{"stream_name":"stdout","time":618.346130715,"data":"TP2_DISK_LAYER_DURABLE 46\n"}
+,{"stream_name":"stdout","time":620.162922962,"data":"TP2_DISK_LAYER_DURABLE 47\n"}
+,{"stream_name":"stdout","time":621.280703566,"data":"TP2_DISK_BAKED cuda:0 blocks.48.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":621.583776279,"data":"TP2_DISK_BAKED cuda:0 blocks.48.attn.out_proj\n"}
+,{"stream_name":"stdout","time":622.321591931,"data":"TP2_DISK_BAKED cuda:1 blocks.49.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":622.604279883,"data":"TP2_DISK_BAKED cuda:1 blocks.49.attn.out_proj\n"}
+,{"stream_name":"stdout","time":622.697805343,"data":"TP2_DISK_BAKED cuda:0 blocks.48.mlp.fc1\n"}
+,{"stream_name":"stdout","time":623.255344022,"data":"TP2_DISK_BAKED cuda:0 blocks.48.mlp.fc2\n"}
+,{"stream_name":"stdout","time":623.256703186,"data":"TP2_DISK_LAYER_QUEUED cuda:0 48\n"}
+,{"stream_name":"stdout","time":623.643933956,"data":"TP2_DISK_BAKED cuda:1 blocks.49.mlp.fc1\n"}
+,{"stream_name":"stdout","time":624.549915885,"data":"TP2_DISK_BAKED cuda:1 blocks.49.mlp.fc2\n"}
+,{"stream_name":"stdout","time":624.550740842,"data":"TP2_DISK_LAYER_QUEUED cuda:1 49\n"}
+,{"stream_name":"stdout","time":627.564178455,"data":"TP2_DISK_LAYER_DURABLE 48\n"}
+,{"stream_name":"stdout","time":628.607474692,"data":"TP2_DISK_LAYER_DURABLE 49\n"}
+,{"stream_name":"stdout","time":629.553372813,"data":"TURBO_HEARTBEAT offline_disk_bake\n"}
+,{"stream_name":"stdout","time":644.902347061,"data":"TP2_DISK_BAKED_AUX cuda:0 token_refiner.blocks.0.attn.out_proj\n"}
+,{"stream_name":"stdout","time":646.470788874,"data":"TP2_DISK_BAKED_AUX cuda:0 token_refiner.blocks.0.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":648.448345203,"data":"TP2_DISK_BAKED_AUX cuda:0 token_refiner.blocks.0.mlp.fc1\n"}
+,{"stream_name":"stdout","time":649.85632844,"data":"TP2_DISK_BAKED_AUX cuda:0 token_refiner.blocks.0.mlp.fc2\n"}
+,{"stream_name":"stdout","time":650.340729323,"data":"TP2_DISK_BAKED_AUX cuda:0 token_refiner.blocks.1.attn.out_proj\n"}
+,{"stream_name":"stdout","time":651.86750044,"data":"TP2_DISK_BAKED_AUX cuda:0 token_refiner.blocks.1.attn.qkv_proj\n"}
+,{"stream_name":"stdout","time":653.737072992,"data":"TP2_DISK_BAKED_AUX cuda:0 token_refiner.blocks.1.mlp.fc1\n"}
+,{"stream_name":"stdout","time":654.665141887,"data":"TP2_DISK_BAKED_AUX cuda:0 token_refiner.blocks.1.mlp.fc2\n"}
+,{"stream_name":"stdout","time":674.758588591,"data":"TURBO_STAGE download_te_tp2\n"}
+,{"stream_name":"stdout","time":689.56921518,"data":"TURBO_HEARTBEAT download_te_tp2\n"}
+,{"stream_name":"stdout","time":704.930815313,"data":"TP2_DOWNLOAD_VERIFIED te 10 /100\n"}
+,{"stream_name":"stdout","time":737.285578974,"data":"TP2_DOWNLOAD_VERIFIED te 20 /100\n"}
+,{"stream_name":"stdout","time":749.555939813,"data":"TURBO_HEARTBEAT download_te_tp2\n"}
+,{"stream_name":"stdout","time":765.293358228,"data":"TP2_DOWNLOAD_VERIFIED te 30 /100\n"}
+,{"stream_name":"stdout","time":790.853583207,"data":"TP2_DOWNLOAD_VERIFIED te 40 /100\n"}
+,{"stream_name":"stdout","time":809.556432805,"data":"TURBO_HEARTBEAT download_te_tp2\n"}
+,{"stream_name":"stdout","time":818.109949627,"data":"TP2_DOWNLOAD_VERIFIED te 50 /100\n"}
+,{"stream_name":"stdout","time":850.097223671,"data":"TP2_DOWNLOAD_VERIFIED te 60 /100\n"}
+,{"stream_name":"stdout","time":869.557096667,"data":"TURBO_HEARTBEAT download_te_tp2\n"}
+,{"stream_name":"stdout","time":870.508535612,"data":"TP2_DOWNLOAD_VERIFIED te 70 /100\n"}
+,{"stream_name":"stdout","time":929.57125634,"data":"TURBO_HEARTBEAT download_te_tp2\n"}
+,{"stream_name":"stdout","time":944.862223817,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":944.863500371,"data":"  File \"/kaggle/temp/h3_direct_overlay/huggingface_hub/utils/_http.py\", line 761, in hf_raise_for_status\n"}
+,{"stream_name":"stdout","time":944.864736204,"data":"    response.raise_for_status()\n"}
+,{"stream_name":"stdout","time":944.865573144,"data":"    ~~~~~~~~~~~~~~~~~~~~~~~~~^^\n"}
+,{"stream_name":"stdout","time":944.866356381,"data":"  File \"/usr/local/lib/python3.13/dist-packages/httpx/_models.py\", line 829, in raise_for_status\n"}
+,{"stream_name":"stdout","time":944.868146127,"data":"    raise HTTPStatusError(message, request=request, response=self)\n"}
+,{"stream_name":"stdout","time":944.86912834,"data":"httpx.HTTPStatusError: Server error '503 Service Unavailable' for url 'https://us.gcp.cdn.hf.co/xet-bridge-us/6aca1c91285b7e7c4d5d8eda/8ab38a348766032c6e3f7effb3855b2f56687b5bd19496941eea11a9c2a9b283?[signed-download-query-redacted]'\n"}
+,{"stream_name":"stdout","time":944.870347264,"data":"For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503\n"}
+,{"stream_name":"stdout","time":944.871311184,"data":"\n"}
+,{"stream_name":"stdout","time":944.872431796,"data":"The above exception was the direct cause of the following exception:\n"}
+,{"stream_name":"stdout","time":944.873519667,"data":"\n"}
+,{"stream_name":"stdout","time":944.874546542,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":944.875542495,"data":"  File \"/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_batch.py\", line 244, in \u003cmodule\u003e\n"}
+,{"stream_name":"stdout","time":944.876637859,"data":"    main()\n"}
+,{"stream_name":"stdout","time":944.877741419,"data":"    ~~~~^^\n"}
+,{"stream_name":"stdout","time":944.878650565,"data":"  File \"/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_batch.py\", line 219, in main\n"}
+,{"stream_name":"stdout","time":944.879704487,"data":"    te = prepare_kind('te')\n"}
+,{"stream_name":"stdout","time":944.880826945,"data":"  File \"/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_batch.py\", line 162, in prepare_kind\n"}
+,{"stream_name":"stdout","time":944.881669686,"data":"    rows.append(future.result())\n"}
+,{"stream_name":"stdout","time":944.882695151,"data":"                ~~~~~~~~~~~~~^^\n"}
+,{"stream_name":"stdout","time":944.883603988,"data":"  File \"/usr/lib/python3.13/concurrent/futures/_base.py\", line 453, in result\n"}
+,{"stream_name":"stdout","time":944.884609807,"data":"    return self.__get_result()\n"}
+,{"stream_name":"stdout","time":944.885740308,"data":"           ~~~~~~~~~~~~~~~~~^^\n"}
+,{"stream_name":"stdout","time":944.886687492,"data":"  File \"/usr/lib/python3.13/concurrent/futures/_base.py\", line 402, in __get_result\n"}
+,{"stream_name":"stdout","time":944.887668689,"data":"    raise self._exception\n"}
+,{"stream_name":"stdout","time":944.888612028,"data":"  File \"/usr/lib/python3.13/concurrent/futures/thread.py\", line 59, in run\n"}
+,{"stream_name":"stdout","time":944.889804229,"data":"    result = self.fn(*self.args, **self.kwargs)\n"}
+,{"stream_name":"stdout","time":944.890702421,"data":"  File \"/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_batch.py\", line 156, in one\n"}
+,{"stream_name":"stdout","time":944.891774222,"data":"    path = download(assets['publication']['repo'], assets['publication']['commit'], name, expected, root)\n"}
+,{"stream_name":"stdout","time":944.89288713,"data":"  File \"/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_batch.py\", line 142, in download\n"}
+,{"stream_name":"stdout","time":944.893862622,"data":"    path = Path(hf_hub_download(repo, name, revision=revision, token=False, local_dir=str(directory)))\n"}
+,{"stream_name":"stdout","time":944.894870086,"data":"                ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":944.89597241,"data":"  File \"/kaggle/temp/h3_direct_overlay/huggingface_hub/utils/_validators.py\", line 88, in _inner_fn\n"}
+,{"stream_name":"stdout","time":944.896899883,"data":"    return fn(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":944.89793952,"data":"  File \"/kaggle/temp/h3_direct_overlay/huggingface_hub/file_download.py\", line 976, in hf_hub_download\n"}
+,{"stream_name":"stdout","time":944.898987199,"data":"    return _hf_hub_download_to_local_dir(\n"}
+,{"stream_name":"stdout","time":944.900037401,"data":"        # Destination\n"}
+,{"stream_name":"stdout","time":944.901092906,"data":"    ...\u003c16 lines\u003e...\n"}
+,{"stream_name":"stdout","time":944.902312088,"data":"        dry_run=dry_run,\n"}
+,{"stream_name":"stdout","time":944.903306647,"data":"    )\n"}
+,{"stream_name":"stdout","time":944.904437998,"data":"  File \"/kaggle/temp/h3_direct_overlay/huggingface_hub/file_download.py\", line 1427, in _hf_hub_download_to_local_dir\n"}
+,{"stream_name":"stdout","time":944.905375566,"data":"    _download_to_tmp_and_move(\n"}
+,{"stream_name":"stdout","time":944.906430205,"data":"    ~~~~~~~~~~~~~~~~~~~~~~~~~^\n"}
+,{"stream_name":"stdout","time":944.907411262,"data":"        incomplete_path=paths.incomplete_path(etag),\n"}
+,{"stream_name":"stdout","time":944.908426133,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":944.90934699,"data":"    ...\u003c8 lines\u003e...\n"}
+,{"stream_name":"stdout","time":944.910475306,"data":"        tqdm_class=tqdm_class,\n"}
+,{"stream_name":"stdout","time":944.911402341,"data":"        ^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":944.912559401,"data":"    )\n"}
+,{"stream_name":"stdout","time":944.913558277,"data":"    ^\n"}
+,{"stream_name":"stdout","time":944.914579613,"data":"  File \"/kaggle/temp/h3_direct_overlay/huggingface_hub/file_download.py\", line 1858, in _download_to_tmp_and_move\n"}
+,{"stream_name":"stdout","time":944.915649013,"data":"    http_get(\n"}
+,{"stream_name":"stdout","time":944.916585367,"data":"    ~~~~~~~~^\n"}
+,{"stream_name":"stdout","time":944.917561692,"data":"        url_to_download,\n"}
+,{"stream_name":"stdout","time":944.918585036,"data":"        ^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":944.919524739,"data":"    ...\u003c4 lines\u003e...\n"}
+,{"stream_name":"stdout","time":944.920367765,"data":"        tqdm_class=tqdm_class,\n"}
+,{"stream_name":"stdout","time":944.921311653,"data":"        ^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":944.92223249,"data":"    )\n"}
+,{"stream_name":"stdout","time":944.923077634,"data":"    ^\n"}
+,{"stream_name":"stdout","time":944.923918284,"data":"  File \"/kaggle/temp/h3_direct_overlay/huggingface_hub/utils/_validators.py\", line 88, in _inner_fn\n"}
+,{"stream_name":"stdout","time":944.924810494,"data":"    return fn(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":944.925713639,"data":"  File \"/kaggle/temp/h3_direct_overlay/huggingface_hub/file_download.py\", line 379, in http_get\n"}
+,{"stream_name":"stdout","time":944.926488147,"data":"    hf_raise_for_status(response)\n"}
+,{"stream_name":"stdout","time":944.927285947,"data":"    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":944.928158582,"data":"  File \"/kaggle/temp/h3_direct_overlay/huggingface_hub/utils/_http.py\", line 877, in hf_raise_for_status\n"}
+,{"stream_name":"stdout","time":944.928943204,"data":"    raise _format(HfHubHTTPError, str(e), response) from e\n"}
+,{"stream_name":"stdout","time":944.929746898,"data":"huggingface_hub.errors.HfHubHTTPError: Server error '503 Service Unavailable' for url 'https://us.gcp.cdn.hf.co/xet-bridge-us/6aca1c91285b7e7c4d5d8eda/8ab38a348766032c6e3f7effb3855b2f56687b5bd19496941eea11a9c2a9b283?[signed-download-query-redacted]'\n"}
+,{"stream_name":"stdout","time":944.930560005,"data":"For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503\n"}
+,{"stream_name":"stdout","time":944.931366376,"data":"\n"}
+,{"stream_name":"stdout","time":944.932150891,"data":"upstream connect error or disconnect/reset before headers. reset reason: connection timeout\n"}
+,{"stream_name":"stdout","time":945.556491867,"data":"T4_SUPERVISOR_FINAL {\"status\": \"worker_exited\", \"deadline_seconds\": 7200, \"scope\": \"Notebook cell execution only; provider startup/mounting excluded\", \"worker_pid\": 98, \"exit_code\": 1, \"seconds\": 856.235149057}\n"}
+,{"stream_name":"stderr","time":946.066947175,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":946.067872208,"data":"  File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":946.067893161,"data":"    import sys;import papermill as pm;pm.execute_notebook(\"__notebook__.ipynb\",\"__notebook__.ipynb\",progress_bar=False,log_output=True,stdout_file=sys.stdout,stderr_file=sys.stderr,allow_errors=False,timeout=8100)\n"}
+,{"stream_name":"stderr","time":946.067898886,"data":"                                      ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":946.067903264,"data":"  File \"/usr/local/lib/python3.13/dist-packages/papermill/execute.py\", line 131, in execute_notebook\n"}
+,{"stream_name":"stderr","time":946.067907108,"data":"    raise_for_execution_errors(nb, output_path)\n"}
+,{"stream_name":"stderr","time":946.067910461,"data":"    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":946.067914291,"data":"  File \"/usr/local/lib/python3.13/dist-packages/papermill/execute.py\", line 251, in raise_for_execution_errors\n"}
+,{"stream_name":"stderr","time":946.067918415,"data":"    raise error\n"}
+,{"stream_name":"stderr","time":946.067922023,"data":"papermill.exceptions.PapermillExecutionError: \n"}
+,{"stream_name":"stderr","time":946.067925989,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":946.067929921,"data":"Exception encountered at \"In [1]\":\n"}
+,{"stream_name":"stderr","time":946.067933364,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":946.067937013,"data":"AssertionError                            Traceback (most recent call last)\n"}
+,{"stream_name":"stderr","time":946.067940373,"data":"/tmp/ipykernel_23/2539162284.py in \u003ccell line: 0\u003e()\n"}
+,{"stream_name":"stderr","time":946.067943905,"data":"    142     receipt['seconds']=time.monotonic()-started;save()\n"}
+,{"stream_name":"stderr","time":946.067947269,"data":"    143     print('T4_SUPERVISOR_FINAL '+json.dumps(receipt),flush=True)\n"}
+,{"stream_name":"stderr","time":946.067950635,"data":"--\u003e 144 assert json.loads(pathlib.Path('/kaggle/working/turbo_085mp_e2e/batch_results.json').read_text())['status']=='complete'\n"}
+,{"stream_name":"stderr","time":946.067970763,"data":"\n"}
+,{"stream_name":"stderr","time":946.067974063,"data":"AssertionError: \n"}
+,{"stream_name":"stderr","time":946.067977336,"data":"\n"}
+,{"stream_name":"stderr","time":949.427157254,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":949.42718603,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":949.783971833,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":949.783998681,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":950.833549968,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":950.985032599,"data":"[NbConvertApp] Writing 585357 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":953.58155064,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":954.597820095,"data":"[NbConvertApp] Writing 991055 bytes to __results__.html\n"}
+]
