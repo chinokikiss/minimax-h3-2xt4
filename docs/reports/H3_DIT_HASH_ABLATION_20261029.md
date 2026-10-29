@@ -64,3 +64,8 @@ Version 1 never reached the dedicated hash gate and did not use a GPU or fetch
 weights. Its failure is not a hash-ablation performance result. The matching
 successful CPU receipt is still required before T4 submission. No Kaggle status
 or live-log query has been made.
+
+Kaggle accepted the corrected [CPU preflight, version 2](https://www.kaggle.com/code/pamcks/h3-dit-hash-ablation-cpu-20261029).
+Retry source commit: `e1966aca5323d555cffc891de8bfff7812295987`;
+capsule SHA256: `aded869fdade8e3d55aaca455d6a17345e2dc3431514a16e625548ed7ff11316`.
+Its result is pending. No GPU experiment has been submitted for this ablation.
