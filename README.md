@@ -18,7 +18,8 @@ conditioning, sampling, and public VAE planning.
 > completed all eight steps on two T4s: 1,639.16 s foreground plus a separate
 > 365.36 s offline bake, with Temporal Video and native Audio VAE decoding.
 > Native Torch2.11.0+cu128, Kitchen0.2.37 and TileLang0.1.13 remain pinned as qualified.
-> Generation quality review remains pending; this is not a
+> User review reports semantic discontinuities and vertical shaking; generation
+> quality is not qualified. This is not a
 > controlled speedup comparison or qualification of another dependency stack.
 
 ## Start here

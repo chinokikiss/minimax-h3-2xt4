@@ -1,0 +1,251 @@
+{
+  "video_sha256": "1bb0cf23006c6a2bc6bfe54ca6a57cd51982ca5072421e5711c4bdcfe4bfc5d7",
+  "frames": 240,
+  "fps": 24,
+  "method": "Downscaled grayscale Shi-Tomasi/Lucas-Kanade tracks and RANSAC affine partial fit; dy is an estimated affine translation component, not pure camera displacement.",
+  "warnings": [
+    "Foreground motion, scale/rotation, occlusion and compression confound global motion estimates.",
+    "A single video cannot isolate TE, DiT or VAE causes.",
+    "17-frame Native chunk cadence is shared by native and Temporal planning, not unique to parallel execution."
+  ],
+  "valid_transitions": 239,
+  "phase_medians": [
+    {
+      "phase": 0,
+      "count": 14,
+      "median_abs_dy": 4.1461240264932435
+    },
+    {
+      "phase": 1,
+      "count": 15,
+      "median_abs_dy": 5.538970716894659
+    },
+    {
+      "phase": 2,
+      "count": 14,
+      "median_abs_dy": 7.330726894198986
+    },
+    {
+      "phase": 3,
+      "count": 14,
+      "median_abs_dy": 4.195849277264884
+    },
+    {
+      "phase": 4,
+      "count": 14,
+      "median_abs_dy": 5.062566550638049
+    },
+    {
+      "phase": 5,
+      "count": 14,
+      "median_abs_dy": 5.412728139181647
+    },
+    {
+      "phase": 6,
+      "count": 14,
+      "median_abs_dy": 5.921390122120483
+    },
+    {
+      "phase": 7,
+      "count": 14,
+      "median_abs_dy": 6.774940147421187
+    },
+    {
+      "phase": 8,
+      "count": 14,
+      "median_abs_dy": 4.08156070091888
+    },
+    {
+      "phase": 9,
+      "count": 14,
+      "median_abs_dy": 4.739885613721439
+    },
+    {
+      "phase": 10,
+      "count": 14,
+      "median_abs_dy": 6.206834281408646
+    },
+    {
+      "phase": 11,
+      "count": 14,
+      "median_abs_dy": 7.045370986730852
+    },
+    {
+      "phase": 12,
+      "count": 14,
+      "median_abs_dy": 3.717069207116809
+    },
+    {
+      "phase": 13,
+      "count": 14,
+      "median_abs_dy": 5.895711454729229
+    },
+    {
+      "phase": 14,
+      "count": 14,
+      "median_abs_dy": 5.402724796225225
+    },
+    {
+      "phase": 15,
+      "count": 14,
+      "median_abs_dy": 4.244999771731894
+    },
+    {
+      "phase": 16,
+      "count": 14,
+      "median_abs_dy": 4.5612620750709585
+    }
+  ],
+  "largest_vertical_components": [
+    {
+      "frame": 107,
+      "time_seconds": 4.458333333333333,
+      "decode_stride_phase": 5,
+      "dy_original_pixels": -18.306772213277235,
+      "dx_original_pixels": -3.942339368935366,
+      "inliers": 340,
+      "tracked": 431,
+      "abs_dy": 18.306772213277235
+    },
+    {
+      "frame": 192,
+      "time_seconds": 8.0,
+      "decode_stride_phase": 5,
+      "dy_original_pixels": -14.096674702687155,
+      "dx_original_pixels": -1.2340759112892659,
+      "inliers": 85,
+      "tracked": 324,
+      "abs_dy": 14.096674702687155
+    },
+    {
+      "frame": 203,
+      "time_seconds": 8.458333333333334,
+      "decode_stride_phase": 16,
+      "dy_original_pixels": 13.825940792562458,
+      "dx_original_pixels": 5.3929316959319555,
+      "inliers": 235,
+      "tracked": 470,
+      "abs_dy": 13.825940792562458
+    },
+    {
+      "frame": 205,
+      "time_seconds": 8.541666666666666,
+      "decode_stride_phase": 1,
+      "dy_original_pixels": 13.614699336196162,
+      "dx_original_pixels": 3.174415939494278,
+      "inliers": 197,
+      "tracked": 427,
+      "abs_dy": 13.614699336196162
+    },
+    {
+      "frame": 132,
+      "time_seconds": 5.5,
+      "decode_stride_phase": 13,
+      "dy_original_pixels": -13.39845169159355,
+      "dx_original_pixels": -6.767949160534376,
+      "inliers": 367,
+      "tracked": 511,
+      "abs_dy": 13.39845169159355
+    },
+    {
+      "frame": 6,
+      "time_seconds": 0.25,
+      "decode_stride_phase": 6,
+      "dy_original_pixels": -12.846470133827566,
+      "dx_original_pixels": -5.495678842770979,
+      "inliers": 533,
+      "tracked": 592,
+      "abs_dy": 12.846470133827566
+    },
+    {
+      "frame": 117,
+      "time_seconds": 4.875,
+      "decode_stride_phase": 15,
+      "dy_original_pixels": -12.480218747277902,
+      "dx_original_pixels": -2.9318020803879814,
+      "inliers": 567,
+      "tracked": 592,
+      "abs_dy": 12.480218747277902
+    },
+    {
+      "frame": 87,
+      "time_seconds": 3.625,
+      "decode_stride_phase": 2,
+      "dy_original_pixels": -12.10088846720446,
+      "dx_original_pixels": -2.5978844827589223,
+      "inliers": 560,
+      "tracked": 567,
+      "abs_dy": 12.10088846720446
+    },
+    {
+      "frame": 112,
+      "time_seconds": 4.666666666666667,
+      "decode_stride_phase": 10,
+      "dy_original_pixels": -12.017470162751428,
+      "dx_original_pixels": -0.8038289747073728,
+      "inliers": 428,
+      "tracked": 489,
+      "abs_dy": 12.017470162751428
+    },
+    {
+      "frame": 125,
+      "time_seconds": 5.208333333333333,
+      "decode_stride_phase": 6,
+      "dy_original_pixels": -11.944546558379587,
+      "dx_original_pixels": -3.0319026041423136,
+      "inliers": 473,
+      "tracked": 520,
+      "abs_dy": 11.944546558379587
+    },
+    {
+      "frame": 155,
+      "time_seconds": 6.458333333333333,
+      "decode_stride_phase": 2,
+      "dy_original_pixels": -11.46596951604043,
+      "dx_original_pixels": 2.4789300231252183,
+      "inliers": 424,
+      "tracked": 473,
+      "abs_dy": 11.46596951604043
+    },
+    {
+      "frame": 129,
+      "time_seconds": 5.375,
+      "decode_stride_phase": 10,
+      "dy_original_pixels": -11.373418105024077,
+      "dx_original_pixels": -3.3915859472595105,
+      "inliers": 515,
+      "tracked": 581,
+      "abs_dy": 11.373418105024077
+    },
+    {
+      "frame": 104,
+      "time_seconds": 4.333333333333333,
+      "decode_stride_phase": 2,
+      "dy_original_pixels": -11.234865179435259,
+      "dx_original_pixels": -9.456306117582509,
+      "inliers": 319,
+      "tracked": 388,
+      "abs_dy": 11.234865179435259
+    },
+    {
+      "frame": 102,
+      "time_seconds": 4.25,
+      "decode_stride_phase": 0,
+      "dy_original_pixels": -11.041686989652913,
+      "dx_original_pixels": -4.930721214244023,
+      "inliers": 294,
+      "tracked": 388,
+      "abs_dy": 11.041686989652913
+    },
+    {
+      "frame": 92,
+      "time_seconds": 3.8333333333333335,
+      "decode_stride_phase": 7,
+      "dy_original_pixels": -10.848731008029569,
+      "dx_original_pixels": -6.586537521983753,
+      "inliers": 501,
+      "tracked": 577,
+      "abs_dy": 10.848731008029569
+    }
+  ]
+}

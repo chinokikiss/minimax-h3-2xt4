@@ -1,0 +1,16 @@
+{
+  "review_date": "2026-10-30",
+  "source": "User qualitative review",
+  "quality_status": "not_qualified",
+  "observations": [
+    "Umbrella suddenly disappears",
+    "Cat-like animal suddenly appears",
+    "Inexplicable vertical shaking"
+  ],
+  "frame_accurate_annotations_available": false,
+  "audio_assessment_available": false,
+  "attribution": "Unresolved",
+  "te_hypothesis": "Quantization-induced causal-prefix dependence is supported by prior synthetic T4 tests; no current-workload causal mask boundary bug has been established",
+  "gpu_job_submitted": false,
+  "default_operators_changed": false
+}
