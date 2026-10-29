@@ -33,6 +33,8 @@ def resource_plan(base=None, *, header=None):
 
 
 def smoke(base, bank, output, handoff, resources, cpu_options=None):
+    # Controls must remain explicit after promoting P1 as the runtime default.
+    cpu_options=dict(future_cache=False,prefetch_refiner=False)|dict(cpu_options or {})
     import torch
     from safetensors.torch import save_file
     from comfy.nested_tensor import NestedTensor

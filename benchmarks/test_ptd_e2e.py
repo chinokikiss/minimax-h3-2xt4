@@ -60,15 +60,22 @@ class RequestContracts(unittest.TestCase):
             changed=deepcopy(bank); setattr(changed,key,value)
             with self.assertRaises(ValueError): validate_bank(changed)
 
-    def test_p1_is_optional_and_disabled_in_every_default(self):
+    def test_p1_defaults_on_and_can_be_disabled_explicitly(self):
         from benchmarks.run_ptd_e2e import ptd_options
         from patches.ptd.runtime import PTDOptions
         from patches.ptd.nodes import MiniMaxH3TP2PTDAdapter
         p=plan()
-        self.assertFalse(PTDOptions().prefetch_refiner)
-        self.assertFalse(MiniMaxH3TP2PTDAdapter.INPUT_TYPES()['optional']['prefetch_refiner'][1]['default'])
-        self.assertFalse(p['prefetch_refiner']); self.assertFalse(ptd_options(p).prefetch_refiner)
-        self.assertTrue(ptd_options(p|dict(prefetch_refiner=True)).prefetch_refiner)
+        self.assertTrue(PTDOptions().prefetch_refiner and PTDOptions().future_cache)
+        self.assertTrue(MiniMaxH3TP2PTDAdapter.INPUT_TYPES()['optional']['prefetch_refiner'][1]['default'])
+        self.assertTrue(MiniMaxH3TP2PTDAdapter.INPUT_TYPES()['optional']['future_cache'][1]['default'])
+        self.assertTrue(p['prefetch_refiner']); self.assertTrue(ptd_options(p).prefetch_refiner)
+        self.assertFalse(PTDOptions(prefetch_refiner=False).prefetch_refiner)
+        self.assertFalse(ptd_options(p|dict(prefetch_refiner=False)).prefetch_refiner)
+        with patch('patches.ptd.runtime.adapt_model',return_value=(None,None)) as adapt:
+            MiniMaxH3TP2PTDAdapter().apply(None,None,None,prefetch_refiner=False)
+            self.assertFalse(adapt.call_args.args[3].prefetch_refiner)
+        del p['prefetch_refiner']
+        self.assertTrue(ptd_options(p).prefetch_refiner)
         with self.assertRaises(ValueError): ptd_options(p|dict(prefetch_refiner='true'))
 
 

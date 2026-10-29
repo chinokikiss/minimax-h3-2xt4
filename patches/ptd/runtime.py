@@ -24,8 +24,8 @@ class PTDOptions:
     stream_weights: bool = True
     allow_fixture: bool = False
     hop_handoff: str = 'queue'
-    future_cache: bool = False
-    prefetch_refiner: bool = False
+    future_cache: bool = True
+    prefetch_refiner: bool = True
 
     def __post_init__(self):
         if any(type(value) is not bool for key,value in vars(self).items() if key != 'hop_handoff'):

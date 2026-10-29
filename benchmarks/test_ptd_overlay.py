@@ -92,7 +92,7 @@ class OverlayContracts(unittest.TestCase):
 
 
 class SurfaceContracts(unittest.TestCase):
-    def test_removed_options_are_not_exposed_and_p1_stays_off(self):
+    def test_removed_options_are_not_exposed_and_p1_can_be_disabled(self):
         from patches.ptd import bank
         from patches.ptd.runtime import PTDOptions
         from patches.ptd.nodes import MiniMaxH3TP2PTDBake,MiniMaxH3TP2PTDAdapter
@@ -101,7 +101,8 @@ class SurfaceContracts(unittest.TestCase):
             self.assertFalse(retired & set().union(*(set(v) for v in cls.INPUT_TYPES().values())))
         for function in (bank.bake,bank.disk_plan,PTDOptions):
             self.assertFalse(retired & inspect.signature(function).parameters.keys())
-        self.assertFalse(PTDOptions().prefetch_refiner)
+        self.assertTrue(PTDOptions().prefetch_refiner)
+        self.assertFalse(PTDOptions(prefetch_refiner=False).prefetch_refiner)
         with self.assertRaises(TypeError): PTDOptions(baked_refiner=True)
 
     def test_future_delivery_prunes_retired_sources_from_historical_capsules(self):

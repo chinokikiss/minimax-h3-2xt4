@@ -1,6 +1,6 @@
 # PTD P2: separate Refiner and Output Head units
 
-> Historical experiment record: the FP32 sidecar and P2 Split implementation and switches have been removed. P1 remains optional and off by default. Reproduce removed cases with their recorded immutable source snapshot. See [current cleanup](H3_PTD_RUNTIME_CLEANUP_20261029.md).
+> Historical experiment record: the FP32 sidecar and P2 Split implementation and switches have been removed. P1 remains configurable; see [current defaults and VRAM analysis](H3_DIT_VRAM_FUSION_ROI_20261029.md). Reproduce removed cases with their recorded immutable source snapshot. See [current cleanup](H3_PTD_RUNTIME_CLEANUP_20261029.md).
 
 Implemented on `codex/h3-ptd-refasymopd`, 2026-10-29. This is an optional storage/loader adaptation. Native forwards, FP16-fix folding, head arithmetic, TP2 collectives and existing defaults are preserved. The physical T4 fixture passes correctness but regresses mean latency 16.5%; see the [measured results](H3_PTD_AUXILIARY_SPLIT_T4_RESULTS_20261029.md). The format remains optional.
 

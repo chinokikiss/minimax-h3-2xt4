@@ -38,7 +38,7 @@ def main():
     assert all(hashlib.sha256(distribution[n]).hexdigest()==value for n,value in frozen.items())
     (args.output/'preservation.json').write_text(json.dumps(dict(parent_sha256=digest,
         non_ptd_runtime_files_preserved=True,native_comfyui_preserved=True,core_pins_preserved=True,
-        retired_sources_removed=list(RETIRED),ptd_cleanup=True,prefetch_refiner_default=False,
+        retired_sources_removed=list(RETIRED),ptd_cleanup=True,prefetch_refiner_default=True,
         observer_fix='Classify every RPC, including Temporal decoder',unrelated_dirty_changes_excluded=True,
         no_local_lora_download=True,credentials=False,full_pipeline_authorized=True,
         plan_sha256=hashlib.sha256(files['ptd_e2e_plan.json']).hexdigest(),frozen_sha256=frozen),indent=2))

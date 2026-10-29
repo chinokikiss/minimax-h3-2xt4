@@ -79,7 +79,7 @@ os.execve(sys.executable,argv,env)
     binding=json.loads((job/'source_binding.json').read_text(encoding='utf-8'))
     binding.update(full_pipeline=args.mode=='gpu',full_pipeline_authorized=True,production_layers=50,expert_hops=8,
         auxiliary_layout='monolithic',online_lora=False,private_references=True,credentials=False,
-        prefetch_refiner=plan.get('prefetch_refiner',False),
+        prefetch_refiner=plan.get('prefetch_refiner',True),
         request_contract=validate(plan),plan_sha256=hashlib.sha256(args.plan.read_bytes()).hexdigest(),
         execution_budget=300 if args.mode=='cpu' else 10800,
         ptd_qualification_sha256=hashlib.sha256(args.ptd_qualification.read_bytes()).hexdigest() if args.ptd_qualification else None)

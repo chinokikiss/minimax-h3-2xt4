@@ -75,14 +75,14 @@ class MiniMaxH3TP2PTDAdapter:
             'optional':{
             'expected_bank_sha256':('STRING',{'default':'',
                 'tooltip':'Trusted bank.json SHA256 from the bake receipt; empty admits the selected local manifest.'}),
-            'future_cache':('BOOLEAN',{'default':False,
+            'future_cache':('BOOLEAN',{'default':True,
                 'tooltip':'Experimental known-sequence CPU reclamation; preserves CUDA lifetime fences.'}),
-            'prefetch_refiner':('BOOLEAN',{'default':False,
-                'tooltip':'Experimental budgeted next-hop CPU refiner lane; requires future_cache.'})}}
+            'prefetch_refiner':('BOOLEAN',{'default':True,
+                'tooltip':'Budgeted next-hop CPU refiner lane; disable for the no-prefetch comparison. Requires future_cache.'})}}
 
     def apply(self,model,session,bank,enabled=False,allow_pruned_adaln=False,
               use_hop_refiner=True,use_pdd_heads=True,audio_chord_correction=True,stream_weights=True,hop_handoff='queue',
-              future_cache=False,prefetch_refiner=False,expected_bank_sha256=''):
+              future_cache=True,prefetch_refiner=True,expected_bank_sha256=''):
         from patches.ptd.runtime import PTDOptions,adapt_model
         options=PTDOptions(enabled=enabled,allow_pruned_adaln=allow_pruned_adaln,use_hop_refiner=use_hop_refiner,
             use_pdd_heads=use_pdd_heads,audio_chord_correction=audio_chord_correction,

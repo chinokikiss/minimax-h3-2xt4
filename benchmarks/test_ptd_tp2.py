@@ -199,7 +199,8 @@ class AdapterContracts(unittest.TestCase):
             reader=lambda hop,**kwargs:SimpleNamespace(identity=('fixture',hop)))
         with patch('patches.ptd.runtime.PTDBank',return_value=bank), \
                 patch('patches.ptd.runtime.tp_specs',side_effect=lambda reader,*a:[reader.identity]):
-            adapter=WorkerAdapter(runtime,'unused',PTDOptions(enabled=True,allow_pruned_adaln=True,hop_handoff='rebuild'))
+            adapter=WorkerAdapter(runtime,'unused',PTDOptions(enabled=True,allow_pruned_adaln=True,
+                hop_handoff='rebuild',future_cache=False,prefetch_refiner=False))
             self.assertEqual(runtime.readers['dit'].identity,('fixture',0))
             with self.assertRaises(ValueError):adapter.select(0,float(bank.sigmas[0]))
             runtime.sample_active=True

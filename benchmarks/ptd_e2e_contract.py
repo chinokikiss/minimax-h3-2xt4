@@ -19,7 +19,7 @@ def from_previous(previous):
         workload_contract='ptd_anime_long_8hop', sampler='ptd', scheduler='trained_ptd',
         video_shift=12., audio_shift=3., ptd_release=RELEASE,
         allow_pruned_adaln=True, auxiliary_layout='monolithic',
-        hop_handoff='queue', future_cache=True, prefetch_refiner=False,
+        hop_handoff='queue', future_cache=True, prefetch_refiner=True,
         expected_packed_tokens=59134,
         source_note='Authorized PTD E2E; original anime prompt/images/geometry/noise seed; '
                     'trained PTD clock and adapter replace Turbo/Euler. Pruned-base approximation.')
@@ -39,7 +39,7 @@ def validate(plan):
     for key, expected in dict(allow_pruned_adaln=True, future_cache=True).items():
         if plan.get(key) is not expected:
             raise ValueError('PTD requires an explicit switch: ' + key)
-    if type(plan.get('prefetch_refiner',False)) is not bool:
+    if type(plan.get('prefetch_refiner',True)) is not bool:
         raise ValueError('P1 refiner prefetch requires an explicit boolean')
     if ('turbo_lora' in plan or plan.get('lora_stack') or plan.get('ptd_release') != RELEASE
             or hashlib.sha256(plan['prompt'].encode()).hexdigest() != PROMPT_SHA

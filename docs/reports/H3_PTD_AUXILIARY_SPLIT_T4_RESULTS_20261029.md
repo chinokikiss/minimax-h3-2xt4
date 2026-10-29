@@ -1,6 +1,6 @@
 # PTD P2: physical two-T4 results
 
-> Historical experiment record: the FP32 sidecar and P2 Split implementation and switches have been removed. P1 remains optional and off by default. Reproduce removed cases with their recorded immutable source snapshot. See [current cleanup](H3_PTD_RUNTIME_CLEANUP_20261029.md).
+> Historical experiment record: the FP32 sidecar and P2 Split implementation and switches have been removed. P1 remains configurable; see [current defaults and VRAM analysis](H3_DIT_VRAM_FUSION_ROI_20261029.md). Reproduce removed cases with their recorded immutable source snapshot. See [current cleanup](H3_PTD_RUNTIME_CLEANUP_20261029.md).
 
 **Correctness and physical separation pass, but the current split loader is not a speedup.** It increases mean eight-hop RPC latency from **94.63 s to 110.22 s (+16.5%)**. Rank 1 no longer consumes refiner payloads, while rank 0's read/preparation waits grow enough to dominate execution. Keep the split format optional and preserve the existing defaults.
 

@@ -1,0 +1,15 @@
+{
+  "p1_default": true,
+  "p1_explicit_disable_tested": true,
+  "future_cache_default": true,
+  "ptd_enabled_by_default": false,
+  "existing_tests": 179,
+  "targeted_tests": 48,
+  "new_gpu_tests": 0,
+  "kaggle_interactions": 0,
+  "proposed_fusions_implemented": false,
+  "native_source_and_core_pins_preserved": true,
+  "capsule_sha256": "cbbc9ddf23351302135722d98d670941a219470ccc163f017aad35809b6ef26c",
+  "existing_e2e_submission_unchanged": true,
+  "analysis_scope": "Current TP2 source, prior physical T4 measurements and analytical buffer sizes; no new peak/speedup claim"
+}

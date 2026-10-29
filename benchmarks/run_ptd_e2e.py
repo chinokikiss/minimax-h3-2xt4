@@ -58,7 +58,7 @@ def ptd_options(config):
     from patches.ptd.runtime import PTDOptions
     validate(config)
     return PTDOptions(enabled=True,allow_pruned_adaln=True,hop_handoff='queue',
-        future_cache=config['future_cache'],prefetch_refiner=config.get('prefetch_refiner',False))
+        future_cache=config['future_cache'],prefetch_refiner=config.get('prefetch_refiner',True))
 
 
 def main():

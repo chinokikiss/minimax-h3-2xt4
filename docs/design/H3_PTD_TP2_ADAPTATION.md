@@ -129,8 +129,8 @@ not promise asynchronous DMA from pageable storage or zero idle time.
 | `audio_chord_correction` | true | False is a deliberate audio-clock ablation |
 | `hop_handoff` | queue | Persistent bounded queue; rebuild is the explicit teardown comparison |
 | `stream_weights` | true | False requests a resident **active** expert, with VRAM admission |
-| `future_cache` | false | Experimental complete-sequence CPU reclamation with consumer event protection |
-| `prefetch_refiner` | false | Experimental bounded next-hop CPU lane; requires future cache |
+| `future_cache` | true | Complete-sequence CPU reclamation with consumer event protection; prerequisite for P1 |
+| `prefetch_refiner` | true | Bounded next-hop CPU lane; can be disabled; requires future cache |
 | Sampler `enabled` | true | When false, returns connected Native sampler/sigmas by identity |
 
 Refiner/head/audio algorithmic ablations do not implement the trained PTD recipe.
@@ -205,8 +205,9 @@ dataset mount, status polling or live-log polling is required for this test.
 References: [release card](https://huggingface.co/taobao-content-ai/MiniMax-H3-PTD-RefAsymOPD-LoRAs),
 [pinned PTD inference source](https://github.com/vita-epfl/PTD-inference/tree/65e593ff0cb0e68f885caa412cdd1c4c6cb08e6b).
 
-P0 future-use reclamation and P1 refiner prefetch remain opt-in. P1 is **off by
-default** in the adapter, graph node and newly generated E2E configurations.
+P0 future-use reclamation and P1 refiner prefetch are **on by default** in the
+adapter, graph node and newly generated E2E configurations. Set
+`prefetch_refiner=False` to disable P1. Disable both for the rebuild control.
 Its physical fixture improved mean RPC latency but worsened maximum hop time;
 see the [measured results](../reports/H3_PTD_CPU_SCHEDULING_T4_RESULTS_20261029.md).
 
@@ -217,3 +218,6 @@ launch paths were removed at the user's request; the historical measurements,
 submitted capsules and receipts remain as experiment records. Old Split banks
 require their archived runtime or a new monolithic bake. See the
 [cleanup and validation record](../reports/H3_PTD_RUNTIME_CLEANUP_20261029.md).
+
+The subsequent user-requested P1 promotion and remaining DiT memory priorities
+are recorded in the [VRAM fusion/lifetime analysis](../reports/H3_DIT_VRAM_FUSION_ROI_20261029.md).

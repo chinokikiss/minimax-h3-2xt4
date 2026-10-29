@@ -1,4 +1,9 @@
-# PTD cleanup: original overlays; P1 remains optional
+# PTD cleanup: original overlays; P1 remains configurable
+
+Follow-up: the user subsequently requested P1 **on by default with an off
+switch**. That promotion supersedes the off-default decision recorded below;
+Sidecar/Split removal remains in force. See the
+[current defaults and DiT memory analysis](H3_DIT_VRAM_FUSION_ROI_20261029.md).
 
 The FP32 refiner sidecar and P2 auxiliary Split implementation have been removed
 from active source at the user's request. P1 next-hop CPU refiner prefetch
