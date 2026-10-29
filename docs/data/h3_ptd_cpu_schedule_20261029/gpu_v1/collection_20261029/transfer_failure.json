@@ -1,0 +1,11 @@
+{
+  "result_available": false,
+  "files_received": 0,
+  "experiment_status": "unverified",
+  "failure": "SSL UNEXPECTED_EOF_WHILE_READING contacting api.kaggle.com",
+  "artifact_download_attempts": 2,
+  "second_attempt": "One bounded transport-only retry after SSL EOF; same final artifacts, no resubmission",
+  "status_or_live_log_polling": false,
+  "further_automatic_requests": false,
+  "credentials_error_observed": false
+}

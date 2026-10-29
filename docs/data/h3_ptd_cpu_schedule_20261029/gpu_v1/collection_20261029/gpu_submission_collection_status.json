@@ -1,0 +1,11 @@
+{
+  "status": "final_outputs_unavailable",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-ptd-cpu-schedule-t4-20261029",
+  "output": "D:\\attention_eval\\h3_ptd_cpu_schedule_20261029\\gpu_retry_v1\\gpu_final",
+  "returncode": 1,
+  "files": 0,
+  "completed_utc": "2026-10-29T02:36:57.857318+00:00",
+  "transport_attempts": 2,
+  "transport_retry_reason": "SSL EOF before any final artifact arrived"
+}
