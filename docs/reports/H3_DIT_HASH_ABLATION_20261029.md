@@ -44,3 +44,5 @@ Local conda CPU regression: 207 passed, no failures/errors/skips. The extracted 
 `benchmarks/build_dit_hash_job.py` requires a matching Kaggle CPU setup and experiment receipt before GPU submission. The CPU job has a 600-second setup watchdog and 180-second contract watchdog. The T4 experiment has a 2400-second execution watchdog and 3300-second provider limit, zero dataset/output mounts, no credentials and no status polling. Artifact transfer may be retried under the repository's existing policy.
 
 Local evidence: `D:\attention_eval\h3_dit_hash_ablation_20261029\`. Final T4 results and the default-policy decision remain pending.
+
+Kaggle accepted the [CPU preflight, version 1](https://www.kaggle.com/code/pamcks/h3-dit-hash-ablation-cpu-20261029). Immutable source commit: `e1093f1c3c9aeba12d9d0f42d5b47815d8d7f268`; capsule SHA256: `1246b03ba71c886884d39b0cc91d5c18ce0f255efeb7ed63239ee6327b155e09`. No Kaggle status query or GPU submission has been made for this ablation yet. The matching successful CPU receipt is required before the prepared T4 job can be submitted.
