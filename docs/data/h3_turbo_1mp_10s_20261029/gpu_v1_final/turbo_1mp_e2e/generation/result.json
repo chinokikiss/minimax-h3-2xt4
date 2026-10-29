@@ -1,0 +1,208 @@
+{
+  "status": "failed",
+  "config": {
+    "width": 1344,
+    "height": 768,
+    "frames": 243,
+    "fps": 24,
+    "steps": 8,
+    "sampler": "euler",
+    "scheduler": "simple",
+    "cfg": 1.0,
+    "video_shift": 6.0,
+    "audio_shift": 3.0,
+    "seed": 20261020,
+    "offline_lora": true,
+    "disk_baked_lora": true,
+    "name": "turbo_1mp_10s",
+    "workload_contract": "turbo_1mp_10s",
+    "model": "MiniMax-H3 Ref2VA",
+    "base_weights": "cnmds/minimax-h3-tp2-int8-561a6211",
+    "negative_prompt": "",
+    "turbo_lora": {
+      "repository": "lightx2v/Minimax-h3-Turbo",
+      "revision": "30f485ed874aa44c8183348ad361c5eabad318da",
+      "file": "minimax_h3_ref2v_turbo_8step_v1.0_768p_comfyui_bf16.safetensors",
+      "bytes": 1956193000,
+      "sha256": "6a56f41ab4229c9dd845b9501bbd475ee57e112d846cf2e819d534a1ae928c5a",
+      "strength": 1.0,
+      "targets": 208
+    },
+    "prompt": "subject_definitions\n\n<Subject 1> is the beautiful anime girl depicted in <Picture 1>, with long flowing purple hair, delicate violet eyes, a traditional pale-colored Japanese kimono, and a red Japanese paper umbrella. Preserve her facial features, hairstyle, clothing, proportions, and artistic identity throughout the video.\n\n<Subject 2> is the traditional Japanese shrine environment depicted in <Picture 2>, surrounded by dense forests, ancient stone pathways, wooden shrine buildings, moss-covered rocks, and distant mountains.\n\n<Subject 3> is a small supernatural white fox spirit with glowing golden markings, soft white fur, expressive ears, and a faint luminous aura.\n\nsummary\n\nCreate a continuous 10-second cinematic Japanese anime fantasy sequence.\n\nDuring a peaceful spring afternoon, a young shrine maiden walks through a beautiful forest shrine surrounded by falling cherry blossom petals.\n\nA mysterious glowing white fox spirit appears near the shrine. The girl notices the spirit, turns toward it, and watches as it gracefully circles around her.\n\nThe sequence features beautiful hand-painted Japanese anime aesthetics, fluid character animation, expressive facial acting, atmospheric perspective, detailed backgrounds, and elegant cinematic camera movements.\n\nreference_retention\n\n<Picture 1>: Preserve the girl\u2019s visual identity, hairstyle, facial characteristics, traditional clothing, accessories, and anime illustration style.\n\n<Picture 2>: Preserve the traditional wooden architecture, forest composition, mountain scenery, stone pathways, and natural atmosphere.\n\nBoth references should be integrated into a consistent 2D Japanese anime visual style.\n\ndetailed_description\n\n[00:00\u201300:03]\n\nA peaceful Japanese shrine surrounded by blooming cherry blossom trees.\n\nWarm afternoon sunlight filters through the branches, casting moving shadows across an ancient stone pathway.\n\n<Subject 1> walks slowly toward the shrine, holding her red Japanese umbrella.\n\nThe camera smoothly tracks her from a three-quarter frontal perspective.\n\nHer long purple hair sways naturally with each step. The sleeves and hem of her kimono respond to her movements and the gentle spring breeze.\n\nPink cherry blossom petals drift through the air at different depths.\n\n[00:03\u201300:06]\n\nA faint golden light emerges from behind a moss-covered stone lantern.\n\nThe girl notices the light and gradually stops walking.\n\nThe camera smoothly moves around her shoulder, revealing a small glowing white fox spirit <Subject 3> standing on the pathway.\n\nThe fox tilts its head curiously, flicks its ears, and takes several delicate steps toward the girl.\n\nShe gently lowers her umbrella and turns toward the fox with a surprised but warm expression.\n\nHer eyes follow the fox\u2019s movements.\n\nSoft sunlight illuminates the edges of her flowing hair.\n\n[00:06\u201300:10.125]\n\nThe white fox spirit suddenly leaps gracefully into the air.\n\nIts body dissolves into a flowing trail of golden magical particles before reforming above the girl\u2019s shoulder.\n\nThe camera performs a smooth cinematic orbit around the girl.\n\nThe magical fox circles around her, leaving behind delicate glowing trails among the falling cherry blossoms.\n\nThe girl raises one hand toward the floating spirit.\n\nHer sleeves and long hair respond naturally to the movement.\n\nThe fox briefly touches her fingertips with its nose.\n\nA soft golden light spreads across her face, and she smiles gently.\n\nThe camera slowly pushes closer as the fox floats upward into the cherry blossom canopy.\n\nMaintain continuous spatial geometry, natural movement, and consistent character identity throughout the sequence.\n\nvisual_style\n\nTraditional Japanese 2D anime animation, detailed hand-painted backgrounds, soft watercolor-inspired environmental shading, clean character linework, expressive eyes, natural cloth and hair dynamics, rich pastel colors, delicate cherry blossom particles, warm afternoon lighting, and smooth cinematic camera movement.\n\nSingle continuous shot without cuts.\n\nNo futuristic architecture, cyberpunk elements, modern technology, or photorealistic character rendering.\n\noverall_soundscape\n\nGentle spring wind moving through the trees, soft footsteps on the stone pathway, subtle rustling of kimono fabric, distant birds singing, and delicate magical shimmering synchronized with the fox spirit\u2019s movements.\n\nNo dialogue.\n\nnon_diegetic_music\n\nGentle Japanese fantasy anime orchestral music featuring soft piano, traditional Japanese flute, delicate strings, and subtle atmospheric textures.\n\nThe music gradually builds during the fox spirit\u2019s appearance and resolves into a peaceful emotional ending.",
+    "prompt_sha256": "e2ebe6a75563a0184ef5fa99299acef24ee3170855774761c44d6714fb2f7754",
+    "reference_images": [
+      {
+        "file": "reference_character.jpg",
+        "url": "https://dthezntil550i.cloudfront.net/1h/latest/1h2106242105027740014340778/1280_960/cb246f62-8fcd-47b3-b585-99ffe6313002.jpg",
+        "source_page": "https://medibang.com/picture/1h2106242105027740014340778/",
+        "bytes": 317018,
+        "sha256": "e5b1710572f2587f7927e65b9e5f8f742bc435ca388ae23a16880fa6bf542383",
+        "size": [
+          1280,
+          905
+        ]
+      },
+      {
+        "file": "reference_shrine.png",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Algorithmically-generated_landscape_artwork_of_forest_with_Shinto_shrine.png",
+        "source_page": "https://commons.wikimedia.org/wiki/File:Algorithmically-generated_landscape_artwork_of_forest_with_Shinto_shrine.png",
+        "bytes": 7703256,
+        "sha256": "cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03",
+        "size": [
+          4096,
+          2048
+        ]
+      }
+    ],
+    "ref_image_size": "match",
+    "duration_seconds": 10.125,
+    "source_request_sha256": "55e51da34987f0e846114daebe37de39971f0aa31f0e2af3387f6ae9b9bed5d9",
+    "operators": "current promoted defaults",
+    "source_note": "One authorized regular Turbo 1MP challenge; same anime prompt/references/seed, offline disk bake, current production defaults, no PTD or online LoRA",
+    "export_frames": 240,
+    "export_audio_samples": 320000,
+    "export_duration_seconds": 10.0,
+    "paths": {
+      "te": "/tmp/h3_turbo_1mp_10s_20261029/te_bundle.json",
+      "dit": "/tmp/h3_turbo_1mp_10s_20261029/baked_tp2/dit_baked.json",
+      "video": "/tmp/h3_turbo_1mp_10s_20261029/vaes/vae/minimax_h3_video_vae_int8_convrot.safetensors",
+      "audio": "/tmp/h3_turbo_1mp_10s_20261029/vaes/vae/minimax_h3_audio_vae_fp32.safetensors"
+    },
+    "images": [
+      "/kaggle/temp/h3_light_source/bench_assets/l1_current/reference_character.jpg",
+      "/kaggle/temp/h3_light_source/bench_assets/l1_current/reference_shrine.png"
+    ],
+    "output": "/kaggle/working/turbo_1mp_e2e/generation",
+    "lora_stack": []
+  },
+  "stages": {
+    "vae_metadata": {
+      "start_ns": 1299176248796,
+      "end_ns": 1299639605983,
+      "status": "complete"
+    },
+    "reference_and_TE": {
+      "start_ns": 1299640310747,
+      "end_ns": 1465358193012,
+      "status": "complete"
+    },
+    "sampler": {
+      "start_ns": 1465925845499,
+      "end_ns": 1539986905141,
+      "status": "failed"
+    }
+  },
+  "denoiser_outputs": [],
+  "sampler_steps": [],
+  "runtime": {
+    "te_path": "/tmp/h3_turbo_1mp_10s_20261029/te_bundle.json",
+    "dit_path": "/tmp/h3_turbo_1mp_10s_20261029/baked_tp2/dit_baked.json",
+    "layers": 50,
+    "weight_bytes": 6442450944,
+    "pinned_bytes": 6442450944,
+    "cache_bytes": 3221225472,
+    "host_bytes": 17179869184,
+    "reserve_bytes": 9663676416,
+    "timeout_seconds": 1500,
+    "te_weight_bytes": null,
+    "cpu_lookahead": 16,
+    "gpu_lookahead": 2,
+    "cross_request_te": true,
+    "rank_checkpoint_dir": null,
+    "cross_model_cpu": true,
+    "prefetch_lifecycle": true,
+    "memory_pressure_aware": true,
+    "decode_te_blocks": 2,
+    "idle_residency": false,
+    "idle_weight_bytes": 4294967296,
+    "idle_reserve_bytes": 4294967296,
+    "idle_delay_seconds": 0.25,
+    "lora_stack": [],
+    "lora_signature": [],
+    "lora_row_partial_reduce": true,
+    "operators": {
+      "te_attention": "kitchen_causal",
+      "dit_attention": "kitchen",
+      "row_linear_backend": "tilelang_scaled_fp16",
+      "scalar_score_workspace_mib": 96,
+      "fc2_quantizer": "fused_stored",
+      "column_linear_backend": "cuda_int8_tilelang",
+      "dit_rms_rope": "tilelang_fp32",
+      "aot_precompile": true,
+      "dit_fused_norm": true,
+      "dit_fused_gate": true,
+      "dit_fused_row_gate": true,
+      "dit_prepared_attention": true
+    },
+    "adaptive_lookahead": true,
+    "tensor_flow": {
+      "mode": "fp16",
+      "residual_exponent": 6,
+      "vision_residual_exponent": 0,
+      "video_residual_exponent": 0
+    },
+    "video_decode_reserve_bytes": 2147483648,
+    "bundle_offline_lora": false,
+    "lora_selective_qkv_b": true,
+    "verify_dit_weights": false
+  },
+  "setup_seconds": 11.881589609999992,
+  "trigger_ns": 1299175728037,
+  "vae_before_sampling": {
+    "video": {
+      "stage": "encode",
+      "read_bytes": 360747328
+    },
+    "audio": {
+      "stage": null,
+      "read_bytes": 0
+    }
+  },
+  "inputs": {
+    "conditioning": {
+      "shape": [
+        1,
+        2908,
+        5120
+      ],
+      "dtype": "torch.float32",
+      "sha256": "bd03acd88bd5f82d607b894e4e55c67bdd8de05b9fdbf4f18d447ba386e62c9d",
+      "finite": true
+    },
+    "noise_0": {
+      "shape": [
+        1,
+        24,
+        72,
+        48,
+        84
+      ],
+      "dtype": "torch.float32",
+      "sha256": "765e0e1c3970c55cf320d2808e989d165989ebc9904e491459fcb87c9521fe73",
+      "finite": true
+    },
+    "noise_1": {
+      "shape": [
+        1,
+        32,
+        2,
+        405
+      ],
+      "dtype": "torch.float32",
+      "sha256": "ea726d4218e88461bad5ce3dd46b0a5f1947a6225dd7e8d07de01afd8ecc6edb",
+      "finite": true
+    }
+  },
+  "sigmas": [
+    1.0,
+    0.9882352948188782,
+    0.9729729890823364,
+    0.9523809552192688,
+    0.9230769276618958,
+    0.8780487775802612,
+    0.800000011920929,
+    0.6315789222717285,
+    0.0
+  ],
+  "error": "RuntimeError('Traceback (most recent call last):\\n  File \"/kaggle/temp/h3_light_source/patches/comfy_tp_runtime.py\", line 686, in _worker\\n    result = runtime.dispatch(command, args, kwargs)\\n  File \"/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_e2e.py\", line 49, in dispatch\\n    result=super().dispatch(command,args,kwargs)\\n  File \"/kaggle/temp/h3_light_source/benchmarks/ref2va_e2e_run.py\", line 198, in dispatch\\n    result = super().dispatch(command, args, kwargs)\\n  File \"/kaggle/temp/h3_light_source/patches/comfy_tp_runtime.py\", line 587, in dispatch\\n    return self.model(*args, **kwargs)\\n           ~~~~~~~~~~^^^^^^^^^^^^^^^^^\\n  File \"/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py\", line 1779, in _wrapped_call_impl\\n    return self._call_impl(*args, **kwargs)\\n           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\\n  File \"/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py\", line 1790, in _call_impl\\n    return forward_call(*args, **kwargs)\\n  File \"/kaggle/temp/h3_light_source/ComfyUI/comfy/ldm/minimax/model.py\", line 621, in forward\\n    graph_out = comfy.patcher_extension.WrapperExecutor.new_class_executor(\\n    ...<2 lines>...\\n        comfy.patcher_extension.get_all_wrappers(comfy.patcher_extension.WrappersMP.DIFFUSION_MODEL, transformer_options)\\n    ).execute(x, timestep, context, transformer_options, minimax_payload=minimax_payload,\\n              denoise_mask=denoise_mask, audio_denoise_mask=audio_denoise_mask, **kwargs)\\n  File \"/kaggle/temp/h3_light_source/ComfyUI/comfy/patcher_extension.py\", line 113, in execute\\n    return self.original(*args, **kwargs)\\n           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\\n  File \"/kaggle/temp/h3_light_source/ComfyUI/comfy/ldm/minimax/model.py\", line 770, in _forward\\n    h = block(h, t_emb, mod_segments, rope_freqs, transformer_options=transformer_options)\\n  File \"/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py\", line 1779, in _wrapped_call_impl\\n    return self._call_impl(*args, **kwargs)\\n           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\\n  File \"/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py\", line 1790, in _call_impl\\n    return forward_call(*args, **kwargs)\\n  File \"/kaggle/temp/h3_light_source/patches/windowed_tp.py\", line 213, in forward\\n    return block(x, *args, **kwargs)\\n  File \"/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py\", line 1779, in _wrapped_call_impl\\n    return self._call_impl(*args, **kwargs)\\n           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\\n  File \"/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py\", line 1790, in _call_impl\\n    return forward_call(*args, **kwargs)\\n  File \"/kaggle/temp/h3_light_source/patches/tp_dit.py\", line 315, in forward\\n    x=self.out_proj(attn_out,reduce_sum=True,residual=x,gate=gate_msa,segments=mod_segments)\\n  File \"/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py\", line 1779, in _wrapped_call_impl\\n    return self._call_impl(*args, **kwargs)\\n           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\\n  File \"/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py\", line 1790, in _call_impl\\n    return forward_call(*args, **kwargs)\\n  File \"/kaggle/temp/h3_light_source/patches/tp_dit.py\", line 135, in forward\\n    out=dispatch_row(self,x,row_linear,dist,input_act)\\n  File \"/kaggle/temp/h3_light_source/patches/h3_operator_policy.py\", line 157, in row_linear\\n    return run(*args)\\n  File \"/kaggle/temp/h3_light_source/patches/tilelang_transport_p2.py\", line 114, in row_linear\\n    q,scale=prepare.global_row_quantize(x,comm,world_size,groupsize,input_act,variant=\\'packed\\')\\n            ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"/kaggle/temp/h3_light_source/patches/tilelang_swiglu_pad.py\", line 107, in global_row_quantize\\n    return previous.global_row_quantize(x,comm,world_size,groupsize,input_act,variant)\\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"/kaggle/temp/h3_light_source/patches/tilelang_row_quant.py\", line 103, in global_row_quantize\\n    rotated = backend._rotate_activation(padded, h, groupsize)\\n  File \"/kaggle/temp/h3_direct_overlay/comfy_kitchen/tensor/int8_utils.py\", line 72, in _rotate_activation\\n    x_rotated = torch.matmul(x_grouped, h)\\ntorch.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.09 GiB. GPU 0 has a total capacity of 14.56 GiB of which 1.75 GiB is free. Process 135 has 570.00 MiB memory in use. Including non-PyTorch memory, this process has 12.25 GiB memory in use. Of the allocated memory 9.47 GiB is allocated by PyTorch, and 2.55 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)\\n')"
+}

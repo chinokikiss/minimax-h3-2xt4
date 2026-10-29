@@ -1,0 +1,98 @@
+{
+  "h3-turbo-1mp-10s-t4-20261029.log": {
+    "bytes": 45180,
+    "sha256": "08354be4eeaef729977de67e5588fb7a3a8b711ae782e6876ed40219b1f49062"
+  },
+  "light_setup\\api_probe.log": {
+    "bytes": 1420,
+    "sha256": "16401c525113952b9f12881dd4803be748019d8aa892a98da31d95f79f04a26d"
+  },
+  "light_setup\\bounded_worker.py": {
+    "bytes": 1925,
+    "sha256": "bea3b9742f63f13068f538c1798912bb8b693e93eb9a3ef9d2a14ecfe4c698dd"
+  },
+  "light_setup\\cpu_qualification.json": {
+    "bytes": 123443,
+    "sha256": "0577fced71e7f5c85601d37bb55d5c91a975ddf886181ba3b54791d8019e7cdf"
+  },
+  "light_setup\\delivery_binding.json": {
+    "bytes": 629,
+    "sha256": "d52e2a8bccc1536beb0c5b1a26ff9a4cf34f63a75f980fdab8fce3f78cba5b30"
+  },
+  "light_setup\\direct-core.txt": {
+    "bytes": 5811,
+    "sha256": "f67dca5cc9543d06bcca19426bda0914306d6e143f8712037e84ee54f30e8eee"
+  },
+  "light_setup\\direct_pip.log": {
+    "bytes": 15666,
+    "sha256": "42a71e7b2241a60bd6b89f59d039bf592b15b3eafe786acbfc720efeb88911b3"
+  },
+  "light_setup\\execution_env.json": {
+    "bytes": 449,
+    "sha256": "53f8cbaa42b4a30ef25583746477a1d1570f37b3f30affd13d09ffcec0dd7911"
+  },
+  "light_setup\\notebook_worker.log": {
+    "bytes": 211,
+    "sha256": "a236037b442479f19c7968c83a44398e1f9c04babd0ba7e40eb7071543ebf739"
+  },
+  "light_setup\\runtime_profile.json": {
+    "bytes": 27855,
+    "sha256": "fb2c2512300010c032bc9c2a3dc28f2e534102c9fb89171861508158e03af13f"
+  },
+  "light_setup\\setup_receipt.json": {
+    "bytes": 132517,
+    "sha256": "e8fd995e8277cc931a3e43fb473eb7848dd67c0f48996995424122b44fb3f596"
+  },
+  "light_setup\\supervision.json": {
+    "bytes": 207,
+    "sha256": "08961dc01272714437ee2334266736a3567938b09fc4bfa49897ca6e0b45877a"
+  },
+  "turbo_1mp_e2e\\batch_results.json": {
+    "bytes": 45581,
+    "sha256": "3349033224bfd577f710137725be044c6e9e80abc34d1bfabf0ac657bc692a48"
+  },
+  "turbo_1mp_e2e\\exception.txt": {
+    "bytes": 675,
+    "sha256": "e684a01399af327e4a0156269a1aa5cb25f8ee9af856910d060ae13aae1a4cf2"
+  },
+  "turbo_1mp_e2e\\full_e2e.log": {
+    "bytes": 30517,
+    "sha256": "c3375446dac572e3458317e935776073c4bbfb71417f4f223526b2f0a6d746b7"
+  },
+  "turbo_1mp_e2e\\offline_disk_bake.log": {
+    "bytes": 12648,
+    "sha256": "742d017230803188a99743f1a94f62b2c5d6ef3a2baaaf2951aec50899f1a679"
+  },
+  "turbo_1mp_e2e\\offline_disk_bake_receipt.json": {
+    "bytes": 664611,
+    "sha256": "a2f452fdb4b7c29bae52efd94599e57d94b4b9164e553fc1932c1dcdfcaed3fb"
+  },
+  "turbo_1mp_e2e\\request_config.json": {
+    "bytes": 7701,
+    "sha256": "1c2840ceb82d9ca8d9142da7cfacf33341e6ad8f100083e691f644b2b12389c6"
+  },
+  "turbo_1mp_e2e\\generation\\exception.txt": {
+    "bytes": 12146,
+    "sha256": "ffb95b1e1129ce5e90bf56d3f2387d77bada99d192e00f833119db4b7ccac0c4"
+  },
+  "turbo_1mp_e2e\\generation\\memory_samples.json.gz": {
+    "bytes": 46125,
+    "sha256": "d19ed68f6b21bb3ca456cc69e563e0a5eae5fb1cadacf17941da3bbef2c0a7c8"
+  },
+  "turbo_1mp_e2e\\generation\\result.json": {
+    "bytes": 16262,
+    "sha256": "85113a2a765a894391b225e761026dc7e4c27f46a2a1f0f360b9d02e6f682a2a"
+  },
+  "turbo_challenge_supervision\\bounded_worker.py": {
+    "bytes": 510,
+    "sha256": "fc975bc610b51a77c25d44dd4f58f55adeb2c252ffa6451708110e6761171218"
+  },
+  "turbo_challenge_supervision\\notebook_worker.log": {
+    "bytes": 16248,
+    "sha256": "998fb6beed84d31cba29ec8e485eb2739ff3a9a738a7ee66674731687abf4595"
+  },
+  "turbo_challenge_supervision\\supervision.json": {
+    "bytes": 209,
+    "sha256": "fb78ea1925232410d7f01b5d1563eed8467e6c1963bb7609a5fbbb3683085620"
+  }
+}

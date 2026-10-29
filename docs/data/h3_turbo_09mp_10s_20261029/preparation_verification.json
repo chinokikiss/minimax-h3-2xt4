@@ -1,0 +1,7 @@
+{
+  "status": "verified",
+  "source_capsule_sha256": "21abe7dd91f284eed9626bb018c6abf66adf1c066b2f76662d72ce53d46d41a1",
+  "failed_gpu_artifact_hashes_match": true,
+  "files": 24,
+  "new_cpu_smoke_run": false
+}

@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_batch.py", line 228, in main
+    run([sys.executable, '-u', str(source / 'benchmarks/run_h3_l1_turbo_e2e.py'),
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+         '--config', str(output / 'request_config.json')], 'full_e2e', args.e2e_timeout)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_batch.py", line 83, in run
+    raise RuntimeError(label + ' failed; see saved stage log')
+RuntimeError: full_e2e failed; see saved stage log

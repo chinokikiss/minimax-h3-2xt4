@@ -89,7 +89,7 @@ os.execve(sys.executable,argv,env)
     nb['cells'][0]['source']=code.splitlines(keepends=True);nbpath.write_text(json.dumps(nb),encoding='utf-8')
     assert nbpath.stat().st_size<9_900_000
     meta=json.loads((job/'kernel-metadata.json').read_text())
-    meta.update(id='pamcks/h3-turbo-09mp-10s-t4-20261029',title='H3 Turbo 0.9MP 10s T4 20261029')
+    meta.update(id='pamcks/h3-turbo-0-9mp-10s-t4-20261029',title='H3 Turbo 0.9MP 10s T4 20261029')
     assert meta['is_private'] and meta['dataset_sources']==meta['kernel_sources']==[]
     (job/'kernel-metadata.json').write_text(json.dumps(meta,indent=2))
     binding=json.loads((job/'source_binding.json').read_text())
@@ -111,8 +111,8 @@ os.execve(sys.executable,argv,env)
         state.update(status='accepted' if process.returncode==0 else 'acceptance_uncertain',returncode=process.returncode)
         match=re.search(r'Kernel version (\d+)',output)
         if match:state['version']=int(match.group(1))
-        match=re.search(r'https://www\.kaggle\.com/code/[\w-]+/[\w-]+',output)
-        if match:state['url']=match.group(0)
+        match=re.search(r'https://www\.kaggle\.com/code/([\w-]+/[\w-]+)',output)
+        if match:state.update(requested_kernel=state['kernel'],kernel=match.group(1),url=match.group(0))
     except subprocess.TimeoutExpired:
         output='Acknowledgement timeout; preserve claim, do not retry automatically.'
         state.update(status='acceptance_uncertain',returncode=-1)

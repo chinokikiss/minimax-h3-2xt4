@@ -1,0 +1,7 @@
+{
+  "accepted_kernel": "pamcks/h3-turbo-0-9mp-10s-t4-20261029",
+  "version": 1,
+  "benchmark_overlay_payload_verified": true,
+  "new_cpu_smoke_run": false,
+  "source_qualification_reused": true
+}
