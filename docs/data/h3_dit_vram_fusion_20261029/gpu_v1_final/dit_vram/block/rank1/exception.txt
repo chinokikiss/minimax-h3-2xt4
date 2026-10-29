@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/kaggle/temp/h3_light_source/benchmarks/run_dit_vram_case.py", line 343, in main
+    run(args.section,block,device,barrier,dist,out,state)
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/kaggle/temp/h3_light_source/benchmarks/run_dit_vram_case.py", line 268, in run
+    value=fn();state['errors'][name]=compare(value,reference);del value
+  File "/kaggle/temp/h3_light_source/benchmarks/run_dit_vram_case.py", line 264, in <lambda>
+    functions={name:(lambda n=name:candidate.forward(block,x.clone(),time_embedding,segments,freqs,labels,n))
+                                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/kaggle/temp/h3_light_source/benchmarks/dit_vram_candidates.py", line 144, in forward
+    with stage('gate1'):x=add(x,gm,branch);del branch
+                          ~~~^^^^^^^^^^^^^
+  File "/kaggle/temp/h3_light_source/benchmarks/dit_vram_candidates.py", line 113, in <lambda>
+    add=(lambda x,g,b:fused.gate(x,g,b,labels)) if fusion else lambda x,g,b:gated_add(x,g,b,segments)
+                      ~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/kaggle/temp/h3_light_source/benchmarks/dit_vram_kernels.py", line 112, in gate
+    raise ValueError('Matching contiguous FP16 branch required')
+ValueError: Matching contiguous FP16 branch required

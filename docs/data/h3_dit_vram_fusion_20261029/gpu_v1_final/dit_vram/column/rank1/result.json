@@ -1,0 +1,336 @@
+{
+  "status": "complete",
+  "section": "column",
+  "rank": 1,
+  "hardware": {
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "name": "Tesla T4",
+    "capability": [
+      7,
+      5
+    ]
+  },
+  "resident_weight_bytes": 196346880,
+  "trained_base": "cnmds/minimax-h3-tp2-int8-561a6211@d3e6a4b131056d2c626a01acf6ba48123a885783",
+  "offline_lora": false,
+  "ptd_bake": false,
+  "weight_residency": "One fixed resident TP2 block; no prefetch/window extrapolation",
+  "input_distribution": "Seeded FP16 residual fixture through trained base block0, not captured real H3 activations",
+  "tokens": 59134,
+  "hidden": 5376,
+  "local_heads": 28,
+  "head_dim": 128,
+  "local_ffn": 7168,
+  "segments": [
+    [
+      0,
+      2392,
+      7
+    ],
+    [
+      2392,
+      3892,
+      6
+    ],
+    [
+      3892,
+      4702,
+      5
+    ],
+    [
+      4702,
+      59134,
+      0
+    ]
+  ],
+  "full_h3_pipeline": false,
+  "warmups": 2,
+  "repeats": 5,
+  "errors": {
+    "prepared": {
+      "finite": true,
+      "byte_exact": false,
+      "max_abs": 0.00048828125,
+      "mismatch_fraction": 4.336327428564181e-05,
+      "relative_rmse": 4.600474192331173e-06
+    },
+    "chunk_4k": {
+      "finite": true,
+      "byte_exact": false,
+      "max_abs": 0.00048828125,
+      "mismatch_fraction": 4.336327428564181e-05,
+      "relative_rmse": 4.600474192331173e-06
+    },
+    "chunk_8k": {
+      "finite": true,
+      "byte_exact": false,
+      "max_abs": 0.00048828125,
+      "mismatch_fraction": 4.336327428564181e-05,
+      "relative_rmse": 4.600474192331173e-06
+    },
+    "chunk_16k": {
+      "finite": true,
+      "byte_exact": false,
+      "max_abs": 0.00048828125,
+      "mismatch_fraction": 4.336327428564181e-05,
+      "relative_rmse": 4.600474192331173e-06
+    }
+  },
+  "exact_qualified": false,
+  "measurements": {
+    "production": {
+      "samples": [
+        {
+          "cuda_ms": 254.23898315429688,
+          "wall_ms": 254.35662099999945,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 258.4140625,
+          "wall_ms": 258.51705799999536,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 259.25946044921875,
+          "wall_ms": 259.32961399996657,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 266.25238037109375,
+          "wall_ms": 266.33790800002544,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 258.0035095214844,
+          "wall_ms": 258.1099519999839,
+          "compile_requests": 0
+        }
+      ],
+      "first_call_after_validation_seconds": 0.26332661600002893,
+      "initial_allocated": 2890701312,
+      "peak_allocated": 7235631104,
+      "incremental_peak": 4344929792,
+      "peak_reserved": 7690256384,
+      "device_used_after": 7829651456,
+      "median_cuda_ms": 258.4140625,
+      "median_wall_ms": 258.51705799999536
+    },
+    "prepared": {
+      "samples": [
+        {
+          "cuda_ms": 351.94384765625,
+          "wall_ms": 352.0548440000084,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 352.2508239746094,
+          "wall_ms": 352.3490069999866,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 368.6553955078125,
+          "wall_ms": 368.75460700002805,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 361.1853942871094,
+          "wall_ms": 361.25958399998126,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 358.4415588378906,
+          "wall_ms": 358.52812000001677,
+          "compile_requests": 0
+        }
+      ],
+      "first_call_after_validation_seconds": 0.3622379590000264,
+      "initial_allocated": 2890701312,
+      "peak_allocated": 7977522688,
+      "incremental_peak": 5086821376,
+      "peak_reserved": 9384755200,
+      "device_used_after": 9524150272,
+      "median_cuda_ms": 358.4415588378906,
+      "median_wall_ms": 358.52812000001677
+    },
+    "chunk_4k": {
+      "samples": [
+        {
+          "cuda_ms": 291.2235412597656,
+          "wall_ms": 291.3091870000244,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 292.83251953125,
+          "wall_ms": 292.905592000011,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 296.2451171875,
+          "wall_ms": 296.31292099998063,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 297.3517761230469,
+          "wall_ms": 297.4397090000025,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 294.6139831542969,
+          "wall_ms": 294.69789400002355,
+          "compile_requests": 0
+        }
+      ],
+      "first_call_after_validation_seconds": 0.2929826529999673,
+      "initial_allocated": 2890701312,
+      "peak_allocated": 5139213312,
+      "incremental_peak": 2248512000,
+      "peak_reserved": 5993660416,
+      "device_used_after": 6133055488,
+      "median_cuda_ms": 294.6139831542969,
+      "median_wall_ms": 294.69789400002355
+    },
+    "chunk_8k": {
+      "samples": [
+        {
+          "cuda_ms": 285.8467712402344,
+          "wall_ms": 285.9261330000322,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 290.20977783203125,
+          "wall_ms": 290.2852070000108,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 290.5720520019531,
+          "wall_ms": 290.64315599998736,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 306.70440673828125,
+          "wall_ms": 306.7981879999593,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 297.30816650390625,
+          "wall_ms": 297.39974300002814,
+          "compile_requests": 0
+        }
+      ],
+      "first_call_after_validation_seconds": 0.2900318499999912,
+      "initial_allocated": 2890701312,
+      "peak_allocated": 5374094336,
+      "incremental_peak": 2483393024,
+      "peak_reserved": 5993660416,
+      "device_used_after": 6133055488,
+      "median_cuda_ms": 290.5720520019531,
+      "median_wall_ms": 290.64315599998736
+    },
+    "chunk_16k": {
+      "samples": [
+        {
+          "cuda_ms": 302.887451171875,
+          "wall_ms": 302.99266100001887,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 301.43896484375,
+          "wall_ms": 301.552657000002,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 306.1842041015625,
+          "wall_ms": 306.272172999968,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 311.53363037109375,
+          "wall_ms": 311.63642600000685,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 310.62982177734375,
+          "wall_ms": 310.71226600005275,
+          "compile_requests": 0
+        }
+      ],
+      "first_call_after_validation_seconds": 0.3022686279999789,
+      "initial_allocated": 2890701312,
+      "peak_allocated": 5843856384,
+      "incremental_peak": 2953155072,
+      "peak_reserved": 6933184512,
+      "device_used_after": 7072579584,
+      "median_cuda_ms": 306.1842041015625,
+      "median_wall_ms": 306.272172999968
+    }
+  },
+  "profiles": {
+    "production": {
+      "status": "complete",
+      "kernel_count": 4,
+      "summed_kernel_ms": 225.752155,
+      "memcpy_count": 1,
+      "launch_api_count": 4,
+      "limitation": "Summed kernel work may overlap; not the critical path"
+    },
+    "chunk_8k": {
+      "status": "complete",
+      "kernel_count": 31,
+      "summed_kernel_ms": 286.72655,
+      "memcpy_count": 1,
+      "launch_api_count": 31,
+      "limitation": "Summed kernel work may overlap; not the critical path"
+    }
+  },
+  "signed_extreme_int32_exact": true,
+  "copy_stream_lifetime": {
+    "finite": true,
+    "byte_exact": true,
+    "max_abs": 0.0,
+    "mismatch_fraction": 0.0,
+    "relative_rmse": 0.0
+  },
+  "compile_requests": [
+    {
+      "module": "patches.tilelang_column_epilogue",
+      "seconds": 1.865443574999972,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "benchmarks.dit_vram_kernels",
+      "seconds": 1.9106233059999909,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "benchmarks.dit_vram_kernels",
+      "seconds": 0.4115864659999602,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "benchmarks.dit_vram_kernels",
+      "seconds": 0.39805144600001086,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "benchmarks.dit_vram_kernels",
+      "seconds": 0.09352345899998227,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "benchmarks.dit_vram_kernels",
+      "seconds": 0.352489281999965,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "benchmarks.dit_vram_kernels",
+      "seconds": 0.3632856080000124,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "benchmarks.dit_vram_kernels",
+      "seconds": 1.9057427029999303,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    }
+  ]
+}

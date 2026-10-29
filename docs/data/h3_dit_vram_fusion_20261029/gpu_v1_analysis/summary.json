@@ -1,0 +1,985 @@
+{
+  "batch_status": "partial_or_failed",
+  "full_pipeline": false,
+  "source_capsule_sha256": "7286ec2f971f1ec7b096db161eb534a7e2d26ec1a20cbdb517f87bc2fcbb6fc3",
+  "interpretation": "Seeded long-shape operator/block fixture; no generation or full-model window qualification",
+  "sections": {
+    "norm_gate": {
+      "status": "complete",
+      "measurements": {
+        "gate_baseline": {
+          "samples": [
+            {
+              "cuda_ms": 51.799041748046875,
+              "wall_ms": 51.87674100000095
+            },
+            {
+              "cuda_ms": 51.78153610229492,
+              "wall_ms": 51.832260999958635
+            },
+            {
+              "cuda_ms": 51.66428756713867,
+              "wall_ms": 51.71274799999992
+            },
+            {
+              "cuda_ms": 51.529441833496094,
+              "wall_ms": 51.574856000002
+            },
+            {
+              "cuda_ms": 51.748321533203125,
+              "wall_ms": 51.823529999978746
+            }
+          ],
+          "median_cuda_ms": 51.748321533203125,
+          "median_wall_ms": 51.823529999978746,
+          "worst_rank_peak_allocated_gib": 5.852091312408447,
+          "peaks_allocated_gib_by_rank": [
+            5.852091312408447,
+            5.852091312408447
+          ],
+          "initial_allocated_gib_by_rank": [
+            1.9895930290222168,
+            1.9895930290222168
+          ],
+          "peaks_reserved_gib_by_rank": [
+            6.3828125,
+            6.3828125
+          ],
+          "sampled_device_used_after_gib_by_rank": [
+            6.50091552734375,
+            6.50091552734375
+          ],
+          "cuda_speedup": 1.0,
+          "worst_rank_peak_saved_gib": 0.0
+        },
+        "gate_fused": {
+          "samples": [
+            {
+              "cuda_ms": 13.581184387207031,
+              "wall_ms": 13.644861999978275
+            },
+            {
+              "cuda_ms": 13.565631866455078,
+              "wall_ms": 13.608336000004329
+            },
+            {
+              "cuda_ms": 13.543840408325195,
+              "wall_ms": 13.590613000019403
+            },
+            {
+              "cuda_ms": 13.528287887573242,
+              "wall_ms": 13.577028000042901
+            },
+            {
+              "cuda_ms": 13.578368186950684,
+              "wall_ms": 13.671145999978762
+            }
+          ],
+          "median_cuda_ms": 13.565631866455078,
+          "median_wall_ms": 13.608336000004329,
+          "worst_rank_peak_allocated_gib": 2.5817360877990723,
+          "peaks_allocated_gib_by_rank": [
+            2.5817360877990723,
+            2.5817360877990723
+          ],
+          "initial_allocated_gib_by_rank": [
+            1.9895930290222168,
+            1.9895930290222168
+          ],
+          "peaks_reserved_gib_by_rank": [
+            3.107421875,
+            3.107421875
+          ],
+          "sampled_device_used_after_gib_by_rank": [
+            3.22552490234375,
+            3.22552490234375
+          ],
+          "cuda_speedup": 3.814663558810387,
+          "worst_rank_peak_saved_gib": 3.270355224609375
+        },
+        "norm_baseline": {
+          "samples": [
+            {
+              "cuda_ms": 53.62547302246094,
+              "wall_ms": 57.51420400002871
+            },
+            {
+              "cuda_ms": 53.6940803527832,
+              "wall_ms": 53.75496400000657
+            },
+            {
+              "cuda_ms": 53.596126556396484,
+              "wall_ms": 53.649940000013885
+            },
+            {
+              "cuda_ms": 53.46611022949219,
+              "wall_ms": 53.55165499997838
+            },
+            {
+              "cuda_ms": 53.60281753540039,
+              "wall_ms": 53.65615099998422
+            }
+          ],
+          "median_cuda_ms": 53.60281753540039,
+          "median_wall_ms": 53.65615099998422,
+          "worst_rank_peak_allocated_gib": 4.3583855628967285,
+          "peaks_allocated_gib_by_rank": [
+            4.3583855628967285,
+            4.3583855628967285
+          ],
+          "initial_allocated_gib_by_rank": [
+            1.9895930290222168,
+            1.9895930290222168
+          ],
+          "peaks_reserved_gib_by_rank": [
+            4.884765625,
+            4.884765625
+          ],
+          "sampled_device_used_after_gib_by_rank": [
+            5.00286865234375,
+            5.00286865234375
+          ],
+          "cuda_speedup": 1.0,
+          "worst_rank_peak_saved_gib": 0.0
+        },
+        "norm_fused": {
+          "samples": [
+            {
+              "cuda_ms": 5.564671993255615,
+              "wall_ms": 5.630193000001782
+            },
+            {
+              "cuda_ms": 5.611519813537598,
+              "wall_ms": 5.654695999965043
+            },
+            {
+              "cuda_ms": 5.635359764099121,
+              "wall_ms": 5.68040299998529
+            },
+            {
+              "cuda_ms": 5.72160005569458,
+              "wall_ms": 5.785134999996444
+            },
+            {
+              "cuda_ms": 5.695487976074219,
+              "wall_ms": 5.760002000045006
+            }
+          ],
+          "median_cuda_ms": 5.635359764099121,
+          "median_wall_ms": 5.68040299998529,
+          "worst_rank_peak_allocated_gib": 2.5817360877990723,
+          "peaks_allocated_gib_by_rank": [
+            2.5817360877990723,
+            2.5817360877990723
+          ],
+          "initial_allocated_gib_by_rank": [
+            1.9895930290222168,
+            1.9895930290222168
+          ],
+          "peaks_reserved_gib_by_rank": [
+            3.107421875,
+            3.107421875
+          ],
+          "sampled_device_used_after_gib_by_rank": [
+            3.22552490234375,
+            3.22552490234375
+          ],
+          "cuda_speedup": 9.511871429555383,
+          "worst_rank_peak_saved_gib": 1.7766494750976562
+        }
+      },
+      "numerical_by_rank": [
+        {
+          "norm_error": {
+            "finite": true,
+            "byte_exact": false,
+            "max_abs": 0.00390625,
+            "mismatch_fraction": 5.269508960279076e-05,
+            "relative_rmse": 4.05820591410032e-06
+          },
+          "gate_error": {
+            "finite": true,
+            "byte_exact": true,
+            "max_abs": 0.0,
+            "mismatch_fraction": 0.0,
+            "relative_rmse": 0.0
+          },
+          "stress_norm_error": {
+            "finite": true,
+            "byte_exact": false,
+            "max_abs": 0.001953125,
+            "mismatch_fraction": 5.0730519480519484e-05,
+            "relative_rmse": 5.326055324967414e-06
+          }
+        },
+        {
+          "norm_error": {
+            "finite": true,
+            "byte_exact": false,
+            "max_abs": 0.00390625,
+            "mismatch_fraction": 5.269508960279076e-05,
+            "relative_rmse": 4.05820591410032e-06
+          },
+          "gate_error": {
+            "finite": true,
+            "byte_exact": true,
+            "max_abs": 0.0,
+            "mismatch_fraction": 0.0,
+            "relative_rmse": 0.0
+          },
+          "stress_norm_error": {
+            "finite": true,
+            "byte_exact": false,
+            "max_abs": 0.001953125,
+            "mismatch_fraction": 5.0730519480519484e-05,
+            "relative_rmse": 5.326055324967414e-06
+          }
+        }
+      ],
+      "profiler_by_rank": [
+        {
+          "norm_baseline": {
+            "status": "complete",
+            "kernel_count": 15,
+            "summed_kernel_ms": 60.716888,
+            "memcpy_count": 0,
+            "launch_api_count": 15,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          },
+          "norm_fused": {
+            "status": "complete",
+            "kernel_count": 1,
+            "summed_kernel_ms": 5.220531,
+            "memcpy_count": 0,
+            "launch_api_count": 1,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          },
+          "gate_baseline": {
+            "status": "complete",
+            "kernel_count": 16,
+            "summed_kernel_ms": 41.083286,
+            "memcpy_count": 5,
+            "launch_api_count": 16,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          },
+          "gate_fused": {
+            "status": "complete",
+            "kernel_count": 1,
+            "summed_kernel_ms": 8.165118999999999,
+            "memcpy_count": 1,
+            "launch_api_count": 1,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          }
+        },
+        {
+          "norm_baseline": {
+            "status": "complete",
+            "kernel_count": 15,
+            "summed_kernel_ms": 62.102686,
+            "memcpy_count": 0,
+            "launch_api_count": 15,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          },
+          "norm_fused": {
+            "status": "complete",
+            "kernel_count": 1,
+            "summed_kernel_ms": 5.329535,
+            "memcpy_count": 0,
+            "launch_api_count": 1,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          },
+          "gate_baseline": {
+            "status": "complete",
+            "kernel_count": 16,
+            "summed_kernel_ms": 40.977858,
+            "memcpy_count": 5,
+            "launch_api_count": 16,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          },
+          "gate_fused": {
+            "status": "complete",
+            "kernel_count": 1,
+            "summed_kernel_ms": 8.149085,
+            "memcpy_count": 1,
+            "launch_api_count": 1,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          }
+        }
+      ]
+    },
+    "column": {
+      "status": "complete",
+      "measurements": {
+        "chunk_16k": {
+          "samples": [
+            {
+              "cuda_ms": 303.1937561035156,
+              "wall_ms": 303.2911280000121
+            },
+            {
+              "cuda_ms": 308.44866943359375,
+              "wall_ms": 308.5433020000323
+            },
+            {
+              "cuda_ms": 306.1842041015625,
+              "wall_ms": 306.272172999968
+            },
+            {
+              "cuda_ms": 313.8697814941406,
+              "wall_ms": 313.96440600002506
+            },
+            {
+              "cuda_ms": 310.62982177734375,
+              "wall_ms": 310.71226600005275
+            }
+          ],
+          "median_cuda_ms": 308.44866943359375,
+          "median_wall_ms": 308.5433020000323,
+          "worst_rank_peak_allocated_gib": 5.4425153732299805,
+          "peaks_allocated_gib_by_rank": [
+            5.4425153732299805,
+            5.4425153732299805
+          ],
+          "initial_allocated_gib_by_rank": [
+            2.6921753883361816,
+            2.6921753883361816
+          ],
+          "peaks_reserved_gib_by_rank": [
+            6.45703125,
+            6.45703125
+          ],
+          "sampled_device_used_after_gib_by_rank": [
+            6.58685302734375,
+            6.58685302734375
+          ],
+          "cuda_speedup": 0.857951810018278,
+          "worst_rank_peak_saved_gib": 1.2961912155151367
+        },
+        "chunk_4k": {
+          "samples": [
+            {
+              "cuda_ms": 292.73907470703125,
+              "wall_ms": 292.85089999996217
+            },
+            {
+              "cuda_ms": 292.83251953125,
+              "wall_ms": 292.905592000011
+            },
+            {
+              "cuda_ms": 296.2451171875,
+              "wall_ms": 296.31292099998063
+            },
+            {
+              "cuda_ms": 297.3517761230469,
+              "wall_ms": 297.4397090000025
+            },
+            {
+              "cuda_ms": 294.6139831542969,
+              "wall_ms": 294.69789400002355
+            }
+          ],
+          "median_cuda_ms": 294.6139831542969,
+          "median_wall_ms": 294.69789400002355,
+          "worst_rank_peak_allocated_gib": 4.7862653732299805,
+          "peaks_allocated_gib_by_rank": [
+            4.7862653732299805,
+            4.7862653732299805
+          ],
+          "initial_allocated_gib_by_rank": [
+            2.6921753883361816,
+            2.6921753883361816
+          ],
+          "peaks_reserved_gib_by_rank": [
+            5.58203125,
+            5.58203125
+          ],
+          "sampled_device_used_after_gib_by_rank": [
+            5.71185302734375,
+            5.71185302734375
+          ],
+          "cuda_speedup": 0.8982401018613079,
+          "worst_rank_peak_saved_gib": 1.9524412155151367
+        },
+        "chunk_8k": {
+          "samples": [
+            {
+              "cuda_ms": 290.1781311035156,
+              "wall_ms": 290.24864400003025
+            },
+            {
+              "cuda_ms": 290.20977783203125,
+              "wall_ms": 290.2852070000108
+            },
+            {
+              "cuda_ms": 290.5720520019531,
+              "wall_ms": 290.64315599998736
+            },
+            {
+              "cuda_ms": 306.70440673828125,
+              "wall_ms": 306.7981879999593
+            },
+            {
+              "cuda_ms": 297.30816650390625,
+              "wall_ms": 297.39974300002814
+            }
+          ],
+          "median_cuda_ms": 290.5720520019531,
+          "median_wall_ms": 290.64315599998736,
+          "worst_rank_peak_allocated_gib": 5.0050153732299805,
+          "peaks_allocated_gib_by_rank": [
+            5.0050153732299805,
+            5.0050153732299805
+          ],
+          "initial_allocated_gib_by_rank": [
+            2.6921753883361816,
+            2.6921753883361816
+          ],
+          "peaks_reserved_gib_by_rank": [
+            5.58203125,
+            5.58203125
+          ],
+          "sampled_device_used_after_gib_by_rank": [
+            5.71185302734375,
+            5.71185302734375
+          ],
+          "cuda_speedup": 0.910734850151736,
+          "worst_rank_peak_saved_gib": 1.7336912155151367
+        },
+        "prepared": {
+          "samples": [
+            {
+              "cuda_ms": 354.2505187988281,
+              "wall_ms": 354.34962499999756
+            },
+            {
+              "cuda_ms": 358.0743408203125,
+              "wall_ms": 358.1569790000003
+            },
+            {
+              "cuda_ms": 368.6553955078125,
+              "wall_ms": 368.75460700002805
+            },
+            {
+              "cuda_ms": 361.1853942871094,
+              "wall_ms": 361.25958399998126
+            },
+            {
+              "cuda_ms": 358.4415588378906,
+              "wall_ms": 358.52812000001677
+            }
+          ],
+          "median_cuda_ms": 358.4415588378906,
+          "median_wall_ms": 358.52812000001677,
+          "worst_rank_peak_allocated_gib": 7.429646968841553,
+          "peaks_allocated_gib_by_rank": [
+            7.429646968841553,
+            7.429646968841553
+          ],
+          "initial_allocated_gib_by_rank": [
+            2.6921753883361816,
+            2.6921753883361816
+          ],
+          "peaks_reserved_gib_by_rank": [
+            8.740234375,
+            8.740234375
+          ],
+          "sampled_device_used_after_gib_by_rank": [
+            8.87005615234375,
+            8.87005615234375
+          ],
+          "cuda_speedup": 0.7382907693411888,
+          "worst_rank_peak_saved_gib": -0.6909403800964355
+        },
+        "production": {
+          "samples": [
+            {
+              "cuda_ms": 254.23898315429688,
+              "wall_ms": 254.35662099999945
+            },
+            {
+              "cuda_ms": 264.63409423828125,
+              "wall_ms": 264.72694300002786
+            },
+            {
+              "cuda_ms": 259.25946044921875,
+              "wall_ms": 259.32961399996657
+            },
+            {
+              "cuda_ms": 270.60382080078125,
+              "wall_ms": 270.67630199996984
+            },
+            {
+              "cuda_ms": 266.9505310058594,
+              "wall_ms": 267.04389399998263
+            }
+          ],
+          "median_cuda_ms": 264.63409423828125,
+          "median_wall_ms": 264.72694300002786,
+          "worst_rank_peak_allocated_gib": 6.738706588745117,
+          "peaks_allocated_gib_by_rank": [
+            6.738706588745117,
+            6.738706588745117
+          ],
+          "initial_allocated_gib_by_rank": [
+            2.6921753883361816,
+            2.6921753883361816
+          ],
+          "peaks_reserved_gib_by_rank": [
+            7.162109375,
+            7.162109375
+          ],
+          "sampled_device_used_after_gib_by_rank": [
+            7.29193115234375,
+            7.29193115234375
+          ],
+          "cuda_speedup": 1.0,
+          "worst_rank_peak_saved_gib": 0.0
+        }
+      },
+      "numerical_by_rank": [
+        {
+          "errors": {
+            "prepared": {
+              "finite": true,
+              "byte_exact": false,
+              "max_abs": 0.00048828125,
+              "mismatch_fraction": 4.396133146751446e-05,
+              "relative_rmse": 4.61882355950633e-06
+            },
+            "chunk_4k": {
+              "finite": true,
+              "byte_exact": false,
+              "max_abs": 0.00048828125,
+              "mismatch_fraction": 4.396133146751446e-05,
+              "relative_rmse": 4.61882355950633e-06
+            },
+            "chunk_8k": {
+              "finite": true,
+              "byte_exact": false,
+              "max_abs": 0.00048828125,
+              "mismatch_fraction": 4.396133146751446e-05,
+              "relative_rmse": 4.61882355950633e-06
+            },
+            "chunk_16k": {
+              "finite": true,
+              "byte_exact": false,
+              "max_abs": 0.00048828125,
+              "mismatch_fraction": 4.396133146751446e-05,
+              "relative_rmse": 4.61882355950633e-06
+            }
+          },
+          "exact_qualified": false,
+          "signed_extreme_int32_exact": true,
+          "copy_stream_lifetime": {
+            "finite": true,
+            "byte_exact": true,
+            "max_abs": 0.0,
+            "mismatch_fraction": 0.0,
+            "relative_rmse": 0.0
+          }
+        },
+        {
+          "errors": {
+            "prepared": {
+              "finite": true,
+              "byte_exact": false,
+              "max_abs": 0.00048828125,
+              "mismatch_fraction": 4.336327428564181e-05,
+              "relative_rmse": 4.600474192331173e-06
+            },
+            "chunk_4k": {
+              "finite": true,
+              "byte_exact": false,
+              "max_abs": 0.00048828125,
+              "mismatch_fraction": 4.336327428564181e-05,
+              "relative_rmse": 4.600474192331173e-06
+            },
+            "chunk_8k": {
+              "finite": true,
+              "byte_exact": false,
+              "max_abs": 0.00048828125,
+              "mismatch_fraction": 4.336327428564181e-05,
+              "relative_rmse": 4.600474192331173e-06
+            },
+            "chunk_16k": {
+              "finite": true,
+              "byte_exact": false,
+              "max_abs": 0.00048828125,
+              "mismatch_fraction": 4.336327428564181e-05,
+              "relative_rmse": 4.600474192331173e-06
+            }
+          },
+          "exact_qualified": false,
+          "signed_extreme_int32_exact": true,
+          "copy_stream_lifetime": {
+            "finite": true,
+            "byte_exact": true,
+            "max_abs": 0.0,
+            "mismatch_fraction": 0.0,
+            "relative_rmse": 0.0
+          }
+        }
+      ],
+      "profiler_by_rank": [
+        {
+          "production": {
+            "status": "complete",
+            "kernel_count": 4,
+            "summed_kernel_ms": 246.711237,
+            "memcpy_count": 1,
+            "launch_api_count": 4,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          },
+          "chunk_8k": {
+            "status": "complete",
+            "kernel_count": 31,
+            "summed_kernel_ms": 292.118992,
+            "memcpy_count": 1,
+            "launch_api_count": 31,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          }
+        },
+        {
+          "production": {
+            "status": "complete",
+            "kernel_count": 4,
+            "summed_kernel_ms": 225.752155,
+            "memcpy_count": 1,
+            "launch_api_count": 4,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          },
+          "chunk_8k": {
+            "status": "complete",
+            "kernel_count": 31,
+            "summed_kernel_ms": 286.72655,
+            "memcpy_count": 1,
+            "launch_api_count": 31,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          }
+        }
+      ]
+    },
+    "row_epilogue": {
+      "status": "complete",
+      "measurements": {
+        "baseline": {
+          "samples": [
+            {
+              "cuda_ms": 67.93833923339844,
+              "wall_ms": 68.03284499994788
+            },
+            {
+              "cuda_ms": 67.80108642578125,
+              "wall_ms": 67.92588600001181
+            },
+            {
+              "cuda_ms": 68.0453109741211,
+              "wall_ms": 68.12074000004031
+            },
+            {
+              "cuda_ms": 68.09852600097656,
+              "wall_ms": 68.17217200000414
+            },
+            {
+              "cuda_ms": 68.08576202392578,
+              "wall_ms": 68.15345600000455
+            }
+          ],
+          "median_cuda_ms": 68.0453109741211,
+          "median_wall_ms": 68.12074000004031,
+          "worst_rank_peak_allocated_gib": 6.444093704223633,
+          "peaks_allocated_gib_by_rank": [
+            6.444093704223633,
+            6.444093704223633
+          ],
+          "initial_allocated_gib_by_rank": [
+            1.9894523620605469,
+            1.9894523620605469
+          ],
+          "peaks_reserved_gib_by_rank": [
+            7.0703125,
+            7.0703125
+          ],
+          "sampled_device_used_after_gib_by_rank": [
+            7.18841552734375,
+            7.18841552734375
+          ],
+          "cuda_speedup": 1.0,
+          "worst_rank_peak_saved_gib": 0.0
+        },
+        "fused": {
+          "samples": [
+            {
+              "cuda_ms": 13.322239875793457,
+              "wall_ms": 13.379116999999496
+            },
+            {
+              "cuda_ms": 13.486207962036133,
+              "wall_ms": 13.541445999976531
+            },
+            {
+              "cuda_ms": 13.498271942138672,
+              "wall_ms": 13.552102000062405
+            },
+            {
+              "cuda_ms": 13.451264381408691,
+              "wall_ms": 13.546066999992945
+            },
+            {
+              "cuda_ms": 13.432831764221191,
+              "wall_ms": 13.476180999987264
+            }
+          ],
+          "median_cuda_ms": 13.451264381408691,
+          "median_wall_ms": 13.541445999976531,
+          "worst_rank_peak_allocated_gib": 2.5815954208374023,
+          "peaks_allocated_gib_by_rank": [
+            2.5815954208374023,
+            2.5815954208374023
+          ],
+          "initial_allocated_gib_by_rank": [
+            1.9894523620605469,
+            1.9894523620605469
+          ],
+          "peaks_reserved_gib_by_rank": [
+            2.609375,
+            2.609375
+          ],
+          "sampled_device_used_after_gib_by_rank": [
+            2.72747802734375,
+            2.72747802734375
+          ],
+          "cuda_speedup": 5.058655383219448,
+          "worst_rank_peak_saved_gib": 3.8624982833862305
+        }
+      },
+      "numerical_by_rank": [
+        {
+          "error": {
+            "finite": true,
+            "byte_exact": true,
+            "max_abs": 0.0,
+            "mismatch_fraction": 0.0,
+            "relative_rmse": 0.0
+          }
+        },
+        {
+          "error": {
+            "finite": true,
+            "byte_exact": true,
+            "max_abs": 0.0,
+            "mismatch_fraction": 0.0,
+            "relative_rmse": 0.0
+          }
+        }
+      ],
+      "profiler_by_rank": [
+        {
+          "baseline": {
+            "status": "complete",
+            "kernel_count": 18,
+            "summed_kernel_ms": 69.57399000000001,
+            "memcpy_count": 5,
+            "launch_api_count": 18,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          },
+          "fused": {
+            "status": "complete",
+            "kernel_count": 1,
+            "summed_kernel_ms": 10.128521000000001,
+            "memcpy_count": 1,
+            "launch_api_count": 1,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          }
+        },
+        {
+          "baseline": {
+            "status": "complete",
+            "kernel_count": 18,
+            "summed_kernel_ms": 69.10039599999999,
+            "memcpy_count": 5,
+            "launch_api_count": 18,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          },
+          "fused": {
+            "status": "complete",
+            "kernel_count": 1,
+            "summed_kernel_ms": 10.052564,
+            "memcpy_count": 1,
+            "launch_api_count": 1,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          }
+        }
+      ]
+    },
+    "attention": {
+      "status": "complete",
+      "measurements": {
+        "baseline": {
+          "samples": [
+            {
+              "cuda_ms": 1613.7535400390625,
+              "wall_ms": 1613.8872970000193
+            },
+            {
+              "cuda_ms": 1602.53125,
+              "wall_ms": 1602.619355999991
+            },
+            {
+              "cuda_ms": 1625.6617431640625,
+              "wall_ms": 1625.7478490000494
+            }
+          ],
+          "median_cuda_ms": 1613.7535400390625,
+          "median_wall_ms": 1613.8872970000193,
+          "worst_rank_peak_allocated_gib": 3.7753381729125977,
+          "peaks_allocated_gib_by_rank": [
+            3.7753381729125977,
+            3.7753381729125977
+          ],
+          "initial_allocated_gib_by_rank": [
+            0.8128223419189453,
+            0.8128223419189453
+          ],
+          "peaks_reserved_gib_by_rank": [
+            3.81640625,
+            3.81640625
+          ],
+          "sampled_device_used_after_gib_by_rank": [
+            3.94622802734375,
+            3.94622802734375
+          ],
+          "cuda_speedup": 1.0,
+          "worst_rank_peak_saved_gib": 0.0
+        },
+        "split": {
+          "samples": [
+            {
+              "cuda_ms": 1606.84033203125,
+              "wall_ms": 1606.9732290000047
+            },
+            {
+              "cuda_ms": 1614.0738525390625,
+              "wall_ms": 1614.170174999913
+            },
+            {
+              "cuda_ms": 1626.06494140625,
+              "wall_ms": 1626.1881980000226
+            }
+          ],
+          "median_cuda_ms": 1614.0738525390625,
+          "median_wall_ms": 1614.170174999913,
+          "worst_rank_peak_allocated_gib": 3.3805761337280273,
+          "peaks_allocated_gib_by_rank": [
+            3.3805761337280273,
+            3.3805761337280273
+          ],
+          "initial_allocated_gib_by_rank": [
+            0.8128223419189453,
+            0.8128223419189453
+          ],
+          "peaks_reserved_gib_by_rank": [
+            3.419921875,
+            3.419921875
+          ],
+          "sampled_device_used_after_gib_by_rank": [
+            3.54974365234375,
+            3.54974365234375
+          ],
+          "cuda_speedup": 0.9998015502825375,
+          "worst_rank_peak_saved_gib": 0.3947620391845703
+        }
+      },
+      "numerical_by_rank": [
+        {
+          "error": {
+            "finite": true,
+            "byte_exact": true,
+            "max_abs": 0.0,
+            "mismatch_fraction": 0.0,
+            "relative_rmse": 0.0
+          }
+        },
+        {
+          "error": {
+            "finite": true,
+            "byte_exact": true,
+            "max_abs": 0.0,
+            "mismatch_fraction": 0.0,
+            "relative_rmse": 0.0
+          }
+        }
+      ],
+      "profiler_by_rank": [
+        {
+          "baseline": {
+            "status": "complete",
+            "kernel_count": 5,
+            "summed_kernel_ms": 1298.943958,
+            "memcpy_count": 1,
+            "launch_api_count": 5,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          },
+          "split": {
+            "status": "complete",
+            "kernel_count": 5,
+            "summed_kernel_ms": 1303.8133109999999,
+            "memcpy_count": 1,
+            "launch_api_count": 5,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          }
+        },
+        {
+          "baseline": {
+            "status": "complete",
+            "kernel_count": 5,
+            "summed_kernel_ms": 1356.197233,
+            "memcpy_count": 1,
+            "launch_api_count": 5,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          },
+          "split": {
+            "status": "complete",
+            "kernel_count": 5,
+            "summed_kernel_ms": 1365.824614,
+            "memcpy_count": 1,
+            "launch_api_count": 5,
+            "limitation": "Summed kernel work may overlap; not the critical path"
+          }
+        }
+      ]
+    },
+    "block": {
+      "status": "incomplete",
+      "rank_results": [
+        {
+          "rank": 0,
+          "status": "failed",
+          "error": "ValueError('Matching contiguous FP16 branch required')",
+          "reason": null,
+          "completed_errors": {}
+        },
+        {
+          "rank": 1,
+          "status": "failed",
+          "error": "ValueError('Matching contiguous FP16 branch required')",
+          "reason": null,
+          "completed_errors": {}
+        }
+      ]
+    }
+  },
+  "blockers": [
+    "Column candidates failed byte qualification; timings do not authorize promotion",
+    "block incomplete; no speedup claim"
+  ],
+  "physical_two_t4_receipt": true,
+  "default_promoted": false,
+  "caveats": [
+    "Component peak savings overlap and must not be added",
+    "CUDA time uses the slower rank for each aligned repeat, then median",
+    "Sampled full-device usage is not the full-device peak",
+    "Compilation/loading and error checks are outside warmed timing",
+    "Missing CUDA trace coverage blocks attribution even if latency samples exist"
+  ]
+}

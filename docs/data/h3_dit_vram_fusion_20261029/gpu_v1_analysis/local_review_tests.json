@@ -1,0 +1,12 @@
+{
+  "interpreter": "C:/ProgramData/miniconda3/envs/comfyui/python.exe",
+  "tests": 18,
+  "passed": true,
+  "gpu_used": false,
+  "modules": [
+    "benchmarks.test_dit_vram_candidates",
+    "benchmarks.test_kaggle_write_capacity",
+    "benchmarks.test_analyze_dit_vram_fusion"
+  ],
+  "note": "Six candidate, eight disk-probe and four analyzer contracts. No GPU retry or production-default change."
+}

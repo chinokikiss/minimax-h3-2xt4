@@ -1,0 +1,164 @@
+{
+  "status": "complete",
+  "section": "row_epilogue",
+  "rank": 1,
+  "hardware": {
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "name": "Tesla T4",
+    "capability": [
+      7,
+      5
+    ]
+  },
+  "resident_weight_bytes": 196346880,
+  "trained_base": "cnmds/minimax-h3-tp2-int8-561a6211@d3e6a4b131056d2c626a01acf6ba48123a885783",
+  "offline_lora": false,
+  "ptd_bake": false,
+  "weight_residency": "One fixed resident TP2 block; no prefetch/window extrapolation",
+  "input_distribution": "Seeded FP16 residual fixture through trained base block0, not captured real H3 activations",
+  "tokens": 59134,
+  "hidden": 5376,
+  "local_heads": 28,
+  "head_dim": 128,
+  "local_ffn": 7168,
+  "segments": [
+    [
+      0,
+      2392,
+      7
+    ],
+    [
+      2392,
+      3892,
+      6
+    ],
+    [
+      3892,
+      4702,
+      5
+    ],
+    [
+      4702,
+      59134,
+      0
+    ]
+  ],
+  "full_h3_pipeline": false,
+  "warmups": 2,
+  "repeats": 5,
+  "error": {
+    "finite": true,
+    "byte_exact": true,
+    "max_abs": 0.0,
+    "mismatch_fraction": 0.0,
+    "relative_rmse": 0.0
+  },
+  "measurements": {
+    "baseline": {
+      "samples": [
+        {
+          "cuda_ms": 67.49382019042969,
+          "wall_ms": 67.61242499999298,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 67.67865753173828,
+          "wall_ms": 67.75848699999187,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 67.90172576904297,
+          "wall_ms": 67.98671999990802,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 67.90531158447266,
+          "wall_ms": 67.96977300007256,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 67.85408020019531,
+          "wall_ms": 67.91326799998387,
+          "compile_requests": 0
+        }
+      ],
+      "first_call_after_validation_seconds": 0.07339762000003702,
+      "initial_allocated": 2136158208,
+      "peak_allocated": 6919292928,
+      "incremental_peak": 4783134720,
+      "peak_reserved": 7591690240,
+      "device_used_after": 7718502400,
+      "median_cuda_ms": 67.85408020019531,
+      "median_wall_ms": 67.91326799998387
+    },
+    "fused": {
+      "samples": [
+        {
+          "cuda_ms": 13.322239875793457,
+          "wall_ms": 13.379116999999496,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 13.408255577087402,
+          "wall_ms": 13.466130999972847,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 13.455488204956055,
+          "wall_ms": 13.526681000030294,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 13.420576095581055,
+          "wall_ms": 13.511488999938592,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 13.40617561340332,
+          "wall_ms": 13.456533999942621,
+          "compile_requests": 0
+        }
+      ],
+      "first_call_after_validation_seconds": 0.013401041999941299,
+      "initial_allocated": 2136158208,
+      "peak_allocated": 2771966976,
+      "incremental_peak": 635808768,
+      "peak_reserved": 2801795072,
+      "device_used_after": 2928607232,
+      "median_cuda_ms": 13.408255577087402,
+      "median_wall_ms": 13.466130999972847
+    }
+  },
+  "profiles": {
+    "baseline": {
+      "status": "complete",
+      "kernel_count": 18,
+      "summed_kernel_ms": 69.10039599999999,
+      "memcpy_count": 5,
+      "launch_api_count": 18,
+      "limitation": "Summed kernel work may overlap; not the critical path"
+    },
+    "fused": {
+      "status": "complete",
+      "kernel_count": 1,
+      "summed_kernel_ms": 10.052564,
+      "memcpy_count": 1,
+      "launch_api_count": 1,
+      "limitation": "Summed kernel work may overlap; not the critical path"
+    }
+  },
+  "restoration_shift": 12,
+  "compile_requests": [
+    {
+      "module": "patches.tilelang_transport_p2",
+      "seconds": 2.090894308000088,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "benchmarks.dit_vram_kernels",
+      "seconds": 2.1628854049999973,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    }
+  ]
+}

@@ -29,5 +29,18 @@ class Results(unittest.TestCase):
             self.assertTrue(all(value['status']=='incomplete' for value in result['sections'].values()))
             self.assertIn('incomplete',markdown(result))
 
+    def test_completed_column_timings_do_not_hide_failed_byte_qualification(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)
+            (root/'result.json').write_text(json.dumps(dict(status='partial_or_failed')))
+            for rank in (0,1):
+                path=root/'column'/f'rank{rank}'
+                path.mkdir(parents=True)
+                (path/'result.json').write_text(json.dumps(dict(status='complete',rank=rank,
+                    exact_qualified=False,measurements={'production':measurements([1,2,3],6)},profiles={})))
+            result=summarize(root)
+            self.assertEqual(result['sections']['column']['status'],'complete')
+            self.assertTrue(any('Column candidates failed byte qualification' in v for v in result['blockers']))
+
 
 if __name__=='__main__':unittest.main(verbosity=2)

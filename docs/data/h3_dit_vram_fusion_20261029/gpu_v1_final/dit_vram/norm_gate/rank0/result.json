@@ -1,0 +1,272 @@
+{
+  "status": "complete",
+  "section": "norm_gate",
+  "rank": 0,
+  "hardware": {
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "name": "Tesla T4",
+    "capability": [
+      7,
+      5
+    ]
+  },
+  "resident_weight_bytes": 196346880,
+  "trained_base": "cnmds/minimax-h3-tp2-int8-561a6211@d3e6a4b131056d2c626a01acf6ba48123a885783",
+  "offline_lora": false,
+  "ptd_bake": false,
+  "weight_residency": "One fixed resident TP2 block; no prefetch/window extrapolation",
+  "input_distribution": "Seeded FP16 residual fixture through trained base block0, not captured real H3 activations",
+  "tokens": 59134,
+  "hidden": 5376,
+  "local_heads": 28,
+  "head_dim": 128,
+  "local_ffn": 7168,
+  "segments": [
+    [
+      0,
+      2392,
+      7
+    ],
+    [
+      2392,
+      3892,
+      6
+    ],
+    [
+      3892,
+      4702,
+      5
+    ],
+    [
+      4702,
+      59134,
+      0
+    ]
+  ],
+  "full_h3_pipeline": false,
+  "warmups": 2,
+  "repeats": 5,
+  "stress_norm_error": {
+    "finite": true,
+    "byte_exact": false,
+    "max_abs": 0.001953125,
+    "mismatch_fraction": 5.0730519480519484e-05,
+    "relative_rmse": 5.326055324967414e-06
+  },
+  "norm_error": {
+    "finite": true,
+    "byte_exact": false,
+    "max_abs": 0.00390625,
+    "mismatch_fraction": 5.269508960279076e-05,
+    "relative_rmse": 4.05820591410032e-06
+  },
+  "gate_error": {
+    "finite": true,
+    "byte_exact": true,
+    "max_abs": 0.0,
+    "mismatch_fraction": 0.0,
+    "relative_rmse": 0.0
+  },
+  "measurements": {
+    "norm_baseline": {
+      "samples": [
+        {
+          "cuda_ms": 53.60435104370117,
+          "wall_ms": 57.51420400002871,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 53.6940803527832,
+          "wall_ms": 53.75496400000657,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 53.596126556396484,
+          "wall_ms": 53.649940000013885,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 53.46611022949219,
+          "wall_ms": 53.55165499997838,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 53.60281753540039,
+          "wall_ms": 53.65615099998422,
+          "compile_requests": 0
+        }
+      ],
+      "first_call_after_validation_seconds": 0.0561957639999946,
+      "initial_allocated": 2136309248,
+      "peak_allocated": 4679780864,
+      "incremental_peak": 2543471616,
+      "peak_reserved": 5244977152,
+      "device_used_after": 5371789312,
+      "median_cuda_ms": 53.60281753540039,
+      "median_wall_ms": 53.65615099998422
+    },
+    "norm_fused": {
+      "samples": [
+        {
+          "cuda_ms": 5.371903896331787,
+          "wall_ms": 5.421170999966307,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 5.3203840255737305,
+          "wall_ms": 5.359620999968229,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 5.317183971405029,
+          "wall_ms": 5.359666999993351,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 5.531968116760254,
+          "wall_ms": 5.586580999988655,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 5.347296237945557,
+          "wall_ms": 5.401376000008895,
+          "compile_requests": 0
+        }
+      ],
+      "first_call_after_validation_seconds": 0.010986538000054225,
+      "initial_allocated": 2136309248,
+      "peak_allocated": 2772118016,
+      "incremental_peak": 635808768,
+      "peak_reserved": 3336568832,
+      "device_used_after": 3463380992,
+      "median_cuda_ms": 5.347296237945557,
+      "median_wall_ms": 5.401376000008895
+    },
+    "gate_baseline": {
+      "samples": [
+        {
+          "cuda_ms": 51.799041748046875,
+          "wall_ms": 51.87674100000095,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 51.78153610229492,
+          "wall_ms": 51.832260999958635,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 51.66428756713867,
+          "wall_ms": 51.71274799999992,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 51.529441833496094,
+          "wall_ms": 51.574856000002,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 51.748321533203125,
+          "wall_ms": 51.823529999978746,
+          "compile_requests": 0
+        }
+      ],
+      "first_call_after_validation_seconds": 0.05673540499998353,
+      "initial_allocated": 2136309248,
+      "peak_allocated": 6283635200,
+      "incremental_peak": 4147325952,
+      "peak_reserved": 6853492736,
+      "device_used_after": 6980304896,
+      "median_cuda_ms": 51.748321533203125,
+      "median_wall_ms": 51.823529999978746
+    },
+    "gate_fused": {
+      "samples": [
+        {
+          "cuda_ms": 13.581184387207031,
+          "wall_ms": 13.644861999978275,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 13.565631866455078,
+          "wall_ms": 13.608336000004329,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 13.543840408325195,
+          "wall_ms": 13.590613000019403,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 13.528287887573242,
+          "wall_ms": 13.577028000042901,
+          "compile_requests": 0
+        },
+        {
+          "cuda_ms": 13.578368186950684,
+          "wall_ms": 13.671145999978762,
+          "compile_requests": 0
+        }
+      ],
+      "first_call_after_validation_seconds": 0.013466315000016493,
+      "initial_allocated": 2136309248,
+      "peak_allocated": 2772118016,
+      "incremental_peak": 635808768,
+      "peak_reserved": 3336568832,
+      "device_used_after": 3463380992,
+      "median_cuda_ms": 13.565631866455078,
+      "median_wall_ms": 13.608336000004329
+    }
+  },
+  "profiles": {
+    "norm_baseline": {
+      "status": "complete",
+      "kernel_count": 15,
+      "summed_kernel_ms": 60.716888,
+      "memcpy_count": 0,
+      "launch_api_count": 15,
+      "limitation": "Summed kernel work may overlap; not the critical path"
+    },
+    "norm_fused": {
+      "status": "complete",
+      "kernel_count": 1,
+      "summed_kernel_ms": 5.220531,
+      "memcpy_count": 0,
+      "launch_api_count": 1,
+      "limitation": "Summed kernel work may overlap; not the critical path"
+    },
+    "gate_baseline": {
+      "status": "complete",
+      "kernel_count": 16,
+      "summed_kernel_ms": 41.083286,
+      "memcpy_count": 5,
+      "launch_api_count": 16,
+      "limitation": "Summed kernel work may overlap; not the critical path"
+    },
+    "gate_fused": {
+      "status": "complete",
+      "kernel_count": 1,
+      "summed_kernel_ms": 8.165118999999999,
+      "memcpy_count": 1,
+      "launch_api_count": 1,
+      "limitation": "Summed kernel work may overlap; not the critical path"
+    }
+  },
+  "compile_requests": [
+    {
+      "module": "benchmarks.dit_vram_kernels",
+      "seconds": 4.374503720000007,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "benchmarks.dit_vram_kernels",
+      "seconds": 0.7171100069999738,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "benchmarks.dit_vram_kernels",
+      "seconds": 1.9482807680000178,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    }
+  ]
+}

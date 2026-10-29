@@ -37,7 +37,7 @@ def summarize(root):
             path=root/section/f'rank{rank}/result.json'
             if path.is_file():ranks.append(json.loads(path.read_text()))
         if len(ranks)!=2 or any(r.get('status')!='complete' for r in ranks):
-            result['sections'][section]=dict(status='incomplete',rank_results=[dict(rank=r.get('rank'),status=r.get('status'),error=r.get('error'),reason=r.get('reason')) for r in ranks])
+            result['sections'][section]=dict(status='incomplete',rank_results=[dict(rank=r.get('rank'),status=r.get('status'),error=r.get('error'),reason=r.get('reason'),completed_errors=r.get('errors')) for r in ranks])
             result['blockers'].append(section+' incomplete; no speedup claim');continue
         names=set(ranks[0].get('measurements',{}))&set(ranks[1].get('measurements',{}))
         rows={name:aggregate(ranks,name) for name in sorted(names)}
@@ -58,6 +58,10 @@ def summarize(root):
                 if all(r.get('errors',{}).get(name,{}).get('byte_exact',False) for r in ranks)]
             record['non_weight_allocation_caveat']='Subtracting weight bytes also leaves inputs, outputs and workspaces; not pure activation memory'
         result['sections'][section]=record
+        if section=='column' and any(r.get('exact_qualified') is not True for r in ranks):
+            result['blockers'].append('Column candidates failed byte qualification; timings do not authorize promotion')
+        if any(p.get('status')!='complete' for r in ranks for p in r.get('profiles',{}).values()):
+            result['blockers'].append(section+' has incomplete profiler capture')
     result['default_promoted']=False
     result['caveats']=['Component peak savings overlap and must not be added',
         'CUDA time uses the slower rank for each aligned repeat, then median',

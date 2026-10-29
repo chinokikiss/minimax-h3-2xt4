@@ -62,6 +62,8 @@ if {args.mode=='cpu'!r}:argv+=['--cpu-preflight']
 os.execve(sys.executable,argv,env)
 """
     code+=supervise_worker(execution,budget=180 if args.mode=='cpu' else 1800,output='/kaggle/working/dit_vram_supervision')
+    expected='vram_cpu_ready' if args.mode=='cpu' else 'complete'
+    code+=f"\nassert json.loads(pathlib.Path('/kaggle/working/dit_vram/result.json').read_text())['status']=={expected!r}\n"
     ast.parse(code);notebook['cells'][0]['source']=code.splitlines(keepends=True);notebook_path.write_text(json.dumps(notebook))
     metadata=json.loads((job/'kernel-metadata.json').read_text());label='cpu' if args.mode=='cpu' else 't4'
     metadata.update(id=f'pamcks/h3-dit-vram-fusion-{label}-20261029',title=f'H3 DiT VRAM Fusion {label.upper()} 20261029')

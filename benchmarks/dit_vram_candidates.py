@@ -132,7 +132,10 @@ def forward(block,x,time_embedding,segments,freqs,labels,variant,*,observer=None
             attended=result.transpose(1,2).reshape(x.shape[0],3584)
             del result
         else:
-            attended=dit_attention(block,qh,kh,vh,{})
+            # Match the production block's [S, local_inner] row-linear input.
+            # The policy returns [B,S,D]; retaining B broke the fused gate's
+            # shape contract even with B=1 and otherwise valid FP16 tensors.
+            attended=dit_attention(block,qh,kh,vh,{}).reshape(x.shape[0],block.inner_per_rank)
             del qkv,q,k,v,qh,kh,vh
     with stage('out_projection'):
         if owns:

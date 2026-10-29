@@ -148,3 +148,110 @@ repeat. Its three synthetic CPU tests passed; those fixtures are not GPU
 performance measurements. An additional nine-row SM120 scalar-store arithmetic
 check passed (RMS relative RMSE 5.47e-6, exact gate/row-gate outputs), again without
 claiming T4 qualification or substituting its performance.
+
+## T4 version 1 returned: four sections passed, block validation incomplete
+
+One final collection downloaded all 74 server artifacts and verified capsule
+`7286ec2f…` against the submitted `089a371` source. The device receipts identify
+two distinct physical Tesla T4s, Torch 2.11.0+cu128 / CUDA 12.8, Kitchen 0.2.37
+and TileLang 0.1.13. Four isolated sections exited successfully. The block
+section exited with code 1; the batch itself reports **`partial_or_failed`**.
+The notebook's green provider status therefore does not establish success of
+every experiment. No full-DiT or end-to-end improvement has been measured.
+
+These are 59,134-token generated residual fixtures through the trained base's
+block-0 shards, with one resident block. They are not captured PTD activations,
+LoRA-baked weights, or a full-model residency-window experiment. The two shards
+total 392,696,256 downloaded bytes. Compilation, input loading and numerical
+checks were outside warmed timing; the timing samples record zero compilation
+requests. Memory was measured in separate passes. Times below take the slower
+rank for each aligned trial, then its median.
+
+| Operator / candidate | Baseline → candidate CUDA ms | Speedup | Allocated peak GiB, baseline → candidate | Peak reduction GiB | Qualification |
+|---|---:|---:|---:|---:|---|
+| RMS + AdaLN | 53.603 → 5.635 | 9.51× | 4.358 → 2.582 | 1.777 | Finite; relative RMSE 4.06e-6; not byte-exact |
+| Gated residual | 51.748 → 13.566 | 3.81× | 5.852 → 2.582 | 3.270 | Byte-exact on both ranks |
+| Scaled row epilogue + gate | 68.045 → 13.451 | 5.06× | 6.444 → 2.582 | 3.862 | Byte-exact on both ranks |
+| FC1 prepared, unchunked | 264.634 → 358.442 | 0.738× | 6.739 → 7.430 | **−0.691** | Slower, more memory; fails byte qualification |
+| FC1 4K chunks | 264.634 → 294.614 | 0.898× | 6.739 → 4.786 | 1.952 | Memory tradeoff; fails byte qualification |
+| FC1 8K chunks | 264.634 → 290.572 | 0.911× | 6.739 → 5.005 | 1.734 | Memory tradeoff; fails byte qualification |
+| FC1 16K chunks | 264.634 → 308.449 | 0.858× | 6.739 → 5.443 | 1.296 | Worse tradeoff than 4K/8K here |
+| Kitchen prepare/consume attention | 1613.754 → 1614.074 | 1.000× | 3.775 → 3.381 | 0.395 | Byte-exact; latency essentially unchanged |
+
+Allocation peaks include the fixture's live inputs, weights, reference tensors
+and outputs; they are not pure temporary-buffer sizes. The gate timings also
+include the harness's input cloning. Attention includes identical host-template
+H2D staging on each path, as declared before submission. None of the component
+peak reductions can be added together or applied to the full DiT peak.
+
+### What the worker traces establish
+
+Every completed isolated operator has a successful minimal-CUDA capture gate
+and an exported, compressed worker trace. In rank 0's captured operator calls:
+
+| Comparison | Baseline kernels → candidate kernels | Evidence / implication |
+|---|---:|---|
+| RMS/AdaLN | 15 → 1 | Eliminates separate reductions, conversions and segment elementwise passes |
+| Gated residual | 16 → 1 | Removes full FP32 residual/branch intermediates and segment passes |
+| Row epilogue + gate | 18 → 1 | Fuses transport reconstruction, dequantization, branch FP16 rounding and residual store |
+| FC1 production → 8K chunks | 4 → 31 | Replaces an already fused production GEMM epilogue with repeated GEMMs and stores |
+| Attention normal → prepared | 5 → 5 | Changes ownership lifetime, without removing attention kernel work |
+
+The FC1 baseline **already selects Kitchen's CUDA INT8 linear**, with a CUTLASS
+SM75 GEMM containing a fused FP16 output epilogue. Its trace also contains two
+FP16 rotation GEMMs and CUDA row quantization. The candidate uses eager
+preparation, an explicit INT32 GEMM result, and a separate TileLang store. In
+the 8K trace, eight INT8 GEMMs and eight dequant stores are visible. The
+unchunked candidate therefore adds work and materialization to a baseline
+that already has fusion; earlier reasoning based solely on the eager fallback
+does not describe this actual run.
+
+Column candidates differ from production in about 0.0044% of stored values,
+with maximum absolute difference 0.00048828125 and relative RMSE about 4.6e-6.
+Their signed-extreme INT32 GEMM check and copy-stream lifetime check pass.
+However, this is not byte qualification: preparation/backend and epilogue
+arithmetic both changed. The candidate explicitly forms `row_scale*weight_scale`
+before multiplying the accumulator; production's CUDA visitor has its own
+ordered epilogue. A codes/scales/intermediate ablation is still needed to
+isolate the differences. It would be unsupported to call them INT8 overflow,
+or to infer generation quality from these operator fixtures.
+
+Fused RMS stress rows remain finite (relative RMSE 5.33e-6), within the declared
+1e-3 operator budget. That budget is not a full-generation quality guarantee.
+The gate and row epilogue are byte-exact only against their declared isolated
+operator references, not a new FP32 model baseline.
+
+Nsight Systems was unavailable. Nsight Compute's binary was present but was
+not used for this batch. These are PyTorch/CUPTI worker-trace observations;
+there is no measured NCU occupancy/stall attribution or Nsight critical path.
+
+### Block failure and next decision
+
+The candidate's non-prepared attention branch retained the policy result's
+`[1,S,D]` batch axis. Production flattens it to `[S,D]` before row projection.
+The candidate consequently passed an incompatible branch shape into the
+two-dimensional fused gate and raised
+`ValueError('Matching contiguous FP16 branch required')` on both ranks. This
+occurred during numerical validation, before block timing, memory histories
+or block traces. It is a benchmark wiring failure, not an observed CUDA OOM.
+
+The experiment-only forward now restores production's reshape. A CPU
+regression executes the mocked block and checks projection/gate boundaries;
+all six candidate contracts pass. The job builder now requires the final
+batch status to be `complete`, preventing a future green notebook from
+concealing failed sections. Neither change modifies production runtime files
+or retroactively qualifies the failed block run. **No GPU retry was submitted.**
+
+The highest-return follow-up is to qualify norm/gate and row-gate fusion inside
+the corrected block, preserving the actual production CUDA column path.
+Prepared attention is a modest memory optimization, with no demonstrated
+latency gain. Keep unchunked prepared FC1 out of promotion; consider 4K/8K only
+as measured memory-pressure alternatives after resolving byte qualification.
+Production defaults remain unchanged.
+
+All original artifacts, including failed block receipts, worker logs and
+compressed CUDA traces, are under
+`docs/data/h3_dit_vram_fusion_20261029/gpu_v1_final/` (plain logs archived as gzip).
+The aligned summary is under `gpu_v1_analysis/`. The original download manifest
+and an additional original-file hash manifest are preserved. Collection used
+one logical final-artifact request and no status/list/live-log queries.

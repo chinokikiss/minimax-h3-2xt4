@@ -1,0 +1,116 @@
+{
+  "status": "failed",
+  "section": "block",
+  "rank": 1,
+  "hardware": {
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "name": "Tesla T4",
+    "capability": [
+      7,
+      5
+    ]
+  },
+  "excluded_variants": {
+    "ownership": "Prepared/chunked column byte qualification failed",
+    "fc1_4k": "Prepared/chunked column byte qualification failed",
+    "fc1_8k": "Prepared/chunked column byte qualification failed",
+    "fc1_16k": "Prepared/chunked column byte qualification failed",
+    "combined_8k": "Prepared/chunked column byte qualification failed"
+  },
+  "resident_weight_bytes": 196346880,
+  "trained_base": "cnmds/minimax-h3-tp2-int8-561a6211@d3e6a4b131056d2c626a01acf6ba48123a885783",
+  "offline_lora": false,
+  "ptd_bake": false,
+  "weight_residency": "One fixed resident TP2 block; no prefetch/window extrapolation",
+  "input_distribution": "Seeded FP16 residual fixture through trained base block0, not captured real H3 activations",
+  "tokens": 59134,
+  "hidden": 5376,
+  "local_heads": 28,
+  "head_dim": 128,
+  "local_ffn": 7168,
+  "segments": [
+    [
+      0,
+      2392,
+      7
+    ],
+    [
+      2392,
+      3892,
+      6
+    ],
+    [
+      3892,
+      4702,
+      5
+    ],
+    [
+      4702,
+      59134,
+      0
+    ]
+  ],
+  "full_h3_pipeline": false,
+  "warmups": 2,
+  "repeats": 5,
+  "errors": {},
+  "error": "ValueError('Matching contiguous FP16 branch required')",
+  "compile_requests": [
+    {
+      "module": "patches.tilelang_fp32_rms_rope",
+      "seconds": 0.004570848000071237,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "patches.tilelang_row_quant",
+      "seconds": 1.9488834239999733,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "patches.tilelang_row_quant",
+      "seconds": 2.1187149969999837,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "patches.tilelang_row_quant",
+      "seconds": 1.9013212549999707,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "patches.tilelang_transport_tradeoffs",
+      "seconds": 1.9603832469999816,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "patches.tilelang_transport_p2",
+      "seconds": 2.064487443999951,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "patches.tilelang_swiglu_quant",
+      "seconds": 3.479289989999984,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "patches.tilelang_row_quant",
+      "seconds": 1.9326956639999935,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "patches.tilelang_transport_tradeoffs",
+      "seconds": 1.9670321410000042,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "patches.tilelang_transport_p2",
+      "seconds": 0.0024640689999841925,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    },
+    {
+      "module": "benchmarks.dit_vram_kernels",
+      "seconds": 0.002365150999935395,
+      "scope": "Compile request or persistent cache load, not necessarily a cold compiler invocation"
+    }
+  ]
+}
