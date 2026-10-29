@@ -75,7 +75,8 @@ subprocess.run([sys.executable,'-u',str(source/'benchmarks/kaggle_write_capacity
         print(json.dumps(dict(status='built', output=str(args.output), kernel=metadata['id'])))
         return
     state = dict(status='submitting', kernel=metadata['id'], submitted_utc=dt.datetime.now(dt.timezone.utc).isoformat(),
-        source_binding=binding, script_sha256=hashlib.sha256(script.encode()).hexdigest(),
+        source_binding=binding, script_sha256=hashlib.sha256((args.output/'experiment.py').read_bytes()).hexdigest(),
+        script_text_lf_sha256=hashlib.sha256(script.encode()).hexdigest(),
         run_timeout_seconds=3300, final_collection_count=0, cpu_only=True,
         result_relative='disk_capacity/result.json', collection='One final artifact retrieval; no status/live-log polls')
     receipt = args.output.parent/'submission.json'

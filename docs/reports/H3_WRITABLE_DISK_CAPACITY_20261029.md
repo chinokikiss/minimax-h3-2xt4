@@ -63,3 +63,9 @@ Only the submission acknowledgement has been received. Actual writable-capacity
 results are **pending**, with final collection count zero. No scheduling state
 or live logs have been queried. Source binding, exact submitted script, metadata
 and acknowledgement receipts are archived in the data folder above.
+
+The first receipt's script digest covered LF-normalized script text, while the
+Windows file contains CRLF. `cpu_v1_source_verification.json` records both hashes,
+verifies the exact archived file and embedded source hashes, and retains the
+original receipt. The builder now records file bytes and canonical text hashes
+separately. This bookkeeping correction did not alter or resubmit the CPU job.

@@ -1,0 +1,14 @@
+{
+  "status": "verified",
+  "accepted": true,
+  "version": 1,
+  "source_commit": "1a79945db6d0b6ddd3e63191e0547363ee903c45",
+  "script_file_sha256": "e100a93233535a000bc958bc13abd39485e1db085bc0e55bcb41a7e87a6cb600",
+  "script_text_lf_sha256": "c098724aa8036e6ce199af5076eaab590101792cfe7aa92c6046b671b0dd78c1",
+  "original_recorded_script_sha256": "c098724aa8036e6ce199af5076eaab590101792cfe7aa92c6046b671b0dd78c1",
+  "original_hash_scope": "UTF-8 script text with LF; original Windows file has CRLF",
+  "original_receipt_preserved": true,
+  "job_changed": false,
+  "resubmitted": false,
+  "embedded_source_hashes_match_local": true
+}
