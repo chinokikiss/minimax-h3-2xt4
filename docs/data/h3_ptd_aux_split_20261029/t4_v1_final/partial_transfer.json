@@ -1,0 +1,16 @@
+{
+  "status": "final_outputs_unavailable",
+  "kernel": "pamcks/h3-ptd-aux-split-t4-20261029",
+  "version": 1,
+  "user_authorized_transport_retry": true,
+  "transport_attempt": 2,
+  "automatic_retries": 0,
+  "started_utc": "2026-10-29T04:20:29.606643+00:00",
+  "output": "D:\\attention_eval\\h3_ptd_aux_split_20261029\\gpu_v1\\gpu_final_retry1",
+  "status_polls": 0,
+  "duplicate_submissions": 0,
+  "source_capsule_sha256": "4877485cceaf780798665794dc40ae94143c2cfc3078dd46a4133f174f1801c6",
+  "returncode": 1,
+  "files": 29,
+  "completed_utc": "2026-10-29T04:20:50.114161+00:00"
+}

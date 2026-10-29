@@ -1,0 +1,4 @@
+Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.4), please consider upgrading to the latest version (2.2.5)
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_supervision/notebook_worker.log
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_supervision/supervision.json
+Kernel log downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\h3-ptd-aux-split-t4-20261029.log 

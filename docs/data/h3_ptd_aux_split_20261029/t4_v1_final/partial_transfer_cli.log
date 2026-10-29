@@ -1,0 +1,31 @@
+Warning: Looks like you're using an outdated `kaggle` version (installed: 2.2.4), please consider upgrading to the latest version (2.2.5)
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\light_setup/api_probe.log
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\light_setup/bounded_worker.py
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\light_setup/cpu_qualification.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\light_setup/delivery_binding.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\light_setup/direct-core.txt
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\light_setup/direct_pip.log
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\light_setup/execution_env.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\light_setup/notebook_worker.log
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\light_setup/runtime_profile.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\light_setup/setup_receipt.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\light_setup/supervision.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_qualification/0_monolithic/preparation.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_qualification/0_monolithic/unused_te.safetensors
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_qualification/0_monolithic/worker_rank0.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_qualification/0_monolithic/worker_rank1.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_qualification/1_split/preparation.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_qualification/1_split/unused_te.safetensors
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_qualification/1_split/worker_rank0.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_qualification/1_split/worker_rank1.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_qualification/2_split_repeat/preparation.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_qualification/2_split_repeat/unused_te.safetensors
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_qualification/2_split_repeat/worker_rank0.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_qualification/2_split_repeat/worker_rank1.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_qualification/3_monolithic_repeat/preparation.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_qualification/3_monolithic_repeat/unused_te.safetensors
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_qualification/3_monolithic_repeat/worker_rank0.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_qualification/3_monolithic_repeat/worker_rank1.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_qualification/result.json
+Output file downloaded to D:\attention_eval\h3_ptd_aux_split_20261029\gpu_v1\gpu_final_retry1\ptd_supervision/bounded_worker.py
+('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))

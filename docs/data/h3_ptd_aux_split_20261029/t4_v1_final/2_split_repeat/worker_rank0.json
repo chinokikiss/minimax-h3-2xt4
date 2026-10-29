@@ -1,0 +1,2743 @@
+{
+  "rank": 0,
+  "spans": [
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.0003992259998994996,
+      "thread_cpu_seconds": 0.00039871500000110416,
+      "default_stream_interval_ms": 0.3994559943675995
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 19.096797525000056,
+      "thread_cpu_seconds": 14.452016061,
+      "default_stream_interval_ms": 19097.30078125
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.0009969810000711732,
+      "thread_cpu_seconds": 0.0007544209999998941,
+      "default_stream_interval_ms": 0.9990079998970032
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 9.319513341999937,
+      "thread_cpu_seconds": 1.1000415260000018,
+      "default_stream_interval_ms": 9321.83984375
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.0004626520001238532,
+      "thread_cpu_seconds": 0.0004617779999982474,
+      "default_stream_interval_ms": 0.4636799991130829
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 17.591468074999966,
+      "thread_cpu_seconds": 1.1148755580000014,
+      "default_stream_interval_ms": 17591.947265625
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.0005048530001658946,
+      "thread_cpu_seconds": 0.0005048919999985912,
+      "default_stream_interval_ms": 0.5060160160064697
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 12.959695627999963,
+      "thread_cpu_seconds": 1.166575193,
+      "default_stream_interval_ms": 12960.048828125
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.000497345999974641,
+      "thread_cpu_seconds": 0.0004966499999987661,
+      "default_stream_interval_ms": 0.4981760084629059
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 12.420560852000108,
+      "thread_cpu_seconds": 1.0965653240000002,
+      "default_stream_interval_ms": 12420.89453125
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.0006153120000362833,
+      "thread_cpu_seconds": 0.0006034680000013282,
+      "default_stream_interval_ms": 0.6166399717330933
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 12.478444631000002,
+      "thread_cpu_seconds": 1.0792221370000021,
+      "default_stream_interval_ms": 12478.76171875
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.0006642030000421073,
+      "thread_cpu_seconds": 0.0005858709999984058,
+      "default_stream_interval_ms": 0.6402879953384399
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 12.811132695999959,
+      "thread_cpu_seconds": 1.145461754000003,
+      "default_stream_interval_ms": 12811.474609375
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.014600137000115865,
+      "thread_cpu_seconds": 0.0007926959999977612,
+      "default_stream_interval_ms": 14.605183601379395
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 12.443530385999793,
+      "thread_cpu_seconds": 0.9966584929999982,
+      "default_stream_interval_ms": 12443.861328125
+    }
+  ],
+  "peak_allocated": 3718966784,
+  "peak_reserved": 4102029312,
+  "rss_bytes": 5157052416,
+  "cpu_preparation_spans": [
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 2.4576999976488878e-05,
+      "thread_cpu_seconds": 2.449100000134763e-05,
+      "start_monotonic": 1140.12122154
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.0007252039999912085,
+      "thread_cpu_seconds": 0.0007103080000003814,
+      "start_monotonic": 1140.12064708
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.001784540000016932,
+      "thread_cpu_seconds": 0.0017838819999997924,
+      "start_monotonic": 1140.122169659
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.002734199000087756,
+      "thread_cpu_seconds": 0.0027340640000002026,
+      "start_monotonic": 1140.121376572
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 1.753900005496689e-05,
+      "thread_cpu_seconds": 1.7030999998723928e-05,
+      "start_monotonic": 1140.124528803
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.0005349989999103855,
+      "thread_cpu_seconds": 0.0005349390000013443,
+      "start_monotonic": 1140.124114899
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.005590262000168877,
+      "thread_cpu_seconds": 0.005589961000000088,
+      "start_monotonic": 1140.127496506
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.008563450000110606,
+      "thread_cpu_seconds": 0.008562746999999149,
+      "start_monotonic": 1140.124654243
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.0006989450000673969,
+      "thread_cpu_seconds": 0.0006982909999990738,
+      "start_monotonic": 1140.210266949
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.0006024960000559076,
+      "thread_cpu_seconds": 0.0006036189999996111,
+      "start_monotonic": 1140.21097427
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.1958826349998617,
+      "thread_cpu_seconds": 0.19586157500000034,
+      "start_monotonic": 1140.442162343
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.42668053500005954,
+      "thread_cpu_seconds": 0.2868855900000007,
+      "start_monotonic": 1140.211583885
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.0005358190001061303,
+      "thread_cpu_seconds": 0.0005369670000003879,
+      "start_monotonic": 1140.63827
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.5920153679999203,
+      "thread_cpu_seconds": 0.5917871249999997,
+      "start_monotonic": 1141.479432472
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 1.4328853199999685,
+      "thread_cpu_seconds": 0.8377549139999996,
+      "start_monotonic": 1140.638812334
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.7832063999999264,
+      "thread_cpu_seconds": 0.7831008789999991,
+      "start_monotonic": 1143.22036748
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 1.9320933899998636,
+      "thread_cpu_seconds": 1.1017179949999996,
+      "start_monotonic": 1142.071704354
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.3923161820000587,
+      "thread_cpu_seconds": 0.3922611970000034,
+      "start_monotonic": 1144.536626963
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.9253776900000048,
+      "thread_cpu_seconds": 0.5532954080000003,
+      "start_monotonic": 1144.00380396
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.0005678780000835104,
+      "thread_cpu_seconds": 0.0005690649999969821,
+      "start_monotonic": 1144.929187729
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.0004085510001914372,
+      "thread_cpu_seconds": 0.00040919999999999845,
+      "start_monotonic": 1144.929762309
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.000367896000170731,
+      "thread_cpu_seconds": 0.00036848299999903134,
+      "start_monotonic": 1144.930175843
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.19567155599997932,
+      "thread_cpu_seconds": 0.1956573309999996,
+      "start_monotonic": 1145.158439117
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.4237824920001003,
+      "thread_cpu_seconds": 0.2811949089999999,
+      "start_monotonic": 1144.930551148
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.000544151000212878,
+      "thread_cpu_seconds": 0.0005451819999997554,
+      "start_monotonic": 1145.354339181
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.594327721000127,
+      "thread_cpu_seconds": 0.594248297,
+      "start_monotonic": 1146.195330692
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 1.43500468000002,
+      "thread_cpu_seconds": 0.8339270450000029,
+      "start_monotonic": 1145.354889667
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.7839890640000249,
+      "thread_cpu_seconds": 0.7839063039999985,
+      "start_monotonic": 1147.94347033
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 1.937817012000096,
+      "thread_cpu_seconds": 1.1107339350000025,
+      "start_monotonic": 1146.789900647
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.3897522199999912,
+      "thread_cpu_seconds": 0.38968703699999807,
+      "start_monotonic": 1149.260975957
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.9232275520000712,
+      "thread_cpu_seconds": 0.5549270029999995,
+      "start_monotonic": 1148.727724102
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.0005538860000342538,
+      "thread_cpu_seconds": 0.0005547299999975053,
+      "start_monotonic": 1149.650956999
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.0003864899999825866,
+      "thread_cpu_seconds": 0.0003869999999999152,
+      "start_monotonic": 1149.651516879
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.00038241599986577057,
+      "thread_cpu_seconds": 0.0003831249999990405,
+      "start_monotonic": 1149.651908322
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.00036193900018588465,
+      "thread_cpu_seconds": 0.0003624050000006207,
+      "start_monotonic": 1149.652296071
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.000556990999939444,
+      "thread_cpu_seconds": 0.0005577890000019181,
+      "start_monotonic": 1149.652662016
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.33938947799993,
+      "thread_cpu_seconds": 0.338474672,
+      "start_monotonic": 1151.642872133
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 1,
+      "wall_seconds": 0.5737538800001403,
+      "thread_cpu_seconds": 0.44111938500000003,
+      "start_monotonic": 1151.408739111
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.7001877359998616,
+      "thread_cpu_seconds": 0.699506064,
+      "start_monotonic": 1153.011534725
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 1,
+      "wall_seconds": 1.5556596930000524,
+      "thread_cpu_seconds": 1.047530421,
+      "start_monotonic": 1152.156412308
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.014872372000127143,
+      "thread_cpu_seconds": 0.014825596000000107,
+      "start_monotonic": 1155.156202918
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.0180438149998281,
+      "thread_cpu_seconds": 0.017688826000000102,
+      "start_monotonic": 1155.153439352
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 5.205900015425868e-05,
+      "thread_cpu_seconds": 4.94129999997206e-05,
+      "start_monotonic": 1155.172701581
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.0014062119998925482,
+      "thread_cpu_seconds": 0.0014063330000002594,
+      "start_monotonic": 1155.171580072
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.004877808999935951,
+      "thread_cpu_seconds": 0.004875450000000114,
+      "start_monotonic": 1155.174466683
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.006103885000129594,
+      "thread_cpu_seconds": 0.00610245400000009,
+      "start_monotonic": 1155.173404365
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 2.336600005037326e-05,
+      "thread_cpu_seconds": 2.3110999999964577e-05,
+      "start_monotonic": 1155.180096444
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.0007035859998723026,
+      "thread_cpu_seconds": 0.000703410000000293,
+      "start_monotonic": 1155.179548987
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.8482637440001781,
+      "thread_cpu_seconds": 0.8481192120000003,
+      "start_monotonic": 1155.124133227
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 1,
+      "wall_seconds": 1.9938731369998095,
+      "thread_cpu_seconds": 1.209421331,
+      "start_monotonic": 1153.978764007
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.6755860309999662,
+      "thread_cpu_seconds": 0.6402843789999997,
+      "start_monotonic": 1156.910991148
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 1,
+      "wall_seconds": 1.2065401960001054,
+      "thread_cpu_seconds": 0.8349020060000001,
+      "start_monotonic": 1156.380254514
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.32377142999985153,
+      "thread_cpu_seconds": 0.3234685369999992,
+      "start_monotonic": 1158.21327281
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 1,
+      "wall_seconds": 0.550881587999811,
+      "thread_cpu_seconds": 0.40975283399999984,
+      "start_monotonic": 1157.986475327
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 1.0043805149998661,
+      "thread_cpu_seconds": 0.9891306670000004,
+      "start_monotonic": 1159.54179047
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 1,
+      "wall_seconds": 1.8408105569999407,
+      "thread_cpu_seconds": 1.2533550510000007,
+      "start_monotonic": 1158.705634181
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 1.4896054379998986,
+      "thread_cpu_seconds": 1.4618643650000003,
+      "start_monotonic": 1161.924156126
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 1,
+      "wall_seconds": 2.6321416579999095,
+      "thread_cpu_seconds": 1.8121896569999993,
+      "start_monotonic": 1160.781936927
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.6365611850001187,
+      "thread_cpu_seconds": 0.6362885209999991,
+      "start_monotonic": 1164.244788644
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 1,
+      "wall_seconds": 1.1664603579999948,
+      "thread_cpu_seconds": 0.812809004,
+      "start_monotonic": 1163.71516811
+    },
+    {
+      "stage": "refiner_total",
+      "hop": 1,
+      "wall_seconds": 13.8061422830001,
+      "thread_cpu_seconds": 9.988252537000001,
+      "start_monotonic": 1151.404819315
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.0070518620000257215,
+      "thread_cpu_seconds": 0.00704620800000022,
+      "start_monotonic": 1168.222947946
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 1,
+      "wall_seconds": 0.010521032000042396,
+      "thread_cpu_seconds": 0.009485350000000281,
+      "start_monotonic": 1168.219743163
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 3.7049999946248136e-05,
+      "thread_cpu_seconds": 3.668399999945393e-05,
+      "start_monotonic": 1168.231181603
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 1,
+      "wall_seconds": 0.0011050049999994371,
+      "thread_cpu_seconds": 0.0011049579999999892,
+      "start_monotonic": 1168.230322384
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.0027123340000798635,
+      "thread_cpu_seconds": 0.002712079000000145,
+      "start_monotonic": 1168.232819397
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 1,
+      "wall_seconds": 0.004013000999975702,
+      "thread_cpu_seconds": 0.004011901000000151,
+      "start_monotonic": 1168.231757201
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 3.614499996729137e-05,
+      "thread_cpu_seconds": 3.544800000021553e-05,
+      "start_monotonic": 1168.23661827
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 1,
+      "wall_seconds": 0.0010428200000660581,
+      "thread_cpu_seconds": 0.0010425809999992097,
+      "start_monotonic": 1168.235821606
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.3274427060000562,
+      "thread_cpu_seconds": 0.3254019630000009,
+      "start_monotonic": 1171.684752307
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 2,
+      "wall_seconds": 0.5576756579998801,
+      "thread_cpu_seconds": 0.41639639700000153,
+      "start_monotonic": 1171.454847246
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 1.0581341229999452,
+      "thread_cpu_seconds": 1.057762007000001,
+      "start_monotonic": 1173.018040652
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 2,
+      "wall_seconds": 1.8948673849999977,
+      "thread_cpu_seconds": 1.3241559719999998,
+      "start_monotonic": 1172.1815821
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 1.4547923879999871,
+      "thread_cpu_seconds": 1.4542145430000009,
+      "start_monotonic": 1175.456451593
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 2,
+      "wall_seconds": 2.600909347999959,
+      "thread_cpu_seconds": 1.8377335200000005,
+      "start_monotonic": 1174.31070695
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.7257553570000255,
+      "thread_cpu_seconds": 0.7255091099999991,
+      "start_monotonic": 1177.792210225
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 2,
+      "wall_seconds": 1.2601921499999662,
+      "thread_cpu_seconds": 0.8983271070000001,
+      "start_monotonic": 1177.258059244
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.367095658000153,
+      "thread_cpu_seconds": 0.3668722529999986,
+      "start_monotonic": 1179.11697818
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 2,
+      "wall_seconds": 0.5961996900000486,
+      "thread_cpu_seconds": 0.4582990820000017,
+      "start_monotonic": 1178.888152558
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.6141456689999814,
+      "thread_cpu_seconds": 0.6140511880000012,
+      "start_monotonic": 1180.488503189
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 2,
+      "wall_seconds": 1.4504082749999725,
+      "thread_cpu_seconds": 0.8610037209999994,
+      "start_monotonic": 1179.652469613
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.8011200240000562,
+      "thread_cpu_seconds": 0.8010331239999999,
+      "start_monotonic": 1182.48477472
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 2,
+      "wall_seconds": 1.9482911200000217,
+      "thread_cpu_seconds": 1.1384891419999974,
+      "start_monotonic": 1181.33785126
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.40769097599991255,
+      "thread_cpu_seconds": 0.40765359799999956,
+      "start_monotonic": 1184.109722332
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 2,
+      "wall_seconds": 0.9385454129999289,
+      "thread_cpu_seconds": 0.588587522000001,
+      "start_monotonic": 1183.579096469
+    },
+    {
+      "stage": "refiner_total",
+      "hop": 2,
+      "wall_seconds": 13.39795641600017,
+      "thread_cpu_seconds": 9.581041290999998,
+      "start_monotonic": 1171.452598082
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.2623929339999904,
+      "thread_cpu_seconds": 0.2620299619999997,
+      "start_monotonic": 1185.194343787
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 3,
+      "wall_seconds": 0.497158188999947,
+      "thread_cpu_seconds": 0.38739176600000036,
+      "start_monotonic": 1184.960000019
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.009231300000010378,
+      "thread_cpu_seconds": 0.00907606700000052,
+      "start_monotonic": 1185.951339668
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 2,
+      "wall_seconds": 0.01397096400000919,
+      "thread_cpu_seconds": 0.011600720000000564,
+      "start_monotonic": 1185.947088199
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 3.6515999909170205e-05,
+      "thread_cpu_seconds": 3.575499999897147e-05,
+      "start_monotonic": 1185.961933299
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 2,
+      "wall_seconds": 0.001246921000074508,
+      "thread_cpu_seconds": 0.001130754000000067,
+      "start_monotonic": 1185.961123806
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.00961802799997713,
+      "thread_cpu_seconds": 0.0029802859999996656,
+      "start_monotonic": 1185.968274092
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 2,
+      "wall_seconds": 0.014944346999982372,
+      "thread_cpu_seconds": 0.004809856999999695,
+      "start_monotonic": 1185.966283494
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 4.281199994693452e-05,
+      "thread_cpu_seconds": 4.248699999997996e-05,
+      "start_monotonic": 1185.982154155
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 2,
+      "wall_seconds": 0.0011016109999673063,
+      "thread_cpu_seconds": 0.0011010809999998372,
+      "start_monotonic": 1185.981288768
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 1.0701432969999587,
+      "thread_cpu_seconds": 1.0692587230000008,
+      "start_monotonic": 1186.522768389
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 3,
+      "wall_seconds": 1.9546622650000245,
+      "thread_cpu_seconds": 1.3178632159999992,
+      "start_monotonic": 1185.638545174
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 1.158790186000033,
+      "thread_cpu_seconds": 1.1576505759999982,
+      "start_monotonic": 1188.962759324
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 3,
+      "wall_seconds": 2.305715113999895,
+      "thread_cpu_seconds": 1.493308773999999,
+      "start_monotonic": 1187.8160677
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.6949452480000673,
+      "thread_cpu_seconds": 0.6940938260000031,
+      "start_monotonic": 1191.028285672
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 3,
+      "wall_seconds": 1.2285988270000416,
+      "thread_cpu_seconds": 0.8805417460000022,
+      "start_monotonic": 1190.494825004
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.19552314699990347,
+      "thread_cpu_seconds": 0.19550167200000246,
+      "start_monotonic": 1192.296525425
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 3,
+      "wall_seconds": 0.42341702600015196,
+      "thread_cpu_seconds": 0.28256160800000174,
+      "start_monotonic": 1192.068883793
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.6055475509999724,
+      "thread_cpu_seconds": 0.6054798179999992,
+      "start_monotonic": 1193.482107668
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 3,
+      "wall_seconds": 1.4427110540000285,
+      "thread_cpu_seconds": 0.8621654260000007,
+      "start_monotonic": 1192.645176934
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.8120879489999879,
+      "thread_cpu_seconds": 0.8120083549999997,
+      "start_monotonic": 1195.46030071
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 3,
+      "wall_seconds": 1.9616083450000588,
+      "thread_cpu_seconds": 1.1483394890000014,
+      "start_monotonic": 1194.31102709
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.3921230809999088,
+      "thread_cpu_seconds": 0.39208689000000163,
+      "start_monotonic": 1197.150074379
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 3,
+      "wall_seconds": 0.9232210320001286,
+      "thread_cpu_seconds": 0.5528478219999968,
+      "start_monotonic": 1196.61921795
+    },
+    {
+      "stage": "refiner_total",
+      "hop": 3,
+      "wall_seconds": 12.904687177000142,
+      "thread_cpu_seconds": 9.010061809,
+      "start_monotonic": 1184.954485068
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.26326856200012116,
+      "thread_cpu_seconds": 0.2622301749999991,
+      "start_monotonic": 1198.199700597
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 4,
+      "wall_seconds": 0.49476086799995755,
+      "thread_cpu_seconds": 0.38460606900000016,
+      "start_monotonic": 1197.968608356
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.009559486999933142,
+      "thread_cpu_seconds": 0.008221538000000805,
+      "start_monotonic": 1198.946860659
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 3,
+      "wall_seconds": 0.014170458000080544,
+      "thread_cpu_seconds": 0.011074127000000544,
+      "start_monotonic": 1198.942720042
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 7.563000008303788e-05,
+      "thread_cpu_seconds": 7.443599999845674e-05,
+      "start_monotonic": 1198.958331454
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 3,
+      "wall_seconds": 0.0017549039998812077,
+      "thread_cpu_seconds": 0.0016794949999994202,
+      "start_monotonic": 1198.95696427
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.0025588060000245605,
+      "thread_cpu_seconds": 0.0024491659999998916,
+      "start_monotonic": 1198.961294036
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 3,
+      "wall_seconds": 0.005128444000092713,
+      "thread_cpu_seconds": 0.004380728999999306,
+      "start_monotonic": 1198.959080189
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 7.05370000559924e-05,
+      "thread_cpu_seconds": 6.955200000113848e-05,
+      "start_monotonic": 1198.978369343
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 3,
+      "wall_seconds": 0.01446980699984124,
+      "thread_cpu_seconds": 0.002266961999998429,
+      "start_monotonic": 1198.964305137
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 1.0812153970000509,
+      "thread_cpu_seconds": 1.0709359140000032,
+      "start_monotonic": 1199.5516288
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 4,
+      "wall_seconds": 1.9610942270001033,
+      "thread_cpu_seconds": 1.327127020999999,
+      "start_monotonic": 1198.672059394
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.9838374079999994,
+      "thread_cpu_seconds": 0.9778110140000038,
+      "start_monotonic": 1202.005409652
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 4,
+      "wall_seconds": 2.1301426410000204,
+      "thread_cpu_seconds": 1.3292236890000027,
+      "start_monotonic": 1200.859359465
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.412943112999983,
+      "thread_cpu_seconds": 0.41271018199999787,
+      "start_monotonic": 1203.82320386
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 4,
+      "wall_seconds": 0.9463654069998029,
+      "thread_cpu_seconds": 0.5949779229999947,
+      "start_monotonic": 1203.29003329
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.2012383349999709,
+      "thread_cpu_seconds": 0.2011991970000011,
+      "start_monotonic": 1204.765975551
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 4,
+      "wall_seconds": 0.42962749800017264,
+      "thread_cpu_seconds": 0.27926818300000633,
+      "start_monotonic": 1204.537819795
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.6196708509999098,
+      "thread_cpu_seconds": 0.6196120270000023,
+      "start_monotonic": 1205.957274366
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 4,
+      "wall_seconds": 1.4580866230000993,
+      "thread_cpu_seconds": 0.8537175210000001,
+      "start_monotonic": 1205.119170154
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.8014834789998986,
+      "thread_cpu_seconds": 0.8008343930000024,
+      "start_monotonic": 1207.971864521
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 4,
+      "wall_seconds": 1.9550114219998704,
+      "thread_cpu_seconds": 1.144685944999999,
+      "start_monotonic": 1206.818571468
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.4126928340001541,
+      "thread_cpu_seconds": 0.412351785999995,
+      "start_monotonic": 1209.600734062
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 4,
+      "wall_seconds": 0.9412973579999289,
+      "thread_cpu_seconds": 0.5908685329999983,
+      "start_monotonic": 1209.07236261
+    },
+    {
+      "stage": "refiner_total",
+      "hop": 4,
+      "wall_seconds": 12.379839489000005,
+      "thread_cpu_seconds": 8.430961848000003,
+      "start_monotonic": 1197.963322178
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.3175353410001662,
+      "thread_cpu_seconds": 0.31728585700000167,
+      "start_monotonic": 1210.675148035
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 5,
+      "wall_seconds": 0.5420485520000966,
+      "thread_cpu_seconds": 0.40839449900000346,
+      "start_monotonic": 1210.450932729
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.008587233000071137,
+      "thread_cpu_seconds": 0.008460671999998226,
+      "start_monotonic": 1211.395665191
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 4,
+      "wall_seconds": 0.01306802199997037,
+      "thread_cpu_seconds": 0.011212852999999967,
+      "start_monotonic": 1211.391447947
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.0001873230000910553,
+      "thread_cpu_seconds": 0.00012394099999823993,
+      "start_monotonic": 1211.409604623
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 4,
+      "wall_seconds": 0.005616278999923452,
+      "thread_cpu_seconds": 0.0019927939999995203,
+      "start_monotonic": 1211.404581318
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.012520405000032042,
+      "thread_cpu_seconds": 0.002799090999999976,
+      "start_monotonic": 1211.414761705
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 4,
+      "wall_seconds": 0.017675277999842365,
+      "thread_cpu_seconds": 0.005100926999997313,
+      "start_monotonic": 1211.410521059
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 6.562099997609039e-05,
+      "thread_cpu_seconds": 6.487399999954846e-05,
+      "start_monotonic": 1211.429515202
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 4,
+      "wall_seconds": 0.0020272990000194113,
+      "thread_cpu_seconds": 0.0016484440000006373,
+      "start_monotonic": 1211.428301488
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.963238365999814,
+      "thread_cpu_seconds": 0.9610900500000028,
+      "start_monotonic": 1212.104208761
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 5,
+      "wall_seconds": 1.8259188259999064,
+      "thread_cpu_seconds": 1.2129190399999956,
+      "start_monotonic": 1211.241818751
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.7935829319999357,
+      "thread_cpu_seconds": 0.7934113599999932,
+      "start_monotonic": 1214.441657732
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 5,
+      "wall_seconds": 1.9413719260001017,
+      "thread_cpu_seconds": 1.141923974000001,
+      "start_monotonic": 1213.294109499
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.44824473099993156,
+      "thread_cpu_seconds": 0.44781271500000486,
+      "start_monotonic": 1216.107915
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 5,
+      "wall_seconds": 0.9795975529998486,
+      "thread_cpu_seconds": 0.6156983389999979,
+      "start_monotonic": 1215.576802705
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.20170546200006356,
+      "thread_cpu_seconds": 0.20169075300000117,
+      "start_monotonic": 1217.149518359
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 5,
+      "wall_seconds": 0.4300099860001865,
+      "thread_cpu_seconds": 0.28173432999999903,
+      "start_monotonic": 1216.921454098
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.6073485350000283,
+      "thread_cpu_seconds": 0.6072605640000006,
+      "start_monotonic": 1218.363029031
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 5,
+      "wall_seconds": 1.4444662089999838,
+      "thread_cpu_seconds": 0.8542050249999988,
+      "start_monotonic": 1217.526165533
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.8082901889999903,
+      "thread_cpu_seconds": 0.8080678890000002,
+      "start_monotonic": 1220.36955331
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 5,
+      "wall_seconds": 1.9558123550000346,
+      "thread_cpu_seconds": 1.1375132869999973,
+      "start_monotonic": 1219.222326386
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.4055783070000416,
+      "thread_cpu_seconds": 0.4055291509999961,
+      "start_monotonic": 1222.048999723
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 5,
+      "wall_seconds": 0.9359357570001521,
+      "thread_cpu_seconds": 0.5639810039999986,
+      "start_monotonic": 1221.518879244
+    },
+    {
+      "stage": "refiner_total",
+      "hop": 5,
+      "wall_seconds": 12.36360594200005,
+      "thread_cpu_seconds": 8.472891649000005,
+      "start_monotonic": 1210.447309634
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.3226613639999414,
+      "thread_cpu_seconds": 0.31980368799999326,
+      "start_monotonic": 1223.148608225
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 6,
+      "wall_seconds": 0.5517001860000619,
+      "thread_cpu_seconds": 0.41352762999999726,
+      "start_monotonic": 1222.919856925
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.008538114999964819,
+      "thread_cpu_seconds": 0.008012863999997677,
+      "start_monotonic": 1223.882942825
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 5,
+      "wall_seconds": 0.013268380999988949,
+      "thread_cpu_seconds": 0.010728907000000731,
+      "start_monotonic": 1223.878391574
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 3.0339999966599862e-05,
+      "thread_cpu_seconds": 2.954400000021451e-05,
+      "start_monotonic": 1223.892312319
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 5,
+      "wall_seconds": 0.0007791779999024584,
+      "thread_cpu_seconds": 0.0007791180000005227,
+      "start_monotonic": 1223.891703775
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.0029736210001374275,
+      "thread_cpu_seconds": 0.00295242600000023,
+      "start_monotonic": 1223.893963758
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 5,
+      "wall_seconds": 0.004493799999863768,
+      "thread_cpu_seconds": 0.0041215589999978874,
+      "start_monotonic": 1223.892679496
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 6.224599997040059e-05,
+      "thread_cpu_seconds": 6.117699999919068e-05,
+      "start_monotonic": 1223.898539928
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 5,
+      "wall_seconds": 0.0017253859998618282,
+      "thread_cpu_seconds": 0.0014169779999981813,
+      "start_monotonic": 1223.897219852
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 1.061354564000112,
+      "thread_cpu_seconds": 1.0609728069999989,
+      "start_monotonic": 1224.514506906
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 6,
+      "wall_seconds": 1.9080504070000188,
+      "thread_cpu_seconds": 1.3275882909999979,
+      "start_monotonic": 1223.66812313
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 1.1785511870000391,
+      "thread_cpu_seconds": 1.174168500999997,
+      "start_monotonic": 1226.969303671
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 6,
+      "wall_seconds": 2.324138509000022,
+      "thread_cpu_seconds": 1.5102822280000012,
+      "start_monotonic": 1225.823994275
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.40080263699996976,
+      "thread_cpu_seconds": 0.4007728130000032,
+      "start_monotonic": 1229.009434603
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 6,
+      "wall_seconds": 0.9290037529999609,
+      "thread_cpu_seconds": 0.5629091950000031,
+      "start_monotonic": 1228.481476395
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.2131893199998558,
+      "thread_cpu_seconds": 0.21286070300000404,
+      "start_monotonic": 1229.986785431
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 6,
+      "wall_seconds": 0.44094610899992404,
+      "thread_cpu_seconds": 0.29241850200000385,
+      "start_monotonic": 1229.759399987
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.5985254830000031,
+      "thread_cpu_seconds": 0.5984605169999995,
+      "start_monotonic": 1231.221533769
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 6,
+      "wall_seconds": 1.4395938830000432,
+      "thread_cpu_seconds": 0.8388711839999985,
+      "start_monotonic": 1230.380716849
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.7984170160000303,
+      "thread_cpu_seconds": 0.7982034210000037,
+      "start_monotonic": 1233.220273663
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 6,
+      "wall_seconds": 1.9454842289999306,
+      "thread_cpu_seconds": 1.1289524599999936,
+      "start_monotonic": 1232.073442237
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.40343121599994447,
+      "thread_cpu_seconds": 0.4034014359999958,
+      "start_monotonic": 1234.891713991
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 6,
+      "wall_seconds": 0.9362871759999507,
+      "thread_cpu_seconds": 0.5631067200000004,
+      "start_monotonic": 1234.359106624
+    },
+    {
+      "stage": "refiner_total",
+      "hop": 6,
+      "wall_seconds": 12.735726445999944,
+      "thread_cpu_seconds": 8.881262321999998,
+      "start_monotonic": 1222.914841413
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.2688874850000502,
+      "thread_cpu_seconds": 0.26712177999999653,
+      "start_monotonic": 1235.99305404
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 7,
+      "wall_seconds": 0.502733821999982,
+      "thread_cpu_seconds": 0.38586078299999826,
+      "start_monotonic": 1235.75960113
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.013450572000010652,
+      "thread_cpu_seconds": 0.0077957409999989125,
+      "start_monotonic": 1236.749333947
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 6,
+      "wall_seconds": 0.020281431000057637,
+      "thread_cpu_seconds": 0.010598661999999592,
+      "start_monotonic": 1236.745400474
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.00010037299989562598,
+      "thread_cpu_seconds": 9.949799999731113e-05,
+      "start_monotonic": 1236.779456828
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 6,
+      "wall_seconds": 0.0163921890000438,
+      "thread_cpu_seconds": 0.0017405619999983912,
+      "start_monotonic": 1236.765766164
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.0038152669999362843,
+      "thread_cpu_seconds": 0.002787925999999885,
+      "start_monotonic": 1236.785126338
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 6,
+      "wall_seconds": 0.006860447999997632,
+      "thread_cpu_seconds": 0.004974636000000032,
+      "start_monotonic": 1236.782486833
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 4.1449000036664074e-05,
+      "thread_cpu_seconds": 4.0608999999136586e-05,
+      "start_monotonic": 1236.794206104
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 6,
+      "wall_seconds": 0.0050274269999590615,
+      "thread_cpu_seconds": 0.0012427949999995747,
+      "start_monotonic": 1236.789446703
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 1.064851833000148,
+      "thread_cpu_seconds": 1.0637937679999965,
+      "start_monotonic": 1237.351544426
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 7,
+      "wall_seconds": 1.9517398370001047,
+      "thread_cpu_seconds": 1.3323352259999979,
+      "start_monotonic": 1236.464974558
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 1.0886334790000092,
+      "thread_cpu_seconds": 1.074168016999998,
+      "start_monotonic": 1239.781855849
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 7,
+      "wall_seconds": 2.2308604360000572,
+      "thread_cpu_seconds": 1.4118836570000042,
+      "start_monotonic": 1238.639872302
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.3965750099998786,
+      "thread_cpu_seconds": 0.3964692689999936,
+      "start_monotonic": 1241.690415518
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 7,
+      "wall_seconds": 0.9298236370000268,
+      "thread_cpu_seconds": 0.5496655630000049,
+      "start_monotonic": 1241.157405635
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.1950965300000007,
+      "thread_cpu_seconds": 0.19508231100000017,
+      "start_monotonic": 1242.652855294
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 7,
+      "wall_seconds": 0.42237450800007537,
+      "thread_cpu_seconds": 0.2734627230000015,
+      "start_monotonic": 1242.425821543
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.6005999589999647,
+      "thread_cpu_seconds": 0.600533059,
+      "start_monotonic": 1243.866107521
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 7,
+      "wall_seconds": 1.4429081519999727,
+      "thread_cpu_seconds": 0.8420056189999983,
+      "start_monotonic": 1243.024030827
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.8026148239998747,
+      "thread_cpu_seconds": 0.8025393469999997,
+      "start_monotonic": 1245.857835124
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 7,
+      "wall_seconds": 1.9429592050000792,
+      "thread_cpu_seconds": 1.1425359119999996,
+      "start_monotonic": 1244.71775386
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.41000830900020446,
+      "thread_cpu_seconds": 0.4099465019999968,
+      "start_monotonic": 1247.547233805
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 7,
+      "wall_seconds": 0.9466744910000671,
+      "thread_cpu_seconds": 0.5725594960000038,
+      "start_monotonic": 1247.010802094
+    },
+    {
+      "stage": "refiner_total",
+      "hop": 7,
+      "wall_seconds": 12.557064414000024,
+      "thread_cpu_seconds": 8.664274211000006,
+      "start_monotonic": 1235.754572206
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.00983161499993912,
+      "thread_cpu_seconds": 0.009341271999996792,
+      "start_monotonic": 1249.242805333
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 7,
+      "wall_seconds": 0.01470320399994307,
+      "thread_cpu_seconds": 0.011904508999997176,
+      "start_monotonic": 1249.238240393
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 8.39889999042498e-05,
+      "thread_cpu_seconds": 8.348400000102174e-05,
+      "start_monotonic": 1249.253961328
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 7,
+      "wall_seconds": 0.001292394000074637,
+      "thread_cpu_seconds": 0.0012655460000026153,
+      "start_monotonic": 1249.252998757
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 0.005750465999881271,
+      "thread_cpu_seconds": 0.003121187999997943,
+      "start_monotonic": 1249.256275029
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 7,
+      "wall_seconds": 0.0078092159999414434,
+      "thread_cpu_seconds": 0.004704234000001861,
+      "start_monotonic": 1249.254636163
+    },
+    {
+      "stage": "split_tensor_checksum",
+      "hop": null,
+      "wall_seconds": 2.409600006103574e-05,
+      "thread_cpu_seconds": 2.3774999998948942e-05,
+      "start_monotonic": 1249.265778411
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 7,
+      "wall_seconds": 0.0034205440001642273,
+      "thread_cpu_seconds": 0.000982843000002731,
+      "start_monotonic": 1249.262502356
+    }
+  ],
+  "auxiliary_consumption": [
+    {
+      "hop": 0,
+      "role": "audio_head",
+      "file": "heads/audio.safetensors",
+      "tensor": "final_layer.audio_out.bias",
+      "payload_bytes": 128,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.0005021880001550016,
+      "thread_cpu_seconds": 0.0005020319999999856
+    },
+    {
+      "hop": 0,
+      "role": "audio_head",
+      "file": "heads/audio.safetensors",
+      "tensor": "final_layer.audio_out.weight",
+      "payload_bytes": 688128,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.00255273900006614,
+      "thread_cpu_seconds": 0.0025530829999986793
+    },
+    {
+      "hop": 0,
+      "role": "video_head",
+      "file": "heads/video.safetensors",
+      "tensor": "final_layer.video_out.bias",
+      "payload_bytes": 384,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.000351353999803905,
+      "thread_cpu_seconds": 0.00035143200000042896
+    },
+    {
+      "hop": 0,
+      "role": "video_head",
+      "file": "heads/video.safetensors",
+      "tensor": "final_layer.video_out.weight",
+      "payload_bytes": 2064384,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.008374533999813139,
+      "thread_cpu_seconds": 0.00837411700000068
+    },
+    {
+      "hop": 0,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_attn_out_proj.safetensors",
+      "tensor": "token_refiner.blocks.0.attn.out_proj.weight",
+      "payload_bytes": 77070336,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.426337126999897,
+      "thread_cpu_seconds": 0.2865422520000003
+    },
+    {
+      "hop": 0,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_attn_qkv_proj.safetensors",
+      "tensor": "token_refiner.blocks.0.attn.qkv_proj.weight",
+      "payload_bytes": 231211008,
+      "header_bytes": 128,
+      "payload_verified": true,
+      "wall_seconds": 1.4327089130001696,
+      "thread_cpu_seconds": 0.8375791030000013
+    },
+    {
+      "hop": 0,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_mlp_fc1.safetensors",
+      "tensor": "token_refiner.blocks.0.mlp.fc1.weight",
+      "payload_bytes": 308281344,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 1.9318693059999532,
+      "thread_cpu_seconds": 1.1014944270000004
+    },
+    {
+      "hop": 0,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_mlp_fc2.safetensors",
+      "tensor": "token_refiner.blocks.0.mlp.fc2.weight",
+      "payload_bytes": 154140672,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.9251530250000997,
+      "thread_cpu_seconds": 0.5530713130000002
+    },
+    {
+      "hop": 0,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_attn_out_proj.safetensors",
+      "tensor": "token_refiner.blocks.1.attn.out_proj.weight",
+      "payload_bytes": 77070336,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.42362444800005505,
+      "thread_cpu_seconds": 0.28103757499999915
+    },
+    {
+      "hop": 0,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_attn_qkv_proj.safetensors",
+      "tensor": "token_refiner.blocks.1.attn.qkv_proj.weight",
+      "payload_bytes": 231211008,
+      "header_bytes": 128,
+      "payload_verified": true,
+      "wall_seconds": 1.4348215730001357,
+      "thread_cpu_seconds": 0.8337443439999994
+    },
+    {
+      "hop": 0,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_mlp_fc1.safetensors",
+      "tensor": "token_refiner.blocks.1.mlp.fc1.weight",
+      "payload_bytes": 308281344,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 1.9375889579998784,
+      "thread_cpu_seconds": 1.110506412000003
+    },
+    {
+      "hop": 0,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_mlp_fc2.safetensors",
+      "tensor": "token_refiner.blocks.1.mlp.fc2.weight",
+      "payload_bytes": 154140672,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.9230139030000828,
+      "thread_cpu_seconds": 0.5547141290000006
+    },
+    {
+      "hop": 1,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_attn_out_proj.safetensors",
+      "tensor": "token_refiner.blocks.0.attn.out_proj.weight",
+      "payload_bytes": 77070336,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.5725808510001116,
+      "thread_cpu_seconds": 0.440398605
+    },
+    {
+      "hop": 1,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_attn_qkv_proj.safetensors",
+      "tensor": "token_refiner.blocks.0.attn.qkv_proj.weight",
+      "payload_bytes": 231211008,
+      "header_bytes": 128,
+      "payload_verified": true,
+      "wall_seconds": 1.5552055130001463,
+      "thread_cpu_seconds": 1.047091499
+    },
+    {
+      "hop": 0,
+      "role": "video_head",
+      "file": "heads/video.safetensors",
+      "tensor": "final_layer.video_out.weight",
+      "payload_bytes": 2064384,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.017215930000020307,
+      "thread_cpu_seconds": 0.017168437999999675
+    },
+    {
+      "hop": 0,
+      "role": "video_head",
+      "file": "heads/video.safetensors",
+      "tensor": "final_layer.video_out.bias",
+      "payload_bytes": 384,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.000803658999984691,
+      "thread_cpu_seconds": 0.0008068960000002789
+    },
+    {
+      "hop": 0,
+      "role": "audio_head",
+      "file": "heads/audio.safetensors",
+      "tensor": "final_layer.audio_out.weight",
+      "payload_bytes": 688128,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.0058341289998224966,
+      "thread_cpu_seconds": 0.005833590000000388
+    },
+    {
+      "hop": 0,
+      "role": "audio_head",
+      "file": "heads/audio.safetensors",
+      "tensor": "final_layer.audio_out.bias",
+      "payload_bytes": 128,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.00045040700001663936,
+      "thread_cpu_seconds": 0.00045031700000031094
+    },
+    {
+      "hop": 1,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_mlp_fc1.safetensors",
+      "tensor": "token_refiner.blocks.0.mlp.fc1.weight",
+      "payload_bytes": 308281344,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 1.9935785990001023,
+      "thread_cpu_seconds": 1.2091298630000002
+    },
+    {
+      "hop": 1,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_mlp_fc2.safetensors",
+      "tensor": "token_refiner.blocks.0.mlp.fc2.weight",
+      "payload_bytes": 154140672,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 1.2062516450000658,
+      "thread_cpu_seconds": 0.8346170319999997
+    },
+    {
+      "hop": 1,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_attn_out_proj.safetensors",
+      "tensor": "token_refiner.blocks.1.attn.out_proj.weight",
+      "payload_bytes": 77070336,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.5506192979999014,
+      "thread_cpu_seconds": 0.4094936849999993
+    },
+    {
+      "hop": 1,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_attn_qkv_proj.safetensors",
+      "tensor": "token_refiner.blocks.1.attn.qkv_proj.weight",
+      "payload_bytes": 231211008,
+      "header_bytes": 128,
+      "payload_verified": true,
+      "wall_seconds": 1.840352219000124,
+      "thread_cpu_seconds": 1.2529031119999994
+    },
+    {
+      "hop": 1,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_mlp_fc1.safetensors",
+      "tensor": "token_refiner.blocks.1.mlp.fc1.weight",
+      "payload_bytes": 308281344,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 2.6317313109998395,
+      "thread_cpu_seconds": 1.8117827320000002
+    },
+    {
+      "hop": 1,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_mlp_fc2.safetensors",
+      "tensor": "token_refiner.blocks.1.mlp.fc2.weight",
+      "payload_bytes": 154140672,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 1.1660743140000704,
+      "thread_cpu_seconds": 0.8124263780000014
+    },
+    {
+      "hop": 1,
+      "role": "video_head",
+      "file": "heads/video.safetensors",
+      "tensor": "final_layer.video_out.weight",
+      "payload_bytes": 2064384,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.009034872000029281,
+      "thread_cpu_seconds": 0.008852915999999489
+    },
+    {
+      "hop": 1,
+      "role": "video_head",
+      "file": "heads/video.safetensors",
+      "tensor": "final_layer.video_out.bias",
+      "payload_bytes": 384,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.0006825680000019929,
+      "thread_cpu_seconds": 0.0006826450000003703
+    },
+    {
+      "hop": 1,
+      "role": "audio_head",
+      "file": "heads/audio.safetensors",
+      "tensor": "final_layer.audio_out.weight",
+      "payload_bytes": 688128,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.0035799919999135454,
+      "thread_cpu_seconds": 0.0035797950000002743
+    },
+    {
+      "hop": 1,
+      "role": "audio_head",
+      "file": "heads/audio.safetensors",
+      "tensor": "final_layer.audio_out.bias",
+      "payload_bytes": 128,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.0006361929999911808,
+      "thread_cpu_seconds": 0.0006361070000000524
+    },
+    {
+      "hop": 2,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_attn_out_proj.safetensors",
+      "tensor": "token_refiner.blocks.0.attn.out_proj.weight",
+      "payload_bytes": 77070336,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.5574340670000311,
+      "thread_cpu_seconds": 0.41615699799999994
+    },
+    {
+      "hop": 2,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_attn_qkv_proj.safetensors",
+      "tensor": "token_refiner.blocks.0.attn.qkv_proj.weight",
+      "payload_bytes": 231211008,
+      "header_bytes": 128,
+      "payload_verified": true,
+      "wall_seconds": 1.8944797369999833,
+      "thread_cpu_seconds": 1.3237710729999996
+    },
+    {
+      "hop": 2,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_mlp_fc1.safetensors",
+      "tensor": "token_refiner.blocks.0.mlp.fc1.weight",
+      "payload_bytes": 308281344,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 2.6005050409999058,
+      "thread_cpu_seconds": 1.8373323869999982
+    },
+    {
+      "hop": 2,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_mlp_fc2.safetensors",
+      "tensor": "token_refiner.blocks.0.mlp.fc2.weight",
+      "payload_bytes": 154140672,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 1.2598110349999843,
+      "thread_cpu_seconds": 0.8979490860000006
+    },
+    {
+      "hop": 2,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_attn_out_proj.safetensors",
+      "tensor": "token_refiner.blocks.1.attn.out_proj.weight",
+      "payload_bytes": 77070336,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.5956033719999141,
+      "thread_cpu_seconds": 0.4577059600000002
+    },
+    {
+      "hop": 2,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_attn_qkv_proj.safetensors",
+      "tensor": "token_refiner.blocks.1.attn.qkv_proj.weight",
+      "payload_bytes": 231211008,
+      "header_bytes": 128,
+      "payload_verified": true,
+      "wall_seconds": 1.4499753100001271,
+      "thread_cpu_seconds": 0.8605739800000016
+    },
+    {
+      "hop": 2,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_mlp_fc1.safetensors",
+      "tensor": "token_refiner.blocks.1.mlp.fc1.weight",
+      "payload_bytes": 308281344,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 1.94788701199991,
+      "thread_cpu_seconds": 1.1380879959999994
+    },
+    {
+      "hop": 2,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_mlp_fc2.safetensors",
+      "tensor": "token_refiner.blocks.1.mlp.fc2.weight",
+      "payload_bytes": 154140672,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.9382234380000227,
+      "thread_cpu_seconds": 0.5882684980000015
+    },
+    {
+      "hop": 3,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_attn_out_proj.safetensors",
+      "tensor": "token_refiner.blocks.0.attn.out_proj.weight",
+      "payload_bytes": 77070336,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.49663503599981595,
+      "thread_cpu_seconds": 0.3868868249999977
+    },
+    {
+      "hop": 2,
+      "role": "video_head",
+      "file": "heads/video.safetensors",
+      "tensor": "final_layer.video_out.weight",
+      "payload_bytes": 2064384,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.013292243000023518,
+      "thread_cpu_seconds": 0.0111450719999997
+    },
+    {
+      "hop": 2,
+      "role": "video_head",
+      "file": "heads/video.safetensors",
+      "tensor": "final_layer.video_out.bias",
+      "payload_bytes": 384,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.0008369970000785543,
+      "thread_cpu_seconds": 0.000721870999999652
+    },
+    {
+      "hop": 2,
+      "role": "audio_head",
+      "file": "heads/audio.safetensors",
+      "tensor": "final_layer.audio_out.weight",
+      "payload_bytes": 688128,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.01403353499995319,
+      "thread_cpu_seconds": 0.00420240799999938
+    },
+    {
+      "hop": 2,
+      "role": "audio_head",
+      "file": "heads/audio.safetensors",
+      "tensor": "final_layer.audio_out.bias",
+      "payload_bytes": 128,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.000645589000214386,
+      "thread_cpu_seconds": 0.0006455999999985806
+    },
+    {
+      "hop": 3,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_attn_qkv_proj.safetensors",
+      "tensor": "token_refiner.blocks.0.attn.qkv_proj.weight",
+      "payload_bytes": 231211008,
+      "header_bytes": 128,
+      "payload_verified": true,
+      "wall_seconds": 1.9543602920000467,
+      "thread_cpu_seconds": 1.3175639329999989
+    },
+    {
+      "hop": 3,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_mlp_fc1.safetensors",
+      "tensor": "token_refiner.blocks.0.mlp.fc1.weight",
+      "payload_bytes": 308281344,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 2.3053422039999987,
+      "thread_cpu_seconds": 1.4929386430000022
+    },
+    {
+      "hop": 3,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_mlp_fc2.safetensors",
+      "tensor": "token_refiner.blocks.0.mlp.fc2.weight",
+      "payload_bytes": 154140672,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 1.2281912559999455,
+      "thread_cpu_seconds": 0.8801365330000017
+    },
+    {
+      "hop": 3,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_attn_out_proj.safetensors",
+      "tensor": "token_refiner.blocks.1.attn.out_proj.weight",
+      "payload_bytes": 77070336,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.4230508870000449,
+      "thread_cpu_seconds": 0.282198876999999
+    },
+    {
+      "hop": 3,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_attn_qkv_proj.safetensors",
+      "tensor": "token_refiner.blocks.1.attn.qkv_proj.weight",
+      "payload_bytes": 231211008,
+      "header_bytes": 128,
+      "payload_verified": true,
+      "wall_seconds": 1.4424212869998883,
+      "thread_cpu_seconds": 0.8618785800000026
+    },
+    {
+      "hop": 3,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_mlp_fc1.safetensors",
+      "tensor": "token_refiner.blocks.1.mlp.fc1.weight",
+      "payload_bytes": 308281344,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 1.9613123050000922,
+      "thread_cpu_seconds": 1.1480461479999988
+    },
+    {
+      "hop": 3,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_mlp_fc2.safetensors",
+      "tensor": "token_refiner.blocks.1.mlp.fc2.weight",
+      "payload_bytes": 154140672,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.9229191049998917,
+      "thread_cpu_seconds": 0.5525490310000016
+    },
+    {
+      "hop": 4,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_attn_out_proj.safetensors",
+      "tensor": "token_refiner.blocks.0.attn.out_proj.weight",
+      "payload_bytes": 77070336,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.49417721400004666,
+      "thread_cpu_seconds": 0.3840805429999996
+    },
+    {
+      "hop": 3,
+      "role": "video_head",
+      "file": "heads/video.safetensors",
+      "tensor": "final_layer.video_out.weight",
+      "payload_bytes": 2064384,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.012787561999857644,
+      "thread_cpu_seconds": 0.010312340999998781
+    },
+    {
+      "hop": 3,
+      "role": "video_head",
+      "file": "heads/video.safetensors",
+      "tensor": "final_layer.video_out.bias",
+      "payload_bytes": 384,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.0011562180000055378,
+      "thread_cpu_seconds": 0.0010822719999996622
+    },
+    {
+      "hop": 3,
+      "role": "audio_head",
+      "file": "heads/audio.safetensors",
+      "tensor": "final_layer.audio_out.weight",
+      "payload_bytes": 688128,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.0044054709999272745,
+      "thread_cpu_seconds": 0.0037971979999991134
+    },
+    {
+      "hop": 3,
+      "role": "audio_head",
+      "file": "heads/audio.safetensors",
+      "tensor": "final_layer.audio_out.bias",
+      "payload_bytes": 128,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.0021536790000027395,
+      "thread_cpu_seconds": 0.0014968560000010456
+    },
+    {
+      "hop": 4,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_attn_qkv_proj.safetensors",
+      "tensor": "token_refiner.blocks.0.attn.qkv_proj.weight",
+      "payload_bytes": 231211008,
+      "header_bytes": 128,
+      "payload_verified": true,
+      "wall_seconds": 1.9606526400000348,
+      "thread_cpu_seconds": 1.3266875480000024
+    },
+    {
+      "hop": 4,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_mlp_fc1.safetensors",
+      "tensor": "token_refiner.blocks.0.mlp.fc1.weight",
+      "payload_bytes": 308281344,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 2.1297589060000064,
+      "thread_cpu_seconds": 1.328843003000003
+    },
+    {
+      "hop": 4,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_mlp_fc2.safetensors",
+      "tensor": "token_refiner.blocks.0.mlp.fc2.weight",
+      "payload_bytes": 154140672,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.9459791849999419,
+      "thread_cpu_seconds": 0.5945943819999968
+    },
+    {
+      "hop": 4,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_attn_out_proj.safetensors",
+      "tensor": "token_refiner.blocks.1.attn.out_proj.weight",
+      "payload_bytes": 77070336,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.4292883379998784,
+      "thread_cpu_seconds": 0.278931944
+    },
+    {
+      "hop": 4,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_attn_qkv_proj.safetensors",
+      "tensor": "token_refiner.blocks.1.attn.qkv_proj.weight",
+      "payload_bytes": 231211008,
+      "header_bytes": 128,
+      "payload_verified": true,
+      "wall_seconds": 1.4577807159998883,
+      "thread_cpu_seconds": 0.8534148909999999
+    },
+    {
+      "hop": 4,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_mlp_fc1.safetensors",
+      "tensor": "token_refiner.blocks.1.mlp.fc1.weight",
+      "payload_bytes": 308281344,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 1.9546076960000391,
+      "thread_cpu_seconds": 1.1442851250000032
+    },
+    {
+      "hop": 4,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_mlp_fc2.safetensors",
+      "tensor": "token_refiner.blocks.1.mlp.fc2.weight",
+      "payload_bytes": 154140672,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.940990359000125,
+      "thread_cpu_seconds": 0.5905649959999977
+    },
+    {
+      "hop": 5,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_attn_out_proj.safetensors",
+      "tensor": "token_refiner.blocks.0.attn.out_proj.weight",
+      "payload_bytes": 77070336,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.5416361150000739,
+      "thread_cpu_seconds": 0.4079839039999982
+    },
+    {
+      "hop": 4,
+      "role": "video_head",
+      "file": "heads/video.safetensors",
+      "tensor": "final_layer.video_out.weight",
+      "payload_bytes": 2064384,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.011555118999922342,
+      "thread_cpu_seconds": 0.010422036000001356
+    },
+    {
+      "hop": 4,
+      "role": "video_head",
+      "file": "heads/video.safetensors",
+      "tensor": "final_layer.video_out.bias",
+      "payload_bytes": 384,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.004519895999919754,
+      "thread_cpu_seconds": 0.0013908779999987075
+    },
+    {
+      "hop": 4,
+      "role": "audio_head",
+      "file": "heads/audio.safetensors",
+      "tensor": "final_layer.audio_out.weight",
+      "payload_bytes": 688128,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.015317684999899939,
+      "thread_cpu_seconds": 0.004224446999998577
+    },
+    {
+      "hop": 4,
+      "role": "audio_head",
+      "file": "heads/audio.safetensors",
+      "tensor": "final_layer.audio_out.bias",
+      "payload_bytes": 128,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.0010702290001063375,
+      "thread_cpu_seconds": 0.001071581999998017
+    },
+    {
+      "hop": 5,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_attn_qkv_proj.safetensors",
+      "tensor": "token_refiner.blocks.0.attn.qkv_proj.weight",
+      "payload_bytes": 231211008,
+      "header_bytes": 128,
+      "payload_verified": true,
+      "wall_seconds": 1.8254866180000136,
+      "thread_cpu_seconds": 1.2124900700000012
+    },
+    {
+      "hop": 5,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_mlp_fc1.safetensors",
+      "tensor": "token_refiner.blocks.0.mlp.fc1.weight",
+      "payload_bytes": 308281344,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 1.9409688329999426,
+      "thread_cpu_seconds": 1.1415237650000023
+    },
+    {
+      "hop": 5,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_mlp_fc2.safetensors",
+      "tensor": "token_refiner.blocks.0.mlp.fc2.weight",
+      "payload_bytes": 154140672,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.9792418499998803,
+      "thread_cpu_seconds": 0.6153461419999999
+    },
+    {
+      "hop": 5,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_attn_out_proj.safetensors",
+      "tensor": "token_refiner.blocks.1.attn.out_proj.weight",
+      "payload_bytes": 77070336,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.4296798510001736,
+      "thread_cpu_seconds": 0.281407202000004
+    },
+    {
+      "hop": 5,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_attn_qkv_proj.safetensors",
+      "tensor": "token_refiner.blocks.1.attn.qkv_proj.weight",
+      "payload_bytes": 231211008,
+      "header_bytes": 128,
+      "payload_verified": true,
+      "wall_seconds": 1.444069030000037,
+      "thread_cpu_seconds": 0.8538109389999988
+    },
+    {
+      "hop": 5,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_mlp_fc1.safetensors",
+      "tensor": "token_refiner.blocks.1.mlp.fc1.weight",
+      "payload_bytes": 308281344,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 1.9555005930001244,
+      "thread_cpu_seconds": 1.1372055399999965
+    },
+    {
+      "hop": 5,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_mlp_fc2.safetensors",
+      "tensor": "token_refiner.blocks.1.mlp.fc2.weight",
+      "payload_bytes": 154140672,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.9355787150000197,
+      "thread_cpu_seconds": 0.5636267030000042
+    },
+    {
+      "hop": 6,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_attn_out_proj.safetensors",
+      "tensor": "token_refiner.blocks.0.attn.out_proj.weight",
+      "payload_bytes": 77070336,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.5512390379999488,
+      "thread_cpu_seconds": 0.41306947200000366
+    },
+    {
+      "hop": 5,
+      "role": "video_head",
+      "file": "heads/video.safetensors",
+      "tensor": "final_layer.video_out.weight",
+      "payload_bytes": 2064384,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.011739230999864958,
+      "thread_cpu_seconds": 0.00997006800000122
+    },
+    {
+      "hop": 5,
+      "role": "video_head",
+      "file": "heads/video.safetensors",
+      "tensor": "final_layer.video_out.bias",
+      "payload_bytes": 384,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.0005366479999793228,
+      "thread_cpu_seconds": 0.0005368130000000804
+    },
+    {
+      "hop": 5,
+      "role": "audio_head",
+      "file": "heads/audio.safetensors",
+      "tensor": "final_layer.audio_out.weight",
+      "payload_bytes": 688128,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.004221579999921232,
+      "thread_cpu_seconds": 0.003850494999998233
+    },
+    {
+      "hop": 5,
+      "role": "audio_head",
+      "file": "heads/audio.safetensors",
+      "tensor": "final_layer.audio_out.bias",
+      "payload_bytes": 128,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.0010483480000402778,
+      "thread_cpu_seconds": 0.0010493700000004935
+    },
+    {
+      "hop": 6,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_attn_qkv_proj.safetensors",
+      "tensor": "token_refiner.blocks.0.attn.qkv_proj.weight",
+      "payload_bytes": 231211008,
+      "header_bytes": 128,
+      "payload_verified": true,
+      "wall_seconds": 1.9076163500001257,
+      "thread_cpu_seconds": 1.3271574210000026
+    },
+    {
+      "hop": 6,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_mlp_fc1.safetensors",
+      "tensor": "token_refiner.blocks.0.mlp.fc1.weight",
+      "payload_bytes": 308281344,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 2.3237896539999383,
+      "thread_cpu_seconds": 1.5099369100000004
+    },
+    {
+      "hop": 6,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_mlp_fc2.safetensors",
+      "tensor": "token_refiner.blocks.0.mlp.fc2.weight",
+      "payload_bytes": 154140672,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.9287146169999687,
+      "thread_cpu_seconds": 0.5626232480000013
+    },
+    {
+      "hop": 6,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_attn_out_proj.safetensors",
+      "tensor": "token_refiner.blocks.1.attn.out_proj.weight",
+      "payload_bytes": 77070336,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.4406547790001696,
+      "thread_cpu_seconds": 0.2921311460000027
+    },
+    {
+      "hop": 6,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_attn_qkv_proj.safetensors",
+      "tensor": "token_refiner.blocks.1.attn.qkv_proj.weight",
+      "payload_bytes": 231211008,
+      "header_bytes": 128,
+      "payload_verified": true,
+      "wall_seconds": 1.4392278850000366,
+      "thread_cpu_seconds": 0.8385081949999957
+    },
+    {
+      "hop": 6,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_mlp_fc1.safetensors",
+      "tensor": "token_refiner.blocks.1.mlp.fc1.weight",
+      "payload_bytes": 308281344,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 1.9451824319999105,
+      "thread_cpu_seconds": 1.1286539670000053
+    },
+    {
+      "hop": 6,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_mlp_fc2.safetensors",
+      "tensor": "token_refiner.blocks.1.mlp.fc2.weight",
+      "payload_bytes": 154140672,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.9359992849999799,
+      "thread_cpu_seconds": 0.5628221540000027
+    },
+    {
+      "hop": 7,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_attn_out_proj.safetensors",
+      "tensor": "token_refiner.blocks.0.attn.out_proj.weight",
+      "payload_bytes": 77070336,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.5022842329999548,
+      "thread_cpu_seconds": 0.38541644100000383
+    },
+    {
+      "hop": 6,
+      "role": "video_head",
+      "file": "heads/video.safetensors",
+      "tensor": "final_layer.video_out.weight",
+      "payload_bytes": 2064384,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.018997234999915236,
+      "thread_cpu_seconds": 0.009875028999999813
+    },
+    {
+      "hop": 6,
+      "role": "video_head",
+      "file": "heads/video.safetensors",
+      "tensor": "final_layer.video_out.bias",
+      "payload_bytes": 384,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.015232543999900372,
+      "thread_cpu_seconds": 0.0011319830000005027
+    },
+    {
+      "hop": 6,
+      "role": "audio_head",
+      "file": "heads/audio.safetensors",
+      "tensor": "final_layer.audio_out.weight",
+      "payload_bytes": 688128,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.005546230000163632,
+      "thread_cpu_seconds": 0.004194379000001192
+    },
+    {
+      "hop": 6,
+      "role": "audio_head",
+      "file": "heads/audio.safetensors",
+      "tensor": "final_layer.audio_out.bias",
+      "payload_bytes": 128,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.004279943000028652,
+      "thread_cpu_seconds": 0.0008496949999994285
+    },
+    {
+      "hop": 7,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_attn_qkv_proj.safetensors",
+      "tensor": "token_refiner.blocks.0.attn.qkv_proj.weight",
+      "payload_bytes": 231211008,
+      "header_bytes": 128,
+      "payload_verified": true,
+      "wall_seconds": 1.9512501869999141,
+      "thread_cpu_seconds": 1.3318481819999946
+    },
+    {
+      "hop": 7,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_mlp_fc1.safetensors",
+      "tensor": "token_refiner.blocks.0.mlp.fc1.weight",
+      "payload_bytes": 308281344,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 2.230451516999892,
+      "thread_cpu_seconds": 1.4114777489999994
+    },
+    {
+      "hop": 7,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_0_mlp_fc2.safetensors",
+      "tensor": "token_refiner.blocks.0.mlp.fc2.weight",
+      "payload_bytes": 154140672,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.9295174549999956,
+      "thread_cpu_seconds": 0.5493626059999954
+    },
+    {
+      "hop": 7,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_attn_out_proj.safetensors",
+      "tensor": "token_refiner.blocks.1.attn.out_proj.weight",
+      "payload_bytes": 77070336,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.42207187500002874,
+      "thread_cpu_seconds": 0.2731635319999981
+    },
+    {
+      "hop": 7,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_attn_qkv_proj.safetensors",
+      "tensor": "token_refiner.blocks.1.attn.qkv_proj.weight",
+      "payload_bytes": 231211008,
+      "header_bytes": 128,
+      "payload_verified": true,
+      "wall_seconds": 1.4425221380001858,
+      "thread_cpu_seconds": 0.8416230409999983
+    },
+    {
+      "hop": 7,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_mlp_fc1.safetensors",
+      "tensor": "token_refiner.blocks.1.mlp.fc1.weight",
+      "payload_bytes": 308281344,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 1.942615222999848,
+      "thread_cpu_seconds": 1.1421954220000003
+    },
+    {
+      "hop": 7,
+      "role": "refiner",
+      "file": "refiner/token_refiner_blocks_1_mlp_fc2.safetensors",
+      "tensor": "token_refiner.blocks.1.mlp.fc2.weight",
+      "payload_bytes": 154140672,
+      "header_bytes": 120,
+      "payload_verified": true,
+      "wall_seconds": 0.9463566550000451,
+      "thread_cpu_seconds": 0.5722449740000002
+    },
+    {
+      "hop": 7,
+      "role": "video_head",
+      "file": "heads/video.safetensors",
+      "tensor": "final_layer.video_out.weight",
+      "payload_bytes": 2064384,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.013210509000145976,
+      "thread_cpu_seconds": 0.011229588999999152
+    },
+    {
+      "hop": 7,
+      "role": "video_head",
+      "file": "heads/video.safetensors",
+      "tensor": "final_layer.video_out.bias",
+      "payload_bytes": 384,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.0007761090000713011,
+      "thread_cpu_seconds": 0.000776179000002486
+    },
+    {
+      "hop": 7,
+      "role": "audio_head",
+      "file": "heads/audio.safetensors",
+      "tensor": "final_layer.audio_out.weight",
+      "payload_bytes": 688128,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.007347629999912897,
+      "thread_cpu_seconds": 0.004243790999996833
+    },
+    {
+      "hop": 7,
+      "role": "audio_head",
+      "file": "heads/audio.safetensors",
+      "tensor": "final_layer.audio_out.bias",
+      "payload_bytes": 128,
+      "header_bytes": 184,
+      "payload_verified": true,
+      "wall_seconds": 0.0004316209999615239,
+      "thread_cpu_seconds": 0.00043041700000046035
+    }
+  ],
+  "measurement": "RPC dispatch wall/thread CPU; CUDA default-stream intervals include idle/waits, not a kernel-time sum",
+  "observer": "Two CUDA events per denoise/hop; identical for rebuild and queue"
+}

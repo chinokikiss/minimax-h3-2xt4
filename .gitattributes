@@ -18,3 +18,5 @@
 /experiments/kitchen_attention/native/vendor/** -text -whitespace
 /patches/kitchen_te_attention.py -text
 /docs/pdf/*.py text eol=lf
+/docs/data/h3_ptd_aux_split_20261029/** -text whitespace=cr-at-eol
+/docs/data/h3_ptd_aux_split_20261029/t4_v1_final/*.log -text -whitespace

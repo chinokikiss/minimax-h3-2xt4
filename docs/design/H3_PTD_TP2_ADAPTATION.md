@@ -217,3 +217,9 @@ consumption. Original banks remain supported, and an offline repack preserves
 Native tensor proofs without merging LoRA again. Both ranks still execute the
 Native heads; rank 1 opens no split refiner unit. See the
 [integrity design, CPU contracts and paired T4 plan](../reports/H3_PTD_AUXILIARY_SPLIT_20261029.md).
+
+The physical P2 comparison now passes all output and ownership checks on two
+SM75 T4s, but its current loader increases mean eight-hop RPC latency 16.5%.
+Rank 1 avoids the refiner scan while rank-0 preparation waits increase. Keep
+split storage optional; defaults remain unchanged. See the
+[measured P2 results and next targets](../reports/H3_PTD_AUXILIARY_SPLIT_T4_RESULTS_20261029.md).

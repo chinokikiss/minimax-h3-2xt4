@@ -12,7 +12,14 @@
 
 - The user explicitly permits Kaggle's native Torch rather than reproducing the local Windows Torch/CUDA package stack. Keep its matching native Python/NumPy/Torchvision/Torchaudio/CUDA environment and record actual versions; do not modify the local conda environment or original snapshot.
 - Core libraries whose APIs/operators H3 relies on remain pinned, especially comfy-kitchen 0.2.37 and TileLang 0.1.13. Preserve the frozen ComfyUI source and legacy attention API. Validate core imports/signatures on CPU before operator tests; do not upgrade upstream source or core libraries to resolve compatibility problems.
-- Do not poll Kaggle status/list endpoints or live logs, including through an API or browser workaround. Minimize interactions: batch submissions, use bounded runs, and collect final outputs once per batch.
+- Do not poll Kaggle status/list endpoints or live logs, including through an API or browser workaround. Minimize interactions: batch submissions, use bounded runs, and perform one logical final-output collection per batch; artifact-download retries are permitted as clarified below.
+
+## Authorized artifact-download retries — 2026-10-29
+
+- Artifact downloads may be retried after network/transport failures or incomplete downloads. The user has explicitly authorized these retries; do not require renewed permission for each attempt.
+- Retrying/resuming final artifact collection is distinct from polling job status or live logs. Keep status/list/live-log polling prohibited; the output-file enumeration needed to download final artifacts is allowed.
+- Preserve partial downloads, prior errors and receipts. Resume missing files where possible, verify source identity and content hashes, and record attempts. Do not resubmit a GPU job just because artifact transfer failed.
+- Keep retries bounded and space repeated failures apart to minimize Kaggle interactions. Report a persistent blocker clearly rather than retrying indefinitely.
 
 ## Authorized delivery change — 2026-10-22
 

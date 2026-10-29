@@ -1,6 +1,6 @@
 # PTD P2: separate Refiner and Output Head units
 
-Implemented on `codex/h3-ptd-refasymopd`, 2026-10-29. This is an optional storage/loader adaptation. Native forwards, FP16-fix folding, head arithmetic, TP2 collectives and existing defaults are preserved. Hardware performance qualification is pending.
+Implemented on `codex/h3-ptd-refasymopd`, 2026-10-29. This is an optional storage/loader adaptation. Native forwards, FP16-fix folding, head arithmetic, TP2 collectives and existing defaults are preserved. The physical T4 fixture passes correctness but regresses mean latency 16.5%; see the [measured results](H3_PTD_AUXILIARY_SPLIT_T4_RESULTS_20261029.md). The format remains optional.
 
 ## Why this change follows P0/P1
 
@@ -96,7 +96,7 @@ The T4 harness uses one two-layer real trained eight-hop bake and one offline re
 
 Benchmark-only worker probes record RPC wall/thread CPU time, nested checksum/read/preparation spans, per-hop/per-role verified bytes, CUDA peaks and host cache reservations. Split cases require consumption evidence on both ranks, **zero refiner payload consumption on rank 1**, and zero legacy full-overlay verification spans. AOT, loading, bake and repack costs are reported separately from hop execution. The observer is kept the same across the paired runs. Nested spans overlap and must not be summed as independent critical-path costs; CUDA default-stream intervals include idle/wait time and are not Nsight kernel traces.
 
-Kaggle's source-bound CPU setup/API gate is required before GPU submission. No full H3 generation, local real LoRA download, token, dataset mount, upstream upgrade or status/live-log polling is part of this experiment. No T4 speedup is claimed before collecting its final evidence.
+Kaggle's source-bound CPU setup/API gate is required before GPU submission. No full H3 generation, local real LoRA download, token, dataset mount, upstream upgrade or status/live-log polling is part of this experiment. The completed T4 comparison does not demonstrate a speedup.
 
 ## Reproducibility
 
@@ -109,19 +109,24 @@ Local evidence: `D:\attention_eval\h3_ptd_aux_split_20261029`. Native ComfyUI ar
 Published source commit: `78a3d135d226ade1584fac538a8951971b3fafff`.
 Collected [H3 PTD Aux Split CPU 20261029](https://www.kaggle.com/code/pamcks/h3-ptd-aux-split-cpu-20261029), version 1, in one final artifact request on 2026-10-29. Its exact source digest matches this delivery. All **179 runtime tests and 38 PTD preflight contracts passed**, including all 16 split-format contracts. Linux positional I/O and fallback/concurrent-descriptor contracts also passed. Native CPU Torch was 2.11.0+cpu; Kitchen 0.2.37 and TileLang 0.1.13 remained pinned. No weights were fetched and no GPU was used. This qualifies setup and CPU contracts, not CUDA kernels or hardware speed.
 
-Using those successful source-bound receipts, Kaggle accepted [H3 PTD Aux Split T4 20261029](https://www.kaggle.com/code/pamcks/h3-ptd-aux-split-t4-20261029), version 1. The submitted source capsule is unchanged; comparison order is monolithic/split/split/monolithic, without the FP32 sidecar or a full generation. Acceptance does not establish that physical T4 execution has started or completed. Final GPU results remain pending. No status/list/live-log polling or duplicate submission was performed; collection will be one final artifact request when prompted.
+Using those successful source-bound receipts, [H3 PTD Aux Split T4 20261029](https://www.kaggle.com/code/pamcks/h3-ptd-aux-split-t4-20261029), version 1, completed all four cases on two distinct SM75 T4s and exited normally. The submitted source capsule is unchanged; comparison order is monolithic/split/split/monolithic, without the FP32 sidecar or a full generation. All 32 calls preserve output hashes. Mean RPC time is 94.63 s monolithic versus 110.22 s split. No default is changed. See the [physical results and attribution limits](H3_PTD_AUXILIARY_SPLIT_T4_RESULTS_20261029.md).
 
 The [CPU receipts and summary](../data/h3_ptd_aux_split_20261029/cpu_final/summary.json), [accepted T4 submission](../data/h3_ptd_aux_split_20261029/t4_submission_v1.json) and [source binding](../data/h3_ptd_aux_split_20261029/t4_source_binding_v1.json) preserve the evidence.
 
 The user-requested final T4 artifact collection at **2026-10-29 04:16:54 UTC**
 (12:16:54 Beijing) failed with `SSLEOFError: UNEXPECTED_EOF_WHILE_READING`
 while connecting to Kaggle's output service. The CLI returned 1 and downloaded
-zero files. This is a collection transport failure; it does **not** establish
-that the GPU job failed, completed, or is still running. Output equality,
-physical hardware qualification, timing and memory conclusions remain
-unavailable. The exclusive collection claim is retained, with no automatic
-retry, status/live-log polling or duplicate submission. See the
+zero files. This was a collection transport failure and established no GPU
+execution state; results were unavailable from that attempt. The initial
+exclusive claim/error is retained. A user-authorized retry then recovered the
+benchmark/worker reports, and a filtered resume under the new `AGENTS.md`
+retry permission completed the remaining supervision/log downloads. All
+earlier files remained byte-identical. No status/live-log polling or duplicate
+submission occurred. See the
 [blocker receipt](../data/h3_ptd_aux_split_20261029/t4_collection_blocker_v1.json)
 and [original CLI error](../data/h3_ptd_aux_split_20261029/t4_collection_transport_error_v1.txt).
+
+The [final archive](../data/h3_ptd_aux_split_20261029/t4_v1_final/README.md)
+contains the independently verified results and normal-exit receipt.
 
 Implementation: [auxiliary units](../../patches/ptd/auxiliary.py), [bank/migration](../../patches/ptd/bank.py), [runtime trust binding](../../patches/ptd/runtime.py), [contract tests](../../benchmarks/test_ptd_auxiliary.py), [bounded experiment](../../benchmarks/run_ptd_tp2_t4.py).

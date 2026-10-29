@@ -1,0 +1,23 @@
+{
+  "status": "resumed",
+  "authorization": "2026-10-29 AGENTS.md artifact-download retry permission",
+  "started_utc": "2026-10-29T04:24:21.567427+00:00",
+  "transport_attempt": 3,
+  "kernel": "pamcks/h3-ptd-aux-split-t4-20261029",
+  "output": "D:\\attention_eval\\h3_ptd_aux_split_20261029\\gpu_v1\\gpu_final_retry1",
+  "file_pattern": "^ptd_supervision/(supervision\\.json|notebook_worker\\.log)$",
+  "status_polls": 0,
+  "duplicate_submissions": 0,
+  "returncode": 0,
+  "files": 32,
+  "prior_artifacts_unchanged": true,
+  "completed_utc": "2026-10-29T04:24:26.245134+00:00",
+  "supervision": {
+    "status": "worker_exited",
+    "deadline_seconds": 1800,
+    "scope": "Notebook cell execution only; provider startup/mounting excluded",
+    "worker_pid": 97,
+    "exit_code": 0,
+    "seconds": 1108.491694368
+  }
+}
