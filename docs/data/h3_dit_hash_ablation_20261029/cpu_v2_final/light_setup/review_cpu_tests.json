@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "tests": 207,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "seconds": 40.20394136700003,
+  "scope": "CPU contracts, not physical T4 qualification"
+}

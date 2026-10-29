@@ -1,0 +1,33 @@
+{
+  "status": "passed",
+  "scope": "Real Linux CPU descriptor gate, no GPU/I-O speed claim",
+  "torch": "2.11.0+cpu",
+  "records": [
+    {
+      "name": "native_linux_pread",
+      "status": "byte_exact",
+      "syscalls": 9
+    },
+    {
+      "name": "short_native_pread",
+      "status": "byte_exact"
+    },
+    {
+      "name": "seek_readinto_fallback",
+      "status": "byte_exact"
+    },
+    {
+      "name": "concurrent_real_descriptors",
+      "status": "byte_exact",
+      "workers": 4
+    },
+    {
+      "name": "fallback_after_partial_pread",
+      "status": "byte_exact"
+    },
+    {
+      "name": "truncated_range",
+      "status": "rejected"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "status": "hash_ablation_cpu_ready",
+  "capsule_sha256": "aded869fdade8e3d55aaca455d6a17345e2dc3431514a16e625548ed7ff11316",
+  "full_pipeline": false,
+  "fixtures": "Real PTD subset: two blocks, both refiners, heads and eight hops",
+  "cases": [],
+  "immutable_input_verification": true,
+  "bake_verification": true,
+  "default_verification_unchanged": true,
+  "tests": 49,
+  "no_weights_fetched": true,
+  "gpu_used": false
+}

@@ -68,4 +68,18 @@ or live-log query has been made.
 Kaggle accepted the corrected [CPU preflight, version 2](https://www.kaggle.com/code/pamcks/h3-dit-hash-ablation-cpu-20261029).
 Retry source commit: `e1966aca5323d555cffc891de8bfff7812295987`;
 capsule SHA256: `aded869fdade8e3d55aaca455d6a17345e2dc3431514a16e625548ed7ff11316`.
-Its result is pending. No GPU experiment has been submitted for this ablation.
+Its final artifacts were collected once: setup status `cpu_ready`, 207 regression
+tests passed with no failures/errors/skips, and all 49 dedicated contracts passed.
+Source hashes, capsule identity and downloaded artifact hashes match. Kitchen
+`0.2.37`, TileLang `0.1.13` and the legacy attention APIs remain qualified on the
+CPU host. No model weights were fetched and no GPU was used in that gate.
+
+Kaggle accepted **version 1** of [H3 DiT Hash Ablation T4 20261029](https://www.kaggle.com/code/pamcks/h3-dit-hash-ablation-t4-20261029),
+using the same CPU-qualified retry capsule. The prepared A/B items, three trials
+per mode, persistent queue, P0/P1 settings and byte-exact output checks are
+unchanged. The notebook requests two T4s and enforces physical SM75/cu128 checks
+before fetching the trained PTD subset. Submission acknowledgement is not proof
+of device execution; GPU results remain pending. No scheduling status or live
+logs have been queried. Receipts are under
+`docs/data/h3_dit_hash_ablation_20261029/gpu_v1_*`, with CPU results under
+`cpu_v2_final/` in the same directory.

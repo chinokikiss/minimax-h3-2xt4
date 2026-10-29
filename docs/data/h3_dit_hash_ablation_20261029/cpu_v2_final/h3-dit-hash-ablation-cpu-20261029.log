@@ -1,0 +1,234 @@
+[{"stream_name":"stderr","time":10.509443754,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":10.509508467,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":10.509516513,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":10.509521577,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":11.434962893,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":11.43500501,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":11.435010948,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":11.435015861,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":12.953146805,"data":"LIGHT_NOTEBOOK_START zero dataset/kernel mounts\n"}
+,{"stream_name":"stdout","time":12.954572106,"data":"T4_SUPERVISOR notebook_cell_started\n"}
+,{"stream_name":"stdout","time":13.081123326,"data":"LIGHT_SOURCE_DOWNLOAD_START\n"}
+,{"stream_name":"stdout","time":16.165936176,"data":"LIGHT_SOURCE_READY\n"}
+,{"stream_name":"stdout","time":16.314821134,"data":"LIGHT_SETUP_STAGE frozen_source\n"}
+,{"stream_name":"stdout","time":20.429599613,"data":"LIGHT_SETUP_STAGE direct_pip\n"}
+,{"stream_name":"stdout","time":76.302019843,"data":"LIGHT_SETUP_HEARTBEAT direct_pip 60\n"}
+,{"stream_name":"stdout","time":88.06334658,"data":"LIGHT_SETUP_STAGE api_probe\n"}
+,{"stream_name":"stdout","time":104.733619696,"data":"LIGHT_SETUP_STAGE cpu_tests\n"}
+,{"stream_name":"stdout","time":136.302539038,"data":"LIGHT_SETUP_HEARTBEAT cpu_tests 120\n"}
+,{"stream_name":"stdout","time":140.060110214,"data":"LIGHT_SETUP_STAGE review_cpu_tests\n"}
+,{"stream_name":"stdout","time":182.022330328,"data":"LIGHT_SETUP_STAGE linux_pread\n"}
+,{"stream_name":"stdout","time":184.393208753,"data":"LIGHT_SETUP_STAGE profiler_tool_versions\n"}
+,{"stream_name":"stdout","time":184.560048687,"data":"LIGHT_SETUP_FINAL cpu_ready\n"}
+,{"stream_name":"stdout","time":184.627915521,"data":"T4_SUPERVISOR_FINAL {\"status\": \"worker_exited\", \"deadline_seconds\": 600, \"scope\": \"Notebook cell execution only; provider startup/mounting excluded\", \"worker_pid\": 37, \"exit_code\": 0, \"seconds\": 171.67057156700002}\n"}
+,{"stream_name":"stdout","time":184.631727306,"data":"T4_SUPERVISOR notebook_cell_started\n"}
+,{"stream_name":"stdout","time":188.039469646,"data":"test_default_verifies_once_and_reload_reuses_the_proof (benchmarks.test_dit_hash_ablation.HashAblation.test_default_verifies_once_and_reload_reuses_the_proof) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":188.087809443,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":188.141297021,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":188.190228703,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":188.244361869,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":188.298295239,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":188.356058132,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":188.430833952,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":188.493573579,"data":"ok\n"}
+,{"stream_name":"stdout","time":188.564354968,"data":"test_queued_readers_override_mode_without_mutating_admitted_base (benchmarks.test_dit_hash_ablation.HashAblation.test_queued_readers_override_mode_without_mutating_admitted_base) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":188.635151108,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":188.744354603,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":188.817754248,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":188.900573627,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":188.977709357,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":189.050789479,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":189.124236017,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":189.183226688,"data":"ok\n"}
+,{"stream_name":"stdout","time":189.249859099,"data":"test_runtime_default_is_verified_and_te_cannot_be_opted_out (benchmarks.test_dit_hash_ablation.HashAblation.test_runtime_default_is_verified_and_te_cannot_be_opted_out) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":189.301643836,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":189.353703938,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":189.403604443,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":189.452011039,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":189.506649115,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":189.555867943,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":189.608950421,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":189.666777853,"data":"ok\n"}
+,{"stream_name":"stdout","time":189.733056218,"data":"test_same_signature_corruption_is_accepted_only_by_trusted_arm (benchmarks.test_dit_hash_ablation.HashAblation.test_same_signature_corruption_is_accepted_only_by_trusted_arm) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":189.789363825,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":189.843400946,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":189.896260938,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":189.943860362,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":189.999434924,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":190.047095358,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":190.097080856,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":190.168878746,"data":"ok\n"}
+,{"stream_name":"stdout","time":190.236144019,"data":"test_trusted_arm_still_rejects_changed_file_signature (benchmarks.test_dit_hash_ablation.HashAblation.test_trusted_arm_still_rejects_changed_file_signature) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":190.288717531,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":190.338157065,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":190.386715563,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":190.439781052,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":190.489430347,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":190.537091735,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":190.59084397,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":190.656849028,"data":"ok\n"}
+,{"stream_name":"stdout","time":190.724185898,"data":"test_trusted_payloads_skip_file_and_tensor_hashes_and_match_verified_weights (benchmarks.test_dit_hash_ablation.HashAblation.test_trusted_payloads_skip_file_and_tensor_hashes_and_match_verified_weights) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":190.773581847,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":190.826157409,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":190.87871735,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":190.926884436,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":190.983189709,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":191.030624045,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":191.076596738,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":191.154644217,"data":"ok\n"}
+,{"stream_name":"stdout","time":191.220838001,"data":"test_concurrent_consumers_verify_only_once (benchmarks.test_ptd_overlay.OverlayContracts.test_concurrent_consumers_verify_only_once) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":191.266541043,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":191.317471658,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":191.369147118,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":191.414931385,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":191.465795495,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":191.516317939,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":191.562426184,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":191.615680903,"data":"ok\n"}
+,{"stream_name":"stdout","time":191.687822387,"data":"test_corruption_is_rejected_on_consumption_even_with_same_size_and_mtime (benchmarks.test_ptd_overlay.OverlayContracts.test_corruption_is_rejected_on_consumption_even_with_same_size_and_mtime) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":191.741327206,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":191.789737968,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":191.842979867,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":191.892498485,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":191.946569006,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":191.996074967,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":192.048171387,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":192.091373676,"data":"ok\n"}
+,{"stream_name":"stdout","time":192.154708393,"data":"test_disabled_roles_keep_native_base_without_reading_overlay (benchmarks.test_ptd_overlay.OverlayContracts.test_disabled_roles_keep_native_base_without_reading_overlay) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":192.200778201,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":192.250716573,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":192.298599873,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":192.345762184,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":192.392636469,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":192.43983974,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":192.486406377,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":192.534751103,"data":"ok\n"}
+,{"stream_name":"stdout","time":192.601156794,"data":"test_metadata_admission_defers_hash_until_first_read_then_reuses_it (benchmarks.test_ptd_overlay.OverlayContracts.test_metadata_admission_defers_hash_until_first_read_then_reuses_it) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":192.652714125,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":192.699563551,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":192.75208776,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":192.798649938,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":192.842599546,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":192.889314645,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":192.942798388,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":192.988168144,"data":"ok\n"}
+,{"stream_name":"stdout","time":193.054678028,"data":"test_mutation_after_verification_fails_without_another_full_hash (benchmarks.test_ptd_overlay.OverlayContracts.test_mutation_after_verification_fails_without_another_full_hash) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":193.102843264,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":193.148747559,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":193.198077748,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":193.243985258,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":193.291860025,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":193.340361179,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":193.391159273,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":193.438519577,"data":"ok\n"}
+,{"stream_name":"stdout","time":193.506292697,"data":"test_retired_layout_and_tampered_receipts_fail_admission (benchmarks.test_ptd_overlay.OverlayContracts.test_retired_layout_and_tampered_receipts_fail_admission) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":193.558011834,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":193.610258185,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":193.660039831,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":193.708444675,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":193.756829018,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":193.804166025,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":193.854190663,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":194.051304701,"data":"ok\n"}
+,{"stream_name":"stdout","time":194.11966026,"data":"test_concurrent_consumers_verify_only_once (benchmarks.test_ptd_overlay.OverlayContracts.test_concurrent_consumers_verify_only_once) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":194.175899391,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":194.223761845,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":194.270511223,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":194.324408215,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":194.376358008,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":194.425304655,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":194.476232966,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":194.545409993,"data":"ok\n"}
+,{"stream_name":"stdout","time":194.616745955,"data":"test_corruption_is_rejected_on_consumption_even_with_same_size_and_mtime (benchmarks.test_ptd_overlay.OverlayContracts.test_corruption_is_rejected_on_consumption_even_with_same_size_and_mtime) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":194.672118292,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":194.721517842,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":194.771590166,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":194.823212359,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":194.877315447,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":194.925177537,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":194.979407334,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":195.021198622,"data":"ok\n"}
+,{"stream_name":"stdout","time":195.090259181,"data":"test_disabled_roles_keep_native_base_without_reading_overlay (benchmarks.test_ptd_overlay.OverlayContracts.test_disabled_roles_keep_native_base_without_reading_overlay) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":195.145335882,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":195.19510369,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":195.258370962,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":195.30791847,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":195.361738322,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":195.412299476,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":195.467965077,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":195.511870355,"data":"ok\n"}
+,{"stream_name":"stdout","time":195.587093448,"data":"test_metadata_admission_defers_hash_until_first_read_then_reuses_it (benchmarks.test_ptd_overlay.OverlayContracts.test_metadata_admission_defers_hash_until_first_read_then_reuses_it) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":195.642508039,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":195.692940967,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":195.743741382,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":195.792487632,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":195.845781584,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":195.895502508,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":195.943523281,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":195.988620116,"data":"ok\n"}
+,{"stream_name":"stdout","time":196.056867042,"data":"test_mutation_after_verification_fails_without_another_full_hash (benchmarks.test_ptd_overlay.OverlayContracts.test_mutation_after_verification_fails_without_another_full_hash) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":196.105928736,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":196.156581759,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":196.21210514,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":196.257872796,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":196.309922926,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":196.363427203,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":196.419977485,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":196.464136932,"data":"ok\n"}
+,{"stream_name":"stdout","time":196.539507013,"data":"test_retired_layout_and_tampered_receipts_fail_admission (benchmarks.test_ptd_overlay.OverlayContracts.test_retired_layout_and_tampered_receipts_fail_admission) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":196.586290267,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":196.635469989,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":196.681153467,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":196.733536024,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":196.788073696,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":196.838757123,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":196.892149479,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":196.968435294,"data":"ok\n"}
+,{"stream_name":"stdout","time":196.971858377,"data":"test_future_delivery_prunes_retired_sources_from_historical_capsules (benchmarks.test_ptd_overlay.SurfaceContracts.test_future_delivery_prunes_retired_sources_from_historical_capsules) ... ok\n"}
+,{"stream_name":"stdout","time":196.980843452,"data":"test_removed_options_are_not_exposed_and_p1_can_be_disabled (benchmarks.test_ptd_overlay.SurfaceContracts.test_removed_options_are_not_exposed_and_p1_can_be_disabled) ... ok\n"}
+,{"stream_name":"stdout","time":196.983205907,"data":"test_cpu_bf16_and_fp32_fallback_preserve_existing_arithmetic (benchmarks.test_h3_dit_fusion.ProductionFusion.test_cpu_bf16_and_fp32_fallback_preserve_existing_arithmetic) ... ok\n"}
+,{"stream_name":"stdout","time":196.986734856,"data":"test_defaults_switches_and_aot_are_consistent (benchmarks.test_h3_dit_fusion.ProductionFusion.test_defaults_switches_and_aot_are_consistent) ... ok\n"}
+,{"stream_name":"stdout","time":196.987694865,"data":"test_labels_reject_gaps_overlaps_and_unknown_modulation_rows (benchmarks.test_h3_dit_fusion.ProductionFusion.test_labels_reject_gaps_overlaps_and_unknown_modulation_rows) ... ok\n"}
+,{"stream_name":"stdout","time":196.989862525,"data":"test_lora_addition_precedes_storage_cast_and_gate_on_fallback (benchmarks.test_h3_dit_fusion.ProductionFusion.test_lora_addition_precedes_storage_cast_and_gate_on_fallback) ... ok\n"}
+,{"stream_name":"stdout","time":196.991094131,"data":"test_online_lora_and_int32_transport_refuse_fusion_before_collectives (benchmarks.test_h3_dit_fusion.ProductionFusion.test_online_lora_and_int32_transport_refuse_fusion_before_collectives) ... ok\n"}
+,{"stream_name":"stdout","time":196.99436182,"data":"test_prepared_attention_releases_qkv_before_execute_and_flattens_output (benchmarks.test_h3_dit_fusion.ProductionFusion.test_prepared_attention_releases_qkv_before_execute_and_flattens_output) ... /usr/local/lib/python3.13/dist-packages/torch/nn/functional.py:2954: UserWarning: Mismatch dtype between input and weight: input dtype = c10::Half, weight dtype = float, Cannot dispatch to fused implementation. (Triggered internally at /pytorch/aten/src/ATen/native/layer_norm.cpp:344.)\n"}
+,{"stream_name":"stdout","time":196.996807569,"data":"  return torch.rms_norm(input, normalized_shape, weight, eps)\n"}
+,{"stream_name":"stdout","time":196.997999409,"data":"ok\n"}
+,{"stream_name":"stdout","time":196.999238202,"data":"test_production_never_imports_experiment_kernels (benchmarks.test_h3_dit_fusion.ProductionFusion.test_production_never_imports_experiment_kernels) ... ok\n"}
+,{"stream_name":"stdout","time":197.012510846,"data":"test_promoted_factories_match_measured_factories (benchmarks.test_h3_dit_fusion.ProductionFusion.test_promoted_factories_match_measured_factories) ... ok\n"}
+,{"stream_name":"stdout","time":197.020527628,"data":"test_row_fusion_uses_the_selected_transport_and_fp16_branch_boundary (benchmarks.test_h3_dit_fusion.ProductionFusion.test_row_fusion_uses_the_selected_transport_and_fp16_branch_boundary) ... ok\n"}
+,{"stream_name":"stdout","time":197.024124609,"data":"test_scaled_transport_consumes_fused_epilogue_after_the_existing_sum (benchmarks.test_h3_dit_fusion.ProductionFusion.test_scaled_transport_consumes_fused_epilogue_after_the_existing_sum) ... ok\n"}
+,{"stream_name":"stdout","time":197.026614535,"data":"test_disabled_returns_native_model_sampler_and_sigmas_by_identity (benchmarks.test_ptd_tp2.AdapterContracts.test_disabled_returns_native_model_sampler_and_sigmas_by_identity) ... ok\n"}
+,{"stream_name":"stdout","time":197.027761157,"data":"test_expert_identity_order_cleanup_and_base_restore (benchmarks.test_ptd_tp2.AdapterContracts.test_expert_identity_order_cleanup_and_base_restore) ... ok\n"}
+,{"stream_name":"stdout","time":197.028996635,"data":"test_native_aot_uses_partial_96_rotation (benchmarks.test_ptd_tp2.AdapterContracts.test_native_aot_uses_partial_96_rotation) ... ok\n"}
+,{"stream_name":"stdout","time":197.030816871,"data":"test_node_registration_under_dynamic_loader_names (benchmarks.test_ptd_tp2.AdapterContracts.test_node_registration_under_dynamic_loader_names) ... ok\n"}
+,{"stream_name":"stdout","time":197.031737016,"data":"test_pruned_approximation_requires_explicit_consent (benchmarks.test_ptd_tp2.AdapterContracts.test_pruned_approximation_requires_explicit_consent) ... ok\n"}
+,{"stream_name":"stdout","time":197.06405939,"data":"test_raw_te_payload_retains_fp32_outliers (benchmarks.test_ptd_tp2.AdapterContracts.test_raw_te_payload_retains_fp32_outliers) ... ok\n"}
+,{"stream_name":"stdout","time":197.081293403,"data":"test_full_head_bias_fusion_and_independent_audio_weights (benchmarks.test_ptd_tp2.CheckpointContracts.test_full_head_bias_fusion_and_independent_audio_weights) ... ok\n"}
+,{"stream_name":"stdout","time":197.120398697,"data":"test_independent_qkv_and_gate_order_every_hop (benchmarks.test_ptd_tp2.CheckpointContracts.test_independent_qkv_and_gate_order_every_hop) ... ok\n"}
+,{"stream_name":"stdout","time":197.136498754,"data":"test_unknown_keys_incomplete_pair_bad_shapes_and_mutation_fail (benchmarks.test_ptd_tp2.CheckpointContracts.test_unknown_keys_incomplete_pair_bad_shapes_and_mutation_fail) ... ok\n"}
+,{"stream_name":"stdout","time":197.137728467,"data":"test_audio_chord_and_native_clock_agree_at_all_knots (benchmarks.test_ptd_tp2.SamplerContracts.test_audio_chord_and_native_clock_agree_at_all_knots) ... ok\n"}
+,{"stream_name":"stdout","time":197.138684079,"data":"test_bad_grid_partial_denoise_and_mask_rejected (benchmarks.test_ptd_tp2.SamplerContracts.test_bad_grid_partial_denoise_and_mask_rejected) ... ok\n"}
+,{"stream_name":"stdout","time":197.141371087,"data":"test_exact_eight_call_recurrence_and_fp32_carry (benchmarks.test_ptd_tp2.SamplerContracts.test_exact_eight_call_recurrence_and_fp32_carry) ... ok\n"}
+,{"stream_name":"stdout","time":197.142588069,"data":"test_append_preserves_active_entry_and_rejects_rebinding_atomically (benchmarks.test_ptd_queue.QueueContracts.test_append_preserves_active_entry_and_rejects_rebinding_atomically) ... ok\n"}
+,{"stream_name":"stdout","time":197.174848906,"data":"test_expert_queue_keeps_shell_window_and_appends_only_the_next_hop (benchmarks.test_ptd_queue.QueueContracts.test_expert_queue_keeps_shell_window_and_appends_only_the_next_hop) ... ok\n"}
+,{"stream_name":"stdout","time":197.181514176,"data":"test_final_layer_uses_native_math_and_restores_heads_after_failure (benchmarks.test_ptd_queue.QueueContracts.test_final_layer_uses_native_math_and_restores_heads_after_failure) ... ok\n"}
+,{"stream_name":"stdout","time":197.182930978,"data":"test_finish_drains_once_before_releasing_auxiliary_owners (benchmarks.test_ptd_queue.QueueContracts.test_finish_drains_once_before_releasing_auxiliary_owners) ... ok\n"}
+,{"stream_name":"stdout","time":197.184144433,"data":"test_pageable_reservation_is_owned_until_ready_without_double_pinning (benchmarks.test_ptd_queue.QueueContracts.test_pageable_reservation_is_owned_until_ready_without_double_pinning) ... ok\n"}
+,{"stream_name":"stdout","time":197.19783062,"data":"test_refiner_matches_fresh_native_loading_and_fp16_folding (benchmarks.test_ptd_queue.QueueContracts.test_refiner_matches_fresh_native_loading_and_fp16_folding) ... ok\n"}
+,{"stream_name":"stdout","time":197.198808044,"data":"test_resident_or_pageable_group_is_not_rejected_by_a_pin_only_bound (benchmarks.test_ptd_queue.QueueContracts.test_resident_or_pageable_group_is_not_rejected_by_a_pin_only_bound) ... ok\n"}
+,{"stream_name":"stdout","time":197.200052665,"data":"\n"}
+,{"stream_name":"stdout","time":197.201416145,"data":"----------------------------------------------------------------------\n"}
+,{"stream_name":"stdout","time":197.2026563,"data":"Ran 49 tests in 10.556s\n"}
+,{"stream_name":"stdout","time":197.203853082,"data":"\n"}
+,{"stream_name":"stdout","time":197.205040283,"data":"OK\n"}
+,{"stream_name":"stdout","time":197.993355782,"data":"T4_SUPERVISOR_FINAL {\"status\": \"worker_exited\", \"deadline_seconds\": 180, \"scope\": \"Notebook cell execution only; provider startup/mounting excluded\", \"worker_pid\": 155, \"exit_code\": 0, \"seconds\": 13.358906466999997}\n"}
+,{"stream_name":"stderr","time":201.503366246,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":201.503406374,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":201.728341598,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":201.728372675,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":202.680453947,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":202.809833921,"data":"[NbConvertApp] Writing 27987 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":206.220355435,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":206.922767023,"data":"[NbConvertApp] Writing 324830 bytes to __results__.html\n"}
+]

@@ -1,0 +1,15 @@
+{
+  "status": "starting",
+  "tools": {
+    "nsys": {
+      "path": null,
+      "available": false
+    },
+    "ncu": {
+      "path": null,
+      "available": false
+    }
+  },
+  "scope": "One DiT NFE after worker capture qualification",
+  "runs": []
+}
