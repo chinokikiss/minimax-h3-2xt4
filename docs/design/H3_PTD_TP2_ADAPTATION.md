@@ -129,6 +129,9 @@ not promise asynchronous DMA from pageable storage or zero idle time.
 | `audio_chord_correction` | true | False is a deliberate audio-clock ablation |
 | `hop_handoff` | queue | Persistent bounded queue; rebuild is the explicit teardown comparison |
 | `stream_weights` | true | False requests a resident **active** expert, with VRAM admission |
+| `future_cache` | false | Experimental complete-sequence CPU reclamation with consumer event protection |
+| `prefetch_refiner` | false | Experimental bounded next-hop CPU lane; requires future cache |
+| Bake `runtime_layout` / adapter `baked_refiner` | false | Optional byte-verified FP32/e6 refiner sidecars; original overlays retained |
 | Sampler `enabled` | true | When false, returns connected Native sampler/sigmas by identity |
 
 Refiner/head/audio algorithmic ablations do not implement the trained PTD recipe.
@@ -202,3 +205,6 @@ dataset mount, status polling or live-log polling is required for this test.
 
 References: [release card](https://huggingface.co/taobao-content-ai/MiniMax-H3-PTD-RefAsymOPD-LoRAs),
 [pinned PTD inference source](https://github.com/vita-epfl/PTD-inference/tree/65e593ff0cb0e68f885caa412cdd1c4c6cb08e6b).
+
+The new CPU scheduling and runtime-ready refiner candidates are opt-in. See
+[implementation, invariants and the bounded ablation plan](../reports/H3_PTD_CPU_SCHEDULING_20261029.md).

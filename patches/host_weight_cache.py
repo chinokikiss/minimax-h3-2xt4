@@ -1,9 +1,9 @@
 """Persistent pageable weight cache, with a host budget shared by GPU workers.
 
-All admission is byte bounded. Speculation runs on one CPU worker per cache;
-foreground demand takes priority at module boundaries. No CUDA work runs here.
+All admission is byte bounded. The default is one CPU worker per cache; PTD
+can enable one refiner lane under the same guards. No CUDA work runs here.
 """
-from collections import OrderedDict
+from collections import Counter, OrderedDict
 from concurrent.futures import Future, CancelledError
 from dataclasses import dataclass
 import multiprocessing as mp
@@ -141,6 +141,13 @@ class HostWeightCache:
         self.wanted = set()
         self.reuse_aware = reuse_aware
         self.next_use = {}
+        self.access_plan = None
+        self.access_cursor = 0
+        self.remaining_uses = Counter()
+        self.near_keys = set()
+        self.holds = Counter()
+        self.priority_keys = set()
+        self.priority_worker = None
         self.closed = False
         self.stats = dict(preparations=0, hits=0, misses=0, evictions=0,
                           discarded_preparations=0, cancelled_prefetches=0,
@@ -149,11 +156,82 @@ class HostWeightCache:
                           preparation_counts={}, events=detail_events())
         self.stats.update(evictions_before_use=0,pressure_yields=0)
         self.stats.update(future_wait_ms=0.,future_waits=0)
+        self.stats.update(consumed_releases=0, future_evictions=0)
         self.worker = threading.Thread(target=self._run, name='disk-weight-cache', daemon=True)
         self.worker.start()
 
     def _bytes(self):
         return sum(e.size for e in self.entries.values())
+
+    def set_access_plan(self, uses, cursor=0):
+        """Opt in to an immutable, complete future sequence, on the owner rank.
+
+        Holds are released by ResidencyWindow only after its CUDA events.
+        This cache never queries CUDA or assumes another rank has finished.
+        """
+        uses = tuple(uses)
+        with self.condition:
+            if not 0 <= cursor <= len(uses):
+                raise ValueError('Invalid consumption cursor')
+            if self.access_plan is not None and (uses != self.access_plan or cursor < self.access_cursor):
+                raise ValueError('A known access sequence cannot change or rewind')
+            self.access_plan, self.access_cursor = uses, cursor
+            self.remaining_uses = Counter(uses[cursor:])
+            self.next_use = {}
+            for index in range(cursor, len(uses)):
+                self.next_use.setdefault(uses[index], index)
+            self.wanted = set(self.remaining_uses)
+            self._release_consumed()
+            self.condition.notify_all()
+
+    def hold(self, key):
+        with self.condition:
+            self.holds[key] += 1
+
+    def release_hold(self, key):
+        with self.condition:
+            if self.holds[key] <= 0:
+                raise RuntimeError('Unbalanced CPU weight protection')
+            self.holds[key] -= 1
+            if not self.holds[key]: del self.holds[key]
+            self._release_consumed()
+            self.condition.notify_all()
+
+    def _release_consumed(self):
+        if self.access_plan is None: return
+        for key in list(self.entries):
+            entry = self.entries[key]
+            if not self.remaining_uses[key] and not entry.readers and not self.holds[key]:
+                size = entry.size
+                del self.entries[key], entry
+                self.budget.release(size)
+                self.stats['consumed_releases'] += 1
+        for key, task in list(self.tasks.items()):
+            if not self.remaining_uses[key] and not task['running']:
+                task['future'].cancel(); del self.tasks[key]
+                self.stats['cancelled_prefetches'] += 1
+
+    def enable_priority_lane(self, keys):
+        """A second CPU lane shares the existing byte/slot admission guards."""
+        with self.condition:
+            if self.closed: raise RuntimeError('Host cache is closed')
+            self.priority_keys = set(keys)
+            if self.priority_worker is None:
+                self.priority_worker = threading.Thread(target=self._run, args=(True,),
+                    name='refiner-weight-cache', daemon=True)
+                self.priority_worker.start()
+            self.condition.notify_all()
+
+    def reset_access_plan(self):
+        """Only after the GPU window and its copy-source leases have drained."""
+        with self.condition:
+            if self.holds or self.tasks:
+                raise RuntimeError('Drain consumers and preparation before clearing the plan')
+            self._release_consumed()
+            self.access_plan = None
+            self.remaining_uses.clear(); self.near_keys.clear()
+            self.priority_keys.clear()
+            self.condition.notify_all()
 
     def _evict_one(self, incoming=None, foreground=True):
         # Expired/model-tail entries go first, rather than evicting the next
@@ -162,8 +240,15 @@ class HostWeightCache:
         if self.reuse_aware:
             keys = sorted(self.entries,key=lambda k:(k not in self.wanted,
                 self.next_use.get(k,float('inf')),-self.entries[k].reload_ms),reverse=True)
+        if self.access_plan is not None:
+            keys = sorted(self.entries, key=lambda k:(k not in self.near_keys,
+                self.next_use.get(k,float('inf'))), reverse=True)
         for key in keys:
             entry = self.entries[key]
+            if self.holds[key]: continue
+            if self.access_plan is not None and not foreground and self.remaining_uses[key]:
+                if key in self.near_keys or self.next_use.get(key,float('inf')) <= self.next_use.get(incoming,float('inf')):
+                    continue
             if (self.reuse_aware and not foreground and key in self.wanted and
                 self.next_use.get(key,float('inf'))<=self.next_use.get(incoming,float('inf'))):
                 continue
@@ -175,6 +260,7 @@ class HostWeightCache:
                 del entry
                 self.budget.release(size)
                 self.stats['evictions'] += 1
+                self.stats['future_evictions'] += int(self.access_plan is not None)
                 return True
         return False
 
@@ -198,8 +284,11 @@ class HostWeightCache:
         with self.condition:
             if self.closed:
                 raise RuntimeError('Host cache is closed')
-            self.wanted = {s.key for s in specs}
-            self.next_use = {s.key:deadlines.get(s.key,i) for i,s in enumerate(specs)}
+            if self.access_plan is None:
+                self.wanted = {s.key for s in specs}
+                self.next_use = {s.key:deadlines.get(s.key,i) for i,s in enumerate(specs)}
+            else:
+                self.near_keys = {s.key for s in specs}
             for key, task in list(self.tasks.items()):
                 if not task['foreground'] and key not in self.wanted and not task['running']:
                     task['future'].cancel()
@@ -217,14 +306,15 @@ class HostWeightCache:
         specs = tuple(specs)
         # Retain matching ready entries; no eager loading of the entire graph.
         with self.condition:
-            self.wanted = {s.key for s in specs}
-            self.next_use = {s.key:i for i,s in enumerate(specs)}
+            if self.access_plan is None:
+                self.wanted = {s.key for s in specs}
+                self.next_use = {s.key:i for i,s in enumerate(specs)}
             if discard_unwanted:
                 # A completed model's tail must not starve another rank's
                 # required startup allocation. Borrowed entries keep ownership.
                 for key in list(self.entries):
                     entry = self.entries[key]
-                    if key not in self.wanted and not entry.readers:
+                    if key not in self.wanted and not entry.readers and not self.holds[key]:
                         size = entry.size
                         self.stats['evictions_before_use'] += int(entry.uses==0)
                         del self.entries[key]
@@ -291,6 +381,8 @@ class HostWeightCache:
         finally:
             with self.condition:
                 entry.readers -= 1
+                entry = None
+                self._release_consumed()
                 self.stats['wait_ms'] += (time.perf_counter()-begin)*1000
                 self.condition.notify_all()
         return result
@@ -332,13 +424,16 @@ class HostWeightCache:
                     self.condition.wait(timeout=.01)
 
 
-    def _run(self):
+    def _run(self, priority=False):
         while True:
             with self.condition:
-                self.condition.wait_for(lambda: self.closed or self.tasks)
+                def candidates():
+                    return [key for key, task in self.tasks.items() if not task['running']
+                        and (key in self.priority_keys) == priority]
+                self.condition.wait_for(lambda: self.closed or candidates())
                 if self.closed:
                     return
-                key = min(self.tasks,key=lambda k: (not self.tasks[k]['foreground'],self.tasks[k]['deadline']))
+                key = min(candidates(),key=lambda k: (not self.tasks[k]['foreground'],self.tasks[k]['deadline']))
                 task = self.tasks[key]
                 spec = task['spec']
                 # Reserve the final entry plus transient checkpoint/module
@@ -356,14 +451,15 @@ class HostWeightCache:
                     reservation+self.budget.reserve_bytes+self.background_headroom_bytes):
                     self.condition.wait(timeout=.1)
                     continue
-                while self._bytes() + spec.max_bytes > self.capacity_bytes:
+                preparing_bytes = sum(t['spec'].max_bytes for t in self.tasks.values() if t['running'])
+                while self._bytes() + preparing_bytes + spec.max_bytes > self.capacity_bytes:
                     if not self._evict_one(key,task['foreground']):
                         break
-                fits = self._bytes() + spec.max_bytes <= self.capacity_bytes
+                fits = self._bytes() + preparing_bytes + spec.max_bytes <= self.capacity_bytes
                 admitted = fits and self.budget.acquire(reservation,
                     speculative=not task['foreground'],preparation=True)
                 while not admitted and self._evict_one(key,task['foreground']):
-                    admitted = (self._bytes() + spec.max_bytes <= self.capacity_bytes
+                    admitted = (self._bytes() + preparing_bytes + spec.max_bytes <= self.capacity_bytes
                                 and self.budget.acquire(reservation,
                                     speculative=not task['foreground'],preparation=True))
                 if not admitted:
@@ -455,7 +551,13 @@ class HostWeightCache:
     def snapshot(self):
         with self.condition:
             return dict(self.stats, cache_bytes=self._bytes(), capacity_bytes=self.capacity_bytes,
-                        pending=len(self.tasks), shared_budget=self.budget.snapshot())
+                        pending=len(self.tasks), shared_budget=self.budget.snapshot(),
+                        future_plan_active=self.access_plan is not None,
+                        protected_groups=len(self.holds), priority_lane=self.priority_worker is not None,
+                        group_states={str(k):dict(size=e.size,next_use=self.next_use.get(k),
+                            remaining_uses=self.remaining_uses[k],
+                            state='protected' if e.readers or self.holds[k] else 'ready')
+                            for k,e in self.entries.items()} if self.access_plan is not None else {})
 
     def close(self):
         with self.condition:
@@ -466,10 +568,11 @@ class HostWeightCache:
                     del self.tasks[key]
             self.condition.notify_all()
         self.worker.join(timeout=180)
-        if self.worker.is_alive():
+        if self.priority_worker is not None:self.priority_worker.join(timeout=180)
+        if self.worker.is_alive() or (self.priority_worker is not None and self.priority_worker.is_alive()):
             raise TimeoutError('Host preparation did not stop')
         with self.condition:
-            if any(e.readers for e in self.entries.values()):
+            if self.holds or any(e.readers for e in self.entries.values()):
                 raise RuntimeError('Close GPU windows before their host cache')
             while self._evict_one():
                 pass

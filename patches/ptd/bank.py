@@ -97,7 +97,7 @@ def _bake_partition(base_path, checkpoint_path, output, layers, device, recipe_s
     return result
 
 
-def _auxiliary(base, checkpoint, hop, output, device, video_shift, audio_shift):
+def _auxiliary(base, checkpoint, hop, output, device, video_shift, audio_shift, runtime_layout=False):
     """Only adapted refiner weights and two effective PDD heads are duplicated."""
     from patches.offline_lora import merged_weight
     from patches.offline_lora_reference import verify_weight
@@ -129,11 +129,17 @@ def _auxiliary(base, checkpoint, hop, output, device, video_shift, audio_shift):
     save_file(values, str(path))
     with path.open('r+b') as stream:
         os.fsync(stream.fileno())
-    return dict(file=path.name, sha256=sha(path), bytes=path.stat().st_size,
-                state_sha256=state_proof(values), verified_targets=targets)
+    result = dict(file=path.name, sha256=sha(path), bytes=path.stat().st_size,
+                  state_sha256=state_proof(values), verified_targets=targets)
+    if runtime_layout:
+        from patches.h3_tensor_flow import TensorFlowPolicy
+        from .refiner_layout import write_layout
+        result['runtime_layout'] = write_layout(values, output, result['sha256'], TensorFlowPolicy('fp16'))
+    return result
 
 
-def disk_plan(base_descriptor, output, layers=50, include_download=False, reserve=4 * 2**30):
+def disk_plan(base_descriptor, output, layers=50, include_download=False, reserve=4 * 2**30,
+              runtime_layout=False):
     base = BundleReader(base_descriptor)
     if base.kind != 'dit' or not 1 <= layers <= 50:
         raise ValueError('PTD baking requires the DiT base bundle and 1-50 layers')
@@ -149,14 +155,17 @@ def disk_plan(base_descriptor, output, layers=50, include_download=False, reserv
                   if key != '__metadata__' and key.endswith(('.weight', '.bias'))
                   and (key.startswith('token_refiner.blocks.') or key.startswith('final_layer.video_out.')
                        or key.startswith('final_layer.audio_out.')))
-    needed = 8 * (blocks + overlay) + reserve + (RELEASE['bytes'] if include_download else 0)
+    layout_bytes = (sum(math.prod(info['shape'])*4 for key,info in base.header.items()
+        if key.startswith('token_refiner.blocks.') and key.endswith('.weight')) if runtime_layout else 0)
+    needed = 8 * (blocks + overlay + layout_bytes) + reserve + (RELEASE['bytes'] if include_download else 0)
     return dict(required_free_bytes=needed, free_bytes=shutil.disk_usage(parent).free,
-                estimated_expert_bytes=8 * (blocks + overlay), shared_base_auxiliary=True,
+                estimated_expert_bytes=8 * (blocks + overlay + layout_bytes), shared_base_auxiliary=True,
                 output=str(path), layers=layers, full_model=layers == 50)
 
 
 def bake(base_descriptor, checkpoint_path, output='/tmp/h3_ptd_refasymopd', *,
-         devices=('cuda:0', 'cuda:1'), layers=50, video_shift=12., audio_shift=3., allow_pruned_adaln=False):
+         devices=('cuda:0', 'cuda:1'), layers=50, video_shift=12., audio_shift=3., allow_pruned_adaln=False,
+         runtime_layout=False):
     """Atomic eight-hop publication, resumable durable shards; no online LoRA."""
     if (len(devices) != 2 or len({torch.device(d).index for d in devices}) != 2
             or any(torch.cuda.get_device_capability(d) != (7, 5)
@@ -183,13 +192,16 @@ def bake(base_descriptor, checkpoint_path, output='/tmp/h3_ptd_refasymopd', *,
         native_merge_sha256=sha(Path(__file__).parents[1] / 'offline_lora.py'),
         native_reference_sha256=sha(Path(__file__).parents[1] / 'offline_lora_reference.py'),
         kitchen=version('comfy-kitchen'), torch=str(torch.__version__))
+    if runtime_layout:
+        recipe['runtime_refiner_layout'] = 'ptd-refiner-fp32-native-fold-v1:fp16:e6'
+        recipe['source_sha256']['refiner_layout.py'] = sha(Path(__file__).with_name('refiner_layout.py'))
     digest = hashlib.sha256(json.dumps(recipe, sort_keys=True).encode()).hexdigest()
     if output.exists():
         bank = PTDBank(output / 'bank.json', allow_fixture=layers != 50)
         if bank.recipe_sha != digest:
             raise ValueError('Cached PTD bank belongs to another base / checkpoint / bake recipe')
         return output / 'bank.json'
-    plan = disk_plan(base.path, output, layers)
+    plan = disk_plan(base.path, output, layers, runtime_layout=runtime_layout)
     if plan['free_bytes'] < plan['required_free_bytes']:
         raise OSError('Insufficient /tmp disk for eight experts: ' + json.dumps(plan))
     partial = output.with_name(output.name + '.partial')
@@ -210,7 +222,8 @@ def bake(base_descriptor, checkpoint_path, output='/tmp/h3_ptd_refasymopd', *,
         expected = {f'dit.block{i:02d}.rank{r}' for i in range(layers) for r in (0, 1)}
         if set(records) != expected:
             raise ValueError('Incomplete PTD TP2 expert coverage')
-        auxiliary = _auxiliary(base, checkpoint, hop, partial / f'hop_{hop:02d}', devices[0], video_shift, audio_shift)
+        auxiliary = _auxiliary(base, checkpoint, hop, partial / f'hop_{hop:02d}', devices[0], video_shift, audio_shift,
+                               runtime_layout=runtime_layout)
         targets = [t for worker in workers for t in worker[hop]['verified_targets']] + auxiliary['verified_targets']
         wanted = {t for t in checkpoint.targets if not t.startswith('blocks.') or int(t.split('.')[1]) < layers}
         if set(targets) != wanted or len(targets) != len(wanted):

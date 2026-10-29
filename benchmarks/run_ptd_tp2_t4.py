@@ -10,6 +10,14 @@ import sys
 import time
 import traceback
 
+SCHEDULING_CASES = (
+    ('queue_baseline', {}),
+    ('future_cache', dict(future_cache=True)),
+    ('future_refiner', dict(future_cache=True,prefetch_refiner=True)),
+    ('future_refiner_baked', dict(future_cache=True,prefetch_refiner=True,baked_refiner=True)),
+    ('future_refiner_repeat', dict(future_cache=True,prefetch_refiner=True)),
+    ('queue_baseline_repeat', {}))
+
 
 def resource_plan(base=None, *, header=None):
     from types import SimpleNamespace
@@ -24,7 +32,7 @@ def resource_plan(base=None, *, header=None):
         host_bytes=20*2**30,reserve_bytes=4*2**30)
 
 
-def smoke(base, bank, output, handoff, resources):
+def smoke(base, bank, output, handoff, resources, cpu_options=None):
     import torch
     from safetensors.torch import save_file
     from comfy.nested_tensor import NestedTensor
@@ -57,7 +65,7 @@ def smoke(base, bank, output, handoff, resources):
     os.environ['H3_PTD_PROBE_DIR']=str(output)
     with patch.object(runtime,'_worker',worker), closing(PhysicalTPService(config)) as service:
         controller = TimedController(service,bank,PTDOptions(enabled=True,allow_fixture=True,
-            allow_pruned_adaln=True,hop_handoff=handoff))
+            allow_pruned_adaln=True,hop_handoff=handoff,**(cpu_options or {})))
         # Compilation is explicit and separate from expert execution. The
         # real H3 rotation is 96/128, not the historical 128/128 rehearsal.
         start=time.monotonic(); aot=service.call('prepare_dit',layout.seq_len)
@@ -105,6 +113,7 @@ def smoke(base, bank, output, handoff, resources):
         assert all(len(row['ptd_probe']['spans'])==16 and all(span['default_stream_interval_ms'] is not None
             for span in row['ptd_probe']['spans']) for row in restored), 'Incomplete worker metric capture'
     return dict(status='complete',hop_handoff=handoff,hops=selected['calls'],hop_seconds=timings,
+        cpu_options=cpu_options or {},
         selection_seconds=handoffs,hop_output_sha256=hashes,queue_states=queue_states,
         final_sha256=[hashlib.sha256(v.contiguous().view(torch.uint8).numpy().tobytes()).hexdigest() for v in final.unbind()],
         aot_wall_seconds=preparation,aot_rank0=aot,rank_stats=stats,restored_stats=restored,
@@ -118,6 +127,7 @@ def main():
     parser.add_argument('--source',type=Path,required=True)
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--cpu-preflight',action='store_true')
+    parser.add_argument('--cpu-scheduling',action='store_true')
     args=parser.parse_args(); args.output.mkdir(parents=True,exist_ok=True)
     source=args.source.resolve(); sys.path[:0]=[str(source),str(source/'ComfyUI'),str(source/'benchmarks')]
     sys.argv=['ptd-tp2','--cpu'] if args.cpu_preflight else ['ptd-tp2']
@@ -143,16 +153,19 @@ def main():
             assert adapt_model(native_forward,None,None,PTDOptions())==(native_forward,None)
             assert 'adapter' in inspect.signature(create_model).parameters
             assert 'include_download' in inspect.signature(disk_plan).parameters
-            contracts=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromNames([
+            names=[
                 'benchmarks.test_ptd_tp2.AdapterContracts.test_node_registration_under_dynamic_loader_names',
                 'benchmarks.test_ptd_tp2.AdapterContracts.test_disabled_returns_native_model_sampler_and_sigmas_by_identity',
-                'benchmarks.test_ptd_queue']))
+                'benchmarks.test_ptd_queue']
+            if args.cpu_scheduling:names+=['benchmarks.test_ptd_cpu_schedule']
+            contracts=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromNames(names))
             assert contracts.wasSuccessful()
             assets=json.loads((source/'bundle_assets.json').read_text())
             state['resources']=resource_plan(header=assets['auxiliary']['dit']['native_header'])
             # Setup/API admission only. No checkpoint download or GPU quota.
             state.update(status='ptd_cpu_ready',core_api_imports=True,no_weights_fetched=True,
-                         registration_contract_tests=2,queue_contract_tests=contracts.testsRun-2)
+                         registration_contract_tests=2,queue_contract_tests=7,
+                         scheduling_contract_tests=contracts.testsRun-9,cpu_scheduling=args.cpu_scheduling)
             return
         import torch
         import importlib.metadata as md
@@ -166,8 +179,9 @@ def main():
         os.environ.update(HF_HUB_DISABLE_XET='1',HF_HUB_DISABLE_PROGRESS_BARS='1',
             OMP_NUM_THREADS='2',MKL_NUM_THREADS='2',MALLOC_ARENA_MAX='2',MINIMAX_H3_PROFILE_DETAILS='1')
         torch.set_num_threads(2)
-        result=unittest.TextTestRunner(verbosity=2).run(
-            unittest.defaultTestLoader.loadTestsFromNames(['benchmarks.test_ptd_tp2','benchmarks.test_ptd_queue']))
+        names=['benchmarks.test_ptd_tp2','benchmarks.test_ptd_queue']
+        if args.cpu_scheduling:names+=['benchmarks.test_ptd_cpu_schedule']
+        result=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromNames(names))
         assert result.wasSuccessful(); state['contract_tests']=result.testsRun
         state['status']='staging_public_subset';save()
         from tp2_public_dit_assets import stage
@@ -182,23 +196,32 @@ def main():
         checkpoint=fetch_subset(scratch/'adapter')
         state['subset_provenance']=json.loads((scratch/'adapter/provenance.json').read_text())
         from patches.ptd.bank import bake,disk_plan,PTDBank
-        state['disk_plan']=disk_plan(base,scratch/'bank',layers=2)
+        state['disk_plan']=disk_plan(base,scratch/'bank',layers=2,runtime_layout=args.cpu_scheduling)
         state['status']='baking_eight_two_layer_experts';save()
-        begin=time.monotonic();bank=bake(base,checkpoint,scratch/'bank',layers=2,allow_pruned_adaln=True)
+        begin=time.monotonic();bank=bake(base,checkpoint,scratch/'bank',layers=2,allow_pruned_adaln=True,
+                                        runtime_layout=args.cpu_scheduling)
         state['bake_seconds']=time.monotonic()-begin
         admitted=PTDBank(bank,allow_fixture=True)
         state['verified_targets_per_hop']=[len(row['native_verified_targets']) for _,row in admitted.hops]
         state['baked_bytes']=sum(sum(r['bytes'] for r in row['shards'].values())+row['auxiliary']['bytes']
                                  for _,row in admitted.hops)
+        state['runtime_layout_bytes']=sum(row['auxiliary'].get('runtime_layout',{}).get('bytes',0)
+                                          for _,row in admitted.hops)
+        state['runtime_layout_native_byte_checks']=sum(row['auxiliary'].get('runtime_layout',{}).get('native_byte_exact_checks',0)
+                                          for _,row in admitted.hops)
         try: PTDBank(bank)
         except ValueError: state['deployment_fixture_rejected']=True
         else: raise AssertionError('Fixture bank was incorrectly admitted for deployment')
         torch.cuda.empty_cache()
         state['status']='eight_hop_native_tp2_smoke';save()
         state['smoke_cases']=[]
-        for index,handoff in enumerate(('rebuild','queue','queue','rebuild')):
-            output=args.output/f'{index}_{handoff}';output.mkdir()
-            value=smoke(base,bank,output,handoff,state['resources'])
+        cases=(SCHEDULING_CASES if args.cpu_scheduling else
+               tuple((handoff,{}) for handoff in ('rebuild','queue','queue','rebuild')))
+        for index,(label,options) in enumerate(cases):
+            output=args.output/f'{index}_{label}';output.mkdir()
+            handoff='queue' if args.cpu_scheduling else label
+            value=smoke(base,bank,output,handoff,state['resources'],options)
+            value['case']=label
             state['smoke_cases'].append(value);save()
             first=state['smoke_cases'][0]
             assert value['hop_output_sha256']==first['hop_output_sha256'], 'Handoff changed a denoiser output'

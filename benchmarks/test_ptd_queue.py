@@ -143,7 +143,7 @@ class QueueContracts(unittest.TestCase):
             model=model,rank=0,readers={'dit':reader(0)},cache=cache,
             config=SimpleNamespace(layers=2,operators=object(),tensor_flow=flow))
         adapter=SimpleNamespace(runtime=runtime,original=object(),bank=SimpleNamespace(reader=reader),
-            options=SimpleNamespace(use_hop_refiner=True,use_pdd_heads=True))
+            options=SimpleNamespace(use_hop_refiner=True,use_pdd_heads=True,future_cache=False,baked_refiner=False))
         def block_specs(reader,*args):
             return [WeightSpec(f'b{reader.identity[1]}_{i}',lambda:nn.Identity(),64) for i in range(2)]
         with patch('patches.ptd.queue.tp_specs',side_effect=block_specs):
@@ -162,6 +162,7 @@ class QueueContracts(unittest.TestCase):
 
     def test_finish_drains_once_before_releasing_auxiliary_owners(self):
         order=[];queue=object.__new__(ExpertQueue);queue.finished=False
+        queue.adapter=SimpleNamespace(options=SimpleNamespace(future_cache=False))
         queue.window=SimpleNamespace(copy_stream=SimpleNamespace(synchronize=lambda:order.append('copy_fence')),
             _reap=lambda:order.append('reap'),close=lambda:order.append('close'),specs={'owned':object()})
         queue.runtime=SimpleNamespace(config=SimpleNamespace(timeout_seconds=7),cache=SimpleNamespace(

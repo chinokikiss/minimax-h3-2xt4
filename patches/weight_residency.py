@@ -232,6 +232,34 @@ class ResidencyWindow:
         self.stats.update(idle_loads=0,idle_h2d_bytes=0,idle_cancellations=0,
                           idle_errors=0,idle_last_error=None,idle_gpu_hits=0,idle_avoided_h2d_bytes=0)
         self.idle_loaded=set()
+        self.future_cpu = False
+        self.cpu_fences = []
+        self.cpu_priority_by_use = {}
+
+    def configure_cpu_schedule(self, *, refiner_by_use=None):
+        """PTD-only complete sequence; no CUDA allocations or math changes."""
+        if self.cursor or self.host_cache is None:
+            raise RuntimeError('Configure the CPU schedule before consumption')
+        self.future_cpu = True
+        self.cpu_priority_by_use = dict(refiner_by_use or {})
+        self.host_cache.set_access_plan(self.uses, self.cursor)
+        if self.cpu_priority_by_use:
+            self.host_cache.enable_priority_lane(set(self.cpu_priority_by_use.values()))
+
+    @contextmanager
+    def _cpu_guard(self, key):
+        if not getattr(self, 'future_cpu', False):
+            yield
+            return
+        self.host_cache.hold(key)
+        try:
+            yield
+        finally:
+            # Protect pageable ownership conservatively through GPU consumption,
+            # even when DMA already uses an independently owned pinned copy.
+            event = torch.cuda.Event()
+            event.record(torch.cuda.current_stream(self.device))
+            self.cpu_fences.append((key, event))
 
     def _drop_pending(self,key):
         self.pending.pop(key,None)
@@ -420,6 +448,11 @@ class ResidencyWindow:
         return module, size
 
     def _reap(self):
+        fences = []
+        for key, event in getattr(self, 'cpu_fences', ()):
+            if event.query(): self.host_cache.release_hold(key)
+            else: fences.append((key, event))
+        self.cpu_fences = fences
         for key in tuple(self.idle_pending):
             future=self.pending.get(key)
             if future is None:self.idle_pending.discard(key)
@@ -559,6 +592,8 @@ class ResidencyWindow:
             # not reserve pin buffers or allocate CUDA tensors. Deadlines are
             # predicted next-use times, not a fixed-depth H2D permission.
             if self.host_cache is not None:
+                if self.future_cpu:
+                    self.host_cache.set_access_plan(self.uses, self.cursor)
                 cpu_keys = []
                 now = time.monotonic()
                 for position in range(self.cursor, len(self.uses)):
@@ -566,7 +601,8 @@ class ResidencyWindow:
                     if (not self.specs[key].resident_backing and key not in self.entries
                             and key not in [k for _,k in cpu_keys]):
                         cpu_keys.append((position,key))
-                    if len(cpu_keys) >= self.cpu_lookahead:
+                    limit = min(self.cpu_lookahead, 2) if self.cpu_priority_by_use else self.cpu_lookahead
+                    if len(cpu_keys) >= limit:
                         break
                 deadlines = {k: now+(p-self.cursor)*(self.compute_ms or 100.)/1000
                              for p,k in cpu_keys}
@@ -574,6 +610,16 @@ class ResidencyWindow:
                     unit = max(self.specs[k].prepare_peak_bytes or 4*self.specs[k].max_bytes for _,k in cpu_keys)
                     depth = self.host_cache.budget.speculation_depth(len(cpu_keys),unit)
                     cpu_keys = cpu_keys[:depth]
+                if self.cpu_priority_by_use:
+                    # The next refiner gets a separate CPU lane while ordinary
+                    # preparation keeps a small imminent prefix. Both lanes use
+                    # the same capacity, process-shared bytes and slot guards.
+                    next_refiner = next(((p,k) for p,k in sorted(self.cpu_priority_by_use.items())
+                        if p > self.cursor and k not in self.entries and k not in [x for _,x in cpu_keys]), None)
+                    if next_refiner is not None:
+                        p,k = next_refiner
+                        deadlines[k] = now+(p-self.cursor)*(self.compute_ms or 100.)/1000
+                        cpu_keys.append((p,k))
                 self.host_cache.prefetch([self.specs[k] for _,k in cpu_keys],deadlines=deadlines)
                 self.stats['cpu_plans'].append(dict(position=self.cursor,
                     cpu_depth=len(cpu_keys),gpu_depth=self.lookahead))
@@ -638,7 +684,7 @@ class ResidencyWindow:
     def use(self, key):
         if self.closed or self.cursor >= len(self.uses) or self.uses[self.cursor] != key:
             raise RuntimeError(f'Unexpected weight use at {self.cursor}: {key}')
-        with torch.cuda.device(self.device):
+        with torch.cuda.device(self.device), self._cpu_guard(key):
             self.prefetch()
             if key not in self.entries:
                 if key not in self.pending:
@@ -703,12 +749,19 @@ class ResidencyWindow:
         if self.closed:
             return self.stats
         if self.idle_cancel is not None:self.cancel_idle(keep=True)
+        if self.future_cpu:
+            # CPU preparation can be waiting for cache space held by a finished
+            # GPU consumer. Release those fences BEFORE joining the CPU pool.
+            with torch.cuda.device(self.device):
+                for _, event in self.cpu_fences: event.synchronize()
+                self._reap()
         self.pool.shutdown(wait=True, cancel_futures=True)
         with torch.cuda.device(self.device):
             self.copy_stream.synchronize()
             for entry in list(self.entries.values()) + self.retired:
                 if entry.last_use is not None:
                     entry.last_use.synchronize()
+            for _, event in self.cpu_fences: event.synchronize()
             self._reap()
         self.entries.clear()
         self.retired.clear()
