@@ -45,4 +45,22 @@ Local conda CPU regression: 207 passed, no failures/errors/skips. The extracted 
 
 Local evidence: `D:\attention_eval\h3_dit_hash_ablation_20261029\`. Final T4 results and the default-policy decision remain pending.
 
-Kaggle accepted the [CPU preflight, version 1](https://www.kaggle.com/code/pamcks/h3-dit-hash-ablation-cpu-20261029). Immutable source commit: `e1093f1c3c9aeba12d9d0f42d5b47815d8d7f268`; capsule SHA256: `1246b03ba71c886884d39b0cc91d5c18ce0f255efeb7ed63239ee6327b155e09`. No Kaggle status query or GPU submission has been made for this ablation yet. The matching successful CPU receipt is required before the prepared T4 job can be submitted.
+Kaggle CPU preflight version 1 failed; final artifacts were collected once.
+Immutable source commit: `e1093f1c3c9aeba12d9d0f42d5b47815d8d7f268`; capsule SHA256: `1246b03ba71c886884d39b0cc91d5c18ce0f255efeb7ed63239ee6327b155e09`.
+Source hashes and capsule identity match. Core imports and legacy API signatures
+passed on native Torch `2.11.0+cpu`, Python `3.13.15`, Kitchen `0.2.37`, TileLang
+`0.1.13`. The regression suite ran 207 tests: 206 passed and one errored.
+
+The failing test mocked GPU execution to exercise the scaled-transport fused
+epilogue contract with CPU tensors, but left the GPU NVTX label unmocked.
+CPU-only Torch correctly raised `NVTX functions not installed`. The correction
+replaces that label with `nullcontext` inside this single CPU test, matching
+its other mocked GPU operations. Production operators, GPU NVTX instrumentation,
+dependencies, test count and A/B items remain byte-exact. The retry capsule
+changes only `benchmarks/test_h3_dit_fusion.py`; it passes 207 local regression
+tests and 49 dedicated contracts again.
+
+Version 1 never reached the dedicated hash gate and did not use a GPU or fetch
+weights. Its failure is not a hash-ablation performance result. The matching
+successful CPU receipt is still required before T4 submission. No Kaggle status
+or live-log query has been made.

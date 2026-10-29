@@ -1,0 +1,597 @@
+{
+  "status": "complete",
+  "cpu_only": true,
+  "packages_installed": false,
+  "raw_devices_written": false,
+  "inventory": {
+    "paths": [
+      {
+        "path": "/kaggle/working",
+        "mount": {
+          "mount": "/kaggle/working",
+          "root": "/kaggle/working",
+          "device": "7:2",
+          "options": "rw,relatime",
+          "filesystem": "ext4",
+          "source": "/dev/loop2",
+          "super_options": "rw"
+        },
+        "total_bytes": 20957446144,
+        "free_bytes": 20940361728,
+        "used_bytes": 307200,
+        "st_dev": 1794,
+        "available_inodes": 1310675,
+        "block_bytes": 4096,
+        "writable": true,
+        "disk_candidate": true
+      },
+      {
+        "path": "/tmp",
+        "mount": {
+          "mount": "/",
+          "root": "/",
+          "device": "0:53",
+          "options": "rw,relatime",
+          "filesystem": "overlay",
+          "source": "overlay",
+          "super_options": "rw,lowerdir=l/JG2IXIK7G65ESQ5UTOYUKZZD32:l/6AL4PMT5SCZRQHUEN44I4XFQGV:l/C7DC7EZIEDC4AQPZUBNU4A7OCF:l/6TODL66AI4TG4Q2LCG7Y63Z4F6:l/7COPCFYO5Z5VQM6BBG2B2EF4HL:l/ATXRZOVQHTY4ULUE343YTE3R45:l/APDENJD67NCPYZ5MS3LQUUEP4G:l/4FJCPTZ4VH2Q6PV75CTO35MKOF:l/KLOKYCNMESZJVQELTVFZBBR7GD:l/HHMGLGTDHEVZCG5LTKMAYVNOB4:l/TVE4I33UXFPRWGXAA7GARXR2YN:l/XXDG25X5Q552U7G5YGBIDXLM4K:l/COH4VY6W4ZDDCP5FOWLIRQDCWV:l/BBQ2DA7L3JQLOQELAPUX6ADBIZ:l/OSW26Q7VGRXCU6VHS3XSWXFGC2:l/3OR46T6MGOGVJBPPUIPGUWQYCK:l/DTH2DIXHTEVVLGBNDXFAZJOLOU:l/LNZXTGD6MZ7WS3PQW5ZY7HR6A3:l/743SPCBK7NTRNP23YKEN7KCHKI:l/R76JLPMLJB2LB7QEU2KIKAHSPF:l/RWDFJR65U3EJT2CNHI4VKET5PD:l/KOUSIGFNH3AYNRED54EMYOBGFB:l/4N3LGN4QIFD242VONRSPCTHFHC:l/IMTXAT3JH7EPS6SJLAIQ2B5473:l/FSQVFJMNB3U7PYXCILOZRPOVYL:l/ZCFHRONUNVKK2OTJPJCD3GJIHZ:l/ORCH7G3T4H3BIKD7W2A7PWPMVZ:l/G5262CV7BFEIAIXKAAH3FWNXQX:l/S5KEEPDISA73WDUYUEC6LPF562:l/RPQFHKM47C2PRJT75TXJR22VNG:l/PFUSAEIIDDMG5PRJKKRMCNVMVQ:l/FK5FJXY6OVIQRVKKKSHAR5TDUG:l/L23OCEZ6DO7KBST6JPCZH36GIB:l/FKFS4RQXRS6GOMSDTCFEH63GS3:l/UPDQAU4MINGZDXEXGH7ASQRRPU:l/RAJDNXOKSWJWHT6N73OXAJ5BV3:l/BWAZ4X2I3RQCTY6LFMQ2AFW7ND:l/YLFZYI22FMQKAULMZPL2TIOZSK:l/EDEZM6KVRLAC3DSNZMTD6PDONC:l/J4ILIWXAX4YW4NUO4ZW6RQUGFW:l/HLWQSLS4BEDAHW2DWHTY4XLGPV:l/LUHHQ4J2Z53H3JFEP32RPPRBRR:l/MQO57U2OHPTYK52JM4D2O2QRYB:l/SUYA3RIBGUVV3Q4YASGGEMMGGA:l/MVFLROV4KUZ7GLTBCHTTTRKD7T:l/YHKDFSJ2CE6JASLAX4KUHEAU4W:l/AZR2DLAWXPEEQIIPTW4SY764QD:l/B4K2QISSRLHCCXXS4MIN27ZLRD:l/TSSCYM7HOEQN254FZJUY3357EX:l/XQMLPXEI7BYHKIU4DZF57DGMHL:l/MKJHIUQRZABDUOLZ73H4N2HXTN:l/H5WM35MGSEXKK6IUUY2HK57DAU:l/IOLSRJ4EPEKARZEI7RRNIVZT6Q:l/MYFLBWJ5NR6E23JDSXCWVVF6YK:l/FM43XYAXWYNL2JGCBNEHMVPJQK:l/DF765ENDH3POBF3RM4VVT2W7I3:l/NSXT5ZQXAASLNOGTN47BBXMOZC:l/HEWDW5KFTJEYUERHYUMWEHIEYF:l/6SKRHN2Q42AXOF4GXJ7PRSI6OF:l/UNNZBMGCI5U3B75NRFHROQ5QI3:l/DIHXKAHCNDHW6QO7KRUEEYDGJE:l/DNHSHJXKGKKRJIXYL2OBFEXLPE:l/M5OLAKB67UZ47TRLYSFXAF5RAN:l/LSLI62WDH3ZNZHP33NECYY6KSK:l/LHQLYQ6US5CJIUNBIJB4MRISBX:l/HRI6LFYPB63UK66NH7VQZTCUP4:l/VDZPGLYFJ3LPPWBRM4O226G6LL:l/ACNBVXW437AEGKIM7T6JXV7AQJ:l/JHDOR4QD6TS2TXTYBWJXEKERR5:l/DJ4FT42B2UQA6YW7NR3PIHAXRS:l/OJKU7CP6OJFFPUJCEVA2QZJYOE:l/I3RLD6UZDEAHT5YQY6HAFLF7AO:l/Q2BIXBLPHCV3LBUOIXXHIFVAWP:l/XYW7INVZWGRDTN7XNCNWBLM6OG:l/MKS3X3TBACL7GS6GO6TXUBK6S6:l/GGUPQGTJJBWOJWTO7OGS6NE225:l/QNMCZ3ZJE5VYCZFWURGH2HY2Z4:l/ON7I3RMVVYOFW2WBV6VVDYNRZW:l/Q27ILM6NCNHH4TFS2DHWTOG4HQ:l/SKLZM7YXU2MLUEHRN6FWX6WSUJ,upperdir=beffc9405d1088f41a1d668da357b7598663485d8bf09381974a2bc37157ce3c/diff,workdir=beffc9405d1088f41a1d668da357b7598663485d8bf09381974a2bc37157ce3c/work"
+        },
+        "total_bytes": 8758385086464,
+        "free_bytes": 1126151974912,
+        "used_bytes": 7632216334336,
+        "st_dev": 53,
+        "available_inodes": 442686818,
+        "block_bytes": 4096,
+        "writable": true,
+        "disk_candidate": true
+      },
+      {
+        "path": "/var/tmp",
+        "mount": {
+          "mount": "/",
+          "root": "/",
+          "device": "0:53",
+          "options": "rw,relatime",
+          "filesystem": "overlay",
+          "source": "overlay",
+          "super_options": "rw,lowerdir=l/JG2IXIK7G65ESQ5UTOYUKZZD32:l/6AL4PMT5SCZRQHUEN44I4XFQGV:l/C7DC7EZIEDC4AQPZUBNU4A7OCF:l/6TODL66AI4TG4Q2LCG7Y63Z4F6:l/7COPCFYO5Z5VQM6BBG2B2EF4HL:l/ATXRZOVQHTY4ULUE343YTE3R45:l/APDENJD67NCPYZ5MS3LQUUEP4G:l/4FJCPTZ4VH2Q6PV75CTO35MKOF:l/KLOKYCNMESZJVQELTVFZBBR7GD:l/HHMGLGTDHEVZCG5LTKMAYVNOB4:l/TVE4I33UXFPRWGXAA7GARXR2YN:l/XXDG25X5Q552U7G5YGBIDXLM4K:l/COH4VY6W4ZDDCP5FOWLIRQDCWV:l/BBQ2DA7L3JQLOQELAPUX6ADBIZ:l/OSW26Q7VGRXCU6VHS3XSWXFGC2:l/3OR46T6MGOGVJBPPUIPGUWQYCK:l/DTH2DIXHTEVVLGBNDXFAZJOLOU:l/LNZXTGD6MZ7WS3PQW5ZY7HR6A3:l/743SPCBK7NTRNP23YKEN7KCHKI:l/R76JLPMLJB2LB7QEU2KIKAHSPF:l/RWDFJR65U3EJT2CNHI4VKET5PD:l/KOUSIGFNH3AYNRED54EMYOBGFB:l/4N3LGN4QIFD242VONRSPCTHFHC:l/IMTXAT3JH7EPS6SJLAIQ2B5473:l/FSQVFJMNB3U7PYXCILOZRPOVYL:l/ZCFHRONUNVKK2OTJPJCD3GJIHZ:l/ORCH7G3T4H3BIKD7W2A7PWPMVZ:l/G5262CV7BFEIAIXKAAH3FWNXQX:l/S5KEEPDISA73WDUYUEC6LPF562:l/RPQFHKM47C2PRJT75TXJR22VNG:l/PFUSAEIIDDMG5PRJKKRMCNVMVQ:l/FK5FJXY6OVIQRVKKKSHAR5TDUG:l/L23OCEZ6DO7KBST6JPCZH36GIB:l/FKFS4RQXRS6GOMSDTCFEH63GS3:l/UPDQAU4MINGZDXEXGH7ASQRRPU:l/RAJDNXOKSWJWHT6N73OXAJ5BV3:l/BWAZ4X2I3RQCTY6LFMQ2AFW7ND:l/YLFZYI22FMQKAULMZPL2TIOZSK:l/EDEZM6KVRLAC3DSNZMTD6PDONC:l/J4ILIWXAX4YW4NUO4ZW6RQUGFW:l/HLWQSLS4BEDAHW2DWHTY4XLGPV:l/LUHHQ4J2Z53H3JFEP32RPPRBRR:l/MQO57U2OHPTYK52JM4D2O2QRYB:l/SUYA3RIBGUVV3Q4YASGGEMMGGA:l/MVFLROV4KUZ7GLTBCHTTTRKD7T:l/YHKDFSJ2CE6JASLAX4KUHEAU4W:l/AZR2DLAWXPEEQIIPTW4SY764QD:l/B4K2QISSRLHCCXXS4MIN27ZLRD:l/TSSCYM7HOEQN254FZJUY3357EX:l/XQMLPXEI7BYHKIU4DZF57DGMHL:l/MKJHIUQRZABDUOLZ73H4N2HXTN:l/H5WM35MGSEXKK6IUUY2HK57DAU:l/IOLSRJ4EPEKARZEI7RRNIVZT6Q:l/MYFLBWJ5NR6E23JDSXCWVVF6YK:l/FM43XYAXWYNL2JGCBNEHMVPJQK:l/DF765ENDH3POBF3RM4VVT2W7I3:l/NSXT5ZQXAASLNOGTN47BBXMOZC:l/HEWDW5KFTJEYUERHYUMWEHIEYF:l/6SKRHN2Q42AXOF4GXJ7PRSI6OF:l/UNNZBMGCI5U3B75NRFHROQ5QI3:l/DIHXKAHCNDHW6QO7KRUEEYDGJE:l/DNHSHJXKGKKRJIXYL2OBFEXLPE:l/M5OLAKB67UZ47TRLYSFXAF5RAN:l/LSLI62WDH3ZNZHP33NECYY6KSK:l/LHQLYQ6US5CJIUNBIJB4MRISBX:l/HRI6LFYPB63UK66NH7VQZTCUP4:l/VDZPGLYFJ3LPPWBRM4O226G6LL:l/ACNBVXW437AEGKIM7T6JXV7AQJ:l/JHDOR4QD6TS2TXTYBWJXEKERR5:l/DJ4FT42B2UQA6YW7NR3PIHAXRS:l/OJKU7CP6OJFFPUJCEVA2QZJYOE:l/I3RLD6UZDEAHT5YQY6HAFLF7AO:l/Q2BIXBLPHCV3LBUOIXXHIFVAWP:l/XYW7INVZWGRDTN7XNCNWBLM6OG:l/MKS3X3TBACL7GS6GO6TXUBK6S6:l/GGUPQGTJJBWOJWTO7OGS6NE225:l/QNMCZ3ZJE5VYCZFWURGH2HY2Z4:l/ON7I3RMVVYOFW2WBV6VVDYNRZW:l/Q27ILM6NCNHH4TFS2DHWTOG4HQ:l/SKLZM7YXU2MLUEHRN6FWX6WSUJ,upperdir=beffc9405d1088f41a1d668da357b7598663485d8bf09381974a2bc37157ce3c/diff,workdir=beffc9405d1088f41a1d668da357b7598663485d8bf09381974a2bc37157ce3c/work"
+        },
+        "total_bytes": 8758385086464,
+        "free_bytes": 1126151974912,
+        "used_bytes": 7632216334336,
+        "st_dev": 53,
+        "available_inodes": 442686818,
+        "block_bytes": 4096,
+        "writable": true,
+        "disk_candidate": true
+      },
+      {
+        "path": "/kaggle/huggingface",
+        "mount": {
+          "mount": "/kaggle/huggingface",
+          "root": "/kaggle/huggingface",
+          "device": "7:2",
+          "options": "rw,relatime",
+          "filesystem": "ext4",
+          "source": "/dev/loop2",
+          "super_options": "rw"
+        },
+        "total_bytes": 20957446144,
+        "free_bytes": 20940361728,
+        "used_bytes": 307200,
+        "st_dev": 1794,
+        "available_inodes": 1310675,
+        "block_bytes": 4096,
+        "writable": true,
+        "disk_candidate": true
+      },
+      {
+        "path": "/root",
+        "mount": {
+          "mount": "/",
+          "root": "/",
+          "device": "0:53",
+          "options": "rw,relatime",
+          "filesystem": "overlay",
+          "source": "overlay",
+          "super_options": "rw,lowerdir=l/JG2IXIK7G65ESQ5UTOYUKZZD32:l/6AL4PMT5SCZRQHUEN44I4XFQGV:l/C7DC7EZIEDC4AQPZUBNU4A7OCF:l/6TODL66AI4TG4Q2LCG7Y63Z4F6:l/7COPCFYO5Z5VQM6BBG2B2EF4HL:l/ATXRZOVQHTY4ULUE343YTE3R45:l/APDENJD67NCPYZ5MS3LQUUEP4G:l/4FJCPTZ4VH2Q6PV75CTO35MKOF:l/KLOKYCNMESZJVQELTVFZBBR7GD:l/HHMGLGTDHEVZCG5LTKMAYVNOB4:l/TVE4I33UXFPRWGXAA7GARXR2YN:l/XXDG25X5Q552U7G5YGBIDXLM4K:l/COH4VY6W4ZDDCP5FOWLIRQDCWV:l/BBQ2DA7L3JQLOQELAPUX6ADBIZ:l/OSW26Q7VGRXCU6VHS3XSWXFGC2:l/3OR46T6MGOGVJBPPUIPGUWQYCK:l/DTH2DIXHTEVVLGBNDXFAZJOLOU:l/LNZXTGD6MZ7WS3PQW5ZY7HR6A3:l/743SPCBK7NTRNP23YKEN7KCHKI:l/R76JLPMLJB2LB7QEU2KIKAHSPF:l/RWDFJR65U3EJT2CNHI4VKET5PD:l/KOUSIGFNH3AYNRED54EMYOBGFB:l/4N3LGN4QIFD242VONRSPCTHFHC:l/IMTXAT3JH7EPS6SJLAIQ2B5473:l/FSQVFJMNB3U7PYXCILOZRPOVYL:l/ZCFHRONUNVKK2OTJPJCD3GJIHZ:l/ORCH7G3T4H3BIKD7W2A7PWPMVZ:l/G5262CV7BFEIAIXKAAH3FWNXQX:l/S5KEEPDISA73WDUYUEC6LPF562:l/RPQFHKM47C2PRJT75TXJR22VNG:l/PFUSAEIIDDMG5PRJKKRMCNVMVQ:l/FK5FJXY6OVIQRVKKKSHAR5TDUG:l/L23OCEZ6DO7KBST6JPCZH36GIB:l/FKFS4RQXRS6GOMSDTCFEH63GS3:l/UPDQAU4MINGZDXEXGH7ASQRRPU:l/RAJDNXOKSWJWHT6N73OXAJ5BV3:l/BWAZ4X2I3RQCTY6LFMQ2AFW7ND:l/YLFZYI22FMQKAULMZPL2TIOZSK:l/EDEZM6KVRLAC3DSNZMTD6PDONC:l/J4ILIWXAX4YW4NUO4ZW6RQUGFW:l/HLWQSLS4BEDAHW2DWHTY4XLGPV:l/LUHHQ4J2Z53H3JFEP32RPPRBRR:l/MQO57U2OHPTYK52JM4D2O2QRYB:l/SUYA3RIBGUVV3Q4YASGGEMMGGA:l/MVFLROV4KUZ7GLTBCHTTTRKD7T:l/YHKDFSJ2CE6JASLAX4KUHEAU4W:l/AZR2DLAWXPEEQIIPTW4SY764QD:l/B4K2QISSRLHCCXXS4MIN27ZLRD:l/TSSCYM7HOEQN254FZJUY3357EX:l/XQMLPXEI7BYHKIU4DZF57DGMHL:l/MKJHIUQRZABDUOLZ73H4N2HXTN:l/H5WM35MGSEXKK6IUUY2HK57DAU:l/IOLSRJ4EPEKARZEI7RRNIVZT6Q:l/MYFLBWJ5NR6E23JDSXCWVVF6YK:l/FM43XYAXWYNL2JGCBNEHMVPJQK:l/DF765ENDH3POBF3RM4VVT2W7I3:l/NSXT5ZQXAASLNOGTN47BBXMOZC:l/HEWDW5KFTJEYUERHYUMWEHIEYF:l/6SKRHN2Q42AXOF4GXJ7PRSI6OF:l/UNNZBMGCI5U3B75NRFHROQ5QI3:l/DIHXKAHCNDHW6QO7KRUEEYDGJE:l/DNHSHJXKGKKRJIXYL2OBFEXLPE:l/M5OLAKB67UZ47TRLYSFXAF5RAN:l/LSLI62WDH3ZNZHP33NECYY6KSK:l/LHQLYQ6US5CJIUNBIJB4MRISBX:l/HRI6LFYPB63UK66NH7VQZTCUP4:l/VDZPGLYFJ3LPPWBRM4O226G6LL:l/ACNBVXW437AEGKIM7T6JXV7AQJ:l/JHDOR4QD6TS2TXTYBWJXEKERR5:l/DJ4FT42B2UQA6YW7NR3PIHAXRS:l/OJKU7CP6OJFFPUJCEVA2QZJYOE:l/I3RLD6UZDEAHT5YQY6HAFLF7AO:l/Q2BIXBLPHCV3LBUOIXXHIFVAWP:l/XYW7INVZWGRDTN7XNCNWBLM6OG:l/MKS3X3TBACL7GS6GO6TXUBK6S6:l/GGUPQGTJJBWOJWTO7OGS6NE225:l/QNMCZ3ZJE5VYCZFWURGH2HY2Z4:l/ON7I3RMVVYOFW2WBV6VVDYNRZW:l/Q27ILM6NCNHH4TFS2DHWTOG4HQ:l/SKLZM7YXU2MLUEHRN6FWX6WSUJ,upperdir=beffc9405d1088f41a1d668da357b7598663485d8bf09381974a2bc37157ce3c/diff,workdir=beffc9405d1088f41a1d668da357b7598663485d8bf09381974a2bc37157ce3c/work"
+        },
+        "total_bytes": 8758385086464,
+        "free_bytes": 1126151974912,
+        "used_bytes": 7632216334336,
+        "st_dev": 53,
+        "available_inodes": 442686818,
+        "block_bytes": 4096,
+        "writable": true,
+        "disk_candidate": true
+      },
+      {
+        "path": "/",
+        "mount": {
+          "mount": "/",
+          "root": "/",
+          "device": "0:53",
+          "options": "rw,relatime",
+          "filesystem": "overlay",
+          "source": "overlay",
+          "super_options": "rw,lowerdir=l/JG2IXIK7G65ESQ5UTOYUKZZD32:l/6AL4PMT5SCZRQHUEN44I4XFQGV:l/C7DC7EZIEDC4AQPZUBNU4A7OCF:l/6TODL66AI4TG4Q2LCG7Y63Z4F6:l/7COPCFYO5Z5VQM6BBG2B2EF4HL:l/ATXRZOVQHTY4ULUE343YTE3R45:l/APDENJD67NCPYZ5MS3LQUUEP4G:l/4FJCPTZ4VH2Q6PV75CTO35MKOF:l/KLOKYCNMESZJVQELTVFZBBR7GD:l/HHMGLGTDHEVZCG5LTKMAYVNOB4:l/TVE4I33UXFPRWGXAA7GARXR2YN:l/XXDG25X5Q552U7G5YGBIDXLM4K:l/COH4VY6W4ZDDCP5FOWLIRQDCWV:l/BBQ2DA7L3JQLOQELAPUX6ADBIZ:l/OSW26Q7VGRXCU6VHS3XSWXFGC2:l/3OR46T6MGOGVJBPPUIPGUWQYCK:l/DTH2DIXHTEVVLGBNDXFAZJOLOU:l/LNZXTGD6MZ7WS3PQW5ZY7HR6A3:l/743SPCBK7NTRNP23YKEN7KCHKI:l/R76JLPMLJB2LB7QEU2KIKAHSPF:l/RWDFJR65U3EJT2CNHI4VKET5PD:l/KOUSIGFNH3AYNRED54EMYOBGFB:l/4N3LGN4QIFD242VONRSPCTHFHC:l/IMTXAT3JH7EPS6SJLAIQ2B5473:l/FSQVFJMNB3U7PYXCILOZRPOVYL:l/ZCFHRONUNVKK2OTJPJCD3GJIHZ:l/ORCH7G3T4H3BIKD7W2A7PWPMVZ:l/G5262CV7BFEIAIXKAAH3FWNXQX:l/S5KEEPDISA73WDUYUEC6LPF562:l/RPQFHKM47C2PRJT75TXJR22VNG:l/PFUSAEIIDDMG5PRJKKRMCNVMVQ:l/FK5FJXY6OVIQRVKKKSHAR5TDUG:l/L23OCEZ6DO7KBST6JPCZH36GIB:l/FKFS4RQXRS6GOMSDTCFEH63GS3:l/UPDQAU4MINGZDXEXGH7ASQRRPU:l/RAJDNXOKSWJWHT6N73OXAJ5BV3:l/BWAZ4X2I3RQCTY6LFMQ2AFW7ND:l/YLFZYI22FMQKAULMZPL2TIOZSK:l/EDEZM6KVRLAC3DSNZMTD6PDONC:l/J4ILIWXAX4YW4NUO4ZW6RQUGFW:l/HLWQSLS4BEDAHW2DWHTY4XLGPV:l/LUHHQ4J2Z53H3JFEP32RPPRBRR:l/MQO57U2OHPTYK52JM4D2O2QRYB:l/SUYA3RIBGUVV3Q4YASGGEMMGGA:l/MVFLROV4KUZ7GLTBCHTTTRKD7T:l/YHKDFSJ2CE6JASLAX4KUHEAU4W:l/AZR2DLAWXPEEQIIPTW4SY764QD:l/B4K2QISSRLHCCXXS4MIN27ZLRD:l/TSSCYM7HOEQN254FZJUY3357EX:l/XQMLPXEI7BYHKIU4DZF57DGMHL:l/MKJHIUQRZABDUOLZ73H4N2HXTN:l/H5WM35MGSEXKK6IUUY2HK57DAU:l/IOLSRJ4EPEKARZEI7RRNIVZT6Q:l/MYFLBWJ5NR6E23JDSXCWVVF6YK:l/FM43XYAXWYNL2JGCBNEHMVPJQK:l/DF765ENDH3POBF3RM4VVT2W7I3:l/NSXT5ZQXAASLNOGTN47BBXMOZC:l/HEWDW5KFTJEYUERHYUMWEHIEYF:l/6SKRHN2Q42AXOF4GXJ7PRSI6OF:l/UNNZBMGCI5U3B75NRFHROQ5QI3:l/DIHXKAHCNDHW6QO7KRUEEYDGJE:l/DNHSHJXKGKKRJIXYL2OBFEXLPE:l/M5OLAKB67UZ47TRLYSFXAF5RAN:l/LSLI62WDH3ZNZHP33NECYY6KSK:l/LHQLYQ6US5CJIUNBIJB4MRISBX:l/HRI6LFYPB63UK66NH7VQZTCUP4:l/VDZPGLYFJ3LPPWBRM4O226G6LL:l/ACNBVXW437AEGKIM7T6JXV7AQJ:l/JHDOR4QD6TS2TXTYBWJXEKERR5:l/DJ4FT42B2UQA6YW7NR3PIHAXRS:l/OJKU7CP6OJFFPUJCEVA2QZJYOE:l/I3RLD6UZDEAHT5YQY6HAFLF7AO:l/Q2BIXBLPHCV3LBUOIXXHIFVAWP:l/XYW7INVZWGRDTN7XNCNWBLM6OG:l/MKS3X3TBACL7GS6GO6TXUBK6S6:l/GGUPQGTJJBWOJWTO7OGS6NE225:l/QNMCZ3ZJE5VYCZFWURGH2HY2Z4:l/ON7I3RMVVYOFW2WBV6VVDYNRZW:l/Q27ILM6NCNHH4TFS2DHWTOG4HQ:l/SKLZM7YXU2MLUEHRN6FWX6WSUJ,upperdir=beffc9405d1088f41a1d668da357b7598663485d8bf09381974a2bc37157ce3c/diff,workdir=beffc9405d1088f41a1d668da357b7598663485d8bf09381974a2bc37157ce3c/work"
+        },
+        "total_bytes": 8758385086464,
+        "free_bytes": 1126151974912,
+        "used_bytes": 7632216334336,
+        "st_dev": 53,
+        "available_inodes": 442686818,
+        "block_bytes": 4096,
+        "writable": true,
+        "disk_candidate": true
+      },
+      {
+        "path": "/proc",
+        "mount": {
+          "mount": "/proc",
+          "root": "/",
+          "device": "0:71",
+          "options": "rw,nosuid,nodev,noexec,relatime",
+          "filesystem": "proc",
+          "source": "proc",
+          "super_options": "rw"
+        },
+        "total_bytes": 0,
+        "free_bytes": 0,
+        "used_bytes": 0,
+        "st_dev": 71,
+        "available_inodes": 0,
+        "block_bytes": 4096,
+        "writable": true,
+        "disk_candidate": false
+      },
+      {
+        "path": "/dev",
+        "mount": {
+          "mount": "/dev",
+          "root": "/",
+          "device": "0:72",
+          "options": "rw,nosuid",
+          "filesystem": "tmpfs",
+          "source": "tmpfs",
+          "super_options": "rw,size=65536k,mode=755"
+        },
+        "total_bytes": 67108864,
+        "free_bytes": 67108864,
+        "used_bytes": 0,
+        "st_dev": 72,
+        "available_inodes": 4108646,
+        "block_bytes": 4096,
+        "writable": true,
+        "disk_candidate": false
+      },
+      {
+        "path": "/dev/pts",
+        "mount": {
+          "mount": "/dev/pts",
+          "root": "/",
+          "device": "0:73",
+          "options": "rw,nosuid,noexec,relatime",
+          "filesystem": "devpts",
+          "source": "devpts",
+          "super_options": "rw,gid=5,mode=620,ptmxmode=666"
+        },
+        "total_bytes": 0,
+        "free_bytes": 0,
+        "used_bytes": 0,
+        "st_dev": 73,
+        "available_inodes": 0,
+        "block_bytes": 4096,
+        "writable": true,
+        "disk_candidate": false
+      },
+      {
+        "path": "/sys",
+        "mount": {
+          "mount": "/sys",
+          "root": "/",
+          "device": "0:74",
+          "options": "ro,nosuid,nodev,noexec,relatime",
+          "filesystem": "sysfs",
+          "source": "sysfs",
+          "super_options": "ro"
+        },
+        "total_bytes": 0,
+        "free_bytes": 0,
+        "used_bytes": 0,
+        "st_dev": 74,
+        "available_inodes": 0,
+        "block_bytes": 4096,
+        "writable": false,
+        "disk_candidate": false
+      },
+      {
+        "path": "/sys/fs/cgroup",
+        "mount": {
+          "mount": "/sys/fs/cgroup",
+          "root": "/",
+          "device": "0:28",
+          "options": "ro,nosuid,nodev,noexec,relatime",
+          "filesystem": "cgroup2",
+          "source": "cgroup",
+          "super_options": "rw,nsdelegate,memory_recursiveprot"
+        },
+        "total_bytes": 0,
+        "free_bytes": 0,
+        "used_bytes": 0,
+        "st_dev": 28,
+        "available_inodes": 0,
+        "block_bytes": 4096,
+        "writable": false,
+        "disk_candidate": false
+      },
+      {
+        "path": "/dev/mqueue",
+        "mount": {
+          "mount": "/dev/mqueue",
+          "root": "/",
+          "device": "0:69",
+          "options": "rw,nosuid,nodev,noexec,relatime",
+          "filesystem": "mqueue",
+          "source": "mqueue",
+          "super_options": "rw"
+        },
+        "total_bytes": 0,
+        "free_bytes": 0,
+        "used_bytes": 0,
+        "st_dev": 69,
+        "available_inodes": 0,
+        "block_bytes": 4096,
+        "writable": true,
+        "disk_candidate": false
+      },
+      {
+        "path": "/dev/shm",
+        "mount": {
+          "mount": "/dev/shm",
+          "root": "/",
+          "device": "0:75",
+          "options": "rw,nosuid,nodev,noexec,relatime",
+          "filesystem": "tmpfs",
+          "source": "shm",
+          "super_options": "rw,size=14680064k"
+        },
+        "total_bytes": 15032385536,
+        "free_bytes": 15032385536,
+        "used_bytes": 0,
+        "st_dev": 75,
+        "available_inodes": 4108661,
+        "block_bytes": 4096,
+        "writable": true,
+        "disk_candidate": false
+      },
+      {
+        "path": "/kaggle/src",
+        "mount": {
+          "mount": "/kaggle/src",
+          "root": "/kaggle/src",
+          "device": "7:2",
+          "options": "ro,relatime",
+          "filesystem": "ext4",
+          "source": "/dev/loop2",
+          "super_options": "rw"
+        },
+        "total_bytes": 20957446144,
+        "free_bytes": 20940361728,
+        "used_bytes": 307200,
+        "st_dev": 1794,
+        "available_inodes": 1310675,
+        "block_bytes": 4096,
+        "writable": false,
+        "disk_candidate": false
+      },
+      {
+        "path": "/kaggle/nbdev",
+        "mount": {
+          "mount": "/kaggle/nbdev",
+          "root": "/kaggle/nbdev",
+          "device": "7:2",
+          "options": "rw,relatime",
+          "filesystem": "ext4",
+          "source": "/dev/loop2",
+          "super_options": "rw"
+        },
+        "total_bytes": 20957446144,
+        "free_bytes": 20940361728,
+        "used_bytes": 307200,
+        "st_dev": 1794,
+        "available_inodes": 1310675,
+        "block_bytes": 4096,
+        "writable": true,
+        "disk_candidate": true
+      },
+      {
+        "path": "/kaggle/lib",
+        "mount": {
+          "mount": "/kaggle/lib",
+          "root": "/kaggle/lib",
+          "device": "7:2",
+          "options": "ro,relatime",
+          "filesystem": "ext4",
+          "source": "/dev/loop2",
+          "super_options": "rw"
+        },
+        "total_bytes": 20957446144,
+        "free_bytes": 20940361728,
+        "used_bytes": 307200,
+        "st_dev": 1794,
+        "available_inodes": 1310675,
+        "block_bytes": 4096,
+        "writable": false,
+        "disk_candidate": false
+      },
+      {
+        "path": "/kaggle/input",
+        "mount": {
+          "mount": "/kaggle/input",
+          "root": "/kaggle/input",
+          "device": "7:2",
+          "options": "ro,relatime",
+          "filesystem": "ext4",
+          "source": "/dev/loop2",
+          "super_options": "rw"
+        },
+        "total_bytes": 20957446144,
+        "free_bytes": 20940361728,
+        "used_bytes": 307200,
+        "st_dev": 1794,
+        "available_inodes": 1310675,
+        "block_bytes": 4096,
+        "writable": false,
+        "disk_candidate": false
+      },
+      {
+        "path": "/etc/secrets/kaggle",
+        "mount": {
+          "mount": "/etc/secrets/kaggle",
+          "root": "/etc/secrets/kaggle",
+          "device": "7:2",
+          "options": "ro,relatime",
+          "filesystem": "ext4",
+          "source": "/dev/loop2",
+          "super_options": "rw"
+        },
+        "total_bytes": 20957446144,
+        "free_bytes": 20940361728,
+        "used_bytes": 307200,
+        "st_dev": 1794,
+        "available_inodes": 1310675,
+        "block_bytes": 4096,
+        "writable": false,
+        "disk_candidate": false
+      },
+      {
+        "path": "/proc/bus",
+        "mount": {
+          "mount": "/proc/bus",
+          "root": "/bus",
+          "device": "0:71",
+          "options": "ro,nosuid,nodev,noexec,relatime",
+          "filesystem": "proc",
+          "source": "proc",
+          "super_options": "rw"
+        },
+        "total_bytes": 0,
+        "free_bytes": 0,
+        "used_bytes": 0,
+        "st_dev": 71,
+        "available_inodes": 0,
+        "block_bytes": 4096,
+        "writable": false,
+        "disk_candidate": false
+      },
+      {
+        "path": "/proc/fs",
+        "mount": {
+          "mount": "/proc/fs",
+          "root": "/fs",
+          "device": "0:71",
+          "options": "ro,nosuid,nodev,noexec,relatime",
+          "filesystem": "proc",
+          "source": "proc",
+          "super_options": "rw"
+        },
+        "total_bytes": 0,
+        "free_bytes": 0,
+        "used_bytes": 0,
+        "st_dev": 71,
+        "available_inodes": 0,
+        "block_bytes": 4096,
+        "writable": false,
+        "disk_candidate": false
+      },
+      {
+        "path": "/proc/irq",
+        "mount": {
+          "mount": "/proc/irq",
+          "root": "/irq",
+          "device": "0:71",
+          "options": "ro,nosuid,nodev,noexec,relatime",
+          "filesystem": "proc",
+          "source": "proc",
+          "super_options": "rw"
+        },
+        "total_bytes": 0,
+        "free_bytes": 0,
+        "used_bytes": 0,
+        "st_dev": 71,
+        "available_inodes": 0,
+        "block_bytes": 4096,
+        "writable": false,
+        "disk_candidate": false
+      },
+      {
+        "path": "/proc/sys",
+        "mount": {
+          "mount": "/proc/sys",
+          "root": "/sys",
+          "device": "0:71",
+          "options": "ro,nosuid,nodev,noexec,relatime",
+          "filesystem": "proc",
+          "source": "proc",
+          "super_options": "rw"
+        },
+        "total_bytes": 0,
+        "free_bytes": 0,
+        "used_bytes": 0,
+        "st_dev": 71,
+        "available_inodes": 0,
+        "block_bytes": 4096,
+        "writable": false,
+        "disk_candidate": false
+      },
+      {
+        "path": "/proc/acpi",
+        "mount": {
+          "mount": "/proc/acpi",
+          "root": "/",
+          "device": "0:76",
+          "options": "ro,relatime",
+          "filesystem": "tmpfs",
+          "source": "tmpfs",
+          "super_options": "ro,size=4k,nr_inodes=1"
+        },
+        "total_bytes": 4096,
+        "free_bytes": 4096,
+        "used_bytes": 0,
+        "st_dev": 76,
+        "available_inodes": 0,
+        "block_bytes": 4096,
+        "writable": false,
+        "disk_candidate": false
+      },
+      {
+        "path": "/proc/scsi",
+        "mount": {
+          "mount": "/proc/scsi",
+          "root": "/",
+          "device": "0:76",
+          "options": "ro,relatime",
+          "filesystem": "tmpfs",
+          "source": "tmpfs",
+          "super_options": "ro,size=4k,nr_inodes=1"
+        },
+        "total_bytes": 4096,
+        "free_bytes": 4096,
+        "used_bytes": 0,
+        "st_dev": 76,
+        "available_inodes": 0,
+        "block_bytes": 4096,
+        "writable": false,
+        "disk_candidate": false
+      },
+      {
+        "path": "/sys/firmware",
+        "mount": {
+          "mount": "/sys/firmware",
+          "root": "/",
+          "device": "0:76",
+          "options": "ro,relatime",
+          "filesystem": "tmpfs",
+          "source": "tmpfs",
+          "super_options": "ro,size=4k,nr_inodes=1"
+        },
+        "total_bytes": 4096,
+        "free_bytes": 4096,
+        "used_bytes": 0,
+        "st_dev": 76,
+        "available_inodes": 0,
+        "block_bytes": 4096,
+        "writable": false,
+        "disk_candidate": false
+      }
+    ],
+    "mountinfo": "723 676 0:53 / / rw,relatime master:391 - overlay overlay rw,lowerdir=l/JG2IXIK7G65ESQ5UTOYUKZZD32:l/6AL4PMT5SCZRQHUEN44I4XFQGV:l/C7DC7EZIEDC4AQPZUBNU4A7OCF:l/6TODL66AI4TG4Q2LCG7Y63Z4F6:l/7COPCFYO5Z5VQM6BBG2B2EF4HL:l/ATXRZOVQHTY4ULUE343YTE3R45:l/APDENJD67NCPYZ5MS3LQUUEP4G:l/4FJCPTZ4VH2Q6PV75CTO35MKOF:l/KLOKYCNMESZJVQELTVFZBBR7GD:l/HHMGLGTDHEVZCG5LTKMAYVNOB4:l/TVE4I33UXFPRWGXAA7GARXR2YN:l/XXDG25X5Q552U7G5YGBIDXLM4K:l/COH4VY6W4ZDDCP5FOWLIRQDCWV:l/BBQ2DA7L3JQLOQELAPUX6ADBIZ:l/OSW26Q7VGRXCU6VHS3XSWXFGC2:l/3OR46T6MGOGVJBPPUIPGUWQYCK:l/DTH2DIXHTEVVLGBNDXFAZJOLOU:l/LNZXTGD6MZ7WS3PQW5ZY7HR6A3:l/743SPCBK7NTRNP23YKEN7KCHKI:l/R76JLPMLJB2LB7QEU2KIKAHSPF:l/RWDFJR65U3EJT2CNHI4VKET5PD:l/KOUSIGFNH3AYNRED54EMYOBGFB:l/4N3LGN4QIFD242VONRSPCTHFHC:l/IMTXAT3JH7EPS6SJLAIQ2B5473:l/FSQVFJMNB3U7PYXCILOZRPOVYL:l/ZCFHRONUNVKK2OTJPJCD3GJIHZ:l/ORCH7G3T4H3BIKD7W2A7PWPMVZ:l/G5262CV7BFEIAIXKAAH3FWNXQX:l/S5KEEPDISA73WDUYUEC6LPF562:l/RPQFHKM47C2PRJT75TXJR22VNG:l/PFUSAEIIDDMG5PRJKKRMCNVMVQ:l/FK5FJXY6OVIQRVKKKSHAR5TDUG:l/L23OCEZ6DO7KBST6JPCZH36GIB:l/FKFS4RQXRS6GOMSDTCFEH63GS3:l/UPDQAU4MINGZDXEXGH7ASQRRPU:l/RAJDNXOKSWJWHT6N73OXAJ5BV3:l/BWAZ4X2I3RQCTY6LFMQ2AFW7ND:l/YLFZYI22FMQKAULMZPL2TIOZSK:l/EDEZM6KVRLAC3DSNZMTD6PDONC:l/J4ILIWXAX4YW4NUO4ZW6RQUGFW:l/HLWQSLS4BEDAHW2DWHTY4XLGPV:l/LUHHQ4J2Z53H3JFEP32RPPRBRR:l/MQO57U2OHPTYK52JM4D2O2QRYB:l/SUYA3RIBGUVV3Q4YASGGEMMGGA:l/MVFLROV4KUZ7GLTBCHTTTRKD7T:l/YHKDFSJ2CE6JASLAX4KUHEAU4W:l/AZR2DLAWXPEEQIIPTW4SY764QD:l/B4K2QISSRLHCCXXS4MIN27ZLRD:l/TSSCYM7HOEQN254FZJUY3357EX:l/XQMLPXEI7BYHKIU4DZF57DGMHL:l/MKJHIUQRZABDUOLZ73H4N2HXTN:l/H5WM35MGSEXKK6IUUY2HK57DAU:l/IOLSRJ4EPEKARZEI7RRNIVZT6Q:l/MYFLBWJ5NR6E23JDSXCWVVF6YK:l/FM43XYAXWYNL2JGCBNEHMVPJQK:l/DF765ENDH3POBF3RM4VVT2W7I3:l/NSXT5ZQXAASLNOGTN47BBXMOZC:l/HEWDW5KFTJEYUERHYUMWEHIEYF:l/6SKRHN2Q42AXOF4GXJ7PRSI6OF:l/UNNZBMGCI5U3B75NRFHROQ5QI3:l/DIHXKAHCNDHW6QO7KRUEEYDGJE:l/DNHSHJXKGKKRJIXYL2OBFEXLPE:l/M5OLAKB67UZ47TRLYSFXAF5RAN:l/LSLI62WDH3ZNZHP33NECYY6KSK:l/LHQLYQ6US5CJIUNBIJB4MRISBX:l/HRI6LFYPB63UK66NH7VQZTCUP4:l/VDZPGLYFJ3LPPWBRM4O226G6LL:l/ACNBVXW437AEGKIM7T6JXV7AQJ:l/JHDOR4QD6TS2TXTYBWJXEKERR5:l/DJ4FT42B2UQA6YW7NR3PIHAXRS:l/OJKU7CP6OJFFPUJCEVA2QZJYOE:l/I3RLD6UZDEAHT5YQY6HAFLF7AO:l/Q2BIXBLPHCV3LBUOIXXHIFVAWP:l/XYW7INVZWGRDTN7XNCNWBLM6OG:l/MKS3X3TBACL7GS6GO6TXUBK6S6:l/GGUPQGTJJBWOJWTO7OGS6NE225:l/QNMCZ3ZJE5VYCZFWURGH2HY2Z4:l/ON7I3RMVVYOFW2WBV6VVDYNRZW:l/Q27ILM6NCNHH4TFS2DHWTOG4HQ:l/SKLZM7YXU2MLUEHRN6FWX6WSUJ,upperdir=beffc9405d1088f41a1d668da357b7598663485d8bf09381974a2bc37157ce3c/diff,workdir=beffc9405d1088f41a1d668da357b7598663485d8bf09381974a2bc37157ce3c/work\n725 723 0:71 / /proc rw,nosuid,nodev,noexec,relatime - proc proc rw\n726 723 0:72 / /dev rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n727 726 0:73 / /dev/pts rw,nosuid,noexec,relatime - devpts devpts rw,gid=5,mode=620,ptmxmode=666\n728 723 0:74 / /sys ro,nosuid,nodev,noexec,relatime - sysfs sysfs ro\n729 728 0:28 / /sys/fs/cgroup ro,nosuid,nodev,noexec,relatime - cgroup2 cgroup rw,nsdelegate,memory_recursiveprot\n730 726 0:69 / /dev/mqueue rw,nosuid,nodev,noexec,relatime - mqueue mqueue rw\n731 726 0:75 / /dev/shm rw,nosuid,nodev,noexec,relatime - tmpfs shm rw,size=14680064k\n732 723 7:2 /kaggle/src /kaggle/src ro,relatime master:383 - ext4 /dev/loop2 rw\n733 723 7:2 /kaggle/nbdev /kaggle/nbdev rw,relatime master:383 - ext4 /dev/loop2 rw\n734 723 7:2 /kaggle/huggingface /kaggle/huggingface rw,relatime master:383 - ext4 /dev/loop2 rw\n735 723 7:2 /kaggle/lib /kaggle/lib ro,relatime master:383 - ext4 /dev/loop2 rw\n736 723 7:2 /kaggle/input /kaggle/input ro,relatime master:383 - ext4 /dev/loop2 rw\n737 723 7:2 /kaggle/working /kaggle/working rw,relatime master:383 - ext4 /dev/loop2 rw\n738 723 253:2 /containers/75c0cf2469b3ab0cc0365001b1be2c57ca9e6e015f56f0f1939e26ca5e639c97/resolv.conf /etc/resolv.conf rw,relatime - ext4 /dev/mapper/snap rw,discard\n739 723 253:2 /containers/75c0cf2469b3ab0cc0365001b1be2c57ca9e6e015f56f0f1939e26ca5e639c97/hostname /etc/hostname rw,relatime - ext4 /dev/mapper/snap rw,discard\n740 723 253:2 /containers/75c0cf2469b3ab0cc0365001b1be2c57ca9e6e015f56f0f1939e26ca5e639c97/hosts /etc/hosts rw,relatime - ext4 /dev/mapper/snap rw,discard\n741 723 7:2 /etc/secrets/kaggle /etc/secrets/kaggle ro,relatime master:383 - ext4 /dev/loop2 rw\n677 725 0:71 /bus /proc/bus ro,nosuid,nodev,noexec,relatime - proc proc rw\n678 725 0:71 /fs /proc/fs ro,nosuid,nodev,noexec,relatime - proc proc rw\n679 725 0:71 /irq /proc/irq ro,nosuid,nodev,noexec,relatime - proc proc rw\n680 725 0:71 /sys /proc/sys ro,nosuid,nodev,noexec,relatime - proc proc rw\n681 725 0:71 /sysrq-trigger /proc/sysrq-trigger ro,nosuid,nodev,noexec,relatime - proc proc rw\n682 725 0:76 / /proc/acpi ro,relatime - tmpfs tmpfs ro,size=4k,nr_inodes=1\n683 725 0:72 /null /proc/interrupts rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n684 725 0:72 /null /proc/kcore rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n685 725 0:72 /null /proc/keys rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n686 725 0:76 / /proc/scsi ro,relatime - tmpfs tmpfs ro,size=4k,nr_inodes=1\n687 725 0:72 /null /proc/timer_list rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n688 728 0:76 / /sys/firmware ro,relatime - tmpfs tmpfs ro,size=4k,nr_inodes=1\n",
+    "commands": {
+      "df": {
+        "returncode": 0,
+        "stdout": "Filesystem       Type        1B-blocks          Used     Available Use% Mounted on\noverlay          overlay 8758385086464 7632216334336 1126151974912  88% /\ntmpfs            tmpfs        67108864             0      67108864   0% /dev\nshm              tmpfs     15032385536             0   15032385536   0% /dev/shm\n/dev/loop2       ext4      20957446144        307200   20940361728   1% /kaggle/src\n/dev/mapper/snap ext4    8758385086464 7632216334336 1126151974912  88% /etc/hosts\ntmpfs            tmpfs            4096             0          4096   0% /proc/acpi\n",
+        "stderr": ""
+      },
+      "lsblk": {
+        "returncode": 0,
+        "stdout": "NAME             SIZE TYPE RO FSTYPE MOUNTPOINTS\nloop0      1073741824 loop  0        \nloop1    103079215104 loop  0        \nloop2     21474836480 loop  0        /etc/secrets/kaggle\n                                     /kaggle/working\n                                     /kaggle/input\n                                     /kaggle/lib\n                                     /kaggle/huggingface\n                                     /kaggle/nbdev\n                                     /kaggle/src\nsda      137438953472 disk  0        \n\u251c\u2500sda1   132915379712 part  0        \n\u251c\u2500sda2       33554432 part  0        \n\u251c\u2500sda3     2147483648 part  0        \n\u251c\u2500sda4       33554432 part  0        \n\u251c\u2500sda5     2147483648 part  0        \n\u251c\u2500sda6            512 part  0        \n\u251c\u2500sda7            512 part  0        \n\u251c\u2500sda8       16777216 part  0        \n\u251c\u2500sda9            512 part  0        \n\u251c\u2500sda10           512 part  0        \n\u251c\u2500sda11       8388608 part  0        \n\u2514\u2500sda12      67108864 part  0        \nsdb     8796093022208 disk  1        \n",
+        "stderr": ""
+      }
+    }
+  },
+  "disks": [
+    {
+      "device": 1794,
+      "base": "/kaggle/working",
+      "filesystem": "ext4",
+      "source": "/dev/loop2",
+      "aliases": [
+        "/kaggle/working",
+        "/kaggle/huggingface",
+        "/kaggle/nbdev"
+      ],
+      "report_filesystem": true,
+      "receipt": "disk_00.json",
+      "status": "lower_bound",
+      "verified_synced_bytes": 20401094656,
+      "stop_reason": "report_filesystem_headroom",
+      "cleanup_errors": []
+    },
+    {
+      "device": 53,
+      "base": "/tmp",
+      "filesystem": "overlay",
+      "source": "overlay",
+      "aliases": [
+        "/tmp",
+        "/var/tmp",
+        "/root",
+        "/"
+      ],
+      "report_filesystem": false,
+      "receipt": "disk_01.json",
+      "status": "observed_boundary",
+      "verified_synced_bytes": 100931731456,
+      "stop_reason": "ENOSPC_or_EDQUOT",
+      "cleanup_errors": []
+    }
+  ],
+  "caveats": [
+    "Writable paths sharing st_dev are aliases, not additive disks; per-directory quotas can still differ.",
+    "Visible unmounted block devices are inventoried only, never mounted or written.",
+    "tmpfs/shm and read-only mounts are excluded from disk fill tests.",
+    "Verified bytes are an observed additional-capacity lower bound, never a future reservation.",
+    "Report filesystem retains 512 MiB; byte cap/deadline stops do not establish a disk limit.",
+    "EIO/emergency read-only is a writeback fault, not a measured exact quota.",
+    "CPU instance storage does not qualify another T4 instance."
+  ],
+  "selected_disks": [
+    {
+      "device": 1794,
+      "base": "/kaggle/working",
+      "filesystem": "ext4",
+      "source": "/dev/loop2",
+      "aliases": [
+        "/kaggle/working",
+        "/kaggle/huggingface",
+        "/kaggle/nbdev"
+      ],
+      "report_filesystem": true
+    },
+    {
+      "device": 53,
+      "base": "/tmp",
+      "filesystem": "overlay",
+      "source": "overlay",
+      "aliases": [
+        "/tmp",
+        "/var/tmp",
+        "/root",
+        "/"
+      ],
+      "report_filesystem": false
+    }
+  ],
+  "seconds": 1647.97295111
+}

@@ -1,0 +1,62 @@
+{
+  "h3-writable-disk-capacity-cpu-20261029.log": {
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "disk_capacity\\cpu_tests.log": {
+    "bytes": 1456,
+    "sha256": "a127c13c2100c66dc45bd1fdb3a4b1bcf39d57ded0a6642b1810cef32e0256ec"
+  },
+  "disk_capacity\\disk_00.json": {
+    "bytes": 38414,
+    "sha256": "466bc9090ee201f4b1af0bc4c2c067c5d5839f87fcaf7d6715813ed607d8393d"
+  },
+  "disk_capacity\\disk_01.json": {
+    "bytes": 164496,
+    "sha256": "c6f32d78336549ea5b25b0ef89f35000b740039372cf1b31e06cd2f68210f129"
+  },
+  "disk_capacity\\result.json": {
+    "bytes": 32951,
+    "sha256": "ff9a49ad68c0c29fcf193946996fff8d2b38ed32457ed6e1e8078294e2c12110"
+  },
+  "disk_capacity\\source_binding.json": {
+    "bytes": 1072,
+    "sha256": "12b0a9f5bf2a759e5a56ffa5318c2fbcae08dff25fdcb4cac059fffe7c8bd6d4"
+  },
+  "disk_capacity\\source\\benchmarks\\kaggle_write_capacity.py": {
+    "bytes": 12296,
+    "sha256": "ebb95e9b0aa017cb4dec6ba08c5913135047745a43bed22c5b4669a9cdaf2875"
+  },
+  "disk_capacity\\source\\benchmarks\\test_kaggle_write_capacity.py": {
+    "bytes": 5261,
+    "sha256": "be126a8e1028cc86231c77cd7a1b8e9e331322a61dfc7acab9cb17bf0c209875"
+  },
+  "disk_capacity\\source\\benchmarks\\__init__.py": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "disk_capacity\\source\\benchmarks\\__pycache__\\kaggle_write_capacity.cpython-313.pyc": {
+    "bytes": 20288,
+    "sha256": "837a6d740229abfe1934a81055d7834a6e6c986f5db747c0b29c3687c08c695d"
+  },
+  "disk_capacity\\source\\benchmarks\\__pycache__\\test_kaggle_write_capacity.cpython-313.pyc": {
+    "bytes": 10287,
+    "sha256": "913350e931b954503e6c194f9b32427051cbe8669fda611851c0d55515cf64b9"
+  },
+  "disk_capacity\\source\\benchmarks\\__pycache__\\__init__.cpython-313.pyc": {
+    "bytes": 156,
+    "sha256": "062a753b35db3f7f4f94aa25194a80bb806885967d0b2d229e103a2d60a4ac37"
+  },
+  "disk_capacity_supervision\\bounded_worker.py": {
+    "bytes": 25792,
+    "sha256": "40460adf790f5d329af216481565ac8e6ba83cbf2e2235e4374eea8545d725c7"
+  },
+  "disk_capacity_supervision\\notebook_worker.log": {
+    "bytes": 2893,
+    "sha256": "54d7b31fdeb44cfc027906e64e885cf19fa1a5181873b6a113a57475a45103e0"
+  },
+  "disk_capacity_supervision\\supervision.json": {
+    "bytes": 208,
+    "sha256": "996ec429867609f6051d6343a8ffc1013b7c3d35362dd2acd57204d5c91969d8"
+  }
+}

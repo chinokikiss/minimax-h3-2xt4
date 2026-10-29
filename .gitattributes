@@ -20,3 +20,7 @@
 /docs/pdf/*.py text eol=lf
 /docs/data/h3_ptd_aux_split_20261029/** -text whitespace=cr-at-eol
 /docs/data/h3_ptd_aux_split_20261029/t4_v1_final/*.log -text -whitespace
+/docs/data/h3_dit_hash_ablation_20261029/** -text whitespace=cr-at-eol
+/docs/data/h3_dit_hash_ablation_20261029/**/*.log -text -whitespace
+/docs/data/h3_writable_disk_capacity_20261029/** -text whitespace=cr-at-eol
+/docs/data/h3_writable_disk_capacity_20261029/**/*.log -text -whitespace

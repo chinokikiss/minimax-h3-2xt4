@@ -1,5 +1,6 @@
 """Production dispatch, numerical boundaries and lifetime tests; no GPU claims."""
 import ast
+from contextlib import nullcontext
 from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
@@ -25,7 +26,7 @@ class ProductionFusion(unittest.TestCase):
 
     @torch.no_grad()
     def test_scaled_transport_consumes_fused_epilogue_after_the_existing_sum(self):
-        from patches import tilelang_transport_p2 as codec,tilelang_swiglu_pad as quant,parallel_int8,optimized_tp
+        from patches import tilelang_transport_p2 as codec,tilelang_swiglu_pad as quant,parallel_int8,optimized_tp,tilelang_row_quant
         value=torch.ones(2,3584);weight=torch.empty(5376,3584,dtype=torch.int8)
         codes=torch.ones(2,3584,dtype=torch.int8);scale=torch.ones(2,1)
         partial=torch.ones(2,5376,dtype=torch.int32);payload=partial.half()
@@ -39,7 +40,8 @@ class ProductionFusion(unittest.TestCase):
         with patch.object(codec,'_supported',return_value=True),patch.object(optimized_tp,'use_fallback_rotation',return_value=True), \
                 patch.object(quant,'global_row_quantize',return_value=(codes,scale)), \
                 patch.object(parallel_int8,'int_mm',return_value=partial),patch.object(codec,'encode',return_value=payload), \
-                patch.object(codec,'collect',side_effect=collect),patch.object(codec,'finish',side_effect=AssertionError('Unfused epilogue')):
+                patch.object(codec,'collect',side_effect=collect),patch.object(codec,'finish',side_effect=AssertionError('Unfused epilogue')), \
+                patch.object(tilelang_row_quant,'label',side_effect=lambda name:nullcontext()):
             actual=codec.row_linear(value,weight,torch.ones(5376,1),comm,2,finish_fn=finish)
         self.assertEqual(order,['sum','fused_epilogue'])
         self.assertTrue(torch.equal(actual,result))

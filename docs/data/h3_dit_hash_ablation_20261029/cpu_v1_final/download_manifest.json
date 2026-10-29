@@ -1,0 +1,62 @@
+{
+  "h3-dit-hash-ablation-cpu-20261029.log": {
+    "bytes": 18419,
+    "sha256": "b3a7fd5a67994f812f8389d8273735d950e73909a158452e14e10824aed62cb4"
+  },
+  "light_setup\\api_probe.log": {
+    "bytes": 1158,
+    "sha256": "e5900b029eaaff7664c772d6aec92634e63fb1e9124e059a28dbcdf1c7e212d4"
+  },
+  "light_setup\\bounded_worker.py": {
+    "bytes": 1950,
+    "sha256": "d777220a8953d09d8a651879c7922391da5f95ed51e70f573689e8e2567af22a"
+  },
+  "light_setup\\cpu_tests.log": {
+    "bytes": 25183,
+    "sha256": "7b8abb4ce8c619a40ac4d34c64096bdcd1b9ddc9d469ded84e268e31b849c351"
+  },
+  "light_setup\\delivery_binding.json": {
+    "bytes": 629,
+    "sha256": "1b7b2b66c528e0aa78f3a25bfee6e51bd371dbab9ac5ea531af1bd4ecd0a1eca"
+  },
+  "light_setup\\direct-core.txt": {
+    "bytes": 5914,
+    "sha256": "425f5b9f04c26bcf5b2bf79a823539166b7206da83d10cf4dff060a9b05ca483"
+  },
+  "light_setup\\direct_pip.log": {
+    "bytes": 15856,
+    "sha256": "e1f54b782283e819625d4857fc6eb9f56e0d0c01781a28415797132dd6e13d3d"
+  },
+  "light_setup\\exception.txt": {
+    "bytes": 651,
+    "sha256": "68dc239feb89eedd62036defe79a5c922e899dc2b7e0214de34a841eb01305fb"
+  },
+  "light_setup\\execution_env.json": {
+    "bytes": 449,
+    "sha256": "53f8cbaa42b4a30ef25583746477a1d1570f37b3f30affd13d09ffcec0dd7911"
+  },
+  "light_setup\\notebook_worker.log": {
+    "bytes": 6126,
+    "sha256": "843c6045a5c27e8ce0aac6a6e40ccc9dbf3bf904128922ed22100ee7d94456f5"
+  },
+  "light_setup\\review_cpu_tests.json": {
+    "bytes": 176,
+    "sha256": "454ff41af0f19a240ac461a282773fc0b2d2f4f422f939a9799cdd2eab9f7c3b"
+  },
+  "light_setup\\review_cpu_tests.log": {
+    "bytes": 88662,
+    "sha256": "057a57a99c269d2f12008ee802e3e204eb7939ff14b8bba525b3d1dec3825ebe"
+  },
+  "light_setup\\runtime_profile.json": {
+    "bytes": 25843,
+    "sha256": "eb48ace46c423b86231b895b48b5d8c8fcceb27048272a1accfa7cdae4cf6cf5"
+  },
+  "light_setup\\setup_receipt.json": {
+    "bytes": 129869,
+    "sha256": "f4c3af601c550c475f0206693525460c015c367d771af719a6ca2a1eeb0b04ea"
+  },
+  "light_setup\\supervision.json": {
+    "bytes": 203,
+    "sha256": "094e56907e27066210f0bb40979c55d175b222ee26250c6e066c910b039d5ec3"
+  }
+}

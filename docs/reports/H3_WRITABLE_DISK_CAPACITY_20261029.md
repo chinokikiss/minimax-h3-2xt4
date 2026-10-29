@@ -59,13 +59,43 @@ GPU acceleration and internet access are disabled; no source/model downloads or
 dependency installation are needed by the submitted script. Its watchdog is
 3,150 seconds and the provider timeout is 3,300 seconds.
 
-Only the submission acknowledgement has been received. Actual writable-capacity
-results are **pending**, with final collection count zero. No scheduling state
-or live logs have been queried. Source binding, exact submitted script, metadata
-and acknowledgement receipts are archived in the data folder above.
+Final artifacts were collected once and the embedded source bytes and source
+binding match the submission. The probe completed in 1,647.97 seconds; the
+watchdog exited successfully. All eight CPU contracts passed. No scheduling
+state or live logs were queried. Raw results, source, logs, readback hashes and
+download hashes are archived under `docs/data/h3_writable_disk_capacity_20261029/cpu_v1_final/`.
 
 The first receipt's script digest covered LF-normalized script text, while the
 Windows file contains CRLF. `cpu_v1_source_verification.json` records both hashes,
 verifies the exact archived file and embedded source hashes, and retains the
 original receipt. The builder now records file bytes and canonical text hashes
 separately. This bookkeeping correction did not alter or resubmit the CPU job.
+
+## Actual result on this CPU instance
+
+| Filesystem and representative path | Verified additional retained payload | Stop condition | Other writable aliases |
+|---|---:|---|---|
+| `/dev/loop2`, ext4, `/kaggle/working` | 19.000 GiB (20,401,094,656 bytes) | Report-space reserve: 514.22 MiB remained | `/kaggle/huggingface`, `/kaggle/nbdev` |
+| Root overlay, `/tmp` | 94.000 GiB (100,931,731,456 bytes) | `ENOSPC`, errno 28 on the next chunk | `/var/tmp`, `/root`, `/` |
+
+The 19-GiB result is a deliberately stopped lower bound, not the ext4 maximum:
+the filesystem reports 19.518 GiB total and the probe retained its report
+reserve. The root-overlay result is an observed writeback boundary with
+128-MiB measurement granularity. The failing 128-MiB file is excluded even
+though its apparent size reached the requested length. Neither number is an
+exact account quota or a reservation for a future instance.
+
+The root overlay advertised about 1,048.81 GiB free before filling, and still
+954.69 GiB free when `ENOSPC` occurred. Thus `df` does not measure the writable
+capacity available to this container. Changing `/tmp` to `/root` or `/var/tmp`
+does not provide another filesystem. No additional independent mounted writable
+disk was selected. `/kaggle/temp` was absent in the standalone CPU probe; it was
+not qualified as a third storage pool.
+
+All probe-owned files were removed, with zero cleanup errors, and free space
+returned to its initial level apart from small report files. This is consistent
+with the earlier T4 bake failing near 93 GiB despite much larger advertised free
+space, but does not establish identical quotas across CPU and T4 instances.
+Planning a roughly 170-GiB full PTD bank from `df` alone remains unsupported;
+future full-model work needs a bounded storage plan and instance-specific
+admission, rather than another alias of the root overlay.

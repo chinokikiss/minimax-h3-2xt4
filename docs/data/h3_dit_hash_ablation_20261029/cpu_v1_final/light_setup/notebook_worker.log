@@ -1,0 +1,113 @@
+LIGHT_SOURCE_DOWNLOAD_START
+LIGHT_SOURCE_READY
+LIGHT_SETUP_STAGE frozen_source
+LIGHT_SETUP_STAGE direct_pip
+LIGHT_SETUP_STAGE api_probe
+LIGHT_SETUP_HEARTBEAT api_probe 60
+LIGHT_SETUP_STAGE cpu_tests
+LIGHT_SETUP_STAGE review_cpu_tests
+LIGHT_SETUP_HEARTBEAT review_cpu_tests 120
+_and_does_not_enable_registry (benchmarks.test_h3_optimization_batch.Operators.test_decoder_scope_restores_after_failure_and_does_not_enable_registry) ... ok
+test_fp32_rope_accepts_native_half_frequency_storage (benchmarks.test_h3_optimization_batch.Operators.test_fp32_rope_accepts_native_half_frequency_storage) ... ok
+test_fp32_rope_never_claims_cpu_support (benchmarks.test_h3_optimization_batch.Operators.test_fp32_rope_never_claims_cpu_support) ... ok
+test_te_epilogue_is_default_only_for_qualified_columns (benchmarks.test_h3_optimization_batch.Operators.test_te_epilogue_is_default_only_for_qualified_columns) ... ok
+test_vae_linear_is_scoped_and_preserves_other_paths (benchmarks.test_h3_optimization_batch.Operators.test_vae_linear_is_scoped_and_preserves_other_paths) ... ok
+test_default_verifies_once_and_reload_reuses_the_proof (benchmarks.test_dit_hash_ablation.HashAblation.test_default_verifies_once_and_reload_reuses_the_proof) ... TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+ok
+test_queued_readers_override_mode_without_mutating_admitted_base (benchmarks.test_dit_hash_ablation.HashAblation.test_queued_readers_override_mode_without_mutating_admitted_base) ... TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+ok
+test_runtime_default_is_verified_and_te_cannot_be_opted_out (benchmarks.test_dit_hash_ablation.HashAblation.test_runtime_default_is_verified_and_te_cannot_be_opted_out) ... TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+ok
+test_same_signature_corruption_is_accepted_only_by_trusted_arm (benchmarks.test_dit_hash_ablation.HashAblation.test_same_signature_corruption_is_accepted_only_by_trusted_arm) ... TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+ok
+test_trusted_arm_still_rejects_changed_file_signature (benchmarks.test_dit_hash_ablation.HashAblation.test_trusted_arm_still_rejects_changed_file_signature) ... TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+ok
+test_trusted_payloads_skip_file_and_tensor_hashes_and_match_verified_weights (benchmarks.test_dit_hash_ablation.HashAblation.test_trusted_payloads_skip_file_and_tensor_hashes_and_match_verified_weights) ... TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 0
+ok
+
+======================================================================
+ERROR: test_scaled_transport_consumes_fused_epilogue_after_the_existing_sum (benchmarks.test_h3_dit_fusion.ProductionFusion.test_scaled_transport_consumes_fused_epilogue_after_the_existing_sum)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/dist-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "/kaggle/temp/h3_light_source/benchmarks/test_h3_dit_fusion.py", line 43, in test_scaled_transport_consumes_fused_epilogue_after_the_existing_sum
+    actual=codec.row_linear(value,weight,torch.ones(5376,1),comm,2,finish_fn=finish)
+  File "/kaggle/temp/h3_light_source/patches/tilelang_transport_p2.py", line 131, in row_linear
+    with label('int8_gemm'):partial=original.int_mm(q,weight)
+         ~~~~~^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "/kaggle/temp/h3_light_source/patches/tilelang_row_quant.py", line 15, in label
+    torch.cuda.nvtx.range_push('row_fusion/' + name)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/cuda/nvtx.py", line 34, in range_push
+    return _nvtx.rangePushA(msg)
+           ~~~~~~~~~~~~~~~~^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/cuda/nvtx.py", line 14, in _fail
+    raise RuntimeError(
+        "NVTX functions not installed. Are you sure you have a CUDA build?"
+    )
+RuntimeError: NVTX functions not installed. Are you sure you have a CUDA build?
+
+----------------------------------------------------------------------
+Ran 207 tests in 33.488s
+
+FAILED (errors=1)
+{"passed": false, "tests": 207, "failures": 0, "errors": 1, "skipped": 0, "seconds": 36.48992281599999, "scope": "CPU contracts, not physical T4 qualification"}
+
+LIGHT_SETUP_FINAL blocked
+Traceback (most recent call last):
+  File "/kaggle/temp/h3_light_source/benchmarks/prepare_kaggle_direct_pip.py", line 162, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/kaggle/temp/h3_light_source/benchmarks/prepare_kaggle_direct_pip.py", line 131, in main
+    run([sys.executable,str(args.source/'benchmarks/run_review_cpu.py'),
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        '--output',str(out/'review_cpu_tests.json')],'review_cpu_tests',env,180)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/kaggle/temp/h3_light_source/benchmarks/prepare_kaggle_direct_pip.py", line 61, in run
+    raise RuntimeError(label+' failed, exit '+str(result.returncode))
+RuntimeError: review_cpu_tests failed, exit 1

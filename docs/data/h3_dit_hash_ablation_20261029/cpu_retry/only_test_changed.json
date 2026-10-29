@@ -1,0 +1,8 @@
+{
+  "changed": [
+    "benchmarks/test_h3_dit_fusion.py"
+  ],
+  "production_source_byte_exact": true,
+  "benchmark_items_unchanged": true,
+  "core_pins_unchanged": true
+}

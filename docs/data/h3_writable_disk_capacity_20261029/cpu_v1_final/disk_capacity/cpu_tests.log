@@ -1,0 +1,13 @@
+test_deadline_aborts_before_data_write (benchmarks.test_kaggle_write_capacity.CapacityContracts.test_deadline_aborts_before_data_write) ... ok
+test_disk_aliases_are_deduplicated_and_overlay_is_last (benchmarks.test_kaggle_write_capacity.CapacityContracts.test_disk_aliases_are_deduplicated_and_overlay_is_last) ... ok
+test_eio_is_preserved_as_writeback_fault_not_exact_capacity (benchmarks.test_kaggle_write_capacity.CapacityContracts.test_eio_is_preserved_as_writeback_fault_not_exact_capacity) ... ok
+test_failed_sync_file_is_excluded_from_durable_capacity (benchmarks.test_kaggle_write_capacity.CapacityContracts.test_failed_sync_file_is_excluded_from_durable_capacity) ... ok
+test_fsync_failure_propagates_before_readback (benchmarks.test_kaggle_write_capacity.CapacityContracts.test_fsync_failure_propagates_before_readback) ... ok
+test_mount_parser_decodes_escaped_paths_and_keeps_ro (benchmarks.test_kaggle_write_capacity.CapacityContracts.test_mount_parser_decodes_escaped_paths_and_keeps_ro) ... ok
+test_output_headroom_stops_without_writing (benchmarks.test_kaggle_write_capacity.CapacityContracts.test_output_headroom_stops_without_writing) ... ok
+test_real_full_write_readback_and_cleanup_preserve_unrelated_files (benchmarks.test_kaggle_write_capacity.CapacityContracts.test_real_full_write_readback_and_cleanup_preserve_unrelated_files) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.077s
+
+OK

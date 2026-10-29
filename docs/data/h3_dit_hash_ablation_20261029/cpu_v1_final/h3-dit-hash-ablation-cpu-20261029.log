@@ -1,0 +1,156 @@
+[{"stream_name":"stderr","time":8.280061998,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.280116313,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.280122946,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.28012705,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":9.001316758,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":9.001347974,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":9.001353604,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":9.001358161,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":10.264189725,"data":"LIGHT_NOTEBOOK_START zero dataset/kernel mounts\n"}
+,{"stream_name":"stdout","time":10.265380487,"data":"T4_SUPERVISOR notebook_cell_started\n"}
+,{"stream_name":"stdout","time":10.372787011,"data":"LIGHT_SOURCE_DOWNLOAD_START\n"}
+,{"stream_name":"stdout","time":11.248530092,"data":"LIGHT_SOURCE_READY\n"}
+,{"stream_name":"stdout","time":11.377565938,"data":"LIGHT_SETUP_STAGE frozen_source\n"}
+,{"stream_name":"stdout","time":14.739702068,"data":"LIGHT_SETUP_STAGE direct_pip\n"}
+,{"stream_name":"stdout","time":66.243042396,"data":"LIGHT_SETUP_STAGE api_probe\n"}
+,{"stream_name":"stdout","time":71.368319075,"data":"LIGHT_SETUP_HEARTBEAT api_probe 60\n"}
+,{"stream_name":"stdout","time":79.198260535,"data":"LIGHT_SETUP_STAGE cpu_tests\n"}
+,{"stream_name":"stdout","time":110.410732615,"data":"LIGHT_SETUP_STAGE review_cpu_tests\n"}
+,{"stream_name":"stdout","time":131.36798473,"data":"LIGHT_SETUP_HEARTBEAT review_cpu_tests 120\n"}
+,{"stream_name":"stdout","time":148.747887225,"data":"_and_does_not_enable_registry (benchmarks.test_h3_optimization_batch.Operators.test_decoder_scope_restores_after_failure_and_does_not_enable_registry) ... ok\n"}
+,{"stream_name":"stdout","time":148.749265576,"data":"test_fp32_rope_accepts_native_half_frequency_storage (benchmarks.test_h3_optimization_batch.Operators.test_fp32_rope_accepts_native_half_frequency_storage) ... ok\n"}
+,{"stream_name":"stdout","time":148.750353704,"data":"test_fp32_rope_never_claims_cpu_support (benchmarks.test_h3_optimization_batch.Operators.test_fp32_rope_never_claims_cpu_support) ... ok\n"}
+,{"stream_name":"stdout","time":148.751678921,"data":"test_te_epilogue_is_default_only_for_qualified_columns (benchmarks.test_h3_optimization_batch.Operators.test_te_epilogue_is_default_only_for_qualified_columns) ... ok\n"}
+,{"stream_name":"stdout","time":148.752930334,"data":"test_vae_linear_is_scoped_and_preserves_other_paths (benchmarks.test_h3_optimization_batch.Operators.test_vae_linear_is_scoped_and_preserves_other_paths) ... ok\n"}
+,{"stream_name":"stdout","time":148.754309449,"data":"test_default_verifies_once_and_reload_reuses_the_proof (benchmarks.test_dit_hash_ablation.HashAblation.test_default_verifies_once_and_reload_reuses_the_proof) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.755420643,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.756582606,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.7575249,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.758727324,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.759959655,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.761185372,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.76227749,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.763454619,"data":"ok\n"}
+,{"stream_name":"stdout","time":148.7645119,"data":"test_queued_readers_override_mode_without_mutating_admitted_base (benchmarks.test_dit_hash_ablation.HashAblation.test_queued_readers_override_mode_without_mutating_admitted_base) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.765651683,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.766671351,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.76756237,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.76849676,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.769424826,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.770442625,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.771286638,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.772375642,"data":"ok\n"}
+,{"stream_name":"stdout","time":148.773501308,"data":"test_runtime_default_is_verified_and_te_cannot_be_opted_out (benchmarks.test_dit_hash_ablation.HashAblation.test_runtime_default_is_verified_and_te_cannot_be_opted_out) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.774562047,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.775682328,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.776763604,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.777846977,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.778957375,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.779910949,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.780983688,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.78181307,"data":"ok\n"}
+,{"stream_name":"stdout","time":148.782728623,"data":"test_same_signature_corruption_is_accepted_only_by_trusted_arm (benchmarks.test_dit_hash_ablation.HashAblation.test_same_signature_corruption_is_accepted_only_by_trusted_arm) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.783665739,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.784651477,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.785567679,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.786557137,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.787537696,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.78842549,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.789381959,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.790362908,"data":"ok\n"}
+,{"stream_name":"stdout","time":148.791182675,"data":"test_trusted_arm_still_rejects_changed_file_signature (benchmarks.test_dit_hash_ablation.HashAblation.test_trusted_arm_still_rejects_changed_file_signature) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.792070673,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.793036924,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.79390493,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.794962647,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.795615325,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.796406905,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.797201422,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.797977469,"data":"ok\n"}
+,{"stream_name":"stdout","time":148.798806167,"data":"test_trusted_payloads_skip_file_and_tensor_hashes_and_match_verified_weights (benchmarks.test_dit_hash_ablation.HashAblation.test_trusted_payloads_skip_file_and_tensor_hashes_and_match_verified_weights) ... TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.799589247,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.800352886,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.801194804,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.802071187,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.802925905,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.803764164,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.804570723,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":148.805425256,"data":"ok\n"}
+,{"stream_name":"stdout","time":148.806230717,"data":"\n"}
+,{"stream_name":"stdout","time":148.807015633,"data":"======================================================================\n"}
+,{"stream_name":"stdout","time":148.807815668,"data":"ERROR: test_scaled_transport_consumes_fused_epilogue_after_the_existing_sum (benchmarks.test_h3_dit_fusion.ProductionFusion.test_scaled_transport_consumes_fused_epilogue_after_the_existing_sum)\n"}
+,{"stream_name":"stdout","time":148.808745061,"data":"----------------------------------------------------------------------\n"}
+,{"stream_name":"stdout","time":148.809394732,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":148.810291069,"data":"  File \"/usr/local/lib/python3.13/dist-packages/torch/utils/_contextlib.py\", line 124, in decorate_context\n"}
+,{"stream_name":"stdout","time":148.811046499,"data":"    return func(*args, **kwargs)\n"}
+,{"stream_name":"stdout","time":148.812016803,"data":"  File \"/kaggle/temp/h3_light_source/benchmarks/test_h3_dit_fusion.py\", line 43, in test_scaled_transport_consumes_fused_epilogue_after_the_existing_sum\n"}
+,{"stream_name":"stdout","time":148.812996871,"data":"    actual=codec.row_linear(value,weight,torch.ones(5376,1),comm,2,finish_fn=finish)\n"}
+,{"stream_name":"stdout","time":148.813991835,"data":"  File \"/kaggle/temp/h3_light_source/patches/tilelang_transport_p2.py\", line 131, in row_linear\n"}
+,{"stream_name":"stdout","time":148.815002687,"data":"    with label('int8_gemm'):partial=original.int_mm(q,weight)\n"}
+,{"stream_name":"stdout","time":148.816035669,"data":"         ~~~~~^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":148.816979224,"data":"  File \"/usr/lib/python3.13/contextlib.py\", line 141, in __enter__\n"}
+,{"stream_name":"stdout","time":148.817892139,"data":"    return next(self.gen)\n"}
+,{"stream_name":"stdout","time":148.818712971,"data":"  File \"/kaggle/temp/h3_light_source/patches/tilelang_row_quant.py\", line 15, in label\n"}
+,{"stream_name":"stdout","time":148.819664906,"data":"    torch.cuda.nvtx.range_push('row_fusion/' + name)\n"}
+,{"stream_name":"stdout","time":148.820539075,"data":"    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":148.82139873,"data":"  File \"/usr/local/lib/python3.13/dist-packages/torch/cuda/nvtx.py\", line 34, in range_push\n"}
+,{"stream_name":"stdout","time":148.822379055,"data":"    return _nvtx.rangePushA(msg)\n"}
+,{"stream_name":"stdout","time":148.823275639,"data":"           ~~~~~~~~~~~~~~~~^^^^^\n"}
+,{"stream_name":"stdout","time":148.824223752,"data":"  File \"/usr/local/lib/python3.13/dist-packages/torch/cuda/nvtx.py\", line 14, in _fail\n"}
+,{"stream_name":"stdout","time":148.825353896,"data":"    raise RuntimeError(\n"}
+,{"stream_name":"stdout","time":148.825986936,"data":"        \"NVTX functions not installed. Are you sure you have a CUDA build?\"\n"}
+,{"stream_name":"stdout","time":148.826750519,"data":"    )\n"}
+,{"stream_name":"stdout","time":148.827737849,"data":"RuntimeError: NVTX functions not installed. Are you sure you have a CUDA build?\n"}
+,{"stream_name":"stdout","time":148.828299562,"data":"\n"}
+,{"stream_name":"stdout","time":148.82909363,"data":"----------------------------------------------------------------------\n"}
+,{"stream_name":"stdout","time":148.82990097,"data":"Ran 207 tests in 33.488s\n"}
+,{"stream_name":"stdout","time":148.830732342,"data":"\n"}
+,{"stream_name":"stdout","time":148.831563193,"data":"FAILED (errors=1)\n"}
+,{"stream_name":"stdout","time":148.832393134,"data":"{\"passed\": false, \"tests\": 207, \"failures\": 0, \"errors\": 1, \"skipped\": 0, \"seconds\": 36.48992281599999, \"scope\": \"CPU contracts, not physical T4 qualification\"}\n"}
+,{"stream_name":"stdout","time":148.833199565,"data":"\n"}
+,{"stream_name":"stdout","time":148.833969614,"data":"LIGHT_SETUP_FINAL blocked\n"}
+,{"stream_name":"stdout","time":148.834712217,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":148.835696247,"data":"  File \"/kaggle/temp/h3_light_source/benchmarks/prepare_kaggle_direct_pip.py\", line 162, in \u003cmodule\u003e\n"}
+,{"stream_name":"stdout","time":148.836358209,"data":"    if __name__=='__main__':main()\n"}
+,{"stream_name":"stdout","time":148.837338916,"data":"                            ~~~~^^\n"}
+,{"stream_name":"stdout","time":148.838171038,"data":"  File \"/kaggle/temp/h3_light_source/benchmarks/prepare_kaggle_direct_pip.py\", line 131, in main\n"}
+,{"stream_name":"stdout","time":148.838913606,"data":"    run([sys.executable,str(args.source/'benchmarks/run_review_cpu.py'),\n"}
+,{"stream_name":"stdout","time":148.839951462,"data":"    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":148.84130345,"data":"        '--output',str(out/'review_cpu_tests.json')],'review_cpu_tests',env,180)\n"}
+,{"stream_name":"stdout","time":148.842080327,"data":"        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":148.842916423,"data":"  File \"/kaggle/temp/h3_light_source/benchmarks/prepare_kaggle_direct_pip.py\", line 61, in run\n"}
+,{"stream_name":"stdout","time":148.843673115,"data":"    raise RuntimeError(label+' failed, exit '+str(result.returncode))\n"}
+,{"stream_name":"stdout","time":148.844454229,"data":"RuntimeError: review_cpu_tests failed, exit 1\n"}
+,{"stream_name":"stdout","time":148.845214443,"data":"T4_SUPERVISOR_FINAL {\"status\": \"worker_exited\", \"deadline_seconds\": 600, \"scope\": \"Notebook cell execution only; provider startup/mounting excluded\", \"worker_pid\": 37, \"exit_code\": 1, \"seconds\": 138.560656463}\n"}
+,{"stream_name":"stderr","time":149.282773537,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":149.283507414,"data":"  File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":149.283532237,"data":"    import sys;import papermill as pm;pm.execute_notebook(\"__notebook__.ipynb\",\"__notebook__.ipynb\",progress_bar=False,log_output=True,stdout_file=sys.stdout,stderr_file=sys.stderr,allow_errors=False,timeout=1000)\n"}
+,{"stream_name":"stderr","time":149.283538719,"data":"                                      ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":149.283560566,"data":"  File \"/usr/local/lib/python3.13/dist-packages/papermill/execute.py\", line 131, in execute_notebook\n"}
+,{"stream_name":"stderr","time":149.283565464,"data":"    raise_for_execution_errors(nb, output_path)\n"}
+,{"stream_name":"stderr","time":149.283569255,"data":"    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":149.283572825,"data":"  File \"/usr/local/lib/python3.13/dist-packages/papermill/execute.py\", line 251, in raise_for_execution_errors\n"}
+,{"stream_name":"stderr","time":149.283577333,"data":"    raise error\n"}
+,{"stream_name":"stderr","time":149.28358113,"data":"papermill.exceptions.PapermillExecutionError: \n"}
+,{"stream_name":"stderr","time":149.283584929,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":149.283588849,"data":"Exception encountered at \"In [1]\":\n"}
+,{"stream_name":"stderr","time":149.283592707,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":149.283596899,"data":"RuntimeError                              Traceback (most recent call last)\n"}
+,{"stream_name":"stderr","time":149.28360065,"data":"/tmp/ipykernel_16/4033939449.py in \u003ccell line: 0\u003e()\n"}
+,{"stream_name":"stderr","time":149.283604642,"data":"     62 receipt=json.loads((OUT/'setup_receipt.json').read_text())\n"}
+,{"stream_name":"stderr","time":149.283607468,"data":"     63 guard=json.loads((OUT/'supervision.json').read_text())\n"}
+,{"stream_name":"stderr","time":149.283609937,"data":"---\u003e 64 if guard['status']!='worker_exited' or guard['exit_code']!=0:raise RuntimeError('Light setup worker failed')\n"}
+,{"stream_name":"stderr","time":149.283612505,"data":"     65 assert receipt['status']=='cpu_ready'\n"}
+,{"stream_name":"stderr","time":149.283614934,"data":"     66 print('T4_SUPERVISOR notebook_cell_started',flush=True)\n"}
+,{"stream_name":"stderr","time":149.283617306,"data":"\n"}
+,{"stream_name":"stderr","time":149.283620737,"data":"RuntimeError: Light setup worker failed\n"}
+,{"stream_name":"stderr","time":149.283624621,"data":"\n"}
+,{"stream_name":"stderr","time":152.057796254,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":152.057833755,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":152.250549085,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":152.250576747,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":153.138844969,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":153.244291951,"data":"[NbConvertApp] Writing 22526 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":156.352886473,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":156.989464501,"data":"[NbConvertApp] Writing 321032 bytes to __results__.html\n"}
+]

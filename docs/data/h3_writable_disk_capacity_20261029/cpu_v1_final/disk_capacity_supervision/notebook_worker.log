@@ -1,0 +1,61 @@
+DISK_PROBE_CPU_CONTRACTS_PASSED
+DISK_START {"device": 1794, "base": "/kaggle/working", "filesystem": "ext4", "source": "/dev/loop2", "aliases": ["/kaggle/working", "/kaggle/huggingface", "/kaggle/nbdev"], "report_filesystem": true}
+DISK_VERIFIED /kaggle/working 2147483648
+DISK_VERIFIED /kaggle/working 4294967296
+DISK_VERIFIED /kaggle/working 6442450944
+DISK_VERIFIED /kaggle/working 8589934592
+DISK_VERIFIED /kaggle/working 10737418240
+DISK_VERIFIED /kaggle/working 12884901888
+DISK_VERIFIED /kaggle/working 15032385536
+DISK_VERIFIED /kaggle/working 17179869184
+DISK_VERIFIED /kaggle/working 19327352832
+DISK_END {"device": 1794, "base": "/kaggle/working", "filesystem": "ext4", "source": "/dev/loop2", "aliases": ["/kaggle/working", "/kaggle/huggingface", "/kaggle/nbdev"], "report_filesystem": true, "receipt": "disk_00.json", "status": "lower_bound", "verified_synced_bytes": 20401094656, "stop_reason": "report_filesystem_headroom", "cleanup_errors": []}
+DISK_START {"device": 53, "base": "/tmp", "filesystem": "overlay", "source": "overlay", "aliases": ["/tmp", "/var/tmp", "/root", "/"], "report_filesystem": false}
+DISK_VERIFIED /tmp 2147483648
+DISK_VERIFIED /tmp 4294967296
+DISK_VERIFIED /tmp 6442450944
+DISK_VERIFIED /tmp 8589934592
+DISK_VERIFIED /tmp 10737418240
+DISK_VERIFIED /tmp 12884901888
+DISK_VERIFIED /tmp 15032385536
+DISK_VERIFIED /tmp 17179869184
+DISK_VERIFIED /tmp 19327352832
+DISK_VERIFIED /tmp 21474836480
+DISK_VERIFIED /tmp 23622320128
+DISK_VERIFIED /tmp 25769803776
+DISK_VERIFIED /tmp 27917287424
+DISK_VERIFIED /tmp 30064771072
+DISK_VERIFIED /tmp 32212254720
+DISK_VERIFIED /tmp 34359738368
+DISK_VERIFIED /tmp 36507222016
+DISK_VERIFIED /tmp 38654705664
+DISK_VERIFIED /tmp 40802189312
+DISK_VERIFIED /tmp 42949672960
+DISK_VERIFIED /tmp 45097156608
+DISK_VERIFIED /tmp 47244640256
+DISK_VERIFIED /tmp 49392123904
+DISK_VERIFIED /tmp 51539607552
+DISK_VERIFIED /tmp 53687091200
+DISK_VERIFIED /tmp 55834574848
+DISK_VERIFIED /tmp 57982058496
+DISK_VERIFIED /tmp 60129542144
+DISK_VERIFIED /tmp 62277025792
+DISK_VERIFIED /tmp 64424509440
+DISK_VERIFIED /tmp 66571993088
+DISK_VERIFIED /tmp 68719476736
+DISK_VERIFIED /tmp 70866960384
+DISK_VERIFIED /tmp 73014444032
+DISK_VERIFIED /tmp 75161927680
+DISK_VERIFIED /tmp 77309411328
+DISK_VERIFIED /tmp 79456894976
+DISK_VERIFIED /tmp 81604378624
+DISK_VERIFIED /tmp 83751862272
+DISK_VERIFIED /tmp 85899345920
+DISK_VERIFIED /tmp 88046829568
+DISK_VERIFIED /tmp 90194313216
+DISK_VERIFIED /tmp 92341796864
+DISK_VERIFIED /tmp 94489280512
+DISK_VERIFIED /tmp 96636764160
+DISK_VERIFIED /tmp 98784247808
+DISK_VERIFIED /tmp 100931731456
+DISK_END {"device": 53, "base": "/tmp", "filesystem": "overlay", "source": "overlay", "aliases": ["/tmp", "/var/tmp", "/root", "/"], "report_filesystem": false, "receipt": "disk_01.json", "status": "observed_boundary", "verified_synced_bytes": 100931731456, "stop_reason": "ENOSPC_or_EDQUOT", "cleanup_errors": []}
