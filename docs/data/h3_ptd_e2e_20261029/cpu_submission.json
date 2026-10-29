@@ -64,7 +64,7 @@
   },
   "run_timeout_seconds": 1100,
   "earliest_final_collection_seconds": 1100,
-  "final_collection_count": 0,
+  "final_collection_count": 1,
   "result_relative": "ptd_e2e_cpu/result.json",
   "notebook_sha256": "02bc456634151c2366729a38982b1cb469aab7b28c341a365606bd1d203ad123",
   "returncode": 0,

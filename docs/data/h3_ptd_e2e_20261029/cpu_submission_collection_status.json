@@ -1,0 +1,19 @@
+{
+  "status": "collected",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-ptd-long-e2e-cpu-20261029",
+  "output": "D:\\attention_eval\\h3_ptd_e2e_20261029\\cpu_final",
+  "returncode": 0,
+  "files": 22,
+  "completed_utc": "2026-10-29T06:28:37.615020+00:00",
+  "experiment": {
+    "status": "ptd_e2e_cpu_ready",
+    "error": null,
+    "stages": null,
+    "completed_sampler_steps": 0,
+    "completed_denoiser_calls": 0,
+    "media": null,
+    "quality_acceptance": "Pending review; collection does not establish generation quality"
+  },
+  "prior_input_hash_matches": {}
+}
