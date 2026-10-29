@@ -131,14 +131,22 @@ def residual_add(x, branch):
     return activation_cast(x.float()+branch.float(),x.dtype)
 
 
-def modulated_norm(norm, x, shift, scale, segments):
+def modulated_norm(norm, x, shift, scale, segments, *, fused=False):
+    if fused:
+        from patches.tilelang_dit_fusion import modulated_norm as run
+        out=run(norm,x,shift,scale,segments)
+        if out is not None:return out
     h = F.rms_norm(x.float(), norm.normalized_shape, norm.weight.float(), norm.eps)
     for a,b,row in segments:
         h[a:b].mul_(1.+scale[row].float()).add_(shift[row].float())
     return activation_cast(h,x.dtype)
 
 
-def gated_add(x, gate, branch, segments):
+def gated_add(x, gate, branch, segments, *, fused=False):
+    if fused:
+        from patches.tilelang_dit_fusion import gated_add as run
+        out=run(x,gate,branch,segments)
+        if out is not None:return out
     for a,b,row in segments:
         x[a:b].copy_(activation_cast(torch.addcmul(x[a:b].float(), branch[a:b].float(), gate[row].float()),x.dtype))
     return x

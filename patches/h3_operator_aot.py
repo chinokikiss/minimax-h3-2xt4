@@ -28,7 +28,7 @@ def environment():
         torch=str(torch.__version__),cuda=torch.version.cuda,tilelang=version('tilelang'),arch='sm_75')
 
 
-def plan(rows,rank,policy,stage='dit'):
+def plan(rows,rank,policy,stage='dit',*,norm_epsilon=1e-5/4096):
     if type(rows) is not int or rows<1 or rank not in (0,1):raise ValueError('Positive packed length and TP2 rank required')
     if stage not in ('te','dit','video'):raise ValueError('Unknown H3 preparation stage')
     calls=[]
@@ -55,16 +55,22 @@ def plan(rows,rank,policy,stage='dit'):
     if stage=='dit' and getattr(policy,'dit_rms_rope','native')=='tilelang_fp32':
         # Native H3 rotates three axes, each with 16 frequency pairs: 96/128.
         add('tilelang_fp32_rms_rope','kernel',rows,28,128,96,'float16','float16',1e-6,'sm_75','float16')
+    if stage=='dit':
+        if getattr(policy,'dit_fused_norm',False):add('tilelang_dit_fusion','norm_kernel',rows,5376,9,float(norm_epsilon))
+        if getattr(policy,'dit_fused_gate',False):add('tilelang_dit_fusion','gate_kernel',rows,5376,9)
+        if getattr(policy,'dit_fused_row_gate',False) and policy.row_linear_backend=='tilelang_scaled_fp16':
+            from patches.tilelang_transport_tradeoffs import shift_for
+            for width in (3584,7168):add('tilelang_dit_fusion','row_gate_kernel',rows,5376,9,shift_for(width))
     return calls
 
 
 @lru_cache(maxsize=16)
-def prepare(rows,rank,policy,stage='dit'):
+def prepare(rows,rank,policy,stage='dit',*,norm_epsilon=1e-5/4096):
     if not torch.cuda.is_available() or torch.cuda.get_device_capability()!=(7,5):
         return dict(status='unsupported_device',rows=rows,rank=rank)
     if version('tilelang')!='0.1.13':raise RuntimeError('Pinned TileLang required')
     build_environment=environment();start=time.monotonic();steps=[];sources={}
-    for module,name,args in plan(rows,rank,policy,stage):
+    for module,name,args in plan(rows,rank,policy,stage,norm_epsilon=norm_epsilon):
         mod=import_module('patches.'+module);fn=getattr(mod,name)
         before=fn.cache_info();begin=time.monotonic();fn(*args);after=fn.cache_info()
         steps.append(dict(module=module,function=name,args=args,seconds=time.monotonic()-begin,

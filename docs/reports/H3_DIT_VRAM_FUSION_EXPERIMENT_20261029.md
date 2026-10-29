@@ -255,3 +255,20 @@ compressed CUDA traces, are under
 The aligned summary is under `gpu_v1_analysis/`. The original download manifest
 and an additional original-file hash manifest are preserved. Collection used
 one logical final-artifact request and no status/list/live-log queries.
+
+## User-requested production integration
+
+Following the explicit promotion request, RMS/AdaLN, gated residual, scaled
+row epilogue/gate and prepared Kitchen attention are now default-on production
+choices, with independent off switches. The production factories match the
+measured factories structurally. Online LoRA, Native INT32 transport,
+unsupported devices/dtypes/layouts and other attention backends keep their
+appropriate existing paths. FC1 chunking/prepared column changes were not
+promoted. Runtime code imports no experiment modules.
+
+[Production switches and contracts](../guides/H3_DIT_FUSION.md) describe
+rounding, eligibility, label lifetime protection, AOT and fallback behavior.
+This user-requested integration supersedes the earlier no-promotion decision;
+it does not change the historical T4 evidence or qualify combined T4/full-model
+latency, memory or generation quality. CPU validation records are kept in
+`docs/data/h3_dit_fusion_production_20261029/`.

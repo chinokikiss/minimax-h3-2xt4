@@ -16,8 +16,14 @@ class H3OperatorPolicy:
     column_linear_backend: str = 'cuda_int8_tilelang'
     dit_rms_rope: str = 'tilelang_fp32'
     aot_precompile: bool = True
+    dit_fused_norm: bool = True
+    dit_fused_gate: bool = True
+    dit_fused_row_gate: bool = True
+    dit_prepared_attention: bool = True
 
     def __post_init__(self):
+        for name in ('dit_fused_norm','dit_fused_gate','dit_fused_row_gate','dit_prepared_attention'):
+            if type(getattr(self,name)) is not bool:raise ValueError(name+' must be boolean')
         if self.dit_rms_rope not in ('native','tilelang_fp32'):raise ValueError('Unknown DiT RMS-RoPE backend')
         if self.te_attention not in ('kitchen_causal','tilelang_group32','native'):raise ValueError('Unknown TE attention')
         if self.dit_attention not in ('kitchen','tilelang_dense','tilelang_drop','tilelang_scalar','native'):
@@ -105,6 +111,28 @@ def dit_attention(block,q,k,v,options):
                 return split.execute(p,routes,output_dtype=q.dtype,centroids=scores)
         return sparse.execute(p,routes,layout='BND',output_dtype=q.dtype)
     return out.transpose(1,2).reshape(q.shape[0],q.shape[2],-1)
+
+
+def prepare_dit_attention(block,q,k,v,options=None):
+    """The caller releases all floating QKV owners before consuming this value."""
+    policy=getattr(block,'operator_policy',None)
+    if (policy is None or policy.dit_attention!='kitchen'
+            or not getattr(policy,'dit_prepared_attention',False)
+            or torch.is_grad_enabled() or torch.compiler.is_compiling()
+            or not q.is_cuda or q.dtype!=torch.float16 or q.shape!=k.shape or q.shape!=v.shape
+            or q.ndim!=4 or q.shape[0]!=1 or q.shape[1]!=28 or q.shape[-1]!=128
+            or k.dtype!=q.dtype or v.dtype!=q.dtype or k.device!=q.device or v.device!=q.device
+            or torch.cuda.get_device_capability(q.device)!=(7,5)):return None
+    import comfy_kitchen as ck
+    if not callable(getattr(ck,'prequantize_int8_attention',None)) or not callable(getattr(ck,'int8_attention_from_prequantized',None)):
+        return None
+    return ck.prequantize_int8_attention(q,k,v)
+
+
+def execute_dit_attention(prepared):
+    import comfy_kitchen as ck
+    out=ck.int8_attention_from_prequantized(prepared)
+    return out.transpose(1,2).reshape(out.shape[0],out.shape[2],-1)
 
 
 def row_linear(module,x,fallback,comm,input_act=None):

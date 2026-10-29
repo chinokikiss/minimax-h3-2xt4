@@ -52,7 +52,7 @@ class Operators(unittest.TestCase):
         self.assertEqual(H3OperatorPolicy().dit_rms_rope,'tilelang_fp32')
         self.assertEqual(H3OperatorPolicy(dit_rms_rope='native').dit_rms_rope,'native')
         calls=plan(59134,1,H3OperatorPolicy(dit_rms_rope='tilelang_fp32'))
-        self.assertEqual(len(calls),12)
+        self.assertEqual(len(calls),16)
         self.assertIn(('tilelang_row_quant','quantizer',(59134,3584,7168,3584,'fast')),calls)
         self.assertTrue(all(c[2][0]==59134 for c in calls))
         te=plan(2392,1,H3OperatorPolicy(),'te')

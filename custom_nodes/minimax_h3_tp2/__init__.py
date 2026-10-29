@@ -49,7 +49,12 @@ class MiniMaxH3TP2Loader:
                         'lora_selective_qkv_b':('BOOLEAN',{'default':True,'tooltip':'Owned QKV B for supported online rank128 adapters; byte-exact and faster on tested T4 fixtures. Inactive offline; unsupported shapes retain full B. Not long-sequence online admission.'}),
                         'column_linear_backend':(['cuda_int8_tilelang','preallocated'],{'default':'cuda_int8_tilelang','tooltip':'Measured direct INT8 GEMM + ordered TileLang epilogue on aligned SM75 DiT columns. Other shapes/devices fall back. Preallocated remains the fallback/control.'}),
                         'dit_rms_rope':(['native','tilelang_fp32'],{'default':'tilelang_fp32','tooltip':'Default: T4-qualified FP32 fused RMS-RoPE for supported packed QKV. Native remains an explicit choice and unsupported-layout/device fallback.'}),
-                        'aot_precompile':('BOOLEAN',{'default':True,'tooltip':'Prepare the exact selected TE/DiT custom kernels before execution. Shipped Kitchen/Torch kernels are already compiled. Preparation time is separate from steady state.'})}}
+                        'aot_precompile':('BOOLEAN',{'default':True,'tooltip':'Prepare the exact selected TE/DiT custom kernels before execution. Shipped Kitchen/Torch kernels are already compiled. Preparation time is separate from steady state.'}),
+                        'dit_fused_norm':('BOOLEAN',{'default':True,'tooltip':'T4 FP16 RMS + AdaLN fusion, with FP32 statistics. Slight reduction-order differences; disable for the original path.'}),
+                        'dit_fused_gate':('BOOLEAN',{'default':True,'tooltip':'T4 FP16 gated residual fusion with FP32 FMA and FP16 storage.'}),
+                        'dit_fused_row_gate':('BOOLEAN',{'default':True,'tooltip':'Fuse scaled-FP16 row epilogue and residual gate for offline/baked DiT. Online LoRA and unsupported routes retain separate operations.'}),
+                        'dit_prepared_attention':('BOOLEAN',{'default':True,'tooltip':'Prepare Kitchen INT8 attention, release floating QKV, then execute. Other attention backends remain unchanged.'})}}
+
     RETURN_TYPES = ('MODEL', 'CLIP', 'MINIMAX_TP2_SESSION')
     FUNCTION = 'load'
     CATEGORY = 'MiniMax H3/TP2'
@@ -67,7 +72,8 @@ class MiniMaxH3TP2Loader:
              vision_residual_exponent=0,video_residual_exponent=0,video_decode_reserve_gib=2.,
              prefetch_lifecycle=True,memory_pressure_aware=True,dit_reserve_gib=9.,
              command_timeout_seconds=1500,rank_checkpoint_dir='',
-             lora_selective_qkv_b=True,column_linear_backend='cuda_int8_tilelang',dit_rms_rope='tilelang_fp32',aot_precompile=True,**retired_options):
+             lora_selective_qkv_b=True,column_linear_backend='cuda_int8_tilelang',dit_rms_rope='tilelang_fp32',aot_precompile=True,
+             dit_fused_norm=True,dit_fused_gate=True,dit_fused_row_gate=True,dit_prepared_attention=True,**retired_options):
         global _service
         from patches.h3_configuration import check_retired_loader_options
         check_retired_loader_options(retired_options)
@@ -106,7 +112,9 @@ class MiniMaxH3TP2Loader:
                 row_linear_backend=row_linear_backend,
                 scalar_score_workspace_mib=int(scalar_score_workspace_mib),
                 fc2_quantizer=fc2_quantizer,column_linear_backend=column_linear_backend,
-                dit_rms_rope=dit_rms_rope,aot_precompile=aot_precompile))
+                dit_rms_rope=dit_rms_rope,aot_precompile=aot_precompile,
+                dit_fused_norm=dit_fused_norm,dit_fused_gate=dit_fused_gate,
+                dit_fused_row_gate=dit_fused_row_gate,dit_prepared_attention=dit_prepared_attention))
         with _lock:
             if _service is None or _service.closed or _service.config != config:
                 if _service is not None:

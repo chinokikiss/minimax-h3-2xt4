@@ -1,0 +1,30 @@
+{
+  "user_requested_promotion": true,
+  "default_on": [
+    "dit_fused_norm",
+    "dit_fused_gate",
+    "dit_fused_row_gate",
+    "dit_prepared_attention"
+  ],
+  "kernel_arithmetic": "Three factory ASTs match measured 2026-10-29 T4 source",
+  "cpu_only": true,
+  "new_t4_run": false,
+  "full_generation_quality_qualified": false,
+  "native_source_and_dependency_versions_unchanged": true,
+  "online_lora_row_fusion": false,
+  "fc1_changes_promoted": false,
+  "local_interpreter": "C:/ProgramData/miniconda3/envs/comfyui/python.exe",
+  "working_tree_hashes": {
+    "patches/tilelang_dit_fusion.py": "84711b6863aac3f160a096652f1c12ae5ce268eb4e7830668b9a43bc1a2188c7",
+    "patches/tp_dit.py": "f483d30a5fe35b752a6e6a31a8042bff60815ddd18b492e0a9908c6d0bd345a1",
+    "patches/h3_tensor_flow.py": "fadf4dda40bb0bffc89f98a3ca700157f2f2c74876180b902b40a65a4d6115c8",
+    "patches/tilelang_transport_p2.py": "fbf4e09f01d40faeb4842dde2d53eede502e66d095a93e43756c4ec0e1b5b30a",
+    "patches/tilelang_swiglu_quant.py": "7f305963619a942749a8b9c7e9d7c6f10acd624977a7cd401c9e63964200dae1",
+    "patches/h3_operator_aot.py": "bd1075ec7266764d20b9e4e4ba801af9e56b41d871011073994e4f3eddc0663e",
+    "patches/h3_operator_dependencies.py": "2720726bb8841e4628e3851b6263c5a34085a2b2d31aee9c30f2f24fe45e1575",
+    "patches/h3_operator_policy.py": "965b06856c5d29618c62aef8dde337743f7d053abaeabe4b37b06a8e4af0bc62",
+    "patches/comfy_tp_runtime.py": "1a9cf5d8905275a4a07018385b0a71b9aa2470592fcfc06d2f721aca5c9c8013",
+    "custom_nodes/minimax_h3_tp2/__init__.py": "530eb879bd8001a9f90cdcfeb16fa22b08b479d4670b0c280623d2bcf6306166"
+  },
+  "preexisting_dirty_changes": "Kept in working tree; excluded from this integration commit using pre-edit snapshots"
+}

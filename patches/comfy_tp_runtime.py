@@ -562,7 +562,8 @@ class RankRuntime:
                 return output
             elif command == 'prepare_dit':
                 from patches.h3_operator_aot import prepare
-                result=prepare(int(args[0]),self.rank,self.config.operators)
+                result=prepare(int(args[0]),self.rank,self.config.operators,
+                    norm_epsilon=1e-5/self.config.tensor_flow.divisor**2)
                 self.events.append(dict(phase='dit_aot',**result))
                 return result
             elif command in ('refine', 'denoise'):

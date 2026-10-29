@@ -103,6 +103,12 @@ class ObservedRank(BASE_RANK):
             owner.record_layout(q,options)
             return original_attention(block,q,k,v,options)
         policy.dit_attention=dit_attention
+        original_prepare=policy.prepare_dit_attention
+        def prepare_attention(block,q,k,v,options=None):
+            prepared=original_prepare(block,q,k,v,options)
+            if prepared is not None:owner.record_layout(q,options or {})
+            return prepared
+        policy.prepare_dit_attention=prepare_attention
         # Observe actual executed entrypoints, not the configured policy string.
         import patches.tilelang_group32_masked as te
         import patches.kitchen_te_attention as kitchen_te
@@ -115,6 +121,7 @@ class ObservedRank(BASE_RANK):
                 (sparse,'execute','DiT/tilelang_sparse_execute'),
                 (split,'execute','DiT/tilelang_scalar_split_execute'),
                 (ck,'int8_attention','kitchen/int8_attention'),
+                (policy,'execute_dit_attention','kitchen/int8_attention'),
                 (lora.NativeAlignedLoRA,'add_to','LoRA/column_or_native_bypass'),
                 (lora.RowPartialLoRA,'add_to','LoRA/row_partial_bypass')):
             fn = getattr(module, name)

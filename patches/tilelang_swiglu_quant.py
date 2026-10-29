@@ -95,10 +95,11 @@ def supported(x,weight,weight_scale,world_size,groupsize):
         and torch.cuda.get_device_capability(x.device)==(7,5))
 
 
-def row_linear(x,weight,weight_scale,comm,*,mode,scaled_transport):
+def row_linear(x,weight,weight_scale,comm,*,mode,scaled_transport,finish_fn=None):
     """Return FP32 through the caller's LoRA addition, then store only once."""
     from patches import parallel_int8 as original,tilelang_transport_p2 as codec
     from patches.tilelang_row_quant import label
+    if finish_fn is not None and not scaled_transport:raise ValueError('Fused row-gate requires scaled FP16 transport')
     with label('fp32_swiglu_convrot_quantize'):q,scale=prepare(x,comm,mode)
     shape=x.shape
     del x
@@ -109,7 +110,8 @@ def row_linear(x,weight,weight_scale,comm,*,mode,scaled_transport):
         with label('scaled_fp16_encode'):payload=codec.encode(partial,'fp16',local_k)
         del partial
         with label('scaled_fp16_sum'):payload=codec.collect(payload,'fp16',comm)
-        with label('scaled_fp16_fused_epilogue'):out=codec.finish(payload,scale,weight_scale,'fp16',local_k)
+        with label('scaled_fp16_fused_epilogue'):
+            out=finish_fn(payload,scale,weight_scale,local_k) if finish_fn else codec.finish(payload,scale,weight_scale,'fp16',local_k)
     else:
         with label('int32_sum'):comm.all_reduce(partial,op=comm.ReduceOp.SUM)
         with label('dequantize'):out=original.dequantize(partial,scale,weight_scale,torch.float32)

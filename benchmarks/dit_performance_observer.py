@@ -51,7 +51,7 @@ class Phases:
         self.originals.append((module,name,original));setattr(module,name,observed)
 
     def install(self):
-        from patches import tp_dit,parallel_int8,tilelang_swiglu_quant,tilelang_transport_p2,h3_tensor_flow
+        from patches import tp_dit,parallel_int8,tilelang_swiglu_quant,tilelang_transport_p2,h3_tensor_flow,h3_operator_policy,tilelang_dit_fusion
         from comfy_kitchen.backends.eager import quantization as eager
         import comfy_kitchen as ck
         import tilelang
@@ -65,6 +65,8 @@ class Phases:
             (h3_tensor_flow,'gated_add','residual/gated_add'),
             (ck,'rms_rope_split_half','attention/QK_norm_RoPE'),
             (ck,'int8_attention','attention/Kitchen_fused_QK_softmax_PV'),
+            (h3_operator_policy,'prepare_dit_attention','attention/Kitchen_prepare'),
+            (h3_operator_policy,'execute_dit_attention','attention/Kitchen_fused_QK_softmax_PV'),
             (sparse,'prepare','attention/sparse_quantize_and_centroids'),
             (sparse,'routes','attention/sparse_routing'),
             (sparse,'execute','attention/sparse_execute'),
@@ -76,7 +78,8 @@ class Phases:
             (tilelang_swiglu_quant,'prepare','FC2/SwiGLU_ConvRot_quantize'),
             (tilelang_transport_p2,'encode','transport/encode'),
             (tilelang_transport_p2,'collect','transport/SUM'),
-            (tilelang_transport_p2,'finish','transport/fused_epilogue')):
+            (tilelang_transport_p2,'finish','transport/fused_epilogue'),
+            (tilelang_dit_fusion,'finish_row','transport/fused_epilogue_gate')):
             self.wrap(module,name,label)
         self.wrap(tilelang,'compile','compile/TileLang',gpu=False)
 

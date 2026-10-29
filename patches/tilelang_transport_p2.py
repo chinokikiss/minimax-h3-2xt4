@@ -103,10 +103,11 @@ def _finish_row(q,scale,shape,weight,weight_scale,comm):
     return out.reshape(*shape[:-1],weight.shape[0])
 
 
-def row_linear(x,weight,weight_scale,comm,world_size,groupsize=256,input_act=None):
+def row_linear(x,weight,weight_scale,comm,world_size,groupsize=256,input_act=None,*,finish_fn=None):
     """Keep packed quantization/GEMM, replacing only SUM transport and epilogue."""
     from patches import tilelang_swiglu_pad as prepare,optimized_tp,parallel_int8 as original
     if not _supported(x,weight,weight_scale,world_size,groupsize,input_act):
+        if finish_fn is not None:raise ValueError('Fused row-gate requires the supported scaled-FP16 route')
         return prepare.row_linear(x,weight,weight_scale,comm,world_size,groupsize,input_act,variant='packed')
     width=x.shape[-1]//(2 if input_act=='swiglu' else 1)
     if optimized_tp.use_fallback_rotation(x,width*world_size,groupsize):
@@ -132,7 +133,8 @@ def row_linear(x,weight,weight_scale,comm,world_size,groupsize=256,input_act=Non
     with label('scaled_fp16_encode'):payload=encode(partial,'fp16',local_k)
     del partial
     with label('scaled_fp16_sum'):payload=collect(payload,'fp16',comm)
-    with label('scaled_fp16_fused_epilogue'):out=finish(payload,scale,weight_scale,'fp16',local_k)
+    with label('scaled_fp16_fused_epilogue'):
+        out=finish_fn(payload,scale,weight_scale,local_k) if finish_fn else finish(payload,scale,weight_scale,'fp16',local_k)
     return out.reshape(*shape[:-1],weight.shape[0])
 
 

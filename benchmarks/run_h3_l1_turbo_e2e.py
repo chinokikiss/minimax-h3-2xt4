@@ -24,9 +24,10 @@ from benchmarks.e2e_attention_validation import kitchen_denoiser_calls
 class CurrentRank(observation.ObservedRank):
     def _install_observers(self):
         super()._install_observers()
-        from patches import tilelang_swiglu_quant as fused,tilelang_transport_p2 as codec
+        from patches import tilelang_swiglu_quant as fused,tilelang_transport_p2 as codec,tilelang_dit_fusion as dit_fusion
         for module,name,label in ((fused,'prepare','current/fused_swiglu_quant'),
-                (codec,'finish','current/scaled_fp16_epilogue')):
+                (codec,'finish','current/scaled_fp16_epilogue'),
+                (dit_fusion,'finish_row','current/scaled_fp16_epilogue')):
             original=getattr(module,name)
             def observe(*args,_fn=original,_label=label,**kwargs):
                 self.backends[_label]+=1

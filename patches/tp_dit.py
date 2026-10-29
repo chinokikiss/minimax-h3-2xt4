@@ -123,9 +123,14 @@ class RowParallelLinearINT8(nn.Module):
         self.weight.data.copy_(full_weight[:, start:end].to(self.device))
         self.weight_scale.data.copy_(full_scale.to(self.device))
 
-    def forward(self, x: torch.Tensor, reduce_sum: bool = True, input_act=None) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, reduce_sum: bool = True, input_act=None,
+                *, residual=None,gate=None,segments=None) -> torch.Tensor:
         if not reduce_sum and self.world_size > 1:
             raise ValueError("Quantization-preserving projection requires reduction")
+        if residual is not None:
+            from patches.tilelang_dit_fusion import row_gated
+            fused=row_gated(self,x,residual,gate,segments,dist,input_act)
+            if fused is not None:return fused
         from patches.h3_operator_policy import row_linear as dispatch_row
         out=dispatch_row(self,x,row_linear,dist,input_act)
         adapter=getattr(self,'lora_adapter',None)
@@ -134,7 +139,12 @@ class RowParallelLinearINT8(nn.Module):
             # Preserve the old path's dtype/order when no FP32 island is used.
             source=x.float() if out.dtype==torch.float32 else x
             out=adapter.add_to(source,out,comm=dist if self.world_size>1 else None,input_act=input_act)
-        return out.to(x.dtype)
+        out=out.to(x.dtype)
+        if residual is not None:
+            from patches.h3_tensor_flow import gated_add
+            return gated_add(residual,gate,out,segments,
+                fused=getattr(getattr(self,'operator_policy',None),'dit_fused_gate',False))
+        return out
 
 class TPDiTBlockINT8(nn.Module):
     """
@@ -241,9 +251,10 @@ class TPDiTBlockINT8(nn.Module):
         transformer_options: Dict[str, Any] = {},
     ) -> torch.Tensor:
         flow=getattr(self,'tensor_flow',None)
+        policy=getattr(self,'operator_policy',None)
         if flow is not None:
             if x.dtype!=flow.dtype:raise ValueError('DiT residual dtype does not match tensor flow')
-            from patches.h3_tensor_flow import modulated_norm,gated_add
+            from patches.h3_tensor_flow import modulated_norm
         # 1. Modulation parameters
         adaln_out = self.adaln_proj(nn.functional.silu(t_emb) if self.apply_silu else t_emb)
         adaln_out = adaln_out.view(-1, 6 * self.hidden)
@@ -252,7 +263,8 @@ class TPDiTBlockINT8(nn.Module):
         # 2. Attention Block
         if flow is not None:
             normed_x = None
-            h=modulated_norm(self.norm1,x,shift_msa,scale_msa,mod_segments)
+            h=modulated_norm(self.norm1,x,shift_msa,scale_msa,mod_segments,
+                fused=getattr(policy,'dit_fused_norm',False))
         else:
             normed_x = self.norm1(x)
             h = self._mod_scale_shift(normed_x, shift_msa, scale_msa, mod_segments)
@@ -268,7 +280,6 @@ class TPDiTBlockINT8(nn.Module):
 
         if rope_freqs is not None:
             from patches.tilelang_fp32_rms_rope import supported,execute
-            policy=getattr(self,'operator_policy',None)
             if (flow is not None and getattr(policy,'dit_rms_rope','native')=='tilelang_fp32'
                     and supported(qkv,rope_freqs,self.heads_per_rank,self.head_dim)):
                 q,k=execute(qkv,rope_freqs,self.q_norm.weight,self.k_norm.weight,
@@ -288,21 +299,30 @@ class TPDiTBlockINT8(nn.Module):
         k_heads = k.transpose(0, 1).unsqueeze(0)
         v_heads = v.transpose(0, 1).unsqueeze(0)
 
-        from patches.h3_operator_policy import dit_attention
-        attn_out = dit_attention(self,q_heads,k_heads,v_heads,transformer_options)
-        # Release every QKV view before O's FP32 promotion/padding/rotation.
-        del qkv, q, k, v, q_heads, k_heads, v_heads
+        from patches.h3_operator_policy import dit_attention,prepare_dit_attention,execute_dit_attention
+        prepared=prepare_dit_attention(self,q_heads,k_heads,v_heads,transformer_options) if flow is not None else None
+        if prepared is not None:
+            del qkv,q,k,v,q_heads,k_heads,v_heads
+            attn_out=execute_dit_attention(prepared)
+            del prepared
+        else:
+            attn_out=dit_attention(self,q_heads,k_heads,v_heads,transformer_options)
+            del qkv,q,k,v,q_heads,k_heads,v_heads
         attn_out = attn_out.reshape(S,self.inner_per_rank)
 
         # RowParallel Out + AllReduce #1 (native INT32 SUM by default)
-        attn_out = self.out_proj(attn_out, reduce_sum=True)
-        x = gated_add(x,gate_msa,attn_out,mod_segments) if flow is not None else self._mod_gate(x, gate_msa, attn_out, mod_segments)
+        if flow is not None:
+            x=self.out_proj(attn_out,reduce_sum=True,residual=x,gate=gate_msa,segments=mod_segments)
+        else:
+            attn_out=self.out_proj(attn_out,reduce_sum=True)
+            x=self._mod_gate(x,gate_msa,attn_out,mod_segments)
         del attn_out
 
         # 3. MLP Block (SwiGLU)
         if flow is not None:
             normed_x2 = None
-            h2=modulated_norm(self.norm2,x,shift_mlp,scale_mlp,mod_segments)
+            h2=modulated_norm(self.norm2,x,shift_mlp,scale_mlp,mod_segments,
+                fused=getattr(policy,'dit_fused_norm',False))
         else:
             normed_x2 = self.norm2(x)
             h2 = self._mod_scale_shift(normed_x2, shift_mlp, scale_mlp, mod_segments)
@@ -310,9 +330,13 @@ class TPDiTBlockINT8(nn.Module):
         fc1_out = self.fc1(h2) # [S, 2 * ffn_per_rank]
         del normed_x2, h2
         # RowParallel FC2 + AllReduce #2 (native INT32 SUM by default)
-        mlp_out = self.fc2(fc1_out,input_act="swiglu")
-        del fc1_out
-        x = gated_add(x,gate_mlp,mlp_out,mod_segments) if flow is not None else self._mod_gate(x, gate_mlp, mlp_out, mod_segments)
-        del mlp_out
+        if flow is not None:
+            x=self.fc2(fc1_out,input_act='swiglu',residual=x,gate=gate_mlp,segments=mod_segments)
+            del fc1_out
+        else:
+            mlp_out=self.fc2(fc1_out,input_act='swiglu')
+            del fc1_out
+            x=self._mod_gate(x,gate_mlp,mlp_out,mod_segments)
+            del mlp_out
 
         return x
