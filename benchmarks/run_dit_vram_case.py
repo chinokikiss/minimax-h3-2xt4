@@ -17,6 +17,8 @@ from unittest.mock import patch
 
 import torch
 
+COMPILE_REQUESTS=[]
+
 
 def compare(actual,reference):
     actual=actual.detach().cpu();reference=reference.detach().cpu()
@@ -47,7 +49,7 @@ def balance(functions,barrier,*,warmups=2,repeats=5):
     keys=list(functions);result={k:dict(samples=[]) for k in keys}
     for name in keys:
         start=time.monotonic();value=functions[name]();torch.cuda.synchronize();del value
-        result[name]['first_call_seconds_including_compile']=time.monotonic()-start
+        result[name]['first_call_after_validation_seconds']=time.monotonic()-start
     for _ in range(warmups):
         for name in keys:
             barrier();value=functions[name]();del value
@@ -58,8 +60,10 @@ def balance(functions,barrier,*,warmups=2,repeats=5):
         for name in order:
             barrier();torch.cuda.synchronize()
             start,end=torch.cuda.Event(enable_timing=True),torch.cuda.Event(enable_timing=True)
+            compiles_before=len(COMPILE_REQUESTS)
             begin=time.perf_counter();start.record();value=functions[name]();end.record();end.synchronize()
-            result[name]['samples'].append(dict(cuda_ms=start.elapsed_time(end),wall_ms=1000*(time.perf_counter()-begin)))
+            result[name]['samples'].append(dict(cuda_ms=start.elapsed_time(end),wall_ms=1000*(time.perf_counter()-begin),
+                                               compile_requests=len(COMPILE_REQUESTS)-compiles_before))
             del value
     for name in keys:
         barrier();torch.cuda.synchronize();torch.cuda.empty_cache()
@@ -71,19 +75,21 @@ def balance(functions,barrier,*,warmups=2,repeats=5):
             median_cuda_ms=statistics.median(s['cuda_ms'] for s in result[name]['samples']),
             median_wall_ms=statistics.median(s['wall_ms'] for s in result[name]['samples']))
         del value
+        if any(sample['compile_requests'] for sample in result[name]['samples']):
+            raise RuntimeError('Unexpected compilation inside steady-state timing: '+name)
     return result
 
 
 def make_inputs(rows,device):
     # Deployment geometry and Native modality ordering, with an explicitly
     # generated residual fixture rather than a private activation capture.
-    segments=[(0,min(3892,rows),0)]
-    prefix=min(3892,rows)
-    if prefix<rows:
-        audio_end=min(prefix+810,rows);segments.append((prefix,audio_end,2))
-        if audio_end<rows:segments.append((audio_end,rows,1))
+    # Native tag order is video=0, text=1, audio=2. Use three
+    # timestep classes (video=.5, audio=.75, pinned text/references=1),
+    # so the modulation table has nine rows rather than one shared clock.
+    segments=[(a,min(b,rows),row) for a,b,row in
+              ((0,2392,7),(2392,3892,6),(3892,4702,5),(4702,59134,0)) if a<rows]
     from benchmarks.dit_vram_candidates import row_labels
-    labels=row_labels(rows,segments,device)
+    labels=row_labels(rows,segments,device,modulation_rows=9)
     x=torch.empty(rows,5376,device=device,dtype=torch.float16).normal_(0.,1./64.)
     angle=torch.arange(64,device=device,dtype=torch.float32)[None,:]*.01+torch.arange(rows,device=device)[:,None]*.0001
     c,s=angle.cos(),angle.sin()
@@ -153,7 +159,7 @@ def run(section,block,device,barrier,dist,out,state):
                  tokens=rows,hidden=5376,local_heads=28,head_dim=128,local_ffn=7168,
                  segments=segments,full_h3_pipeline=False,warmups=2,repeats=5)
     if section=='norm_gate':
-        shift=torch.randn(3,5376,device=device)*.1;scale=torch.randn_like(shift)*.1;gate=torch.randn_like(shift)*.1
+        shift=torch.randn(9,5376,device=device)*.1;scale=torch.randn_like(shift)*.1;gate=torch.randn_like(shift)*.1
         branch=torch.empty_like(x).normal_(0.,.02)
         # Also cover zero/tiny/max-FP16 rows and folded epsilon independently.
         tiny=x[:33].clone();tiny[0].zero_();tiny[1].fill_(1e-7);tiny[2,::128]=65504.
@@ -217,7 +223,7 @@ def run(section,block,device,barrier,dist,out,state):
         payload=torch.empty(rows,5376,device=device,dtype=torch.float16).uniform_(-64,64)
         scale=torch.full((rows,1),.001,device=device)
         weights=block.fc2.weight_scale
-        gate=torch.randn(3,5376,device=device)*.1
+        gate=torch.randn(9,5376,device=device)*.1
         def baseline():
             branch=codec.finish(payload,scale,weights,'fp16',local_k).half()
             return gated_add(x.clone(),gate,branch,segments)
@@ -235,7 +241,7 @@ def run(section,block,device,barrier,dist,out,state):
         from patches.kitchen_attention import int8_attention
         # Weights are real; this large input is generated through their QKV
         # projection, without rerunning the complete model or sampler.
-        packed=block.qkv_proj(modulated_norm(block.norm1,x,torch.zeros(3,5376,device=device),torch.zeros(3,5376,device=device),segments))
+        packed=block.qkv_proj(modulated_norm(block.norm1,x,torch.zeros(9,5376,device=device),torch.zeros(9,5376,device=device),segments))
         template=packed.cpu();del packed
         def call(split):
             qkv=template.to(device);q,k=execute(qkv,freqs,block.q_norm.weight,block.k_norm.weight,epsilon=block.q_norm.eps)
@@ -252,7 +258,8 @@ def run(section,block,device,barrier,dist,out,state):
         state['profiles']={name:profile(fn,out/(name+'.json')) for name,fn in functions.items()}
         state['timing_caveat']='Includes identical CPU template H2D staging in both cases; block timing is GPU-resident'
     elif section=='block':
-        time_embedding=torch.tensor([[1.,.5,.25,.125,.0625,.03125,.015625,.0078125]],device=device)
+        times=torch.tensor([.5,.75,1.],device=device)
+        time_embedding=times[:,None].pow(torch.arange(8,device=device)[None,:])
         excluded=state.get('excluded_variants',{})
         functions={name:(lambda n=name:candidate.forward(block,x.clone(),time_embedding,segments,freqs,labels,n))
                    for name in candidate.VARIANTS if name not in excluded}
@@ -307,6 +314,14 @@ def main():
     state=dict(status='starting',section=args.section,rank=rank,hardware=dict(torch=str(torch.__version__),
         cuda=torch.version.cuda,name=torch.cuda.get_device_name(device),capability=list(torch.cuda.get_device_capability(device))))
     if args.eligibility:state['excluded_variants']=json.loads(args.eligibility.read_text())
+    import tilelang
+    original_compile=tilelang.compile
+    def tracked_compile(*a,**kw):
+        caller=sys._getframe(1).f_globals.get('__name__');start=time.monotonic()
+        try:return original_compile(*a,**kw)
+        finally:COMPILE_REQUESTS.append(dict(module=caller,seconds=time.monotonic()-start,
+                                            scope='Compile request or persistent cache load, not necessarily a cold compiler invocation'))
+    tilelang.compile=tracked_compile
     try:
         from patches.legacy_runtime import validate_packages,validate_source
         validate_packages();validate_source(args.source/'ComfyUI')
@@ -329,6 +344,8 @@ def main():
     except BaseException as error:
         state.update(status='failed',error=repr(error));(out/'exception.txt').write_text(traceback.format_exc());raise
     finally:
+        tilelang.compile=original_compile
+        state['compile_requests']=COMPILE_REQUESTS
         (out/'result.json').write_text(json.dumps(state,indent=2));print('DIT_VRAM_RESULT',rank,args.section,state['status'],flush=True)
         if dist.is_initialized():dist.destroy_process_group()
 

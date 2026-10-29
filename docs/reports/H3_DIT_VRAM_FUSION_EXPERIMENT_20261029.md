@@ -17,8 +17,12 @@ needed. The generated residual fixture is not a real H3 distribution capture.
 
 All large tests use **59,134 tokens**, hidden 5,376, 28 local heads × 128,
 local FFN 7,168, current FP16-fix storage and FP32 stability islands. Modulation
-spans are text/references 0–3,892, audio 3,892–4,702, and video 4,702–59,134.
-Both ranks share the seeded input and time-basis fixture. Block weights are
+spans are text 0–2,392, reference images 2,392–3,892, audio 3,892–4,702, and
+video 4,702–59,134. Native modality tags are video=0, text=1, audio=2. Three
+conditioning clocks use a nine-row modulation table: pinned text/reference
+rows 7/6, audio row 5 and video row 0. Both ranks share the seeded input and
+generated eight-dimensional FP32 conditioning coordinates; these do not replay
+the checkpoint's interpolated AdaLN curve or a captured denoiser input. Block weights are
 real trained base weights, not PTD-baked weights; shapes/operator contracts
 match the PTD path, but generation-quality conclusions are out of scope.
 
@@ -74,7 +78,9 @@ errors remain in the results even if a candidate fails qualification.
 
 ## Measurement and evidence
 
-First-call time, including any compilation, is separate from steady state.
+Compile requests/cache loads are recorded separately. The first call after
+validation is labeled accordingly; it is not presented as a cold compilation.
+Any compilation observed inside a steady-state timing sample rejects that timing.
 Isolated sections use two warmups and five balanced/reversed repeats; attention
 and full block use one warmup and three repeats to bound GPU cost. Error
 reductions, model loading and profiler capture are outside timed measurements.
@@ -105,12 +111,19 @@ and core dependency lock remains byte-exact. Local execution uses conda
 `comfyui`; Kaggle retains its native Torch family and exact Kitchen 0.2.37 /
 TileLang 0.1.13 pins.
 
-The extracted candidate capsule passed **179 existing CPU tests and four new
-ownership/partition/chunk-destination tests** locally. SM75 factory compilation
+The extracted initial capsule passed **179 existing CPU tests and four new
+ownership/partition/chunk-destination tests** locally and on Kaggle CPU version 1.
+A pre-GPU Native-source audit corrected the fixture's modality tags and added
+three-clock/nine-row coverage, with a fifth CPU contract. A new immutable CPU
+qualification is required for that corrected capsule before GPU submission.
+SM75 factory compilation
 was checked locally without claiming T4 execution. An attempted SM75 launch on
 the local SM120 device correctly had no compatible binary; a separate SM120
-preview encountered the existing Windows compiler-diagnostic issue. Neither
-constitutes T4 numerical or performance evidence, and no dependency was changed.
+preview encountered the existing Windows compiler-diagnostic issue. A separate
+small SM120 scalar-store check then passed: gate, column store and fused row gate
+were byte-exact, and RMS relative RMSE was 3.59e-6. Vectorized stores were disabled
+only in that local compiler process, without package/source changes. Neither
+preview constitutes T4 numerical or performance evidence.
 
 In-place Q/K RMS-RoPE, the later combined FC1-dequant/SwiGLU producer, and
 phase-aware weight-window scheduling remain follow-ups. They are not silently

@@ -17,11 +17,11 @@ class Operand:
         return codes,scale
 
 
-def row_labels(rows,segments,device):
+def row_labels(rows,segments,device,modulation_rows=3):
     labels=torch.full((rows,),-1,dtype=torch.int32,device='cpu')
     for start,stop,row in segments:
-        if not (0<=start<stop<=rows and type(row) is int and 0<=row<3):
-            raise ValueError('Valid Native three-row modulation segments required')
+        if not (0<=start<stop<=rows and type(row) is int and 0<=row<modulation_rows):
+            raise ValueError('Valid bounded modulation rows required')
         if bool((labels[start:stop]!=-1).any()):raise ValueError('Overlapping modulation segments')
         labels[start:stop]=row
     if bool((labels<0).any()):raise ValueError('Modulation segments must cover the input')

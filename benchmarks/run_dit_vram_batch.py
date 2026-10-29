@@ -44,7 +44,7 @@ def main():
         state['trained_weight_inputs']=selected
         if args.cpu_preflight:
             result=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromName('benchmarks.test_dit_vram_candidates'))
-            assert result.wasSuccessful() and result.testsRun==4
+            assert result.wasSuccessful() and result.testsRun==5
             state.update(status='vram_cpu_ready',tests=result.testsRun,gpu_used=False,weights_fetched=False)
             return
         import torch

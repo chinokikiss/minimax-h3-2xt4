@@ -55,5 +55,14 @@ class Contracts(unittest.TestCase):
             self.assertNotIn('dit_vram_candidates',(root/'patches'/f'{name}.py').read_text())
         self.assertEqual([VARIANTS[n]['chunk'] for n in ('fc1_4k','fc1_8k','fc1_16k')],[4096,8192,16384])
 
+    def test_deployment_fixture_preserves_native_modality_tags_and_multiple_clocks(self):
+        from benchmarks.run_dit_vram_case import make_inputs
+        x,segments,labels,freqs=make_inputs(59134,'meta')
+        self.assertEqual(segments,[(0,2392,7),(2392,3892,6),(3892,4702,5),(4702,59134,0)])
+        self.assertEqual(tuple(x.shape),(59134,5376))
+        self.assertEqual(tuple(freqs.shape),(1,59134,1,64,2,2))
+        actual=row_labels(7,[(0,2,7),(2,5,6),(5,7,0)],'cpu',modulation_rows=9)
+        self.assertEqual(actual.tolist(),[7,7,6,6,6,0,0])
+
 
 if __name__=='__main__':unittest.main(verbosity=2)
