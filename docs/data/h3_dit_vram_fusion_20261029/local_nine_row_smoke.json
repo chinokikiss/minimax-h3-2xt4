@@ -1,0 +1,7 @@
+{
+  "scope": "Small SM120 scalar-store arithmetic only, not T4 validation or timing",
+  "modulation_rows": 9,
+  "norm_relative_rmse": 5.472728389577242e-06,
+  "gate_byte_exact": true,
+  "row_gate_byte_exact": true
+}

@@ -1,0 +1,90 @@
+{
+  "h3-dit-vram-fusion-cpu-20261029.log": {
+    "bytes": 5489,
+    "sha256": "243d86389d5691eb66b56240ddd0758dd5384545e3c95f96fdb48ef40216dcd5"
+  },
+  "dit_vram\\result.json": {
+    "bytes": 1541,
+    "sha256": "d663f626a0934001366ddda3392801c9f1771c51f69fae6d78bfa4016c487ebc"
+  },
+  "dit_vram_supervision\\bounded_worker.py": {
+    "bytes": 403,
+    "sha256": "ece266864f728ad051c347b32cf1a78ee649f72ad2183aab7b25e772da40ae02"
+  },
+  "dit_vram_supervision\\notebook_worker.log": {
+    "bytes": 828,
+    "sha256": "b7d9af397303efde570235081102aac75bf2cd7ea10bad7b40045e16996ffa13"
+  },
+  "dit_vram_supervision\\supervision.json": {
+    "bytes": 208,
+    "sha256": "a45cc5b621a70c1ef983d21dfcbfd805aa032a374bf7b459b17cc812b8a3e405"
+  },
+  "light_setup\\api_probe.log": {
+    "bytes": 1158,
+    "sha256": "e5900b029eaaff7664c772d6aec92634e63fb1e9124e059a28dbcdf1c7e212d4"
+  },
+  "light_setup\\bounded_worker.py": {
+    "bytes": 2082,
+    "sha256": "a4499d34bc5058d473de8cf8efa7ea62ca0a2b9c6f33d03f83c414f1ed662d32"
+  },
+  "light_setup\\cpu_tests.log": {
+    "bytes": 25183,
+    "sha256": "477e28483d13a040683b5da4e3bad700b08868796db593886fd36e29189294df"
+  },
+  "light_setup\\delivery_binding.json": {
+    "bytes": 765,
+    "sha256": "5e8c45f9f960abb5377a7d22198b3d3aa8bae022a537d80cd7405a0e8c7ae7ed"
+  },
+  "light_setup\\direct-core.txt": {
+    "bytes": 5914,
+    "sha256": "425f5b9f04c26bcf5b2bf79a823539166b7206da83d10cf4dff060a9b05ca483"
+  },
+  "light_setup\\direct_pip.log": {
+    "bytes": 15853,
+    "sha256": "757c887f46b9a6dca33e3d9bfede3d14893203cfaf1a08ed25767738c40855cc"
+  },
+  "light_setup\\execution_env.json": {
+    "bytes": 449,
+    "sha256": "53f8cbaa42b4a30ef25583746477a1d1570f37b3f30affd13d09ffcec0dd7911"
+  },
+  "light_setup\\linux_pread.json": {
+    "bytes": 664,
+    "sha256": "65a8fba081ac4d016b9e85485953a7bbc58c6a54e65165bf5774fa4706d243e0"
+  },
+  "light_setup\\linux_pread.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "light_setup\\notebook_worker.log": {
+    "bytes": 370,
+    "sha256": "91b6ec3f4aac065a7629a7cdbd3ed9f1efcf370ee8cedb0786a8c2b4fd0ab2b5"
+  },
+  "light_setup\\profiler_tool_versions.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "light_setup\\review_cpu_tests.json": {
+    "bytes": 175,
+    "sha256": "af0218cf06a5683438e86f628499e23eb713e2b7b634f7654a419addf4f0f952"
+  },
+  "light_setup\\review_cpu_tests.log": {
+    "bytes": 80455,
+    "sha256": "b056689a7425deb605272c76f7435e1dede5af4d7373b76751a16f5aa140e2aa"
+  },
+  "light_setup\\runtime_profile.json": {
+    "bytes": 25843,
+    "sha256": "eb48ace46c423b86231b895b48b5d8c8fcceb27048272a1accfa7cdae4cf6cf5"
+  },
+  "light_setup\\setup_receipt.json": {
+    "bytes": 129862,
+    "sha256": "0bb3e08825109d4d17588792c44e0eae0af59b1a1eb076351cea94897fe27e46"
+  },
+  "light_setup\\supervision.json": {
+    "bytes": 203,
+    "sha256": "ea32ff1bbf78622c6c2284f29c9d5e6e08f32f4d722f5b85e1f7524ce0e831ed"
+  },
+  "light_setup\\profiler_availability_cpu\\profilers.json": {
+    "bytes": 249,
+    "sha256": "f537865cf029cc1c9ac0e5a7a73aade4d8d712ee988a5dabe1ce2e2be49f8792"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "cpu_version": 2,
+  "cpu_status": "vram_cpu_ready",
+  "cpu_core_review": {
+    "passed": true,
+    "tests": 179,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 33.91956475200004,
+    "scope": "CPU contracts, not physical T4 qualification"
+  },
+  "candidate_tests": 5,
+  "source_capsule_sha256": "7286ec2f971f1ec7b096db161eb534a7e2d26ec1a20cbdb517f87bc2fcbb6fc3",
+  "source_publication_commit": "089a371ca64be5fe726361112b893a092786ff58",
+  "core_pins": {
+    "comfy-kitchen": "0.2.37",
+    "tilelang": "0.1.13"
+  },
+  "kitchen_split_api": {
+    "prequantize_int8_attention": "(q: 'torch.Tensor', k: 'torch.Tensor', v: 'torch.Tensor', *, scale: 'float | None' = None, attn_mask: 'torch.Tensor | None' = None) -> 'PrequantizedInt8Attention'",
+    "int8_attention_from_prequantized": "(quantized: 'PrequantizedInt8Attention') -> 'torch.Tensor'"
+  },
+  "setup_seconds": 140.81878862000008,
+  "gpu_version": 1,
+  "gpu_submission_status": "accepted",
+  "gpu_submitted_utc": "2026-10-29T08:20:38.637908+00:00",
+  "gpu_kernel": "pamcks/h3-dit-vram-fusion-t4-20261029",
+  "gpu_outcome": "Not queried; final artifacts pending",
+  "full_h3_pipeline": false,
+  "target": {
+    "tokens": 59134,
+    "hidden": 5376,
+    "local_ffn": 7168,
+    "local_heads": 28,
+    "head_dim": 128,
+    "modulation_rows": 9,
+    "tp": 2
+  },
+  "input_scope": "Two trained base rank shards plus generated activation/conditioning fixture; not a captured full H3 distribution",
+  "execution_budget_seconds": 1800,
+  "status_polling": false,
+  "production_defaults_changed": false
+}

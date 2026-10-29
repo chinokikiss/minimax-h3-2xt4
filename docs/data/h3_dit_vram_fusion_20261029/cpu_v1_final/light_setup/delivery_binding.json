@@ -1,0 +1,14 @@
+{
+  "file": "d5f6ac2f87036eea6954fa9f08461cba0ed5250275dc0e5999e36683b29b5b9a.tar.gz",
+  "sha256": "d5f6ac2f87036eea6954fa9f08461cba0ed5250275dc0e5999e36683b29b5b9a",
+  "bytes": 18680225,
+  "capsule_sha256": "c62c0f545eca173cfd4d08bc84fef38041f2428a299a7936cafd9828e9ee6ca9",
+  "source_files": 887,
+  "core_pins": 78,
+  "kaggle_mounts": 0,
+  "published": true,
+  "commit": "fc3128f20408759e33b3807d07663789e955d81f",
+  "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/fc3128f20408759e33b3807d07663789e955d81f/runtime/kaggle_artifacts/d5f6ac2f87036eea6954fa9f08461cba0ed5250275dc0e5999e36683b29b5b9a.tar.gz",
+  "zero_mounts": true,
+  "publication_verified": "Git push acknowledged and immutable HTTP HEAD; bootstrap checks full bytes and hash"
+}

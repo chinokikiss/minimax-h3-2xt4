@@ -1,0 +1,15 @@
+{
+  "parent_sha256": "1c961b1bd9113b0d6f81145535e3d239220d6140e70c5ef339a4755edbb72aa6",
+  "production_runtime_byte_exact": true,
+  "native_and_core_pins_preserved": true,
+  "benchmark_only_sources": [
+    "dit_vram_kernels.py",
+    "dit_vram_candidates.py",
+    "run_dit_vram_case.py",
+    "run_dit_vram_batch.py",
+    "test_dit_vram_candidates.py"
+  ],
+  "no_model_weights": true,
+  "no_private_inputs": true,
+  "no_credential": true
+}

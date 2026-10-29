@@ -1,0 +1,13 @@
+{
+  "device": "NVIDIA GeForce RTX 5060 Ti",
+  "t4_qualification": false,
+  "performance_measurements": false,
+  "target": "sm_120",
+  "local_only_workaround": "Disable vectorized stores in this compile process; no package/source changes",
+  "norm_max_abs": 0.0009765625,
+  "norm_relative_rmse": 3.5923530958825722e-06,
+  "gate_byte_exact": true,
+  "column_byte_exact": true,
+  "row_gate_byte_exact": true,
+  "status": "passed"
+}

@@ -1,0 +1,33 @@
+{
+  "status": "vram_cpu_ready",
+  "full_pipeline": false,
+  "no_private_inputs": true,
+  "no_lora_download": true,
+  "source_hashes": {
+    "dit_vram_kernels.py": "e9e2370df918f0645d784e6baa01db7a4f207a2f6c27b352afc96056efc41580",
+    "dit_vram_candidates.py": "4c6c11d60490d46bb87bdbae817bdb476af543e9827e8f28d184355481824c35",
+    "run_dit_vram_case.py": "5fab7d1ba3bbf61750fded6a4c59c2d02b7441951a39f99099ba450ec7d305b7",
+    "run_dit_vram_batch.py": "ba76f58c993ebf97fd7b5035a0a9f7fa963a0ef70955831abc770e20d5c83ecf",
+    "test_dit_vram_candidates.py": "9dc20ba7736c594fdf6df979589e6811bf1ae7ebf6e087f7929f5e6de55cb95d"
+  },
+  "capsule_sha256": "7286ec2f971f1ec7b096db161eb534a7e2d26ec1a20cbdb517f87bc2fcbb6fc3",
+  "kitchen_split_api": {
+    "prequantize_int8_attention": "(q: 'torch.Tensor', k: 'torch.Tensor', v: 'torch.Tensor', *, scale: 'float | None' = None, attn_mask: 'torch.Tensor | None' = None) -> 'PrequantizedInt8Attention'",
+    "int8_attention_from_prequantized": "(quantized: 'PrequantizedInt8Attention') -> 'torch.Tensor'"
+  },
+  "trained_weight_inputs": {
+    "dit.block00.rank0.safetensors": {
+      "sha256": "b2a368d96e29cf42f572003519985910c18b91059f02a33812fc1c622e51c980",
+      "bytes": 196348128,
+      "upload_seconds": 4.014930450000065
+    },
+    "dit.block00.rank1.safetensors": {
+      "sha256": "5bb1240c133cd836c88dcc6a8c5ab3ba34171e6098329fc55145e06ee54a6e27",
+      "bytes": 196348128,
+      "upload_seconds": 3.3703202359999977
+    }
+  },
+  "tests": 5,
+  "gpu_used": false,
+  "weights_fetched": false
+}

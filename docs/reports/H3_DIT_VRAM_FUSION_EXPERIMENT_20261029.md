@@ -1,8 +1,8 @@
 # DiT VRAM fusion: bounded T4 operator experiment
 
-Status: implementation and local CPU validation complete; fresh Kaggle CPU
-qualification precedes a separate physical two-T4 operator job. No results or
-default promotion are claimed yet. This experiment implements the first-stage
+Status: corrected Kaggle CPU version 2 passed **179 regression + 5 experiment
+tests**. Kaggle acknowledged **T4 operator version 1**; GPU execution outcome and
+final measurements remain pending. No default promotion is claimed. This experiment implements the first-stage
 candidates from [the ROI analysis](H3_DIT_VRAM_FUSION_ROI_20261029.md).
 
 The ongoing PTD E2E job is a separate immutable submission and is unchanged.
@@ -128,3 +128,23 @@ preview constitutes T4 numerical or performance evidence.
 In-place Q/K RMS-RoPE, the later combined FC1-dequant/SwiGLU producer, and
 phase-aware weight-window scheduling remain follow-ups. They are not silently
 included in this first batch.
+
+## Immutable submission
+
+- [CPU qualification, version 2](https://www.kaggle.com/code/pamcks/h3-dit-vram-fusion-cpu-20261029): corrected Native modulation fixture; exact frozen core/API gate passed. The installed Linux Kitchen exposes both split-attention functions.
+- [T4 operator batch, version 1](https://www.kaggle.com/code/pamcks/h3-dit-vram-fusion-t4-20261029): one accepted GPU submission; no status/list/live-log query.
+- Source commit `089a371`, archive `3b24746a0a09a9f87fbf8c39ae0f587fbd2bbabb8a8169be499feac814c21557`, capsule `7286ec2f971f1ec7b096db161eb534a7e2d26ec1a20cbdb517f87bc2fcbb6fc3`.
+- Evidence: `docs/data/h3_dit_vram_fusion_20261029/`; local raw working data: `D:\attention_eval\h3_dit_vram_fusion_20261029`.
+
+The initial four-contract CPU version and the corrected five-contract version
+each had one successful logical final-artifact collection. The GPU notebook
+uses the corrected capsule and both matching CPU qualification receipts. Neither
+CPU version fetched model weights or requested GPU acceleration. The initial
+capsule was never submitted as a GPU experiment.
+
+The artifact-only analyzer checks incomplete sections, keeps numerical/trace
+blockers, and computes the median after taking the slower rank in each aligned
+repeat. Its three synthetic CPU tests passed; those fixtures are not GPU
+performance measurements. An additional nine-row SM120 scalar-store arithmetic
+check passed (RMS relative RMSE 5.47e-6, exact gate/row-gate outputs), again without
+claiming T4 qualification or substituting its performance.
