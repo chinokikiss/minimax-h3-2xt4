@@ -1,0 +1,29 @@
+{
+  "qualified_capsule_sha256": "21abe7dd91f284eed9626bb018c6abf66adf1c066b2f76662d72ce53d46d41a1",
+  "production_files_compared": 97,
+  "all_staged_production_matches_qualified_source_after_crlf_normalization": true,
+  "newly_synced_paths": [
+    "patches/comfy_sampler.py",
+    "patches/kitchen_attention.py",
+    "patches/kitchen_attention_native/attention.cu",
+    "patches/kitchen_attention_native/vendor/LICENSE",
+    "patches/kitchen_attention_native/vendor/NOTICE",
+    "patches/kitchen_attention_native/vendor/attn_utils.cuh",
+    "patches/kitchen_attention_native/vendor/cp_async.cuh",
+    "patches/kitchen_attention_native/vendor/manifest.json",
+    "patches/kitchen_attention_native/vendor/math.cuh",
+    "patches/kitchen_attention_native/vendor/mma.cuh",
+    "patches/kitchen_attention_native/vendor/numeric_conversion.cuh",
+    "patches/kitchen_attention_native/vendor/permuted_smem.cuh",
+    "patches/kitchen_attention_native/vendor/qk_int_sv_i8_cuda.cuh",
+    "patches/kitchen_te_attention.py",
+    "patches/parallel_vae.py",
+    "patches/tp_video_vae.py"
+  ],
+  "newer_working_edits_preserved_uncommitted": [
+    "custom_nodes/minimax_h3_tp2/__init__.py",
+    "patches/comfy_tp_runtime.py",
+    "patches/h3_operator_policy.py"
+  ],
+  "scope": "Existing CPU-qualified and physical-T4-executed source; no new runtime implementation or upstream update"
+}

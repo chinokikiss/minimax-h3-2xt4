@@ -1,0 +1,10 @@
+{
+  "started_utc": "2026-10-29T15:54:16.372173+00:00",
+  "kind": "missing_final_artifact_retry",
+  "retained_files": 8,
+  "status": "downloaded",
+  "status_polling": false,
+  "returned_files": 19,
+  "completed_utc": "2026-10-29T15:58:01.217351+00:00",
+  "local_files": 27
+}

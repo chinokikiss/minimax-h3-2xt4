@@ -71,7 +71,8 @@ class VideoDecodeWeights(nn.Module):
         self.decoder = ViT3DDecoder(operations=ops, num_layers=36)
 
     def _decode_pixels(self, z):
-        return self.decoder(self.post_quant_conv(z))
+        from patches.kitchen_attention import native_scope
+        with native_scope():return self.decoder(self.post_quant_conv(z))
 
 
 def checkpoint_plan(path, kind):
@@ -200,7 +201,8 @@ def parallel_attention(self, x, rotary_pos_emb, pre_norm, residual, residual_sca
     q, k, v = (a.transpose(1, 2) for a in (q, k, v))
     sizes = [end - start for start, end in run.ranges]
     full_k, full_v = run.exchange(torch.stack((k, v)), sizes, 'kv', 3).unbind(0)
-    out = comfy.quant_ops.ck.int8_attention(q, full_k, full_v)
+    from patches.kitchen_attention import int8_attention
+    out = int8_attention(q, full_k, full_v)
     out = out.transpose(1, 2).reshape(b, s, -1)
     return comfy.ops.linear_input_act(self.to_out, torch.nan_to_num(out), None,
                                      residual=residual, residual_scale=residual_scale)

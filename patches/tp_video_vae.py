@@ -78,7 +78,8 @@ class RealTPTransformerBlock(nn.Module):
             q = torch.nn.functional.rms_norm(q, (self.dim_head,), eps=self.eps)
             k = torch.nn.functional.rms_norm(k, (self.dim_head,), eps=self.eps)
         q, k, v = (a.transpose(1, 2) for a in [q, k, v])
-        out = ck.int8_attention(q, k, v).transpose(1, 2).reshape(b, s, self.inner_dim_per_rank)
+        from patches.kitchen_attention import int8_attention
+        out = int8_attention(q, k, v).transpose(1, 2).reshape(b, s, self.inner_dim_per_rank)
         full, _, _ = gather(torch.nan_to_num(out), dist, -1)
         x = ck.int8_linear(full, self.qw_out_full, self.qs_out_full, self.b_out, x.dtype,
             convrot=True, convrot_groupsize=self.convrot_groupsize, residual=x, residual_scale=self.scale1)

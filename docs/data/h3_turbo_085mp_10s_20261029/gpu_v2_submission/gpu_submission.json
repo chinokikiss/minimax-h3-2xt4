@@ -82,7 +82,7 @@
   },
   "run_timeout_seconds": 8100,
   "earliest_final_collection_seconds": 8100,
-  "final_collection_count": 0,
+  "final_collection_count": 1,
   "result_relative": "turbo_085mp_e2e/batch_results.json",
   "notebook_sha256": "f0cdfa9c4998681a026f40a200fa7bc780fc991ad7992e110c9271d8adcdd35f",
   "returncode": 0,

@@ -178,7 +178,8 @@ class DecodeHandoff:
     def _decode(self, method, *args, **kwargs):
         with self.service.lock:
             self.service.call('decode_start')
-            output = method(*args, **kwargs)
+            from patches.kitchen_attention import native_scope
+            with native_scope():output = method(*args, **kwargs)
             device = torch.device(self.vae.device)
             if device.type == 'cuda':
                 torch.cuda.synchronize(device)

@@ -1,0 +1,34 @@
+{
+  "light_setup\\api_probe.log": {
+    "bytes": 1420,
+    "sha256": "16401c525113952b9f12881dd4803be748019d8aa892a98da31d95f79f04a26d"
+  },
+  "light_setup\\bounded_worker.py": {
+    "bytes": 1925,
+    "sha256": "bea3b9742f63f13068f538c1798912bb8b693e93eb9a3ef9d2a14ecfe4c698dd"
+  },
+  "light_setup\\cpu_qualification.json": {
+    "bytes": 123443,
+    "sha256": "0577fced71e7f5c85601d37bb55d5c91a975ddf886181ba3b54791d8019e7cdf"
+  },
+  "light_setup\\delivery_binding.json": {
+    "bytes": 629,
+    "sha256": "d52e2a8bccc1536beb0c5b1a26ff9a4cf34f63a75f980fdab8fce3f78cba5b30"
+  },
+  "light_setup\\direct-core.txt": {
+    "bytes": 5811,
+    "sha256": "f67dca5cc9543d06bcca19426bda0914306d6e143f8712037e84ee54f30e8eee"
+  },
+  "light_setup\\direct_pip.log": {
+    "bytes": 15658,
+    "sha256": "bf0a47efcf9f0a313fed3cbbc9187ad1fcd80c321c90f2265e793cd29715b328"
+  },
+  "light_setup\\execution_env.json": {
+    "bytes": 449,
+    "sha256": "53f8cbaa42b4a30ef25583746477a1d1570f37b3f30affd13d09ffcec0dd7911"
+  },
+  "light_setup\\notebook_worker.log": {
+    "bytes": 211,
+    "sha256": "a236037b442479f19c7968c83a44398e1f9c04babd0ba7e40eb7071543ebf739"
+  }
+}

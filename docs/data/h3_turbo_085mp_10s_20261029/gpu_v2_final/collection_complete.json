@@ -1,0 +1,15 @@
+{
+  "status": "complete",
+  "remote_artifacts": 27,
+  "public_artifacts": 24,
+  "private_payloads": [
+    "audio.wav",
+    "decode_inputs.pt",
+    "video.mp4"
+  ],
+  "submission_version": 2,
+  "source_binding_verified": true,
+  "initial_transport_failure_preserved": true,
+  "missing_file_retry_count": 1,
+  "kaggle_status_polling": false
+}

@@ -2,6 +2,8 @@
 
 [Documentation index](../README.md)
 
+[0.85 MP / 10-second regular Turbo E2E](H3_TURBO_085MP_10S_E2E_20261030.md) completed all eight steps on two T4s, with stage timings, memory evidence and verified media; quality review remains pending.
+
 [All-stage operator preparation, scoped cu128 defaults and pipelined bake](H3_OPERATORS_AOT_BAKE_BATCH_20261028.md) records the implementation, exact AOT scope and physical two-T4 results; compiled caches retained, guarded RMS-RoPE promoted and convolution fallback rejected.
 
 [TE causal prefix invariance and FP32 precision](TE_CAUSAL_PREFIX_PRECISION_20261026.md)

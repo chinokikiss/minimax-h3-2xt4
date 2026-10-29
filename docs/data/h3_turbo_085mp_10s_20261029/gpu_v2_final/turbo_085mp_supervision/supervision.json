@@ -1,0 +1,8 @@
+{
+  "status": "worker_exited",
+  "deadline_seconds": 7200,
+  "scope": "Notebook cell execution only; provider startup/mounting excluded",
+  "worker_pid": 97,
+  "exit_code": 0,
+  "seconds": 2745.7539522290003
+}

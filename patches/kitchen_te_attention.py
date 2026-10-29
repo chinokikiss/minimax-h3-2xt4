@@ -1,7 +1,7 @@
 """Kitchen TE prefill, preserving boolean/additive masks and compact GQA.
 
-The default calls the pinned Kitchen mask API directly. The implicit native
-kernel is an explicit experiment; mask recognition can dominate short calls.
+The default uses the shared Kitchen adapter, with direct FP32 output for FP32
+inference. The historical implicit native kernel remains an explicit experiment.
 """
 from collections import OrderedDict
 from functools import lru_cache
@@ -108,9 +108,9 @@ def plain_causal_mask(mask,n,nk):
 
 
 def attention(q,k,v,mask=None,*,use_native=False):
-    import comfy_kitchen as ck
+    from patches.kitchen_attention import int8_attention
     if not use_native:
-        out=ck.int8_attention(q,k,v,attn_mask=mask)
+        out=int8_attention(q,k,v,attn_mask=mask)
         return out.transpose(1,2).reshape(q.shape[0],q.shape[2],-1)
     backend=_backend_for_device(q.device)
     shape=tuple(mask.shape) if mask is not None else ()
@@ -122,5 +122,5 @@ def attention(q,k,v,mask=None,*,use_native=False):
             and not any(t.requires_grad for t in (q,k,v))
             and plain_causal_mask(mask,q.shape[2],k.shape[2])):
         out=backend.attention(q,k,v,is_causal=True)
-    else:out=ck.int8_attention(q,k,v,attn_mask=mask)
+    else:out=int8_attention(q,k,v,attn_mask=mask)
     return out.transpose(1,2).reshape(q.shape[0],q.shape[2],-1)

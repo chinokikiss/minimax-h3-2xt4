@@ -1,0 +1,9 @@
+{
+  "status": "final_outputs_unavailable",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-turbo-0-85mp-10s-t4-20261029",
+  "output": "D:\\attention_eval\\h3_turbo_085mp_10s_20261029\\retry2\\kaggle\\gpu_final",
+  "returncode": 1,
+  "files": 8,
+  "completed_utc": "2026-10-29T15:53:32.661753+00:00"
+}

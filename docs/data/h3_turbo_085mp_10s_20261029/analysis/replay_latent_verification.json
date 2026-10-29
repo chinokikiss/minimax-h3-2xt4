@@ -1,0 +1,25 @@
+{
+  "video": {
+    "shape": [
+      1,
+      24,
+      72,
+      44,
+      76
+    ],
+    "dtype": "torch.float32",
+    "sha256": "d59ed19057d88d9f5af78a851b35b28b3bbe4bcefe172f90f8be9cd234f65ccd",
+    "finite": true
+  },
+  "audio": {
+    "shape": [
+      1,
+      32,
+      2,
+      405
+    ],
+    "dtype": "torch.float32",
+    "sha256": "63b62e4627c246014ab6001c8d60a2333dfd31315afe3f603953e489983795c2",
+    "finite": true
+  }
+}

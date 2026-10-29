@@ -37,3 +37,7 @@
 /docs/data/h3_turbo_09mp_10s_20261029/gpu_v1_final/**/exception.txt -text -whitespace
 
 /docs/data/h3_turbo_085mp_10s_20261029/gpu_v1_final/**/exception.txt -text -whitespace
+
+/patches/kitchen_attention.py -text
+
+/patches/kitchen_attention_native/** -text -whitespace
