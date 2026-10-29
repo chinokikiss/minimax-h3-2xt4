@@ -1,0 +1,24 @@
+{
+  "status": "ptd_cpu_ready",
+  "capsule_sha256": "4877485cceaf780798665794dc40ae94143c2cfc3078dd46a4133f174f1801c6",
+  "full_pipeline": false,
+  "no_local_lora_download": true,
+  "scope": "2 trained blocks, both refiners, full head banks, all 8 hops",
+  "resources": {
+    "refiner_bound": 3194093568,
+    "block_bound": 197395456,
+    "weight_bytes": 6442450944,
+    "cache_bytes": 4294967296,
+    "pinned_bytes": 4294967296,
+    "host_bytes": 21474836480,
+    "reserve_bytes": 4294967296
+  },
+  "core_api_imports": true,
+  "no_weights_fetched": true,
+  "registration_contract_tests": 2,
+  "queue_contract_tests": 7,
+  "scheduling_contract_tests": 13,
+  "split_contract_tests": 16,
+  "cpu_scheduling": false,
+  "split_auxiliary": true
+}
