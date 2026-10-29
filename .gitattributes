@@ -24,3 +24,5 @@
 /docs/data/h3_dit_hash_ablation_20261029/**/*.log -text -whitespace
 /docs/data/h3_writable_disk_capacity_20261029/** -text whitespace=cr-at-eol
 /docs/data/h3_writable_disk_capacity_20261029/**/*.log -text -whitespace
+/docs/data/h3_turbo_1mp_10s_20261029/** -text whitespace=cr-at-eol
+/docs/data/h3_turbo_1mp_10s_20261029/**/*.log -text -whitespace
