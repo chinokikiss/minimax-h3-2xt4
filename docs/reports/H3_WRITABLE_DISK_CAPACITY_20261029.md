@@ -48,3 +48,18 @@ Sources:
 Submission/source receipts will be retained under
 `docs/data/h3_writable_disk_capacity_20261029/`. No provider status/list/live-log
 polling is used; results are collected separately after completion.
+
+## Submission
+
+Kaggle acknowledged **version 1** of
+[H3 Writable Disk Capacity CPU 20261029](https://www.kaggle.com/code/pamcks/h3-writable-disk-capacity-cpu-20261029).
+The embedded probe and contracts are bound to immutable source commit
+`1a79945db6d0b6ddd3e63191e0547363ee903c45` and individual SHA256 hashes.
+GPU acceleration and internet access are disabled; no source/model downloads or
+dependency installation are needed by the submitted script. Its watchdog is
+3,150 seconds and the provider timeout is 3,300 seconds.
+
+Only the submission acknowledgement has been received. Actual writable-capacity
+results are **pending**, with final collection count zero. No scheduling state
+or live logs have been queried. Source binding, exact submitted script, metadata
+and acknowledgement receipts are archived in the data folder above.

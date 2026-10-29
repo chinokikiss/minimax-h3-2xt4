@@ -1,0 +1,16 @@
+{
+  "id": "pamcks/h3-writable-disk-capacity-cpu-20261029",
+  "title": "H3 Writable Disk Capacity CPU 20261029",
+  "code_file": "experiment.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "docker_image_pinning_type": "original",
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": [],
+  "model_sources": []
+}

@@ -1,0 +1,39 @@
+{
+  "status": "accepted",
+  "kernel": "pamcks/h3-writable-disk-capacity-cpu-20261029",
+  "submitted_utc": "2026-10-29T11:22:11.271509+00:00",
+  "source_binding": {
+    "source_commit": "1a79945db6d0b6ddd3e63191e0547363ee903c45",
+    "source_sha256": {
+      "kaggle_write_capacity.py": "ebb95e9b0aa017cb4dec6ba08c5913135047745a43bed22c5b4669a9cdaf2875",
+      "test_kaggle_write_capacity.py": "be126a8e1028cc86231c77cd7a1b8e9e331322a61dfc7acab9cb17bf0c209875"
+    },
+    "source_urls": {
+      "kaggle_write_capacity.py": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/1a79945db6d0b6ddd3e63191e0547363ee903c45/benchmarks/kaggle_write_capacity.py",
+      "test_kaggle_write_capacity.py": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/1a79945db6d0b6ddd3e63191e0547363ee903c45/benchmarks/test_kaggle_write_capacity.py"
+    },
+    "embedded_sources": true,
+    "cpu_only": true,
+    "stdlib_only": true,
+    "installs": false,
+    "h3_runtime_loaded": false,
+    "native_packages_unchanged": true,
+    "credentials": false,
+    "dataset_sources": [],
+    "kernel_sources": [],
+    "per_disk_byte_cap": 549755813888,
+    "per_disk_seconds": 1500,
+    "overall_probe_seconds": 3000,
+    "watchdog_seconds": 3150,
+    "report_headroom_bytes": 536870912
+  },
+  "script_sha256": "c098724aa8036e6ce199af5076eaab590101792cfe7aa92c6046b671b0dd78c1",
+  "run_timeout_seconds": 3300,
+  "final_collection_count": 0,
+  "cpu_only": true,
+  "result_relative": "disk_capacity/result.json",
+  "collection": "One final artifact retrieval; no status/live-log polls",
+  "returncode": 0,
+  "version": 1,
+  "url": "https://www.kaggle.com/code/pamcks/h3-writable-disk-capacity-cpu-20261029"
+}
