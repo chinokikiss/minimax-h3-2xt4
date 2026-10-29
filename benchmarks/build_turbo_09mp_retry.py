@@ -27,7 +27,7 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--previous',type=Path,required=True)
     p.add_argument('--evidence',type=Path,required=True);p.add_argument('--control-commit',required=True)
     p.add_argument('--reference-directory',type=Path,required=True);p.add_argument('--reference-mirror',type=Path,required=True)
-    p.add_argument('--megapixels',choices=('0.9','0.85'),default='0.9')
+    p.add_argument('--megapixels',choices=('0.9','0.85','0.8'),default='0.9')
     p.add_argument('--failed-result',type=Path)
     p.add_argument('--submit',action='store_true');args=p.parse_args()
     assert re.fullmatch('[0-9a-f]{40}',args.control_commit)
@@ -42,7 +42,8 @@ def main():
     failed_path=args.failed_result or previous/'kaggle/gpu_final/turbo_1mp_e2e/generation/result.json'
     failed=json.loads(failed_path.read_text(encoding='utf-8'))
     assert failed['status']=='failed' and 'out of memory' in failed['error'].lower()
-    width,height,tag,slug={'0.9':(1280,704,'09mp','0-9mp'),'0.85':(1216,704,'085mp','0-85mp')}[args.megapixels]
+    width,height,tag,slug={'0.9':(1280,704,'09mp','0-9mp'),'0.85':(1216,704,'085mp','0-85mp'),
+        '0.8':(1184,672,'08mp','0-8mp')}[args.megapixels]
     plan=json.loads((previous/'delivery/plan.json').read_text());assert (plan['width'],plan['height'])==(1344,768)
     plan.update(width=width,height=height,name=f'turbo_{tag}_10s',
         source_note=f'Explicitly authorized {args.megapixels}MP retry after GPU OOM; no new CPU smoke, same regular Turbo inputs/settings')

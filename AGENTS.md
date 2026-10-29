@@ -25,6 +25,11 @@
 - After the 0.9 MP OOM, the user requests another direct GPU retry, finally selecting approximately 0.85 MP (1216×704). Skip a new CPU smoke test and reuse the successful unchanged runtime/core qualification with the separately hashed benchmark contract overlay.
 - Keep the 10-second regular Turbo workload, offline bake, model/LoRA, references, seed, sampler and dependency pins unchanged. Retain prior failure artifacts and submit only one GPU job; no status/live-log polling.
 
+## Authorized 0.8 MP resolution retry — 2026-10-29
+
+- After the 0.85 MP OOM, the user explicitly requests one 0.8 MP direct GPU retry (1184×672) and skipping the CPU smoke test. Reuse the successful unchanged runtime/core qualification with a separately hashed benchmark-only contract overlay; do not relabel the old qualification.
+- Preserve the ten-second regular Turbo workload, offline LoRA bake, inputs, sampler, source and core pins. Retain the previous failure artifacts and receipts. No status/live-log polling or automatic duplicate submission.
+
 ## Authorized Kaggle exception — 2026-10-21
 
 - The user explicitly permits Kaggle's native Torch rather than reproducing the local Windows Torch/CUDA package stack. Keep its matching native Python/NumPy/Torchvision/Torchaudio/CUDA environment and record actual versions; do not modify the local conda environment or original snapshot.
