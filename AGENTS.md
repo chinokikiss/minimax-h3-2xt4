@@ -14,6 +14,12 @@
 - Low-level bundle readers retain verified defaults for offline baking and integrity tools. Inference receives the runtime flag explicitly; A/B experiments must select both arms explicitly.
 - The user authorizes one regular Turbo LoRA long E2E challenge at approximately 1 MP and 10 seconds, with persisted offline TP2 baking. This is not PTD. Preserve the existing source/core pins, CPU-before-GPU qualification and no-status-polling policy.
 
+## Authorized 0.9 MP resolution retry — 2026-10-29
+
+- After the 1 MP GPU OOM, the user explicitly requests one 0.9 MP resubmission and skipping the CPU smoke test. Reuse the successful prior CPU qualification for the unchanged runtime/core. No new CPU smoke instance is required for this resolution retry.
+- Preserve the qualified source capsule and core setup; record a content-hashed benchmark-only canvas/export-validation overlay separately. Do not fabricate a fresh CPU receipt for that overlay or change production operators, dependency versions, model/LoRA, prompts, references, seed or sampler settings.
+- Retain failed-job artifacts and receipts. No status/live-log polling or automatic duplicate submission.
+
 ## Authorized Kaggle exception — 2026-10-21
 
 - The user explicitly permits Kaggle's native Torch rather than reproducing the local Windows Torch/CUDA package stack. Keep its matching native Python/NumPy/Torchvision/Torchaudio/CUDA environment and record actual versions; do not modify the local conda environment or original snapshot.
