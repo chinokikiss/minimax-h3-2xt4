@@ -1,0 +1,22 @@
+{
+  "parent_sha256": "6fbf526443929aca96a756bd060dbe583621753fdfe2e2b1a8d2a1405eed8b9a",
+  "original_runtime_files_preserved": true,
+  "native_comfyui_preserved": true,
+  "core_pins_preserved": true,
+  "benchmark_only_changes": true,
+  "observer_fix": "Classify every RPC, including Temporal decoder",
+  "unrelated_dirty_changes_excluded": true,
+  "split_auxiliary": false,
+  "no_local_lora_download": true,
+  "credentials": false,
+  "full_pipeline_authorized": true,
+  "plan_sha256": "e3f41e19abd642d0a3a890773525defe04caec5fb0efe19d1c14c2abdbf6604d",
+  "frozen_sha256": {
+    "direct_core_requirements.json": "50eb673de9cb28e6b17a4c59997793eb3ed2df68d7da6a8d2fe9d5761aef9db3",
+    "frozen/comfy_source.tar.gz.bin": "97cb93348993c7ff9a1390680ca4509d2880712707ae5bb249a1f4b2e8a92ebc",
+    "frozen/constraints-local-conda.txt": "5a94152799828ea794a0f84ddd925df76967a89692b24a13f3ee16b3b254f573",
+    "frozen/frozen_kaggle_setup.py": "fd6c168e576e8b654803408380985260d1f38c651e5698644d6cb27674ecc318",
+    "frozen/local_conda.json": "e3a07afb8cb79e6f45c9c0118debc4bd4008c022d2652e0891273dac2db07aa3",
+    "frozen/requirements-local-conda.txt": "81e4f75c02676e0bdb7e35cb5ad3746465053935a23e764be7c385d46585c3f7"
+  }
+}
