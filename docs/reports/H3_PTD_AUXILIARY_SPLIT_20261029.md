@@ -106,4 +106,7 @@ Source capsule SHA256: `4877485cceaf780798665794dc40ae94143c2cfc3078dd46a4133f17
 
 Local evidence: `D:\attention_eval\h3_ptd_aux_split_20261029`. Native ComfyUI archive and exact core-lock hashes match the previous frozen parent; unrelated dirty-worktree changes are excluded.
 
+Published source commit: `78a3d135d226ade1584fac538a8951971b3fafff`.
+Kaggle accepted [H3 PTD Aux Split CPU 20261029](https://www.kaggle.com/code/pamcks/h3-ptd-aux-split-cpu-20261029), version 1. Final CPU outputs have not been collected; no P2 GPU job has been submitted. The paired T4 job requires this capsule's successful CPU setup and split-contract receipts. Collection will be one final artifact request when prompted, without status/live-log polling.
+
 Implementation: [auxiliary units](../../patches/ptd/auxiliary.py), [bank/migration](../../patches/ptd/bank.py), [runtime trust binding](../../patches/ptd/runtime.py), [contract tests](../../benchmarks/test_ptd_auxiliary.py), [bounded experiment](../../benchmarks/run_ptd_tp2_t4.py).
