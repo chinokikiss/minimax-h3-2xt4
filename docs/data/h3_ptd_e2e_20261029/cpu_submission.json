@@ -1,0 +1,73 @@
+{
+  "kernel": "pamcks/h3-ptd-long-e2e-cpu-20261029",
+  "status": "accepted",
+  "submitted_utc": "2026-10-29T06:23:49.252028+00:00",
+  "source_binding": {
+    "mode": "cpu",
+    "publication": {
+      "published": true,
+      "url": "https://raw.githubusercontent.com/chinokikiss/minimax-h3-2xt4/b79b1bce1b8450a250e58bb8c8676630e58b4f59/runtime/kaggle_artifacts/3c0aa394f0d8da7c7e77dacc692cf1153da31d74945110a2075f017e35d7b30f.tar.gz",
+      "commit": "b79b1bce1b8450a250e58bb8c8676630e58b4f59",
+      "sha256": "3c0aa394f0d8da7c7e77dacc692cf1153da31d74945110a2075f017e35d7b30f",
+      "bytes": 18672505,
+      "capsule_sha256": "ca75f4b685f929060402a0860e0441e6d0eafff038b24495df810620ef0b4d52",
+      "zero_mounts": true,
+      "publication_verified": "Git push and HTTP HEAD; full size/SHA checked during bootstrap"
+    },
+    "qualification_sha256": null,
+    "kaggle_dataset_sources": [],
+    "kaggle_kernel_sources": [],
+    "temporary_private_auth": false,
+    "profile_hashes": {},
+    "setup_budget": 600,
+    "execution_budget": 300,
+    "dit_lifetimes": false,
+    "dit_attention": "kitchen",
+    "review_suite": true,
+    "review_recovery": false,
+    "turbo_e2e": false,
+    "vae_compare_preflight": false,
+    "vae_ab_bake": false,
+    "dit_pair": false,
+    "dit_pair_retry": false,
+    "pair_qualification_sha256": null,
+    "vae_input_qualification_sha256": null,
+    "profile_qualification_sha256": null,
+    "full_pipeline": false,
+    "full_pipeline_authorized": true,
+    "production_layers": 50,
+    "expert_hops": 8,
+    "split_auxiliary": false,
+    "fp32_sidecar": false,
+    "online_lora": false,
+    "private_references": true,
+    "credentials": false,
+    "request_contract": {
+      "prompt_sha256": "e2ebe6a75563a0184ef5fa99299acef24ee3170855774761c44d6714fb2f7754",
+      "reference_sha256": [
+        "e5b1710572f2587f7927e65b9e5f8f742bc435ca388ae23a16880fa6bf542383",
+        "cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03"
+      ],
+      "geometry": [
+        1152,
+        672,
+        243
+      ],
+      "layers": 50,
+      "hops": 8,
+      "pruned_adaln_approximation": true,
+      "split_auxiliary": false,
+      "full_pipeline": true
+    },
+    "plan_sha256": "e3f41e19abd642d0a3a890773525defe04caec5fb0efe19d1c14c2abdbf6604d",
+    "ptd_qualification_sha256": null
+  },
+  "run_timeout_seconds": 1100,
+  "earliest_final_collection_seconds": 1100,
+  "final_collection_count": 0,
+  "result_relative": "ptd_e2e_cpu/result.json",
+  "notebook_sha256": "02bc456634151c2366729a38982b1cb469aab7b28c341a365606bd1d203ad123",
+  "returncode": 0,
+  "version": 1,
+  "url": "https://www.kaggle.com/code/pamcks/h3-ptd-long-e2e-cpu-20261029"
+}
