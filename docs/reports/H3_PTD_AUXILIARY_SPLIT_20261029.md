@@ -113,4 +113,15 @@ Using those successful source-bound receipts, Kaggle accepted [H3 PTD Aux Split 
 
 The [CPU receipts and summary](../data/h3_ptd_aux_split_20261029/cpu_final/summary.json), [accepted T4 submission](../data/h3_ptd_aux_split_20261029/t4_submission_v1.json) and [source binding](../data/h3_ptd_aux_split_20261029/t4_source_binding_v1.json) preserve the evidence.
 
+The user-requested final T4 artifact collection at **2026-10-29 04:16:54 UTC**
+(12:16:54 Beijing) failed with `SSLEOFError: UNEXPECTED_EOF_WHILE_READING`
+while connecting to Kaggle's output service. The CLI returned 1 and downloaded
+zero files. This is a collection transport failure; it does **not** establish
+that the GPU job failed, completed, or is still running. Output equality,
+physical hardware qualification, timing and memory conclusions remain
+unavailable. The exclusive collection claim is retained, with no automatic
+retry, status/live-log polling or duplicate submission. See the
+[blocker receipt](../data/h3_ptd_aux_split_20261029/t4_collection_blocker_v1.json)
+and [original CLI error](../data/h3_ptd_aux_split_20261029/t4_collection_transport_error_v1.txt).
+
 Implementation: [auxiliary units](../../patches/ptd/auxiliary.py), [bank/migration](../../patches/ptd/bank.py), [runtime trust binding](../../patches/ptd/runtime.py), [contract tests](../../benchmarks/test_ptd_auxiliary.py), [bounded experiment](../../benchmarks/run_ptd_tp2_t4.py).

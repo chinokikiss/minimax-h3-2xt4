@@ -1,0 +1,16 @@
+{
+  "status": "collection_transport_blocked",
+  "kernel": "pamcks/h3-ptd-aux-split-t4-20261029",
+  "submission_version": 1,
+  "attempted_utc": "2026-10-29T04:16:54.948120+00:00",
+  "error_class": "TLS SSLEOFError: unexpected EOF",
+  "downloaded_files": 0,
+  "job_execution_status": "unknown",
+  "output_hash_verification": "unavailable",
+  "performance_results": "unavailable",
+  "logical_collection_attempts": 1,
+  "transport_retries": 0,
+  "status_polls": 0,
+  "duplicate_submissions": 0,
+  "cli_log_sha256": "00927261fe874eb76c47f62a2e19715aab2c0c2bfef36ed8c8af0a3f08405e60"
+}
