@@ -1,0 +1,21 @@
+{
+  "retired_sources": [
+    "patches/ptd/auxiliary.py",
+    "patches/ptd/refiner_layout.py",
+    "benchmarks/test_ptd_auxiliary.py",
+    "benchmarks/analyze_ptd_aux_split.py"
+  ],
+  "retired_paths_absent": true,
+  "retired_switches_absent": true,
+  "ordinary_transport_and_attention_kept": {
+    "patches/tilelang_transport_p2.py": "2ba3032848a83049bdaf419b7deb50e165e75a3d1fe0820851761bc15e9e89fd",
+    "patches/tilelang_attention_p2.py": "9e451dfd5961b02f68707bb63a7cbfdfd74383ffb27d2fc7169ad1406764737c"
+  },
+  "p1_default": false,
+  "existing_submitted_archive_preserved": "3c0aa394f0d8da7c7e77dacc692cf1153da31d74945110a2075f017e35d7b30f",
+  "local_execution": "C:/ProgramData/miniconda3/envs/comfyui/python.exe",
+  "gpus_hidden": true,
+  "kaggle_interactions": 0,
+  "new_gpu_jobs": 0,
+  "model_or_lora_payloads_downloaded": false
+}

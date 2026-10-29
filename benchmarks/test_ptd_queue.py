@@ -143,7 +143,7 @@ class QueueContracts(unittest.TestCase):
             model=model,rank=0,readers={'dit':reader(0)},cache=cache,
             config=SimpleNamespace(layers=2,operators=object(),tensor_flow=flow))
         adapter=SimpleNamespace(runtime=runtime,original=object(),bank=SimpleNamespace(reader=reader),
-            options=SimpleNamespace(use_hop_refiner=True,use_pdd_heads=True,future_cache=False,baked_refiner=False))
+            options=SimpleNamespace(use_hop_refiner=True,use_pdd_heads=True,future_cache=False))
         def block_specs(reader,*args):
             return [WeightSpec(f'b{reader.identity[1]}_{i}',lambda:nn.Identity(),64) for i in range(2)]
         with patch('patches.ptd.queue.tp_specs',side_effect=block_specs):

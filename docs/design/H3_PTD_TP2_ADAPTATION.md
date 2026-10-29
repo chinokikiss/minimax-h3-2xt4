@@ -131,7 +131,6 @@ not promise asynchronous DMA from pageable storage or zero idle time.
 | `stream_weights` | true | False requests a resident **active** expert, with VRAM admission |
 | `future_cache` | false | Experimental complete-sequence CPU reclamation with consumer event protection |
 | `prefetch_refiner` | false | Experimental bounded next-hop CPU lane; requires future cache |
-| Bake `runtime_layout` / adapter `baked_refiner` | false | Optional byte-verified FP32/e6 refiner sidecars; original overlays retained |
 | Sampler `enabled` | true | When false, returns connected Native sampler/sigmas by identity |
 
 Refiner/head/audio algorithmic ablations do not implement the trained PTD recipe.
@@ -206,20 +205,15 @@ dataset mount, status polling or live-log polling is required for this test.
 References: [release card](https://huggingface.co/taobao-content-ai/MiniMax-H3-PTD-RefAsymOPD-LoRAs),
 [pinned PTD inference source](https://github.com/vita-epfl/PTD-inference/tree/65e593ff0cb0e68f885caa412cdd1c4c6cb08e6b).
 
-The new CPU scheduling and runtime-ready refiner candidates are opt-in. See
-[implementation, invariants and the bounded ablation plan](../reports/H3_PTD_CPU_SCHEDULING_20261029.md).
+P0 future-use reclamation and P1 refiner prefetch remain opt-in. P1 is **off by
+default** in the adapter, graph node and newly generated E2E configurations.
+Its physical fixture improved mean RPC latency but worsened maximum hop time;
+see the [measured results](../reports/H3_PTD_CPU_SCHEDULING_T4_RESULTS_20261029.md).
 
-The CPU scheduling ablation has completed on physical T4s: consumed-group reclamation reduces managed host peaks; next-hop refiner preparation improves average RPC latency with worse maximum hop time; the current full FP32 sidecar regresses. All candidates preserve output hashes in the bounded fixture and remain optional. See the [measured results](../reports/H3_PTD_CPU_SCHEDULING_T4_RESULTS_20261029.md).
-
-P2 now offers physically separate compact refiner projections and video/audio
-head units, with receipt-bound header and tensor verification on every disk
-consumption. Original banks remain supported, and an offline repack preserves
-Native tensor proofs without merging LoRA again. Both ranks still execute the
-Native heads; rank 1 opens no split refiner unit. See the
-[integrity design, CPU contracts and paired T4 plan](../reports/H3_PTD_AUXILIARY_SPLIT_20261029.md).
-
-The physical P2 comparison now passes all output and ownership checks on two
-SM75 T4s, but its current loader increases mean eight-hop RPC latency 16.5%.
-Rank 1 avoids the refiner scan while rank-0 preparation waits increase. Keep
-split storage optional; defaults remain unchanged. See the
-[measured P2 results and next targets](../reports/H3_PTD_AUXILIARY_SPLIT_T4_RESULTS_20261029.md).
+Only the original monolithic auxiliary layout is implemented. It is hash-checked
+once per hop reader at first tensor consumption, with signature checks on later
+reads. The FP32 sidecar and P2 Split implementation, switches and experiment
+launch paths were removed at the user's request; the historical measurements,
+submitted capsules and receipts remain as experiment records. Old Split banks
+require their archived runtime or a new monolithic bake. See the
+[cleanup and validation record](../reports/H3_PTD_RUNTIME_CLEANUP_20261029.md).

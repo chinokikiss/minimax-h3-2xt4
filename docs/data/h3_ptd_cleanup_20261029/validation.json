@@ -1,0 +1,33 @@
+{
+  "status": "local_cpu_passed",
+  "existing_cpu_tests": {
+    "passed": true,
+    "tests": 179,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 13.592999999997119,
+    "scope": "CPU contracts, not physical T4 qualification"
+  },
+  "targeted_cpu_tests": 48,
+  "initial_cleanup_capsule_sha256": "cb52ce9e1a032a0eb58422a2cce41207ea073e65a59c309fb83c7c10cdf09764",
+  "final_cleanup_capsule_sha256": "6c45eb5ed0cb91aa471eb128772003bf533409c193a274dc3ac5836ae9a55efc",
+  "runtime_ast_unchanged_between_cpu_runs": {
+    "patches/ptd/bank.py": true,
+    "patches/ptd/checkpoint.py": true,
+    "patches/ptd/mapping.py": true,
+    "patches/ptd/nodes.py": true,
+    "patches/ptd/queue.py": true,
+    "patches/ptd/runtime.py": true,
+    "patches/ptd/sampler.py": true,
+    "patches/ptd/schedule.py": true,
+    "patches/ptd/__init__.py": true
+  },
+  "p1_optional": true,
+  "p1_default": false,
+  "new_e2e_plan_prefetch_refiner": false,
+  "kaggle_interactions": 0,
+  "new_gpu_jobs": 0,
+  "new_t4_performance_qualification": false,
+  "existing_submitted_job_unchanged": true
+}

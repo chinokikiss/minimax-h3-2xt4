@@ -45,15 +45,20 @@ def validate_bank(bank):
     from patches.ptd.checkpoint import RELEASE
     if (bank.layers != 50 or len(bank.hops) != 8
             or bank.recipe['checkpoint_sha256'] != RELEASE['sha256']
-            or (bank.recipe['video_shift'], bank.recipe['audio_shift']) != (12.,3.)
-            or bank.recipe.get('auxiliary_storage') or bank.recipe.get('runtime_refiner_layout')):
-        raise ValueError('Full monolithic PTD bank required; Split/sidecar are disabled')
+            or (bank.recipe['video_shift'], bank.recipe['audio_shift']) != (12.,3.)):
+        raise ValueError('Full PTD bank and trained clock required')
     counts = [len(receipt['native_verified_targets']) for _, receipt in bank.hops]
     if counts != [208]*8:
         raise ValueError('Every full expert needs 208 independent Native merge proofs')
     return dict(bank_sha256=bank.digest, recipe_sha256=bank.recipe_sha,
-        verified_targets_by_hop=counts, layers=50, hops=8, split_auxiliary=False,
-        fp32_sidecar=False, online_lora=False)
+        verified_targets_by_hop=counts, layers=50, hops=8, auxiliary_layout='monolithic',online_lora=False)
+
+
+def ptd_options(config):
+    from patches.ptd.runtime import PTDOptions
+    validate(config)
+    return PTDOptions(enabled=True,allow_pruned_adaln=True,hop_handoff='queue',
+        future_cache=config['future_cache'],prefetch_refiner=config.get('prefetch_refiner',False))
 
 
 def main():
@@ -73,7 +78,7 @@ def main():
     validate_packages(); validate_source(ROOT/'ComfyUI')
     from patches.comfy_sampler import create_clip,create_model,ParallelDecodeHandoff
     from patches.ptd.bank import PTDBank
-    from patches.ptd.runtime import PTDOptions,adapt_model
+    from patches.ptd.runtime import adapt_model
     from patches.ptd.sampler import make_sampler
     from patches.staged_vae import StagedVAE
     from comfy_extras.nodes_minimax_h3 import MiniMaxH3ReferenceToVideo,MiniMaxH3SigmaShift
@@ -113,8 +118,7 @@ def main():
         service=PTDService(runtime); service.on_denoise=denoised
         clip=create_clip(service); model=create_model(service)
         model=MiniMaxH3SigmaShift.execute(model,12.,3.)[0]
-        options=PTDOptions(enabled=True,allow_pruned_adaln=True,hop_handoff='queue',
-            future_cache=True,prefetch_refiner=True,baked_refiner=False)
+        options=ptd_options(config)
         model,controller=adapt_model(model,service,bank.path,options,expected_bank_sha256=bank.digest)
         state['ptd_options']=asdict(options); state['trigger_ns']=time.monotonic_ns()
         images={f'ref_image_{i+1}':torch.from_numpy(np.asarray(Image.open(path).convert('RGB'),dtype=np.float32)/255)[None]

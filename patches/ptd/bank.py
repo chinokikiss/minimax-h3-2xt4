@@ -97,8 +97,7 @@ def _bake_partition(base_path, checkpoint_path, output, layers, device, recipe_s
     return result
 
 
-def _auxiliary(base, checkpoint, hop, output, device, video_shift, audio_shift, runtime_layout=False,
-               split_auxiliary=False, recipe_sha256=None):
+def _auxiliary(base, checkpoint, hop, output, device, video_shift, audio_shift):
     """Only adapted refiner weights and two effective PDD heads are duplicated."""
     from patches.offline_lora import merged_weight
     from patches.offline_lora_reference import verify_weight
@@ -126,26 +125,16 @@ def _auxiliary(base, checkpoint, hop, output, device, video_shift, audio_shift, 
     for name, value in values.items():
         if list(value.shape) != base.header[name]['shape'] or not torch.isfinite(value).all():
             raise ValueError('PTD auxiliary shape / finiteness mismatch: ' + name)
-    if split_auxiliary:
-        from .auxiliary import write_split
-        return write_split(values, output, recipe_sha256, hop, targets)
     path = Path(output) / 'aux_overlay.safetensors'
     save_file(values, str(path))
     with path.open('r+b') as stream:
         os.fsync(stream.fileno())
     result = dict(file=path.name, sha256=sha(path), bytes=path.stat().st_size,
                   state_sha256=state_proof(values), verified_targets=targets)
-    if runtime_layout:
-        from patches.h3_tensor_flow import TensorFlowPolicy
-        from .refiner_layout import write_layout
-        result['runtime_layout'] = write_layout(values, output, result['sha256'], TensorFlowPolicy('fp16'))
     return result
 
 
-def disk_plan(base_descriptor, output, layers=50, include_download=False, reserve=4 * 2**30,
-              runtime_layout=False, split_auxiliary=False):
-    if runtime_layout and split_auxiliary:
-        raise ValueError('Compact split auxiliaries cannot use the experimental FP32 sidecar')
+def disk_plan(base_descriptor, output, layers=50, include_download=False, reserve=4 * 2**30):
     base = BundleReader(base_descriptor)
     if base.kind != 'dit' or not 1 <= layers <= 50:
         raise ValueError('PTD baking requires the DiT base bundle and 1-50 layers')
@@ -161,21 +150,15 @@ def disk_plan(base_descriptor, output, layers=50, include_download=False, reserv
                   if key != '__metadata__' and key.endswith(('.weight', '.bias'))
                   and (key.startswith('token_refiner.blocks.') or key.startswith('final_layer.video_out.')
                        or key.startswith('final_layer.audio_out.')))
-    layout_bytes = (sum(math.prod(info['shape'])*4 for key,info in base.header.items()
-        if key.startswith('token_refiner.blocks.') and key.endswith('.weight')) if runtime_layout else 0)
-    unit_headers = 2**20 if split_auxiliary else 0
-    needed = 8 * (blocks + overlay + layout_bytes + unit_headers) + reserve + (RELEASE['bytes'] if include_download else 0)
+    needed = 8 * (blocks + overlay) + reserve + (RELEASE['bytes'] if include_download else 0)
     return dict(required_free_bytes=needed, free_bytes=shutil.disk_usage(parent).free,
-                estimated_expert_bytes=8 * (blocks + overlay + layout_bytes + unit_headers), shared_base_auxiliary=True,
+                estimated_expert_bytes=8 * (blocks + overlay), shared_base_auxiliary=True,
                 output=str(path), layers=layers, full_model=layers == 50)
 
 
 def bake(base_descriptor, checkpoint_path, output='/tmp/h3_ptd_refasymopd', *,
-         devices=('cuda:0', 'cuda:1'), layers=50, video_shift=12., audio_shift=3., allow_pruned_adaln=False,
-         runtime_layout=False, split_auxiliary=False):
+         devices=('cuda:0', 'cuda:1'), layers=50, video_shift=12., audio_shift=3., allow_pruned_adaln=False):
     """Atomic eight-hop publication, resumable durable shards; no online LoRA."""
-    if runtime_layout and split_auxiliary:
-        raise ValueError('Compact split auxiliaries cannot use the experimental FP32 sidecar')
     if (len(devices) != 2 or len({torch.device(d).index for d in devices}) != 2
             or any(torch.cuda.get_device_capability(d) != (7, 5)
                    or 'T4' not in torch.cuda.get_device_name(d) for d in devices)):
@@ -201,20 +184,13 @@ def bake(base_descriptor, checkpoint_path, output='/tmp/h3_ptd_refasymopd', *,
         native_merge_sha256=sha(Path(__file__).parents[1] / 'offline_lora.py'),
         native_reference_sha256=sha(Path(__file__).parents[1] / 'offline_lora_reference.py'),
         kitchen=version('comfy-kitchen'), torch=str(torch.__version__))
-    if runtime_layout:
-        recipe['runtime_refiner_layout'] = 'ptd-refiner-fp32-native-fold-v1:fp16:e6'
-        recipe['source_sha256']['refiner_layout.py'] = sha(Path(__file__).with_name('refiner_layout.py'))
-    if split_auxiliary:
-        from .auxiliary import FORMAT as AUX_FORMAT, LAYOUT
-        recipe['auxiliary_storage'] = dict(format=AUX_FORMAT, layout=LAYOUT)
-        recipe['source_sha256']['auxiliary.py'] = sha(Path(__file__).with_name('auxiliary.py'))
     digest = hashlib.sha256(json.dumps(recipe, sort_keys=True).encode()).hexdigest()
     if output.exists():
         bank = PTDBank(output / 'bank.json', allow_fixture=layers != 50)
         if bank.recipe_sha != digest:
             raise ValueError('Cached PTD bank belongs to another base / checkpoint / bake recipe')
         return output / 'bank.json'
-    plan = disk_plan(base.path, output, layers, runtime_layout=runtime_layout, split_auxiliary=split_auxiliary)
+    plan = disk_plan(base.path, output, layers)
     if plan['free_bytes'] < plan['required_free_bytes']:
         raise OSError('Insufficient /tmp disk for eight experts: ' + json.dumps(plan))
     partial = output.with_name(output.name + '.partial')
@@ -235,8 +211,7 @@ def bake(base_descriptor, checkpoint_path, output='/tmp/h3_ptd_refasymopd', *,
         expected = {f'dit.block{i:02d}.rank{r}' for i in range(layers) for r in (0, 1)}
         if set(records) != expected:
             raise ValueError('Incomplete PTD TP2 expert coverage')
-        auxiliary = _auxiliary(base, checkpoint, hop, partial / f'hop_{hop:02d}', devices[0], video_shift, audio_shift,
-                               runtime_layout=runtime_layout, split_auxiliary=split_auxiliary, recipe_sha256=digest)
+        auxiliary = _auxiliary(base, checkpoint, hop, partial / f'hop_{hop:02d}', devices[0], video_shift, audio_shift)
         targets = [t for worker in workers for t in worker[hop]['verified_targets']] + auxiliary['verified_targets']
         wanted = {t for t in checkpoint.targets if not t.startswith('blocks.') or int(t.split('.')[1]) < layers}
         if set(targets) != wanted or len(targets) != len(wanted):
@@ -254,72 +229,6 @@ def bake(base_descriptor, checkpoint_path, output='/tmp/h3_ptd_refasymopd', *,
                 sigmas=hop_sigmas(8, 32, video_shift).tolist(), online_lora=False))
     partial.replace(output)
     PTDBank(output / 'bank.json', allow_fixture=layers != 50)
-    return output / 'bank.json'
-
-
-def repack_split_bank(path, output, *, allow_fixture=False, expected_sha256=None):
-    """Offline representation change; keep the original Native merge receipts.
-
-    Only one projection/head unit is resident on CPU. Expert shards are linked
-    (copied when links are unsupported), without repeating any LoRA merge.
-    """
-    from collections.abc import Mapping
-    from .auxiliary import FORMAT as AUX_FORMAT, LAYOUT, write_split
-    source = PTDBank(path, allow_fixture=allow_fixture, expected_sha256=expected_sha256)
-    output = Path(output).resolve()
-    partial = output.with_name(output.name + '.partial')
-    if output.exists() or partial.exists() or output == source.path.parent:
-        raise FileExistsError('Preserve the existing bank; choose a new repack directory')
-    if any(row['auxiliary'].get('format') for _,row in source.hops):
-        raise ValueError('Repack expects the original monolithic auxiliary bank')
-    parent = output.parent
-    while not parent.exists(): parent = parent.parent
-    # Admit the worst-case copy fallback as well as compact auxiliary output.
-    needed = sum(row['auxiliary']['bytes'] + sum(s['bytes'] for s in row['shards'].values())
-                 for _,row in source.hops) + 4 * 2**30 + 8 * 2**20
-    if shutil.disk_usage(parent).free < needed:
-        raise OSError('Insufficient free disk for a separately published PTD repack')
-    raw_manifest = source.path.read_bytes()
-    if hashlib.sha256(raw_manifest).hexdigest() != source.digest:
-        raise RuntimeError('Source PTD manifest changed before repack')
-    partial.mkdir(parents=True)
-    manifest = json.loads(raw_manifest)
-    entries = []
-    class Values(Mapping):
-        def __init__(self, reader): self.reader = reader
-        def __iter__(self): return (n for n in self.reader.header if n != '__metadata__')
-        def __len__(self): return sum(1 for _ in self)
-        def __getitem__(self, name): return self.reader.read_tensor(name)
-    for hop, (directory, record) in enumerate(source.hops):
-        destination = partial / directory.name
-        destination.mkdir()
-        overlay = (directory / record['auxiliary']['file']).resolve()
-        if overlay.parent != directory or sha(overlay) != record['auxiliary']['sha256']:
-            raise ValueError('Source PTD auxiliary failed repack admission')
-        reader = CheckpointReader(overlay)
-        auxiliary = write_split(Values(reader), destination, source.recipe_sha, hop,
-                                record['auxiliary']['verified_targets'])
-        if auxiliary['state_sha256'] != record['auxiliary']['state_sha256'] or signature(overlay) != reader.signature:
-            raise ValueError('Repack changed a Native-verified tensor')
-        for stem, row in record['shards'].items():
-            # Verify source payload/proof once; no GPU or Native remerge.
-            for suffix, digest in (('.json', row['manifest_sha256']), ('.safetensors', row['file_sha256'])):
-                original, target = directory / (stem + suffix), destination / (stem + suffix)
-                if sha(original) != digest:
-                    raise ValueError('Source PTD shard failed repack admission')
-                try: os.link(original, target)
-                except OSError: shutil.copyfile(original, target)
-        receipt = dict(record, auxiliary=auxiliary)
-        atomic_json(destination / 'receipt.json', receipt)
-        entries.append(dict(directory=destination.name, receipt_sha256=sha(destination / 'receipt.json')))
-        print('PTD_AUX_REPACK_DURABLE', hop, flush=True)
-    source.check()
-    manifest.update(hops=entries, auxiliary_repack=dict(format=AUX_FORMAT, layout=LAYOUT,
-        source_bank_sha256=source.digest, source_recipe_sha256=source.recipe_sha,
-        source_sha256=sha(Path(__file__).with_name('auxiliary.py')), native_tensor_bytes_unchanged=True))
-    atomic_json(partial / 'bank.json', manifest)
-    PTDBank(partial / 'bank.json', allow_fixture=allow_fixture)
-    partial.replace(output)
     return output / 'bank.json'
 
 
@@ -372,9 +281,8 @@ class PTDBank:
             expected = {f'dit.block{i:02d}.rank{r}' for i in range(self.layers) for r in (0,1)}
             if set(record['shards']) != expected:
                 raise ValueError('PTD hop has incomplete TP2 coverage')
-            if record['auxiliary'].get('format'):
-                from .auxiliary import SplitAuxiliary
-                SplitAuxiliary(directory, record['auxiliary'], self.recipe_sha, hop)
+            if record['auxiliary'].get('format') or not record['auxiliary'].get('file'):
+                raise ValueError('PTD requires the original monolithic auxiliary overlay')
             self.hops.append((directory, record))
         self.check()
 
@@ -382,17 +290,17 @@ class PTDBank:
         if any(signature(path) != expected for path, expected in self.signatures.items()):
             raise RuntimeError('PTD bank changed during sampling')
 
-    def reader(self, hop, *, refiner=True, heads=True, base_reader=None, lazy_overlay=False):
+    def reader(self, hop, *, refiner=True, heads=True, base_reader=None):
         self.check()
         return HopReader(self, hop, refiner=refiner, heads=heads,
-                         base_reader=base_reader, lazy_overlay=lazy_overlay)
+                         base_reader=base_reader)
 
 
 class HopReader(BundleReader):
     """Adapt the validated Native bundle loader; no online remerge on eviction."""
     _shard = DiskBakedReader._shard
 
-    def __init__(self, bank, hop, *, refiner=True, heads=True, base_reader=None, lazy_overlay=False):
+    def __init__(self, bank, hop, *, refiner=True, heads=True, base_reader=None):
         if type(hop) is not int or not 0 <= hop < 8:
             raise ValueError('PTD hop must be 0-7')
         if base_reader is None:
@@ -415,20 +323,13 @@ class HopReader(BundleReader):
             if old['state_sha256'] != row['base_state_sha256']:
                 raise ValueError('PTD expert base tensor proof mismatch')
             self.plan['blocks'][stem] = dict(old, state_sha256=row['state_sha256'])
-        self.split_auxiliary = None
-        if receipt['auxiliary'].get('format'):
-            from .auxiliary import SplitAuxiliary
-            self.split_auxiliary = SplitAuxiliary(self.root, receipt['auxiliary'], bank.recipe_sha, hop)
-        else:
-            overlay = self.root / receipt['auxiliary']['file']
-            if overlay.resolve().parent != self.root:
-                raise ValueError('PTD auxiliary overlay hash mismatch')
-            self.overlay = CheckpointReader(overlay)
-            self.overlay_sha = receipt['auxiliary']['sha256']
-            self.overlay_verified = False
-            self.overlay_lock = threading.Lock()
-            if not lazy_overlay:
-                self._verify_overlay()
+        overlay = self.root / receipt['auxiliary']['file']
+        if overlay.resolve().parent != self.root:
+            raise ValueError('PTD auxiliary overlay hash mismatch')
+        self.overlay = CheckpointReader(overlay)
+        self.overlay_sha = receipt['auxiliary']['sha256']
+        self.overlay_verified = False
+        self.overlay_lock = threading.Lock()
         self.refiner_enabled, self.heads_enabled = refiner, heads
         self.identity = (*self.identity, FORMAT, bank.recipe_sha, bank.digest, hop, bool(refiner), bool(heads))
 
@@ -442,18 +343,15 @@ class HopReader(BundleReader):
     def read_tensor(self, name, *, rows=None, columns=None):
         self._check_roots()
         enabled = self.refiner_enabled if name.startswith('token_refiner.') else self.heads_enabled
-        auxiliary = self.split_auxiliary
-        names = auxiliary.by_name if auxiliary is not None else self.overlay.header
-        if enabled and name in names and name != '__metadata__':
+        if enabled and name in self.overlay.header and name != '__metadata__':
             if rows or columns:
                 raise ValueError('PTD overlay exposes whole native tensors')
-            if auxiliary is not None:
-                return auxiliary.read_tensor(name)
             self._verify_overlay()
             return self.overlay.read_tensor(name)
         return super().read_tensor(name, rows=rows, columns=columns)
 
     def _verify_overlay(self):
+        """Verify once on first consumption; retain signature guards on later reads."""
         with self.overlay_lock:
             if not self.overlay_verified:
                 if sha(self.overlay.path) != self.overlay_sha:

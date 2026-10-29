@@ -14,11 +14,9 @@ SCHEDULING_CASES = (
     ('queue_baseline', {}),
     ('future_cache', dict(future_cache=True)),
     ('future_refiner', dict(future_cache=True,prefetch_refiner=True)),
-    ('future_refiner_baked', dict(future_cache=True,prefetch_refiner=True,baked_refiner=True)),
     ('future_refiner_repeat', dict(future_cache=True,prefetch_refiner=True)),
     ('queue_baseline_repeat', {}))
 
-SPLIT_CASES = ('monolithic', 'split', 'split_repeat', 'monolithic_repeat')
 
 
 def resource_plan(base=None, *, header=None):
@@ -130,10 +128,7 @@ def main():
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--cpu-preflight',action='store_true')
     parser.add_argument('--cpu-scheduling',action='store_true')
-    parser.add_argument('--split-auxiliary',action='store_true')
     args=parser.parse_args(); args.output.mkdir(parents=True,exist_ok=True)
-    if args.cpu_scheduling and args.split_auxiliary:
-        parser.error('Use separate historical scheduling and compact auxiliary experiments')
     source=args.source.resolve(); sys.path[:0]=[str(source),str(source/'ComfyUI'),str(source/'benchmarks')]
     sys.argv=['ptd-tp2','--cpu'] if args.cpu_preflight else ['ptd-tp2']
     import comfy.options
@@ -162,8 +157,7 @@ def main():
                 'benchmarks.test_ptd_tp2.AdapterContracts.test_node_registration_under_dynamic_loader_names',
                 'benchmarks.test_ptd_tp2.AdapterContracts.test_disabled_returns_native_model_sampler_and_sigmas_by_identity',
                 'benchmarks.test_ptd_queue']
-            if args.cpu_scheduling or args.split_auxiliary:names+=['benchmarks.test_ptd_cpu_schedule']
-            if args.split_auxiliary:names+=['benchmarks.test_ptd_auxiliary']
+            if args.cpu_scheduling:names+=['benchmarks.test_ptd_cpu_schedule']
             contracts=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromNames(names))
             assert contracts.wasSuccessful()
             assets=json.loads((source/'bundle_assets.json').read_text())
@@ -171,9 +165,8 @@ def main():
             # Setup/API admission only. No checkpoint download or GPU quota.
             state.update(status='ptd_cpu_ready',core_api_imports=True,no_weights_fetched=True,
                          registration_contract_tests=2,queue_contract_tests=7,
-                         scheduling_contract_tests=13 if args.cpu_scheduling or args.split_auxiliary else 0,
-                         split_contract_tests=contracts.testsRun-22 if args.split_auxiliary else 0,
-                         cpu_scheduling=args.cpu_scheduling,split_auxiliary=args.split_auxiliary)
+                         scheduling_contract_tests=11 if args.cpu_scheduling else 0,
+                         cpu_scheduling=args.cpu_scheduling)
             return
         import torch
         import importlib.metadata as md
@@ -188,8 +181,7 @@ def main():
             OMP_NUM_THREADS='2',MKL_NUM_THREADS='2',MALLOC_ARENA_MAX='2',MINIMAX_H3_PROFILE_DETAILS='1')
         torch.set_num_threads(2)
         names=['benchmarks.test_ptd_tp2','benchmarks.test_ptd_queue']
-        if args.cpu_scheduling or args.split_auxiliary:names+=['benchmarks.test_ptd_cpu_schedule']
-        if args.split_auxiliary:names+=['benchmarks.test_ptd_auxiliary']
+        if args.cpu_scheduling:names+=['benchmarks.test_ptd_cpu_schedule']
         result=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromNames(names))
         assert result.wasSuccessful(); state['contract_tests']=result.testsRun
         state['status']='staging_public_subset';save()
@@ -202,63 +194,30 @@ def main():
             free,_=torch.cuda.mem_get_info(device)
             assert free>=state['resources']['weight_bytes']+state['resources']['reserve_bytes'], 'Required group cannot fit on T4'
         save()  # Resource admission precedes PTD download and baking.
-        from patches.ptd.bank import bake,disk_plan,PTDBank,repack_split_bank
-        state['disk_plan']=disk_plan(base,scratch/'bank',layers=2,runtime_layout=args.cpu_scheduling)
-        if args.split_auxiliary:
-            # Worst-case copied shards, although same-filesystem hard links
-            # normally avoid this duplication. Admission precedes LoRA fetch.
-            state['disk_plan']['required_free_bytes']+=state['disk_plan']['estimated_expert_bytes']
+        from patches.ptd.bank import bake,disk_plan,PTDBank
+        state['disk_plan']=disk_plan(base,scratch/'bank',layers=2)
         assert state['disk_plan']['free_bytes']>=state['disk_plan']['required_free_bytes'], 'Insufficient disk for comparison banks'
         checkpoint=fetch_subset(scratch/'adapter')
         state['subset_provenance']=json.loads((scratch/'adapter/provenance.json').read_text())
         state['status']='baking_eight_two_layer_experts';save()
-        begin=time.monotonic();bank=bake(base,checkpoint,scratch/'bank',layers=2,allow_pruned_adaln=True,
-                                        runtime_layout=args.cpu_scheduling)
+        begin=time.monotonic();bank=bake(base,checkpoint,scratch/'bank',layers=2,allow_pruned_adaln=True)
         state['bake_seconds']=time.monotonic()-begin
         admitted=PTDBank(bank,allow_fixture=True)
         state['verified_targets_per_hop']=[len(row['native_verified_targets']) for _,row in admitted.hops]
         state['baked_bytes']=sum(sum(r['bytes'] for r in row['shards'].values())+row['auxiliary']['bytes']
                                  for _,row in admitted.hops)
-        state['runtime_layout_bytes']=sum(row['auxiliary'].get('runtime_layout',{}).get('bytes',0)
-                                          for _,row in admitted.hops)
-        state['runtime_layout_native_byte_checks']=sum(row['auxiliary'].get('runtime_layout',{}).get('native_byte_exact_checks',0)
-                                          for _,row in admitted.hops)
-        split_bank = None
-        if args.split_auxiliary:
-            state['status']='offline_compact_repack';save()
-            begin=time.monotonic()
-            split_bank=repack_split_bank(bank,scratch/'split_bank',allow_fixture=True,expected_sha256=admitted.digest)
-            state['repack_seconds']=time.monotonic()-begin
-            split=PTDBank(split_bank,allow_fixture=True)
-            state['auxiliary_comparison']=dict(source_manifest_sha256=admitted.digest,split_manifest_sha256=split.digest,
-                recipe_sha256=admitted.recipe_sha,original_auxiliary_bytes=sum(r['auxiliary']['bytes'] for _,r in admitted.hops),
-                split_auxiliary_bytes=sum(r['auxiliary']['bytes'] for _,r in split.hops),
-                native_tensor_proofs_equal=all(a['auxiliary']['state_sha256']==b['auxiliary']['state_sha256']
-                    for (_,a),(_,b) in zip(admitted.hops,split.hops)),lora_remerged=False,fp32_sidecar=False)
-            assert state['auxiliary_comparison']['native_tensor_proofs_equal']
         try: PTDBank(bank)
         except ValueError: state['deployment_fixture_rejected']=True
         else: raise AssertionError('Fixture bank was incorrectly admitted for deployment')
         torch.cuda.empty_cache()
         state['status']='eight_hop_native_tp2_smoke';save()
         state['smoke_cases']=[]
-        cases=(tuple((label,dict(future_cache=True,prefetch_refiner=True)) for label in SPLIT_CASES)
-               if args.split_auxiliary else SCHEDULING_CASES if args.cpu_scheduling else
+        cases=(SCHEDULING_CASES if args.cpu_scheduling else
                tuple((handoff,{}) for handoff in ('rebuild','queue','queue','rebuild')))
         for index,(label,options) in enumerate(cases):
             output=args.output/f'{index}_{label}';output.mkdir()
-            handoff='queue' if args.cpu_scheduling or args.split_auxiliary else label
-            selected_bank=split_bank if args.split_auxiliary and label.startswith('split') else bank
-            value=smoke(base,selected_bank,output,handoff,state['resources'],options)
-            if args.split_auxiliary:
-                accesses=[row['ptd_probe']['auxiliary_consumption'] for row in value['restored_stats']]
-                if label.startswith('split'):
-                    assert accesses[0] and accesses[1], 'Missing split consumption evidence'
-                    assert not any(row['role']=='refiner' for row in accesses[1]), 'Rank 1 consumed a refiner unit'
-                    assert all(row['payload_verified'] for rows in accesses for row in rows)
-                    for rank in value['restored_stats']:
-                        assert not any(row['stage']=='raw_overlay_verify' for row in rank['ptd_probe']['cpu_preparation_spans'])
-                else: assert not any(accesses), 'Monolithic control consumed split units'
+            handoff='queue' if args.cpu_scheduling else label
+            value=smoke(base,bank,output,handoff,state['resources'],options)
             value['case']=label
             state['smoke_cases'].append(value);save()
             first=state['smoke_cases'][0]

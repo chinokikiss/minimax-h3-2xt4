@@ -1,5 +1,7 @@
 # PTD CPU scheduling: physical two-T4 results
 
+> Historical experiment record: the FP32 sidecar and P2 Split implementation and switches have been removed. P1 remains optional and off by default. Reproduce removed cases with their recorded immutable source snapshot. See [current cleanup](H3_PTD_RUNTIME_CLEANUP_20261029.md).
+
 All six cases passed on two distinct Tesla T4 GPUs (SM75), preserving byte-identical video/audio outputs and final FP32 carried state. **Consumption-aware reclamation lowers managed host peaks. Refiner prefetch improves average latency but increases per-hop variability. The current FP32 sidecar is a negative optimization.** No candidate defaults are changed by this report.
 
 ## Experiment and qualification

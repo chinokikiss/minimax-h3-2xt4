@@ -18,8 +18,8 @@ def from_previous(previous):
     plan.update(name='ptd_anime_ref2va_1152x672_243f_8hop',
         workload_contract='ptd_anime_long_8hop', sampler='ptd', scheduler='trained_ptd',
         video_shift=12., audio_shift=3., ptd_release=RELEASE,
-        allow_pruned_adaln=True, split_auxiliary=False, runtime_refiner_layout=False,
-        hop_handoff='queue', future_cache=True, prefetch_refiner=True,
+        allow_pruned_adaln=True, auxiliary_layout='monolithic',
+        hop_handoff='queue', future_cache=True, prefetch_refiner=False,
         expected_packed_tokens=59134,
         source_note='Authorized PTD E2E; original anime prompt/images/geometry/noise seed; '
                     'trained PTD clock and adapter replace Turbo/Euler. Pruned-base approximation.')
@@ -32,14 +32,15 @@ def validate(plan):
         seed=20261020, negative_prompt='', sampler='ptd', scheduler='trained_ptd',
         video_shift=12., audio_shift=3., offline_lora=True, disk_baked_lora=True,
         workload_contract='ptd_anime_long_8hop', expected_packed_tokens=59134,
-        ref_image_size='match', hop_handoff='queue')
+        ref_image_size='match', hop_handoff='queue', auxiliary_layout='monolithic')
     for key, expected in fixed.items():
         if plan.get(key) != expected:
             raise ValueError('PTD request contract mismatch: ' + key)
-    for key, expected in dict(allow_pruned_adaln=True, split_auxiliary=False,
-            runtime_refiner_layout=False, future_cache=True, prefetch_refiner=True).items():
+    for key, expected in dict(allow_pruned_adaln=True, future_cache=True).items():
         if plan.get(key) is not expected:
             raise ValueError('PTD requires an explicit switch: ' + key)
+    if type(plan.get('prefetch_refiner',False)) is not bool:
+        raise ValueError('P1 refiner prefetch requires an explicit boolean')
     if ('turbo_lora' in plan or plan.get('lora_stack') or plan.get('ptd_release') != RELEASE
             or hashlib.sha256(plan['prompt'].encode()).hexdigest() != PROMPT_SHA
             or plan.get('prompt_sha256') != PROMPT_SHA
@@ -47,7 +48,7 @@ def validate(plan):
         raise ValueError('PTD input identity or offline adapter mismatch')
     return dict(prompt_sha256=PROMPT_SHA, reference_sha256=list(REFERENCE_SHAS),
         geometry=[plan[k] for k in ('width','height','frames')], layers=50, hops=8,
-        pruned_adaln_approximation=True, split_auxiliary=False, full_pipeline=True)
+        pruned_adaln_approximation=True, auxiliary_layout='monolithic', full_pipeline=True)
 
 
 def resource_plan(header, assets, vaes, *, free_bytes, host_limit):

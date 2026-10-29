@@ -1,8 +1,6 @@
-"""Known-sequence eviction, concurrent preparation and static-fold contracts."""
+"""Known-sequence eviction, concurrent preparation and lifetime contracts."""
 from collections import Counter
-from pathlib import Path
 from types import SimpleNamespace
-import tempfile
 import threading
 import unittest
 from unittest.mock import patch
@@ -12,7 +10,6 @@ from torch import nn
 
 from patches.host_weight_cache import HostBudget, HostWeightCache, _Cached
 from patches.weight_residency import WeightSpec, ResidencyWindow
-from patches.ptd.refiner_layout import write_layout, read_layout_tensor
 from patches.h3_tensor_flow import TensorFlowPolicy
 
 
@@ -197,52 +194,12 @@ class ScheduleContracts(unittest.TestCase):
         runtime=SimpleNamespace(window=window,preprocessing=preprocessing,keys=['block0'],model=model,rank=0,
             readers={'dit':reader(0)},cache=cache,config=SimpleNamespace(layers=1,operators=None,tensor_flow=flow))
         adapter=SimpleNamespace(runtime=runtime,original=None,bank=SimpleNamespace(reader=reader),options=SimpleNamespace(
-            future_cache=True,prefetch_refiner=True,baked_refiner=False,use_hop_refiner=True,use_pdd_heads=True))
+            future_cache=True,prefetch_refiner=True,use_hop_refiner=True,use_pdd_heads=True))
         with patch('patches.ptd.queue.tp_specs',side_effect=lambda r,*a:[WeightSpec(('block',r.identity[1]),lambda:nn.Identity(),64)]):
             queue=ExpertQueue(adapter)
         self.assertEqual(set(queue.plans),set(range(8)))
         self.assertEqual(window.cursor,0);self.assertEqual(sum(window.remaining.values()),len(window.uses))
         cache.set_access_plan.assert_called_once_with(window.uses,0)
         self.assertEqual(cache.enable_priority_lane.call_args.args[0],{queue.refine_keys[i] for i in range(1,8)})
-
-    def test_runtime_sidecar_matches_native_then_rejects_corruption_and_wrong_flow(self):
-        flow=TensorFlowPolicy('fp16')
-        values={f'token_refiner.blocks.0.{name}.weight':torch.linspace(-3,3,32).reshape(4,8).half()
-            for name in ('attn.qkv_proj','attn.out_proj','mlp.fc1','mlp.fc2')}
-        with tempfile.TemporaryDirectory() as directory:
-            proof=write_layout(values,directory,'source-digest',flow)
-            reader=SimpleNamespace(root=Path(directory),hop=0,bank=SimpleNamespace(hops=[(None,{
-                'auxiliary':{'sha256':'source-digest','runtime_layout':proof}})]))
-            for name,source in values.items():
-                expected=source.float()
-                if name.endswith(('attn.out_proj.weight','mlp.fc2.weight')):expected=expected/flow.divisor
-                self.assertTrue(torch.equal(read_layout_tensor(reader,name,flow),expected))
-            with self.assertRaises(ValueError):read_layout_tensor(reader,next(iter(values)),TensorFlowPolicy('legacy'))
-            name=next(iter(values));proof['tensors'][name]['sha256']='0'*64
-            with self.assertRaisesRegex(ValueError,'integrity'):read_layout_tensor(reader,name,flow)
-
-    def test_baked_refiner_preserves_full_native_norm_and_projection_state(self):
-        from benchmarks.test_ptd_queue import native_tiny
-        from patches.h3_tensor_flow import prepare_dit
-        from patches.ptd.queue import refiner_group
-        from patches.ptd.nodes import MiniMaxH3TP2PTDAdapter
-        self.assertIn('future_cache',MiniMaxH3TP2PTDAdapter.INPUT_TYPES()['optional'])
-        flow=TensorFlowPolicy('fp16');model=native_tiny();prepare_dit(model,flow,rank=0)
-        values={}
-        for i,block in enumerate(model.token_refiner.blocks):
-            for part,module in [('attn.qkv_proj',block.attn.base.qkv_proj),('attn.out_proj',block.attn.base.out_proj),
-                                ('mlp.fc1',block.mlp.fc1),('mlp.fc2',block.mlp.fc2)]:
-                values[f'token_refiner.blocks.{i}.{part}.weight']=torch.linspace(-.2,.3,module.weight.numel()).reshape(module.weight.shape).half()
-        with tempfile.TemporaryDirectory() as directory:
-            proof=write_layout(values,directory,'original-overlay',flow)
-            aux=dict(sha256='original-overlay',runtime_layout=proof,verified_targets=[k.removesuffix('.weight') for k in values])
-            reader=SimpleNamespace(root=Path(directory),hop=0,bank=SimpleNamespace(hops=[(None,{'auxiliary':aux})]),
-                read_tensor=lambda name:values[name].clone())
-            canonical={'condition_proj':model.condition_proj,'token_refiner':model.token_refiner}
-            raw=refiner_group(canonical,reader,flow);baked=refiner_group(canonical,reader,flow,baked=True)
-            self.assertEqual(set(raw.state_dict()),set(baked.state_dict()))
-            for name,value in raw.state_dict().items():self.assertTrue(torch.equal(value,baked.state_dict()[name]),name)
-            self.assertEqual(raw['token_refiner'].blocks[0].norm1.eps,baked['token_refiner'].blocks[0].norm1.eps)
-
 
 if __name__=='__main__':unittest.main(verbosity=2)

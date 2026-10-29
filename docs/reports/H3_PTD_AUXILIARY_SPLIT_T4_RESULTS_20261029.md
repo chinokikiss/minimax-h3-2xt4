@@ -1,5 +1,7 @@
 # PTD P2: physical two-T4 results
 
+> Historical experiment record: the FP32 sidecar and P2 Split implementation and switches have been removed. P1 remains optional and off by default. Reproduce removed cases with their recorded immutable source snapshot. See [current cleanup](H3_PTD_RUNTIME_CLEANUP_20261029.md).
+
 **Correctness and physical separation pass, but the current split loader is not a speedup.** It increases mean eight-hop RPC latency from **94.63 s to 110.22 s (+16.5%)**. Rank 1 no longer consumes refiner payloads, while rank 0's read/preparation waits grow enough to dominate execution. Keep the split format optional and preserve the existing defaults.
 
 ## Qualification and scope
@@ -93,4 +95,4 @@ Original result SHA256: `812cad379983a8ee181dfd1d24cfb18a79b80e352b0d26d7cc7af6c
 
 The initial download failed with TLS EOF. A user-authorized retry recovered all benchmark results and worker reports but disconnected before the final supervision/log files. After the user explicitly permitted artifact-download retries in `AGENTS.md`, a filtered resume fetched the remaining files successfully, retained the earlier files byte-for-byte and confirmed normal exit. There were **three transfer attempts, zero status/live-log polls and zero duplicate GPU submissions**. Artifact transfers used no GPU experiment time.
 
-[Archived evidence and reproduction instructions](../data/h3_ptd_aux_split_20261029/t4_v1_final/README.md) include the lossless original result, independent summary, eight complete worker reports, AOT receipts, source binding, setup receipt and final supervision. Analysis is separate from runtime code in [analyze_ptd_aux_split.py](../../benchmarks/analyze_ptd_aux_split.py).
+[Archived evidence and reproduction instructions](../data/h3_ptd_aux_split_20261029/t4_v1_final/README.md) include the lossless original result, independent summary, eight complete worker reports, AOT receipts, source binding, setup receipt and final supervision. Analysis is separate from runtime code in [analyze_ptd_aux_split.py](https://github.com/chinokikiss/minimax-h3-2xt4/blob/b79b1bce1b8450a250e58bb8c8676630e58b4f59/benchmarks/analyze_ptd_aux_split.py).

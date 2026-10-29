@@ -23,7 +23,7 @@ class RequestContracts(unittest.TestCase):
         p=plan(); self.assertTrue(validate(p)['full_pipeline'])
         self.assertNotIn('turbo_lora',p)
         for change in (dict(sampler='euler'),dict(video_shift=6.),dict(seed=1),
-                dict(split_auxiliary=True),dict(runtime_refiner_layout=True),dict(allow_pruned_adaln=False),
+                dict(auxiliary_layout='other'),dict(allow_pruned_adaln=False),
                 dict(lora_stack=[('online.safetensors',1.)]),dict(prompt=p['prompt']+'changed')):
             with self.subTest(change=tuple(change)),self.assertRaises(ValueError): validate(p|change)
 
@@ -49,16 +49,27 @@ class RequestContracts(unittest.TestCase):
         with self.assertRaises(OSError): resource_plan(**kwargs,free_bytes=1,host_limit=30*2**30)
         with self.assertRaises(MemoryError): resource_plan(**kwargs,free_bytes=2**40,host_limit=16*2**30)
 
-    def test_production_bank_rejects_fixture_split_or_sidecar(self):
+    def test_production_bank_rejects_fixture_wrong_checkpoint_or_clock(self):
         from benchmarks.run_ptd_e2e import validate_bank
         bank=SimpleNamespace(layers=50,hops=[(None,dict(native_verified_targets=list(range(208))))]*8,
             recipe=dict(checkpoint_sha256=RELEASE['sha256'],video_shift=12.,audio_shift=3.),
             digest='a'*64,recipe_sha='b'*64)
         self.assertEqual(validate_bank(bank)['verified_targets_by_hop'],[208]*8)
-        for key,value in (('layers',2),('recipe',bank.recipe|dict(auxiliary_storage={'format':'split'})),
-                ('recipe',bank.recipe|dict(runtime_refiner_layout='fp32'))):
+        for key,value in (('layers',2),('recipe',bank.recipe|dict(checkpoint_sha256='0'*64)),
+                ('recipe',bank.recipe|dict(video_shift=6.))):
             changed=deepcopy(bank); setattr(changed,key,value)
             with self.assertRaises(ValueError): validate_bank(changed)
+
+    def test_p1_is_optional_and_disabled_in_every_default(self):
+        from benchmarks.run_ptd_e2e import ptd_options
+        from patches.ptd.runtime import PTDOptions
+        from patches.ptd.nodes import MiniMaxH3TP2PTDAdapter
+        p=plan()
+        self.assertFalse(PTDOptions().prefetch_refiner)
+        self.assertFalse(MiniMaxH3TP2PTDAdapter.INPUT_TYPES()['optional']['prefetch_refiner'][1]['default'])
+        self.assertFalse(p['prefetch_refiner']); self.assertFalse(ptd_options(p).prefetch_refiner)
+        self.assertTrue(ptd_options(p|dict(prefetch_refiner=True)).prefetch_refiner)
+        with self.assertRaises(ValueError): ptd_options(p|dict(prefetch_refiner='true'))
 
 
 class NativeSamplingContract(unittest.TestCase):

@@ -1,5 +1,7 @@
 # PTD CPU scheduling and runtime-ready refiner experiment
 
+> Historical experiment record: the FP32 sidecar and P2 Split implementation and switches have been removed. P1 remains optional and off by default. Reproduce removed cases with their recorded immutable source snapshot. See [current cleanup](H3_PTD_RUNTIME_CLEANUP_20261029.md).
+
 P0 consumption-aware reclamation, P1 cross-hop CPU refiner preparation and optional offline FP32 refiner sidecars are implemented on `codex/h3-ptd-refasymopd`. They remain opt-in. The validated queue and all Native defaults remain available. The physical fixture has now completed; [measured results and limitations](H3_PTD_CPU_SCHEDULING_T4_RESULTS_20261029.md) qualify memory/average-latency effects for the bounded fixture only.
 
 ## Consumption-aware cache

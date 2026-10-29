@@ -38,12 +38,11 @@ def main():
     torch.set_grad_enabled(False); torch.set_num_threads(2)
     if args.bake_only:
         from patches.ptd.bank import bake
-        bake(args.base,args.checkpoint,args.bank_output,layers=50,allow_pruned_adaln=True,
-             runtime_layout=False,split_auxiliary=False)
+        bake(args.base,args.checkpoint,args.bank_output,layers=50,allow_pruned_adaln=True)
         return
     output=args.output.resolve(); output.mkdir(parents=True,exist_ok=True)
     state=dict(status='starting',commands=[],full_pipeline=True,request_count=1,
-               online_lora=False,split_auxiliary=False,fp32_sidecar=False)
+               online_lora=False,auxiliary_layout='monolithic')
     def save(): (output/'batch_results.json').write_text(json.dumps(state,indent=2))
     def mark(stage,**extra):
         state.update(status=stage,**extra); save(); print('PTD_E2E_STAGE',stage,flush=True)
@@ -116,7 +115,7 @@ def main():
         checkpoint=download_on_t4(scratch/'adapter')
         from patches.ptd.bank import disk_plan,PTDBank
         bank_output=scratch/'eight_hop_tp2'
-        disk=disk_plan(paths['dit'],bank_output,layers=50,runtime_layout=False,split_auxiliary=False)
+        disk=disk_plan(paths['dit'],bank_output,layers=50)
         state['bake_disk_plan']=disk; save()
         if disk['free_bytes']<disk['required_free_bytes']: raise OSError('Full PTD bank disk admission failed')
         run([sys.executable,'-u',str(source/'benchmarks/run_ptd_e2e_batch.py'),

@@ -26,7 +26,6 @@ class PTDOptions:
     hop_handoff: str = 'queue'
     future_cache: bool = False
     prefetch_refiner: bool = False
-    baked_refiner: bool = False
 
     def __post_init__(self):
         if any(type(value) is not bool for key,value in vars(self).items() if key != 'hop_handoff'):
@@ -35,12 +34,10 @@ class PTDOptions:
             raise ValueError('Unknown PTD hop handoff')
         if self.enabled and not self.stream_weights and self.hop_handoff == 'queue':
             raise ValueError('Resident-expert ablation requires hop_handoff=rebuild')
-        if (self.future_cache or self.prefetch_refiner or self.baked_refiner) and self.hop_handoff != 'queue':
+        if (self.future_cache or self.prefetch_refiner) and self.hop_handoff != 'queue':
             raise ValueError('CPU scheduling experiments require the queue handoff')
         if self.prefetch_refiner and (not self.future_cache or not self.use_hop_refiner):
             raise ValueError('Refiner prefetch requires a future cache and per-hop refiners')
-        if self.baked_refiner and not self.use_hop_refiner:
-            raise ValueError('Baked refiner requires per-hop refiners')
 
 
 def audio_sigma(time, ratio=.25):
@@ -67,11 +64,6 @@ class WorkerAdapter:
             raise ValueError('PTD requires its original TP2 base, without a second Turbo/online LoRA')
         if self.bank.layers != runtime.config.layers:
             raise ValueError('Runtime layer count differs from the baked PTD bank')
-        if options.baked_refiner:
-            from .refiner_layout import layout_proof
-            from types import SimpleNamespace
-            for hop in range(8):
-                layout_proof(SimpleNamespace(bank=self.bank,hop=hop), runtime.config.tensor_flow)
         if 'adaln_t_table' in self.original.header and not options.allow_pruned_adaln:
             raise ValueError('Current pruned AdaLN base needs explicit allow_pruned_adaln approximation consent')
         if not options.stream_weights:
@@ -102,7 +94,7 @@ class WorkerAdapter:
                     self.queue.select(hop)
                 elif preparing and hop == 0:
                     reader = self.bank.reader(0, refiner=self.options.use_hop_refiner,
-                        heads=self.options.use_pdd_heads,base_reader=self.original,lazy_overlay=True)
+                        heads=self.options.use_pdd_heads,base_reader=self.original)
                     reader.operator_policy = self.runtime.config.operators
                     reader.tensor_flow = self.runtime.config.tensor_flow
                     self.runtime.readers['dit'] = reader

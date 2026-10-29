@@ -20,7 +20,7 @@ def main():
     validate_packages(); validate_source(source/'ComfyUI')
     manifest=json.loads((source.parent/'h3_light_distribution/delivery_manifest.json').read_text())
     state=dict(status='starting',capsule_sha256=manifest['capsule_sha256'],no_weights_fetched=True,
-        full_pipeline_authorized=True,gpu_used=False,split_auxiliary=False,credentials=False)
+        full_pipeline_authorized=True,gpu_used=False,auxiliary_layout='monolithic',credentials=False)
     try:
         from benchmarks.ptd_e2e_contract import validate,resource_plan
         from benchmarks.qualify_anime_inputs import download_image
@@ -37,7 +37,8 @@ def main():
         state['references']=[download_image(row,source/'bench_assets/l1_current') for row in plan['reference_images']]
         result=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromNames([
             'benchmarks.test_ptd_tp2','benchmarks.test_ptd_queue','benchmarks.test_ptd_cpu_schedule',
-            'benchmarks.test_ptd_e2e','benchmarks.test_e2e_attention_validation']))
+            'benchmarks.test_ptd_e2e','benchmarks.test_e2e_attention_validation',
+            'benchmarks.test_ptd_overlay']))
         state['contract_tests']=result.testsRun
         if not result.wasSuccessful(): raise RuntimeError('PTD E2E CPU contracts failed')
         state.update(status='ptd_e2e_cpu_ready',native_sampler_integration=True)

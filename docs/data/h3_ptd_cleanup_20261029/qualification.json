@@ -1,0 +1,60 @@
+{
+  "status": "ptd_e2e_cpu_ready",
+  "capsule_sha256": "6c45eb5ed0cb91aa471eb128772003bf533409c193a274dc3ac5836ae9a55efc",
+  "no_weights_fetched": true,
+  "full_pipeline_authorized": true,
+  "gpu_used": false,
+  "auxiliary_layout": "monolithic",
+  "credentials": false,
+  "workload": {
+    "prompt_sha256": "e2ebe6a75563a0184ef5fa99299acef24ee3170855774761c44d6714fb2f7754",
+    "reference_sha256": [
+      "e5b1710572f2587f7927e65b9e5f8f742bc435ca388ae23a16880fa6bf542383",
+      "cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03"
+    ],
+    "geometry": [
+      1152,
+      672,
+      243
+    ],
+    "layers": 50,
+    "hops": 8,
+    "pruned_adaln_approximation": true,
+    "auxiliary_layout": "monolithic",
+    "full_pipeline": true
+  },
+  "resource_estimate": {
+    "required_free_bytes": 258523593608,
+    "free_bytes": 1099511627776,
+    "estimated_bank_bytes": 182727920384,
+    "host_limit_bytes": 32212254720,
+    "cache_bytes": 4294967296,
+    "host_bytes": 21474836480,
+    "reserve_bytes": 9663676416,
+    "weight_bytes": 6442450944,
+    "pinned_bytes": 6442450944,
+    "bounded_gpu_experts": true
+  },
+  "references": [
+    {
+      "file": "reference_character.jpg",
+      "bytes": 317018,
+      "sha256": "e5b1710572f2587f7927e65b9e5f8f742bc435ca388ae23a16880fa6bf542383",
+      "size": [
+        1280,
+        905
+      ]
+    },
+    {
+      "file": "reference_shrine.png",
+      "bytes": 7703256,
+      "sha256": "cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03",
+      "size": [
+        4096,
+        2048
+      ]
+    }
+  ],
+  "contract_tests": 48,
+  "native_sampler_integration": true
+}

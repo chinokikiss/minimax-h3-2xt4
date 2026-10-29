@@ -14,7 +14,7 @@ def _projection(refiner, name):
     return getattr(getattr(owner, 'base', owner), attribute)
 
 
-def refiner_group(canonical, reader, flow, baked=False):
+def refiner_group(canonical, reader, flow):
     """Same load-to-FP32 and output-weight folding as Native construction.
 
     Immutable norms/condition projection share CPU backing. Only the selected
@@ -29,13 +29,8 @@ def refiner_group(canonical, reader, flow, baked=False):
         module = _projection(group['token_refiner'], relative)
         if getattr(module, 'bias', None) is not None:
             raise ValueError('Queued refiner requires the frozen bias-free projections')
-        if baked:
-            from .refiner_layout import read_layout_tensor
-            value = read_layout_tensor(reader, target+'.weight', flow)
-            if value.dtype != module.weight.dtype: raise ValueError('Runtime refiner dtype differs from Native')
-        else:
-            value = reader.read_tensor(target+'.weight').to(dtype=module.weight.dtype)
-        if not baked and flow.enabled and relative.endswith(('attn.out_proj', 'mlp.fc2')):
+        value = reader.read_tensor(target+'.weight').to(dtype=module.weight.dtype)
+        if flow.enabled and relative.endswith(('attn.out_proj', 'mlp.fc2')):
             value = value / flow.divisor
         module.weight = nn.Parameter(value.contiguous(), requires_grad=False)
     return group
@@ -126,7 +121,7 @@ class ExpertQueue:
     def reader(self, hop):
         if hop not in self.readers:
             reader = self.adapter.bank.reader(hop, refiner=self.adapter.options.use_hop_refiner,
-                heads=self.adapter.options.use_pdd_heads, base_reader=self.adapter.original, lazy_overlay=True)
+                heads=self.adapter.options.use_pdd_heads, base_reader=self.adapter.original)
             reader.operator_policy = self.runtime.config.operators
             reader.tensor_flow = self.runtime.config.tensor_flow
             self.readers[hop] = reader
@@ -147,8 +142,7 @@ class ExpertQueue:
                     for name,info in reader.header.items() if name.startswith('token_refiner.blocks.')
                     and name.endswith('.weight')), default=0)
                 refiner = replace(refiner, key=((reader.identity,runtime.config.tensor_flow),'ptd_refiner',runtime.rank),
-                    prepare=lambda reader=reader:refiner_group(self.canonical, reader, runtime.config.tensor_flow,
-                        baked=self.adapter.options.baked_refiner),
+                    prepare=lambda reader=reader:refiner_group(self.canonical, reader, runtime.config.tensor_flow),
                     prepare_peak_bytes=refiner.max_bytes+largest+16*2**20,
                     resident_backing=False, pin_backing=False)
             self.refine_keys[hop] = refiner.key

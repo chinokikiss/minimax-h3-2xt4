@@ -1,5 +1,7 @@
 # PTD P2 final T4 evidence
 
+> Historical reproduction: the analyzer and P2 runtime were removed from active source. The command below refers to [source commit b79b1bc](https://github.com/chinokikiss/minimax-h3-2xt4/tree/b79b1bce1b8450a250e58bb8c8676630e58b4f59). Raw measurements and receipts are unchanged.
+
 Kaggle `pamcks/h3-ptd-aux-split-t4-20261029`, version 1. Four eight-hop cases completed on two distinct SM75 Tesla T4s. Result status is `complete`; final supervisor exit code is 0. The split format is correct but increases this fixture's mean RPC time 16.5%.
 
 - `ptd_result.json.gz`: losslessly compressed original 9,072,697-byte result. Decompressed SHA256 is `812cad379983a8ee181dfd1d24cfb18a79b80e352b0d26d7cc7af6c4481cb2d1`.

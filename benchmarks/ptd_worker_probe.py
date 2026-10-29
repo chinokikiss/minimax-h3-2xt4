@@ -16,9 +16,6 @@ def worker(rank, config, budget, port, connection):
     # production loader. Nested spans overlap and must never be added blindly.
     import patches.ptd.queue as queue
     import patches.ptd.bank as bank
-    import patches.ptd.refiner_layout as layout
-    import patches.ptd.auxiliary as auxiliary
-    auxiliary_access = []
 
     def timed(name, function, select=None, reader_index=None):
         def call(*args, **kwargs):
@@ -37,20 +34,6 @@ def worker(rank, config, budget, port, connection):
         select=lambda reader:not reader.overlay_verified,reader_index=0)
     bank.HopReader.read_tensor = timed('raw_aux_read',bank.HopReader.read_tensor,
         select=lambda reader,name,**kw:name.startswith(('token_refiner.','final_layer.')),reader_index=0)
-    layout.read_layout_tensor = timed('layout_read_and_verify',layout.read_layout_tensor,reader_index=0)
-    layout.tensor_hash = timed('layout_tensor_checksum',layout.tensor_hash)
-    auxiliary.tensor_hash = timed('split_tensor_checksum',auxiliary.tensor_hash)
-    split_read = auxiliary.SplitAuxiliary.read_tensor
-    def consumed(reader, name):
-        unit = reader.by_name[name]
-        start, cpu = time.perf_counter(), time.thread_time()
-        value = split_read(reader, name)
-        auxiliary_access.append(dict(hop=reader.hop,role=unit['role'],file=unit['file'],tensor=name,
-            payload_bytes=value.numel()*value.element_size(),header_bytes=unit['header_bytes'],
-            payload_verified=True,wall_seconds=time.perf_counter()-start,
-            thread_cpu_seconds=time.thread_time()-cpu))
-        return value
-    auxiliary.SplitAuxiliary.read_tensor = consumed
 
     def report():
         rows=[]
@@ -60,7 +43,6 @@ def worker(rank, config, budget, port, connection):
         return dict(rank=rank,spans=rows,peak_allocated=torch.cuda.max_memory_allocated(rank),
             peak_reserved=torch.cuda.max_memory_reserved(rank),rss_bytes=psutil.Process().memory_info().rss,
             cpu_preparation_spans=list(preparations),
-            auxiliary_consumption=list(auxiliary_access),
             measurement='RPC dispatch wall/thread CPU; CUDA default-stream intervals include idle/waits, not a kernel-time sum',
             observer='Two CUDA events per denoise/hop; identical for rebuild and queue')
 

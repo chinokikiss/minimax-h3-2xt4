@@ -13,6 +13,7 @@ import re
 import subprocess
 import tarfile
 from build_kaggle_light_delivery import payload_from_distribution, write_distribution
+from ptd_delivery_sources import RETIRED,apply as ptd_sources
 
 ROOT=Path(__file__).resolve().parents[1]
 HOOKS=('patches/comfy_sampler.py','patches/comfy_tp_runtime.py','custom_nodes/minimax_h3_tp2/__init__.py')
@@ -20,7 +21,7 @@ FILES=('patches/h3_operator_aot.py','benchmarks/case_h3_optimization.py',
        'patches/weight_residency.py','patches/host_weight_cache.py',
        'benchmarks/test_h3_optimization_batch.py','benchmarks/test_ptd_tp2.py',
        'benchmarks/test_ptd_queue.py','benchmarks/ptd_worker_probe.py',
-       'benchmarks/test_ptd_cpu_schedule.py','benchmarks/test_ptd_auxiliary.py',
+       'benchmarks/test_ptd_cpu_schedule.py','benchmarks/test_ptd_overlay.py',
        'benchmarks/ptd_t4_assets.py','benchmarks/run_ptd_tp2_t4.py',
        'custom_nodes/minimax_h3_tp2/ptd_nodes.py')
 
@@ -67,8 +68,9 @@ def main():
     additions=(*FILES,*(str(path.relative_to(ROOT)).replace('\\','/')
                        for path in (ROOT/'patches/ptd').iterdir() if path.is_file()))
     for name in additions:files[name]=(ROOT/name).read_bytes()
+    additions=tuple(set(additions)|set(ptd_sources(files)))
     for name in HOOKS:files[name]=owned_hooks(name,original[name])
-    assert all(files[n]==v for n,v in original.items() if n not in (*additions,*HOOKS))
+    assert all(files[n]==v for n,v in original.items() if n not in (*additions,*HOOKS,*RETIRED))
     assert not any(re.search(rb'(?:hf_[A-Za-z0-9]{25,}|gh[pousr]_[A-Za-z0-9]{30,})',v) for v in files.values())
     write_distribution(args.output,distribution,files,parent=digest)
     assert all(hashlib.sha256(distribution[n]).hexdigest()==value for n,value in frozen.items())

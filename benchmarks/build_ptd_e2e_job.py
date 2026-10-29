@@ -35,7 +35,7 @@ def main():
         gate=json.loads(args.ptd_qualification.read_text(encoding='utf-8'))
         assert setup['status']=='cpu_ready' and setup['review_suite']['passed']
         assert gate['status']=='ptd_e2e_cpu_ready' and gate['no_weights_fetched'] and not gate['gpu_used']
-        assert gate['native_sampler_integration'] and gate['split_auxiliary'] is False
+        assert gate['native_sampler_integration'] and gate['auxiliary_layout']=='monolithic'
         assert setup['capsule_sha256']==gate['capsule_sha256']==publication['capsule_sha256']
         command+=['--qualification',str(args.qualification)]
     subprocess.run(command,check=True)
@@ -78,7 +78,8 @@ os.execve(sys.executable,argv,env)
     (job/'kernel-metadata.json').write_text(json.dumps(metadata,indent=2),encoding='utf-8')
     binding=json.loads((job/'source_binding.json').read_text(encoding='utf-8'))
     binding.update(full_pipeline=args.mode=='gpu',full_pipeline_authorized=True,production_layers=50,expert_hops=8,
-        split_auxiliary=False,fp32_sidecar=False,online_lora=False,private_references=True,credentials=False,
+        auxiliary_layout='monolithic',online_lora=False,private_references=True,credentials=False,
+        prefetch_refiner=plan.get('prefetch_refiner',False),
         request_contract=validate(plan),plan_sha256=hashlib.sha256(args.plan.read_bytes()).hexdigest(),
         execution_budget=300 if args.mode=='cpu' else 10800,
         ptd_qualification_sha256=hashlib.sha256(args.ptd_qualification.read_bytes()).hexdigest() if args.ptd_qualification else None)

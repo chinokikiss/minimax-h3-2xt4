@@ -1,5 +1,7 @@
 # PTD P2: separate Refiner and Output Head units
 
+> Historical experiment record: the FP32 sidecar and P2 Split implementation and switches have been removed. P1 remains optional and off by default. Reproduce removed cases with their recorded immutable source snapshot. See [current cleanup](H3_PTD_RUNTIME_CLEANUP_20261029.md).
+
 Implemented on `codex/h3-ptd-refasymopd`, 2026-10-29. This is an optional storage/loader adaptation. Native forwards, FP16-fix folding, head arithmetic, TP2 collectives and existing defaults are preserved. The physical T4 fixture passes correctness but regresses mean latency 16.5%; see the [measured results](H3_PTD_AUXILIARY_SPLIT_T4_RESULTS_20261029.md). The format remains optional.
 
 ## Why this change follows P0/P1
@@ -129,4 +131,4 @@ and [original CLI error](../data/h3_ptd_aux_split_20261029/t4_collection_transpo
 The [final archive](../data/h3_ptd_aux_split_20261029/t4_v1_final/README.md)
 contains the independently verified results and normal-exit receipt.
 
-Implementation: [auxiliary units](../../patches/ptd/auxiliary.py), [bank/migration](../../patches/ptd/bank.py), [runtime trust binding](../../patches/ptd/runtime.py), [contract tests](../../benchmarks/test_ptd_auxiliary.py), [bounded experiment](../../benchmarks/run_ptd_tp2_t4.py).
+Implementation: [auxiliary units](https://github.com/chinokikiss/minimax-h3-2xt4/blob/b79b1bce1b8450a250e58bb8c8676630e58b4f59/patches/ptd/auxiliary.py), [bank/migration](../../patches/ptd/bank.py), [runtime trust binding](../../patches/ptd/runtime.py), [contract tests](https://github.com/chinokikiss/minimax-h3-2xt4/blob/b79b1bce1b8450a250e58bb8c8676630e58b4f59/benchmarks/test_ptd_auxiliary.py), [bounded experiment](../../benchmarks/run_ptd_tp2_t4.py).
