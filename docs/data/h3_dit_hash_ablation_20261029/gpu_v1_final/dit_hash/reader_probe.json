@@ -1,0 +1,385 @@
+{
+  "rows": [
+    {
+      "verify": true,
+      "rank": 0,
+      "repeat": 0,
+      "wall_seconds": 1.7226499359999252,
+      "thread_cpu_seconds": 1.2416377540000099,
+      "admission_seconds": 8.536176034999926,
+      "hash_calls": [
+        {
+          "function": "sha",
+          "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_00/dit.block00.rank0.json",
+          "bytes": 5862,
+          "kind": "metadata",
+          "start_monotonic": 749.5106755,
+          "wall_seconds": 0.00022530100000039965,
+          "thread_cpu_seconds": 0.00017997400001945607,
+          "tid": 98
+        },
+        {
+          "function": "sha",
+          "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_00/dit.block00.rank0.safetensors",
+          "bytes": 196348072,
+          "kind": "payload",
+          "start_monotonic": 749.511106355,
+          "wall_seconds": 1.0575451280000152,
+          "thread_cpu_seconds": 0.5766616079999949,
+          "tid": 98
+        },
+        {
+          "function": "state_hashes",
+          "bytes": 196346880,
+          "kind": "tensor_state",
+          "start_monotonic": 750.735973814,
+          "wall_seconds": 0.49447255200004747,
+          "thread_cpu_seconds": 0.494413537000014,
+          "tid": 98
+        }
+      ]
+    },
+    {
+      "verify": true,
+      "rank": 0,
+      "repeat": 1,
+      "wall_seconds": 0.1648689450000802,
+      "thread_cpu_seconds": 0.16480560600001581,
+      "admission_seconds": 8.536176034999926,
+      "hash_calls": []
+    },
+    {
+      "verify": true,
+      "rank": 0,
+      "repeat": 2,
+      "wall_seconds": 0.15939759800005504,
+      "thread_cpu_seconds": 0.15937628099999301,
+      "admission_seconds": 8.536176034999926,
+      "hash_calls": []
+    },
+    {
+      "verify": true,
+      "rank": 1,
+      "repeat": 0,
+      "wall_seconds": 1.3546280130000241,
+      "thread_cpu_seconds": 1.2296033070000192,
+      "admission_seconds": 8.536176034999926,
+      "hash_calls": [
+        {
+          "function": "sha",
+          "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_00/dit.block00.rank1.json",
+          "bytes": 5862,
+          "kind": "metadata",
+          "start_monotonic": 753.071569633,
+          "wall_seconds": 0.0003449570000384483,
+          "thread_cpu_seconds": 0.00028304599999273705,
+          "tid": 98
+        },
+        {
+          "function": "sha",
+          "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_00/dit.block00.rank1.safetensors",
+          "bytes": 196348072,
+          "kind": "payload",
+          "start_monotonic": 753.072149046,
+          "wall_seconds": 0.7009103329999107,
+          "thread_cpu_seconds": 0.5760433460000058,
+          "tid": 98
+        },
+        {
+          "function": "state_hashes",
+          "bytes": 196346880,
+          "kind": "tensor_state",
+          "start_monotonic": 753.933957393,
+          "wall_seconds": 0.489184162000015,
+          "thread_cpu_seconds": 0.48912586200000874,
+          "tid": 98
+        }
+      ]
+    },
+    {
+      "verify": true,
+      "rank": 1,
+      "repeat": 1,
+      "wall_seconds": 0.1620452590000241,
+      "thread_cpu_seconds": 0.16202151799998887,
+      "admission_seconds": 8.536176034999926,
+      "hash_calls": []
+    },
+    {
+      "verify": true,
+      "rank": 1,
+      "repeat": 2,
+      "wall_seconds": 0.16154887099992266,
+      "thread_cpu_seconds": 0.1615364310000018,
+      "admission_seconds": 8.536176034999926,
+      "hash_calls": []
+    },
+    {
+      "verify": false,
+      "rank": 0,
+      "repeat": 0,
+      "wall_seconds": 0.1628326320000042,
+      "thread_cpu_seconds": 0.16282086199998957,
+      "admission_seconds": 0.034906701999943834,
+      "hash_calls": [
+        {
+          "function": "sha",
+          "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_00/dit.block00.rank0.json",
+          "bytes": 5862,
+          "kind": "metadata",
+          "start_monotonic": 756.30021253,
+          "wall_seconds": 0.00010010500000134925,
+          "thread_cpu_seconds": 0.00010012799998548871,
+          "tid": 98
+        }
+      ]
+    },
+    {
+      "verify": false,
+      "rank": 0,
+      "repeat": 1,
+      "wall_seconds": 0.1636438090000638,
+      "thread_cpu_seconds": 0.16361725699999852,
+      "admission_seconds": 0.034906701999943834,
+      "hash_calls": []
+    },
+    {
+      "verify": false,
+      "rank": 0,
+      "repeat": 2,
+      "wall_seconds": 0.17676120599992373,
+      "thread_cpu_seconds": 0.17674752300001728,
+      "admission_seconds": 0.034906701999943834,
+      "hash_calls": []
+    },
+    {
+      "verify": false,
+      "rank": 1,
+      "repeat": 0,
+      "wall_seconds": 0.1598933920000718,
+      "thread_cpu_seconds": 0.1598805010000035,
+      "admission_seconds": 0.034906701999943834,
+      "hash_calls": [
+        {
+          "function": "sha",
+          "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_00/dit.block00.rank1.json",
+          "bytes": 5862,
+          "kind": "metadata",
+          "start_monotonic": 758.343235255,
+          "wall_seconds": 0.0001828389999900537,
+          "thread_cpu_seconds": 0.00018292400000063935,
+          "tid": 98
+        }
+      ]
+    },
+    {
+      "verify": false,
+      "rank": 1,
+      "repeat": 1,
+      "wall_seconds": 0.16131811500008553,
+      "thread_cpu_seconds": 0.16129179000000704,
+      "admission_seconds": 0.034906701999943834,
+      "hash_calls": []
+    },
+    {
+      "verify": false,
+      "rank": 1,
+      "repeat": 2,
+      "wall_seconds": 0.16566108999995777,
+      "thread_cpu_seconds": 0.1656479860000104,
+      "admission_seconds": 0.034906701999943834,
+      "hash_calls": []
+    },
+    {
+      "verify": false,
+      "rank": 0,
+      "repeat": 0,
+      "wall_seconds": 0.1623222739999619,
+      "thread_cpu_seconds": 0.16230031399999234,
+      "admission_seconds": 0.03904736300000877,
+      "hash_calls": [
+        {
+          "function": "sha",
+          "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_00/dit.block00.rank0.json",
+          "bytes": 5862,
+          "kind": "metadata",
+          "start_monotonic": 760.404200374,
+          "wall_seconds": 0.00010298699999111705,
+          "thread_cpu_seconds": 0.00010288999999374937,
+          "tid": 98
+        }
+      ]
+    },
+    {
+      "verify": false,
+      "rank": 0,
+      "repeat": 1,
+      "wall_seconds": 0.16227008699991075,
+      "thread_cpu_seconds": 0.16224330899999018,
+      "admission_seconds": 0.03904736300000877,
+      "hash_calls": []
+    },
+    {
+      "verify": false,
+      "rank": 0,
+      "repeat": 2,
+      "wall_seconds": 0.16613191800001914,
+      "thread_cpu_seconds": 0.16611851400000432,
+      "admission_seconds": 0.03904736300000877,
+      "hash_calls": []
+    },
+    {
+      "verify": false,
+      "rank": 1,
+      "repeat": 0,
+      "wall_seconds": 0.15927121899994745,
+      "thread_cpu_seconds": 0.15922674399999437,
+      "admission_seconds": 0.03904736300000877,
+      "hash_calls": [
+        {
+          "function": "sha",
+          "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_00/dit.block00.rank1.json",
+          "bytes": 5862,
+          "kind": "metadata",
+          "start_monotonic": 762.416882466,
+          "wall_seconds": 0.00019469800008664606,
+          "thread_cpu_seconds": 0.00019450300001722098,
+          "tid": 98
+        }
+      ]
+    },
+    {
+      "verify": false,
+      "rank": 1,
+      "repeat": 1,
+      "wall_seconds": 0.16368001500006812,
+      "thread_cpu_seconds": 0.16366675100002226,
+      "admission_seconds": 0.03904736300000877,
+      "hash_calls": []
+    },
+    {
+      "verify": false,
+      "rank": 1,
+      "repeat": 2,
+      "wall_seconds": 0.16084510099994986,
+      "thread_cpu_seconds": 0.16082225400000993,
+      "admission_seconds": 0.03904736300000877,
+      "hash_calls": []
+    },
+    {
+      "verify": true,
+      "rank": 0,
+      "repeat": 0,
+      "wall_seconds": 1.1747125309999547,
+      "thread_cpu_seconds": 1.1744971300000202,
+      "admission_seconds": 8.46860778700011,
+      "hash_calls": [
+        {
+          "function": "sha",
+          "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_00/dit.block00.rank0.json",
+          "bytes": 5862,
+          "kind": "metadata",
+          "start_monotonic": 772.876562773,
+          "wall_seconds": 0.00011834999997972773,
+          "thread_cpu_seconds": 0.00011830900001541522,
+          "tid": 98
+        },
+        {
+          "function": "sha",
+          "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_00/dit.block00.rank0.safetensors",
+          "bytes": 196348072,
+          "kind": "payload",
+          "start_monotonic": 772.876807732,
+          "wall_seconds": 0.5147000389999903,
+          "thread_cpu_seconds": 0.5145817049999835,
+          "tid": 98
+        },
+        {
+          "function": "state_hashes",
+          "bytes": 196346880,
+          "kind": "tensor_state",
+          "start_monotonic": 773.55307658,
+          "wall_seconds": 0.49541830699990896,
+          "thread_cpu_seconds": 0.49535212000000683,
+          "tid": 98
+        }
+      ]
+    },
+    {
+      "verify": true,
+      "rank": 0,
+      "repeat": 1,
+      "wall_seconds": 0.16305353700010983,
+      "thread_cpu_seconds": 0.16304077899999925,
+      "admission_seconds": 8.46860778700011,
+      "hash_calls": []
+    },
+    {
+      "verify": true,
+      "rank": 0,
+      "repeat": 2,
+      "wall_seconds": 0.1627806149999742,
+      "thread_cpu_seconds": 0.1619955920000109,
+      "admission_seconds": 8.46860778700011,
+      "hash_calls": []
+    },
+    {
+      "verify": true,
+      "rank": 1,
+      "repeat": 0,
+      "wall_seconds": 1.1843916530000342,
+      "thread_cpu_seconds": 1.1841992800000014,
+      "admission_seconds": 8.46860778700011,
+      "hash_calls": [
+        {
+          "function": "sha",
+          "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_00/dit.block00.rank1.json",
+          "bytes": 5862,
+          "kind": "metadata",
+          "start_monotonic": 775.909376865,
+          "wall_seconds": 0.00018848100000923296,
+          "thread_cpu_seconds": 0.0001876850000144259,
+          "tid": 98
+        },
+        {
+          "function": "sha",
+          "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_00/dit.block00.rank1.safetensors",
+          "bytes": 196348072,
+          "kind": "payload",
+          "start_monotonic": 775.9097232,
+          "wall_seconds": 0.5255211329999838,
+          "thread_cpu_seconds": 0.525457614000004,
+          "tid": 98
+        },
+        {
+          "function": "state_hashes",
+          "bytes": 196346880,
+          "kind": "tensor_state",
+          "start_monotonic": 776.595257985,
+          "wall_seconds": 0.4954866949999541,
+          "thread_cpu_seconds": 0.4953831530000059,
+          "tid": 98
+        }
+      ]
+    },
+    {
+      "verify": true,
+      "rank": 1,
+      "repeat": 1,
+      "wall_seconds": 0.16259536600000501,
+      "thread_cpu_seconds": 0.16258269200000086,
+      "admission_seconds": 8.46860778700011,
+      "hash_calls": []
+    },
+    {
+      "verify": true,
+      "rank": 1,
+      "repeat": 2,
+      "wall_seconds": 0.1606414020000102,
+      "thread_cpu_seconds": 0.1606295070000101,
+      "admission_seconds": 8.46860778700011,
+      "hash_calls": []
+    }
+  ],
+  "semantics": "Sequential CPU owned-shard loads on the T4 host; first-use/reload, not GPU or physically cold I/O"
+}

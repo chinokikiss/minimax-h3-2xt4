@@ -1,0 +1,1046 @@
+{
+  "rank": 1,
+  "spans": [
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.0003442100000938808,
+      "thread_cpu_seconds": 0.00034265000000033297,
+      "default_stream_interval_ms": 0.3505600094795227
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 22.53881486099999,
+      "thread_cpu_seconds": 6.5857813830000005,
+      "default_stream_interval_ms": 22549.025390625
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.001287509000007958,
+      "thread_cpu_seconds": 0.0012873529999986033,
+      "default_stream_interval_ms": 1.2873599529266357
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 5.674189612000077,
+      "thread_cpu_seconds": 2.105084430999998,
+      "default_stream_interval_ms": 5674.2705078125
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.0006400350000603794,
+      "thread_cpu_seconds": 0.0006398299999972323,
+      "default_stream_interval_ms": 0.6409919857978821
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 15.189606839000021,
+      "thread_cpu_seconds": 15.015555696000003,
+      "default_stream_interval_ms": 15200.7060546875
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.0007761829999708425,
+      "thread_cpu_seconds": 0.0007355629999992175,
+      "default_stream_interval_ms": 0.7774720191955566
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 0.12280576399996335,
+      "thread_cpu_seconds": 0.09378937500000006,
+      "default_stream_interval_ms": 3596.476318359375
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.000651436999987709,
+      "thread_cpu_seconds": 0.000650452999998663,
+      "default_stream_interval_ms": 0.6542080044746399
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 17.51959697099994,
+      "thread_cpu_seconds": 17.329528685,
+      "default_stream_interval_ms": 17519.845703125
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.0006552239999564335,
+      "thread_cpu_seconds": 0.0006546380000003182,
+      "default_stream_interval_ms": 0.6594240069389343
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 0.07605394400002297,
+      "thread_cpu_seconds": 0.06272700400000275,
+      "default_stream_interval_ms": 3061.22998046875
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.00042667999991863326,
+      "thread_cpu_seconds": 0.00042671499999613616,
+      "default_stream_interval_ms": 0.43007999658584595
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 19.51914616199997,
+      "thread_cpu_seconds": 19.452921234,
+      "default_stream_interval_ms": 19519.4453125
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.0009455059999936566,
+      "thread_cpu_seconds": 0.0008868809999995619,
+      "default_stream_interval_ms": 0.9448000192642212
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 11.561196866000046,
+      "thread_cpu_seconds": 11.53024474499999,
+      "default_stream_interval_ms": 11573.5
+    }
+  ],
+  "peak_allocated": 416863744,
+  "hash_verification": {
+    "calls": [
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/base/base_bundle/bundle.json",
+        "bytes": 1005620,
+        "kind": "metadata",
+        "start_monotonic": 782.953046544,
+        "wall_seconds": 0.0027052269999785494,
+        "thread_cpu_seconds": 0.002704813999999889,
+        "tid": 128
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/base/dit_aux.safetensors",
+        "bytes": 1602311528,
+        "kind": "payload",
+        "start_monotonic": 782.965940806,
+        "wall_seconds": 4.2599013009999,
+        "thread_cpu_seconds": 4.2593113769999995,
+        "tid": 128
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/base/dit_bundle.json",
+        "bytes": 170983,
+        "kind": "metadata",
+        "start_monotonic": 831.706080348,
+        "wall_seconds": 0.00067204499998752,
+        "thread_cpu_seconds": 0.0006703469999997935,
+        "tid": 128
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/base/base_bundle/bundle.json",
+        "bytes": 1005620,
+        "kind": "metadata",
+        "start_monotonic": 831.708683271,
+        "wall_seconds": 0.002889076999963436,
+        "thread_cpu_seconds": 0.0028887940000004164,
+        "tid": 128
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/base/dit_aux.safetensors",
+        "bytes": 1602311528,
+        "kind": "payload",
+        "start_monotonic": 831.722154169,
+        "wall_seconds": 4.296222594000028,
+        "thread_cpu_seconds": 4.293309984,
+        "tid": 128
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/base/base_bundle/bundle.json",
+        "bytes": 1005620,
+        "kind": "metadata",
+        "start_monotonic": 836.018575811,
+        "wall_seconds": 0.0027253169999994498,
+        "thread_cpu_seconds": 0.0027260259999977166,
+        "tid": 128
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_00/aux_overlay.safetensors",
+        "bytes": 1544161056,
+        "kind": "payload",
+        "start_monotonic": 836.482710545,
+        "wall_seconds": 5.82458843500001,
+        "thread_cpu_seconds": 4.821321843,
+        "tid": 128
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_00/dit.block00.rank1.json",
+        "bytes": 5862,
+        "kind": "metadata",
+        "start_monotonic": 850.12749788,
+        "wall_seconds": 0.00037043899999389396,
+        "thread_cpu_seconds": 0.0003693940000000003,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_00/dit.block00.rank1.safetensors",
+        "bytes": 196348072,
+        "kind": "payload",
+        "start_monotonic": 850.128042104,
+        "wall_seconds": 0.8329738060000409,
+        "thread_cpu_seconds": 0.810592886,
+        "tid": 141
+      },
+      {
+        "function": "state_hashes",
+        "bytes": 196346880,
+        "kind": "tensor_state",
+        "start_monotonic": 851.191456694,
+        "wall_seconds": 0.9052236180000364,
+        "thread_cpu_seconds": 0.9020013869999999,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_00/dit.block01.rank1.json",
+        "bytes": 5862,
+        "kind": "metadata",
+        "start_monotonic": 852.105281477,
+        "wall_seconds": 0.0018518280000989762,
+        "thread_cpu_seconds": 0.00027843300000007787,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_00/dit.block01.rank1.safetensors",
+        "bytes": 196348072,
+        "kind": "payload",
+        "start_monotonic": 852.107348805,
+        "wall_seconds": 1.8224174900000207,
+        "thread_cpu_seconds": 0.914200181,
+        "tid": 141
+      },
+      {
+        "function": "state_hashes",
+        "bytes": 196346880,
+        "kind": "tensor_state",
+        "start_monotonic": 854.160112283,
+        "wall_seconds": 0.8982409070000585,
+        "thread_cpu_seconds": 0.8914193020000001,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_01/dit.block00.rank1.json",
+        "bytes": 5862,
+        "kind": "metadata",
+        "start_monotonic": 855.079718535,
+        "wall_seconds": 0.00261222300002828,
+        "thread_cpu_seconds": 0.0003078260000002331,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_01/dit.block00.rank1.safetensors",
+        "bytes": 196348072,
+        "kind": "payload",
+        "start_monotonic": 855.082574491,
+        "wall_seconds": 1.2865490160000945,
+        "thread_cpu_seconds": 0.8985680450000002,
+        "tid": 141
+      },
+      {
+        "function": "state_hashes",
+        "bytes": 196346880,
+        "kind": "tensor_state",
+        "start_monotonic": 856.635204242,
+        "wall_seconds": 0.9386941820000629,
+        "thread_cpu_seconds": 0.8147813170000004,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_01/dit.block01.rank1.json",
+        "bytes": 5862,
+        "kind": "metadata",
+        "start_monotonic": 857.591991451,
+        "wall_seconds": 0.0031082929999683984,
+        "thread_cpu_seconds": 0.0002791860000002089,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_01/dit.block01.rank1.safetensors",
+        "bytes": 196348072,
+        "kind": "payload",
+        "start_monotonic": 857.595330928,
+        "wall_seconds": 1.2418336510000927,
+        "thread_cpu_seconds": 0.8963619669999998,
+        "tid": 141
+      },
+      {
+        "function": "state_hashes",
+        "bytes": 196346880,
+        "kind": "tensor_state",
+        "start_monotonic": 859.043906493,
+        "wall_seconds": 0.6833712019999894,
+        "thread_cpu_seconds": 0.6831292370000002,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_01/aux_overlay.safetensors",
+        "bytes": 1544161056,
+        "kind": "payload",
+        "start_monotonic": 859.743805466,
+        "wall_seconds": 4.8713446329999215,
+        "thread_cpu_seconds": 4.813430566,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_02/dit.block00.rank1.json",
+        "bytes": 5862,
+        "kind": "metadata",
+        "start_monotonic": 864.620288537,
+        "wall_seconds": 0.00023507700007030508,
+        "thread_cpu_seconds": 0.00020527699999917104,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_02/dit.block00.rank1.safetensors",
+        "bytes": 196348072,
+        "kind": "payload",
+        "start_monotonic": 864.620677816,
+        "wall_seconds": 1.4236926739999944,
+        "thread_cpu_seconds": 0.8268305159999993,
+        "tid": 141
+      },
+      {
+        "function": "state_hashes",
+        "bytes": 196346880,
+        "kind": "tensor_state",
+        "start_monotonic": 866.264039553,
+        "wall_seconds": 0.9211983730000384,
+        "thread_cpu_seconds": 0.9197438990000002,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_02/dit.block01.rank1.json",
+        "bytes": 5862,
+        "kind": "metadata",
+        "start_monotonic": 867.193918754,
+        "wall_seconds": 0.002046070000005784,
+        "thread_cpu_seconds": 0.00031392700000054674,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_02/dit.block01.rank1.safetensors",
+        "bytes": 196348072,
+        "kind": "payload",
+        "start_monotonic": 867.196172084,
+        "wall_seconds": 1.1597942040000362,
+        "thread_cpu_seconds": 0.7303032680000001,
+        "tid": 141
+      },
+      {
+        "function": "state_hashes",
+        "bytes": 196346880,
+        "kind": "tensor_state",
+        "start_monotonic": 868.572717515,
+        "wall_seconds": 0.5721623570000247,
+        "thread_cpu_seconds": 0.5721073799999985,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_02/aux_overlay.safetensors",
+        "bytes": 1544161056,
+        "kind": "payload",
+        "start_monotonic": 869.152689133,
+        "wall_seconds": 6.20686501800003,
+        "thread_cpu_seconds": 6.201878110000003,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_03/dit.block00.rank1.json",
+        "bytes": 5862,
+        "kind": "metadata",
+        "start_monotonic": 875.367102621,
+        "wall_seconds": 0.0004707770000322853,
+        "thread_cpu_seconds": 0.0004113809999992668,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_03/dit.block00.rank1.safetensors",
+        "bytes": 196348072,
+        "kind": "payload",
+        "start_monotonic": 875.367810991,
+        "wall_seconds": 1.0323139879999417,
+        "thread_cpu_seconds": 0.8628479150000032,
+        "tid": 141
+      },
+      {
+        "function": "state_hashes",
+        "bytes": 196346880,
+        "kind": "tensor_state",
+        "start_monotonic": 876.678143658,
+        "wall_seconds": 0.809084637000069,
+        "thread_cpu_seconds": 0.8073676059999997,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_03/dit.block01.rank1.json",
+        "bytes": 5862,
+        "kind": "metadata",
+        "start_monotonic": 877.494432769,
+        "wall_seconds": 0.00036599700001715973,
+        "thread_cpu_seconds": 0.0002641159999967613,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_03/dit.block01.rank1.safetensors",
+        "bytes": 196348072,
+        "kind": "payload",
+        "start_monotonic": 877.494980763,
+        "wall_seconds": 1.046106774000009,
+        "thread_cpu_seconds": 0.8709159260000021,
+        "tid": 141
+      },
+      {
+        "function": "state_hashes",
+        "bytes": 196346880,
+        "kind": "tensor_state",
+        "start_monotonic": 878.761238621,
+        "wall_seconds": 0.8985774950000405,
+        "thread_cpu_seconds": 0.8943958019999982,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_03/aux_overlay.safetensors",
+        "bytes": 1544161056,
+        "kind": "payload",
+        "start_monotonic": 879.666912798,
+        "wall_seconds": 5.490465723000057,
+        "thread_cpu_seconds": 4.757136119999998,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_04/dit.block00.rank1.json",
+        "bytes": 5862,
+        "kind": "metadata",
+        "start_monotonic": 885.164664234,
+        "wall_seconds": 0.0003708409999489959,
+        "thread_cpu_seconds": 0.00029022100000020146,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_04/dit.block00.rank1.safetensors",
+        "bytes": 196348072,
+        "kind": "payload",
+        "start_monotonic": 885.165263115,
+        "wall_seconds": 0.8444840150000346,
+        "thread_cpu_seconds": 0.7180420820000002,
+        "tid": 141
+      },
+      {
+        "function": "state_hashes",
+        "bytes": 196346880,
+        "kind": "tensor_state",
+        "start_monotonic": 886.201294529,
+        "wall_seconds": 0.5128118969998923,
+        "thread_cpu_seconds": 0.5127485559999982,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_04/dit.block01.rank1.json",
+        "bytes": 5862,
+        "kind": "metadata",
+        "start_monotonic": 886.719775631,
+        "wall_seconds": 0.00031303500009016716,
+        "thread_cpu_seconds": 0.00025848199999956023,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_04/dit.block01.rank1.safetensors",
+        "bytes": 196348072,
+        "kind": "payload",
+        "start_monotonic": 886.720234209,
+        "wall_seconds": 0.9106676490000609,
+        "thread_cpu_seconds": 0.7644145040000012,
+        "tid": 141
+      },
+      {
+        "function": "state_hashes",
+        "bytes": 196346880,
+        "kind": "tensor_state",
+        "start_monotonic": 887.823530105,
+        "wall_seconds": 0.637639386999922,
+        "thread_cpu_seconds": 0.6362067299999978,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_04/aux_overlay.safetensors",
+        "bytes": 1544161056,
+        "kind": "payload",
+        "start_monotonic": 888.466042626,
+        "wall_seconds": 9.303659261999996,
+        "thread_cpu_seconds": 5.745551706999997,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_05/dit.block00.rank1.json",
+        "bytes": 5862,
+        "kind": "metadata",
+        "start_monotonic": 897.775084802,
+        "wall_seconds": 0.0007784050000054776,
+        "thread_cpu_seconds": 0.00022963600000025508,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_05/dit.block00.rank1.safetensors",
+        "bytes": 196348072,
+        "kind": "payload",
+        "start_monotonic": 897.776091662,
+        "wall_seconds": 1.0456430880000198,
+        "thread_cpu_seconds": 0.9597703489999958,
+        "tid": 141
+      },
+      {
+        "function": "state_hashes",
+        "bytes": 196346880,
+        "kind": "tensor_state",
+        "start_monotonic": 899.023412996,
+        "wall_seconds": 0.9082712229999288,
+        "thread_cpu_seconds": 0.9058392669999975,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_05/dit.block01.rank1.json",
+        "bytes": 5862,
+        "kind": "metadata",
+        "start_monotonic": 899.938951284,
+        "wall_seconds": 0.00033735599993178766,
+        "thread_cpu_seconds": 0.00028624600000171085,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_05/dit.block01.rank1.safetensors",
+        "bytes": 196348072,
+        "kind": "payload",
+        "start_monotonic": 899.93949831,
+        "wall_seconds": 1.0086867349999693,
+        "thread_cpu_seconds": 0.9739269230000005,
+        "tid": 141
+      },
+      {
+        "function": "state_hashes",
+        "bytes": 196346880,
+        "kind": "tensor_state",
+        "start_monotonic": 901.146777414,
+        "wall_seconds": 0.9159292260000029,
+        "thread_cpu_seconds": 0.9131189000000006,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_05/aux_overlay.safetensors",
+        "bytes": 1544161056,
+        "kind": "payload",
+        "start_monotonic": 902.069950424,
+        "wall_seconds": 8.023568349000016,
+        "thread_cpu_seconds": 7.374963942000001,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_06/dit.block00.rank1.json",
+        "bytes": 5862,
+        "kind": "metadata",
+        "start_monotonic": 910.100702634,
+        "wall_seconds": 0.0005982400000448251,
+        "thread_cpu_seconds": 0.0002066869999950427,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_06/dit.block00.rank1.safetensors",
+        "bytes": 196348072,
+        "kind": "payload",
+        "start_monotonic": 910.101505736,
+        "wall_seconds": 1.2200799099999813,
+        "thread_cpu_seconds": 0.7251744729999956,
+        "tid": 141
+      },
+      {
+        "function": "state_hashes",
+        "bytes": 196346880,
+        "kind": "tensor_state",
+        "start_monotonic": 911.482250517,
+        "wall_seconds": 0.509266657000012,
+        "thread_cpu_seconds": 0.5092192230000023,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_06/dit.block01.rank1.json",
+        "bytes": 5862,
+        "kind": "metadata",
+        "start_monotonic": 911.996712674,
+        "wall_seconds": 0.0011908619999303482,
+        "thread_cpu_seconds": 0.0002806840000033617,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_06/dit.block01.rank1.safetensors",
+        "bytes": 196348072,
+        "kind": "payload",
+        "start_monotonic": 911.998111288,
+        "wall_seconds": 0.719062188999942,
+        "thread_cpu_seconds": 0.6408213019999991,
+        "tid": 141
+      },
+      {
+        "function": "state_hashes",
+        "bytes": 196346880,
+        "kind": "tensor_state",
+        "start_monotonic": 912.899214575,
+        "wall_seconds": 0.5223208270000441,
+        "thread_cpu_seconds": 0.522226633999999,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_06/aux_overlay.safetensors",
+        "bytes": 1544161056,
+        "kind": "payload",
+        "start_monotonic": 913.427064925,
+        "wall_seconds": 6.872999084000071,
+        "thread_cpu_seconds": 5.241346926999995,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_07/dit.block00.rank1.json",
+        "bytes": 5862,
+        "kind": "metadata",
+        "start_monotonic": 920.32091723,
+        "wall_seconds": 0.0012141199999859964,
+        "thread_cpu_seconds": 0.00024000800000578693,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_07/dit.block00.rank1.safetensors",
+        "bytes": 196348072,
+        "kind": "payload",
+        "start_monotonic": 920.322281783,
+        "wall_seconds": 0.9691580359999534,
+        "thread_cpu_seconds": 0.6152294729999994,
+        "tid": 141
+      },
+      {
+        "function": "state_hashes",
+        "bytes": 196346880,
+        "kind": "tensor_state",
+        "start_monotonic": 921.48422694,
+        "wall_seconds": 0.5325378090000186,
+        "thread_cpu_seconds": 0.532468969,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_07/dit.block01.rank1.json",
+        "bytes": 5862,
+        "kind": "metadata",
+        "start_monotonic": 922.022065252,
+        "wall_seconds": 0.0011448600000676379,
+        "thread_cpu_seconds": 0.00023190499999969916,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_07/dit.block01.rank1.safetensors",
+        "bytes": 196348072,
+        "kind": "payload",
+        "start_monotonic": 922.023356495,
+        "wall_seconds": 0.7782985699999472,
+        "thread_cpu_seconds": 0.6419985559999972,
+        "tid": 141
+      },
+      {
+        "function": "state_hashes",
+        "bytes": 196346880,
+        "kind": "tensor_state",
+        "start_monotonic": 923.021698571,
+        "wall_seconds": 0.8797190420000334,
+        "thread_cpu_seconds": 0.8790402619999966,
+        "tid": 141
+      },
+      {
+        "function": "sha",
+        "path": "/tmp/h3_dit_hash_ablation_20261029/bank/hop_07/aux_overlay.safetensors",
+        "bytes": 1544161056,
+        "kind": "payload",
+        "start_monotonic": 923.908388584,
+        "wall_seconds": 9.559712459000025,
+        "thread_cpu_seconds": 6.3897084550000045,
+        "tid": 141
+      }
+    ],
+    "semantics": "CPU hash spans can overlap prefetch/other threads; summed time is not critical-path savings"
+  },
+  "peak_reserved": 444596224,
+  "rss_bytes": 1915834368,
+  "cpu_preparation_spans": [
+    {
+      "stage": "raw_overlay_verify",
+      "hop": 0,
+      "wall_seconds": 5.824700703999952,
+      "thread_cpu_seconds": 4.821433070000001,
+      "start_monotonic": 836.482704786
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 5.825098738999941,
+      "thread_cpu_seconds": 4.821828382,
+      "start_monotonic": 836.482511079
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.00068743600002108,
+      "thread_cpu_seconds": 0.0006884609999993074,
+      "start_monotonic": 842.307617584
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.00031869600002210063,
+      "thread_cpu_seconds": 0.00032253100000190216,
+      "start_monotonic": 842.308313075
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.002409488000012061,
+      "thread_cpu_seconds": 0.002410390999997958,
+      "start_monotonic": 842.308639838
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.00042758100005357846,
+      "thread_cpu_seconds": 0.00042727399999975546,
+      "start_monotonic": 842.311546981
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.000433463000035772,
+      "thread_cpu_seconds": 0.00043404999999907545,
+      "start_monotonic": 842.31197994
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.0005182670000749567,
+      "thread_cpu_seconds": 0.0005190570000017658,
+      "start_monotonic": 842.312418259
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.00417934699999023,
+      "thread_cpu_seconds": 0.0016935259999999452,
+      "start_monotonic": 855.066991216
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.0019470280000177809,
+      "thread_cpu_seconds": 0.0007274270000001692,
+      "start_monotonic": 855.071230474
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.000873215999945387,
+      "thread_cpu_seconds": 0.0008735940000001996,
+      "start_monotonic": 855.073524206
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 0,
+      "wall_seconds": 0.0026282759999958216,
+      "thread_cpu_seconds": 0.0006352189999994096,
+      "start_monotonic": 855.074452694
+    },
+    {
+      "stage": "raw_overlay_verify",
+      "hop": 1,
+      "wall_seconds": 4.8714738830000215,
+      "thread_cpu_seconds": 4.813551373999999,
+      "start_monotonic": 859.743785912
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 1,
+      "wall_seconds": 4.873023310999997,
+      "thread_cpu_seconds": 4.815105097999999,
+      "start_monotonic": 859.74327485
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 1,
+      "wall_seconds": 0.0003865319999931671,
+      "thread_cpu_seconds": 0.0003869579999999928,
+      "start_monotonic": 864.616376449
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 1,
+      "wall_seconds": 0.0004992670000092403,
+      "thread_cpu_seconds": 0.0005002010000012547,
+      "start_monotonic": 864.616934219
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 1,
+      "wall_seconds": 0.00029367000001911947,
+      "thread_cpu_seconds": 0.0002940420000001609,
+      "start_monotonic": 864.617484656
+    },
+    {
+      "stage": "raw_overlay_verify",
+      "hop": 2,
+      "wall_seconds": 6.207011386999966,
+      "thread_cpu_seconds": 6.202020278000003,
+      "start_monotonic": 869.152680755
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 2,
+      "wall_seconds": 6.2096652050000785,
+      "thread_cpu_seconds": 6.203947825,
+      "start_monotonic": 869.151134666
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 2,
+      "wall_seconds": 0.0006959830000141665,
+      "thread_cpu_seconds": 0.0006969330000003993,
+      "start_monotonic": 875.360902615
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 2,
+      "wall_seconds": 0.0008152289999543427,
+      "thread_cpu_seconds": 0.0008158920000020942,
+      "start_monotonic": 875.361937577
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 2,
+      "wall_seconds": 0.000847891000034906,
+      "thread_cpu_seconds": 0.0008493390000019474,
+      "start_monotonic": 875.362810599
+    },
+    {
+      "stage": "raw_overlay_verify",
+      "hop": 3,
+      "wall_seconds": 5.490617097999916,
+      "thread_cpu_seconds": 4.757284303999999,
+      "start_monotonic": 879.666905151
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 3,
+      "wall_seconds": 5.492106680999996,
+      "thread_cpu_seconds": 4.758773749000003,
+      "start_monotonic": 879.666614644
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 3,
+      "wall_seconds": 0.0008375219999834371,
+      "thread_cpu_seconds": 0.0008383219999998914,
+      "start_monotonic": 885.158828339
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 3,
+      "wall_seconds": 0.0009967979999601084,
+      "thread_cpu_seconds": 0.0009963270000028501,
+      "start_monotonic": 885.16003874
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 3,
+      "wall_seconds": 0.0005440979999775664,
+      "thread_cpu_seconds": 0.0005448799999996368,
+      "start_monotonic": 885.161088271
+    },
+    {
+      "stage": "raw_overlay_verify",
+      "hop": 4,
+      "wall_seconds": 9.303791536999938,
+      "thread_cpu_seconds": 5.7456812249999984,
+      "start_monotonic": 888.466037549
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 4,
+      "wall_seconds": 9.305091317999995,
+      "thread_cpu_seconds": 5.746980142000005,
+      "start_monotonic": 888.465818207
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 4,
+      "wall_seconds": 0.0005132339999818214,
+      "thread_cpu_seconds": 0.0005136420000013686,
+      "start_monotonic": 897.771002264
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 4,
+      "wall_seconds": 0.0005695209999885265,
+      "thread_cpu_seconds": 0.0005704430000008642,
+      "start_monotonic": 897.771754098
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 4,
+      "wall_seconds": 0.00042671899996094,
+      "thread_cpu_seconds": 0.00042685700000077986,
+      "start_monotonic": 897.772385349
+    },
+    {
+      "stage": "raw_overlay_verify",
+      "hop": 5,
+      "wall_seconds": 8.023713457999975,
+      "thread_cpu_seconds": 7.375106487000004,
+      "start_monotonic": 902.069943976
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 5,
+      "wall_seconds": 8.025463790999993,
+      "thread_cpu_seconds": 7.376535261000001,
+      "start_monotonic": 902.069644423
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 5,
+      "wall_seconds": 0.0005858709999984058,
+      "thread_cpu_seconds": 0.0005854540000029829,
+      "start_monotonic": 910.095342146
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 5,
+      "wall_seconds": 0.0007910140000149113,
+      "thread_cpu_seconds": 0.0007906749999975204,
+      "start_monotonic": 910.096360032
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 5,
+      "wall_seconds": 0.0004655449999972916,
+      "thread_cpu_seconds": 0.0004651899999998932,
+      "start_monotonic": 910.097349179
+    },
+    {
+      "stage": "raw_overlay_verify",
+      "hop": 6,
+      "wall_seconds": 6.873099994999961,
+      "thread_cpu_seconds": 5.241445249999998,
+      "start_monotonic": 913.427059042
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 6,
+      "wall_seconds": 6.884843997000075,
+      "thread_cpu_seconds": 5.243625678999997,
+      "start_monotonic": 913.426799591
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 6,
+      "wall_seconds": 0.0005671160000702002,
+      "thread_cpu_seconds": 0.0005678209999970818,
+      "start_monotonic": 920.311739208
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 6,
+      "wall_seconds": 0.006341367000004539,
+      "thread_cpu_seconds": 0.0006929059999976062,
+      "start_monotonic": 920.312515614
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 6,
+      "wall_seconds": 0.00039395900000727124,
+      "thread_cpu_seconds": 0.00039441699999542834,
+      "start_monotonic": 920.318923007
+    },
+    {
+      "stage": "raw_overlay_verify",
+      "hop": 7,
+      "wall_seconds": 9.559822098999916,
+      "thread_cpu_seconds": 6.389815632000001,
+      "start_monotonic": 923.908382314
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 7,
+      "wall_seconds": 9.572852487000091,
+      "thread_cpu_seconds": 6.391872336000006,
+      "start_monotonic": 923.908084802
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 7,
+      "wall_seconds": 0.000419200000010278,
+      "thread_cpu_seconds": 0.0004193629999917903,
+      "start_monotonic": 933.481066536
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 7,
+      "wall_seconds": 0.007480099000076734,
+      "thread_cpu_seconds": 0.0006803059999924699,
+      "start_monotonic": 933.481668799
+    },
+    {
+      "stage": "raw_aux_read",
+      "hop": 7,
+      "wall_seconds": 0.0003885940000145638,
+      "thread_cpu_seconds": 0.00038923900000042977,
+      "start_monotonic": 933.489202751
+    }
+  ],
+  "measurement": "RPC dispatch wall/thread CPU; CUDA default-stream intervals include idle/waits, not a kernel-time sum",
+  "observer": "Two CUDA events per denoise/hop; identical for rebuild and queue"
+}

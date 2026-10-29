@@ -1,0 +1,126 @@
+{
+  "comparison": {
+    "status": "complete",
+    "verified_seconds": [
+      112.63910131,
+      109.01789577800014,
+      113.17918873600001
+    ],
+    "trusted_seconds": [
+      65.2326822260004,
+      41.90337605500008,
+      67.37956230999953
+    ],
+    "verified_median_seconds": 112.63910131,
+    "trusted_median_seconds": 65.2326822260004,
+    "speedup": 1.7267280367187534,
+    "saved_percent": 42.0870004577983,
+    "verified_range_seconds": [
+      109.01789577800014,
+      113.17918873600001
+    ],
+    "trusted_range_seconds": [
+      41.90337605500008,
+      67.37956230999953
+    ],
+    "other_phase_medians": {
+      "startup_seconds": {
+        "True": 13.758239352999908,
+        "False": 6.81429134699988
+      },
+      "controller_admission_seconds": {
+        "True": 4.272757179999871,
+        "False": 0.028189256999894496
+      },
+      "aot_wall_seconds": {
+        "True": 1.6533674769999607,
+        "False": 1.8488543240000581
+      }
+    },
+    "semantics": "Parent selection + denoiser RPCs for two real blocks and eight hops; not full H3 latency",
+    "statistical_limit": "Three fresh-service trials per arm; report dispersion, no significance claim from a point estimate"
+  },
+  "per_rank_medians": {
+    "True": {
+      "0": {
+        "bulk_calls": 42,
+        "bulk_GiB": 20.34104497730732,
+        "bulk_wall": 102.78121695899938,
+        "bulk_cpu": 80.94348885299996,
+        "peak_alloc_GiB": 3.463557720184326,
+        "peak_reserved_GiB": 3.8203125,
+        "rss_GiB": 4.642894744873047,
+        "overlay_calls": 8,
+        "overlay_GiB": 11.504896402359009,
+        "overlay_wall": 63.277474221999455,
+        "overlay_cpu": 49.46183841799999
+      },
+      "1": {
+        "bulk_calls": 42,
+        "bulk_GiB": 20.34104497730732,
+        "bulk_wall": 89.06894881699964,
+        "bulk_cpu": 78.12225466400002,
+        "peak_alloc_GiB": 0.38823461532592773,
+        "peak_reserved_GiB": 0.4140625,
+        "rss_GiB": 1.6480903625488281,
+        "overlay_calls": 8,
+        "overlay_GiB": 11.504896402359009,
+        "overlay_wall": 47.20341008899982,
+        "overlay_cpu": 44.91863394099999
+      }
+    },
+    "False": {
+      "0": {
+        "bulk_calls": 0,
+        "bulk_GiB": 0.0,
+        "bulk_wall": 0,
+        "bulk_cpu": 0,
+        "peak_alloc_GiB": 3.463557720184326,
+        "peak_reserved_GiB": 3.8203125,
+        "rss_GiB": 4.850002288818359,
+        "overlay_calls": 0,
+        "overlay_GiB": 0.0,
+        "overlay_wall": 0,
+        "overlay_cpu": 0
+      },
+      "1": {
+        "bulk_calls": 0,
+        "bulk_GiB": 0.0,
+        "bulk_wall": 0,
+        "bulk_cpu": 0,
+        "peak_alloc_GiB": 0.38823461532592773,
+        "peak_reserved_GiB": 0.416015625,
+        "rss_GiB": 1.7930946350097656,
+        "overlay_calls": 0,
+        "overlay_GiB": 0.0,
+        "overlay_wall": 0,
+        "overlay_cpu": 0
+      }
+    }
+  },
+  "reader_wall_seconds": {
+    "True": {
+      "0": {
+        "first": 1.44868123349994,
+        "reload": 0.16291707600004202
+      },
+      "1": {
+        "first": 1.2695098330000292,
+        "reload": 0.16179706499997337
+      }
+    },
+    "False": {
+      "0": {
+        "first": 0.16257745299998305,
+        "reload": 0.16488786350004148
+      },
+      "1": {
+        "first": 0.15958230550000962,
+        "reload": 0.16249906500007683
+      }
+    }
+  },
+  "outputs_rechecked_byte_exact": true,
+  "scope": "Two full-width trained blocks, both refiners and heads, eight hops, fresh workers per trial; no full H3",
+  "hash_time_caveat": "Worker lifecycle spans include startup and overlap; do not sum into RPC critical-path savings"
+}

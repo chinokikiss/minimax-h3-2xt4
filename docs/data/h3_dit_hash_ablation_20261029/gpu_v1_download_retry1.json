@@ -1,0 +1,14 @@
+{
+  "status": "complete",
+  "purpose": "Resume missing final artifacts after SSL EOF; no status or live-log polling",
+  "started_utc": "2026-10-29T12:53:52.108304+00:00",
+  "preserved_files": 49,
+  "files": 52,
+  "previous_files_byte_exact": true,
+  "new_files": [
+    "light_setup\\setup_receipt.json",
+    "light_setup\\supervision.json",
+    "h3-dit-hash-ablation-t4-20261029.log"
+  ],
+  "ended_utc": "2026-10-29T12:54:08.704478+00:00"
+}

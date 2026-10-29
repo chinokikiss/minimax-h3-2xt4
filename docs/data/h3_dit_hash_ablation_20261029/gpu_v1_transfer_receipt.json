@@ -1,0 +1,21 @@
+{
+  "initial_attempt": {
+    "status": "incomplete",
+    "files": 49,
+    "failure": "SSL UNEXPECTED_EOF_WHILE_READING while downloading setup_receipt.json"
+  },
+  "resumption": {
+    "status": "complete",
+    "files": 52,
+    "previous_files_byte_exact": true,
+    "missing_payloads": [
+      "light_setup/setup_receipt.json",
+      "light_setup/supervision.json"
+    ],
+    "final_log_collected": true
+  },
+  "source_binding_verified": true,
+  "gpu_resubmitted": false,
+  "status_polled": false,
+  "private_transport_error_log": "D:\\attention_eval\\h3_dit_hash_ablation_20261029\\cpu_retry\\kaggle\\gpu_submission_collection_cli.log"
+}

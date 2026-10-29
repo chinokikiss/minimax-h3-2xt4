@@ -1,0 +1,232 @@
+[{"stream_name":"stderr","time":8.01234413,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.012403585,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.012410087,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.01241472,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":8.649153587,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.649185954,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.649191332000001,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.649195167,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":9.862865016,"data":"LIGHT_NOTEBOOK_START zero dataset/kernel mounts\n"}
+,{"stream_name":"stdout","time":9.863641854,"data":"T4_SUPERVISOR notebook_cell_started\n"}
+,{"stream_name":"stdout","time":9.957700191,"data":"LIGHT_SOURCE_DOWNLOAD_START\n"}
+,{"stream_name":"stdout","time":12.429916143,"data":"LIGHT_SOURCE_READY\n"}
+,{"stream_name":"stdout","time":12.542361313,"data":"LIGHT_SETUP_STAGE frozen_source\n"}
+,{"stream_name":"stdout","time":15.799222228,"data":"LIGHT_SETUP_STAGE direct_pip\n"}
+,{"stream_name":"stdout","time":59.237241706,"data":"LIGHT_SETUP_STAGE api_probe\n"}
+,{"stream_name":"stdout","time":72.537990792,"data":"LIGHT_SETUP_HEARTBEAT api_probe 60\n"}
+,{"stream_name":"stdout","time":85.166433272,"data":"LIGHT_SETUP_FINAL ready_for_device_gate\n"}
+,{"stream_name":"stdout","time":85.225494719,"data":"T4_SUPERVISOR_FINAL {\"status\": \"worker_exited\", \"deadline_seconds\": 600, \"scope\": \"Notebook cell execution only; provider startup/mounting excluded\", \"worker_pid\": 50, \"exit_code\": 0, \"seconds\": 75.35993553100002}\n"}
+,{"stream_name":"stdout","time":85.227932424,"data":"T4_SUPERVISOR notebook_cell_started\n"}
+,{"stream_name":"stdout","time":89.423130118,"data":"Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.\n"}
+,{"stream_name":"stdout","time":152.844454258,"data":"PTD_TRAINED_RANGE 1 / 17\n"}
+,{"stream_name":"stdout","time":154.335058783,"data":"PTD_TRAINED_RANGE 2 / 17\n"}
+,{"stream_name":"stdout","time":155.765114011,"data":"PTD_TRAINED_RANGE 3 / 17\n"}
+,{"stream_name":"stdout","time":157.284112662,"data":"PTD_TRAINED_RANGE 4 / 17\n"}
+,{"stream_name":"stdout","time":158.974440224,"data":"PTD_TRAINED_RANGE 5 / 17\n"}
+,{"stream_name":"stdout","time":160.893653665,"data":"PTD_TRAINED_RANGE 6 / 17\n"}
+,{"stream_name":"stdout","time":162.236983972,"data":"PTD_TRAINED_RANGE 7 / 17\n"}
+,{"stream_name":"stdout","time":163.952958132,"data":"PTD_TRAINED_RANGE 8 / 17\n"}
+,{"stream_name":"stdout","time":165.659125043,"data":"PTD_TRAINED_RANGE 9 / 17\n"}
+,{"stream_name":"stdout","time":167.2700389,"data":"PTD_TRAINED_RANGE 10 / 17\n"}
+,{"stream_name":"stdout","time":168.828988086,"data":"PTD_TRAINED_RANGE 11 / 17\n"}
+,{"stream_name":"stdout","time":170.369619172,"data":"PTD_TRAINED_RANGE 12 / 17\n"}
+,{"stream_name":"stdout","time":172.597999431,"data":"PTD_TRAINED_RANGE 13 / 17\n"}
+,{"stream_name":"stdout","time":174.416017772,"data":"PTD_TRAINED_RANGE 14 / 17\n"}
+,{"stream_name":"stdout","time":176.007609321,"data":"PTD_TRAINED_RANGE 15 / 17\n"}
+,{"stream_name":"stdout","time":177.575330435,"data":"PTD_TRAINED_RANGE 16 / 17\n"}
+,{"stream_name":"stdout","time":179.125389012,"data":"PTD_TRAINED_RANGE 17 / 17\n"}
+,{"stream_name":"stdout","time":202.968694613,"data":"WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\n"}
+,{"stream_name":"stdout","time":202.968734692,"data":"WARNING WARNING WARNING\n"}
+,{"stream_name":"stdout","time":202.968740864,"data":"If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n"}
+,{"stream_name":"stdout","time":202.969935107,"data":"\n"}
+,{"stream_name":"stdout","time":203.076924786,"data":"WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\n"}
+,{"stream_name":"stdout","time":203.078143032,"data":"WARNING WARNING WARNING\n"}
+,{"stream_name":"stdout","time":203.079166624,"data":"If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n"}
+,{"stream_name":"stdout","time":203.08014061,"data":"\n"}
+,{"stream_name":"stdout","time":206.323933038,"data":"PTD_LAYER_QUEUED cuda:0 0 0\n"}
+,{"stream_name":"stdout","time":206.339612906,"data":"PTD_LAYER_QUEUED cuda:1 1 0\n"}
+,{"stream_name":"stdout","time":211.932540045,"data":"TP2_DISK_LAYER_DURABLE 1\n"}
+,{"stream_name":"stdout","time":211.958712571,"data":"PTD_LAYER_QUEUED cuda:1 1 1\n"}
+,{"stream_name":"stdout","time":212.864088505,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":212.887630847,"data":"PTD_LAYER_QUEUED cuda:0 0 1\n"}
+,{"stream_name":"stdout","time":216.822697933,"data":"TP2_DISK_LAYER_DURABLE 1\n"}
+,{"stream_name":"stdout","time":216.825727312,"data":"PTD_LAYER_QUEUED cuda:1 1 2\n"}
+,{"stream_name":"stdout","time":217.970735522,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":217.993400503,"data":"PTD_LAYER_QUEUED cuda:0 0 2\n"}
+,{"stream_name":"stdout","time":221.714602087,"data":"TP2_DISK_LAYER_DURABLE 1\n"}
+,{"stream_name":"stdout","time":221.719258324,"data":"PTD_LAYER_QUEUED cuda:1 1 3\n"}
+,{"stream_name":"stdout","time":222.882275436,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":222.898527725,"data":"PTD_LAYER_QUEUED cuda:0 0 3\n"}
+,{"stream_name":"stdout","time":226.618260794,"data":"TP2_DISK_LAYER_DURABLE 1\n"}
+,{"stream_name":"stdout","time":226.620724629,"data":"PTD_LAYER_QUEUED cuda:1 1 4\n"}
+,{"stream_name":"stdout","time":227.741451196,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":227.771954453,"data":"PTD_LAYER_QUEUED cuda:0 0 4\n"}
+,{"stream_name":"stdout","time":234.665103925,"data":"TP2_DISK_LAYER_DURABLE 1\n"}
+,{"stream_name":"stdout","time":234.669661519,"data":"PTD_LAYER_QUEUED cuda:1 1 5\n"}
+,{"stream_name":"stdout","time":238.54510978,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":238.546065424,"data":"PTD_LAYER_QUEUED cuda:0 0 5\n"}
+,{"stream_name":"stdout","time":239.815072623,"data":"TP2_DISK_LAYER_DURABLE 1\n"}
+,{"stream_name":"stdout","time":239.820966669,"data":"PTD_LAYER_QUEUED cuda:1 1 6\n"}
+,{"stream_name":"stdout","time":243.635300885,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":243.637240319,"data":"PTD_LAYER_QUEUED cuda:0 0 6\n"}
+,{"stream_name":"stdout","time":244.657693566,"data":"TP2_DISK_LAYER_DURABLE 1\n"}
+,{"stream_name":"stdout","time":244.688118544,"data":"PTD_LAYER_QUEUED cuda:1 1 7\n"}
+,{"stream_name":"stdout","time":247.960093791,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":247.961256341,"data":"PTD_LAYER_QUEUED cuda:0 0 7\n"}
+,{"stream_name":"stdout","time":248.862225458,"data":"TP2_DISK_LAYER_DURABLE 1\n"}
+,{"stream_name":"stdout","time":251.776935015,"data":"TP2_DISK_LAYER_DURABLE 0\n"}
+,{"stream_name":"stdout","time":252.832736801,"data":"WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\n"}
+,{"stream_name":"stdout","time":252.83474696,"data":"WARNING WARNING WARNING\n"}
+,{"stream_name":"stdout","time":252.837187474,"data":"If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n"}
+,{"stream_name":"stdout","time":252.838738454,"data":"\n"}
+,{"stream_name":"stdout","time":279.089118069,"data":"PTD_HOP_DURABLE 0 4\n"}
+,{"stream_name":"stdout","time":304.808293993,"data":"PTD_HOP_DURABLE 1 4\n"}
+,{"stream_name":"stdout","time":330.650634971,"data":"PTD_HOP_DURABLE 2 4\n"}
+,{"stream_name":"stdout","time":357.058410659,"data":"PTD_HOP_DURABLE 3 4\n"}
+,{"stream_name":"stdout","time":383.164690786,"data":"PTD_HOP_DURABLE 4 4\n"}
+,{"stream_name":"stdout","time":409.347385199,"data":"PTD_HOP_DURABLE 5 4\n"}
+,{"stream_name":"stdout","time":435.536924713,"data":"PTD_HOP_DURABLE 6 4\n"}
+,{"stream_name":"stdout","time":461.581762374,"data":"PTD_HOP_DURABLE 7 4\n"}
+,{"stream_name":"stdout","time":517.855523973,"data":"2026-10-29 12:35:51  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`2026-10-29 12:35:51  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`\n"}
+,{"stream_name":"stdout","time":517.856531585,"data":"\n"}
+,{"stream_name":"stdout","time":521.596676165,"data":"2026-10-29 12:35:55  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":521.597326368,"data":"2026-10-29 12:35:55  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":522.151690196,"data":"2026-10-29 12:35:55  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`\n"}
+,{"stream_name":"stdout","time":522.152080802,"data":"2026-10-29 12:35:55  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`\n"}
+,{"stream_name":"stdout","time":523.992941626,"data":"2026-10-29 12:35:57  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":524.024710279,"data":"2026-10-29 12:35:57  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":524.279479591,"data":"2026-10-29 12:35:57  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`\n"}
+,{"stream_name":"stdout","time":524.317872483,"data":"2026-10-29 12:35:57  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`\n"}
+,{"stream_name":"stdout","time":526.031527989,"data":"2026-10-29 12:35:59  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`2026-10-29 12:35:59  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":526.032542509,"data":"\n"}
+,{"stream_name":"stdout","time":526.324598261,"data":"2026-10-29 12:35:59  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`2026-10-29 12:35:59  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`\n"}
+,{"stream_name":"stdout","time":526.325941915,"data":"\n"}
+,{"stream_name":"stdout","time":528.027744853,"data":"2026-10-29 12:36:01  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":528.047645367,"data":"2026-10-29 12:36:01  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":528.326093851,"data":"2026-10-29 12:36:01  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`\n"}
+,{"stream_name":"stdout","time":528.334597933,"data":"2026-10-29 12:36:01  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`\n"}
+,{"stream_name":"stdout","time":529.967647729,"data":"2026-10-29 12:36:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":530.005401721,"data":"2026-10-29 12:36:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":530.301739271,"data":"2026-10-29 12:36:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1, 2]`\n"}
+,{"stream_name":"stdout","time":530.330686967,"data":"2026-10-29 12:36:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1, 2]`\n"}
+,{"stream_name":"stdout","time":534.058397461,"data":"2026-10-29 12:36:07  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":534.346931838,"data":"2026-10-29 12:36:07  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":534.3708701,"data":"2026-10-29 12:36:07  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`\n"}
+,{"stream_name":"stdout","time":534.656051881,"data":"2026-10-29 12:36:08  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`\n"}
+,{"stream_name":"stdout","time":536.069517303,"data":"2026-10-29 12:36:09  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":536.362694395,"data":"2026-10-29 12:36:09  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":536.375193517,"data":"2026-10-29 12:36:09  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`\n"}
+,{"stream_name":"stdout","time":536.661122251,"data":"2026-10-29 12:36:10  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`\n"}
+,{"stream_name":"stdout","time":538.089238051,"data":"2026-10-29 12:36:11  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":538.382678208,"data":"2026-10-29 12:36:11  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`\n"}
+,{"stream_name":"stdout","time":538.542986196,"data":"2026-10-29 12:36:12  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":538.562794509,"data":"2026-10-29 12:36:12  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`\n"}
+,{"stream_name":"stdout","time":540.234882611,"data":"2026-10-29 12:36:13  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":540.404167836,"data":"2026-10-29 12:36:14  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":540.536638326,"data":"2026-10-29 12:36:14  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`\n"}
+,{"stream_name":"stdout","time":540.708521813,"data":"2026-10-29 12:36:14  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`\n"}
+,{"stream_name":"stdout","time":542.30457249,"data":"2026-10-29 12:36:15  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":542.542790083,"data":"2026-10-29 12:36:16  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":542.653611544,"data":"2026-10-29 12:36:16  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`\n"}
+,{"stream_name":"stdout","time":542.912386983,"data":"2026-10-29 12:36:16  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`\n"}
+,{"stream_name":"stdout","time":544.523682905,"data":"2026-10-29 12:36:18  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":544.714413124,"data":"2026-10-29 12:36:18  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":544.908603151,"data":"2026-10-29 12:36:18  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[4, 5]`\n"}
+,{"stream_name":"stdout","time":545.079557477,"data":"2026-10-29 12:36:18  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[4, 5]`\n"}
+,{"stream_name":"stdout","time":547.221800143,"data":"2026-10-29 12:36:20  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":547.463841272,"data":"2026-10-29 12:36:21  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":547.601705272,"data":"2026-10-29 12:36:21  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[5]`\n"}
+,{"stream_name":"stdout","time":547.829048188,"data":"[12:36:21] : Warning: T.vectorized loop over `vec` with extent 8 is lowered as a serial loop because TileLang could not find a valid vectorization plan. Scalar accumulator updates inside the loop are a common cause; move reductions to T.unroll or T.serial if this is intended.\n"}
+,{"stream_name":"stdout","time":547.865701819,"data":"2026-10-29 12:36:21  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[5]`\n"}
+,{"stream_name":"stdout","time":548.074480588,"data":"[12:36:21] : Warning: T.vectorized loop over `vec` with extent 8 is lowered as a serial loop because TileLang could not find a valid vectorization plan. Scalar accumulator updates inside the loop are a common cause; move reductions to T.unroll or T.serial if this is intended.\n"}
+,{"stream_name":"stdout","time":549.649788517,"data":"2026-10-29 12:36:23  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":549.87788603,"data":"2026-10-29 12:36:23  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":550.012681471,"data":"2026-10-29 12:36:23  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[]`\n"}
+,{"stream_name":"stdout","time":550.241695262,"data":"2026-10-29 12:36:23  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[]`\n"}
+,{"stream_name":"stdout","time":551.735236009,"data":"2026-10-29 12:36:25  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":551.958453797,"data":"2026-10-29 12:36:25  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":552.029980611,"data":"2026-10-29 12:36:25  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[]`\n"}
+,{"stream_name":"stdout","time":552.265589199,"data":"2026-10-29 12:36:25  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[]`\n"}
+,{"stream_name":"stdout","time":553.986028266,"data":"2026-10-29 12:36:27  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":554.216694108,"data":"2026-10-29 12:36:27  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":554.321486881,"data":"2026-10-29 12:36:27  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[]`\n"}
+,{"stream_name":"stdout","time":554.541742639,"data":"2026-10-29 12:36:28  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[]`\n"}
+,{"stream_name":"stdout","time":556.076452856,"data":"2026-10-29 12:36:29  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":556.293332489,"data":"2026-10-29 12:36:29  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":556.389936162,"data":"WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\n"}
+,{"stream_name":"stdout","time":556.391396193,"data":"WARNING WARNING WARNING\n"}
+,{"stream_name":"stdout","time":556.392637725,"data":"If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n"}
+,{"stream_name":"stdout","time":556.393705048,"data":"\n"}
+,{"stream_name":"stdout","time":561.106901357,"data":"WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\n"}
+,{"stream_name":"stdout","time":561.10977545,"data":"WARNING WARNING WARNING\n"}
+,{"stream_name":"stdout","time":561.110044576,"data":"If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n"}
+,{"stream_name":"stdout","time":561.110988678,"data":"\n"}
+,{"stream_name":"stdout","time":571.646785282,"data":"NCCL version 2.31.2+cuda13.3\n"}
+,{"stream_name":"stdout","time":573.702192726,"data":"2026-10-29 12:36:47  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[4, 5]`\n"}
+,{"stream_name":"stdout","time":576.666276807,"data":"2026-10-29 12:36:50  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`\n"}
+,{"stream_name":"stdout","time":700.523654273,"data":"WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\n"}
+,{"stream_name":"stdout","time":700.524533476,"data":"WARNING WARNING WARNING\n"}
+,{"stream_name":"stdout","time":700.525303826,"data":"If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n"}
+,{"stream_name":"stdout","time":700.526071764,"data":"\n"}
+,{"stream_name":"stdout","time":705.312295547,"data":"WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\n"}
+,{"stream_name":"stdout","time":705.314674114,"data":"WARNING WARNING WARNING\n"}
+,{"stream_name":"stdout","time":705.315650558,"data":"If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n"}
+,{"stream_name":"stdout","time":705.316691511,"data":"\n"}
+,{"stream_name":"stdout","time":715.735683027,"data":"NCCL version 2.31.2+cuda13.3\n"}
+,{"stream_name":"stdout","time":828.340763721,"data":"WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\n"}
+,{"stream_name":"stdout","time":828.342012808,"data":"WARNING WARNING WARNING\n"}
+,{"stream_name":"stdout","time":828.342926837,"data":"If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n"}
+,{"stream_name":"stdout","time":828.343892683,"data":"\n"}
+,{"stream_name":"stdout","time":828.690398848,"data":"WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\n"}
+,{"stream_name":"stdout","time":828.692684716,"data":"WARNING WARNING WARNING\n"}
+,{"stream_name":"stdout","time":828.69517992,"data":"If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n"}
+,{"stream_name":"stdout","time":828.696208788,"data":"\n"}
+,{"stream_name":"stdout","time":836.773861468,"data":"NCCL version 2.31.2+cuda13.3\n"}
+,{"stream_name":"stdout","time":902.301408969,"data":"WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\n"}
+,{"stream_name":"stdout","time":902.304049985,"data":"WARNING WARNING WARNING\n"}
+,{"stream_name":"stdout","time":902.304063009,"data":"If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n"}
+,{"stream_name":"stdout","time":902.304068734,"data":"\n"}
+,{"stream_name":"stdout","time":902.660923524,"data":"WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\n"}
+,{"stream_name":"stdout","time":902.662783428,"data":"WARNING WARNING WARNING\n"}
+,{"stream_name":"stdout","time":902.663887275,"data":"If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n"}
+,{"stream_name":"stdout","time":902.665055898,"data":"\n"}
+,{"stream_name":"stdout","time":907.911042773,"data":"NCCL version 2.31.2+cuda13.3\n"}
+,{"stream_name":"stdout","time":961.908746027,"data":"WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\n"}
+,{"stream_name":"stdout","time":961.909618612,"data":"WARNING WARNING WARNING\n"}
+,{"stream_name":"stdout","time":961.910408124,"data":"If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n"}
+,{"stream_name":"stdout","time":961.911281083,"data":"\n"}
+,{"stream_name":"stdout","time":966.536787304,"data":"WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\n"}
+,{"stream_name":"stdout","time":966.539347477,"data":"WARNING WARNING WARNING\n"}
+,{"stream_name":"stdout","time":966.540745312,"data":"If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n"}
+,{"stream_name":"stdout","time":966.541996324,"data":"\n"}
+,{"stream_name":"stdout","time":976.724248274,"data":"NCCL version 2.31.2+cuda13.3\n"}
+,{"stream_name":"stdout","time":1096.468955783,"data":"WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\n"}
+,{"stream_name":"stdout","time":1096.470144161,"data":"WARNING WARNING WARNING\n"}
+,{"stream_name":"stdout","time":1096.471279025,"data":"If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n"}
+,{"stream_name":"stdout","time":1096.472296155,"data":"\n"}
+,{"stream_name":"stdout","time":1101.26033042,"data":"WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\n"}
+,{"stream_name":"stdout","time":1101.261493727,"data":"WARNING WARNING WARNING\n"}
+,{"stream_name":"stdout","time":1101.262390588,"data":"If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n"}
+,{"stream_name":"stdout","time":1101.263224793,"data":"\n"}
+,{"stream_name":"stdout","time":1111.669124745,"data":"NCCL version 2.31.2+cuda13.3\n"}
+,{"stream_name":"stdout","time":1224.147699194,"data":"WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\n"}
+,{"stream_name":"stdout","time":1224.148783629,"data":"WARNING WARNING WARNING\n"}
+,{"stream_name":"stdout","time":1224.148810382,"data":"If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n"}
+,{"stream_name":"stdout","time":1224.14945262,"data":"\n"}
+,{"stream_name":"stdout","time":1224.52133715,"data":"WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.\n"}
+,{"stream_name":"stdout","time":1224.523809391,"data":"WARNING WARNING WARNING\n"}
+,{"stream_name":"stdout","time":1224.524131844,"data":"If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.\n"}
+,{"stream_name":"stdout","time":1224.525351783,"data":"\n"}
+,{"stream_name":"stdout","time":1233.910627988,"data":"NCCL version 2.31.2+cuda13.3\n"}
+,{"stream_name":"stdout","time":1293.736504452,"data":"/usr/lib/python3.13/multiprocessing/resource_tracker.py:479: UserWarning: resource_tracker: There appear to be 2 leaked semaphore objects to clean up at shutdown: {'/mp-qw9cc428', '/mp-edtvjvd8'}\n"}
+,{"stream_name":"stdout","time":1293.737549227,"data":"  warnings.warn(\n"}
+,{"stream_name":"stdout","time":1298.72646856,"data":"T4_SUPERVISOR_FINAL {\"status\": \"worker_exited\", \"deadline_seconds\": 2400, \"scope\": \"Notebook cell execution only; provider startup/mounting excluded\", \"worker_pid\": 98, \"exit_code\": 0, \"seconds\": 1213.494852663}\n"}
+,{"stream_name":"stderr","time":1302.176510707,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":1302.176568006,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":1302.519806563,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":1302.519838473,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":1303.552298683,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":1303.653758421,"data":"[NbConvertApp] Writing 160541 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":1306.205278989,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":1307.194455136,"data":"[NbConvertApp] Writing 450477 bytes to __results__.html\n"}
+]

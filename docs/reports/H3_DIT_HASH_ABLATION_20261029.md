@@ -1,6 +1,9 @@
 # DiT trusted-bake hash ablation — 2026-10-29
 
-Status: implementation and local CPU qualification complete; real two-T4 timings pending. No speedup is claimed yet.
+Status: the two-T4 A/B completed. Trusting the bake reduced median eight-hop
+selection + denoiser RPC time from **112.639 s to 65.233 s**, a **42.087%**
+reduction and **1.727×** speedup in this reduced streaming fixture. All outputs
+are byte-identical. This is not a full-model or full-pipeline speedup claim.
 
 ## Question and switch
 
@@ -43,7 +46,9 @@ Local conda CPU regression: 207 passed, no failures/errors/skips. The extracted 
 
 `benchmarks/build_dit_hash_job.py` requires a matching Kaggle CPU setup and experiment receipt before GPU submission. The CPU job has a 600-second setup watchdog and 180-second contract watchdog. The T4 experiment has a 2400-second execution watchdog and 3300-second provider limit, zero dataset/output mounts, no credentials and no status polling. Artifact transfer may be retried under the repository's existing policy.
 
-Local evidence: `D:\attention_eval\h3_dit_hash_ablation_20261029\`. Final T4 results and the default-policy decision remain pending.
+Local evidence: `D:\attention_eval\h3_dit_hash_ablation_20261029\`. T4 results
+are recorded below. Verification remains the runtime default; this experiment
+does not change that policy.
 
 Kaggle CPU preflight version 1 failed; final artifacts were collected once.
 Immutable source commit: `e1093f1c3c9aeba12d9d0f42d5b47815d8d7f268`; capsule SHA256: `1246b03ba71c886884d39b0cc91d5c18ce0f255efeb7ed63239ee6327b155e09`.
@@ -78,8 +83,125 @@ Kaggle accepted **version 1** of [H3 DiT Hash Ablation T4 20261029](https://www.
 using the same CPU-qualified retry capsule. The prepared A/B items, three trials
 per mode, persistent queue, P0/P1 settings and byte-exact output checks are
 unchanged. The notebook requests two T4s and enforces physical SM75/cu128 checks
-before fetching the trained PTD subset. Submission acknowledgement is not proof
-of device execution; GPU results remain pending. No scheduling status or live
-logs have been queried. Receipts are under
+before fetching the trained PTD subset. The final artifacts now confirm device
+execution and completion. No scheduling status or live logs have been queried. Receipts are under
 `docs/data/h3_dit_hash_ablation_20261029/gpu_v1_*`, with CPU results under
 `cpu_v2_final/` in the same directory.
+
+## Physical T4 results
+
+Both distinct devices identify as Tesla T4, SM75. Actual environment: native
+Torch `2.11.0+cu128`, CUDA `12.8`, Kitchen `0.2.37`, TileLang `0.1.13`. Source
+and capsule hashes match the CPU-qualified retry. The execution supervisor
+exited with code 0 after 1,213.49 seconds, including downloads, one bank bake,
+reader probes, rehearsal and six measured trials. The bake took 284.36 seconds
+and is excluded from inference measurements.
+
+| Measurement | Verification enabled | Trust bake |
+|---|---:|---:|
+| Trial 0, selection + denoiser RPCs | 112.639 s | 65.233 s |
+| Trial 1 | 109.018 s | 41.903 s |
+| Trial 2 | 113.179 s | 67.380 s |
+| Median RPC time | **112.639 s** | **65.233 s** |
+| Worker/service startup, median | 13.758 s | 6.814 s |
+| Controller admission, median | 4.273 s | 0.028 s |
+| AOT preparation after rehearsal, median | 1.653 s | 1.849 s |
+| Whole fixture service lifetime, median | 138.836 s | 76.083 s |
+
+The RPC median saves **47.406 seconds**. Every trusted trial is faster than
+every verified trial, so the effect is practically substantial in this fixture.
+The trusted arm nevertheless has a broad 41.903–67.380-second range. Three
+samples per arm do not establish a formal significance level or explain that
+variance. Whole-service lifetime includes startup/admission/preparation/shutdown;
+it is not H3 generation latency. Medians of phases are not additive.
+
+All six cases completed all eight hops with P0/P1 enabled and one persistent
+queue. Video/audio hashes at every denoiser call and final FP32 sampler-state
+hashes match the rehearsal exactly. Standalone per-case files match the aggregate
+result, and both worker reports contain the expected 16 dispatch spans.
+
+## Attribution: host hashing is on the critical path
+
+Each verified worker performs **26 payload SHA256 calls over 17.415 GiB** and
+**16 tensor-state hash calls over 2.926 GiB** across its service lifetime. Of
+those payload calls, eight scan the monolithic hop auxiliary overlays: **11.505
+GiB per rank**. Two base-auxiliary scans account for another 2.985 GiB; sixteen
+owned block-shard scans account for the remainder. These counts include startup
+and admission work as well as inference.
+
+| Median worker hash attribution | Rank 0 | Rank 1 |
+|---|---:|---:|
+| Bulk hash thread CPU time, verified | 80.943 s | 78.122 s |
+| Bulk hash span wall-time sum, verified | 102.781 s | 89.069 s |
+| Overlay SHA256 thread CPU time, verified | 49.462 s | 44.919 s |
+| Overlay SHA256 span wall-time sum, verified | 63.277 s | 47.203 s |
+| Bulk hash calls, trusted | **0** | **0** |
+
+The trusted arm still executes 20 metadata hash calls per worker, totaling
+about 3.13 MiB; their measured thread CPU cost is approximately 0.016 seconds.
+The large payload/tensor work disappears rather than being relabeled or moved
+into timed GPU kernels. Numerical operators, bank bytes and compilation items
+are unchanged, and the AOT medians show no compilation-related improvement.
+
+Rank 1 illustrates the monolithic-overlay penalty particularly clearly: it
+only consumes output-head tensors, but first verifies the entire shared overlay.
+Its aggregate auxiliary-read span median drops from 47.247 s to 0.182 s when
+bulk verification is bypassed. Rank 0 still needs the refiner payloads and
+conversion/folding: its seven instrumented queued-refiner preparation spans sum
+to median 85.202 s with verification and 56.884 s when trusted. Those nested
+spans are attribution evidence, not independent latency terms.
+
+Hash work competes with CPU preparation and cannot be fully hidden by P1 in
+this experiment. The measured RPC reduction establishes critical-path impact.
+Do not add hash span sums across ranks or subtract them from RPC latency:
+prefetch, CPU work and GPU execution overlap. These counters do not measure
+kernel-only time, GPU busy percentage or Nsight memory stalls. Remaining trusted
+latency includes refiner preparation, loading, transfers, communication and
+execution; this A/B does not isolate each remaining component.
+
+## First consumption versus cached reload
+
+The 24 sequential reader observations on the same T4 host confirm that the
+gain is mainly first-use verification, not a faster tensor copy implementation.
+All compared loaded weights are byte-exact.
+
+| Median owned-shard load | Verified | Trusted |
+|---|---:|---:|
+| Rank 0, first consumption | 1.449 s | 0.163 s |
+| Rank 1, first consumption | 1.270 s | 0.160 s |
+| Rank 0, subsequent loads of same reader identity | 0.163 s | 0.165 s |
+| Rank 1, subsequent loads | 0.162 s | 0.162 s |
+
+Thus removing hashes from an already verified cached reader offers essentially
+no benefit. PTD still pays first-use costs for each new hop-specific identity.
+The six service trials intentionally reset these reader identities while reusing
+the same bank and warmed binary cache. Physically cold storage and a second
+complete trajectory in an already-running service were not measured.
+
+Rank 0 peak allocated VRAM stays at 3.464 GiB in every trial, with median peak
+reserved 3.820 GiB. Rank 1 median peak allocation remains 0.388 GiB, although
+one trusted trial reaches 0.568 GiB. Rank 0 median process RSS rises from 4.643
+to 4.850 GiB. This is a host-work optimization, not a demonstrated memory-saving
+optimization. Long-sequence activation peaks were not tested here.
+
+For an explicitly trusted immutable bake, `verify_dit_weights=False` now has
+strong fixture-level performance evidence without changing numerical results.
+There is no reason to remove the cached verification implementation: retain
+the verified route for files that need consumption-time content checks. The
+default remains `True` pending a separate policy decision. No full-pipeline
+generation or additional GPU run was submitted during result collection.
+
+## Final evidence collection
+
+The first final-artifact transfer saved 49 files and then encountered an SSL EOF.
+A bounded missing-file retry downloaded only the two remaining setup receipts
+and the final kernel log. All 49 earlier files retain their hashes. All 52
+remote artifacts are now complete, with matching source identity and successful
+setup/execution supervisor receipts. This was artifact resumption, not a status
+query, live-log poll or GPU resubmission.
+
+Raw results: `docs/data/h3_dit_hash_ablation_20261029/gpu_v1_final/`.
+The complete inventory is `gpu_v1_complete_download_manifest.json`; the initial
+partial inventory and failure/attempt receipts are retained separately. Derived
+per-trial CSV, attribution medians and source/hardware/output verification are
+under `analysis/` in the same data directory.

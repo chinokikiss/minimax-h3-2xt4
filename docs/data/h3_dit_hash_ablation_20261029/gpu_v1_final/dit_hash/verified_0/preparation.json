@@ -1,0 +1,234 @@
+{
+  "aot": {
+    "status": "prepared",
+    "stage": "dit",
+    "rows": 24,
+    "rank": 0,
+    "seconds": 1.4838749420000568,
+    "steps": [
+      {
+        "module": "tilelang_column_epilogue",
+        "function": "kernel",
+        "args": [
+          24,
+          10752,
+          false,
+          "float16",
+          "sm_75"
+        ],
+        "seconds": 1.1378201409999065,
+        "compiled": true
+      },
+      {
+        "module": "tilelang_column_epilogue",
+        "function": "kernel",
+        "args": [
+          24,
+          14336,
+          false,
+          "float16",
+          "sm_75"
+        ],
+        "seconds": 0.016301860999988094,
+        "compiled": true
+      },
+      {
+        "module": "tilelang_row_quant",
+        "function": "packing_kernel",
+        "args": [
+          24,
+          3584,
+          2,
+          0
+        ],
+        "seconds": 0.01124422499992761,
+        "compiled": true
+      },
+      {
+        "module": "tilelang_row_quant",
+        "function": "maximum_kernel",
+        "args": [
+          24,
+          3584,
+          7168,
+          0
+        ],
+        "seconds": 0.02901582499998767,
+        "compiled": true
+      },
+      {
+        "module": "tilelang_row_quant",
+        "function": "quantizer",
+        "args": [
+          24,
+          3584,
+          7168,
+          0,
+          "fast"
+        ],
+        "seconds": 0.014415502000019842,
+        "compiled": true
+      },
+      {
+        "module": "tilelang_swiglu_quant",
+        "function": "fused_kernel",
+        "args": [
+          24,
+          7168,
+          "float16",
+          "sm_75",
+          "stored"
+        ],
+        "seconds": 0.05258413600006406,
+        "compiled": true
+      },
+      {
+        "module": "tilelang_row_quant",
+        "function": "quantizer",
+        "args": [
+          24,
+          7168,
+          7168,
+          0,
+          "fast"
+        ],
+        "seconds": 0.014563436000003094,
+        "compiled": true
+      },
+      {
+        "module": "tilelang_transport_tradeoffs",
+        "function": "fp16_codec",
+        "args": [
+          24,
+          5376,
+          11
+        ],
+        "seconds": 0.010263345999987905,
+        "compiled": true
+      },
+      {
+        "module": "tilelang_transport_p2",
+        "function": "epilogue",
+        "args": [
+          24,
+          5376,
+          "fp16",
+          11
+        ],
+        "seconds": 0.01964697999994769,
+        "compiled": true
+      },
+      {
+        "module": "tilelang_transport_tradeoffs",
+        "function": "fp16_codec",
+        "args": [
+          24,
+          5376,
+          12
+        ],
+        "seconds": 0.00865399199994954,
+        "compiled": true
+      },
+      {
+        "module": "tilelang_transport_p2",
+        "function": "epilogue",
+        "args": [
+          24,
+          5376,
+          "fp16",
+          12
+        ],
+        "seconds": 0.019715376000021934,
+        "compiled": true
+      },
+      {
+        "module": "tilelang_fp32_rms_rope",
+        "function": "kernel",
+        "args": [
+          24,
+          28,
+          128,
+          96,
+          "float16",
+          "float16",
+          1e-06,
+          "sm_75",
+          "float16"
+        ],
+        "seconds": 0.07049613899994256,
+        "compiled": true
+      },
+      {
+        "module": "tilelang_dit_fusion",
+        "function": "norm_kernel",
+        "args": [
+          24,
+          5376,
+          9,
+          2.44140625e-09
+        ],
+        "seconds": 0.03429481599994233,
+        "compiled": true
+      },
+      {
+        "module": "tilelang_dit_fusion",
+        "function": "gate_kernel",
+        "args": [
+          24,
+          5376,
+          9
+        ],
+        "seconds": 0.0097856080000156,
+        "compiled": true
+      },
+      {
+        "module": "tilelang_dit_fusion",
+        "function": "row_gate_kernel",
+        "args": [
+          24,
+          5376,
+          9,
+          11
+        ],
+        "seconds": 0.013638904999993429,
+        "compiled": true
+      },
+      {
+        "module": "tilelang_dit_fusion",
+        "function": "row_gate_kernel",
+        "args": [
+          24,
+          5376,
+          9,
+          12
+        ],
+        "seconds": 0.014389602999926865,
+        "compiled": true
+      }
+    ],
+    "identity_sha256": "330862de9e3ccf8b4fe4c613d71885eec49889bfd584ba9573f0fb4e9ceccf67",
+    "environment": {
+      "compiler": "/usr/local/cuda-12.8/bin/nvcc",
+      "compiler_version": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Fri_Feb_21_20:23:50_PST_2025\nCuda compilation tools, release 12.8, V12.8.93\nBuild cuda_12.8.r12.8/compiler.35583870_0\n",
+      "python": "3.13.15",
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "tilelang": "0.1.13",
+      "arch": "sm_75"
+    },
+    "complete_default_custom_coverage": true,
+    "prebuilt": "Torch/cuBLAS/NCCL, Kitchen attention/linears/RoPE and native VAE convolution/norm are shipped compiled; first-use warmup is separate",
+    "semantics": "Preparation compilation only; startup cost is reported separately"
+  },
+  "seconds": 1.6533674769999607,
+  "resources": {
+    "refiner_bound": 3194093568,
+    "block_bound": 197395456,
+    "weight_bytes": 6442450944,
+    "cache_bytes": 4294967296,
+    "pinned_bytes": 4294967296,
+    "host_bytes": 21474836480,
+    "reserve_bytes": 4294967296
+  },
+  "hop_handoff": "queue"
+}

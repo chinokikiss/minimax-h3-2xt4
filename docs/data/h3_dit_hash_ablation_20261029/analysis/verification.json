@@ -1,0 +1,39 @@
+{
+  "status": "verified",
+  "experiment_complete": true,
+  "source_hashes_match": true,
+  "source_commit": "e1966aca5323d555cffc891de8bfff7812295987",
+  "capsule_sha256": "aded869fdade8e3d55aaca455d6a17345e2dc3431514a16e625548ed7ff11316",
+  "hardware": {
+    "devices": [
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "45488917-ad98-5066-84e8-31d311d1007a"
+      },
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "f32d1b5e-fc34-d24c-0954-5c618b677518"
+      }
+    ],
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "kitchen": "0.2.37",
+    "tilelang": "0.1.13"
+  },
+  "repeats_per_arm": 3,
+  "cases_rechecked_against_warmup": true,
+  "case_files_match_aggregate": true,
+  "worker_reports_complete": true,
+  "downloaded_files": 52,
+  "downloaded_bytes": 6053055,
+  "artifact_resume_complete": true,
+  "all_prior_artifacts_unchanged": true
+}
