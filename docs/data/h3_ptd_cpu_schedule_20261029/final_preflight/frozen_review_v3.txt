@@ -1,0 +1,634 @@
+test_closed_session_is_not_retained_by_atexit (benchmarks.test_pipeline_review.PipelineReview.test_closed_session_is_not_retained_by_atexit) ... ok
+test_explicit_diagnostic_snapshot_is_read_only (benchmarks.test_pipeline_review.PipelineReview.test_explicit_diagnostic_snapshot_is_read_only) ... ok
+test_normal_launcher_preserves_node_availability_and_isolation_is_explicit (benchmarks.test_pipeline_review.PipelineReview.test_normal_launcher_preserves_node_availability_and_isolation_is_explicit) ... ok
+test_runtime_audio_path_does_not_load_historical_manager_or_benchmarks (benchmarks.test_pipeline_review.PipelineReview.test_runtime_audio_path_does_not_load_historical_manager_or_benchmarks) ... ok
+test_attention_O_quantizer_releases_packing_input_before_rotation (benchmarks.test_dit_temporaries.DiTTemporaries.test_attention_O_quantizer_releases_packing_input_before_rotation) ... ok
+test_block_releases_attention_before_O_and_FC1_before_residual (benchmarks.test_dit_temporaries.DiTTemporaries.test_block_releases_attention_before_O_and_FC1_before_residual) ... ok
+test_column_matches_pinned_eager_and_preserves_input (benchmarks.test_dit_temporaries.DiTTemporaries.test_column_matches_pinned_eager_and_preserves_input) ... ok
+test_column_releases_rotation_codes_and_accumulator_at_last_consumer (benchmarks.test_dit_temporaries.DiTTemporaries.test_column_releases_rotation_codes_and_accumulator_at_last_consumer) ... ok
+test_grad_compiled_and_other_backend_calls_keep_public_operator (benchmarks.test_dit_temporaries.DiTTemporaries.test_grad_compiled_and_other_backend_calls_keep_public_operator) ... ok
+test_auxiliary_range_plan_contains_only_non_transformer_tensors (benchmarks.test_tp2_bundle.Bundle.test_auxiliary_range_plan_contains_only_non_transformer_tensors) ... ok
+test_bundle_offline_matches_independent_full_native_matrix_and_keeps_base (benchmarks.test_tp2_bundle.Bundle.test_bundle_offline_matches_independent_full_native_matrix_and_keeps_base) ... ok
+test_cached_proof_rejects_mutation_during_last_tensor_read (benchmarks.test_tp2_bundle.Bundle.test_cached_proof_rejects_mutation_during_last_tensor_read) ... ok
+test_component_packing_and_shared_row_scales_round_trip (benchmarks.test_tp2_bundle.Bundle.test_component_packing_and_shared_row_scales_round_trip) ... ok
+test_corruption_and_changed_lora_are_rejected (benchmarks.test_tp2_bundle.Bundle.test_corruption_and_changed_lora_are_rejected) ... ok
+test_different_lora_strength_changes_identity_without_new_base_files (benchmarks.test_tp2_bundle.Bundle.test_different_lora_strength_changes_identity_without_new_base_files) ... ok
+test_immutable_state_proof_is_once_per_owner_without_changing_merge_count (benchmarks.test_tp2_bundle.Bundle.test_immutable_state_proof_is_once_per_owner_without_changing_merge_count) ... ok
+test_node_routes_offline_bundle_without_full_checkpoint_bake_or_online_adapter (benchmarks.test_tp2_bundle.Bundle.test_node_routes_offline_bundle_without_full_checkpoint_bake_or_online_adapter) ... ok
+test_decode_reserve_is_separate_and_configurable (benchmarks.test_video_decode_memory.DecodePolicy.test_decode_reserve_is_separate_and_configurable) ... ok
+test_host_refusal_is_distinct_and_keeps_collective_order (benchmarks.test_video_decode_memory.DecodePolicy.test_host_refusal_is_distinct_and_keeps_collective_order) ... ok
+test_loader_appends_widget_and_restarts_on_policy_change (benchmarks.test_video_decode_memory.DecodePolicy.test_loader_appends_widget_and_restarts_on_policy_change) ... ok
+test_local_gpu_refusal_does_not_load_or_reserve_host (benchmarks.test_video_decode_memory.DecodePolicy.test_local_gpu_refusal_does_not_load_or_reserve_host) ... ok
+test_peer_refusal_rolls_back_local_staging (benchmarks.test_video_decode_memory.DecodePolicy.test_peer_refusal_rolls_back_local_staging) ... ok
+test_replica_load_failure_releases_lease_and_records_reason (benchmarks.test_video_decode_memory.DecodePolicy.test_replica_load_failure_releases_lease_and_records_reason) ... ok
+test_admission_refusal_restores_trained_parent_before_native_fallback (benchmarks.test_video_decode_memory.ParentOwnership.test_admission_refusal_restores_trained_parent_before_native_fallback) ... ok
+test_collective_decode_error_propagates_and_releases_replicas (benchmarks.test_video_decode_memory.ParentOwnership.test_collective_decode_error_propagates_and_releases_replicas) ... ok
+test_exception_restores_original_model_patcher_and_size (benchmarks.test_video_decode_memory.ParentOwnership.test_exception_restores_original_model_patcher_and_size) ... ok
+test_native_tile_temporal_batch_and_pixel_processing_are_exact (benchmarks.test_video_decode_memory.ParentOwnership.test_native_tile_temporal_batch_and_pixel_processing_are_exact) ... ok
+test_parallel_handoff_uses_weightless_parent_and_restores_native (benchmarks.test_video_decode_memory.ParentOwnership.test_parallel_handoff_uses_weightless_parent_and_restores_native) ... ok
+test_unoffloadable_parent_falls_back_before_worker_collectives (benchmarks.test_video_decode_memory.ParentOwnership.test_unoffloadable_parent_falls_back_before_worker_collectives) ... ok
+test_auto_and_native_forward_full_stereo_and_tiling_without_rank_prepare (benchmarks.test_native_audio_decode.NativeAudioDecode.test_auto_and_native_forward_full_stereo_and_tiling_without_rank_prepare) ... ok
+test_obsolete_worker_requests_decline_without_allocating_or_collectives (benchmarks.test_native_audio_decode.NativeAudioDecode.test_obsolete_worker_requests_decline_without_allocating_or_collectives) ... ok
+test_old_loader_auto_selection_is_normalized_to_native_for_audio (benchmarks.test_native_audio_decode.NativeAudioDecode.test_old_loader_auto_selection_is_normalized_to_native_for_audio) ... ok
+test_parallel_weight_loaders_reject_audio_before_opening_checkpoint (benchmarks.test_native_audio_decode.NativeAudioDecode.test_parallel_weight_loaders_reject_audio_before_opening_checkpoint) ... ok
+test_staged_loader_prepares_decoder_before_native_public_call (benchmarks.test_native_audio_decode.NativeAudioDecode.test_staged_loader_prepares_decoder_before_native_public_call) ... ok
+test_core_gate_accepts_preserved_versions_and_rejects_drift (benchmarks.test_h3_default_fused_row.DefaultFusedRow.test_core_gate_accepts_preserved_versions_and_rejects_drift) ... ok
+test_dit_lora_is_added_in_fp32_before_one_output_store (benchmarks.test_h3_default_fused_row.DefaultFusedRow.test_dit_lora_is_added_in_fp32_before_one_output_store) ... ok
+test_explicit_previous_policy_retains_its_dispatch (benchmarks.test_h3_default_fused_row.DefaultFusedRow.test_explicit_previous_policy_retains_its_dispatch) ... ok
+test_fallback_cast_precedes_swiglu (benchmarks.test_h3_default_fused_row.DefaultFusedRow.test_fallback_cast_precedes_swiglu) ... ok
+test_native_fp32_experiments_do_not_inherit_lossy_default (benchmarks.test_h3_default_fused_row.DefaultFusedRow.test_native_fp32_experiments_do_not_inherit_lossy_default) ... ok
+test_promoted_kernel_is_the_measured_kernel (benchmarks.test_h3_default_fused_row.DefaultFusedRow.test_promoted_kernel_is_the_measured_kernel) ... ok
+test_scaled_attention_output_row_accepts_fp16_storage (benchmarks.test_h3_default_fused_row.DefaultFusedRow.test_scaled_attention_output_row_accepts_fp16_storage) ... ok
+test_te_parts_are_packed_before_product_and_store_fp16 (benchmarks.test_h3_default_fused_row.DefaultFusedRow.test_te_parts_are_packed_before_product_and_store_fp16) ... ok
+test_both_owners_stacked_adapters_and_swiglu_use_only_fp32_hidden_sum (benchmarks.test_h3_row_partial_combined.PartialReduction.test_both_owners_stacked_adapters_and_swiglu_use_only_fp32_hidden_sum) ... ok
+test_runtime_default_and_explicit_native_gather_have_distinct_identity (benchmarks.test_h3_row_partial_combined.PartialReduction.test_runtime_default_and_explicit_native_gather_have_distinct_identity) ... ok
+test_store_reads_owned_a_columns_and_keeps_full_b (benchmarks.test_h3_row_partial_combined.PartialReduction.test_store_reads_owned_a_columns_and_keeps_full_b) ... ok
+test_registration_loads_no_component_and_decode_can_be_first_use (benchmarks.test_h3_reference_loading.LazyComponents.test_registration_loads_no_component_and_decode_can_be_first_use) ... ok
+test_idle_selection_tracks_reference_type_changes (benchmarks.test_h3_reference_loading.ReferencePlan.test_idle_selection_tracks_reference_type_changes) ... ok
+test_image_audio_and_mixed_references (benchmarks.test_h3_reference_loading.ReferencePlan.test_image_audio_and_mixed_references) ... ok
+test_no_reference_or_decode_only_does_not_select_encoders (benchmarks.test_h3_reference_loading.ReferencePlan.test_no_reference_or_decode_only_does_not_select_encoders) ... ok
+test_te_only_references_and_guides (benchmarks.test_h3_reference_loading.ReferencePlan.test_te_only_references_and_guides) ... ok
+test_video_soundtrack_requires_matching_video_and_video_vae (benchmarks.test_h3_reference_loading.ReferencePlan.test_video_soundtrack_requires_matching_video_and_video_vae) ... ok
+test_dense_fold_bias_and_private_ownership (benchmarks.test_h3_tensor_flow.TensorFlowContracts.test_dense_fold_bias_and_private_ownership) ... ok
+test_flow_changes_residency_identity (benchmarks.test_h3_tensor_flow.TensorFlowContracts.test_flow_changes_residency_identity) ... ok
+test_int8_fold_preserves_bytes_and_post_b_order (benchmarks.test_h3_tensor_flow.TensorFlowContracts.test_int8_fold_preserves_bytes_and_post_b_order) ... ok
+test_legacy_is_noop (benchmarks.test_h3_tensor_flow.TensorFlowContracts.test_legacy_is_noop) ... ok
+test_loader_default_and_explicit_legacy_recreate_session (benchmarks.test_h3_tensor_flow.TensorFlowContracts.test_loader_default_and_explicit_legacy_recreate_session) ... ok
+test_modulation_and_gate_per_token_rows (benchmarks.test_h3_tensor_flow.TensorFlowContracts.test_modulation_and_gate_per_token_rows) ... ok
+test_native_lora_fp32_island_precedes_post_b_scale (benchmarks.test_h3_tensor_flow.TensorFlowContracts.test_native_lora_fp32_island_precedes_post_b_scale) ... ok
+test_norms_and_affine_beta (benchmarks.test_h3_tensor_flow.TensorFlowContracts.test_norms_and_affine_beta) ... ok
+test_pinned_native_llama_deepstack_gauge_boundary (benchmarks.test_h3_tensor_flow.TensorFlowContracts.test_pinned_native_llama_deepstack_gauge_boundary) ... ok
+test_policy (benchmarks.test_h3_tensor_flow.TensorFlowContracts.test_policy) ... ok
+test_public_conditioning_stays_finite_and_preserves_native_layout (benchmarks.test_h3_tensor_flow.TensorFlowContracts.test_public_conditioning_stays_finite_and_preserves_native_layout) ... ok
+test_runtime_defaults_and_bf16_guard (benchmarks.test_h3_tensor_flow.TensorFlowContracts.test_runtime_defaults_and_bf16_guard) ... ok
+test_te_deepstack_and_unscaled_export_survive_copy (benchmarks.test_h3_tensor_flow.TensorFlowContracts.test_te_deepstack_and_unscaled_export_survive_copy) ... ok
+test_video_default_does_not_rewrite_native_weights (benchmarks.test_h3_tensor_flow.TensorFlowContracts.test_video_default_does_not_rewrite_native_weights) ... ok
+test_all_runtime_window_constructors_forward_flag (benchmarks.test_h3_operator_enhancements.AdaptiveWindow.test_all_runtime_window_constructors_forward_flag) ... ok
+test_headroom_byte_budget_resident_reuse_and_bounds (benchmarks.test_h3_operator_enhancements.AdaptiveWindow.test_headroom_byte_budget_resident_reuse_and_bounds) ... ok
+test_codec_collect_and_fused_finish_sequence (benchmarks.test_h3_operator_enhancements.OperatorSelection.test_codec_collect_and_fused_finish_sequence) ... ok
+test_defaults_and_optional_dispatch (benchmarks.test_h3_operator_enhancements.OperatorSelection.test_defaults_and_optional_dispatch) ... ok
+test_loader_roundtrip_and_dependencies (benchmarks.test_h3_operator_enhancements.OperatorSelection.test_loader_roundtrip_and_dependencies) ... ok
+test_concurrent_reads_and_checkpoint_mutation (benchmarks.test_h3_operator_enhancements.PositionalIO.test_concurrent_reads_and_checkpoint_mutation) ... ok
+test_fallback_after_partial_pread (benchmarks.test_h3_operator_enhancements.PositionalIO.test_fallback_after_partial_pread) ... ok
+test_pread_short_reads_no_seek (benchmarks.test_h3_operator_enhancements.PositionalIO.test_pread_short_reads_no_seek) ... ok
+test_short_readinto_and_eof (benchmarks.test_h3_operator_enhancements.PositionalIO.test_short_readinto_and_eof) ... ok
+test_unavailable_and_unsupported_fd_fallback (benchmarks.test_h3_operator_enhancements.PositionalIO.test_unavailable_and_unsupported_fd_fallback) ... ok
+test_refiner_native_sdpa_and_legacy_alias (benchmarks.test_h3_operator_enhancements.RefinerAndLifetime.test_refiner_native_sdpa_and_legacy_alias) ... ok
+test_te_deletions_preserve_exact_arithmetic_both_mlp_paths (benchmarks.test_h3_operator_enhancements.RefinerAndLifetime.test_te_deletions_preserve_exact_arithmetic_both_mlp_paths) ... ok
+test_cgroup_shmem_kernel_file_floor_and_shared_slots (benchmarks.test_residency_policy.Residency.test_cgroup_shmem_kernel_file_floor_and_shared_slots) ... ok
+test_prefetched_prefix_survives_startup_and_far_speculation (benchmarks.test_residency_policy.Residency.test_prefetched_prefix_survives_startup_and_far_speculation) ... ok
+test_preparation_failure_releases_shared_lease (benchmarks.test_residency_policy.Residency.test_preparation_failure_releases_shared_lease) ... ok
+test_cached_module_from_another_checkout_is_rejected (benchmarks.test_legacy_runtime.RuntimeLock.test_cached_module_from_another_checkout_is_rejected) ... ok
+test_dependency_lock_rejects_different_torch_including_the_historical_t4_version (benchmarks.test_legacy_runtime.RuntimeLock.test_dependency_lock_rejects_different_torch_including_the_historical_t4_version) ... ok
+test_local_checkout_matches_qualified_source (benchmarks.test_legacy_runtime.RuntimeLock.test_local_checkout_matches_qualified_source) ... ok
+test_text_lock_accepts_crlf_and_rejects_changed_or_missing_files (benchmarks.test_legacy_runtime.RuntimeLock.test_text_lock_accepts_crlf_and_rejects_changed_or_missing_files) ... ok
+test_archive_and_requirements_are_verified_before_source_use (benchmarks.test_frozen_kaggle_setup.FrozenSetup.test_archive_and_requirements_are_verified_before_source_use) ... ok
+test_offline_install_checks_wheel_versions_before_calling_pip (benchmarks.test_frozen_kaggle_setup.FrozenSetup.test_offline_install_checks_wheel_versions_before_calling_pip) ... ok
+test_online_resolution_refuses_an_allocated_gpu (benchmarks.test_frozen_kaggle_setup.FrozenSetup.test_online_resolution_refuses_an_allocated_gpu) ... ok
+test_unhashed_wheel_blocks (benchmarks.test_frozen_kaggle_setup.FrozenSetup.test_unhashed_wheel_blocks) ... ok
+test_version_substitution_and_unknown_platform_dependency_block (benchmarks.test_frozen_kaggle_setup.FrozenSetup.test_version_substitution_and_unknown_platform_dependency_block) ... ok
+test_native_torch_or_unqualified_abi_is_rejected (benchmarks.test_direct_pip_delivery.DirectPins.test_native_torch_or_unqualified_abi_is_rejected) ... ok
+test_reuse_native_exact_packages_and_install_only_differences (benchmarks.test_direct_pip_delivery.DirectPins.test_reuse_native_exact_packages_and_install_only_differences) ... ok
+test_abort_reconciles_parent_vae_lease (benchmarks.test_h3_loading_stages.ComponentAndIdle.test_abort_reconciles_parent_vae_lease) ... ok
+test_cancel_while_preloading_drops_encoder_and_stops_te (benchmarks.test_h3_loading_stages.ComponentAndIdle.test_cancel_while_preloading_drops_encoder_and_stops_te) ... ok
+test_component_selection_is_disjoint_except_shared_norms (benchmarks.test_h3_loading_stages.ComponentAndIdle.test_component_selection_is_disjoint_except_shared_norms) ... ok
+test_encoder_prefetch_before_te_and_sampling_release (benchmarks.test_h3_loading_stages.ComponentAndIdle.test_encoder_prefetch_before_te_and_sampling_release) ... ok
+test_preload_failure_keeps_te_prefetch_and_filters_current_graph (benchmarks.test_h3_loading_stages.ComponentAndIdle.test_preload_failure_keeps_te_prefetch_and_filters_current_graph) ... ok
+test_pressure_can_release_vae_after_te_consumed_idle_window (benchmarks.test_h3_loading_stages.ComponentAndIdle.test_pressure_can_release_vae_after_te_consumed_idle_window) ... ok
+test_pressure_releases_both_encoder_and_te (benchmarks.test_h3_loading_stages.ComponentAndIdle.test_pressure_releases_both_encoder_and_te) ... ok
+test_staged_component_switch_releases_old_lease_and_never_overlaps (benchmarks.test_h3_loading_stages.ComponentAndIdle.test_staged_component_switch_releases_old_lease_and_never_overlaps) ... ok
+MERGED cpu blocks.0.attn.out_proj
+MERGED cpu blocks.0.mlp.fc2
+MERGED cpu blocks.1.attn.out_proj
+MERGED cpu blocks.1.mlp.fc2
+MERGED cpu blocks.2.attn.out_proj
+MERGED cpu blocks.2.mlp.fc2
+MERGED cpu blocks.3.attn.out_proj
+MERGED cpu blocks.3.mlp.fc2
+MERGED cpu blocks.0.attn.out_proj
+MERGED cpu blocks.0.mlp.fc2
+MERGED cpu blocks.1.attn.out_proj
+MERGED cpu blocks.1.mlp.fc2
+MERGED cpu blocks.2.attn.out_proj
+MERGED cpu blocks.2.mlp.fc2
+MERGED cpu blocks.3.attn.out_proj
+MERGED cpu blocks.3.mlp.fc2
+test_cached_bake_overwrites_on_lora_change (benchmarks.test_h3_loading_stages.OfflineBake.test_cached_bake_overwrites_on_lora_change) ... ok
+MERGED cpu blocks.0.attn.out_proj
+MERGED cpu blocks.0.mlp.fc2
+MERGED cpu blocks.1.attn.out_proj
+MERGED cpu blocks.1.mlp.fc2
+MERGED cpu blocks.2.attn.out_proj
+MERGED cpu blocks.2.mlp.fc2
+MERGED cpu blocks.3.attn.out_proj
+MERGED cpu blocks.3.mlp.fc2
+test_cached_bake_reuse_and_corruption_rejection (benchmarks.test_h3_loading_stages.OfflineBake.test_cached_bake_reuse_and_corruption_rejection) ... ok
+test_cancelled_base_copy_cleans_owned_scratch (benchmarks.test_h3_loading_stages.OfflineBake.test_cancelled_base_copy_cleans_owned_scratch) ... ok
+test_failed_worker_does_not_publish_checkpoint (benchmarks.test_h3_loading_stages.OfflineBake.test_failed_worker_does_not_publish_checkpoint) ... ok
+test_is_changed_tracks_strength (benchmarks.test_h3_loading_stages.OfflineBake.test_is_changed_tracks_strength) ... ok
+test_loader_offline_does_not_apply_adapters_twice (benchmarks.test_h3_loading_stages.OfflineBake.test_loader_offline_does_not_apply_adapters_twice) ... ok
+MERGED cpu blocks.0.attn.out_proj
+MERGED cpu blocks.0.mlp.fc2
+MERGED cpu blocks.1.attn.out_proj
+MERGED cpu blocks.1.mlp.fc2
+MERGED cpu blocks.2.attn.out_proj
+MERGED cpu blocks.2.mlp.fc2
+MERGED cpu blocks.3.attn.out_proj
+MERGED cpu blocks.3.mlp.fc2
+MERGED cpu blocks.0.attn.out_proj
+MERGED cpu blocks.0.mlp.fc2
+MERGED cpu blocks.2.attn.out_proj
+MERGED cpu blocks.2.mlp.fc2
+MERGED cpu blocks.1.attn.out_proj
+MERGED cpu blocks.1.mlp.fc2
+MERGED cpu blocks.3.attn.out_proj
+MERGED cpu blocks.3.mlp.fc2
+test_spawned_layer_parallel_bake_matches_serial_and_preserves_base (benchmarks.test_h3_loading_stages.OfflineBake.test_spawned_layer_parallel_bake_matches_serial_and_preserves_base) ... ok
+test_only_successful_idle_and_matching_model_can_start (benchmarks.test_idle_lifecycle.Lifecycle.test_only_successful_idle_and_matching_model_can_start) ... ok
+test_queued_and_rapidly_submitted_requests_suppress_prefetch (benchmarks.test_idle_lifecycle.Lifecycle.test_queued_and_rapidly_submitted_requests_suppress_prefetch) ... ok
+test_switch_discards_previous_te_and_same_model_keeps_entries (benchmarks.test_idle_lifecycle.Lifecycle.test_switch_discards_previous_te_and_same_model_keeps_entries) ... ok
+test_native_replacement_and_offline_manifest_change_are_rejected (benchmarks.test_idle_identity.Identity.test_native_replacement_and_offline_manifest_change_are_rejected) ... ok
+test_full_width_columns_need_no_extra_source_bytes_or_row_syscalls (benchmarks.test_review_optimizations.CheckpointRanges.test_full_width_columns_need_no_extra_source_bytes_or_row_syscalls) ... ok
+test_owned_reads_preserve_order_without_read_amplification (benchmarks.test_review_optimizations.CheckpointRanges.test_owned_reads_preserve_order_without_read_amplification) ... ok
+test_removed_chunk_option_and_mutation_are_rejected (benchmarks.test_review_optimizations.CheckpointRanges.test_removed_chunk_option_and_mutation_are_rejected) ... ok
+test_short_positional_reads_then_seek_fallback_and_eof (benchmarks.test_review_optimizations.CheckpointRanges.test_short_positional_reads_then_seek_fallback_and_eof) ... ok
+test_chunked_destination_is_exact_without_output_concatenation (benchmarks.test_review_optimizations.ColumnDestination.test_chunked_destination_is_exact_without_output_concatenation) ... ok
+test_te_shares_only_identical_preparation_and_preserves_projection_hooks (benchmarks.test_review_optimizations.ColumnDestination.test_te_shares_only_identical_preparation_and_preserves_projection_hooks) ... ok
+test_error_releases_workers_and_restores_empty_parent_without_fallback (benchmarks.test_review_optimizations.LazyVideoParent.test_error_releases_workers_and_restores_empty_parent_without_fallback) ... ok
+test_real_metadata_template_reads_no_learned_payload (benchmarks.test_review_optimizations.LazyVideoParent.test_real_metadata_template_reads_no_learned_payload) ... ok
+test_refusal_loads_parent_only_after_remote_lease_is_released (benchmarks.test_review_optimizations.LazyVideoParent.test_refusal_loads_parent_only_after_remote_lease_is_released) ... ok
+test_success_never_loads_parent_component_and_keeps_native_plan_exact (benchmarks.test_review_optimizations.LazyVideoParent.test_success_never_loads_parent_component_and_keeps_native_plan_exact) ... ok
+test_column_only_policy_still_requires_the_pinned_compiler_library (benchmarks.test_review_optimizations.LoaderControls.test_column_only_policy_still_requires_the_pinned_compiler_library) ... ok
+test_invalid_resource_controls_rejected (benchmarks.test_review_optimizations.LoaderControls.test_invalid_resource_controls_rejected) ... ok
+test_loader_defaults_and_explicit_resource_controls (benchmarks.test_review_optimizations.LoaderControls.test_loader_defaults_and_explicit_resource_controls) ... ok
+test_qkv_owned_rows_are_explicit_and_geometry_guarded (benchmarks.test_review_optimizations.LoaderControls.test_qkv_owned_rows_are_explicit_and_geometry_guarded) ... ok
+test_selected_qkv_adapter_packs_each_component_and_preserves_scale_order (benchmarks.test_review_optimizations.LoaderControls.test_selected_qkv_adapter_packs_each_component_and_preserves_scale_order) ... ok
+test_returned_cpu_tensor_is_owned_copy (benchmarks.test_review_optimizations.ReplyOwnership.test_returned_cpu_tensor_is_owned_copy) ... ok
+test_unused_rank_has_no_conversion_diagnostics_still_return (benchmarks.test_review_optimizations.ReplyOwnership.test_unused_rank_has_no_conversion_diagnostics_still_return) ... ok
+test_both_worker_trace_labels_cover_each_selected_route (benchmarks.test_review_t4.ReviewT4.test_both_worker_trace_labels_cover_each_selected_route) ... ok
+test_cpu_and_gpu_jobs_have_no_mounts_and_bind_matching_review_qualification (benchmarks.test_review_t4.ReviewT4.test_cpu_and_gpu_jobs_have_no_mounts_and_bind_matching_review_qualification) ... ok
+test_fixture_plan_refuses_full_bundle_mutable_revision_and_auth (benchmarks.test_review_t4.ReviewT4.test_fixture_plan_refuses_full_bundle_mutable_revision_and_auth) ... ok
+test_recovery_preserves_rng_draw_order_without_repeating_operators (benchmarks.test_review_t4.ReviewT4.test_recovery_preserves_rng_draw_order_without_repeating_operators) ... ok
+test_validation_reference_does_not_retain_source_storage (benchmarks.test_review_t4.ReviewT4.test_validation_reference_does_not_retain_source_storage) ... ok
+test_browser_restores_legacy_widgets_by_name_and_leaves_v2_intact (benchmarks.test_h3_configuration_defaults.ConfigurationDefaults.test_browser_restores_legacy_widgets_by_name_and_leaves_v2_intact) ... ok
+test_int32_base_sum_and_fixed_scalemax_have_no_alternate_runtime_mode (benchmarks.test_h3_configuration_defaults.ConfigurationDefaults.test_int32_base_sum_and_fixed_scalemax_have_no_alternate_runtime_mode) ... ok
+test_loader_policy_and_runtime_defaults_agree (benchmarks.test_h3_configuration_defaults.ConfigurationDefaults.test_loader_policy_and_runtime_defaults_agree) ... ok
+test_offline_bundle_keeps_adapters_and_online_is_explicit (benchmarks.test_h3_configuration_defaults.ConfigurationDefaults.test_offline_bundle_keeps_adapters_and_online_is_explicit) ... ok
+test_rejected_te_ablation_is_outside_runtime (benchmarks.test_h3_configuration_defaults.ConfigurationDefaults.test_rejected_te_ablation_is_outside_runtime) ... ok
+test_removed_python_arguments_cannot_reenable_old_paths (benchmarks.test_h3_configuration_defaults.ConfigurationDefaults.test_removed_python_arguments_cannot_reenable_old_paths) ... [transformers] Accessing `__warningregistry__` from `.models.aria.image_processing_aria`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.aria.image_processing_pil_aria`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.auto.image_processing_auto`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.beit.image_processing_beit`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.beit.image_processing_pil_beit`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.bit.image_processing_bit`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.bit.image_processing_pil_bit`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.blip.image_processing_blip`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.blip.image_processing_pil_blip`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.bridgetower.image_processing_bridgetower`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.bridgetower.image_processing_pil_bridgetower`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.chameleon.image_processing_chameleon`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.chameleon.image_processing_pil_chameleon`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.chinese_clip.image_processing_chinese_clip`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.chinese_clip.image_processing_pil_chinese_clip`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.chmv2.image_processing_chmv2`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.clip.image_processing_clip`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.clip.image_processing_pil_clip`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.cohere2_vision.image_processing_cohere2_vision`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.conditional_detr.image_processing_conditional_detr`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.conditional_detr.image_processing_pil_conditional_detr`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.convnext.image_processing_convnext`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.convnext.image_processing_pil_convnext`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.deepseek_vl.image_processing_deepseek_vl`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.deepseek_vl.image_processing_pil_deepseek_vl`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.deepseek_vl_hybrid.image_processing_deepseek_vl_hybrid`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.deepseek_vl_hybrid.image_processing_pil_deepseek_vl_hybrid`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.deformable_detr.image_processing_deformable_detr`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.deformable_detr.image_processing_pil_deformable_detr`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.deit.image_processing_deit`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.deit.image_processing_pil_deit`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.depth_pro.image_processing_depth_pro`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.detr.image_processing_detr`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.detr.image_processing_pil_detr`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.dinov3_vit.image_processing_dinov3_vit`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.donut.image_processing_donut`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.donut.image_processing_pil_donut`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.dpt.image_processing_dpt`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.dpt.image_processing_pil_dpt`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.efficientloftr.image_processing_efficientloftr`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.efficientloftr.image_processing_pil_efficientloftr`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.efficientnet.image_processing_efficientnet`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.efficientnet.image_processing_pil_efficientnet`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.emu3.image_processing_emu3`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.eomt.image_processing_eomt`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.eomt.image_processing_pil_eomt`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.ernie4_5_vl_moe.image_processing_ernie4_5_vl_moe`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.ernie4_5_vl_moe.image_processing_pil_ernie4_5_vl_moe`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.flava.image_processing_flava`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.flava.image_processing_pil_flava`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.fuyu.image_processing_fuyu`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.fuyu.image_processing_pil_fuyu`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.gemma3.image_processing_gemma3`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.gemma3.image_processing_pil_gemma3`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.gemma4.image_processing_gemma4`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.gemma4.image_processing_pil_gemma4`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.glm46v.image_processing_glm46v`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.glm46v.image_processing_pil_glm46v`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.glm4v.image_processing_glm4v`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.glm4v.image_processing_pil_glm4v`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.glm_image.image_processing_glm_image`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.glm_image.image_processing_pil_glm_image`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.glpn.image_processing_glpn`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.glpn.image_processing_pil_glpn`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.got_ocr2.image_processing_got_ocr2`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.got_ocr2.image_processing_pil_got_ocr2`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.grounding_dino.image_processing_grounding_dino`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.grounding_dino.image_processing_pil_grounding_dino`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.idefics.image_processing_idefics`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.idefics.image_processing_pil_idefics`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.idefics2.image_processing_idefics2`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.idefics2.image_processing_pil_idefics2`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.idefics3.image_processing_idefics3`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.idefics3.image_processing_pil_idefics3`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.imagegpt.image_processing_imagegpt`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.imagegpt.image_processing_pil_imagegpt`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.janus.image_processing_janus`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.janus.image_processing_pil_janus`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.kosmos2_5.image_processing_kosmos2_5`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.kosmos2_5.image_processing_pil_kosmos2_5`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.layoutlmv2.image_processing_layoutlmv2`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.layoutlmv2.image_processing_pil_layoutlmv2`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.layoutlmv3.image_processing_layoutlmv3`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.layoutlmv3.image_processing_pil_layoutlmv3`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.levit.image_processing_levit`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.levit.image_processing_pil_levit`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.lfm2_vl.image_processing_lfm2_vl`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.lightglue.image_processing_lightglue`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.lightglue.image_processing_pil_lightglue`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.llama4.image_processing_llama4`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.llava.image_processing_llava`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.llava.image_processing_pil_llava`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.llava_next.image_processing_llava_next`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.llava_next.image_processing_pil_llava_next`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.llava_onevision.image_processing_llava_onevision`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.llava_onevision.image_processing_pil_llava_onevision`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.mask2former.image_processing_mask2former`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.mask2former.image_processing_pil_mask2former`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.maskformer.image_processing_maskformer`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.maskformer.image_processing_pil_maskformer`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.minicpmv4_6.image_processing_minicpmv4_6`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.minicpmv4_6.image_processing_pil_minicpmv4_6`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.mllama.image_processing_mllama`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.mllama.image_processing_pil_mllama`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.mobilenet_v1.image_processing_mobilenet_v1`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.mobilenet_v1.image_processing_pil_mobilenet_v1`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.mobilenet_v2.image_processing_mobilenet_v2`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.mobilenet_v2.image_processing_pil_mobilenet_v2`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.mobilevit.image_processing_mobilevit`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.mobilevit.image_processing_pil_mobilevit`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.nougat.image_processing_nougat`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.nougat.image_processing_pil_nougat`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.oneformer.image_processing_oneformer`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.oneformer.image_processing_pil_oneformer`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.ovis2.image_processing_ovis2`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.ovis2.image_processing_pil_ovis2`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.owlv2.image_processing_owlv2`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.owlv2.image_processing_pil_owlv2`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.owlvit.image_processing_owlvit`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.owlvit.image_processing_pil_owlvit`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.paddleocr_vl.image_processing_paddleocr_vl`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.paddleocr_vl.image_processing_pil_paddleocr_vl`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.perceiver.image_processing_perceiver`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.perceiver.image_processing_pil_perceiver`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.perception_lm.image_processing_perception_lm`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.phi4_multimodal.image_processing_phi4_multimodal`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.pi0.image_processing_pi0`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.pix2struct.image_processing_pil_pix2struct`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.pix2struct.image_processing_pix2struct`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.pixtral.image_processing_pil_pixtral`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.pixtral.image_processing_pixtral`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.poolformer.image_processing_pil_poolformer`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.poolformer.image_processing_poolformer`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.pp_chart2table.image_processing_pil_pp_chart2table`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.pp_chart2table.image_processing_pp_chart2table`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.pp_doclayout_v2.image_processing_pp_doclayout_v2`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.pp_doclayout_v3.image_processing_pp_doclayout_v3`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.pp_formulanet.image_processing_pp_formulanet`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.pp_lcnet.image_processing_pp_lcnet`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.pp_ocrv5_server_det.image_processing_pp_ocrv5_server_det`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.pp_ocrv5_server_rec.image_processing_pp_ocrv5_server_rec`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.prompt_depth_anything.image_processing_pil_prompt_depth_anything`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.prompt_depth_anything.image_processing_prompt_depth_anything`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.pvt.image_processing_pil_pvt`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.pvt.image_processing_pvt`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.qwen2_vl.image_processing_pil_qwen2_vl`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.qwen2_vl.image_processing_qwen2_vl`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.rf_detr.image_processing_rf_detr`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.rt_detr.image_processing_pil_rt_detr`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.rt_detr.image_processing_rt_detr`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.sam.image_processing_pil_sam`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.sam.image_processing_sam`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.sam2.image_processing_sam2`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.sam3.image_processing_sam3`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.segformer.image_processing_pil_segformer`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.segformer.image_processing_segformer`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.seggpt.image_processing_pil_seggpt`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.seggpt.image_processing_seggpt`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.siglip.image_processing_pil_siglip`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.siglip.image_processing_siglip`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.siglip2.image_processing_pil_siglip2`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.siglip2.image_processing_siglip2`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.slanext.image_processing_slanext`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.smolvlm.image_processing_pil_smolvlm`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.smolvlm.image_processing_smolvlm`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.superglue.image_processing_pil_superglue`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.superglue.image_processing_superglue`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.superpoint.image_processing_pil_superpoint`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.superpoint.image_processing_superpoint`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.swin2sr.image_processing_pil_swin2sr`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.swin2sr.image_processing_swin2sr`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.textnet.image_processing_pil_textnet`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.textnet.image_processing_textnet`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.timm_wrapper.image_processing_timm_wrapper`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.tvp.image_processing_pil_tvp`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.tvp.image_processing_tvp`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.uvdoc.image_processing_uvdoc`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.video_llama_3.image_processing_pil_video_llama_3`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.video_llama_3.image_processing_video_llama_3`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.video_llava.image_processing_video_llava`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.videomae.image_processing_pil_videomae`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.videomae.image_processing_videomae`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.vilt.image_processing_pil_vilt`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.vilt.image_processing_vilt`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.vit.image_processing_pil_vit`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.vit.image_processing_vit`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.vitmatte.image_processing_pil_vitmatte`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.vitmatte.image_processing_vitmatte`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.vitpose.image_processing_pil_vitpose`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.vitpose.image_processing_vitpose`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.vivit.image_processing_vivit`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.yolos.image_processing_pil_yolos`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.yolos.image_processing_yolos`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.zoedepth.image_processing_pil_zoedepth`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+[transformers] Accessing `__warningregistry__` from `.models.zoedepth.image_processing_zoedepth`. Returning `__warningregistry__` instead. Behavior may be different and this alias will be removed in future versions.
+ok
+test_byte_preservation_and_changed_artifact (benchmarks.test_te_loading.Loading.test_byte_preservation_and_changed_artifact) ... ok
+test_parallel_preparation_capacity_and_shutdown (benchmarks.test_te_loading.Loading.test_parallel_preparation_capacity_and_shutdown) ... ok
+test_auxiliary_range_plan_contains_only_non_transformer_tensors (benchmarks.test_tp2_bundle.Bundle.test_auxiliary_range_plan_contains_only_non_transformer_tensors) ... ok
+test_bundle_offline_matches_independent_full_native_matrix_and_keeps_base (benchmarks.test_tp2_bundle.Bundle.test_bundle_offline_matches_independent_full_native_matrix_and_keeps_base) ... ok
+test_cached_proof_rejects_mutation_during_last_tensor_read (benchmarks.test_tp2_bundle.Bundle.test_cached_proof_rejects_mutation_during_last_tensor_read) ... ok
+test_component_packing_and_shared_row_scales_round_trip (benchmarks.test_tp2_bundle.Bundle.test_component_packing_and_shared_row_scales_round_trip) ... ok
+test_corruption_and_changed_lora_are_rejected (benchmarks.test_tp2_bundle.Bundle.test_corruption_and_changed_lora_are_rejected) ... ok
+test_different_lora_strength_changes_identity_without_new_base_files (benchmarks.test_tp2_bundle.Bundle.test_different_lora_strength_changes_identity_without_new_base_files) ... ok
+test_immutable_state_proof_is_once_per_owner_without_changing_merge_count (benchmarks.test_tp2_bundle.Bundle.test_immutable_state_proof_is_once_per_owner_without_changing_merge_count) ... ok
+test_node_routes_offline_bundle_without_full_checkpoint_bake_or_online_adapter (benchmarks.test_tp2_bundle.Bundle.test_node_routes_offline_bundle_without_full_checkpoint_bake_or_online_adapter) ... ok
+test_auxiliary_range_plan_contains_only_non_transformer_tensors (benchmarks.test_tp2_disk_bake.DiskBake.test_auxiliary_range_plan_contains_only_non_transformer_tensors) ... ok
+test_bundle_offline_matches_independent_full_native_matrix_and_keeps_base (benchmarks.test_tp2_disk_bake.DiskBake.test_bundle_offline_matches_independent_full_native_matrix_and_keeps_base) ... ok
+TP2_DISK_BAKED cpu blocks.0.attn.qkv_proj
+TP2_DISK_BAKED cpu blocks.0.attn.out_proj
+TP2_DISK_BAKED cpu blocks.0.mlp.fc1
+TP2_DISK_BAKED cpu blocks.0.mlp.fc2
+TP2_DISK_BAKED cpu blocks.0.adaln_proj.linear
+TP2_DISK_LAYER_QUEUED cpu 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_QUEUED cpu 1
+TP2_DISK_LAYER_DURABLE 1
+TP2_DISK_LAYER_QUEUED cpu 2
+TP2_DISK_LAYER_DURABLE 2
+TP2_DISK_LAYER_QUEUED cpu 3
+TP2_DISK_LAYER_DURABLE 3
+TP2_DISK_LAYER_QUEUED cpu 4
+TP2_DISK_LAYER_DURABLE 4
+TP2_DISK_LAYER_QUEUED cpu 5
+TP2_DISK_LAYER_DURABLE 5
+TP2_DISK_LAYER_QUEUED cpu 6
+TP2_DISK_LAYER_DURABLE 6
+TP2_DISK_LAYER_QUEUED cpu 7
+TP2_DISK_LAYER_DURABLE 7
+TP2_DISK_LAYER_QUEUED cpu 8
+TP2_DISK_LAYER_DURABLE 8
+TP2_DISK_LAYER_QUEUED cpu 9
+TP2_DISK_LAYER_DURABLE 9
+TP2_DISK_LAYER_QUEUED cpu 10
+TP2_DISK_LAYER_DURABLE 10
+TP2_DISK_LAYER_QUEUED cpu 11
+TP2_DISK_LAYER_DURABLE 11
+TP2_DISK_LAYER_QUEUED cpu 12
+TP2_DISK_LAYER_DURABLE 12
+TP2_DISK_LAYER_QUEUED cpu 13
+TP2_DISK_LAYER_DURABLE 13
+TP2_DISK_LAYER_QUEUED cpu 14
+TP2_DISK_LAYER_DURABLE 14
+TP2_DISK_LAYER_QUEUED cpu 15
+TP2_DISK_LAYER_DURABLE 15
+TP2_DISK_LAYER_QUEUED cpu 16
+TP2_DISK_LAYER_DURABLE 16
+TP2_DISK_LAYER_QUEUED cpu 17
+TP2_DISK_LAYER_DURABLE 17
+TP2_DISK_LAYER_QUEUED cpu 18
+TP2_DISK_LAYER_DURABLE 18
+TP2_DISK_LAYER_QUEUED cpu 19
+TP2_DISK_LAYER_DURABLE 19
+TP2_DISK_LAYER_QUEUED cpu 20
+TP2_DISK_LAYER_DURABLE 20
+TP2_DISK_LAYER_QUEUED cpu 21
+TP2_DISK_LAYER_DURABLE 21
+TP2_DISK_LAYER_QUEUED cpu 22
+TP2_DISK_LAYER_DURABLE 22
+TP2_DISK_LAYER_QUEUED cpu 23
+TP2_DISK_LAYER_DURABLE 23
+TP2_DISK_LAYER_QUEUED cpu 24
+TP2_DISK_LAYER_DURABLE 24
+TP2_DISK_LAYER_QUEUED cpu 25
+TP2_DISK_LAYER_DURABLE 25
+TP2_DISK_LAYER_QUEUED cpu 26
+TP2_DISK_LAYER_DURABLE 26
+TP2_DISK_LAYER_QUEUED cpu 27
+TP2_DISK_LAYER_DURABLE 27
+TP2_DISK_LAYER_QUEUED cpu 28
+TP2_DISK_LAYER_DURABLE 28
+TP2_DISK_LAYER_QUEUED cpu 29
+TP2_DISK_LAYER_DURABLE 29
+TP2_DISK_LAYER_QUEUED cpu 30
+TP2_DISK_LAYER_DURABLE 30
+TP2_DISK_LAYER_QUEUED cpu 31
+TP2_DISK_LAYER_DURABLE 31
+TP2_DISK_LAYER_QUEUED cpu 32
+TP2_DISK_LAYER_DURABLE 32
+TP2_DISK_LAYER_QUEUED cpu 33
+TP2_DISK_LAYER_DURABLE 33
+TP2_DISK_LAYER_QUEUED cpu 34
+TP2_DISK_LAYER_DURABLE 34
+TP2_DISK_LAYER_QUEUED cpu 35
+TP2_DISK_LAYER_DURABLE 35
+TP2_DISK_LAYER_QUEUED cpu 36
+TP2_DISK_LAYER_DURABLE 36
+TP2_DISK_LAYER_QUEUED cpu 37
+TP2_DISK_LAYER_DURABLE 37
+TP2_DISK_LAYER_QUEUED cpu 38
+TP2_DISK_LAYER_DURABLE 38
+TP2_DISK_LAYER_QUEUED cpu 39
+TP2_DISK_LAYER_DURABLE 39
+TP2_DISK_LAYER_QUEUED cpu 40
+TP2_DISK_LAYER_DURABLE 40
+TP2_DISK_LAYER_QUEUED cpu 41
+TP2_DISK_LAYER_DURABLE 41
+TP2_DISK_LAYER_QUEUED cpu 42
+TP2_DISK_LAYER_DURABLE 42
+TP2_DISK_LAYER_QUEUED cpu 43
+TP2_DISK_LAYER_DURABLE 43
+TP2_DISK_LAYER_QUEUED cpu 44
+TP2_DISK_LAYER_DURABLE 44
+TP2_DISK_LAYER_QUEUED cpu 45
+TP2_DISK_LAYER_DURABLE 45
+TP2_DISK_LAYER_QUEUED cpu 46
+TP2_DISK_LAYER_DURABLE 46
+TP2_DISK_LAYER_QUEUED cpu 47
+TP2_DISK_LAYER_DURABLE 47
+TP2_DISK_LAYER_QUEUED cpu 48
+TP2_DISK_LAYER_DURABLE 48
+TP2_DISK_LAYER_QUEUED cpu 49
+TP2_DISK_LAYER_DURABLE 49
+TP2_DISK_BAKED_AUX cpu token_refiner.blocks.0.attn.out_proj
+test_cache_recipe_and_corruption_are_rejected (benchmarks.test_tp2_disk_bake.DiskBake.test_cache_recipe_and_corruption_are_rejected) ... ok
+test_cached_proof_rejects_mutation_during_last_tensor_read (benchmarks.test_tp2_disk_bake.DiskBake.test_cached_proof_rejects_mutation_during_last_tensor_read) ... ok
+test_component_packing_and_shared_row_scales_round_trip (benchmarks.test_tp2_disk_bake.DiskBake.test_component_packing_and_shared_row_scales_round_trip) ... ok
+test_corruption_and_changed_lora_are_rejected (benchmarks.test_tp2_disk_bake.DiskBake.test_corruption_and_changed_lora_are_rejected) ... ok
+test_different_lora_strength_changes_identity_without_new_base_files (benchmarks.test_tp2_disk_bake.DiskBake.test_different_lora_strength_changes_identity_without_new_base_files) ... ok
+TP2_DISK_BAKED cpu blocks.0.attn.qkv_proj
+TP2_DISK_BAKED cpu blocks.0.attn.out_proj
+TP2_DISK_BAKED cpu blocks.0.mlp.fc1
+TP2_DISK_BAKED cpu blocks.0.mlp.fc2
+TP2_DISK_BAKED cpu blocks.0.adaln_proj.linear
+TP2_DISK_LAYER_QUEUED cpu 0
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_QUEUED cpu 1
+TP2_DISK_LAYER_DURABLE 1
+TP2_DISK_LAYER_QUEUED cpu 2
+TP2_DISK_LAYER_DURABLE 2
+TP2_DISK_LAYER_QUEUED cpu 3
+TP2_DISK_LAYER_DURABLE 3
+TP2_DISK_LAYER_QUEUED cpu 4
+TP2_DISK_LAYER_DURABLE 4
+TP2_DISK_LAYER_QUEUED cpu 5
+TP2_DISK_LAYER_DURABLE 5
+TP2_DISK_LAYER_QUEUED cpu 6
+TP2_DISK_LAYER_DURABLE 6
+TP2_DISK_LAYER_QUEUED cpu 7
+TP2_DISK_LAYER_DURABLE 7
+TP2_DISK_LAYER_QUEUED cpu 8
+TP2_DISK_LAYER_DURABLE 8
+TP2_DISK_LAYER_QUEUED cpu 9
+TP2_DISK_LAYER_DURABLE 9
+TP2_DISK_LAYER_QUEUED cpu 10
+TP2_DISK_LAYER_DURABLE 10
+TP2_DISK_LAYER_QUEUED cpu 11
+TP2_DISK_LAYER_DURABLE 11
+TP2_DISK_LAYER_QUEUED cpu 12
+TP2_DISK_LAYER_DURABLE 12
+TP2_DISK_LAYER_QUEUED cpu 13
+TP2_DISK_LAYER_DURABLE 13
+TP2_DISK_LAYER_QUEUED cpu 14
+TP2_DISK_LAYER_DURABLE 14
+TP2_DISK_LAYER_QUEUED cpu 15
+TP2_DISK_LAYER_DURABLE 15
+TP2_DISK_LAYER_QUEUED cpu 16
+TP2_DISK_LAYER_DURABLE 16
+TP2_DISK_LAYER_QUEUED cpu 17
+TP2_DISK_LAYER_DURABLE 17
+TP2_DISK_LAYER_QUEUED cpu 18
+TP2_DISK_LAYER_DURABLE 18
+TP2_DISK_LAYER_QUEUED cpu 19
+TP2_DISK_LAYER_DURABLE 19
+TP2_DISK_LAYER_QUEUED cpu 20
+TP2_DISK_LAYER_DURABLE 20
+TP2_DISK_LAYER_QUEUED cpu 21
+TP2_DISK_LAYER_DURABLE 21
+TP2_DISK_LAYER_QUEUED cpu 22
+TP2_DISK_LAYER_DURABLE 22
+TP2_DISK_LAYER_QUEUED cpu 23
+TP2_DISK_LAYER_DURABLE 23
+TP2_DISK_LAYER_QUEUED cpu 24
+TP2_DISK_LAYER_DURABLE 24
+TP2_DISK_LAYER_QUEUED cpu 25
+TP2_DISK_LAYER_DURABLE 25
+TP2_DISK_LAYER_QUEUED cpu 26
+TP2_DISK_LAYER_DURABLE 26
+TP2_DISK_LAYER_QUEUED cpu 27
+TP2_DISK_LAYER_DURABLE 27
+TP2_DISK_LAYER_QUEUED cpu 28
+TP2_DISK_LAYER_DURABLE 28
+TP2_DISK_LAYER_QUEUED cpu 29
+TP2_DISK_LAYER_DURABLE 29
+TP2_DISK_LAYER_QUEUED cpu 30
+TP2_DISK_LAYER_DURABLE 30
+TP2_DISK_LAYER_QUEUED cpu 31
+TP2_DISK_LAYER_DURABLE 31
+TP2_DISK_LAYER_QUEUED cpu 32
+TP2_DISK_LAYER_DURABLE 32
+TP2_DISK_LAYER_QUEUED cpu 33
+TP2_DISK_LAYER_DURABLE 33
+TP2_DISK_LAYER_QUEUED cpu 34
+TP2_DISK_LAYER_DURABLE 34
+TP2_DISK_LAYER_QUEUED cpu 35
+TP2_DISK_LAYER_DURABLE 35
+TP2_DISK_LAYER_QUEUED cpu 36
+TP2_DISK_LAYER_DURABLE 36
+TP2_DISK_LAYER_QUEUED cpu 37
+TP2_DISK_LAYER_DURABLE 37
+TP2_DISK_LAYER_QUEUED cpu 38
+TP2_DISK_LAYER_DURABLE 38
+TP2_DISK_LAYER_QUEUED cpu 39
+TP2_DISK_LAYER_DURABLE 39
+TP2_DISK_LAYER_QUEUED cpu 40
+TP2_DISK_LAYER_DURABLE 40
+TP2_DISK_LAYER_QUEUED cpu 41
+TP2_DISK_LAYER_DURABLE 41
+TP2_DISK_LAYER_QUEUED cpu 42
+TP2_DISK_LAYER_DURABLE 42
+TP2_DISK_LAYER_QUEUED cpu 43
+TP2_DISK_LAYER_DURABLE 43
+TP2_DISK_LAYER_QUEUED cpu 44
+TP2_DISK_LAYER_DURABLE 44
+TP2_DISK_LAYER_QUEUED cpu 45
+TP2_DISK_LAYER_DURABLE 45
+TP2_DISK_LAYER_QUEUED cpu 46
+TP2_DISK_LAYER_DURABLE 46
+TP2_DISK_LAYER_QUEUED cpu 47
+TP2_DISK_LAYER_DURABLE 47
+TP2_DISK_LAYER_QUEUED cpu 48
+TP2_DISK_LAYER_DURABLE 48
+TP2_DISK_LAYER_QUEUED cpu 49
+TP2_DISK_LAYER_DURABLE 49
+TP2_DISK_BAKED_AUX cpu token_refiner.blocks.0.attn.out_proj
+test_disk_bake_is_native_exact_and_has_no_remerge_after_base_payload_removal (benchmarks.test_tp2_disk_bake.DiskBake.test_disk_bake_is_native_exact_and_has_no_remerge_after_base_payload_removal) ... ok
+test_failure_never_publishes_a_complete_descriptor (benchmarks.test_tp2_disk_bake.DiskBake.test_failure_never_publishes_a_complete_descriptor) ... ok
+test_immutable_state_proof_is_once_per_owner_without_changing_merge_count (benchmarks.test_tp2_disk_bake.DiskBake.test_immutable_state_proof_is_once_per_owner_without_changing_merge_count) ... ok
+test_node_routes_offline_bundle_without_full_checkpoint_bake_or_online_adapter (benchmarks.test_tp2_disk_bake.DiskBake.test_node_routes_offline_bundle_without_full_checkpoint_bake_or_online_adapter) ... ok
+test_current_defaults_and_offline_only_runtime (benchmarks.test_h3_l1_turbo_e2e.TurboLongRun.test_current_defaults_and_offline_only_runtime) ... ok
+test_decode_kitchen_calls_do_not_change_dit_acceptance_count (benchmarks.test_h3_l1_turbo_e2e.TurboLongRun.test_decode_kitchen_calls_do_not_change_dit_acceptance_count) ... ok
+test_download_cleanup_is_scoped_and_requires_complete_owned_files (benchmarks.test_h3_l1_turbo_e2e.TurboLongRun.test_download_cleanup_is_scoped_and_requires_complete_owned_files) ... ok
+test_real_header_when_bound_in_frozen_capsule (benchmarks.test_h3_l1_turbo_e2e.TurboLongRun.test_real_header_when_bound_in_frozen_capsule) ... ok
+test_admission_refusal_restores_trained_parent_before_native_fallback (benchmarks.test_temporal_vae.TemporalHandoff.test_admission_refusal_restores_trained_parent_before_native_fallback) ... ok
+test_collective_decode_error_propagates_and_releases_replicas (benchmarks.test_temporal_vae.TemporalHandoff.test_collective_decode_error_propagates_and_releases_replicas) ... ok
+test_default_and_auto_select_temporal_while_query_remains_explicit (benchmarks.test_temporal_vae.TemporalHandoff.test_default_and_auto_select_temporal_while_query_remains_explicit) ... ok
+test_exception_restores_original_model_patcher_and_size (benchmarks.test_temporal_vae.TemporalHandoff.test_exception_restores_original_model_patcher_and_size) ... ok
+test_native_tile_temporal_batch_and_pixel_processing_are_exact (benchmarks.test_temporal_vae.TemporalHandoff.test_native_tile_temporal_batch_and_pixel_processing_are_exact) ... ok
+test_parallel_handoff_uses_weightless_parent_and_restores_native (benchmarks.test_temporal_vae.TemporalHandoff.test_parallel_handoff_uses_weightless_parent_and_restores_native) ... ok
+test_temporal_handoff_uses_both_replies_and_restores_native_parent (benchmarks.test_temporal_vae.TemporalHandoff.test_temporal_handoff_uses_both_replies_and_restores_native_parent) ... ok
+test_unoffloadable_parent_falls_back_before_worker_collectives (benchmarks.test_temporal_vae.TemporalHandoff.test_unoffloadable_parent_falls_back_before_worker_collectives) ... ok
+test_failure_clears_pair_cache_and_allows_a_new_request (benchmarks.test_temporal_vae.TemporalPlanning.test_failure_clears_pair_cache_and_allows_a_new_request) ... ok
+test_native_pixel_results_include_tail_padding_blending_batch_and_tiles (benchmarks.test_temporal_vae.TemporalPlanning.test_native_pixel_results_include_tail_padding_blending_batch_and_tiles) ... ok
+test_parent_service_returns_both_independent_owners (benchmarks.test_temporal_vae.TemporalPlanning.test_parent_service_returns_both_independent_owners) ... ok
+test_rank_one_temporal_payload_is_not_silently_discarded (benchmarks.test_temporal_vae.TemporalPlanning.test_rank_one_temporal_payload_is_not_silently_discarded) ... ok
+test_worker_owns_only_its_clip_and_empty_tail_never_decodes (benchmarks.test_temporal_vae.TemporalPlanning.test_worker_owns_only_its_clip_and_empty_tail_never_decodes) ... ok
+test_cpu_preflight_has_no_gpu_and_uses_hash_auth_probe (benchmarks.test_temporal_delivery.DecoderDelivery.test_cpu_preflight_has_no_gpu_and_uses_hash_auth_probe) ... ok
+test_gpu_requires_matching_cpu_input_then_runs_only_decoder_batch (benchmarks.test_temporal_delivery.DecoderDelivery.test_gpu_requires_matching_cpu_input_then_runs_only_decoder_batch) ... ok
+test_private_worker_launcher_is_removed_even_if_startup_fails (benchmarks.test_temporal_delivery.DecoderDelivery.test_private_worker_launcher_is_removed_even_if_startup_fails) ... ok
+
+----------------------------------------------------------------------
+Ran 179 tests in 11.047s
+
+OK
+C:\Users\Administrator\AppData\Local\Temp\tmprm5nwfyp\job
+C:\Users\Administrator\AppData\Local\Temp\tmpy4k4ufl_\job
+{"passed": true, "tests": 179, "failures": 0, "errors": 0, "skipped": 0, "seconds": 13.735000000000127, "scope": "CPU contracts, not physical T4 qualification"}

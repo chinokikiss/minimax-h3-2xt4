@@ -599,6 +599,7 @@ class ResidencyWindow:
                 for position in range(self.cursor, len(self.uses)):
                     key = self.uses[position]
                     if (not self.specs[key].resident_backing and key not in self.entries
+                            and not (self.future_cpu and key in self.pending)
                             and key not in [k for _,k in cpu_keys]):
                         cpu_keys.append((position,key))
                     limit = min(self.cpu_lookahead, 2) if self.cpu_priority_by_use else self.cpu_lookahead
@@ -615,7 +616,8 @@ class ResidencyWindow:
                     # preparation keeps a small imminent prefix. Both lanes use
                     # the same capacity, process-shared bytes and slot guards.
                     next_refiner = next(((p,k) for p,k in sorted(self.cpu_priority_by_use.items())
-                        if p > self.cursor and k not in self.entries and k not in [x for _,x in cpu_keys]), None)
+                        if p > self.cursor and k not in self.entries and k not in self.pending
+                        and k not in [x for _,x in cpu_keys]), None)
                     if next_refiner is not None:
                         p,k = next_refiner
                         deadlines[k] = now+(p-self.cursor)*(self.compute_ms or 100.)/1000

@@ -99,6 +99,22 @@ class ScheduleContracts(unittest.TestCase):
         self.assertLess(order.index('consumer_complete'),order.index('release_hold'))
         self.assertLess(order.index('release_hold'),order.index('join_prepare'))
 
+    def test_pending_copy_source_is_not_prepared_again_after_cache_take(self):
+        from concurrent.futures import Future
+        from contextlib import nullcontext
+        from unittest.mock import Mock
+        cache=SimpleNamespace(budget=SimpleNamespace(pressure_aware=False),
+            set_access_plan=Mock(),prefetch=Mock())
+        with patch('torch.cuda.Stream',return_value=object()):
+            window=ResidencyWindow((item('a'),item('refiner')),('a','refiner'),'cuda:0',
+                max_weight_bytes=4096,pinned_bytes=4096,host_cache=cache)
+        window.future_cpu=True;window.cpu_priority_by_use={1:'refiner'}
+        window.pending={'a':Future(),'refiner':Future()}
+        try:
+            with patch('torch.cuda.device',return_value=nullcontext()):window.prefetch()
+            self.assertEqual(cache.prefetch.call_args.args[0],[])
+        finally:window.pool.shutdown()
+
     def test_priority_refiner_prepares_concurrently_with_current_block(self):
         cache=self.cache(128);cache.set_access_plan(('block','refiner'))
         cache.enable_priority_lane({'refiner'})
