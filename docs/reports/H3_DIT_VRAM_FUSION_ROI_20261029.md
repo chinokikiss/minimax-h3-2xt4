@@ -6,6 +6,11 @@ storage. A larger attention rewrite is not the first step.** This is a source
 and retained-profiler analysis, not a new GPU measurement or an implementation
 of the proposed kernels.
 
+The user subsequently authorized the bounded operator experiment described in
+[the experiment record](H3_DIT_VRAM_FUSION_EXPERIMENT_20261029.md). Its candidate
+code is isolated from production, and its measurements must not be confused
+with the analytical buffer estimates in this report.
+
 P1 next-hop refiner prefetch is now **on by default and can be disabled**.
 `future_cache` also defaults on because P1 requires it. PTD itself remains
 disabled until explicitly selected. The graph node, `PTDOptions`, generated E2E
