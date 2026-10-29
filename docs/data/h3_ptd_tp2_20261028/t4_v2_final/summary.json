@@ -1,0 +1,283 @@
+{
+  "status": "complete",
+  "source_capsule_sha256": "595eddf8be6f4cecd46d67a9792d49283488e29d9de2933fca8c367c6dead6bf",
+  "hardware": {
+    "devices": [
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "9a0d7320-9f2f-e3e3-5a48-09c67fb390eb"
+      },
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "3efbda76-649e-a99c-d88e-b526c660a20a"
+      }
+    ],
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "kitchen": "0.2.37",
+    "tilelang": "0.1.13"
+  },
+  "scope": "2 trained blocks, both refiners, full head banks, all 8 hops",
+  "full_pipeline": false,
+  "quality_qualified": false,
+  "raw_result_sha256": "91fa63953b9556220a2dc538f806ac100b44d1950a94ae5c6149d02baaf60ebd",
+  "bake_seconds": 272.48331362600004,
+  "verified_merge_targets": 128,
+  "baked_bytes": 18636426752,
+  "cases": [
+    {
+      "index": 0,
+      "method": "rebuild",
+      "selection_seconds": [
+        0.002555764999897292,
+        10.211237681000057,
+        10.591127488999973,
+        10.558073405999949,
+        10.654167746999974,
+        10.576932173000046,
+        10.550438529999951,
+        10.957281411000054
+      ],
+      "denoiser_seconds": [
+        14.709348674000012,
+        9.227174627999943,
+        8.963434775999986,
+        9.243467909999936,
+        8.956398388000025,
+        8.961460352000017,
+        9.350260187000003,
+        8.901071320000028
+      ],
+      "rpc_total_seconds": 152.41443043699985,
+      "hops_1_to_7_rpc_seconds": 137.70252599799994,
+      "aot_wall_seconds": 29.476176394999925,
+      "ranks": [
+        {
+          "rank": 0,
+          "window_count": 8,
+          "window_host_wait_seconds": 32.663857648000544,
+          "window_h2d_bytes": 28708274176,
+          "copy_event_interval_seconds": 5.855573516249657,
+          "peak_allocated_bytes": 3617947136,
+          "peak_reserved_bytes": 4185915392,
+          "rss_snapshot_bytes": 1853489152,
+          "peak_host_cache_bytes": 392693760,
+          "shared_host_budget_peak_reserved_bytes": 5579266048,
+          "cache_snapshot_before_teardown": 392693760
+        },
+        {
+          "rank": 1,
+          "window_count": 8,
+          "window_host_wait_seconds": 33.6093130549998,
+          "window_h2d_bytes": 3141550080,
+          "copy_event_interval_seconds": 0.3123194885253906,
+          "peak_allocated_bytes": 416863744,
+          "peak_reserved_bytes": 446693376,
+          "rss_snapshot_bytes": 1766445056,
+          "peak_host_cache_bytes": 392693760,
+          "shared_host_budget_peak_reserved_bytes": 5579266048,
+          "cache_snapshot_before_teardown": 392693760
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "method": "queue",
+      "selection_seconds": [
+        0.0009680719999778375,
+        0.007077166000044599,
+        0.012847700000065743,
+        0.010444862999975157,
+        0.009941307999952187,
+        0.011318678999941767,
+        0.015742163000140863,
+        0.001735867999968832
+      ],
+      "denoiser_seconds": [
+        13.827107365000074,
+        13.246398967000005,
+        13.963949297999989,
+        14.381906597000125,
+        14.14689215899989,
+        14.706643225000107,
+        14.074638068000013,
+        14.278758960999994
+      ],
+      "rpc_total_seconds": 112.69637045900026,
+      "hops_1_to_7_rpc_seconds": 98.86829502200021,
+      "aot_wall_seconds": 1.4626536019998184,
+      "ranks": [
+        {
+          "rank": 0,
+          "window_count": 1,
+          "window_host_wait_seconds": 74.68401679000043,
+          "window_h2d_bytes": 28710729728,
+          "copy_event_interval_seconds": 6.301645693898201,
+          "peak_allocated_bytes": 3524532224,
+          "peak_reserved_bytes": 4102029312,
+          "rss_snapshot_bytes": 4806447104,
+          "peak_host_cache_bytes": 4177532416,
+          "shared_host_budget_peak_reserved_bytes": 11979269632,
+          "cache_snapshot_before_teardown": 1180834304
+        },
+        {
+          "rank": 1,
+          "window_count": 1,
+          "window_host_wait_seconds": 34.42889348200014,
+          "window_h2d_bytes": 3163574272,
+          "copy_event_interval_seconds": 0.3005362222194672,
+          "peak_allocated_bytes": 414153728,
+          "peak_reserved_bytes": 446693376,
+          "rss_snapshot_bytes": 1595822080,
+          "peak_host_cache_bytes": 3163574272,
+          "shared_host_budget_peak_reserved_bytes": 11979269632,
+          "cache_snapshot_before_teardown": 3163574272
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "method": "queue",
+      "selection_seconds": [
+        0.0010238659999686206,
+        0.008475707999878068,
+        0.008693004999940968,
+        0.008262725000122373,
+        0.011715078999941397,
+        0.007143431000031342,
+        0.0072355639999841515,
+        0.0014415819998703228
+      ],
+      "denoiser_seconds": [
+        13.433544514000005,
+        13.09461652799996,
+        13.87642153999991,
+        14.983483146000026,
+        14.451262778,
+        15.231682178000028,
+        11.664436287999933,
+        15.861198548999937
+      ],
+      "rpc_total_seconds": 112.65063648099954,
+      "hops_1_to_7_rpc_seconds": 99.21606810099956,
+      "aot_wall_seconds": 1.2451058830001784,
+      "ranks": [
+        {
+          "rank": 0,
+          "window_count": 1,
+          "window_host_wait_seconds": 81.42938633300015,
+          "window_h2d_bytes": 28710729728,
+          "copy_event_interval_seconds": 6.478564633563161,
+          "peak_allocated_bytes": 3524532224,
+          "peak_reserved_bytes": 4102029312,
+          "rss_snapshot_bytes": 5002100736,
+          "peak_host_cache_bytes": 4177532416,
+          "shared_host_budget_peak_reserved_bytes": 12173648896,
+          "cache_snapshot_before_teardown": 1180834304
+        },
+        {
+          "rank": 1,
+          "window_count": 1,
+          "window_host_wait_seconds": 22.385507220999898,
+          "window_h2d_bytes": 3163574272,
+          "copy_event_interval_seconds": 0.27889567855000497,
+          "peak_allocated_bytes": 416863744,
+          "peak_reserved_bytes": 446693376,
+          "rss_snapshot_bytes": 1811963904,
+          "peak_host_cache_bytes": 3163574272,
+          "shared_host_budget_peak_reserved_bytes": 12173648896,
+          "cache_snapshot_before_teardown": 3163574272
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "method": "rebuild",
+      "selection_seconds": [
+        0.000912529999823164,
+        10.330193102000067,
+        10.739524388000063,
+        10.628965611000012,
+        10.859568326000044,
+        10.677044228999875,
+        10.629616191999958,
+        10.06483801200011
+      ],
+      "denoiser_seconds": [
+        8.736614346000124,
+        8.90232856900002,
+        8.965754821000019,
+        9.187206855999875,
+        9.009225109999988,
+        9.263513816999875,
+        9.194798024999955,
+        7.516775438000195
+      ],
+      "rpc_total_seconds": 144.706879372,
+      "hops_1_to_7_rpc_seconds": 135.96935249600006,
+      "aot_wall_seconds": 1.706311191000168,
+      "ranks": [
+        {
+          "rank": 0,
+          "window_count": 8,
+          "window_host_wait_seconds": 32.61233679400016,
+          "window_h2d_bytes": 28708274176,
+          "copy_event_interval_seconds": 5.794985051035881,
+          "peak_allocated_bytes": 3617947136,
+          "peak_reserved_bytes": 4185915392,
+          "rss_snapshot_bytes": 1866194944,
+          "peak_host_cache_bytes": 392693760,
+          "shared_host_budget_peak_reserved_bytes": 5579266048,
+          "cache_snapshot_before_teardown": 392693760
+        },
+        {
+          "rank": 1,
+          "window_count": 8,
+          "window_host_wait_seconds": 33.0430494740001,
+          "window_h2d_bytes": 3141550080,
+          "copy_event_interval_seconds": 0.33822790718078616,
+          "peak_allocated_bytes": 416863744,
+          "peak_reserved_bytes": 446693376,
+          "rss_snapshot_bytes": 1772896256,
+          "peak_host_cache_bytes": 392693760,
+          "shared_host_budget_peak_reserved_bytes": 5579266048,
+          "cache_snapshot_before_teardown": 392693760
+        }
+      ]
+    }
+  ],
+  "methods": {
+    "rebuild": {
+      "repetitions": 2,
+      "mean_eight_hop_rpc_seconds": 148.56065490449993,
+      "mean_hops_1_to_7_rpc_seconds": 136.835939247,
+      "median_selection_hops_1_to_7_seconds": 10.610046549999993,
+      "median_denoiser_hops_1_to_7_seconds": 8.987489965500004
+    },
+    "queue": {
+      "repetitions": 2,
+      "mean_eight_hop_rpc_seconds": 112.6735034699999,
+      "mean_hops_1_to_7_rpc_seconds": 99.04218156149989,
+      "median_selection_hops_1_to_7_seconds": 0.008584356499909518,
+      "median_denoiser_hops_1_to_7_seconds": 14.212825559999942
+    }
+  },
+  "eight_hop_latency_reduction": 0.24156565180444012,
+  "hops_1_to_7_latency_reduction": 0.2761975976010169,
+  "measurement_limits": [
+    "Sum of parent selection+denoiser RPC durations, not end-to-end pipeline or sampler wall time",
+    "AOT preparation, model download, bake, service startup/configuration and teardown excluded",
+    "Two repetitions per method in ABBA order on two blocks and 24 packed tokens",
+    "Default-stream and copy events are intervals including waits, not kernel-time attribution",
+    "RSS is a snapshot; CUDA allocation high-water marks exclude context/external allocator memory",
+    "Per-hop hash equality verifies handoff equivalence, not PTD quality or full-model fidelity"
+  ]
+}

@@ -177,7 +177,7 @@ separates AOT preparation from hop execution. The handoff experiment reuses one
 bake in rebuild/queue/queue/rebuild order, hashes both stream outputs at every
 hop and the final FP32 carry, and checks stable shell/window identities in
 queue mode. It records selection RPC time, denoiser RPC time, benchmark-only
-worker wall/thread CPU spans and peak CUDA/host memory. Default-stream CUDA
+worker wall/thread CPU spans, peak CUDA allocation/reservation and host RSS snapshots. Default-stream CUDA
 intervals include waits and idle gaps; they are not a kernel-time breakdown or
 a substitute for a Nsight trace. It does not execute TE, VAE or a
 complete H3 generation and does not measure output quality.
@@ -186,7 +186,15 @@ The adaptation audit also found the AOT RMS-RoPE plan used 128 rotary features
 while Native H3 uses 96 of its 128 head features. The plan and its rehearsal
 consumer now use 96; the underlying qualified operator and Native math are
 unchanged. Previous 128-feature preparation traces cannot establish a 96-feature
-cache hit. This needs confirmation in the new T4 run.
+cache hit. T4 version 2 confirms SM75 preparation of the corrected 96/128 layout;
+this receipt does not prove zero runtime first-use work.
+
+The bounded physical comparison completed all four eight-hop cases with
+byte-identical video/audio outputs and final FP32 state. The queue reduced
+mean selection-plus-denoiser RPC time by 24.2%, while retaining more CPU cache
+and leaving substantial preparation waits. These small-fixture results do
+not qualify full-model speed or quality. See the
+[physical comparison report](../reports/H3_PTD_QUEUE_T4_20261029.md).
 
 Kaggle uses the frozen source archive, native Torch/CUDA family, Kitchen
 0.2.37 and TileLang 0.1.13. No upstream update, token, private activation,

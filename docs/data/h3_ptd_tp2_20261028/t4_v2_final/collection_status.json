@@ -1,0 +1,16 @@
+{
+  "status": "collected",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-ptd-tp2-t4-20261028",
+  "output": "D:\\attention_eval\\h3_ptd_refasymopd_20261028\\validation_queue_v1\\gpu_final",
+  "returncode": 0,
+  "files": 32,
+  "completed_utc": "2026-10-29T01:07:45.336370+00:00",
+  "transport_attempts": 2,
+  "transport_retry_reason": "SSL unexpected EOF during final artifact download",
+  "experiment": {
+    "status": "complete",
+    "error": null,
+    "smoke_cases": 4
+  }
+}

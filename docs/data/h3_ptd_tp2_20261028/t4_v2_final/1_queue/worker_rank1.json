@@ -1,0 +1,106 @@
+{
+  "rank": 1,
+  "spans": [
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.0003232019998904434,
+      "thread_cpu_seconds": 0.0003224499999987529,
+      "default_stream_interval_ms": 0.3245759904384613
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 13.71826299899999,
+      "thread_cpu_seconds": 5.883124710999999,
+      "default_stream_interval_ms": 13718.3154296875
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.006394649999947433,
+      "thread_cpu_seconds": 0.006218720999999761,
+      "default_stream_interval_ms": 6.394815921783447
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 13.219895996999867,
+      "thread_cpu_seconds": 8.817993258999998,
+      "default_stream_interval_ms": 13219.9501953125
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.011191230000122232,
+      "thread_cpu_seconds": 0.005401007999999763,
+      "default_stream_interval_ms": 11.190112113952637
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 13.947886674000074,
+      "thread_cpu_seconds": 9.519650489,
+      "default_stream_interval_ms": 13947.9462890625
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.007068841999853248,
+      "thread_cpu_seconds": 0.005026501999999766,
+      "default_stream_interval_ms": 7.067647933959961
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 14.366265974000044,
+      "thread_cpu_seconds": 9.686018220999998,
+      "default_stream_interval_ms": 14366.31640625
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.008724276000066311,
+      "thread_cpu_seconds": 0.005092395999994892,
+      "default_stream_interval_ms": 8.724448204040527
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 14.130175259999987,
+      "thread_cpu_seconds": 9.714425353000003,
+      "default_stream_interval_ms": 14130.216796875
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.010127525999905629,
+      "thread_cpu_seconds": 0.005243839000002026,
+      "default_stream_interval_ms": 10.127424240112305
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 14.69141905499987,
+      "thread_cpu_seconds": 9.99092885000001,
+      "default_stream_interval_ms": 14691.462890625
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.013986481000074491,
+      "thread_cpu_seconds": 0.005872844999998961,
+      "default_stream_interval_ms": 13.985600471496582
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 14.057534487999874,
+      "thread_cpu_seconds": 9.665693947000008,
+      "default_stream_interval_ms": 14057.580078125
+    },
+    {
+      "command": "ptd_hop",
+      "wall_seconds": 0.0005347110000002431,
+      "thread_cpu_seconds": 0.0005276349999974173,
+      "default_stream_interval_ms": 0.536191999912262
+    },
+    {
+      "command": "denoise",
+      "wall_seconds": 14.26425644699998,
+      "thread_cpu_seconds": 10.047881347,
+      "default_stream_interval_ms": 14264.3056640625
+    }
+  ],
+  "peak_allocated": 414153728,
+  "peak_reserved": 446693376,
+  "rss_bytes": 1595822080,
+  "measurement": "RPC dispatch wall/thread CPU; CUDA default-stream intervals include idle/waits, not a kernel-time sum",
+  "observer": "Two CUDA events per denoise/hop; identical for rebuild and queue"
+}

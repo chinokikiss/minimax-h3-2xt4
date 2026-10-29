@@ -1,0 +1,9 @@
+{
+  "status": "final_outputs_unavailable",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-ptd-tp2-t4-20261028",
+  "output": "D:\\attention_eval\\h3_ptd_refasymopd_20261028\\validation_queue_v1\\gpu_final",
+  "returncode": 1,
+  "files": 10,
+  "completed_utc": "2026-10-29T01:06:42.032505+00:00"
+}

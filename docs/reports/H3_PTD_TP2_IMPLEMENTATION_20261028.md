@@ -40,7 +40,7 @@ Unrelated dirty-worktree attention/VAE changes are excluded from this delivery.
 CPU API preflight notebook:
 [H3 PTD TP2 CPU 20261028](https://www.kaggle.com/code/pamcks/h3-ptd-tp2-cpu-20261028).
 
-**Queued retry CPU version 3 passed; T4 version 2 accepted. T4 version 1 failed before denoising.** One final output collection
+**CPU version 3 and physical T4 version 2 passed. T4 version 1 failed before denoising.** One final output collection
 retrieved version 1 after the user reported completion. Its pinned core API
 probe and all 111 base tests passed. The review suite ran 179 tests, with 177
 passing and two import errors. Both errors came from the newly added relative
@@ -99,9 +99,9 @@ with one event-owned window; the explicit rebuild option remains. CPU contracts
 cover append ordering, identity protection, host reservation transfer through
 the ready event, one-time final drainage, head restoration after exceptions,
 and byte-equivalent Native refiner weight loading/folding on tiny fixtures.
-The new source-bound CPU preflight has passed. Physical queue/rebuild
-execution and performance remain unqualified pending the T4 comparison. No status/list or live-log
-endpoint was polled.
+The new source-bound CPU preflight and bounded physical T4 queue/rebuild
+comparison have passed. Full-model throughput and generation quality remain
+unqualified. No status/list or live-log endpoint was polled.
 
 Queue implementation commit `b6d094d391ecaec4dc89feacb32abe23b912f0ad` is
 pushed on the isolated branch. The rebuilt extracted frozen source passed
@@ -121,13 +121,18 @@ on Kaggle native CPU Torch 2.11.0+cpu.
 Kaggle accepted T4 version 2 once, using these source-bound receipts. It is
 GPU-enabled with the T4 accelerator requested, zero input mounts and a
 2,500-second notebook timeout (600-second setup and 1,800-second supervised
-experiment budgets). Acceptance does not establish actual hardware
-allocation, successful execution or performance. No final GPU output has
-yet been collected. See [CPU evidence](../data/h3_ptd_tp2_20261028/cpu_v3_final/)
-and the [T4 submission](../data/h3_ptd_tp2_20261028/t4_v2_queue/).
+experiment budgets). Final outputs collected on 2026-10-29 confirm two
+distinct physical T4 GPUs, all four cases complete, 32 denoiser calls, 128
+Native merge-target checks and byte-exact per-hop/final outputs. Mean
+eight-hop selection-plus-denoiser RPC time fell from 148.561 s to 112.674 s
+(24.2% lower); this is a small operator fixture, not full-pipeline latency.
+The queue still waits heavily for CPU-prepared weights and retains more host
+cache. See the [physical results and limits](H3_PTD_QUEUE_T4_20261029.md),
+[CPU evidence](../data/h3_ptd_tp2_20261028/cpu_v3_final/) and
+[final T4 evidence](../data/h3_ptd_tp2_20261028/t4_v2_final/README.md).
 
-The physical comparison will reuse one baked bank in **rebuild, queue, queue,
-rebuild** order. It requires byte-identical seeded video/audio outputs and
+The physical comparison reused one baked bank in **rebuild, queue, queue,
+rebuild** order. It verified byte-identical seeded video/audio outputs and
 FP32 carried state, records hop-selection and denoiser RPC timing separately,
 and persists worker CPU/default-stream intervals plus window wait/H2D events
 and memory peaks. AOT preparation is separate. CUDA default-stream intervals
@@ -157,8 +162,9 @@ quality comparison. No private inputs or credentials are needed.
    unverified against the Diffusers scheduler. Pruned AdaLN adds a separate
    approximation. Generation quality remains unqualified.
 3. The RMS-RoPE AOT plan is corrected to Native H3's **96/128** rotary layout.
-   Its cache coverage must be confirmed in the new T4 experiment; historical
-   128/128 preparation traces do not prove that coverage.
+   The T4 version-2 AOT receipts confirm preparation of 96/128 kernels on
+   SM75. They do not prove zero runtime first-use work; historical 128/128
+   traces remain insufficient evidence for this layout.
 
 Small source-preservation and submission receipts are in
 [`docs/data/h3_ptd_tp2_20261028`](../data/h3_ptd_tp2_20261028/).
