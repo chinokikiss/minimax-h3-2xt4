@@ -55,12 +55,12 @@ def native_audio_shift(time, ratio=.25):
 
 
 class WorkerAdapter:
-    def __init__(self, runtime, path, options):
+    def __init__(self, runtime, path, options, expected_bank_sha256=None):
         if isinstance(options,dict):options=PTDOptions(**options)
         if not isinstance(options, PTDOptions) or not options.enabled:
             raise ValueError('Explicit enabled PTD options required')
         self.runtime, self.options = runtime, options
-        self.bank = PTDBank(path, allow_fixture=options.allow_fixture)
+        self.bank = PTDBank(path, allow_fixture=options.allow_fixture, expected_sha256=expected_bank_sha256)
         self.original = runtime.readers['dit']
         if (type(self.original) is not BundleReader or self.original.path.resolve() != self.bank.base
                 or runtime.config.lora_stack):
@@ -218,9 +218,9 @@ class PTDRemoteDenoiser(RemoteDenoiser):
 
 
 class Controller:
-    def __init__(self, service, path, options):
+    def __init__(self, service, path, options, *, expected_bank_sha256=None):
         self.service, self.path, self.options = service, str(Path(path).resolve()), options
-        self.bank = PTDBank(path, allow_fixture=options.allow_fixture)
+        self.bank = PTDBank(path, allow_fixture=options.allow_fixture, expected_sha256=expected_bank_sha256)
         self.sigmas = self.bank.sigmas
         self.hops = 8
         self.selection = ContextVar(f'ptd_tp2_{id(self)}', default=None)
@@ -229,7 +229,7 @@ class Controller:
         return PTDRemoteDenoiser(service, self)
 
     def begin(self):
-        self.service.call('ptd_configure', self.path, asdict(self.options))
+        self.service.call('ptd_configure', self.path, asdict(self.options), self.bank.digest)
 
     def conditions(self, conditions, inputs):
         import comfy.conds
@@ -258,7 +258,7 @@ class Controller:
             self.selection.reset(token)
 
 
-def adapt_model(model, service, path, options):
+def adapt_model(model, service, path, options, *, expected_bank_sha256=None):
     if not options.enabled:
         return model, None
     if (getattr(model.model.diffusion_model,'service',None) is not service
@@ -273,7 +273,7 @@ def adapt_model(model, service, path, options):
     if any(kind != 'outer_sample' or set(entries) != {'minimax_tp2_session'}
            for kind, entries in model.wrappers.items()):
         raise ValueError('Additional sampler wrappers require PTD qualification')
-    controller = Controller(service, path, options)
+    controller = Controller(service, path, options, expected_bank_sha256=expected_bank_sha256)
     # Create a private existing Native proxy shell; never mutate the MODEL
     # supplied by the caller or globally replace a Native implementation.
     clone = create_model(service, device=model.load_device, adapter=controller)

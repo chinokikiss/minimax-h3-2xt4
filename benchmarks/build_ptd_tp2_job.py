@@ -21,7 +21,9 @@ def main():
     parser.add_argument('--ptd-qualification',type=Path)
     parser.add_argument('--submit',action='store_true')
     parser.add_argument('--cpu-scheduling',action='store_true')
+    parser.add_argument('--split-auxiliary',action='store_true')
     args=parser.parse_args(); args.evidence.mkdir(parents=True,exist_ok=True)
+    if args.cpu_scheduling and args.split_auxiliary:parser.error('Select one experiment batch')
     job=args.evidence/(args.mode+'_job'); publication=json.loads(args.publication.read_text())
     command=[sys.executable,str(Path(__file__).with_name('build_kaggle_light_job.py')),
         '--mode','cpu' if args.mode=='cpu' else 'e2e','--publication',str(args.publication),
@@ -34,6 +36,7 @@ def main():
         assert setup['status']=='cpu_ready' and setup['review_suite']['passed']
         assert gate['status']=='ptd_cpu_ready' and gate['no_weights_fetched']
         if args.cpu_scheduling: assert gate.get('cpu_scheduling') is True and gate['scheduling_contract_tests'] >= 8
+        if args.split_auxiliary: assert gate.get('split_auxiliary') is True and gate['split_contract_tests'] >= 13
         assert setup['capsule_sha256']==gate['capsule_sha256']==publication['capsule_sha256']
         command+=['--qualification',str(args.qualification)]
     subprocess.run(command,check=True)
@@ -52,6 +55,7 @@ EXTRA
 os.execve(sys.executable,argv,env)
 """.replace('EXTRA',"argv+=['--cpu-preflight']" if args.mode=='cpu' else '')
     if args.cpu_scheduling:execution=execution.replace('os.execve(',"argv+=['--cpu-scheduling']\nos.execve(")
+    if args.split_auxiliary:execution=execution.replace('os.execve(',"argv+=['--split-auxiliary']\nos.execve(")
     code+=supervise_worker(execution,budget=180 if args.mode=='cpu' else 1800,
                            output='/kaggle/working/ptd_supervision')
     code+="assert json.loads(pathlib.Path('/kaggle/working/ptd_qualification/result.json').read_text())['status'] in ('ptd_cpu_ready','complete')\n"
@@ -64,6 +68,9 @@ os.execve(sys.executable,argv,env)
     if args.cpu_scheduling:
         metadata.update(id=f'pamcks/h3-ptd-cpu-schedule-{label}-20261029',
             title=f'H3 PTD CPU Schedule {label.upper()} 20261029')
+    if args.split_auxiliary:
+        metadata.update(id=f'pamcks/h3-ptd-aux-split-{label}-20261029',
+            title=f'H3 PTD Aux Split {label.upper()} 20261029')
     assert metadata['dataset_sources']==metadata['kernel_sources']==[]
     (job/'kernel-metadata.json').write_text(json.dumps(metadata,indent=2),encoding='utf-8')
     binding=json.loads((job/'source_binding.json').read_text())
@@ -75,6 +82,10 @@ os.execve(sys.executable,argv,env)
     if args.cpu_scheduling:
         from run_ptd_tp2_t4 import SCHEDULING_CASES
         binding.update(cpu_scheduling=True,scheduling_cases=list(SCHEDULING_CASES),handoff_order=None)
+    if args.split_auxiliary:
+        from run_ptd_tp2_t4 import SPLIT_CASES
+        binding.update(split_auxiliary=True,comparison_order=list(SPLIT_CASES),handoff_order=None,
+            native_tensor_bytes_unchanged=True,fp32_sidecar=False)
     (job/'source_binding.json').write_text(json.dumps(binding,indent=2),encoding='utf-8')
     if not args.submit:return
     timeout=1000 if args.mode=='cpu' else 2500

@@ -210,3 +210,10 @@ The new CPU scheduling and runtime-ready refiner candidates are opt-in. See
 [implementation, invariants and the bounded ablation plan](../reports/H3_PTD_CPU_SCHEDULING_20261029.md).
 
 The CPU scheduling ablation has completed on physical T4s: consumed-group reclamation reduces managed host peaks; next-hop refiner preparation improves average RPC latency with worse maximum hop time; the current full FP32 sidecar regresses. All candidates preserve output hashes in the bounded fixture and remain optional. See the [measured results](../reports/H3_PTD_CPU_SCHEDULING_T4_RESULTS_20261029.md).
+
+P2 now offers physically separate compact refiner projections and video/audio
+head units, with receipt-bound header and tensor verification on every disk
+consumption. Original banks remain supported, and an offline repack preserves
+Native tensor proofs without merging LoRA again. Both ranks still execute the
+Native heads; rank 1 opens no split refiner unit. See the
+[integrity design, CPU contracts and paired T4 plan](../reports/H3_PTD_AUXILIARY_SPLIT_20261029.md).
