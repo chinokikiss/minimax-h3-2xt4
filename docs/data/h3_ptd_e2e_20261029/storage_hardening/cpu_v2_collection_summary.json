@@ -1,0 +1,40 @@
+{
+  "kernel": "pamcks/h3-ptd-long-e2e-cpu-20261029",
+  "version": 2,
+  "status": "ptd_e2e_cpu_ready",
+  "source_capsule_sha256": "f289791007e0b475381a2af3a3a6cf7ba54a96f78d32a117f73288a5ae4e4ccd",
+  "source_binding_matches": true,
+  "review": {
+    "passed": true,
+    "tests": 179,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 36.26500201600004,
+    "scope": "CPU contracts, not physical T4 qualification"
+  },
+  "ptd_storage_contracts": 53,
+  "skipped": 0,
+  "storage": {
+    "status": "passed",
+    "requested_bytes": 258523593608,
+    "allocated_bytes": 258523627520,
+    "write_sync_readback": true,
+    "seconds": 0.17987205599996514,
+    "scope": "This instance and scratch path only"
+  },
+  "allocation_free_space_decrease_bytes": 258523635712,
+  "storage_qualification_limit": "Point-in-time block allocation and endpoint write/sync/readback on CPU instance; not a full-data write test or validation of the failed/new GPU instance",
+  "setup_seconds": 151.20316336999997,
+  "collection": {
+    "logical_final_collections": 1,
+    "download_attempts": 2,
+    "initial_error": "TLS SSLEOF before result.json download",
+    "resumed_missing_artifacts": true,
+    "preserved_existing_hashes_match": true,
+    "files": 23,
+    "status_polling": false
+  },
+  "gpu_used": false,
+  "model_weights_fetched": false
+}

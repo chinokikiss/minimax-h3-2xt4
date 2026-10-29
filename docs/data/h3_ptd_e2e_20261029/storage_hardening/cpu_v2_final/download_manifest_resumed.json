@@ -1,0 +1,94 @@
+{
+  "h3-ptd-long-e2e-cpu-20261029.log": {
+    "bytes": 38971,
+    "sha256": "7957ea908113afe2e3ea621463b407f37cce216fa0017e56a17e3149e827aefd"
+  },
+  "light_setup/api_probe.log": {
+    "bytes": 1158,
+    "sha256": "e5900b029eaaff7664c772d6aec92634e63fb1e9124e059a28dbcdf1c7e212d4"
+  },
+  "light_setup/bounded_worker.py": {
+    "bytes": 2092,
+    "sha256": "6c7c9986a181d99796a5a6f466f5309986b1b6d0346069e73cecfd45c9b0d21c"
+  },
+  "light_setup/cpu_tests.log": {
+    "bytes": 25183,
+    "sha256": "e3bc4174290cd90d14592d6389e07348f23a586b3d26fac467010ae29860bb32"
+  },
+  "light_setup/delivery_binding.json": {
+    "bytes": 775,
+    "sha256": "3770b40655a58b3c0d6107f3ecb1a0b15d5c349b698540d159e9bbd0a656756b"
+  },
+  "light_setup/direct-core.txt": {
+    "bytes": 5914,
+    "sha256": "425f5b9f04c26bcf5b2bf79a823539166b7206da83d10cf4dff060a9b05ca483"
+  },
+  "light_setup/direct_pip.log": {
+    "bytes": 15856,
+    "sha256": "722082dbd334a010b93957ff1b39abdb285c15ad6971accd05729013e25e940c"
+  },
+  "light_setup/execution_env.json": {
+    "bytes": 449,
+    "sha256": "53f8cbaa42b4a30ef25583746477a1d1570f37b3f30affd13d09ffcec0dd7911"
+  },
+  "light_setup/linux_pread.json": {
+    "bytes": 664,
+    "sha256": "65a8fba081ac4d016b9e85485953a7bbc58c6a54e65165bf5774fa4706d243e0"
+  },
+  "light_setup/linux_pread.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "light_setup/notebook_worker.log": {
+    "bytes": 377,
+    "sha256": "bc2085fa645df484817dcd4d5d5124771db18c5afe88cf8868005bfa4760b907"
+  },
+  "light_setup/profiler_availability_cpu/profilers.json": {
+    "bytes": 249,
+    "sha256": "f537865cf029cc1c9ac0e5a7a73aade4d8d712ee988a5dabe1ce2e2be49f8792"
+  },
+  "light_setup/profiler_tool_versions.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "light_setup/review_cpu_tests.json": {
+    "bytes": 175,
+    "sha256": "b80f618fcffb70b19aabd34d9bee5834b9dccf095c3d1e78c1ceb6ef2d9bab1e"
+  },
+  "light_setup/review_cpu_tests.log": {
+    "bytes": 80455,
+    "sha256": "c8a1a448cd524e34f03cb7bc2935b0848630c1bf54a72ccce537885681c159e8"
+  },
+  "light_setup/runtime_profile.json": {
+    "bytes": 25843,
+    "sha256": "eb48ace46c423b86231b895b48b5d8c8fcceb27048272a1accfa7cdae4cf6cf5"
+  },
+  "light_setup/setup_receipt.json": {
+    "bytes": 129323,
+    "sha256": "ec25f5347830d3e8b6e8a3a75a303ac0d5afcf7acfc2c8e7818189d6bd90981e"
+  },
+  "light_setup/supervision.json": {
+    "bytes": 208,
+    "sha256": "aee77eb5ed67241e545f802ef79fbb36d5de0c6194564e91ef58939a25cc0f18"
+  },
+  "ptd_e2e_cpu/result.json": {
+    "bytes": 18536,
+    "sha256": "bf289b657c04e3663cec6d727ead8767b19bedb770c4e90cca4ffdebf275cfb3"
+  },
+  "ptd_e2e_cpu/storage_admission.json": {
+    "bytes": 16791,
+    "sha256": "d022f509337d129d969cae640593e89062244f4f1fc761f8c3b993e354b5466b"
+  },
+  "ptd_e2e_supervision/bounded_worker.py": {
+    "bytes": 410,
+    "sha256": "2f81ac3f9788569d76b4ecae34e2310cb3c7623c8fe84812aebf7c8362412a00"
+  },
+  "ptd_e2e_supervision/notebook_worker.log": {
+    "bytes": 28290,
+    "sha256": "cdd8c80170d016654a7aa9671ad6d3ba43453ec99720c2505883ae64271bad18"
+  },
+  "ptd_e2e_supervision/supervision.json": {
+    "bytes": 209,
+    "sha256": "36110d2866a690f6d228feb892e0b23da4bc3c2913f6cbdcaed6ee971cc5ebb1"
+  }
+}

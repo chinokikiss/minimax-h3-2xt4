@@ -1,0 +1,9 @@
+{
+  "status": "final_outputs_unavailable",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-ptd-long-e2e-cpu-20261029",
+  "output": "D:\\attention_eval\\h3_ptd_storage_20261029\\kaggle\\cpu_final",
+  "returncode": 1,
+  "files": 17,
+  "completed_utc": "2026-10-29T07:31:48.099066+00:00"
+}
