@@ -1,0 +1,18 @@
+{
+  "status": "collected",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-ptd-cpu-schedule-t4-20261029",
+  "output": "D:\\attention_eval\\h3_ptd_cpu_schedule_20261029\\gpu_retry_v1\\gpu_final",
+  "returncode": 0,
+  "files": 40,
+  "completed_utc": "2026-10-29T02:40:59.527806+00:00",
+  "transport_attempts": 3,
+  "transport_retry_reason": "SSL EOF before any final artifact arrived",
+  "user_authorized_retry": true,
+  "source_binding_verified": true,
+  "experiment": {
+    "status": "complete",
+    "error": null,
+    "completed_cases": 6
+  }
+}

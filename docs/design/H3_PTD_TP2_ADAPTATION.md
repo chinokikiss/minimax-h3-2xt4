@@ -208,3 +208,5 @@ References: [release card](https://huggingface.co/taobao-content-ai/MiniMax-H3-P
 
 The new CPU scheduling and runtime-ready refiner candidates are opt-in. See
 [implementation, invariants and the bounded ablation plan](../reports/H3_PTD_CPU_SCHEDULING_20261029.md).
+
+The CPU scheduling ablation has completed on physical T4s: consumed-group reclamation reduces managed host peaks; next-hop refiner preparation improves average RPC latency with worse maximum hop time; the current full FP32 sidecar regresses. All candidates preserve output hashes in the bounded fixture and remain optional. See the [measured results](../reports/H3_PTD_CPU_SCHEDULING_T4_RESULTS_20261029.md).
