@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/kaggle/temp/h3_light_source/benchmarks/run_ptd_e2e_batch.py", line 122, in main
+    run([sys.executable,'-u',str(source/'benchmarks/run_ptd_e2e_batch.py'),
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+         '--source',str(source),'--output',str(output),'--bake-only',
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+         '--base',paths['dit'],'--checkpoint',str(checkpoint),'--bank-output',str(bank_output)],
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+         'offline_eight_hop_bake',6300)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/kaggle/temp/h3_light_source/benchmarks/run_ptd_e2e_batch.py", line 70, in run
+    if process.returncode: raise RuntimeError(label+' failed; preserve the stage log')
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: offline_eight_hop_bake failed; preserve the stage log

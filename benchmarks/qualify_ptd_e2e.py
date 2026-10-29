@@ -4,13 +4,15 @@ import json
 import os
 from pathlib import Path
 import sys
+import tempfile
 import traceback
 import unittest
 
 
 def main():
     parser=argparse.ArgumentParser(); parser.add_argument('--source',type=Path,required=True)
-    parser.add_argument('--output',type=Path,required=True); args=parser.parse_args()
+    parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--storage-admission',action='store_true'); args=parser.parse_args()
     source=args.source.resolve(); args.output.mkdir(parents=True,exist_ok=True)
     sys.path[:0]=[str(source),str(source/'ComfyUI'),str(source/'benchmarks')]
     os.environ['CUDA_VISIBLE_DEVICES']='-1'; sys.argv=sys.argv[:1]
@@ -38,9 +40,14 @@ def main():
         result=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromNames([
             'benchmarks.test_ptd_tp2','benchmarks.test_ptd_queue','benchmarks.test_ptd_cpu_schedule',
             'benchmarks.test_ptd_e2e','benchmarks.test_e2e_attention_validation',
-            'benchmarks.test_ptd_overlay']))
+            'benchmarks.test_ptd_overlay','benchmarks.test_ptd_storage']))
         state['contract_tests']=result.testsRun
         if not result.wasSuccessful(): raise RuntimeError('PTD E2E CPU contracts failed')
+        if args.storage_admission:
+            from benchmarks.ptd_storage import capacity_probe
+            with tempfile.TemporaryDirectory(prefix='h3_ptd_storage_',dir='/tmp') as scratch:
+                state['storage_admission']=capacity_probe(scratch,state['resource_estimate']['required_free_bytes'],
+                                                          args.output/'storage_admission.json')
         state.update(status='ptd_e2e_cpu_ready',native_sampler_integration=True)
     except BaseException as error:
         state.update(status='failed',error=repr(error)); (args.output/'exception.txt').write_text(traceback.format_exc()); raise

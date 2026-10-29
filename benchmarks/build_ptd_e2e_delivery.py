@@ -12,7 +12,8 @@ from ptd_delivery_sources import RETIRED,apply as ptd_sources
 
 ROOT=Path(__file__).resolve().parents[1]
 FILES=('ptd_e2e_contract.py','run_ptd_e2e.py','run_ptd_e2e_batch.py','test_ptd_e2e.py','qualify_ptd_e2e.py',
-       'ref2va_e2e_run.py','e2e_attention_validation.py','test_e2e_attention_validation.py')
+       'ref2va_e2e_run.py','e2e_attention_validation.py','test_e2e_attention_validation.py',
+       'ptd_storage.py','test_ptd_storage.py')
 
 
 def main():

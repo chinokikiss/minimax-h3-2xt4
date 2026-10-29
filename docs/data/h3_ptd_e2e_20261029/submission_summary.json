@@ -35,7 +35,7 @@
   "cpu_gate_url": "https://www.kaggle.com/code/pamcks/h3-ptd-long-e2e-cpu-20261029",
   "gpu_job_url": "https://www.kaggle.com/code/pamcks/h3-ptd-long-e2e-t4-20261029",
   "gpu_version": 1,
-  "gpu_status": "accepted",
+  "gpu_status": "failed_during_offline_bake",
   "gpu_submission_utc": "2026-10-29T06:29:30.070226+00:00",
   "cpu_qualification_tests": 41,
   "cpu_review_tests": 179,
@@ -57,6 +57,9 @@
     "core_imports": "passed",
     "tf32_default": false
   },
-  "gpu_results_available": false,
-  "no_status_or_live_log_polling": true
+  "gpu_results_available": true,
+  "no_status_or_live_log_polling": true,
+  "completed_denoiser_calls": 0,
+  "media_available": false,
+  "final_artifact_collections": 1
 }

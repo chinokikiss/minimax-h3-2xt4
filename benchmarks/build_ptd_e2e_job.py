@@ -36,6 +36,7 @@ def main():
         assert setup['status']=='cpu_ready' and setup['review_suite']['passed']
         assert gate['status']=='ptd_e2e_cpu_ready' and gate['no_weights_fetched'] and not gate['gpu_used']
         assert gate['native_sampler_integration'] and gate['auxiliary_layout']=='monolithic'
+        assert gate['storage_admission']['status']=='passed', 'Real scratch allocation must pass on the CPU gate'
         assert setup['capsule_sha256']==gate['capsule_sha256']==publication['capsule_sha256']
         command+=['--qualification',str(args.qualification)]
     subprocess.run(command,check=True)
@@ -59,6 +60,7 @@ env=dict(os.environ);env.update(json.loads(pathlib.Path('/kaggle/working/light_s
 source=pathlib.Path('/kaggle/temp/h3_light_source')
 argv=[sys.executable,'-u',str(source/'benchmarks/{script}'),'--source',str(source),
  '--output','/kaggle/working/{result}']
+if {args.mode=='cpu'!r}: argv+=['--storage-admission']
 os.execve(sys.executable,argv,env)
 """
     code+=supervise_worker(execution,budget=300 if args.mode=='cpu' else 10800,

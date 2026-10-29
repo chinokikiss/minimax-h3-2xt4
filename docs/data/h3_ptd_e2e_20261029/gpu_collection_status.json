@@ -1,0 +1,19 @@
+{
+  "status": "collected",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-ptd-long-e2e-t4-20261029",
+  "output": "D:\\attention_eval\\h3_ptd_e2e_20261029\\gpu_final",
+  "returncode": 0,
+  "files": 19,
+  "completed_utc": "2026-10-29T07:16:33.138351+00:00",
+  "experiment": {
+    "status": "failed",
+    "error": "RuntimeError('offline_eight_hop_bake failed; preserve the stage log')",
+    "stages": null,
+    "completed_sampler_steps": 0,
+    "completed_denoiser_calls": 0,
+    "media": null,
+    "quality_acceptance": "Pending review; collection does not establish generation quality"
+  },
+  "prior_input_hash_matches": {}
+}

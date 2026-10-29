@@ -67,6 +67,7 @@ def main():
                 state['commands'].append(dict(stage=label,seconds=time.monotonic()-start,exit_code=process.returncode))
                 save()
             if process.returncode: raise RuntimeError(label+' failed; preserve the stage log')
+    scratch=None
     stopped=threading.Event()
     def heartbeat():
         while not stopped.wait(60): print('PTD_E2E_HEARTBEAT',state['status'],flush=True)
@@ -102,6 +103,10 @@ def main():
         resources=resource_plan(assets['auxiliary']['dit']['native_header'],assets,identity,
                                free_bytes=shutil.disk_usage(scratch).free,host_limit=host_limit)
         state['resource_plan']=resources; save()
+        from benchmarks.ptd_storage import capacity_probe
+        mark('scratch_allocation_admission')
+        state['storage_admission']=capacity_probe(scratch,resources['required_free_bytes'],output/'storage_admission.json')
+        save()
         images=[]
         from benchmarks.qualify_anime_inputs import download_image
         for row in plan['reference_images']:
@@ -148,7 +153,15 @@ def main():
         if result['status']!='complete': raise RuntimeError('PTD E2E incomplete')
         mark('complete',completed_hops=len(result['sampler_steps']),media=result['media'])
     except BaseException as error:
-        state.update(status='failed',error=repr(error)); (output/'exception.txt').write_text(traceback.format_exc()); save(); raise
+        state.update(failed_stage=state['status'],status='failed',error=repr(error))
+        (output/'exception.txt').write_text(traceback.format_exc())
+        if scratch is not None:
+            try:
+                from benchmarks.ptd_storage import failure_evidence
+                state['storage_failure']=failure_evidence(scratch,output)
+            except BaseException as diagnostic_error:
+                state['storage_diagnostic_error']=repr(diagnostic_error)
+        save(); raise
     finally: stopped.set()
 
 

@@ -1,0 +1,126 @@
+{
+  "status": "failed",
+  "commands": [
+    {
+      "stage": "offline_eight_hop_bake",
+      "seconds": 356.9542024960001,
+      "exit_code": 1
+    }
+  ],
+  "full_pipeline": true,
+  "request_count": 1,
+  "online_lora": false,
+  "split_auxiliary": false,
+  "fp32_sidecar": false,
+  "hardware": {
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "kitchen": "0.2.37",
+    "tilelang": "0.1.13",
+    "devices": [
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "ebcdc6da-8779-5436-7cac-598a29b8c84f"
+      },
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ],
+        "uuid": "e445940e-89f4-f276-4cbc-47ffbab94540"
+      }
+    ]
+  },
+  "request": {
+    "width": 1152,
+    "height": 672,
+    "frames": 243,
+    "fps": 24,
+    "steps": 8,
+    "sampler": "ptd",
+    "scheduler": "trained_ptd",
+    "cfg": 1.0,
+    "video_shift": 12.0,
+    "audio_shift": 3.0,
+    "seed": 20261020,
+    "offline_lora": true,
+    "disk_baked_lora": true,
+    "name": "ptd_anime_ref2va_1152x672_243f_8hop",
+    "workload_contract": "ptd_anime_long_8hop",
+    "model": "MiniMax-H3 Ref2VA",
+    "base_weights": "cnmds/minimax-h3-tp2-int8-561a6211",
+    "negative_prompt": "",
+    "prompt": "subject_definitions\n\n<Subject 1> is the beautiful anime girl depicted in <Picture 1>, with long flowing purple hair, delicate violet eyes, a traditional pale-colored Japanese kimono, and a red Japanese paper umbrella. Preserve her facial features, hairstyle, clothing, proportions, and artistic identity throughout the video.\n\n<Subject 2> is the traditional Japanese shrine environment depicted in <Picture 2>, surrounded by dense forests, ancient stone pathways, wooden shrine buildings, moss-covered rocks, and distant mountains.\n\n<Subject 3> is a small supernatural white fox spirit with glowing golden markings, soft white fur, expressive ears, and a faint luminous aura.\n\nsummary\n\nCreate a continuous 10-second cinematic Japanese anime fantasy sequence.\n\nDuring a peaceful spring afternoon, a young shrine maiden walks through a beautiful forest shrine surrounded by falling cherry blossom petals.\n\nA mysterious glowing white fox spirit appears near the shrine. The girl notices the spirit, turns toward it, and watches as it gracefully circles around her.\n\nThe sequence features beautiful hand-painted Japanese anime aesthetics, fluid character animation, expressive facial acting, atmospheric perspective, detailed backgrounds, and elegant cinematic camera movements.\n\nreference_retention\n\n<Picture 1>: Preserve the girl\u2019s visual identity, hairstyle, facial characteristics, traditional clothing, accessories, and anime illustration style.\n\n<Picture 2>: Preserve the traditional wooden architecture, forest composition, mountain scenery, stone pathways, and natural atmosphere.\n\nBoth references should be integrated into a consistent 2D Japanese anime visual style.\n\ndetailed_description\n\n[00:00\u201300:03]\n\nA peaceful Japanese shrine surrounded by blooming cherry blossom trees.\n\nWarm afternoon sunlight filters through the branches, casting moving shadows across an ancient stone pathway.\n\n<Subject 1> walks slowly toward the shrine, holding her red Japanese umbrella.\n\nThe camera smoothly tracks her from a three-quarter frontal perspective.\n\nHer long purple hair sways naturally with each step. The sleeves and hem of her kimono respond to her movements and the gentle spring breeze.\n\nPink cherry blossom petals drift through the air at different depths.\n\n[00:03\u201300:06]\n\nA faint golden light emerges from behind a moss-covered stone lantern.\n\nThe girl notices the light and gradually stops walking.\n\nThe camera smoothly moves around her shoulder, revealing a small glowing white fox spirit <Subject 3> standing on the pathway.\n\nThe fox tilts its head curiously, flicks its ears, and takes several delicate steps toward the girl.\n\nShe gently lowers her umbrella and turns toward the fox with a surprised but warm expression.\n\nHer eyes follow the fox\u2019s movements.\n\nSoft sunlight illuminates the edges of her flowing hair.\n\n[00:06\u201300:10.125]\n\nThe white fox spirit suddenly leaps gracefully into the air.\n\nIts body dissolves into a flowing trail of golden magical particles before reforming above the girl\u2019s shoulder.\n\nThe camera performs a smooth cinematic orbit around the girl.\n\nThe magical fox circles around her, leaving behind delicate glowing trails among the falling cherry blossoms.\n\nThe girl raises one hand toward the floating spirit.\n\nHer sleeves and long hair respond naturally to the movement.\n\nThe fox briefly touches her fingertips with its nose.\n\nA soft golden light spreads across her face, and she smiles gently.\n\nThe camera slowly pushes closer as the fox floats upward into the cherry blossom canopy.\n\nMaintain continuous spatial geometry, natural movement, and consistent character identity throughout the sequence.\n\nvisual_style\n\nTraditional Japanese 2D anime animation, detailed hand-painted backgrounds, soft watercolor-inspired environmental shading, clean character linework, expressive eyes, natural cloth and hair dynamics, rich pastel colors, delicate cherry blossom particles, warm afternoon lighting, and smooth cinematic camera movement.\n\nSingle continuous shot without cuts.\n\nNo futuristic architecture, cyberpunk elements, modern technology, or photorealistic character rendering.\n\noverall_soundscape\n\nGentle spring wind moving through the trees, soft footsteps on the stone pathway, subtle rustling of kimono fabric, distant birds singing, and delicate magical shimmering synchronized with the fox spirit\u2019s movements.\n\nNo dialogue.\n\nnon_diegetic_music\n\nGentle Japanese fantasy anime orchestral music featuring soft piano, traditional Japanese flute, delicate strings, and subtle atmospheric textures.\n\nThe music gradually builds during the fox spirit\u2019s appearance and resolves into a peaceful emotional ending.",
+    "prompt_sha256": "e2ebe6a75563a0184ef5fa99299acef24ee3170855774761c44d6714fb2f7754",
+    "reference_images": [
+      {
+        "file": "reference_character.jpg",
+        "url": "https://dthezntil550i.cloudfront.net/1h/latest/1h2106242105027740014340778/1280_960/cb246f62-8fcd-47b3-b585-99ffe6313002.jpg",
+        "source_page": "https://medibang.com/picture/1h2106242105027740014340778/",
+        "bytes": 317018,
+        "sha256": "e5b1710572f2587f7927e65b9e5f8f742bc435ca388ae23a16880fa6bf542383",
+        "size": [
+          1280,
+          905
+        ]
+      },
+      {
+        "file": "reference_shrine.png",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Algorithmically-generated_landscape_artwork_of_forest_with_Shinto_shrine.png",
+        "source_page": "https://commons.wikimedia.org/wiki/File:Algorithmically-generated_landscape_artwork_of_forest_with_Shinto_shrine.png",
+        "bytes": 7703256,
+        "sha256": "cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03",
+        "size": [
+          4096,
+          2048
+        ]
+      }
+    ],
+    "ref_image_size": "match",
+    "duration_seconds": 10.125,
+    "source_request_sha256": "55e51da34987f0e846114daebe37de39971f0aa31f0e2af3387f6ae9b9bed5d9",
+    "operators": "current promoted defaults",
+    "source_note": "Authorized PTD E2E; original anime prompt/images/geometry/noise seed; trained PTD clock and adapter replace Turbo/Euler. Pruned-base approximation.",
+    "ptd_release": {
+      "repo": "taobao-content-ai/MiniMax-H3-PTD-RefAsymOPD-LoRAs",
+      "revision": "d1f88c89c352e7751b56b5f32c7b657fb3e0f2c5",
+      "file": "MiniMax-H3-Ref2VA-PTD-RefAsymOPD-8Step.safetensors",
+      "bytes": 11112893024,
+      "sha256": "6796802b9150110a3cd7f66891c9e6190502a432c30b0fa1aa299724cfc15cc3"
+    },
+    "allow_pruned_adaln": true,
+    "split_auxiliary": false,
+    "runtime_refiner_layout": false,
+    "hop_handoff": "queue",
+    "future_cache": true,
+    "prefetch_refiner": true,
+    "expected_packed_tokens": 59134
+  },
+  "resource_plan": {
+    "required_free_bytes": 258523593608,
+    "free_bytes": 1124662312960,
+    "estimated_bank_bytes": 182727920384,
+    "host_limit_bytes": 32212254720,
+    "cache_bytes": 4294967296,
+    "host_bytes": 21474836480,
+    "reserve_bytes": 9663676416,
+    "weight_bytes": 6442450944,
+    "pinned_bytes": 6442450944,
+    "bounded_gpu_experts": true
+  },
+  "bake_disk_plan": {
+    "required_free_bytes": 187022887680,
+    "free_bytes": 1065161986048,
+    "estimated_expert_bytes": 182727920384,
+    "shared_base_auxiliary": true,
+    "output": "/tmp/h3_ptd_e2e_20261029/eight_hop_tp2",
+    "layers": 50,
+    "full_model": true
+  },
+  "error": "RuntimeError('offline_eight_hop_bake failed; preserve the stage log')"
+}

@@ -1,0 +1,78 @@
+{
+  "h3-ptd-long-e2e-t4-20261029.log": {
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "light_setup\\api_probe.log": {
+    "bytes": 1420,
+    "sha256": "16401c525113952b9f12881dd4803be748019d8aa892a98da31d95f79f04a26d"
+  },
+  "light_setup\\bounded_worker.py": {
+    "bytes": 1895,
+    "sha256": "e00ecd68be46cc432cf8d4d3758b5071def2eb2bd0a8fac95ef0b1307704dfae"
+  },
+  "light_setup\\cpu_qualification.json": {
+    "bytes": 121425,
+    "sha256": "eb6edb77f8ee14c2e7168fe24f16cfc88f10146f9218148d752f06ce90813bbf"
+  },
+  "light_setup\\delivery_binding.json": {
+    "bytes": 595,
+    "sha256": "80f5fe7b9132dcd0c35434d7db685ff186186e52bc0b5fabb2dc2ba3c9b5f145"
+  },
+  "light_setup\\direct-core.txt": {
+    "bytes": 5811,
+    "sha256": "f67dca5cc9543d06bcca19426bda0914306d6e143f8712037e84ee54f30e8eee"
+  },
+  "light_setup\\direct_pip.log": {
+    "bytes": 15656,
+    "sha256": "db649c90ee90756b04aa0fb4a5947f0467ecd89be22bc1f09fe3c783ac68c2fa"
+  },
+  "light_setup\\execution_env.json": {
+    "bytes": 449,
+    "sha256": "53f8cbaa42b4a30ef25583746477a1d1570f37b3f30affd13d09ffcec0dd7911"
+  },
+  "light_setup\\notebook_worker.log": {
+    "bytes": 211,
+    "sha256": "a236037b442479f19c7968c83a44398e1f9c04babd0ba7e40eb7071543ebf739"
+  },
+  "light_setup\\runtime_profile.json": {
+    "bytes": 27855,
+    "sha256": "fb2c2512300010c032bc9c2a3dc28f2e534102c9fb89171861508158e03af13f"
+  },
+  "light_setup\\setup_receipt.json": {
+    "bytes": 130425,
+    "sha256": "788c5f90b5c9e0278407e27cf25f75398e60ebda52e8d5e0a358ec436c89044e"
+  },
+  "light_setup\\supervision.json": {
+    "bytes": 207,
+    "sha256": "1990bb52f120243298d7fe7b413ad1f159f1284c51a49969c849249a82139c5b"
+  },
+  "ptd_e2e\\batch_results.json": {
+    "bytes": 8826,
+    "sha256": "3aa9d306bf8e18856f743ac93f0af7ad929531ba702ed2ea9614368b1c627b38"
+  },
+  "ptd_e2e\\bundle_assets_receipt.json": {
+    "bytes": 41433,
+    "sha256": "f13e131b236853641ada26be59ee90042b81a3be5f59e54089bc370062723f34"
+  },
+  "ptd_e2e\\exception.txt": {
+    "bytes": 1019,
+    "sha256": "4dc32f0720549d5a491f2b40f51a3d98840f8c05c70e96c22b90baf484798247"
+  },
+  "ptd_e2e\\offline_eight_hop_bake.log": {
+    "bytes": 8132,
+    "sha256": "b71f282565343a6d7e7c9150d1e24a92f933499e846f0c2994667b35fefef58c"
+  },
+  "ptd_e2e_supervision\\bounded_worker.py": {
+    "bytes": 369,
+    "sha256": "6b20a0a3e3da1f9764c3aa1626fc2c6a83cf23f58ad4948b817d22f696efc1d3"
+  },
+  "ptd_e2e_supervision\\notebook_worker.log": {
+    "bytes": 5337,
+    "sha256": "73b896788ededd981c68125934f3e37f93d8e253fd817e34d00293761cc4153a"
+  },
+  "ptd_e2e_supervision\\supervision.json": {
+    "bytes": 206,
+    "sha256": "941a971e0f4f048500305f48add253b544e871a5afa9016c19158403ff4191da"
+  }
+}
