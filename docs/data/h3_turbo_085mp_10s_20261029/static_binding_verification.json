@@ -1,0 +1,20 @@
+{
+  "benchmark_overlay_payload_verified": true,
+  "benchmark_overlay_sha256": "8043ee767d8102f6d519d8ecb36b44f5eb7fd5f14e4c01206c140fa9b17e806c",
+  "new_cpu_smoke_run": false,
+  "source_qualification_reused": true,
+  "changed_request_fields": [
+    "geometry_retry_provenance",
+    "height",
+    "name",
+    "source_note",
+    "width"
+  ],
+  "width": 1216,
+  "height": 704,
+  "megapixels": 0.856064,
+  "generated_video_tokens": 60192,
+  "private": true,
+  "credentials": false,
+  "zero_mounts": true
+}

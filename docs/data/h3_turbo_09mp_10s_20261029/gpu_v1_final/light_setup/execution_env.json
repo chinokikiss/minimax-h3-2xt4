@@ -1,0 +1,11 @@
+{
+  "PYTHONPATH": "/kaggle/temp/h3_direct_overlay:/kaggle/temp/h3_light_source:/kaggle/temp/h3_light_source/ComfyUI:/kaggle/temp/h3_light_source/benchmarks",
+  "COMFY_ROOT": "/kaggle/temp/h3_light_source/ComfyUI",
+  "H3_RUNTIME_LOCK": "/kaggle/working/light_setup/runtime_profile.json",
+  "OMP_NUM_THREADS": "2",
+  "NCCL_P2P_DISABLE": "1",
+  "NCCL_DEBUG": "WARN",
+  "NCCL_MIN_NCHANNELS": "4",
+  "NCCL_MAX_NCHANNELS": "4",
+  "PYTHONUNBUFFERED": "1"
+}

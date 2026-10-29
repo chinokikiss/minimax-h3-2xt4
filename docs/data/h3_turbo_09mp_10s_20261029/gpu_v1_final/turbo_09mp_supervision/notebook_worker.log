@@ -1,0 +1,389 @@
+TURBO_STAGE download_dit_tp2
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+TP2_DOWNLOAD_VERIFIED dit 10 /100
+TP2_DOWNLOAD_VERIFIED dit 20 /100
+TURBO_HEARTBEAT download_dit_tp2
+TP2_DOWNLOAD_VERIFIED dit 30 /100
+TP2_DOWNLOAD_VERIFIED dit 40 /100
+TP2_DOWNLOAD_VERIFIED dit 50 /100
+TURBO_HEARTBEAT download_dit_tp2
+TP2_DOWNLOAD_VERIFIED dit 60 /100
+TP2_DOWNLOAD_VERIFIED dit 70 /100
+TP2_DOWNLOAD_VERIFIED dit 80 /100
+TURBO_HEARTBEAT download_dit_tp2
+TP2_DOWNLOAD_VERIFIED dit 90 /100
+TP2_DOWNLOAD_VERIFIED dit 100 /100
+TURBO_STAGE assemble_dit_auxiliary
+TURBO_STAGE download_replacement_turbo
+TURBO_HEARTBEAT download_replacement_turbo
+TURBO_STAGE offline_disk_bake
+TP2_DISK_BAKED cuda:1 blocks.1.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.0.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.1.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.0.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.0.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.1.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.0.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 0
+TP2_DISK_BAKED cuda:1 blocks.1.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 1
+TP2_DISK_LAYER_DURABLE 0
+TP2_DISK_LAYER_DURABLE 1
+TURBO_HEARTBEAT offline_disk_bake
+TP2_DISK_BAKED cuda:1 blocks.3.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.2.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.3.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.2.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.3.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.2.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.3.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 3
+TP2_DISK_BAKED cuda:0 blocks.2.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 2
+TP2_DISK_LAYER_DURABLE 2
+TP2_DISK_LAYER_DURABLE 3
+TP2_DISK_BAKED cuda:1 blocks.5.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.4.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.5.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.4.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.5.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.4.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.5.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 5
+TP2_DISK_BAKED cuda:0 blocks.4.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 4
+TP2_DISK_BAKED cuda:0 blocks.6.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.7.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.6.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.7.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.6.mlp.fc1
+TP2_DISK_LAYER_DURABLE 4
+TP2_DISK_LAYER_DURABLE 5
+TP2_DISK_BAKED cuda:1 blocks.7.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.6.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 6
+TP2_DISK_BAKED cuda:1 blocks.7.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 7
+TP2_DISK_LAYER_DURABLE 7
+TP2_DISK_LAYER_DURABLE 6
+TP2_DISK_BAKED cuda:1 blocks.9.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.8.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.9.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.8.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.9.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.8.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.9.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 9
+TP2_DISK_BAKED cuda:0 blocks.8.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 8
+TP2_DISK_LAYER_DURABLE 8
+TP2_DISK_LAYER_DURABLE 9
+TP2_DISK_BAKED cuda:0 blocks.10.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.11.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.10.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.11.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.10.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.11.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.10.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 10
+TP2_DISK_BAKED cuda:1 blocks.11.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 11
+TP2_DISK_LAYER_DURABLE 11
+TP2_DISK_LAYER_DURABLE 10
+TP2_DISK_BAKED cuda:0 blocks.12.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.13.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.12.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.13.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.12.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.13.mlp.fc1
+TURBO_HEARTBEAT offline_disk_bake
+TP2_DISK_BAKED cuda:1 blocks.13.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 13
+TP2_DISK_BAKED cuda:0 blocks.12.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 12
+TP2_DISK_LAYER_DURABLE 12
+TP2_DISK_LAYER_DURABLE 13
+TP2_DISK_BAKED cuda:0 blocks.14.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.15.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.14.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.15.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.14.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.15.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.14.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 14
+TP2_DISK_BAKED cuda:1 blocks.15.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 15
+TP2_DISK_LAYER_DURABLE 14
+TP2_DISK_LAYER_DURABLE 15
+TP2_DISK_BAKED cuda:1 blocks.17.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.16.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.17.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.16.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.17.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.16.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.17.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 17
+TP2_DISK_BAKED cuda:0 blocks.16.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 16
+TP2_DISK_LAYER_DURABLE 16
+TP2_DISK_LAYER_DURABLE 17
+TP2_DISK_BAKED cuda:0 blocks.18.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.19.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.18.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.19.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.18.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.19.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.18.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 18
+TP2_DISK_BAKED cuda:1 blocks.19.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 19
+TP2_DISK_LAYER_DURABLE 19
+TP2_DISK_LAYER_DURABLE 18
+TP2_DISK_BAKED cuda:0 blocks.20.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.21.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.20.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.21.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.20.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.21.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.20.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 20
+TP2_DISK_BAKED cuda:1 blocks.21.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 21
+TP2_DISK_LAYER_DURABLE 20
+TP2_DISK_LAYER_DURABLE 21
+TP2_DISK_BAKED cuda:0 blocks.22.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.23.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.22.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.23.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.22.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.23.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.22.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 22
+TP2_DISK_BAKED cuda:1 blocks.23.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 23
+TURBO_HEARTBEAT offline_disk_bake
+TP2_DISK_LAYER_DURABLE 23
+TP2_DISK_LAYER_DURABLE 22
+TP2_DISK_BAKED cuda:0 blocks.24.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.25.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.24.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.25.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.24.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.25.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.25.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 25
+TP2_DISK_BAKED cuda:0 blocks.24.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 24
+TP2_DISK_LAYER_DURABLETP2_DISK_LAYER_DURABLE 24
+TP2_DISK_BAKED cuda:1 blocks.27.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.26.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.27.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.26.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.27.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.26.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.27.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 27
+TP2_DISK_BAKED cuda:0 blocks.26.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 26
+TP2_DISK_LAYER_DURABLETP2_DISK_LAYER_DURABLE 27
+TP2_DISK_BAKED cuda:1 blocks.29.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.28.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.29.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.28.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.28.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.29.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.28.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 28
+TP2_DISK_BAKED cuda:1 blocks.29.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 29
+TP2_DISK_LAYER_DURABLE 28
+TP2_DISK_LAYER_DURABLE 29
+TP2_DISK_BAKED cuda:0 blocks.30.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.31.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.30.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.31.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.31.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.30.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.31.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 31
+TP2_DISK_BAKED cuda:0 blocks.30.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 30
+TP2_DISK_LAYER_DURABLE 30
+TP2_DISK_LAYER_DURABLE 31
+TP2_DISK_BAKED cuda:1 blocks.33.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.32.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.33.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.32.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.33.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.32.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.33.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 33
+TP2_DISK_BAKED cuda:0 blocks.32.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 32
+TP2_DISK_LAYER_DURABLE 32
+TP2_DISK_LAYER_DURABLE 33
+TP2_DISK_BAKED cuda:1 blocks.35.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.34.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.35.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.34.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.35.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.34.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.35.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 35
+TP2_DISK_BAKED cuda:0 blocks.34.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 34
+TURBO_HEARTBEAT offline_disk_bake
+TP2_DISK_LAYER_DURABLE 35
+TP2_DISK_LAYER_DURABLE 34
+TP2_DISK_BAKED cuda:1 blocks.37.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.36.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.37.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.36.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.37.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.36.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.36.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 36
+TP2_DISK_BAKED cuda:1 blocks.37.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 37
+TP2_DISK_LAYER_DURABLE 37
+TP2_DISK_LAYER_DURABLE 36
+TP2_DISK_BAKED cuda:0 blocks.38.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.39.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.38.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.39.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.38.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.39.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.38.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 38
+TP2_DISK_BAKED cuda:1 blocks.39.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 39
+TP2_DISK_LAYER_DURABLE 39
+TP2_DISK_LAYER_DURABLE 38
+TP2_DISK_BAKED cuda:0 blocks.40.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.41.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.40.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.41.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.40.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.41.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.40.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 40
+TP2_DISK_BAKED cuda:1 blocks.41.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 41
+TP2_DISK_LAYER_DURABLE 40
+TP2_DISK_LAYER_DURABLE 41
+TP2_DISK_BAKED cuda:0 blocks.42.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.43.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.42.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.43.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.42.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.43.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.42.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 42
+TP2_DISK_BAKED cuda:1 blocks.43.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 43
+TP2_DISK_LAYER_DURABLE 42
+TP2_DISK_LAYER_DURABLE 43
+TP2_DISK_BAKED cuda:1 blocks.45.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.44.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.45.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.44.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.45.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.44.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.45.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 45
+TP2_DISK_BAKED cuda:0 blocks.44.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 44
+TP2_DISK_LAYER_DURABLE 45
+TP2_DISK_LAYER_DURABLE 44
+TURBO_HEARTBEAT offline_disk_bake
+TP2_DISK_BAKED cuda:1 blocks.47.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.46.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.47.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.46.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.47.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.46.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.47.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 47
+TP2_DISK_BAKED cuda:0 blocks.46.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 46
+TP2_DISK_LAYER_DURABLE 46
+TP2_DISK_LAYER_DURABLE 47
+TP2_DISK_BAKED cuda:1 blocks.49.attn.qkv_proj
+TP2_DISK_BAKED cuda:0 blocks.48.attn.qkv_proj
+TP2_DISK_BAKED cuda:1 blocks.49.attn.out_proj
+TP2_DISK_BAKED cuda:0 blocks.48.attn.out_proj
+TP2_DISK_BAKED cuda:1 blocks.49.mlp.fc1
+TP2_DISK_BAKED cuda:0 blocks.48.mlp.fc1
+TP2_DISK_BAKED cuda:1 blocks.49.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:1 49
+TP2_DISK_BAKED cuda:0 blocks.48.mlp.fc2
+TP2_DISK_LAYER_QUEUED cuda:0 48
+TP2_DISK_LAYER_DURABLE 49
+TP2_DISK_LAYER_DURABLE 48
+TP2_DISK_BAKED_AUX cuda:0 token_refiner.blocks.0.attn.out_proj
+TP2_DISK_BAKED_AUX cuda:0 token_refiner.blocks.0.attn.qkv_proj
+TP2_DISK_BAKED_AUX cuda:0 token_refiner.blocks.0.mlp.fc1
+TP2_DISK_BAKED_AUX cuda:0 token_refiner.blocks.0.mlp.fc2
+TP2_DISK_BAKED_AUX cuda:0 token_refiner.blocks.1.attn.out_proj
+TP2_DISK_BAKED_AUX cuda:0 token_refiner.blocks.1.attn.qkv_proj
+TP2_DISK_BAKED_AUX cuda:0 token_refiner.blocks.1.mlp.fc1
+TP2_DISK_BAKED_AUX cuda:0 token_refiner.blocks.1.mlp.fc2
+TURBO_HEARTBEAT offline_disk_bake
+TURBO_STAGE download_te_tp2
+TP2_DOWNLOAD_VERIFIED te 10 /100
+TURBO_HEARTBEAT download_te_tp2
+TP2_DOWNLOAD_VERIFIED te 20 /100
+TP2_DOWNLOAD_VERIFIED te 30 /100
+TURBO_HEARTBEAT download_te_tp2
+TP2_DOWNLOAD_VERIFIED te 40 /100
+TP2_DOWNLOAD_VERIFIED te 50 /100
+TURBO_HEARTBEAT download_te_tp2
+TP2_DOWNLOAD_VERIFIED te 60 /100
+TP2_DOWNLOAD_VERIFIED te 70 /100
+TURBO_HEARTBEAT download_te_tp2
+TP2_DOWNLOAD_VERIFIED te 80 /100
+TP2_DOWNLOAD_VERIFIED te 90 /100
+TURBO_HEARTBEAT download_te_tp2
+TP2_DOWNLOAD_VERIFIED te 100 /100
+TURBO_STAGE assemble_te_auxiliary
+TURBO_HEARTBEAT assemble_te_auxiliary
+TURBO_STAGE download_vaes
+TURBO_STAGE full_e2e
+TURBO_HEARTBEAT full_e2e
+L1_STAGE_START vae_metadata
+L1_STAGE_END vae_metadata {'start_ns': 1516199236177, 'end_ns': 1516672242681, 'status': 'complete'}
+L1_STAGE_START reference_and_TE
+TURBO_HEARTBEAT full_e2e
+TURBO_HEARTBEAT full_e2e
+TURBO_HEARTBEAT full_e2e
+REF2VA_RANK_COMMAND 0 {'command': 'te', 'nfe': 0, 'start_ns': 1520565412249, 'enqueue_end_ns': 1695542527989, 'peak_allocated': 3353869312, 'peak_reserved': 5312086016}
+REF2VA_RANK_COMMAND 1 {'command': 'te', 'nfe': 0, 'start_ns': 1520565695570, 'enqueue_end_ns': 1695550297849, 'peak_allocated': 3353869312, 'peak_reserved': 5312086016}
+L1_STAGE_END reference_and_TE {'start_ns': 1516673043066, 'end_ns': 1695831560387, 'status': 'complete'}
+L1_STAGE_START sampler
+REF2VA_RANK_COMMAND 1 {'command': 'refine', 'nfe': 0, 'start_ns': 1698215380355, 'enqueue_end_ns': 1698831164381, 'peak_allocated': 101374976, 'peak_reserved': 153092096}
+REF2VA_RANK_COMMAND 0 {'command': 'refine', 'nfe': 0, 'start_ns': 1698215842166, 'enqueue_end_ns': 1720071051504, 'peak_allocated': 3902258688, 'peak_reserved': 4185915392}
+TURBO_HEARTBEAT full_e2e
+REF2VA_RANK_COMMAND 1 {'command': 'refine', 'nfe': 0, 'start_ns': 1760690862965, 'enqueue_end_ns': 1760713742282, 'peak_allocated': 101374976, 'peak_reserved': 153092096}
+REF2VA_RANK_COMMAND 0 {'command': 'refine', 'nfe': 0, 'start_ns': 1760690414777, 'enqueue_end_ns': 1760718436727, 'peak_allocated': 3902258688, 'peak_reserved': 4185915392}
+REF2VA_LAYOUT 0 {'sequence_tokens': 68576, 'segments': [(0, 2649, 'text'), (2649, 3524, 'ref_img'), (3524, 4406, 'ref_img'), (4406, 5216, 'audio'), (5216, 68576, 'video')], 'query_shape': [1, 28, 68576, 128]}
+REF2VA_LAYOUT 1 {'sequence_tokens': 68576, 'segments': [(0, 2649, 'text'), (2649, 3524, 'ref_img'), (3524, 4406, 'ref_img'), (4406, 5216, 'audio'), (5216, 68576, 'video')], 'query_shape': [1, 28, 68576, 128]}
+TURBO_HEARTBEAT full_e2e
+TURBO_HEARTBEAT full_e2e
+TURBO_HEARTBEAT full_e2e
+REF2VA_RANK_COMMAND 0 {'command': 'denoise', 'nfe': 1, 'start_ns': 1761234446945, 'enqueue_end_ns': 1939536147903, 'peak_allocated': 12504806912, 'peak_reserved': 14795407360}
+REF2VA_RANK_COMMAND 1 {'command': 'denoise', 'nfe': 1, 'start_ns': 1761229374563, 'enqueue_end_ns': 1948343117211, 'peak_allocated': 12380002816, 'peak_reserved': 15374221312}
+L1_DENOISER_COMPLETE 1 [{'shape': [1, 24, 72, 44, 80], 'dtype': 'torch.float16', 'finite': True, 'minimum': -12.234375, 'maximum': 12.7109375, 'mean': 0.20262019336223602, 'rms': 2.256962537765503}, {'shape': [1, 32, 2, 405], 'dtype': 'torch.float16', 'finite': True, 'minimum': -6.5625, 'maximum': 5.19921875, 'mean': -0.22088246047496796, 'rms': 1.5665589570999146}]
+L1_STAGE_END sampler {'start_ns': 1696419625253, 'end_ns': 1956643654723, 'status': 'failed'}
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_batch.py", line 244, in <module>
+    main()
+    ~~~~^^
+  File "/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_batch.py", line 228, in main
+    run([sys.executable, '-u', str(source / 'benchmarks/run_h3_l1_turbo_e2e.py'),
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+         '--config', str(output / 'request_config.json')], 'full_e2e', args.e2e_timeout)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_batch.py", line 83, in run
+    raise RuntimeError(label + ' failed; see saved stage log')
+RuntimeError: full_e2e failed; see saved stage log

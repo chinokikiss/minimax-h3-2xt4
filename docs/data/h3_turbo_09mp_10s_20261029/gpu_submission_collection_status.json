@@ -1,0 +1,19 @@
+{
+  "status": "collected",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-turbo-0-9mp-10s-t4-20261029",
+  "output": "D:\\attention_eval\\h3_turbo_09mp_10s_20261029\\kaggle\\gpu_final",
+  "returncode": 0,
+  "files": 26,
+  "completed_utc": "2026-10-29T14:35:19.218485+00:00",
+  "experiment": {
+    "status": "failed",
+    "error": "RuntimeError: full_e2e failed; see saved stage log",
+    "stages": null,
+    "completed_sampler_steps": 0,
+    "completed_denoiser_calls": 0,
+    "media": null,
+    "quality_acceptance": "Pending review; collection does not establish generation quality"
+  },
+  "prior_input_hash_matches": {}
+}

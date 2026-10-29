@@ -1,8 +1,30 @@
 # Regular Turbo 0.9 MP / ten-second retry — 2026-10-29
 
 Kaggle accepted **version 1** of [H3 Turbo 0.9MP 10s T4 20261029](https://www.kaggle.com/code/pamcks/h3-turbo-0-9mp-10s-t4-20261029).
-Generation results are pending. No CPU smoke job or test suite was run for
+Final artifacts confirm **OOM after the first DiT denoiser call**, before the
+first sampler step completed. No CPU smoke job or test suite was run for
 this retry, following the user's explicit instruction.
+
+## Collected failure
+
+One final collection retrieved 26 artifacts, with source binding and download
+hashes recorded. Offline baking completed in **346.690 s**. The full E2E
+subprocess ran **492.064 s** before failure; reference/TE preparation completed.
+The result records one finite FP16 video/audio denoiser output pair and zero
+completed sampler steps. Decode was not reached and no final media was produced.
+
+Unlike the 1 MP failure inside attention-output quantization, this failure was
+in the parent sampler: `model_sampling.calculate_denoised`, at
+`model_input - model_output * sigma`. It requested **24 MiB**, with **4.75 MiB**
+free on GPU 0. The error reported a separate process holding **14.01 GiB**;
+the failing process had about **554 MiB** including non-PyTorch allocations.
+This identifies cross-process device pressure at sampler handoff, rather than
+establishing that another DiT kernel failed or that allocator fragmentation
+caused the failure. No allocator or residency-policy changes were made here.
+
+The user selected a subsequent **1216×704 (0.856064 MP)** retry, skipping another
+CPU smoke run. Raw evidence is retained under
+`docs/data/h3_turbo_09mp_10s_20261029/gpu_v1_final/`.
 
 ## Workload
 
