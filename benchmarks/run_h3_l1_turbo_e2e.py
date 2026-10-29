@@ -51,6 +51,8 @@ class CurrentRank(observation.ObservedRank):
             result['benchmark']['tensor_flow']=asdict(self.config.tensor_flow)
             result['benchmark']['operators']=asdict(self.config.operators)
             result['benchmark']['online_lora_attached']=False
+            result['benchmark']['verify_dit_weights']=self.config.verify_dit_weights
+            result['benchmark']['dit_payload_verification']=getattr(self.readers['dit'],'verify_payloads',None)
         return result
 
 
@@ -102,6 +104,9 @@ def main():
     if config.get('workload_contract')=='anime_ref2va_8step':
         from benchmarks.anime_e2e_contract import validate
         validate(config,config['reference_images'])
+    elif config.get('workload_contract')=='turbo_1mp_10s':
+        from benchmarks.turbo_challenge_contract import validate
+        validate(config)
     output=Path(config['output']);output.mkdir(parents=True,exist_ok=True)
     state=dict(status='starting',config=config,stages={},denoiser_outputs=[],sampler_steps=[])
     def save():(output/'result.json').write_text(json.dumps(state,indent=2,default=str))
@@ -171,11 +176,18 @@ def main():
         pixels=stage('video_decode',lambda:decoders['video'].decode(video).cpu())
         waveform=stage('audio_decode',lambda:decoders['audio'].decode(audio).cpu())
         assert decoders['audio'].last_strategy=='native'
-        if config.get('workload_contract')=='anime_ref2va_8step':
+        if config.get('workload_contract') in ('anime_ref2va_8step','turbo_1mp_10s'):
             shape=list(pixels.shape[-4:])
             assert shape[:3]==[config['frames'],config['height'],config['width']], 'Requested video shape changed'
         state['decoded_shapes']=dict(pixels=list(pixels.shape),waveform=list(waveform.shape))
-        state['media']=stage('file_export',lambda:observation.export_media(pixels,waveform,output))
+        export_pixels,export_audio=pixels,waveform
+        if config.get('workload_contract')=='turbo_1mp_10s':
+            from benchmarks.turbo_challenge_contract import export_views
+            export_pixels,export_audio=export_views(pixels,waveform,config)
+            state['export_shapes']=dict(pixels=list(export_pixels.shape),waveform=list(export_audio.shape))
+            state['export_duration_seconds']=config['export_duration_seconds']
+        state['media']=stage('file_export',lambda:observation.export_media(export_pixels,export_audio,output))
+        del export_pixels,export_audio
         state['foreground_seconds']=(time.monotonic_ns()-state['trigger_ns'])/1e9
         state['outputs']={k:observation.digest(t) for k,t in dict(video=video,audio=audio,pixels=pixels,waveform=waveform).items()}
         if not all(v['finite'] for v in state['outputs'].values()):raise FloatingPointError('Nonfinite final output')
@@ -191,9 +203,13 @@ def main():
             assert rank['bundle_preparation']['dit']['merged_matrices']==0
             assert calls.get('current/fused_swiglu_quant') and calls.get('current/scaled_fp16_epilogue')
             assert not any(v for k,v in calls.items() if k.startswith('LoRA/'))
-            assert max(c['peak_allocated'] for c in bench['commands'] if c['command']=='denoise')<14.5*GiB
-            if config.get('workload_contract')=='anime_ref2va_8step':
+            if config.get('workload_contract')!='turbo_1mp_10s':
+                assert max(c['peak_allocated'] for c in bench['commands'] if c['command']=='denoise')<14.5*GiB
+            if config.get('workload_contract') in ('anime_ref2va_8step','turbo_1mp_10s'):
                 assert calls.get('TE/column_view')==250, 'Expected five optimized columns in each of 50 TE layers'
+            if config.get('workload_contract')=='turbo_1mp_10s':
+                assert rank['benchmark']['verify_dit_weights'] is False
+                assert rank['benchmark']['dit_payload_verification'] is False
         state.update(status='complete',quality_acceptance='Pending visual/audio review; no dense Native comparison or generation-equivalence claim')
     except BaseException as error:
         state.update(status='failed',error=repr(error));(output/'exception.txt').write_text(traceback.format_exc())

@@ -1,0 +1,34 @@
+{
+  "parent_sha256": "eadb59c0f8e6d7a2af5030a2d0aa60254443f15fcaba955112892bd18ea3089c",
+  "frozen_archive_and_lock_sha256": {
+    "direct_core_requirements.json": "50eb673de9cb28e6b17a4c59997793eb3ed2df68d7da6a8d2fe9d5761aef9db3",
+    "frozen/comfy_source.tar.gz.bin": "97cb93348993c7ff9a1390680ca4509d2880712707ae5bb249a1f4b2e8a92ebc",
+    "frozen/constraints-local-conda.txt": "5a94152799828ea794a0f84ddd925df76967a89692b24a13f3ee16b3b254f573",
+    "frozen/frozen_kaggle_setup.py": "fd6c168e576e8b654803408380985260d1f38c651e5698644d6cb27674ecc318",
+    "frozen/local_conda.json": "e3a07afb8cb79e6f45c9c0118debc4bd4008c022d2652e0891273dac2db07aa3",
+    "frozen/requirements-local-conda.txt": "81e4f75c02676e0bdb7e35cb5ad3746465053935a23e764be7c385d46585c3f7"
+  },
+  "native_comfyui_preserved": true,
+  "core_pins_preserved": true,
+  "unrelated_dirty_changes_excluded": true,
+  "no_local_lora_download": true,
+  "ptd": false,
+  "overlays": {
+    "patches/comfy_tp_runtime.py": "3f6e82fb2cd04e17e05591a3df68fff4edc6edffc1b7e15cbf39e411c0fcb71a",
+    "custom_nodes/minimax_h3_tp2/__init__.py": "c7e3bab42286238652cc49bd2995bb8749e23427d903c7f74bb6867819fc08a0",
+    "benchmarks/run_h3_l1_turbo_e2e.py": "f8128e57f2e292cccaa8c65a1aa3c7c6308ef31f9a8396457bcaefd7e4360c85",
+    "benchmarks/run_h3_l1_turbo_batch.py": "5b02fab144c00d13450ca10bd905c6484ca1c3b39b0229af6421c24ec35a5229",
+    "benchmarks/run_review_cpu.py": "4f9a4d8eb62f1e840da1265830aa6399e52c9db269d5cefa0f75ce9a736d3324",
+    "benchmarks/test_dit_hash_ablation.py": "3377cd002bbbb7c327a311e7b29d6e63f009166e4407de95cfa87e05c2a94ace",
+    "benchmarks/ref2va_e2e_run.py": "2799b66cad381e98ffbb64c57999a4562fd1572e485f4c2597e8cbd9a6d245f2",
+    "benchmarks/e2e_attention_validation.py": "c0cb94f54b71c8077aad93ed18f70374dcddb97e552cc45cf1db236ae4b49809",
+    "benchmarks/test_h3_l1_turbo_e2e.py": "b1363258b67b106ef0d04710f8868cdc0ee45a98880f8fef6751b07ea0640ab9",
+    "benchmarks/test_e2e_attention_validation.py": "9dc72872669e2fbc512b109defaa847860438873162a37ae4a883fb5285eeb8c",
+    "benchmarks/turbo_challenge_contract.py": "74ae84aa946678ded176f7e7148bc2fe59c271e2a8c568160e52fd87c117b377",
+    "benchmarks/test_turbo_challenge.py": "55c9f801614873a387763e94d4debad0e3c9a52ff09ce535aa6a8ed225bd6246",
+    "benchmarks/qualify_turbo_challenge.py": "51effeec03461bf6a151dc8ecb6cd8256a1a2e785d845b004ec6e716ba30e5ae",
+    "benchmarks/build_turbo_challenge_job.py": "b0a5d21a9eb96a812dc3c93ea8792449c490b599853ec993d8ea35f11d7a3e34",
+    "benchmarks/build_turbo_challenge_delivery.py": "c1ed92cbfb55b5a9c56cb08f56cd5250a5125c05a8c1229e859c34ea45aee8b1"
+  },
+  "plan_sha256": "ec0837108c6b57034be8116f5bfcd230040b721c9c6ecbdce23e49a66e18cfb9"
+}

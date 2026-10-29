@@ -67,7 +67,7 @@ class RuntimeConfig:
     video_decode_reserve_bytes: int = 2 * GiB
     bundle_offline_lora: bool = False
     lora_selective_qkv_b: bool = True
-    verify_dit_weights: bool = True
+    verify_dit_weights: bool = False
 
     def __post_init__(self):
         if type(self.verify_dit_weights) is not bool:raise ValueError('verify_dit_weights must be boolean')

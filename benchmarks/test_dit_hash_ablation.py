@@ -75,11 +75,13 @@ class HashAblation(unittest.TestCase):
         self.assertTrue(base.verify_payloads)
         self.assertIsNot(trusted.verified,base.verified)
 
-    def test_runtime_default_is_verified_and_te_cannot_be_opted_out(self):
+    def test_runtime_default_trusts_bake_and_te_cannot_be_opted_out(self):
         from patches.comfy_tp_runtime import RuntimeConfig
         default=RuntimeConfig('te','dit')
-        self.assertTrue(default.verify_dit_weights)
-        self.assertNotEqual(default,replace(default,verify_dit_weights=False))
+        self.assertFalse(default.verify_dit_weights)
+        self.assertNotEqual(default,replace(default,verify_dit_weights=True))
+        from custom_nodes.minimax_h3_tp2 import MiniMaxH3TP2Loader
+        self.assertFalse(MiniMaxH3TP2Loader.INPUT_TYPES()['optional']['verify_dit_weights'][1]['default'])
         with self.assertRaises(ValueError):replace(default,verify_dit_weights=0)
         descriptor=json.loads(self.fixture.descriptor.read_text());descriptor['kind']='te'
         with self.assertRaisesRegex(ValueError,'restricted to DiT'):

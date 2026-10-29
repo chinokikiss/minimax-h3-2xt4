@@ -36,8 +36,12 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--source', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--plan',type=Path)
+    parser.add_argument('--scratch',type=Path,default=Path('/kaggle/temp/h3_l1_turbo_05mp'))
+    parser.add_argument('--e2e-timeout',type=int,default=2700)
     args = parser.parse_args()
     source, output = args.source.resolve(), args.output.resolve()
+    if not 60<=args.e2e_timeout<=7200:raise ValueError('Bounded generation timeout required')
     output.mkdir(parents=True, exist_ok=True)
     state = dict(status='starting', commands=[], downloads={}, full_pipeline=True,
                  online_lora=False, request_count=1)
@@ -104,11 +108,14 @@ def main():
             MALLOC_ARENA_MAX='2', MALLOC_TRIM_THRESHOLD_='67108864')
         state['hardware'] = dict(devices=devices, torch=torch.__version__, cuda=torch.version.cuda,
             kitchen=md.version('comfy-kitchen'), tilelang=md.version('tilelang'))
-        plan = json.loads((source / 'turbo_plan.json').read_text())
+        plan = json.loads((args.plan or source/'turbo_plan.json').read_text())
+        if plan.get('workload_contract')=='turbo_1mp_10s':
+            from benchmarks.turbo_challenge_contract import validate
+            validate(plan)
         assets = json.loads((source / 'bundle_assets.json').read_text())
         identity = json.loads((source / 'l1_model_identity.json').read_text())
         references = json.loads((source / 'l1_assets_identity.json').read_text())['images']
-        scratch = Path('/kaggle/temp/h3_l1_turbo_05mp')
+        scratch = args.scratch
         scratch.mkdir(exist_ok=False)
         (scratch / '.owned_by_turbo_e2e').write_text('Staged public base downloads for this one job')
         root = scratch / 'base_bundle'
@@ -219,7 +226,7 @@ def main():
         request = plan | dict(paths=paths, images=images, output=str(output / 'generation'), lora_stack=[])
         (output / 'request_config.json').write_text(json.dumps(request, indent=2))
         run([sys.executable, '-u', str(source / 'benchmarks/run_h3_l1_turbo_e2e.py'),
-             '--config', str(output / 'request_config.json')], 'full_e2e', 2700)
+             '--config', str(output / 'request_config.json')], 'full_e2e', args.e2e_timeout)
         result = json.loads((output / 'generation/result.json').read_text())
         if result['status'] != 'complete':
             raise RuntimeError('Full generation incomplete')

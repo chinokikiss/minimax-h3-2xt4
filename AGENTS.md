@@ -8,6 +8,12 @@
 - Older Kaggle builders/notebooks are historical and may contain divergent dependency setup. Do not submit them directly. Use the frozen setup preflight first, and replace their setup before any new submission.
 - Preserve historical submitted sources, results and environments. Do not run a full H3 pipeline or consume Kaggle GPU time for environment setup checks.
 
+## Authorized trusted-bake default — 2026-10-29
+
+- The user promotes trusted DiT bake loading to the runtime/loader default: `verify_dit_weights=False`. Keep explicit `True` available. TE verification, metadata/schema/file-signature guards and download/bake-time validation remain unchanged.
+- Low-level bundle readers retain verified defaults for offline baking and integrity tools. Inference receives the runtime flag explicitly; A/B experiments must select both arms explicitly.
+- The user authorizes one regular Turbo LoRA long E2E challenge at approximately 1 MP and 10 seconds, with persisted offline TP2 baking. This is not PTD. Preserve the existing source/core pins, CPU-before-GPU qualification and no-status-polling policy.
+
 ## Authorized Kaggle exception — 2026-10-21
 
 - The user explicitly permits Kaggle's native Torch rather than reproducing the local Windows Torch/CUDA package stack. Keep its matching native Python/NumPy/Torchvision/Torchaudio/CUDA environment and record actual versions; do not modify the local conda environment or original snapshot.

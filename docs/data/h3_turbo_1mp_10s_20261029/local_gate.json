@@ -1,0 +1,52 @@
+{
+  "status": "turbo_challenge_cpu_ready",
+  "capsule_sha256": "21abe7dd91f284eed9626bb018c6abf66adf1c066b2f76662d72ce53d46d41a1",
+  "no_weights_fetched": true,
+  "gpu_used": false,
+  "ptd": false,
+  "online_lora": false,
+  "full_pipeline_authorized": true,
+  "workload": {
+    "width": 1344,
+    "height": 768,
+    "output_megapixels": 1.032192,
+    "native_frames": 243,
+    "native_duration_seconds": 10.125,
+    "export_frames": 240,
+    "export_duration_seconds": 10.0,
+    "video_latent_shape": [
+      1,
+      24,
+      72,
+      48,
+      84
+    ],
+    "generated_video_tokens": 72576,
+    "audio_latent_t": 405,
+    "note": "Actual TE/reference/packed sequence lengths are captured during execution"
+  },
+  "references": [
+    {
+      "file": "reference_character.jpg",
+      "bytes": 317018,
+      "sha256": "e5b1710572f2587f7927e65b9e5f8f742bc435ca388ae23a16880fa6bf542383",
+      "size": [
+        1280,
+        905
+      ]
+    },
+    {
+      "file": "reference_shrine.png",
+      "bytes": 7703256,
+      "sha256": "cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03",
+      "size": [
+        4096,
+        2048
+      ]
+    }
+  ],
+  "contract_tests": 14,
+  "lora_targets": 208,
+  "native_frame_grid": true,
+  "trusted_bake_default": true
+}

@@ -54,7 +54,7 @@ class MiniMaxH3TP2Loader:
                         'dit_fused_gate':('BOOLEAN',{'default':True,'tooltip':'T4 FP16 gated residual fusion with FP32 FMA and FP16 storage.'}),
                         'dit_fused_row_gate':('BOOLEAN',{'default':True,'tooltip':'Fuse scaled-FP16 row epilogue and residual gate for offline/baked DiT. Online LoRA and unsupported routes retain separate operations.'}),
                         'dit_prepared_attention':('BOOLEAN',{'default':True,'tooltip':'Prepare Kitchen INT8 attention, release floating QKV, then execute. Other attention backends remain unchanged.'}),
-                        'verify_dit_weights':('BOOLEAN',{'default':True,'tooltip':'Default verifies DiT payload and tensor hashes on first consumption. Disable only for the trusted-bake A/B; metadata and file-signature checks remain.'})}}
+                        'verify_dit_weights':('BOOLEAN',{'default':False,'tooltip':'Trust baked DiT payloads by default. Enable for first-consumption payload and tensor hashes. Metadata, schemas and file-signature checks remain.'})}}
 
     RETURN_TYPES = ('MODEL', 'CLIP', 'MINIMAX_TP2_SESSION')
     FUNCTION = 'load'
@@ -75,7 +75,7 @@ class MiniMaxH3TP2Loader:
              command_timeout_seconds=1500,rank_checkpoint_dir='',
              lora_selective_qkv_b=True,column_linear_backend='cuda_int8_tilelang',dit_rms_rope='tilelang_fp32',aot_precompile=True,
              dit_fused_norm=True,dit_fused_gate=True,dit_fused_row_gate=True,dit_prepared_attention=True,
-             verify_dit_weights=True,**retired_options):
+             verify_dit_weights=False,**retired_options):
         global _service
         from patches.h3_configuration import check_retired_loader_options
         check_retired_loader_options(retired_options)

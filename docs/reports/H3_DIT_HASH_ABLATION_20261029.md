@@ -9,11 +9,11 @@ are byte-identical. This is not a full-model or full-pipeline speedup claim.
 
 Does trusting an already validated bake remove enough work from the inference critical path to matter, with the persistent queue and P0/P1 scheduling enabled?
 
-`RuntimeConfig.verify_dit_weights` and the appended `MiniMaxH3TP2Loader` widget default to `True`. Setting the flag to `False` skips DiT safetensors payload SHA256 and loaded tensor-state hashes, including the PTD monolithic refiner/output-head overlays. It also covers ordinary DiT TP2 bundles and disk-baked LoRA replacements. TE verification remains enabled. Native safetensors readers have no newly introduced payload hashing to bypass.
+During this A/B, `RuntimeConfig.verify_dit_weights` and the appended loader widget defaulted to `True`; each measured arm selected its value explicitly. After reviewing the physical T4 result, the user promoted **`False` as the runtime/loader default** on 2026-10-29. Setting the flag to `False` skips DiT safetensors payload SHA256 and loaded tensor-state hashes, including the PTD monolithic refiner/output-head overlays. It also covers ordinary DiT TP2 bundles and disk-baked LoRA replacements. Explicit `True` remains available. TE verification remains enabled. Native safetensors readers have no newly introduced payload hashing to bypass.
 
 The trusted arm still checks small descriptors, manifests, bake receipts, provenance, tensor schemas, and size/mtime signatures. This is a bulk payload/tensor hashing ablation, not removal of all metadata validation. Bake-time numerical/provenance checks and immutable download validation remain outside inference timing. A trusted file with changed bytes and unchanged size/mtime can be consumed without detection; the corruption test explicitly demonstrates that difference. The mode is therefore a deliberate trust assumption, not an equivalent integrity check.
 
-The flag participates in reader identity to prevent cross-mode cache reuse. Queued hop readers copy the mode without mutating the admitted base reader. Existing workflows retain verification unless explicitly opted out; the new widget is appended after existing loader widgets.
+The flag participates in reader identity to prevent cross-mode cache reuse. Queued hop readers copy the mode without mutating the admitted base reader. Existing workflows with an explicit saved `True` retain that choice; new/default runtime construction trusts the bake. The widget remains in its appended position. Low-level readers retain verified defaults for baking and integrity tools; the runtime passes its trusted/verified choice explicitly.
 
 ## Why first use and reload differ
 
@@ -47,8 +47,8 @@ Local conda CPU regression: 207 passed, no failures/errors/skips. The extracted 
 `benchmarks/build_dit_hash_job.py` requires a matching Kaggle CPU setup and experiment receipt before GPU submission. The CPU job has a 600-second setup watchdog and 180-second contract watchdog. The T4 experiment has a 2400-second execution watchdog and 3300-second provider limit, zero dataset/output mounts, no credentials and no status polling. Artifact transfer may be retried under the repository's existing policy.
 
 Local evidence: `D:\attention_eval\h3_dit_hash_ablation_20261029\`. T4 results
-are recorded below. Verification remains the runtime default; this experiment
-does not change that policy.
+are recorded below. The user subsequently promoted trusted-bake loading to the
+runtime default; the original A/B artifacts remain unchanged.
 
 Kaggle CPU preflight version 1 failed; final artifacts were collected once.
 Immutable source commit: `e1093f1c3c9aeba12d9d0f42d5b47815d8d7f268`; capsule SHA256: `1246b03ba71c886884d39b0cc91d5c18ce0f255efeb7ed63239ee6327b155e09`.
@@ -188,8 +188,10 @@ For an explicitly trusted immutable bake, `verify_dit_weights=False` now has
 strong fixture-level performance evidence without changing numerical results.
 There is no reason to remove the cached verification implementation: retain
 the verified route for files that need consumption-time content checks. The
-default remains `True` pending a separate policy decision. No full-pipeline
-generation or additional GPU run was submitted during result collection.
+user subsequently selected default `False`, with `True` retained as an option.
+Download integrity and Native bake-time verification remain enabled. No
+full-pipeline generation or additional GPU run was submitted during this result
+collection; the later regular Turbo challenge is a separate batch.
 
 ## Final evidence collection
 
