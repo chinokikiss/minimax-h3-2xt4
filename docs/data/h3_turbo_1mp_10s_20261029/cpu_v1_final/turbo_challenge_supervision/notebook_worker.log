@@ -1,0 +1,20 @@
+test_export_slices_do_not_copy_or_change_native_decode (benchmarks.test_turbo_challenge.TurboChallenge.test_export_slices_do_not_copy_or_change_native_decode) ... ok
+test_missing_decoded_frames_or_audio_cannot_pass (benchmarks.test_turbo_challenge.TurboChallenge.test_missing_decoded_frames_or_audio_cannot_pass) ... ok
+test_native_grid_matches_the_requested_latent_geometry (benchmarks.test_turbo_challenge.TurboChallenge.test_native_grid_matches_the_requested_latent_geometry) ... ok
+test_online_ptd_lower_resolution_and_wrong_duration_rejected (benchmarks.test_turbo_challenge.TurboChallenge.test_online_ptd_lower_resolution_and_wrong_duration_rejected) ... ok
+test_only_geometry_and_export_change_from_regular_turbo (benchmarks.test_turbo_challenge.TurboChallenge.test_only_geometry_and_export_change_from_regular_turbo) ... ok
+test_runtime_keeps_current_operators_and_trusted_bake_default (benchmarks.test_turbo_challenge.TurboChallenge.test_runtime_keeps_current_operators_and_trusted_bake_default) ... ok
+test_exact_requested_workload_and_native_frame_grid (benchmarks.test_anime_e2e.AnimeE2E.test_exact_requested_workload_and_native_frame_grid) ... ok
+test_real_eight_step_header_matches_all_native_targets (benchmarks.test_anime_e2e.AnimeE2E.test_real_eight_step_header_matches_all_native_targets) ... ok
+test_sampler_resolution_prompt_and_adapter_substitution_rejected (benchmarks.test_anime_e2e.AnimeE2E.test_sampler_resolution_prompt_and_adapter_substitution_rejected) ... ok
+test_staged_reference_is_verified_without_any_network_access (benchmarks.test_anime_e2e.AnimeE2E.test_staged_reference_is_verified_without_any_network_access) ... ok
+test_correctly_tagged_temporal_decode_is_not_denoising (benchmarks.test_e2e_attention_validation.E2EAttentionValidation.test_correctly_tagged_temporal_decode_is_not_denoising) ... ok
+test_genuine_extra_attention_inside_a_denoiser_is_still_counted (benchmarks.test_e2e_attention_validation.E2EAttentionValidation.test_genuine_extra_attention_inside_a_denoiser_is_still_counted) ... ok
+test_incomplete_or_duplicate_completion_markers_are_rejected (benchmarks.test_e2e_attention_validation.E2EAttentionValidation.test_incomplete_or_duplicate_completion_markers_are_rejected) ... ok
+test_old_temporal_decode_with_stale_denoise_tag_is_separated (benchmarks.test_e2e_attention_validation.E2EAttentionValidation.test_old_temporal_decode_with_stale_denoise_tag_is_separated) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 7.704s
+
+OK
+{"status": "turbo_challenge_cpu_ready", "capsule_sha256": "21abe7dd91f284eed9626bb018c6abf66adf1c066b2f76662d72ce53d46d41a1", "no_weights_fetched": true, "gpu_used": false, "ptd": false, "online_lora": false, "full_pipeline_authorized": true, "workload": {"width": 1344, "height": 768, "output_megapixels": 1.032192, "native_frames": 243, "native_duration_seconds": 10.125, "export_frames": 240, "export_duration_seconds": 10.0, "video_latent_shape": [1, 24, 72, 48, 84], "generated_video_tokens": 72576, "audio_latent_t": 405, "note": "Actual TE/reference/packed sequence lengths are captured during execution"}, "references": [{"file": "reference_character.jpg", "bytes": 317018, "sha256": "e5b1710572f2587f7927e65b9e5f8f742bc435ca388ae23a16880fa6bf542383", "size": [1280, 905]}, {"file": "reference_shrine.png", "bytes": 7703256, "sha256": "cd4cbfd7137b80e85e64ada86ffd93e512b874de84cb4291fc0278b747461e03", "size": [4096, 2048]}], "contract_tests": 14, "lora_targets": 208, "native_frame_grid": true, "trusted_bake_default": true}
