@@ -16,6 +16,10 @@ def worker(rank, config, budget, port, connection):
     # production loader. Nested spans overlap and must never be added blindly.
     import patches.ptd.queue as queue
     import patches.ptd.bank as bank
+    hash_observer=None
+    if os.environ.get('H3_PTD_HASH_ABLATION')=='1':
+        from dit_hash_observer import HashObserver
+        hash_observer=HashObserver()
 
     def timed(name, function, select=None, reader_index=None):
         def call(*args, **kwargs):
@@ -41,6 +45,7 @@ def worker(rank, config, budget, port, connection):
             rows.append(dict(row,default_stream_interval_ms=start.elapsed_time(stop)
                              if stop.query() else None))
         return dict(rank=rank,spans=rows,peak_allocated=torch.cuda.max_memory_allocated(rank),
+            hash_verification=hash_observer.report() if hash_observer is not None else None,
             peak_reserved=torch.cuda.max_memory_reserved(rank),rss_bytes=psutil.Process().memory_info().rss,
             cpu_preparation_spans=list(preparations),
             measurement='RPC dispatch wall/thread CPU; CUDA default-stream intervals include idle/waits, not a kernel-time sum',
@@ -72,3 +77,4 @@ def worker(rank, config, budget, port, connection):
     try: runtime._worker(rank,config,budget,port,connection)
     finally:
         persist(report())
+        if hash_observer is not None:hash_observer.close()

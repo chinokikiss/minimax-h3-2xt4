@@ -49,7 +49,8 @@ class ProductionFusion(unittest.TestCase):
         import custom_nodes.minimax_h3_tp2 as node
         policy=H3OperatorPolicy()
         widgets=list(node.MiniMaxH3TP2Loader.INPUT_TYPES()['optional'])
-        self.assertEqual(widgets[-5:],['aot_precompile','dit_fused_norm','dit_fused_gate','dit_fused_row_gate','dit_prepared_attention'])
+        start=widgets.index('aot_precompile')
+        self.assertEqual(widgets[start:start+5],['aot_precompile','dit_fused_norm','dit_fused_gate','dit_fused_row_gate','dit_prepared_attention'])
         for key in ('dit_fused_norm','dit_fused_gate','dit_fused_row_gate','dit_prepared_attention'):
             self.assertTrue(getattr(policy,key))
             self.assertTrue(node.MiniMaxH3TP2Loader.INPUT_TYPES()['optional'][key][1]['default'])

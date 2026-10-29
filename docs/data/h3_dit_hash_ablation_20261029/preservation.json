@@ -1,0 +1,41 @@
+{
+  "parent_sha256": "3b24746a0a09a9f87fbf8c39ae0f587fbd2bbabb8a8169be499feac814c21557",
+  "frozen_archive_and_lock_sha256": {
+    "direct_core_requirements.json": "50eb673de9cb28e6b17a4c59997793eb3ed2df68d7da6a8d2fe9d5761aef9db3",
+    "frozen/comfy_source.tar.gz.bin": "97cb93348993c7ff9a1390680ca4509d2880712707ae5bb249a1f4b2e8a92ebc",
+    "frozen/constraints-local-conda.txt": "5a94152799828ea794a0f84ddd925df76967a89692b24a13f3ee16b3b254f573",
+    "frozen/frozen_kaggle_setup.py": "fd6c168e576e8b654803408380985260d1f38c651e5698644d6cb27674ecc318",
+    "frozen/local_conda.json": "e3a07afb8cb79e6f45c9c0118debc4bd4008c022d2652e0891273dac2db07aa3",
+    "frozen/requirements-local-conda.txt": "81e4f75c02676e0bdb7e35cb5ad3746465053935a23e764be7c385d46585c3f7"
+  },
+  "native_comfyui_preserved": true,
+  "core_pins_preserved": true,
+  "unrelated_dirty_changes_excluded": true,
+  "weights_downloaded_locally": false,
+  "overlays": {
+    "patches/tilelang_dit_fusion.py": "84711b6863aac3f160a096652f1c12ae5ce268eb4e7830668b9a43bc1a2188c7",
+    "patches/tp_dit.py": "66a3abfa0f01330ca0b8760b4ba3905fa785b50b39df902e439dfacaeb1b2edc",
+    "patches/h3_tensor_flow.py": "fadf4dda40bb0bffc89f98a3ca700157f2f2c74876180b902b40a65a4d6115c8",
+    "patches/tilelang_transport_p2.py": "fbf4e09f01d40faeb4842dde2d53eede502e66d095a93e43756c4ec0e1b5b30a",
+    "patches/tilelang_swiglu_quant.py": "30aa9f7bb164107edc053813d6ef9dad45031413e7eba8e49ac92408e81d289f",
+    "patches/h3_operator_aot.py": "bd1075ec7266764d20b9e4e4ba801af9e56b41d871011073994e4f3eddc0663e",
+    "patches/h3_operator_dependencies.py": "2720726bb8841e4628e3851b6263c5a34085a2b2d31aee9c30f2f24fe45e1575",
+    "patches/h3_operator_policy.py": "b09be56093df10c56455c61eacb5822eec661acb9bb72402ca7967b786a9dbaf",
+    "patches/comfy_tp_runtime.py": "faa8e7b818fbb85130c5b44e0df0794731bc6472f5ddeab958924dc9b1ae509c",
+    "custom_nodes/minimax_h3_tp2/__init__.py": "90b2db58f62277ec6632edf0e50adef25ea004f8d86f29966c3d0374346e1cf3",
+    "patches/tp2_bundle.py": "0be7ecd3d141ad171792dda8dc5eb68b03e3e3a2d739a5a1ec9d74000f05804f",
+    "patches/tp2_disk_bake.py": "9edab2173f168e024d1d05ce54cd40f39489037425680c214ed8be88952f5f84",
+    "patches/ptd/bank.py": "32c74f0ab3617a1dbc4852f8bd3d7fece50d2b3fbeb1e9a552aed22c72054a50",
+    "patches/ptd/runtime.py": "3cc7c31b13963a93442cc15fedba3b6a7187a2fd16bcda7c6c63fa8cf6ff7b2d",
+    "benchmarks/test_h3_optimization_batch.py": "b0c00cb054ab494dd1d1d3946915aa6d1fd41a57047d0a85662a153efe4ed408",
+    "benchmarks/test_h3_dit_fusion.py": "bb40b83d03f2b189f2ed18eb9cbb289e910e6eb4d502a71168822a875cf2b1c9",
+    "benchmarks/run_review_cpu.py": "444996816d62c63d21cbda342be6540651d9b37d12ec6eba56794254c7c20a0f",
+    "benchmarks/dit_hash_observer.py": "40776772a16f738774149ff729680cca1a1c9d5c4261be55915b7eac35097734",
+    "benchmarks/test_dit_hash_ablation.py": "2ab784772e83f8553668a225e97333d5b5c6502d38d308580c73a10aa8899c8c",
+    "benchmarks/run_dit_hash_ablation.py": "405e8aa58ac99105791ae1bd6513036ba51513ae0b1d4e4e7880da0593d496ee",
+    "benchmarks/ptd_worker_probe.py": "33c3518eba09d04e37429313f669e5287cb105a5645c05d5cd720ad7ef79581c",
+    "benchmarks/run_ptd_tp2_t4.py": "8b486092c0357ab8f52887165b590af507bd4f807fb4efcb92c90df7d876b585",
+    "benchmarks/build_dit_hash_job.py": "53f38bd3cdf767d436f7919ae12542c38d6cdbd7db9b187bda841c56e9ae8da9",
+    "benchmarks/build_dit_hash_delivery.py": "d42b9b49ac64ff46c1c72b3ef3bb4b0f9532fb694d740728143bd838c57fbd5c"
+  }
+}

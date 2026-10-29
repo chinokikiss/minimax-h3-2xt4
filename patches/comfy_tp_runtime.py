@@ -67,8 +67,10 @@ class RuntimeConfig:
     video_decode_reserve_bytes: int = 2 * GiB
     bundle_offline_lora: bool = False
     lora_selective_qkv_b: bool = True
+    verify_dit_weights: bool = True
 
     def __post_init__(self):
+        if type(self.verify_dit_weights) is not bool:raise ValueError('verify_dit_weights must be boolean')
         if not isinstance(self.tensor_flow,TensorFlowPolicy):raise ValueError('TensorFlowPolicy required')
         if self.tensor_flow.mode=='bf16_reference':raise ValueError('BF16 reference is a local component test mode, not a T4 deployment mode')
         if not isinstance(self.operators,H3OperatorPolicy):raise ValueError('H3OperatorPolicy required')
@@ -128,7 +130,8 @@ class RankRuntime:
     def __init__(self, config, rank, device, comm, budget):
         self.config, self.rank, self.device, self.comm = config, rank, torch.device(device), comm
         from patches.tp2_bundle import open_checkpoint,BundleReader
-        self.readers = {'te': open_checkpoint(config.te_path), 'dit': open_checkpoint(config.dit_path)}
+        dit_options={} if config.verify_dit_weights else dict(verify_dit_weights=False)
+        self.readers = {'te': open_checkpoint(config.te_path), 'dit': open_checkpoint(config.dit_path,**dit_options)}
         for reader in self.readers.values():
             reader.operator_policy=config.operators
             reader.tensor_flow=config.tensor_flow

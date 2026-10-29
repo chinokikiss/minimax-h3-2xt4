@@ -31,14 +31,14 @@ def signature(path):
     s=Path(path).stat(); return s.st_size,s.st_mtime_ns
 
 
-def open_checkpoint(path):
+def open_checkpoint(path,*,verify_dit_weights=True):
     if Path(path).suffix.lower()=='.json':
         value=json.loads(Path(path).read_text())
         if value.get('format')=='h3-tp2-disk-baked-v1':
             from patches.tp2_disk_bake import DiskBakedReader
-            return DiskBakedReader(path,value)
+            return DiskBakedReader(path,value,verify_payloads=verify_dit_weights)
         if value.get('format')!=DESCRIPTOR: raise ValueError('Unknown checkpoint descriptor')
-        return BundleReader(path,value)
+        return BundleReader(path,value,verify_payloads=verify_dit_weights if value.get('kind')=='dit' else True)
     return CheckpointReader(path)
 
 
@@ -66,11 +66,14 @@ def join_matrix(first, second, name, *, scale=False):
 
 
 class BundleReader:
-    def __init__(self,path,descriptor=None):
+    def __init__(self,path,descriptor=None,*,verify_payloads=True):
         self.path=Path(path).resolve(); self.signature=signature(self.path)
         value=descriptor or json.loads(self.path.read_text())
         if value.get('format')!=DESCRIPTOR or value.get('kind') not in ('te','dit'): raise ValueError('Invalid bundle descriptor')
         self.kind=value['kind']; self.root=(self.path.parent/value['bundle_root']).resolve()
+        if type(verify_payloads) is not bool or (self.kind!='dit' and not verify_payloads):
+            raise ValueError('Trusted payload ablation is restricted to DiT')
+        self.verify_payloads=verify_payloads
         self.bundle_file=self.root/'bundle.json'
         if sha(self.bundle_file)!=value['bundle_sha256']: raise ValueError('Bundle index checksum mismatch')
         self.bundle_signature=signature(self.bundle_file)
@@ -84,7 +87,7 @@ class BundleReader:
         if hashlib.sha256(json.dumps(self.header,sort_keys=True).encode()).hexdigest()!=value['native_header_sha256']:
             raise ValueError('Native header checksum mismatch')
         self.aux=CheckpointReader((self.path.parent/value['auxiliary_file']).resolve())
-        if sha(self.aux.path)!=value['auxiliary_sha256']: raise ValueError('Auxiliary checkpoint checksum mismatch')
+        if verify_payloads and sha(self.aux.path)!=value['auxiliary_sha256']: raise ValueError('Auxiliary checkpoint checksum mismatch')
         prefix='model.layers.' if self.kind=='te' else 'blocks.'
         names={n for n in self.header if n!='__metadata__' and not n.startswith(prefix)}
         if names!={n for n in self.aux.header if n!='__metadata__'}: raise ValueError('Auxiliary tensor coverage mismatch')
@@ -92,6 +95,7 @@ class BundleReader:
             if any(self.header[name][k]!=self.aux.header[name][k] for k in ('dtype','shape')):
                 raise ValueError('Auxiliary tensor schema mismatch')
         self.identity=('tp2-bundle-v1',str(self.path),*self.signature,value['bundle_sha256'],value['source']['sha256'],value['auxiliary_sha256'])
+        if not verify_payloads:self.identity=(*self.identity,'trusted-dit-payloads-v1')
         self.read_lock=threading.RLock(); self.prepare_lock=threading.Lock()
         self.logical_read_bytes=self.range_read_calls=0
         self.verified={}; self.state_verified={}; self.shard_readers={}
@@ -130,7 +134,7 @@ class BundleReader:
                 raise ValueError('Unqualified bundle shard')
             if any(m[k]!=expected[k] for k in ('kind','index','rank','state_sha256','quant_metadata')):
                 raise ValueError('Shard differs from Native tensor proof')
-            if sha(path)!=m['file_sha256']: raise ValueError('Shard file checksum mismatch')
+            if self.verify_payloads and sha(path)!=m['file_sha256']: raise ValueError('Shard file checksum mismatch')
             if before!=(signature(path),signature(manifest_path)):
                 raise RuntimeError('Bundle shard changed during validation')
             self.verified[str(path)],self.verified[str(manifest_path)]=before
@@ -210,7 +214,7 @@ class BundleReader:
             module.load_state_dict(state,strict=True,assign=True)
             stem=f'{self.kind}.block{index:02d}.rank{rank}'
             proof=(self.verified[str(source.path)],self.verified[str(self.root/(stem+'.json'))])
-            if self.state_verified.get(stem)!=proof:
+            if self.verify_payloads and self.state_verified.get(stem)!=proof:
                 if state_hashes(module)!=expected['state_sha256']: raise ValueError('Rank tensors differ from Native proof')
                 self._shard(index,rank)  # Reject mutation during the payload proof.
                 self.state_verified[stem]=proof

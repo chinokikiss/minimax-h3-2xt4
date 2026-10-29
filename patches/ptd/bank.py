@@ -233,7 +233,9 @@ def bake(base_descriptor, checkpoint_path, output='/tmp/h3_ptd_refasymopd', *,
 
 
 class PTDBank:
-    def __init__(self, path, *, allow_fixture=False, expected_sha256=None):
+    def __init__(self, path, *, allow_fixture=False, expected_sha256=None,verify_payloads=True):
+        if type(verify_payloads) is not bool:raise ValueError('Explicit payload verification boolean required')
+        self.verify_payloads=verify_payloads
         self.path = Path(path).resolve()
         self.signature = signature(self.path)
         raw = self.path.read_bytes()
@@ -258,7 +260,7 @@ class PTDBank:
         self.base = Path(self.recipe['base'])
         if sha(self.base) != self.recipe['base_sha256']:
             raise ValueError('PTD base descriptor changed')
-        base = BundleReader(self.base)
+        base = BundleReader(self.base,verify_payloads=verify_payloads)
         if sha(base.bundle_file) != self.recipe['base_bundle_sha256']:
             raise ValueError('PTD base bundle changed')
         self.signatures = {self.path: self.signature, self.base: signature(self.base),
@@ -304,7 +306,7 @@ class HopReader(BundleReader):
         if type(hop) is not int or not 0 <= hop < 8:
             raise ValueError('PTD hop must be 0-7')
         if base_reader is None:
-            super().__init__(bank.base)
+            super().__init__(bank.base,verify_payloads=getattr(bank,'verify_payloads',True))
         else:
             if type(base_reader) is not BundleReader or base_reader.path != bank.base:
                 raise ValueError('Queued reader needs the already admitted immutable base')
@@ -314,6 +316,7 @@ class HopReader(BundleReader):
             self.verified, self.state_verified, self.shard_readers = {}, {}, {}
             self.stats = dict(base_reader.stats)
         self.bank, self.hop = bank, hop
+        self.verify_payloads=getattr(bank,'verify_payloads',True)
         self.root, receipt = bank.hops[hop]
         self.recipe_sha256 = bank.recipe_sha
         self.baked_records = receipt['shards']
@@ -332,6 +335,7 @@ class HopReader(BundleReader):
         self.overlay_lock = threading.Lock()
         self.refiner_enabled, self.heads_enabled = refiner, heads
         self.identity = (*self.identity, FORMAT, bank.recipe_sha, bank.digest, hop, bool(refiner), bool(heads))
+        if not self.verify_payloads:self.identity=(*self.identity,'trusted-dit-payloads-v1')
 
     def _check_roots(self):
         super()._check_roots()
@@ -354,7 +358,7 @@ class HopReader(BundleReader):
         """Verify once on first consumption; retain signature guards on later reads."""
         with self.overlay_lock:
             if not self.overlay_verified:
-                if sha(self.overlay.path) != self.overlay_sha:
+                if self.verify_payloads and sha(self.overlay.path) != self.overlay_sha:
                     raise ValueError('PTD auxiliary overlay hash mismatch')
                 if signature(self.overlay.path) != self.overlay.signature:
                     raise RuntimeError('PTD overlay changed during validation')

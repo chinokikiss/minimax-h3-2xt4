@@ -21,7 +21,7 @@ NAMES=['test_pipeline_review','test_dit_temporaries','test_tp2_bundle',
     'test_idle_lifecycle','test_idle_identity','test_review_optimizations','test_review_t4',
     'test_h3_configuration_defaults','test_te_loading','test_tp2_disk_bake','test_h3_l1_turbo_e2e',
     'test_temporal_vae','test_temporal_delivery','test_e2e_attention_validation',
-    'test_h3_dit_fusion','test_h3_optimization_batch.Operators']
+    'test_h3_dit_fusion','test_h3_optimization_batch.Operators','test_dit_hash_ablation.HashAblation']
 
 
 def main():

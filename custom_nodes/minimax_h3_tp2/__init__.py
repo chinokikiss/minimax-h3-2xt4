@@ -53,7 +53,8 @@ class MiniMaxH3TP2Loader:
                         'dit_fused_norm':('BOOLEAN',{'default':True,'tooltip':'T4 FP16 RMS + AdaLN fusion, with FP32 statistics. Slight reduction-order differences; disable for the original path.'}),
                         'dit_fused_gate':('BOOLEAN',{'default':True,'tooltip':'T4 FP16 gated residual fusion with FP32 FMA and FP16 storage.'}),
                         'dit_fused_row_gate':('BOOLEAN',{'default':True,'tooltip':'Fuse scaled-FP16 row epilogue and residual gate for offline/baked DiT. Online LoRA and unsupported routes retain separate operations.'}),
-                        'dit_prepared_attention':('BOOLEAN',{'default':True,'tooltip':'Prepare Kitchen INT8 attention, release floating QKV, then execute. Other attention backends remain unchanged.'})}}
+                        'dit_prepared_attention':('BOOLEAN',{'default':True,'tooltip':'Prepare Kitchen INT8 attention, release floating QKV, then execute. Other attention backends remain unchanged.'}),
+                        'verify_dit_weights':('BOOLEAN',{'default':True,'tooltip':'Default verifies DiT payload and tensor hashes on first consumption. Disable only for the trusted-bake A/B; metadata and file-signature checks remain.'})}}
 
     RETURN_TYPES = ('MODEL', 'CLIP', 'MINIMAX_TP2_SESSION')
     FUNCTION = 'load'
@@ -73,7 +74,8 @@ class MiniMaxH3TP2Loader:
              prefetch_lifecycle=True,memory_pressure_aware=True,dit_reserve_gib=9.,
              command_timeout_seconds=1500,rank_checkpoint_dir='',
              lora_selective_qkv_b=True,column_linear_backend='cuda_int8_tilelang',dit_rms_rope='tilelang_fp32',aot_precompile=True,
-             dit_fused_norm=True,dit_fused_gate=True,dit_fused_row_gate=True,dit_prepared_attention=True,**retired_options):
+             dit_fused_norm=True,dit_fused_gate=True,dit_fused_row_gate=True,dit_prepared_attention=True,
+             verify_dit_weights=True,**retired_options):
         global _service
         from patches.h3_configuration import check_retired_loader_options
         check_retired_loader_options(retired_options)
@@ -100,6 +102,7 @@ class MiniMaxH3TP2Loader:
             timeout_seconds=int(command_timeout_seconds),
             rank_checkpoint_dir=str(Path(rank_checkpoint_dir).resolve()) if rank_checkpoint_dir else None,
             lora_selective_qkv_b=bool(lora_selective_qkv_b),
+            verify_dit_weights=verify_dit_weights,
             idle_weight_bytes=int(idle_weight_gib*GiB),lora_stack=tuple(lora_stack),
             bundle_offline_lora=bundle_offline,
             lora_row_partial_reduce=bool(lora_row_partial_reduce),

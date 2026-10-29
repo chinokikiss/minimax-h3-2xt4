@@ -39,7 +39,7 @@ def state_proof(state):
 
 class DiskBakedReader(BundleReader):
     """Base provenance plus hash-bound disk replacements, without online LoRA."""
-    def __init__(self, path, descriptor=None):
+    def __init__(self, path, descriptor=None,*,verify_payloads=True):
         path = Path(path).resolve()
         value = descriptor or json.loads(path.read_text())
         if value.get('format') != DESCRIPTOR:
@@ -48,7 +48,7 @@ class DiskBakedReader(BundleReader):
         receipt = (path.parent / value['receipt']).resolve()
         if sha(base) != value['base_descriptor_sha256'] or sha(receipt) != value['receipt_sha256']:
             raise ValueError('Disk-baked source/receipt checksum mismatch')
-        super().__init__(base)
+        super().__init__(base,verify_payloads=verify_payloads)
         if self.kind != 'dit':
             raise ValueError('Only DiT receives offline LoRA')
         record = json.loads(receipt.read_text())
@@ -75,7 +75,7 @@ class DiskBakedReader(BundleReader):
                 raise ValueError('Baked shard base proof mismatch')
             self.plan['blocks'][stem] = dict(original, state_sha256=row['state_sha256'])
         auxiliary = self.root / 'dit_aux.safetensors'
-        if sha(auxiliary) != record['auxiliary_sha256']:
+        if self.verify_payloads and sha(auxiliary) != record['auxiliary_sha256']:
             raise ValueError('Baked auxiliary checksum mismatch')
         self.aux = CheckpointReader(auxiliary)
         self.identity = (*self.identity, DESCRIPTOR, self.recipe_sha256, value['receipt_sha256'])
@@ -107,7 +107,8 @@ class DiskBakedReader(BundleReader):
             if (proof['format'] != SHARD or proof['recipe_sha256'] != self.recipe_sha256
                     or proof['state_sha256'] != row['state_sha256']
                     or proof['base_state_sha256'] != row['base_state_sha256']
-                    or proof['file_sha256'] != row['file_sha256'] or sha(path) != row['file_sha256']):
+                    or proof['file_sha256'] != row['file_sha256']
+                    or (self.verify_payloads and sha(path) != row['file_sha256'])):
                 raise ValueError('Baked shard payload/proof mismatch')
             if before != (signature(path), signature(manifest)):
                 raise RuntimeError('Baked shard changed during validation')

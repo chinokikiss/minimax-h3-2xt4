@@ -32,7 +32,7 @@ def resource_plan(base=None, *, header=None):
         host_bytes=20*2**30,reserve_bytes=4*2**30)
 
 
-def smoke(base, bank, output, handoff, resources, cpu_options=None):
+def smoke(base, bank, output, handoff, resources, cpu_options=None,*,verify_dit_weights=True):
     # Controls must remain explicit after promoting P1 as the runtime default.
     cpu_options=dict(future_cache=False,prefetch_refiner=False)|dict(cpu_options or {})
     import torch
@@ -47,7 +47,8 @@ def smoke(base, bank, output, handoff, resources, cpu_options=None):
     te = output/'unused_te.safetensors'; save_file({}, str(te))
     config = RuntimeConfig(str(te), str(base), layers=2,
         **{key:value for key,value in resources.items() if key.endswith('_bytes')},
-        cross_request_te=False,cross_model_cpu=False,timeout_seconds=420)
+        cross_request_te=False,cross_model_cpu=False,timeout_seconds=420,
+        verify_dit_weights=verify_dit_weights)
     generator = torch.Generator().manual_seed(20261028)
     noise = NestedTensor([torch.randn(1,24,1,4,4,generator=generator),
                           torch.randn(1,32,2,8,generator=generator)])
@@ -65,9 +66,13 @@ def smoke(base, bank, output, handoff, resources, cpu_options=None):
     import patches.comfy_tp_runtime as runtime
     from ptd_worker_probe import worker
     os.environ['H3_PTD_PROBE_DIR']=str(output)
+    startup_begin=time.monotonic()
     with patch.object(runtime,'_worker',worker), closing(PhysicalTPService(config)) as service:
+        startup_seconds=time.monotonic()-startup_begin
+        controller_begin=time.monotonic()
         controller = TimedController(service,bank,PTDOptions(enabled=True,allow_fixture=True,
             allow_pruned_adaln=True,hop_handoff=handoff,**(cpu_options or {})))
+        controller_seconds=time.monotonic()-controller_begin
         # Compilation is explicit and separate from expert execution. The
         # real H3 rotation is 96/128, not the historical 128/128 rehearsal.
         start=time.monotonic(); aot=service.call('prepare_dit',layout.seq_len)
@@ -115,6 +120,8 @@ def smoke(base, bank, output, handoff, resources, cpu_options=None):
         assert all(len(row['ptd_probe']['spans'])==16 and all(span['default_stream_interval_ms'] is not None
             for span in row['ptd_probe']['spans']) for row in restored), 'Incomplete worker metric capture'
     return dict(status='complete',hop_handoff=handoff,hops=selected['calls'],hop_seconds=timings,
+        verify_dit_weights=verify_dit_weights,startup_seconds=startup_seconds,
+        controller_admission_seconds=controller_seconds,
         cpu_options=cpu_options or {},
         selection_seconds=handoffs,hop_output_sha256=hashes,queue_states=queue_states,
         final_sha256=[hashlib.sha256(v.contiguous().view(torch.uint8).numpy().tobytes()).hexdigest() for v in final.unbind()],
