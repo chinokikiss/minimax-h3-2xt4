@@ -55,10 +55,21 @@ def collect(submission,output,*,run=subprocess.run):
                 status['status']='source_binding_mismatch'
             else:
                 status['status']='collected'
-                result=read(output/state['result_relative'])
-                status['experiment']=dict(status=result['status'],scope=expected['scope'],
-                    completed_trials=len(result.get('trials',[])),upload_methods=result.get('methods',[]),
-                    acceptance='CPU study only; inspect cache/authentication/privacy limitations')
+                relative=Path(state['result_relative'])
+                if relative.is_absolute() or '..' in relative.parts:raise ValueError('Result must stay inside collected outputs')
+                if (output/relative).exists():
+                    result=read(output/relative)
+                    status['experiment']=dict(status=result['status'],scope=expected['scope'],
+                        completed_trials=len(result.get('trials',[])),upload_methods=result.get('methods',[]),
+                        phase=result.get('phase'),error_type=result.get('error_type'),
+                        acceptance='CPU study only; inspect cache/authentication/privacy limitations')
+                else:
+                    supervision=output/(kind+'_supervision')/'supervision.json'
+                    worker=read(supervision) if supervision.exists() else {}
+                    status['experiment']=dict(status='failed_before_result' if worker.get('exit_code') else 'result_missing',
+                        scope=expected['scope'],worker_exit_code=worker.get('exit_code'),
+                        blocker='Final result file missing; inspect retained worker log and supervision receipt',
+                        acceptance='Artifact collection succeeded; this is not a successful study')
             write(status_path(submission),status)
             return status
         binding=output/'light_setup/delivery_binding.json'

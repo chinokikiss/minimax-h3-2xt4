@@ -1,0 +1,14 @@
+{
+  "artifact_collection": "complete",
+  "source_binding_verified": true,
+  "artifacts": 7,
+  "experiment": "failed_before_upload",
+  "worker_seconds": 4.3347439670000085,
+  "worker_exit_code": 1,
+  "cause": "Scratch parent /kaggle/temp absent; mkdir lacked parents=True",
+  "upload_attempts": 0,
+  "collector_issue": "Missing result.json incorrectly raised a second FileNotFoundError",
+  "local_regression_tests_passed": 6,
+  "replacement_submitted": false,
+  "other_jobs_queried": false
+}

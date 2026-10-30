@@ -18,7 +18,7 @@
   },
   "run_timeout_seconds": 840,
   "earliest_final_collection_seconds": 840,
-  "final_collection_count": 0,
+  "final_collection_count": 1,
   "result_relative": "dataset_upload/result.json",
   "experiment_kind": "dataset_upload",
   "submitted_code_sha256": "029cf1732feb1a0e0e26d0cef46d54d2502ef93dca09ed115e0652ccb0a37b59",

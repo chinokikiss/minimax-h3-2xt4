@@ -1,7 +1,8 @@
 # Seed repeat and dataset I/O studies — 2026-10-30
 
 Kaggle accepted **three version-1 submissions**: exactly one GPU notebook and
-two CPU notebooks. **Execution results are pending.** No status/list/live-log
+two CPU notebooks. **GPU/read results remain pending; upload version 1 failed
+before any upload attempt.** No status/list/live-log
 polling, automatic resubmission or additional H3 CPU smoke job is configured.
 
 | Notebook | Scope | Provider execution limit |
@@ -83,6 +84,35 @@ The worker has a 1,150 s watchdog and a 1,020 s trial-scheduling deadline.
 Source installation, H3 imports and GPU allocation are absent.
 
 ## CPU upload study: native clients and authentication
+
+### Version 1 failure and prepared fix
+
+The final worker log establishes a probe setup bug, not an upload-client or
+authentication failure: `/kaggle/temp` did not exist, and the probe called
+`base.mkdir(exist_ok=False)` without creating its parents. It raised
+`FileNotFoundError` after **4.335 s**, before generating the synthetic payload
+or invoking any upload operation. No private probe dataset was created by
+the study. Native CLI inspection printed **Kaggle 2.0.2**, and native
+KaggleHub upload source inspection succeeded; no package was upgraded.
+These observations do not qualify either client's upload path or credentials.
+
+The bug is fixed with parent-aware, non-overwriting scratch creation. The
+probe now writes its initial state and phase before inspection/preparation and
+retains a structured error receipt if an early failure occurs. The artifact
+collector was also corrected: a source-verified failed worker with no final
+`result.json` is reported as `failed_before_result`, rather than throwing a
+second `FileNotFoundError` that obscures the worker failure.
+
+**Six local regression tests passed**, including missing-parent payload
+creation, bounded block generation, early-error persistence and collection of
+a failed worker without a final result. Tests used no network, credentials,
+models or GPU. All seven final artifacts were retained with verified source
+and content hashes. The initial collector error is preserved separately.
+The original submitted source/results are unchanged.
+
+A corrected CPU retry is prepared separately; **no replacement has been
+submitted** under the one-submission/no-automatic-resubmission rule. The GPU
+and read study were not queried or resubmitted during this investigation.
 
 The study records the actually installed Kaggle/KaggleHub/SDK versions and
 function signatures without upgrading or installing clients. It examines:

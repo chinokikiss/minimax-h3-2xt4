@@ -8,6 +8,23 @@ from benchmarks.collect_kaggle_final_once import collect
 
 
 class FinalCollection(unittest.TestCase):
+    def test_dataset_failure_without_result_preserves_worker_exit(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary);path=self.fixture(root);out=root/'output'
+            binding=dict(kind='dataset_upload',scope='Synthetic CPU probe')
+            state=json.loads(path.read_text());state.update(experiment_kind='dataset_upload',
+                source_binding=binding,result_relative='dataset_upload/result.json');path.write_text(json.dumps(state))
+            def run(*args,**kw):
+                p=out/'dataset_upload/source_binding.json';p.parent.mkdir()
+                p.write_text(json.dumps(binding))
+                p=out/'dataset_upload_supervision/supervision.json';p.parent.mkdir()
+                p.write_text(json.dumps(dict(status='worker_exited',exit_code=1)))
+                return SimpleNamespace(returncode=0,stdout='',stderr='')
+            receipt=collect(path,out,run=run)
+            self.assertEqual(receipt['status'],'collected')
+            self.assertEqual(receipt['experiment']['status'],'failed_before_result')
+            self.assertEqual(receipt['experiment']['worker_exit_code'],1)
+
     def fixture(self,root):
         path=root/'submission.json'
         path.write_text(json.dumps(dict(returncode=0,kernel='owner/kernel',final_collection_count=0,
