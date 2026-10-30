@@ -1,7 +1,7 @@
 # TE page-cache bypass and hash profiling — 2026-10-30
 
 **Version 1 failed before model download or TE execution. The small Linux
-O_DIRECT gate passed; TE performance remains unmeasured.** The user requests one additional
+O_DIRECT gate passed; TE performance remains unmeasured. Version 2 is accepted and pending.** The user requests one additional
 GPU instance to test whether bypassing the page cache with `O_DIRECT` reduces
 reclaim/refault activity and improves TE time. Hash verification is explicitly
 included in the profile and remains enabled in both arms.
@@ -55,7 +55,7 @@ obtained one file before another TLS EOF. A second bounded transfer retry using
 the existing certificate-verifying TLS 1.2 helper obtained all files. The
 original errors, partial manifest and retry receipts are retained. Signed
 artifact URLs remain private; public records contain only a sanitized transport
-error summary. No status/list/live-log polling or GPU resubmission occurred.
+error summary. No status/list/live-log polling or GPU resubmission occurred during v1 collection.
 
 Evidence:
 
@@ -225,7 +225,7 @@ Final artifacts have now been collected and validated as described above.
 Version 1 failed before the throughput/TE trials; it must not be reported as
 a completed performance comparison.
 
-### Corrected retry prepared, not submitted
+### Corrected retry preparation and accepted version 2
 
 A separate corrected notebook is ready at
 `D:\attention_eval\h3_te_direct_io_20261030\retry2\gpu_job\experiment.ipynb`.
@@ -233,5 +233,8 @@ Its benchmark sources are bound to commit `5e7cebb199d78f3d468c53255bd9dc09d8532
 `9648f491e69fca5e154f5403cd60b25db3d5b5a5315fba3d31785c678f8af1d5`. The builder's frozen-capsule rehearsal and seven CPU tests passed.
 The workload, A/B order, TE verification, operators, core pins and time bounds
 are unchanged. [Preparation receipt](../data/h3_te_direct_io_20261030/retry2/preparation.json)
-records **prepared_not_submitted**. No second GPU job has been submitted;
-the repository's one-job/no-automatic-resubmission rule remains in force.
+retains the historical **prepared_not_submitted** state. The user subsequently
+explicitly approved this retry, and Kaggle accepted **version 2**.
+[Submission receipt](../data/h3_te_direct_io_20261030/retry2/gpu_submission.json)
+records that one new submission. No status/list/live-log polling, final
+collection or further submission has occurred for v2. Results remain pending.

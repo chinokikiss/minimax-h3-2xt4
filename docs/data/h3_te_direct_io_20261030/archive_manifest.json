@@ -155,6 +155,14 @@
     "bytes": 1487,
     "sha256": "cb62051083d59ba1075d2b229243510d57832c6a9193058dd70f4813e67014c7"
   },
+  "retry2/gpu_submission.json": {
+    "bytes": 3828,
+    "sha256": "0008594e3f7e368049fa3c61d08042aec4194a2ed2635c2379bd1eda19e0cd97"
+  },
+  "retry2/gpu_submission_cli.log": {
+    "bytes": 267,
+    "sha256": "cd7c9315dd96391039803ff223cd6cf9772f26fa13f984985e6137f21891520b"
+  },
   "retry2/kernel-metadata.json": {
     "bytes": 468,
     "sha256": "24fe1d1eacf9ddcf214cc5413e4483ba8b3280676fe1d7aa77562d74bdd4a055"

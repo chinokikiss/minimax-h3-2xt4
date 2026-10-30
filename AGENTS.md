@@ -55,6 +55,11 @@
 - Reuse the matching already-passed CPU source/core qualification. Bind the new benchmark-only adapter/observers separately, test them locally and run a Linux alignment/byte/cache-bypass gate before TE execution. This authorizes no extra CPU instance or environment-only GPU test.
 - Use one private zero-mount submission with bounded execution, durable receipts and final artifacts only. O_DIRECT must not silently fall back to buffered weight reads. Do not alter global drop_caches, poll status/live logs, resubmit automatically or embed credentials.
 
+## Explicit TE O_DIRECT retry — 2026-10-30
+
+- After the frozen-helper import failure, the user explicitly answered yes to submitting the prepared corrected version 2. Submit that source-bound private T4 retry once, retaining the same workload, frozen runtime/core, operators, TE verification and measurement plan.
+- Version 2 was accepted. This authorization does not permit another automatic resubmission, status/live-log polling or an extra CPU instance. Collect final artifacts after the user reports completion; bounded transfer retries remain authorized.
+
 ## Authorized Kaggle exception — 2026-10-21
 
 - The user explicitly permits Kaggle's native Torch rather than reproducing the local Windows Torch/CUDA package stack. Keep its matching native Python/NumPy/Torchvision/Torchaudio/CUDA environment and record actual versions; do not modify the local conda environment or original snapshot.
