@@ -29,7 +29,7 @@ def main():
     p.add_argument('--reference-directory',type=Path,required=True);p.add_argument('--reference-mirror',type=Path,required=True)
     p.add_argument('--megapixels',choices=('0.9','0.85','0.8'),default='0.9')
     p.add_argument('--failed-result',type=Path)
-    p.add_argument('--failure-kind',choices=('oom','download'),default='oom')
+    p.add_argument('--failure-kind',choices=('oom','download','seed'),default='oom')
     p.add_argument('--submit',action='store_true');args=p.parse_args()
     assert re.fullmatch('[0-9a-f]{40}',args.control_commit)
     previous=args.previous.resolve();args.evidence.mkdir(parents=True,exist_ok=True)
@@ -42,20 +42,29 @@ def main():
     assert setup['capsule_sha256']==gate['capsule_sha256']==pub['capsule_sha256']
     failed_path=args.failed_result or previous/'kaggle/gpu_final/turbo_1mp_e2e/generation/result.json'
     failed=json.loads(failed_path.read_text(encoding='utf-8'))
-    assert failed['status']=='failed'
-    if args.failure_kind=='oom':assert 'out of memory' in failed['error'].lower()
-    else:assert '503' in failed['error'] and 'HfHubHTTPError' in failed['error']
+    if args.failure_kind=='seed':
+        assert failed['status']=='complete' and failed['completed_steps']==8
+        assert failed['request']['seed']==20261020 and (failed['request']['width'],failed['request']['height'])==(1216,704)
+    else:
+        assert failed['status']=='failed'
+        if args.failure_kind=='oom':assert 'out of memory' in failed['error'].lower()
+        else:assert '503' in failed['error'] and 'HfHubHTTPError' in failed['error']
     width,height,tag,slug={'0.9':(1280,704,'09mp','0-9mp'),'0.85':(1216,704,'085mp','0-85mp'),
         '0.8':(1184,672,'08mp','0-8mp')}[args.megapixels]
     plan=json.loads((previous/'delivery/plan.json').read_text());assert (plan['width'],plan['height'])==(1344,768)
     plan.update(width=width,height=height,name=f'turbo_{tag}_10s',
         source_note=f'Explicitly authorized {args.megapixels}MP retry after {args.failure_kind} failure; no new CPU smoke, same regular Turbo inputs/settings')
+    if args.failure_kind=='seed':
+        assert args.megapixels=='0.85'
+        tag='085mp_seed20261021'
+        plan.update(seed=20261021,name=f'turbo_{tag}_10s',
+            source_note='Authorized seed-only repeat of completed 0.85MP E2E; seed 20261021 replaces 20261020; same runtime, inputs and all other sampling settings')
     validate(plan)
     payload=subprocess.check_output(['git','show',args.control_commit+':'+MODULE],cwd=ROOT)
     assert payload.replace(b'\r\n',b'\n')==(ROOT/MODULE).read_bytes().replace(b'\r\n',b'\n')
     ast.parse(payload)
     additions=[]
-    if args.failure_kind=='download':
+    if args.failure_kind in ('download','seed'):
         module='benchmarks/run_h3_l1_turbo_batch.py'
         extra=subprocess.check_output(['git','show',args.control_commit+':'+module],cwd=ROOT)
         assert extra.replace(b'\r\n',b'\n')==(ROOT/module).read_bytes().replace(b'\r\n',b'\n')
@@ -70,6 +79,10 @@ def main():
         prior_failed_result_sha256=hashlib.sha256(failed_path.read_bytes()).hexdigest(),
         failure_kind=args.failure_kind,additional_files=[{k:v for k,v in item.items() if k!='payload_b85'} for item in additions])
     plan['geometry_retry_provenance']=overlay
+    if args.failure_kind=='seed':
+        overlay.pop('prior_failed_result_sha256')
+        overlay['baseline_result_sha256']=hashlib.sha256(failed_path.read_bytes()).hexdigest()
+        overlay['comparison']='Seed sensitivity only; not TE attention attribution'
     (args.evidence/'request.json').write_text(json.dumps(plan,indent=2))
     job=args.evidence/'gpu_job'
     subprocess.run([sys.executable,str(ROOT/'benchmarks/build_kaggle_light_job.py'),'--mode','e2e',
@@ -112,6 +125,8 @@ os.execve(sys.executable,argv,env)
     assert nbpath.stat().st_size<9_900_000
     meta=json.loads((job/'kernel-metadata.json').read_text())
     meta.update(id=f'pamcks/h3-turbo-{slug}-10s-t4-20261029',title=f'H3 Turbo {args.megapixels}MP 10s T4 20261029')
+    if args.failure_kind=='seed':
+        meta.update(id='pamcks/h3-turbo-seed-20261021-t4-20261030',title='H3 Turbo Seed 20261021 T4 20261030')
     assert meta['is_private'] and meta['dataset_sources']==meta['kernel_sources']==[]
     (job/'kernel-metadata.json').write_text(json.dumps(meta,indent=2))
     binding=json.loads((job/'source_binding.json').read_text())

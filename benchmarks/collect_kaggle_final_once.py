@@ -48,6 +48,19 @@ def collect(submission,output,*,run=subprocess.run):
                   completed_utc=dt.datetime.now(dt.timezone.utc).isoformat())
     if result.returncode or not manifest:status['status']='final_outputs_unavailable'
     else:
+        if state.get('experiment_kind') in ('dataset_read','dataset_upload'):
+            kind=state['experiment_kind'];binding=output/kind/'source_binding.json'
+            expected=state['source_binding']
+            if not binding.exists() or read(binding)!=expected:
+                status['status']='source_binding_mismatch'
+            else:
+                status['status']='collected'
+                result=read(output/state['result_relative'])
+                status['experiment']=dict(status=result['status'],scope=expected['scope'],
+                    completed_trials=len(result.get('trials',[])),upload_methods=result.get('methods',[]),
+                    acceptance='CPU study only; inspect cache/authentication/privacy limitations')
+            write(status_path(submission),status)
+            return status
         binding=output/'light_setup/delivery_binding.json'
         expected=state['source_binding']['publication']['capsule_sha256']
         if not binding.exists() or read(binding).get('capsule_sha256')!=expected:

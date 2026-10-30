@@ -5,6 +5,7 @@ import hashlib
 NAME='turbo_1mp_10s'
 PROMPT_SHA='e2ebe6a75563a0184ef5fa99299acef24ee3170855774761c44d6714fb2f7754'
 CANVASES=frozenset(((1344,768),(1280,704),(1216,704),(1184,672)))
+SEEDS=frozenset((20261020,20261021))
 
 
 def from_previous(previous):
@@ -23,11 +24,12 @@ def validate(plan):
     from benchmarks.anime_e2e_contract import validate as previous_contract
     width,height=plan.get('width'),plan.get('height')
     if (width,height) not in CANVASES:raise ValueError('Unauthorized Turbo challenge canvas')
+    if plan.get('seed') not in SEEDS:raise ValueError('Unauthorized Turbo challenge seed')
     fixed=dict(workload_contract=NAME,frames=243,fps=24,
         export_frames=240,export_audio_samples=320000,export_duration_seconds=10.0)
     for key,value in fixed.items():
         if plan.get(key)!=value:raise ValueError('Turbo challenge mismatch: '+key)
-    previous_contract(plan|dict(width=1152,height=672),plan['reference_images'])
+    previous_contract(plan|dict(width=1152,height=672,seed=20261020),plan['reference_images'])
     if ('ptd_release' in plan or plan.get('lora_stack') or
             hashlib.sha256(plan['prompt'].encode()).hexdigest()!=PROMPT_SHA):
         raise ValueError('Keep the previous regular Turbo prompt and no online/PTD adapter')

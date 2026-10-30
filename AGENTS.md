@@ -36,6 +36,13 @@
 - Benchmark-only download handling may retry transient HTTP/transport failures up to three attempts with bounded backoff, preserve partial files, and retain exact revisions, byte sizes and SHA256 validation. Record this additional benchmark overlay separately; production operators and dependency pins remain unchanged.
 - Preserve the prior failed version and submit one new version only. No Kaggle status/live-log polling.
 
+## Authorized seed / dataset CPU batch — 2026-10-30
+
+- The user requests exactly one GPU E2E repeat with a different seed and two CPU studies. Use seed 20261021 for the same 1216×704 ten-second regular Turbo workload; preserve TE Kitchen causal, DiT, decoder, LoRA, references and all other settings. Reuse the previously CPU-qualified and physical-T4-executed runtime/core with separately hashed benchmark overlays; do not allocate an extra H3 environment-smoke instance.
+- The read-only CPU study may mount six public opaque-binary datasets and measure 1/2/4/6 datasets together, with 1–64 readers, bounded reusable buffers, RSS guards and cache caveats. This is not authorization to remount model datasets in the GPU run or to claim CPU-storage results are T4 results.
+- The upload CPU study may inspect native KaggleHub/CLI/API and attempt small private synthetic dataset uploads using only notebook-native authentication or attached Secrets. Do not embed local Kaggle credentials, install unpinned clients, upload H3 captures/weights or publish probe datasets. Report missing authentication as a blocker.
+- Submit each job once, retain durable receipts and bounded watchdogs, and use final artifacts only. No status/list/live-log polling or automatic resubmission.
+
 ## Authorized Kaggle exception — 2026-10-21
 
 - The user explicitly permits Kaggle's native Torch rather than reproducing the local Windows Torch/CUDA package stack. Keep its matching native Python/NumPy/Torchvision/Torchaudio/CUDA environment and record actual versions; do not modify the local conda environment or original snapshot.
