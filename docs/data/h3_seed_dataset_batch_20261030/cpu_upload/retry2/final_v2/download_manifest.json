@@ -1,0 +1,46 @@
+{
+  "h3-dataset-upload-study-cpu-20261030.log": {
+    "bytes": 1470,
+    "sha256": "5780ce85ee414d9ce878a8b22c8ba4f95285608d54205f0b1e5efc26ead4b303"
+  },
+  "dataset_upload\\api_client.log": {
+    "bytes": 308,
+    "sha256": "0d1f5004d33fc3238d7bb3aecab5a84575e2f203e4413f4944286029e0fc91a4"
+  },
+  "dataset_upload\\cli_client.log": {
+    "bytes": 243,
+    "sha256": "c2c7b617b7ab21c784958bcc6715553389917da4c4943ba34d2b6afd507eaeb9"
+  },
+  "dataset_upload\\hub_client.log": {
+    "bytes": 1202,
+    "sha256": "db76caddd11148a90b9c6e21e2eccd82265435dbb701ec98bfc1393debaea77c"
+  },
+  "dataset_upload\\kaggle_dataset_upload_study.py": {
+    "bytes": 8295,
+    "sha256": "745204fb3460d78f2ab218b6bbdf7429046a1a9b3b9d2f547d6d9cc2bbdb4fc0"
+  },
+  "dataset_upload\\native_hub_upload_source.txt": {
+    "bytes": 1352,
+    "sha256": "6d87b0a59fad0d57cebd3edc3b1326c9bb9ba7a7880acd5906a50797326a79f8"
+  },
+  "dataset_upload\\result.json": {
+    "bytes": 2914,
+    "sha256": "c4e248b218d1296f8d111888947ee19876673293af1d11cf62041e9accc2a5c7"
+  },
+  "dataset_upload\\source_binding.json": {
+    "bytes": 515,
+    "sha256": "722e3f74fc6552e460e89baa30ce8e5765a86d86dc65becfae9a050f584cc138"
+  },
+  "dataset_upload_supervision\\bounded_worker.py": {
+    "bytes": 12584,
+    "sha256": "4ef8bbc54782d5d3a31ddf07084b8c7ab4f06076bf68ef5617b475ebbbbe979a"
+  },
+  "dataset_upload_supervision\\notebook_worker.log": {
+    "bytes": 165,
+    "sha256": "a6c502d0d2e496e6131b0860cfb825f64197f7bdd91282e7fc83571203446e93"
+  },
+  "dataset_upload_supervision\\supervision.json": {
+    "bytes": 206,
+    "sha256": "f6b63d2c03f7d673468f2b989a016b8cc113c407241584ed1724153544efa570"
+  }
+}

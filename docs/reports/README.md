@@ -2,6 +2,8 @@
 
 [Documentation index](../README.md)
 
+[Dataset CPU read and upload results](H3_DATASET_CPU_RESULTS_20261030.md): 74 read trials, shared-NFS throughput plateau, process/cache memory accounting, native private API and Hub upload acknowledgements; CLI invocation fix remains upload-untested.
+
 [0.85 MP / 10-second regular Turbo E2E](H3_TURBO_085MP_10S_E2E_20261030.md) completed all eight steps on two T4s, with stage timings, memory evidence and verified media; user review reports semantic/temporal quality issues; generation quality is not qualified.
 
 [All-stage operator preparation, scoped cu128 defaults and pipelined bake](H3_OPERATORS_AOT_BAKE_BATCH_20261028.md) records the implementation, exact AOT scope and physical two-T4 results; compiled caches retained, guarded RMS-RoPE promoted and convolution fallback rejected.

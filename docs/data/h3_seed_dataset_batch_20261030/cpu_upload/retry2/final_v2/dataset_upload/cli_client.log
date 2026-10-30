@@ -1,0 +1,2 @@
+/usr/bin/python3: No module named kaggle.__main__; 'kaggle' is a package and cannot be directly executed
+Warning: Looks like you're using an outdated `kaggle` version (installed: 2.0.2), please consider upgrading to the latest version (2.2.5)

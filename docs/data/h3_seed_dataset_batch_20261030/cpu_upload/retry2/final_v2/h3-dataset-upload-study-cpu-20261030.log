@@ -1,0 +1,11 @@
+[{"stream_name":"stdout","time":0.966210104,"data":"T4_SUPERVISOR notebook_cell_started\n"}
+,{"stream_name":"stdout","time":4.182365923,"data":"Warning: Looks like you're using an outdated `kaggle` version (installed: 2.0.2), please consider upgrading to the latest version (2.2.5)\n"}
+,{"stream_name":"stdout","time":18.321762565,"data":"UPLOAD_STUDY_DONE complete\n"}
+,{"stream_name":"stdout","time":18.638499614,"data":"T4_SUPERVISOR_FINAL {\"status\": \"worker_exited\", \"deadline_seconds\": 720, \"scope\": \"Notebook cell execution only; provider startup/mounting excluded\", \"worker_pid\": 9, \"exit_code\": 0, \"seconds\": 17.64308240700001}\n"}
+,{"stream_name":"stderr","time":21.289568858,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":21.289610628,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":21.674018791,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":21.674054211,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":23.918839224,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":24.577383345,"data":"[NbConvertApp] Writing 306109 bytes to __results__.html\n"}
+]

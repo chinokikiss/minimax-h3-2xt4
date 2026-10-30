@@ -1,9 +1,16 @@
 # Seed repeat and dataset I/O studies — 2026-10-30
 
 Kaggle accepted **three version-1 submissions**: exactly one GPU notebook and
-two CPU notebooks. **GPU/read results remain pending; upload version 1 failed
-before any upload attempt.** No status/list/live-log
-polling, automatic resubmission or additional H3 CPU smoke job is configured.
+two CPU notebooks. **Read v1 and the explicitly requested upload v2 retry are
+complete.** Read throughput peaked near 832 MiB/s; adding up to six datasets
+did not increase the observed plateau. Private Python API creation and a
+KaggleHub version upload returned successfully; the CLI arm failed before
+upload because of an invocation bug. See the
+[measured results and chart](H3_DATASET_CPU_RESULTS_20261030.md).
+
+The GPU seed repeat has not been collected in this CPU follow-up. No
+status/list/live-log polling, automatic resubmission or additional H3 CPU
+smoke job is configured.
 
 | Notebook | Scope | Provider execution limit |
 |---|---|---:|
@@ -85,7 +92,7 @@ Source installation, H3 imports and GPU allocation are absent.
 
 ## CPU upload study: native clients and authentication
 
-### Version 1 failure and prepared fix
+### Version 1 failure and version 2 recovery
 
 The final worker log establishes a probe setup bug, not an upload-client or
 authentication failure: `/kaggle/temp` did not exist, and the probe called
@@ -110,9 +117,17 @@ models or GPU. All seven final artifacts were retained with verified source
 and content hashes. The initial collector error is preserved separately.
 The original submitted source/results are unchanged.
 
-A corrected CPU retry is prepared separately; **no replacement has been
-submitted** under the one-submission/no-automatic-resubmission rule. The GPU
-and read study were not queried or resubmitted during this investigation.
+The user explicitly requested the corrected retry. Kaggle accepted **version 2**
+from source commit `642d3736c49313e615a9657bf53032f1ae06fbfd`; it completed
+with API/Hub upload acknowledgements. Its CLI arm exposed a separate native
+entry-point mismatch, now corrected locally and covered by a seventh regression
+test. That later CLI fix has not been resubmitted.
+
+The user then reported upload success, and final artifacts were collected.
+Read v1 was collected with one bounded retry after a TLS artifact-transfer
+failure. Neither study was automatically resubmitted, and the GPU was untouched
+during this collection. See the [results report](H3_DATASET_CPU_RESULTS_20261030.md)
+for authentication evidence, memory/cache accounting and validation limits.
 
 The study records the actually installed Kaggle/KaggleHub/SDK versions and
 function signatures without upgrading or installing clients. It examines:
@@ -140,7 +155,7 @@ Authentication uses only the notebook's native environment or already attached
 embedded or transferred.** Missing authentication, unavailable native clients
 or insufficient permissions are explicit blockers. A request acknowledgement
 is not proof that processing completed or that round-trip bytes were verified;
-no success is claimed before final evidence is collected.
+the collected v2 evidence supports request acknowledgement only.
 
 ## Preparation, evidence and collection
 
@@ -149,7 +164,9 @@ bounds and multi-dataset byte totals. They performed no model/GPU/network
 execution. Static preparation verified all three scripts/notebooks, source
 hashes, GPU-versus-CPU flags, private metadata, six read mounts and no embedded
 credential values. Each submission has an exclusive durable receipt, accepted
-version and provider URL. Only one GPU and two CPU submissions were made.
+version and provider URL. The original batch comprised one GPU and two CPU
+submissions; one additional CPU upload version was explicitly requested and
+accepted after the setup failure. No additional GPU instance was submitted.
 
 Sources: `benchmarks/build_turbo_09mp_retry.py`,
 `benchmarks/build_dataset_cpu_studies.py`,

@@ -1,0 +1,494 @@
+{
+  "scope": "CPU mounted reads and 16 MiB synthetic private upload requests; no T4 result",
+  "provenance": {
+    "read": {
+      "files_verified": 7,
+      "source_binding": {
+        "kind": "dataset_read",
+        "source_commit": "4f1f599eea823bafc5aa10e738974d5e9b036580",
+        "source_sha256": "e4047d070f6486b958b002aaa17ac4a72e33b3fce7861ea021570d24953375ea",
+        "module": "kaggle_dataset_read_sweep.py",
+        "cpu_only": true,
+        "installs": false,
+        "h3_runtime_loaded": false,
+        "core_libraries_unchanged": true,
+        "credential_values_embedded": false,
+        "dataset_sources": [
+          "cdeotte/melanoma-512x512",
+          "cdeotte/melanoma-768x768",
+          "cdeotte/melanoma-1024x1024",
+          "cdeotte/melanoma-384x384",
+          "cdeotte/melanoma-256x256",
+          "cdeotte/melanoma-128x128"
+        ],
+        "kernel_sources": [],
+        "scope": "Mounted opaque binary reads"
+      }
+    },
+    "upload": {
+      "files_verified": 11,
+      "source_binding": {
+        "kind": "dataset_upload",
+        "source_commit": "642d3736c49313e615a9657bf53032f1ae06fbfd",
+        "source_sha256": "745204fb3460d78f2ab218b6bbdf7429046a1a9b3b9d2f547d6d9cc2bbdb4fc0",
+        "module": "kaggle_dataset_upload_study.py",
+        "cpu_only": true,
+        "installs": false,
+        "h3_runtime_loaded": false,
+        "core_libraries_unchanged": true,
+        "credential_values_embedded": false,
+        "dataset_sources": [],
+        "kernel_sources": [],
+        "scope": "Private synthetic uploads using native clients and ambient/attached-secret auth"
+      }
+    }
+  },
+  "read": {
+    "trials": 74,
+    "seconds": 487.94160010100006,
+    "cpu_count": 4,
+    "cpu_quota": "400000 100000\n",
+    "curves": [
+      {
+        "datasets": 1,
+        "readers": 1,
+        "median_mib_s": 238.30847528984742,
+        "minimum_mib_s": 238.2804963517022,
+        "maximum_mib_s": 238.33645422799268,
+        "repetitions": 2
+      },
+      {
+        "datasets": 1,
+        "readers": 2,
+        "median_mib_s": 399.00159786048073,
+        "minimum_mib_s": 381.28381861769395,
+        "maximum_mib_s": 416.71937710326756,
+        "repetitions": 2
+      },
+      {
+        "datasets": 1,
+        "readers": 4,
+        "median_mib_s": 607.4539685823815,
+        "minimum_mib_s": 579.8983053400267,
+        "maximum_mib_s": 635.0096318247365,
+        "repetitions": 2
+      },
+      {
+        "datasets": 1,
+        "readers": 8,
+        "median_mib_s": 740.7765862727697,
+        "minimum_mib_s": 740.7357048796412,
+        "maximum_mib_s": 740.8174676658982,
+        "repetitions": 2
+      },
+      {
+        "datasets": 1,
+        "readers": 16,
+        "median_mib_s": 831.8956093172721,
+        "minimum_mib_s": 831.8288456692516,
+        "maximum_mib_s": 831.9623729652928,
+        "repetitions": 2
+      },
+      {
+        "datasets": 1,
+        "readers": 32,
+        "median_mib_s": 761.0096952730948,
+        "minimum_mib_s": 739.4696392567629,
+        "maximum_mib_s": 782.5497512894268,
+        "repetitions": 2
+      },
+      {
+        "datasets": 1,
+        "readers": 64,
+        "median_mib_s": 739.4128645033818,
+        "minimum_mib_s": 697.9588751896014,
+        "maximum_mib_s": 780.8668538171621,
+        "repetitions": 2
+      },
+      {
+        "datasets": 2,
+        "readers": 1,
+        "median_mib_s": 229.72198970808387,
+        "minimum_mib_s": 227.03373605696999,
+        "maximum_mib_s": 232.41024335919775,
+        "repetitions": 2
+      },
+      {
+        "datasets": 2,
+        "readers": 2,
+        "median_mib_s": 409.3041486846595,
+        "minimum_mib_s": 384.63638871805966,
+        "maximum_mib_s": 433.9719086512593,
+        "repetitions": 2
+      },
+      {
+        "datasets": 2,
+        "readers": 4,
+        "median_mib_s": 560.275571897993,
+        "minimum_mib_s": 463.2821830789202,
+        "maximum_mib_s": 657.2689607170659,
+        "repetitions": 2
+      },
+      {
+        "datasets": 2,
+        "readers": 8,
+        "median_mib_s": 770.9220585967917,
+        "minimum_mib_s": 727.6110533641167,
+        "maximum_mib_s": 814.2330638294667,
+        "repetitions": 2
+      },
+      {
+        "datasets": 2,
+        "readers": 16,
+        "median_mib_s": 830.6310054212814,
+        "minimum_mib_s": 814.5766183724237,
+        "maximum_mib_s": 846.6853924701392,
+        "repetitions": 2
+      },
+      {
+        "datasets": 2,
+        "readers": 32,
+        "median_mib_s": 706.2317935181584,
+        "minimum_mib_s": 598.9048931619451,
+        "maximum_mib_s": 813.5586938743716,
+        "repetitions": 2
+      },
+      {
+        "datasets": 2,
+        "readers": 64,
+        "median_mib_s": 796.143103881495,
+        "minimum_mib_s": 780.4832251904675,
+        "maximum_mib_s": 811.8029825725225,
+        "repetitions": 2
+      },
+      {
+        "datasets": 4,
+        "readers": 1,
+        "median_mib_s": 235.37815959861746,
+        "minimum_mib_s": 229.5883127512034,
+        "maximum_mib_s": 241.16800644603148,
+        "repetitions": 2
+      },
+      {
+        "datasets": 4,
+        "readers": 2,
+        "median_mib_s": 348.68266953287275,
+        "minimum_mib_s": 289.856461255021,
+        "maximum_mib_s": 407.50887781072447,
+        "repetitions": 2
+      },
+      {
+        "datasets": 4,
+        "readers": 4,
+        "median_mib_s": 574.9441546059606,
+        "minimum_mib_s": 550.6362892629818,
+        "maximum_mib_s": 599.2520199489395,
+        "repetitions": 2
+      },
+      {
+        "datasets": 4,
+        "readers": 8,
+        "median_mib_s": 702.4178137892461,
+        "minimum_mib_s": 702.4120118701586,
+        "maximum_mib_s": 702.4236157083337,
+        "repetitions": 2
+      },
+      {
+        "datasets": 4,
+        "readers": 16,
+        "median_mib_s": 814.2778019959871,
+        "minimum_mib_s": 814.1201805514384,
+        "maximum_mib_s": 814.4354234405358,
+        "repetitions": 2
+      },
+      {
+        "datasets": 4,
+        "readers": 32,
+        "median_mib_s": 813.2345257050943,
+        "minimum_mib_s": 813.0932354473906,
+        "maximum_mib_s": 813.3758159627978,
+        "repetitions": 2
+      },
+      {
+        "datasets": 4,
+        "readers": 64,
+        "median_mib_s": 811.333188364795,
+        "minimum_mib_s": 809.8424015961533,
+        "maximum_mib_s": 812.8239751334368,
+        "repetitions": 2
+      },
+      {
+        "datasets": 6,
+        "readers": 1,
+        "median_mib_s": 234.70048879721432,
+        "minimum_mib_s": 233.20372376473816,
+        "maximum_mib_s": 236.19725382969048,
+        "repetitions": 2
+      },
+      {
+        "datasets": 6,
+        "readers": 2,
+        "median_mib_s": 420.41741926458985,
+        "minimum_mib_s": 415.93676728443927,
+        "maximum_mib_s": 424.8980712447405,
+        "repetitions": 2
+      },
+      {
+        "datasets": 6,
+        "readers": 4,
+        "median_mib_s": 593.5993854731659,
+        "minimum_mib_s": 550.6286075057141,
+        "maximum_mib_s": 636.5701634406176,
+        "repetitions": 2
+      },
+      {
+        "datasets": 6,
+        "readers": 8,
+        "median_mib_s": 784.6828203898697,
+        "minimum_mib_s": 753.9327528462576,
+        "maximum_mib_s": 815.4328879334818,
+        "repetitions": 2
+      },
+      {
+        "datasets": 6,
+        "readers": 16,
+        "median_mib_s": 798.6002468733807,
+        "minimum_mib_s": 783.153287686282,
+        "maximum_mib_s": 814.0472060604792,
+        "repetitions": 2
+      },
+      {
+        "datasets": 6,
+        "readers": 32,
+        "median_mib_s": 767.1752340850212,
+        "minimum_mib_s": 752.7804126026401,
+        "maximum_mib_s": 781.5700555674023,
+        "repetitions": 2
+      },
+      {
+        "datasets": 6,
+        "readers": 64,
+        "median_mib_s": 812.4388644269302,
+        "minimum_mib_s": 812.331555225711,
+        "maximum_mib_s": 812.5461736281495,
+        "repetitions": 2
+      }
+    ],
+    "best_by_cohort": [
+      {
+        "datasets": 1,
+        "readers": 16,
+        "median_mib_s": 831.8956093172721,
+        "minimum_mib_s": 831.8288456692516,
+        "maximum_mib_s": 831.9623729652928,
+        "repetitions": 2
+      },
+      {
+        "datasets": 2,
+        "readers": 16,
+        "median_mib_s": 830.6310054212814,
+        "minimum_mib_s": 814.5766183724237,
+        "maximum_mib_s": 846.6853924701392,
+        "repetitions": 2
+      },
+      {
+        "datasets": 4,
+        "readers": 16,
+        "median_mib_s": 814.2778019959871,
+        "minimum_mib_s": 814.1201805514384,
+        "maximum_mib_s": 814.4354234405358,
+        "repetitions": 2
+      },
+      {
+        "datasets": 6,
+        "readers": 64,
+        "median_mib_s": 812.4388644269302,
+        "minimum_mib_s": 812.331555225711,
+        "maximum_mib_s": 812.5461736281495,
+        "repetitions": 2
+      }
+    ],
+    "normal_cache_controls_single_measurement": [
+      {
+        "datasets": 1,
+        "readers": 1,
+        "mib_s": 238.33095689698578,
+        "seconds": 11.244970710000075
+      },
+      {
+        "datasets": 1,
+        "readers": 64,
+        "mib_s": 5080.889490622219,
+        "seconds": 0.5274715450000258
+      },
+      {
+        "datasets": 2,
+        "readers": 1,
+        "mib_s": 399.845917072059,
+        "seconds": 10.243946042999937
+      },
+      {
+        "datasets": 2,
+        "readers": 64,
+        "mib_s": 5364.3631286386935,
+        "seconds": 0.7635575560000234
+      },
+      {
+        "datasets": 4,
+        "readers": 1,
+        "mib_s": 433.8751521921311,
+        "seconds": 9.44050374699998
+      },
+      {
+        "datasets": 4,
+        "readers": 64,
+        "mib_s": 6442.409039896242,
+        "seconds": 0.6357870130000265
+      },
+      {
+        "datasets": 6,
+        "readers": 1,
+        "mib_s": 1200.010059107747,
+        "seconds": 3.4133047210000313
+      },
+      {
+        "datasets": 6,
+        "readers": 64,
+        "mib_s": 6495.589799799885,
+        "seconds": 0.6305816909999749
+      }
+    ],
+    "memory_all_trials": {
+      "peak_process_rss_bytes": 106766336,
+      "peak_trial_rss_growth_bytes": 63844352,
+      "peak_cgroup_current_bytes": 8210698240,
+      "peak_cgroup_anon_bytes": 116363264,
+      "peak_cgroup_file_bytes": 8089178112,
+      "max_cgroup_pgscan": 0,
+      "max_cgroup_pgsteal": 0,
+      "memory_pressure_samples": [
+        "some avg10=0.00 avg60=0.00 avg300=0.00 total=0\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0\n"
+      ]
+    },
+    "memory_dontneed_trials": {
+      "peak_process_rss_bytes": 99184640,
+      "peak_trial_rss_growth_bytes": 63844352,
+      "peak_cgroup_current_bytes": 3503415296,
+      "peak_cgroup_anon_bytes": 108781568,
+      "peak_cgroup_file_bytes": 3394416640,
+      "max_cgroup_pgscan": 0,
+      "max_cgroup_pgsteal": 0,
+      "memory_pressure_samples": [
+        "some avg10=0.00 avg60=0.00 avg300=0.00 total=0\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=0\n"
+      ]
+    },
+    "max_payload_buffer_bytes": 67108864,
+    "inventory": [
+      {
+        "root": "/kaggle/input/datasets/cdeotte/melanoma-512x512",
+        "files": 32,
+        "bytes": 2810209506
+      },
+      {
+        "root": "/kaggle/input/datasets/cdeotte/melanoma-768x768",
+        "files": 32,
+        "bytes": 5671206463
+      },
+      {
+        "root": "/kaggle/input/datasets/cdeotte/melanoma-1024x1024",
+        "files": 32,
+        "bytes": 9425618427
+      },
+      {
+        "root": "/kaggle/input/datasets/cdeotte/melanoma-384x384",
+        "files": 32,
+        "bytes": 1695939448
+      },
+      {
+        "root": "/kaggle/input/datasets/cdeotte/melanoma-256x256",
+        "files": 32,
+        "bytes": 833460213
+      },
+      {
+        "root": "/kaggle/input/datasets/cdeotte/melanoma-128x128",
+        "files": 32,
+        "bytes": 260058343
+      }
+    ],
+    "dataset_mount_lines": [
+      "796 795 0:52 / /kaggle/input/datasets/cdeotte/melanoma-128x128 ro,relatime master:374 - nfs 192.168.14.2:/data/kagglesdsdata/datasets/758409/1324483/dmhsmv1v12ur ro,vers=3,rsize=524288,wsize=524288,namlen=255,hard,nolock,fatal_neterrors=none,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=192.168.14.2,mountvers=3,mountport=2050,mountproto=tcp,local_lock=all,addr=192.168.14.2",
+      "797 795 0:52 / /kaggle/input/datasets/cdeotte/melanoma-256x256 ro,relatime master:374 - nfs 192.168.14.2:/data/kagglesdsdata/datasets/688574/1322494/dmhsmts1gcwq ro,vers=3,rsize=524288,wsize=524288,namlen=255,hard,nolock,fatal_neterrors=none,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=192.168.14.2,mountvers=3,mountport=2050,mountproto=tcp,local_lock=all,addr=192.168.14.2",
+      "798 795 0:52 / /kaggle/input/datasets/cdeotte/melanoma-384x384 ro,relatime master:374 - nfs 192.168.14.2:/data/kagglesdsdata/datasets/689329/1322517/dmhsmtrgiwd3 ro,vers=3,rsize=524288,wsize=524288,namlen=255,hard,nolock,fatal_neterrors=none,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=192.168.14.2,mountvers=3,mountport=2050,mountproto=tcp,local_lock=all,addr=192.168.14.2",
+      "799 795 0:52 / /kaggle/input/datasets/cdeotte/melanoma-512x512 ro,relatime master:374 - nfs 192.168.14.2:/data/kagglesdsdata/datasets/688719/1322552/dmhsmtr3fx5e ro,vers=3,rsize=524288,wsize=524288,namlen=255,hard,nolock,fatal_neterrors=none,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=192.168.14.2,mountvers=3,mountport=2050,mountproto=tcp,local_lock=all,addr=192.168.14.2",
+      "800 795 0:52 / /kaggle/input/datasets/cdeotte/melanoma-768x768 ro,relatime master:374 - nfs 192.168.14.2:/data/kagglesdsdata/datasets/689578/1322612/dmhsmtrt541o ro,vers=3,rsize=524288,wsize=524288,namlen=255,hard,nolock,fatal_neterrors=none,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=192.168.14.2,mountvers=3,mountport=2050,mountproto=tcp,local_lock=all,addr=192.168.14.2",
+      "801 795 0:52 / /kaggle/input/datasets/cdeotte/melanoma-1024x1024 ro,relatime master:374 - nfs 192.168.14.2:/data/kagglesdsdata/datasets/758881/1322750/dmhsmtrqan1v ro,vers=3,rsize=524288,wsize=524288,namlen=255,hard,nolock,fatal_neterrors=none,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=192.168.14.2,mountvers=3,mountport=2050,mountproto=tcp,local_lock=all,addr=192.168.14.2"
+    ],
+    "caveats": [
+      "Mounted binary-read proxy, not a T4 measurement or network downloader benchmark.",
+      "DONTNEED is advisory; neither first pass nor hints prove physically cold reads.",
+      "Kernel/file/FUSE/backend caches and shared host activity remain uncontrolled.",
+      "RSS buffer bounds do not eliminate kernel page-cache usage; cgroup file/anon counters are retained.",
+      "Two repetitions, heterogeneous corpus sizes and 0.2-second sampling limit precision.",
+      "Trials stop at 12 seconds, 4 GiB, or corpus exhaustion; not a sustained hard ceiling.",
+      "Shared NFS endpoint is observed; precise bottleneck is not isolated."
+    ]
+  },
+  "upload": {
+    "versions": {
+      "kaggle": "2.0.2",
+      "kagglehub": "1.0.2",
+      "kagglesdk": "0.1.37",
+      "requests": "2.34.2",
+      "httpx": "0.28.1"
+    },
+    "payload_bytes": 16777216,
+    "payload_sha256": "4b1e61981d070c94fa2f3baab0aabeac4519c9291226aec6a773ea98fac13bd2",
+    "methods": [
+      {
+        "method": "cli",
+        "handle": "pamcks/h3-upload-cli-probe-20261030",
+        "seconds": 1.0028449200000296,
+        "returncode": 1,
+        "peak_child_rss_bytes": 54333440,
+        "guard_triggered": false,
+        "status": "blocked_or_failed",
+        "privacy": "private create; hub only versions acknowledged private dataset",
+        "note": "Request acknowledgement does not establish completed dataset processing or readback integrity"
+      },
+      {
+        "method": "api",
+        "handle": "pamcks/h3-upload-api-probe-20261030",
+        "seconds": 7.2655599370000346,
+        "returncode": 0,
+        "peak_child_rss_bytes": 57577472,
+        "guard_triggered": false,
+        "status": "request_returned",
+        "privacy": "private create; hub only versions acknowledged private dataset",
+        "note": "Request acknowledgement does not establish completed dataset processing or readback integrity"
+      },
+      {
+        "method": "hub",
+        "handle": "pamcks/h3-upload-api-probe-20261030",
+        "seconds": 4.008878769999967,
+        "returncode": 0,
+        "peak_child_rss_bytes": 77189120,
+        "guard_triggered": false,
+        "status": "request_returned",
+        "privacy": "private create; hub only versions acknowledged private dataset",
+        "note": "Request acknowledgement does not establish completed dataset processing or readback integrity"
+      }
+    ],
+    "credential_presence": {
+      "KAGGLE_API_TOKEN": false,
+      "KAGGLE_USERNAME": false,
+      "KAGGLE_KEY": false
+    },
+    "interpretation": [
+      "API private creation and Hub version upload returned acknowledgements.",
+      "Processing completion and round-trip content integrity were not checked.",
+      "CLI did not upload: native 2.0.2 has no python -m kaggle entry point.",
+      "Console entry-point correction is local and not Kaggle-upload validated.",
+      "Create and version requests are different operations; timings do not rank methods."
+    ]
+  }
+}

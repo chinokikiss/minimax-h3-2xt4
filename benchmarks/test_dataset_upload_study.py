@@ -4,12 +4,24 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from types import SimpleNamespace
 from unittest.mock import patch
 
 from benchmarks import kaggle_dataset_upload_study as probe
 
 
 class UploadStudy(unittest.TestCase):
+    def test_cli_uses_native_distribution_console_entry_not_missing_main(self):
+        from unittest.mock import Mock
+        invoked=Mock(return_value=None)
+        entry=SimpleNamespace(group='console_scripts',name='kaggle',load=Mock(return_value=invoked))
+        with patch.object(probe.md,'distribution',return_value=SimpleNamespace(entry_points=[entry])), \
+                patch.object(probe.os,'execv',side_effect=AssertionError('No python -m entry point')), \
+                patch.object(probe.sys,'argv',[]):
+            probe.operation('cli',Path('payload'),'owner/private')
+            self.assertEqual(probe.sys.argv,['kaggle','datasets','create','-p','payload','-q','-t'])
+        invoked.assert_called_once_with()
+
     def test_missing_scratch_parent_created_and_payload_streamed(self):
         with tempfile.TemporaryDirectory() as directory:
             base=Path(directory)/'not-created'/'nested'/'probe'

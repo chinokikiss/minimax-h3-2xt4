@@ -43,3 +43,4 @@
 /patches/kitchen_attention_native/** -text -whitespace
 
 /docs/data/h3_seed_dataset_batch_20261030/** -text whitespace=cr-at-eol
+/docs/data/h3_seed_dataset_batch_20261030/**/*.log -text -whitespace

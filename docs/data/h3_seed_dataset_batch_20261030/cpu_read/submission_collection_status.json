@@ -1,0 +1,9 @@
+{
+  "status": "final_outputs_unavailable",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-dataset-read-sweep-cpu-20261030",
+  "output": "D:\\attention_eval\\h3_seed_dataset_batch_20261030\\cpu_read\\final",
+  "returncode": 1,
+  "files": 0,
+  "completed_utc": "2026-10-30T02:08:00.612342+00:00"
+}

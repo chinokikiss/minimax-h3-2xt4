@@ -1,0 +1,52 @@
+{
+  "status": "collected",
+  "kaggle_requests": 1,
+  "kernel": "pamcks/h3-dataset-upload-study-cpu-20261030",
+  "output": "D:\\attention_eval\\h3_seed_dataset_batch_20261030\\cpu_upload\\retry2\\final",
+  "returncode": 0,
+  "files": 11,
+  "completed_utc": "2026-10-30T02:11:26.320398+00:00",
+  "experiment": {
+    "status": "complete",
+    "scope": "Private synthetic uploads using native clients and ambient/attached-secret auth",
+    "completed_trials": 0,
+    "upload_methods": [
+      {
+        "method": "cli",
+        "handle": "pamcks/h3-upload-cli-probe-20261030",
+        "seconds": 1.0028449200000296,
+        "returncode": 1,
+        "peak_child_rss_bytes": 54333440,
+        "guard_triggered": false,
+        "status": "blocked_or_failed",
+        "privacy": "private create; hub only versions acknowledged private dataset",
+        "note": "Request acknowledgement does not establish completed dataset processing or readback integrity"
+      },
+      {
+        "method": "api",
+        "handle": "pamcks/h3-upload-api-probe-20261030",
+        "seconds": 7.2655599370000346,
+        "returncode": 0,
+        "peak_child_rss_bytes": 57577472,
+        "guard_triggered": false,
+        "status": "request_returned",
+        "privacy": "private create; hub only versions acknowledged private dataset",
+        "note": "Request acknowledgement does not establish completed dataset processing or readback integrity"
+      },
+      {
+        "method": "hub",
+        "handle": "pamcks/h3-upload-api-probe-20261030",
+        "seconds": 4.008878769999967,
+        "returncode": 0,
+        "peak_child_rss_bytes": 77189120,
+        "guard_triggered": false,
+        "status": "request_returned",
+        "privacy": "private create; hub only versions acknowledged private dataset",
+        "note": "Request acknowledgement does not establish completed dataset processing or readback integrity"
+      }
+    ],
+    "phase": "finished",
+    "error_type": null,
+    "acceptance": "CPU study only; inspect cache/authentication/privacy limitations"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "h3-dataset-read-sweep-cpu-20261030.log": {
+    "bytes": 8002,
+    "sha256": "86705e84562518ff174ca090dbb813ac933b0d5113a635361409b179f834d800"
+  },
+  "dataset_read/kaggle_dataset_read_sweep.py": {
+    "bytes": 6786,
+    "sha256": "e4047d070f6486b958b002aaa17ac4a72e33b3fce7861ea021570d24953375ea"
+  },
+  "dataset_read/result.json": {
+    "bytes": 3719113,
+    "sha256": "3896bb7b9035fd91ea5c68388338bbfae4e0c386e054ec408a061f5c554dc41c"
+  },
+  "dataset_read/source_binding.json": {
+    "bytes": 655,
+    "sha256": "c2def5ff4a1c0caf50cd1eb171f6762a4018f9cbfa6992852ddfb38c3c5d9043"
+  },
+  "dataset_read_supervision/bounded_worker.py": {
+    "bytes": 10683,
+    "sha256": "277cbeb1706c45db250d7f915a362ba3b5e544ba676f4db53909dd48b2d23266"
+  },
+  "dataset_read_supervision/notebook_worker.log": {
+    "bytes": 2447,
+    "sha256": "791c85006fd76411f8ed47b6ebc4c7481d9f9f12ee05e5a2697365d4130e884a"
+  },
+  "dataset_read_supervision/supervision.json": {
+    "bytes": 208,
+    "sha256": "81ecd6c1bd5986c5c20096577a37d90c722fe4a802a8622485bb6c0237311fbd"
+  }
+}

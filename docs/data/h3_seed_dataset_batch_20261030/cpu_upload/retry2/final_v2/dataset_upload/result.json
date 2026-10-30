@@ -1,0 +1,69 @@
+{
+  "status": "complete",
+  "cpu_only": true,
+  "installs": false,
+  "methods": [
+    {
+      "method": "cli",
+      "handle": "pamcks/h3-upload-cli-probe-20261030",
+      "seconds": 1.0028449200000296,
+      "returncode": 1,
+      "peak_child_rss_bytes": 54333440,
+      "guard_triggered": false,
+      "status": "blocked_or_failed",
+      "privacy": "private create; hub only versions acknowledged private dataset",
+      "note": "Request acknowledgement does not establish completed dataset processing or readback integrity"
+    },
+    {
+      "method": "api",
+      "handle": "pamcks/h3-upload-api-probe-20261030",
+      "seconds": 7.2655599370000346,
+      "returncode": 0,
+      "peak_child_rss_bytes": 57577472,
+      "guard_triggered": false,
+      "status": "request_returned",
+      "privacy": "private create; hub only versions acknowledged private dataset",
+      "note": "Request acknowledgement does not establish completed dataset processing or readback integrity"
+    },
+    {
+      "method": "hub",
+      "handle": "pamcks/h3-upload-api-probe-20261030",
+      "seconds": 4.008878769999967,
+      "returncode": 0,
+      "peak_child_rss_bytes": 77189120,
+      "guard_triggered": false,
+      "status": "request_returned",
+      "privacy": "private create; hub only versions acknowledged private dataset",
+      "note": "Request acknowledgement does not establish completed dataset processing or readback integrity"
+    }
+  ],
+  "payload_bytes": 16777216,
+  "scope": "Small synthetic private uploads; no H3 weights, activations, credentials or upload throughput extrapolation",
+  "no_status_or_list_polling": true,
+  "credentials_embedded": false,
+  "versions": {
+    "kaggle": "2.0.2",
+    "kagglehub": "1.0.2",
+    "kagglesdk": "0.1.37",
+    "requests": "2.34.2",
+    "httpx": "0.28.1"
+  },
+  "phase": "finished",
+  "credential_presence": {
+    "KAGGLE_API_TOKEN": false,
+    "KAGGLE_USERNAME": false,
+    "KAGGLE_KEY": false
+  },
+  "credential_presence_after_secret_lookup": {
+    "KAGGLE_API_TOKEN": false,
+    "KAGGLE_USERNAME": false,
+    "KAGGLE_KEY": false
+  },
+  "api_signatures": {
+    "dataset_create_new": "(self, folder: str, public: bool = False, quiet: bool = False, convert_to_csv: bool = True, dir_mode: str = 'skip') -> kagglesdk.datasets.types.dataset_api_service.ApiCreateDatasetResponse",
+    "dataset_create_version": "(self, folder: str, version_notes: str, quiet: bool = False, convert_to_csv: bool = True, delete_old_versions: bool = False, dir_mode: str = 'skip') -> kagglesdk.datasets.types.dataset_api_service.ApiCreateDatasetResponse"
+  },
+  "hub_signature": "(handle: str, local_dataset_dir: str, version_notes: str = '', ignore_patterns: list[str] | str | None = None) -> None",
+  "payload_sha256": "4b1e61981d070c94fa2f3baab0aabeac4519c9291226aec6a773ea98fac13bd2",
+  "cleanup": "Created private synthetic datasets retained; no deletion or status polling attempted"
+}

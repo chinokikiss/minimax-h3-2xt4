@@ -43,6 +43,11 @@
 - The upload CPU study may inspect native KaggleHub/CLI/API and attempt small private synthetic dataset uploads using only notebook-native authentication or attached Secrets. Do not embed local Kaggle credentials, install unpinned clients, upload H3 captures/weights or publish probe datasets. Report missing authentication as a blocker.
 - Submit each job once, retain durable receipts and bounded watchdogs, and use final artifacts only. No status/list/live-log polling or automatic resubmission.
 
+## Explicit upload retry and read-study collection — 2026-10-30
+
+- The user's "Submit and check H3 Dataset Read Sweep CPU 20261030" authorizes exactly one corrected upload-study CPU retry and final read-study artifact collection. Upload version 2 was submitted; it does not authorize automatic further retries or another GPU run.
+- The user subsequently reports upload-study success; collect its final artifacts once and distinguish accepted upload requests from completed processing/readback proof. Existing artifact-transfer retry permission remains in force.
+
 ## Authorized Kaggle exception — 2026-10-21
 
 - The user explicitly permits Kaggle's native Torch rather than reproducing the local Windows Torch/CUDA package stack. Keep its matching native Python/NumPy/Torchvision/Torchaudio/CUDA environment and record actual versions; do not modify the local conda environment or original snapshot.

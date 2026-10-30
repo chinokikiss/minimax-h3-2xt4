@@ -27,7 +27,15 @@ def prepare_payload(base,blocks=16):
 
 def operation(kind,folder,handle):
     if kind=='cli':
-        os.execv(sys.executable,[sys.executable,'-m','kaggle','datasets','create','-p',str(folder),'-q','-t'])
+        entries=[e for e in md.distribution('kaggle').entry_points
+            if e.group=='console_scripts' and e.name=='kaggle']
+        if len(entries)!=1:raise RuntimeError('Native Kaggle console entry point unavailable')
+        # Kaggle 2.0.2 has a console script but no kaggle.__main__ module.
+        # Loading this distribution's entry point also avoids another Python's CLI.
+        sys.argv=['kaggle','datasets','create','-p',str(folder),'-q','-t']
+        code=entries[0].load()()
+        if code:raise SystemExit(code)
+        return
     if kind=='api':
         from kaggle.api.kaggle_api_extended import KaggleApi
         api=KaggleApi();api.authenticate()

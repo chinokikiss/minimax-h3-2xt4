@@ -25,7 +25,7 @@
   },
   "run_timeout_seconds": 1260,
   "earliest_final_collection_seconds": 1260,
-  "final_collection_count": 0,
+  "final_collection_count": 1,
   "result_relative": "dataset_read/result.json",
   "experiment_kind": "dataset_read",
   "submitted_code_sha256": "0ad2ba4eee16c8ae9cfe9a44f34d91a0fcf62d1dfc887fe43cd2b49e25062201",

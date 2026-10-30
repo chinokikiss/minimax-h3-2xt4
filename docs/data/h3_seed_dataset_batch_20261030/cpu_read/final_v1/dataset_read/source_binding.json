@@ -1,0 +1,21 @@
+{
+  "kind": "dataset_read",
+  "source_commit": "4f1f599eea823bafc5aa10e738974d5e9b036580",
+  "source_sha256": "e4047d070f6486b958b002aaa17ac4a72e33b3fce7861ea021570d24953375ea",
+  "module": "kaggle_dataset_read_sweep.py",
+  "cpu_only": true,
+  "installs": false,
+  "h3_runtime_loaded": false,
+  "core_libraries_unchanged": true,
+  "credential_values_embedded": false,
+  "dataset_sources": [
+    "cdeotte/melanoma-512x512",
+    "cdeotte/melanoma-768x768",
+    "cdeotte/melanoma-1024x1024",
+    "cdeotte/melanoma-384x384",
+    "cdeotte/melanoma-256x256",
+    "cdeotte/melanoma-128x128"
+  ],
+  "kernel_sources": [],
+  "scope": "Mounted opaque binary reads"
+}
