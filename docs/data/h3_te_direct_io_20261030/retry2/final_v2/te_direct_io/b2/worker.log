@@ -1,0 +1,17 @@
+WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+WARNING WARNING WARNING
+If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.
+
+/usr/local/lib/python3.13/dist-packages/torch/profiler/profiler.py:224: UserWarning: Warning: Profiler clears events at the end of each cycle.Only events from the current cycle will be reported.To keep events across cycles, set acc_events=True.
+  _warn_once(
+/usr/local/lib/python3.13/dist-packages/torch/profiler/profiler.py:224: UserWarning: Warning: Profiler clears events at the end of each cycle.Only events from the current cycle will be reported.To keep events across cycles, set acc_events=True.
+  _warn_once(
+WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+WARNING WARNING WARNING
+If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.
+
+WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+WARNING WARNING WARNING
+If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.
+
+NCCL version 2.31.2+cuda13.3

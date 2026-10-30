@@ -1,7 +1,9 @@
 # TE page-cache bypass and hash profiling — 2026-10-30
 
-**Version 1 failed before model download or TE execution. The small Linux
-O_DIRECT gate passed; TE performance remains unmeasured. Version 2 is accepted and pending.** The user requests one additional
+**Version 2 completed on two T4s. The tested O_DIRECT adapter was 17.9% slower
+on first-use TE.** See the [measured results, hash costs and GPU traces](H3_TE_DIRECT_IO_RESULTS_20261030.md).
+Version 1 failed before model loading; its failure and correction are preserved below.
+The original request was for one additional
 GPU instance to test whether bypassing the page cache with `O_DIRECT` reduces
 reclaim/refault activity and improves TE time. Hash verification is explicitly
 included in the profile and remains enabled in both arms.
@@ -236,5 +238,7 @@ are unchanged. [Preparation receipt](../data/h3_te_direct_io_20261030/retry2/pre
 retains the historical **prepared_not_submitted** state. The user subsequently
 explicitly approved this retry, and Kaggle accepted **version 2**.
 [Submission receipt](../data/h3_te_direct_io_20261030/retry2/gpu_submission.json)
-records that one new submission. No status/list/live-log polling, final
-collection or further submission has occurred for v2. Results remain pending.
+records that one new submission. The user then requested collection: v2
+completed successfully, all 90 final files were verified, and the
+[results report](H3_TE_DIRECT_IO_RESULTS_20261030.md) records the negative
+performance result. No status/list/live-log polling or further submission occurred.

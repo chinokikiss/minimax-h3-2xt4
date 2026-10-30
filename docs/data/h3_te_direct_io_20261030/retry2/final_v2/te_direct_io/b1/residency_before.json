@@ -1,0 +1,608 @@
+[
+  {
+    "file": "te.block00.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block00.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block01.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block01.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block02.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block02.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block03.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block03.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block04.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block04.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block05.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block05.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block06.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block06.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block07.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block07.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block08.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block08.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block09.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block09.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block10.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block10.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block11.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block11.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block12.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block12.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block13.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block13.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block14.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block14.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block15.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block15.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block16.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block16.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block17.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block17.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block18.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block18.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block19.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block19.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block20.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block20.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block21.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block21.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block22.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block22.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block23.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block23.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block24.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block24.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block25.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block25.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block26.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block26.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block27.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block27.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block28.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block28.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block29.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block29.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block30.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block30.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block31.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block31.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block32.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block32.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block33.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block33.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block34.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block34.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block35.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block35.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block36.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block36.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block37.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block37.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block38.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block38.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block39.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block39.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block40.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block40.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block41.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block41.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block42.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block42.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block43.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block43.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block44.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block44.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block45.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block45.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block46.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block46.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block47.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block47.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block48.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block48.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block49.rank0.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te.block49.rank1.safetensors",
+    "pages": 59566,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  },
+  {
+    "file": "te_aux.safetensors",
+    "pages": 670507,
+    "resident_pages": 0,
+    "resident_fraction": 0.0
+  }
+]

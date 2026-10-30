@@ -1,0 +1,85 @@
+{
+  "status": "verified",
+  "artifacts": 90,
+  "hardware": [
+    {
+      "name": "Tesla T4",
+      "capability": [
+        7,
+        5
+      ],
+      "uuid": "e0e334d1-76fe-8808-7a21-6773844c4475"
+    },
+    {
+      "name": "Tesla T4",
+      "capability": [
+        7,
+        5
+      ],
+      "uuid": "608358b9-5006-b101-e000-5e46cff10c2a"
+    }
+  ],
+  "software": {
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "kitchen": "0.2.37",
+    "tilelang": "0.1.13",
+    "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]"
+  },
+  "conditioning_bit_exact": true,
+  "conditioning_shape": [
+    1,
+    2528,
+    5120
+  ],
+  "complete_gpu_traces": 4,
+  "kernel_events_per_trace": 6307,
+  "source_hashes": {
+    "benchmarks/te_direct_io.py": "0aaa44278b8268340f176e6879e48994f6d47798516fc7dc325a9ede17faaeba",
+    "benchmarks/test_te_direct_io.py": "b6086e722504032d60f5f996c72516e8d3078758ea0a67f96557301f5487e9a8",
+    "benchmarks/run_te_direct_io.py": "ff68780e963abd638e9b79651a831a5005493fb64399892d488d3296c00bf988"
+  },
+  "comparison": {
+    "buffered": {
+      "first_verified_seconds": [
+        140.130213691,
+        126.065312535
+      ],
+      "first_verified_median_seconds": 133.09776311299998,
+      "unprofiled_repeat_seconds": [
+        49.203804265
+      ],
+      "first_phase_scan_pages": [
+        11700524,
+        13942703
+      ],
+      "first_phase_refault_pages": [
+        6128995,
+        6173286
+      ]
+    },
+    "direct": {
+      "first_verified_seconds": [
+        158.934021856,
+        154.913137896
+      ],
+      "first_verified_median_seconds": 156.923579876,
+      "unprofiled_repeat_seconds": [
+        71.518396668
+      ],
+      "first_phase_scan_pages": [
+        4447935,
+        7321352
+      ],
+      "first_phase_refault_pages": [
+        5928389,
+        6107646
+      ]
+    },
+    "first_verified_direct_slowdown_percent": 17.90098962277216,
+    "single_repeat_direct_slowdown_percent": 45.35135592934827
+  },
+  "full_pipeline": false,
+  "production_changed": false,
+  "new_gpu_submission": false
+}

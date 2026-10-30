@@ -1,0 +1,50 @@
+TE_IO_STAGE direct_support_gate {}
+TE_IO_STAGE download_te {}
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+TE_IO_STAGE download_te {"completed": 10}
+TE_IO_STAGE download_te {"completed": 20}
+TE_IO_HEARTBEAT download_te
+TE_IO_STAGE download_te {"completed": 30}
+TE_IO_STAGE download_te {"completed": 40}
+TE_IO_STAGE download_te {"completed": 50}
+TE_IO_HEARTBEAT download_te
+TE_IO_STAGE download_te {"completed": 60}
+TE_IO_STAGE download_te {"completed": 70}
+TE_IO_HEARTBEAT download_te
+TE_IO_STAGE download_te {"completed": 80}
+TE_IO_STAGE download_te {"completed": 90}
+TE_IO_HEARTBEAT download_te
+TE_IO_STAGE download_te {"completed": 100}
+TE_IO_STAGE assemble_te_aux {}
+TE_IO_HEARTBEAT assemble_te_aux
+TE_IO_STAGE raw_io_complete {}
+TE_IO_STAGE raw_io_complete {}
+TE_IO_STAGE raw_io_complete {}
+TE_IO_STAGE raw_io_complete {}
+TE_IO_STAGE te_warmup {}
+TE_IO_HEARTBEAT te_warmup
+TE_IO_HEARTBEAT te_warmup
+TE_IO_HEARTBEAT te_warmup
+TE_IO_STAGE te_a1 {}
+TE_IO_HEARTBEAT te_a1
+TE_IO_HEARTBEAT te_a1
+TE_IO_HEARTBEAT te_a1
+TE_IO_HEARTBEAT te_a1
+TE_IO_HEARTBEAT te_a1
+TE_IO_STAGE te_b1 {}
+TE_IO_HEARTBEAT te_b1
+TE_IO_HEARTBEAT te_b1
+TE_IO_HEARTBEAT te_b1
+TE_IO_HEARTBEAT te_b1
+TE_IO_HEARTBEAT te_b1
+TE_IO_STAGE te_b2 {}
+TE_IO_HEARTBEAT te_b2
+TE_IO_HEARTBEAT te_b2
+TE_IO_HEARTBEAT te_b2
+TE_IO_HEARTBEAT te_b2
+TE_IO_STAGE te_a2 {}
+TE_IO_HEARTBEAT te_a2
+TE_IO_HEARTBEAT te_a2
+TE_IO_HEARTBEAT te_a2
+TE_IO_HEARTBEAT te_a2
+TE_IO_STAGE complete {}

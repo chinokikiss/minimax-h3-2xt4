@@ -2,7 +2,7 @@
 
 [Documentation index](../README.md)
 
-[TE O_DIRECT and hash profiling](H3_TE_DIRECT_IO_T4_20261030.md): v1 failed before model loading; Linux direct-I/O gate passed. The self-contained fix passed frozen-capsule CPU rehearsal; user-approved v2 accepted, TE performance pending.
+[TE O_DIRECT T4 results](H3_TE_DIRECT_IO_RESULTS_20261030.md): complete, byte-exact A/B; direct adapter 17.9% slower on first-use TE, fewer reclaim scans but persistent refaults; hash CPU and waiting collectives explain the priorities. Buffered remains default.
 
 [Dataset CPU read and upload results](H3_DATASET_CPU_RESULTS_20261030.md): 74 read trials, shared-NFS throughput plateau, process/cache memory accounting, native private API and Hub upload acknowledgements; CLI invocation fix remains upload-untested.
 

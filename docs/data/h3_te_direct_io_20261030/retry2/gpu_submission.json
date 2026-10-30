@@ -80,7 +80,7 @@
   },
   "run_timeout_seconds": 5100,
   "earliest_final_collection_seconds": 5100,
-  "final_collection_count": 0,
+  "final_collection_count": 1,
   "experiment_kind": "te_direct_io",
   "result_relative": "te_direct_io/result.json",
   "returncode": 0,

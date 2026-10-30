@@ -1,0 +1,79 @@
+[{"stream_name":"stderr","time":7.854608705,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":7.854663787,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":7.8546699,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":7.854673701,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":8.489928613,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.489957767,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.489962627,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.489966585,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":9.866032232,"data":"LIGHT_NOTEBOOK_START zero dataset/kernel mounts\n"}
+,{"stream_name":"stdout","time":9.867154779,"data":"T4_SUPERVISOR notebook_cell_started\n"}
+,{"stream_name":"stdout","time":9.963352848,"data":"LIGHT_SOURCE_DOWNLOAD_START\n"}
+,{"stream_name":"stdout","time":11.011931238,"data":"LIGHT_SOURCE_READY\n"}
+,{"stream_name":"stdout","time":11.134121011,"data":"LIGHT_SETUP_STAGE frozen_source\n"}
+,{"stream_name":"stdout","time":14.346448121,"data":"LIGHT_SETUP_STAGE direct_pip\n"}
+,{"stream_name":"stdout","time":65.475217596,"data":"LIGHT_SETUP_STAGE api_probe\n"}
+,{"stream_name":"stdout","time":71.13177632,"data":"LIGHT_SETUP_HEARTBEAT api_probe 60\n"}
+,{"stream_name":"stdout","time":92.298577136,"data":"LIGHT_SETUP_FINAL ready_for_device_gate\n"}
+,{"stream_name":"stdout","time":92.347556085,"data":"T4_SUPERVISOR_FINAL {\"status\": \"worker_exited\", \"deadline_seconds\": 600, \"scope\": \"Notebook cell execution only; provider startup/mounting excluded\", \"worker_pid\": 51, \"exit_code\": 0, \"seconds\": 82.478566322}\n"}
+,{"stream_name":"stdout","time":92.875297314,"data":"T4_SUPERVISOR notebook_cell_started\n"}
+,{"stream_name":"stdout","time":97.108241551,"data":"TE_IO_STAGE direct_support_gate {}\n"}
+,{"stream_name":"stdout","time":97.361380484,"data":"TE_IO_STAGE download_te {}\n"}
+,{"stream_name":"stdout","time":98.100384519,"data":"Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.\n"}
+,{"stream_name":"stdout","time":127.402703524,"data":"TE_IO_STAGE download_te {\"completed\": 10}\n"}
+,{"stream_name":"stdout","time":153.68201832,"data":"TE_IO_STAGE download_te {\"completed\": 20}\n"}
+,{"stream_name":"stdout","time":154.696097571,"data":"TE_IO_HEARTBEAT download_te\n"}
+,{"stream_name":"stdout","time":170.11640774,"data":"TE_IO_STAGE download_te {\"completed\": 30}\n"}
+,{"stream_name":"stdout","time":188.697919854,"data":"TE_IO_STAGE download_te {\"completed\": 40}\n"}
+,{"stream_name":"stdout","time":213.807532501,"data":"TE_IO_STAGE download_te {\"completed\": 50}\n"}
+,{"stream_name":"stdout","time":214.69720088,"data":"TE_IO_HEARTBEAT download_te\n"}
+,{"stream_name":"stdout","time":244.861936715,"data":"TE_IO_STAGE download_te {\"completed\": 60}\n"}
+,{"stream_name":"stdout","time":268.321936564,"data":"TE_IO_STAGE download_te {\"completed\": 70}\n"}
+,{"stream_name":"stdout","time":274.702797075,"data":"TE_IO_HEARTBEAT download_te\n"}
+,{"stream_name":"stdout","time":294.219144919,"data":"TE_IO_STAGE download_te {\"completed\": 80}\n"}
+,{"stream_name":"stdout","time":327.332261014,"data":"TE_IO_STAGE download_te {\"completed\": 90}\n"}
+,{"stream_name":"stdout","time":334.704418114,"data":"TE_IO_HEARTBEAT download_te\n"}
+,{"stream_name":"stdout","time":351.757343472,"data":"TE_IO_STAGE download_te {\"completed\": 100}\n"}
+,{"stream_name":"stdout","time":351.760353489,"data":"TE_IO_STAGE assemble_te_aux {}\n"}
+,{"stream_name":"stdout","time":394.711547722,"data":"TE_IO_HEARTBEAT assemble_te_aux\n"}
+,{"stream_name":"stdout","time":410.06533985,"data":"TE_IO_STAGE raw_io_complete {}\n"}
+,{"stream_name":"stdout","time":410.312662014,"data":"TE_IO_STAGE raw_io_complete {}\n"}
+,{"stream_name":"stdout","time":410.567162075,"data":"TE_IO_STAGE raw_io_complete {}\n"}
+,{"stream_name":"stdout","time":410.840846457,"data":"TE_IO_STAGE raw_io_complete {}\n"}
+,{"stream_name":"stdout","time":410.8422419,"data":"TE_IO_STAGE te_warmup {}\n"}
+,{"stream_name":"stdout","time":454.712686811,"data":"TE_IO_HEARTBEAT te_warmup\n"}
+,{"stream_name":"stdout","time":514.739147627,"data":"TE_IO_HEARTBEAT te_warmup\n"}
+,{"stream_name":"stdout","time":574.737811968,"data":"TE_IO_HEARTBEAT te_warmup\n"}
+,{"stream_name":"stdout","time":632.286013577,"data":"TE_IO_STAGE te_a1 {}\n"}
+,{"stream_name":"stdout","time":634.703893155,"data":"TE_IO_HEARTBEAT te_a1\n"}
+,{"stream_name":"stdout","time":694.712936386,"data":"TE_IO_HEARTBEAT te_a1\n"}
+,{"stream_name":"stdout","time":754.723831084,"data":"TE_IO_HEARTBEAT te_a1\n"}
+,{"stream_name":"stdout","time":814.750230677,"data":"TE_IO_HEARTBEAT te_a1\n"}
+,{"stream_name":"stdout","time":874.728106909,"data":"TE_IO_HEARTBEAT te_a1\n"}
+,{"stream_name":"stdout","time":889.996708844,"data":"TE_IO_STAGE te_b1 {}\n"}
+,{"stream_name":"stdout","time":934.716719221,"data":"TE_IO_HEARTBEAT te_b1\n"}
+,{"stream_name":"stdout","time":994.712389258,"data":"TE_IO_HEARTBEAT te_b1\n"}
+,{"stream_name":"stdout","time":1054.727126752,"data":"TE_IO_HEARTBEAT te_b1\n"}
+,{"stream_name":"stdout","time":1114.718698676,"data":"TE_IO_HEARTBEAT te_b1\n"}
+,{"stream_name":"stdout","time":1174.716011942,"data":"TE_IO_HEARTBEAT te_b1\n"}
+,{"stream_name":"stdout","time":1179.560250729,"data":"TE_IO_STAGE te_b2 {}\n"}
+,{"stream_name":"stdout","time":1234.735637764,"data":"TE_IO_HEARTBEAT te_b2\n"}
+,{"stream_name":"stdout","time":1294.726155711,"data":"TE_IO_HEARTBEAT te_b2\n"}
+,{"stream_name":"stdout","time":1354.726018473,"data":"TE_IO_HEARTBEAT te_b2\n"}
+,{"stream_name":"stdout","time":1414.71944781,"data":"TE_IO_HEARTBEAT te_b2\n"}
+,{"stream_name":"stdout","time":1470.369315253,"data":"TE_IO_STAGE te_a2 {}\n"}
+,{"stream_name":"stdout","time":1474.706674345,"data":"TE_IO_HEARTBEAT te_a2\n"}
+,{"stream_name":"stdout","time":1534.71816647,"data":"TE_IO_HEARTBEAT te_a2\n"}
+,{"stream_name":"stdout","time":1594.729939733,"data":"TE_IO_HEARTBEAT te_a2\n"}
+,{"stream_name":"stdout","time":1654.724090952,"data":"TE_IO_HEARTBEAT te_a2\n"}
+,{"stream_name":"stdout","time":1694.49829477,"data":"TE_IO_STAGE complete {}\n"}
+,{"stream_name":"stdout","time":1695.136708584,"data":"T4_SUPERVISOR_FINAL {\"status\": \"worker_exited\", \"deadline_seconds\": 4200, \"scope\": \"Notebook cell execution only; provider startup/mounting excluded\", \"worker_pid\": 99, \"exit_code\": 0, \"seconds\": 1602.257558888}\n"}
+,{"stream_name":"stderr","time":1698.559969696,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":1698.560017583,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":1698.927541814,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":1698.927609799,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":1700.120273661,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":1700.209589731,"data":"[NbConvertApp] Writing 624321 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":1702.773055125,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":1703.720362188,"data":"[NbConvertApp] Writing 1033542 bytes to __results__.html\n"}
+]

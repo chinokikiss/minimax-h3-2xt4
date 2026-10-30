@@ -1,0 +1,9 @@
+case,mode,call,profiled,seconds
+a1,buffered,0,False,140.130213691
+a1,buffered,1,True,55.954850518
+b1,direct,0,False,158.934021856
+b1,direct,1,False,71.518396668
+b2,direct,0,False,154.913137896
+b2,direct,1,True,81.449155218
+a2,buffered,0,False,126.065312535
+a2,buffered,1,False,49.203804265

@@ -1,0 +1,148 @@
+{
+  "groups": [
+    {
+      "phase": "startup",
+      "kind": "file_sha256",
+      "category": "file_sha256",
+      "calls": 2,
+      "work_wall_ns": 11254941919,
+      "thread_cpu_ns": 9613257504,
+      "returned_bytes": 0,
+      "hashed_bytes": 2747402012,
+      "aligned_requested_bytes": 0
+    },
+    {
+      "phase": "startup",
+      "kind": "direct_syscall",
+      "category": "weights",
+      "calls": 2,
+      "work_wall_ns": 1646644,
+      "thread_cpu_ns": 159860,
+      "returned_bytes": 45056,
+      "hashed_bytes": 0,
+      "aligned_requested_bytes": 45056
+    },
+    {
+      "phase": "startup",
+      "kind": "direct_syscall",
+      "category": "file_sha256",
+      "calls": 10477,
+      "work_wall_ns": 2278667113,
+      "thread_cpu_ns": 659449652,
+      "returned_bytes": 2746396392,
+      "hashed_bytes": 0,
+      "aligned_requested_bytes": 2746396672
+    },
+    {
+      "phase": "startup",
+      "kind": "rank_startup",
+      "category": "weights",
+      "calls": 1,
+      "work_wall_ns": 11278470507,
+      "thread_cpu_ns": 0,
+      "returned_bytes": 0,
+      "hashed_bytes": 0,
+      "aligned_requested_bytes": 0
+    },
+    {
+      "phase": "te1",
+      "kind": "direct_syscall",
+      "category": "weights",
+      "calls": 4410,
+      "work_wall_ns": 6471901268,
+      "thread_cpu_ns": 3388980109,
+      "returned_bytes": 14956970008,
+      "hashed_bytes": 0,
+      "aligned_requested_bytes": 14957068288
+    },
+    {
+      "phase": "te1",
+      "kind": "read_tensor",
+      "category": "weights",
+      "calls": 1252,
+      "work_wall_ns": 33914359567,
+      "thread_cpu_ns": 30764021875,
+      "returned_bytes": 0,
+      "hashed_bytes": 0,
+      "aligned_requested_bytes": 0
+    },
+    {
+      "phase": "te1",
+      "kind": "direct_syscall",
+      "category": "file_sha256",
+      "calls": 46550,
+      "work_wall_ns": 36674028322,
+      "thread_cpu_ns": 3292832233,
+      "returned_bytes": 12199018800,
+      "hashed_bytes": 0,
+      "aligned_requested_bytes": 12199116800
+    },
+    {
+      "phase": "te1",
+      "kind": "file_sha256",
+      "category": "file_sha256",
+      "calls": 50,
+      "work_wall_ns": 78226256835,
+      "thread_cpu_ns": 44114050510,
+      "returned_bytes": 0,
+      "hashed_bytes": 12199018800,
+      "aligned_requested_bytes": 0
+    },
+    {
+      "phase": "te1",
+      "kind": "tensor_sha256",
+      "category": "tensor_sha256",
+      "calls": 50,
+      "work_wall_ns": 34276959867,
+      "thread_cpu_ns": 34230087506,
+      "returned_bytes": 0,
+      "hashed_bytes": 12198937600,
+      "aligned_requested_bytes": 0
+    },
+    {
+      "phase": "te1",
+      "kind": "block_cpu_prepare",
+      "category": "weights",
+      "calls": 50,
+      "work_wall_ns": 140295592059,
+      "thread_cpu_ns": 103368657771,
+      "returned_bytes": 0,
+      "hashed_bytes": 0,
+      "aligned_requested_bytes": 0
+    },
+    {
+      "phase": "te2",
+      "kind": "direct_syscall",
+      "category": "weights",
+      "calls": 3193,
+      "work_wall_ns": 47827606011,
+      "thread_cpu_ns": 2738829442,
+      "returned_bytes": 11468314664,
+      "hashed_bytes": 0,
+      "aligned_requested_bytes": 11468406784
+    },
+    {
+      "phase": "te2",
+      "kind": "read_tensor",
+      "category": "weights",
+      "calls": 844,
+      "work_wall_ns": 66973919290,
+      "thread_cpu_ns": 21671928362,
+      "returned_bytes": 0,
+      "hashed_bytes": 0,
+      "aligned_requested_bytes": 0
+    },
+    {
+      "phase": "te2",
+      "kind": "block_cpu_prepare",
+      "category": "weights",
+      "calls": 46,
+      "work_wall_ns": 67284300167,
+      "thread_cpu_ns": 21945237380,
+      "returned_bytes": 0,
+      "hashed_bytes": 0,
+      "aligned_requested_bytes": 0
+    }
+  ],
+  "semantics": "Nested spans and cross-thread work totals; do not sum them as TE critical-path attribution"
+}

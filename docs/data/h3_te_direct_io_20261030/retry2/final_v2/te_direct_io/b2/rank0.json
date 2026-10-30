@@ -1,0 +1,1177 @@
+{
+  "commands": [
+    {
+      "phase": "te1",
+      "profiled": false,
+      "start_ns": 1622136613691,
+      "end_ns": 1776577164716,
+      "wall_seconds": 154.440551025,
+      "peak_allocated": 2999684096,
+      "peak_reserved": 4393533440
+    },
+    {
+      "phase": "te2",
+      "profiled": true,
+      "start_ns": 1777535167415,
+      "end_ns": 1857761494958,
+      "wall_seconds": 80.226327543,
+      "peak_allocated": 3311853568,
+      "peak_reserved": 4882169856
+    }
+  ],
+  "blocks": [
+    {
+      "layer": 0,
+      "phase": "te1",
+      "start_ns": 1639683134913,
+      "ready_host_ns": 1643048476201,
+      "enqueue_end_ns": 1647440222422,
+      "wait_gpu_event_ms": 3378.385009765625,
+      "compute_gpu_event_ms": 4380.9609375
+    },
+    {
+      "layer": 1,
+      "phase": "te1",
+      "start_ns": 1647455875690,
+      "ready_host_ns": 1647846105223,
+      "enqueue_end_ns": 1647859476469,
+      "wait_gpu_event_ms": 403.0272521972656,
+      "compute_gpu_event_ms": 90.33881378173828
+    },
+    {
+      "layer": 2,
+      "phase": "te1",
+      "start_ns": 1647950867972,
+      "ready_host_ns": 1650881552850,
+      "enqueue_end_ns": 1650891041079,
+      "wait_gpu_event_ms": 2945.93896484375,
+      "compute_gpu_event_ms": 158.389404296875
+    },
+    {
+      "layer": 3,
+      "phase": "te1",
+      "start_ns": 1651056809167,
+      "ready_host_ns": 1654044918049,
+      "enqueue_end_ns": 1654061544122,
+      "wait_gpu_event_ms": 2996.184326171875,
+      "compute_gpu_event_ms": 124.94633483886719
+    },
+    {
+      "layer": 4,
+      "phase": "te1",
+      "start_ns": 1654062817998,
+      "ready_host_ns": 1657307734674,
+      "enqueue_end_ns": 1657320592492,
+      "wait_gpu_event_ms": 3141.06298828125,
+      "compute_gpu_event_ms": 335.1778869628906
+    },
+    {
+      "layer": 5,
+      "phase": "te1",
+      "start_ns": 1657322331703,
+      "ready_host_ns": 1660459834821,
+      "enqueue_end_ns": 1660468402057,
+      "wait_gpu_event_ms": 2821.90283203125,
+      "compute_gpu_event_ms": 148.07154846191406
+    },
+    {
+      "layer": 6,
+      "phase": "te1",
+      "start_ns": 1660469333914,
+      "ready_host_ns": 1663871595471,
+      "enqueue_end_ns": 1663879293152,
+      "wait_gpu_event_ms": 3268.364013671875,
+      "compute_gpu_event_ms": 90.39753723144531
+    },
+    {
+      "layer": 7,
+      "phase": "te1",
+      "start_ns": 1663880101958,
+      "ready_host_ns": 1666949644499,
+      "enqueue_end_ns": 1666958869922,
+      "wait_gpu_event_ms": 2982.306640625,
+      "compute_gpu_event_ms": 291.9211120605469
+    },
+    {
+      "layer": 8,
+      "phase": "te1",
+      "start_ns": 1666960020589,
+      "ready_host_ns": 1669938237646,
+      "enqueue_end_ns": 1669947969653,
+      "wait_gpu_event_ms": 2698.18359375,
+      "compute_gpu_event_ms": 294.5180969238281
+    },
+    {
+      "layer": 9,
+      "phase": "te1",
+      "start_ns": 1669949095532,
+      "ready_host_ns": 1673164986032,
+      "enqueue_end_ns": 1673173568376,
+      "wait_gpu_event_ms": 2931.03662109375,
+      "compute_gpu_event_ms": 360.7151184082031
+    },
+    {
+      "layer": 10,
+      "phase": "te1",
+      "start_ns": 1673174661199,
+      "ready_host_ns": 1676031740340,
+      "enqueue_end_ns": 1676041586566,
+      "wait_gpu_event_ms": 2507.31591796875,
+      "compute_gpu_event_ms": 495.8167419433594
+    },
+    {
+      "layer": 11,
+      "phase": "te1",
+      "start_ns": 1676042778875,
+      "ready_host_ns": 1678853376460,
+      "enqueue_end_ns": 1678862570788,
+      "wait_gpu_event_ms": 2324.89208984375,
+      "compute_gpu_event_ms": 502.8084411621094
+    },
+    {
+      "layer": 12,
+      "phase": "te1",
+      "start_ns": 1678863575727,
+      "ready_host_ns": 1681874205100,
+      "enqueue_end_ns": 1681884485308,
+      "wait_gpu_event_ms": 2518.1416015625,
+      "compute_gpu_event_ms": 605.942626953125
+    },
+    {
+      "layer": 13,
+      "phase": "te1",
+      "start_ns": 1681885640501,
+      "ready_host_ns": 1684684870690,
+      "enqueue_end_ns": 1684694769192,
+      "wait_gpu_event_ms": 2204.385986328125,
+      "compute_gpu_event_ms": 554.9302978515625
+    },
+    {
+      "layer": 14,
+      "phase": "te1",
+      "start_ns": 1684695873835,
+      "ready_host_ns": 1687460321484,
+      "enqueue_end_ns": 1687468728380,
+      "wait_gpu_event_ms": 2222.57861328125,
+      "compute_gpu_event_ms": 425.2919006347656
+    },
+    {
+      "layer": 15,
+      "phase": "te1",
+      "start_ns": 1687471241861,
+      "ready_host_ns": 1690182474205,
+      "enqueue_end_ns": 1690192196598,
+      "wait_gpu_event_ms": 2294.66748046875,
+      "compute_gpu_event_ms": 450.0438537597656
+    },
+    {
+      "layer": 16,
+      "phase": "te1",
+      "start_ns": 1690193239484,
+      "ready_host_ns": 1692966749111,
+      "enqueue_end_ns": 1692976512862,
+      "wait_gpu_event_ms": 2336.37939453125,
+      "compute_gpu_event_ms": 578.7613525390625
+    },
+    {
+      "layer": 17,
+      "phase": "te1",
+      "start_ns": 1692977551851,
+      "ready_host_ns": 1695424111262,
+      "enqueue_end_ns": 1695433539506,
+      "wait_gpu_event_ms": 1877.329833984375,
+      "compute_gpu_event_ms": 695.1297607421875
+    },
+    {
+      "layer": 18,
+      "phase": "te1",
+      "start_ns": 1695434740314,
+      "ready_host_ns": 1697920051499,
+      "enqueue_end_ns": 1697929292038,
+      "wait_gpu_event_ms": 1802.0030517578125,
+      "compute_gpu_event_ms": 804.2359619140625
+    },
+    {
+      "layer": 19,
+      "phase": "te1",
+      "start_ns": 1697930317830,
+      "ready_host_ns": 1700403347714,
+      "enqueue_end_ns": 1700412853884,
+      "wait_gpu_event_ms": 1677.129638671875,
+      "compute_gpu_event_ms": 968.3034057617188
+    },
+    {
+      "layer": 20,
+      "phase": "te1",
+      "start_ns": 1700413982051,
+      "ready_host_ns": 1702790207594,
+      "enqueue_end_ns": 1702803644272,
+      "wait_gpu_event_ms": 1419.206298828125,
+      "compute_gpu_event_ms": 1086.6248779296875
+    },
+    {
+      "layer": 21,
+      "phase": "te1",
+      "start_ns": 1702805449511,
+      "ready_host_ns": 1705062772902,
+      "enqueue_end_ns": 1705073715191,
+      "wait_gpu_event_ms": 1186.112060546875,
+      "compute_gpu_event_ms": 1195.697998046875
+    },
+    {
+      "layer": 22,
+      "phase": "te1",
+      "start_ns": 1705074613619,
+      "ready_host_ns": 1707405660960,
+      "enqueue_end_ns": 1707416087200,
+      "wait_gpu_event_ms": 1149.14453125,
+      "compute_gpu_event_ms": 1355.0164794921875
+    },
+    {
+      "layer": 23,
+      "phase": "te1",
+      "start_ns": 1707417055779,
+      "ready_host_ns": 1709800933971,
+      "enqueue_end_ns": 1709808346741,
+      "wait_gpu_event_ms": 1039.29541015625,
+      "compute_gpu_event_ms": 1494.691650390625
+    },
+    {
+      "layer": 24,
+      "phase": "te1",
+      "start_ns": 1709809048199,
+      "ready_host_ns": 1712492053732,
+      "enqueue_end_ns": 1712504502585,
+      "wait_gpu_event_ms": 1194.6260986328125,
+      "compute_gpu_event_ms": 1282.71044921875
+    },
+    {
+      "layer": 25,
+      "phase": "te1",
+      "start_ns": 1712505609438,
+      "ready_host_ns": 1714841467191,
+      "enqueue_end_ns": 1714850052873,
+      "wait_gpu_event_ms": 1068.24853515625,
+      "compute_gpu_event_ms": 1406.1202392578125
+    },
+    {
+      "layer": 26,
+      "phase": "te1",
+      "start_ns": 1714850849071,
+      "ready_host_ns": 1717396353292,
+      "enqueue_end_ns": 1717415981322,
+      "wait_gpu_event_ms": 1151.0328369140625,
+      "compute_gpu_event_ms": 1255.134521484375
+    },
+    {
+      "layer": 27,
+      "phase": "te1",
+      "start_ns": 1717419084277,
+      "ready_host_ns": 1719547765073,
+      "enqueue_end_ns": 1719557504788,
+      "wait_gpu_event_ms": 895.3211669921875,
+      "compute_gpu_event_ms": 1339.912353515625
+    },
+    {
+      "layer": 28,
+      "phase": "te1",
+      "start_ns": 1719558305731,
+      "ready_host_ns": 1722172425636,
+      "enqueue_end_ns": 1722187173673,
+      "wait_gpu_event_ms": 1276.2862548828125,
+      "compute_gpu_event_ms": 1213.3663330078125
+    },
+    {
+      "layer": 29,
+      "phase": "te1",
+      "start_ns": 1722190875980,
+      "ready_host_ns": 1724488249163,
+      "enqueue_end_ns": 1724497438121,
+      "wait_gpu_event_ms": 1110.0623779296875,
+      "compute_gpu_event_ms": 1574.380859375
+    },
+    {
+      "layer": 30,
+      "phase": "te1",
+      "start_ns": 1724498420531,
+      "ready_host_ns": 1726942703199,
+      "enqueue_end_ns": 1726950986771,
+      "wait_gpu_event_ms": 881.2890625,
+      "compute_gpu_event_ms": 1683.0157470703125
+    },
+    {
+      "layer": 31,
+      "phase": "te1",
+      "start_ns": 1726951934052,
+      "ready_host_ns": 1729536121810,
+      "enqueue_end_ns": 1729543248215,
+      "wait_gpu_event_ms": 909.7511596679688,
+      "compute_gpu_event_ms": 1602.3857421875
+    },
+    {
+      "layer": 32,
+      "phase": "te1",
+      "start_ns": 1729544060611,
+      "ready_host_ns": 1732070066248,
+      "enqueue_end_ns": 1732078550590,
+      "wait_gpu_event_ms": 933.2164916992188,
+      "compute_gpu_event_ms": 2020.9111328125
+    },
+    {
+      "layer": 33,
+      "phase": "te1",
+      "start_ns": 1732079613606,
+      "ready_host_ns": 1734639690593,
+      "enqueue_end_ns": 1734647725828,
+      "wait_gpu_event_ms": 546.8890380859375,
+      "compute_gpu_event_ms": 2058.2900390625
+    },
+    {
+      "layer": 34,
+      "phase": "te1",
+      "start_ns": 1734648580696,
+      "ready_host_ns": 1737446260307,
+      "enqueue_end_ns": 1737454614416,
+      "wait_gpu_event_ms": 749.78662109375,
+      "compute_gpu_event_ms": 1765.588134765625
+    },
+    {
+      "layer": 35,
+      "phase": "te1",
+      "start_ns": 1737455413681,
+      "ready_host_ns": 1740030136103,
+      "enqueue_end_ns": 1740039784580,
+      "wait_gpu_event_ms": 816.03857421875,
+      "compute_gpu_event_ms": 1622.32666015625
+    },
+    {
+      "layer": 36,
+      "phase": "te1",
+      "start_ns": 1740040716889,
+      "ready_host_ns": 1742566384082,
+      "enqueue_end_ns": 1742574950731,
+      "wait_gpu_event_ms": 916.06005859375,
+      "compute_gpu_event_ms": 1828.52734375
+    },
+    {
+      "layer": 37,
+      "phase": "te1",
+      "start_ns": 1742576046660,
+      "ready_host_ns": 1745249651847,
+      "enqueue_end_ns": 1745257209944,
+      "wait_gpu_event_ms": 853.7784423828125,
+      "compute_gpu_event_ms": 1539.2431640625
+    },
+    {
+      "layer": 38,
+      "phase": "te1",
+      "start_ns": 1745257961436,
+      "ready_host_ns": 1747793889576,
+      "enqueue_end_ns": 1747802731772,
+      "wait_gpu_event_ms": 1006.5167236328125,
+      "compute_gpu_event_ms": 1390.4769287109375
+    },
+    {
+      "layer": 39,
+      "phase": "te1",
+      "start_ns": 1747803593910,
+      "ready_host_ns": 1750104715242,
+      "enqueue_end_ns": 1750112903648,
+      "wait_gpu_event_ms": 918.3197021484375,
+      "compute_gpu_event_ms": 1730.6859130859375
+    },
+    {
+      "layer": 40,
+      "phase": "te1",
+      "start_ns": 1750113944308,
+      "ready_host_ns": 1752641574835,
+      "enqueue_end_ns": 1752650310164,
+      "wait_gpu_event_ms": 807.7406005859375,
+      "compute_gpu_event_ms": 1564.654052734375
+    },
+    {
+      "layer": 41,
+      "phase": "te1",
+      "start_ns": 1752651241068,
+      "ready_host_ns": 1754968429093,
+      "enqueue_end_ns": 1754975338376,
+      "wait_gpu_event_ms": 760.6536254882812,
+      "compute_gpu_event_ms": 1453.7540283203125
+    },
+    {
+      "layer": 42,
+      "phase": "te1",
+      "start_ns": 1754976255639,
+      "ready_host_ns": 1757337367083,
+      "enqueue_end_ns": 1757345926277,
+      "wait_gpu_event_ms": 917.0030517578125,
+      "compute_gpu_event_ms": 1730.3193359375
+    },
+    {
+      "layer": 43,
+      "phase": "te1",
+      "start_ns": 1757347044294,
+      "ready_host_ns": 1760056269934,
+      "enqueue_end_ns": 1760071684730,
+      "wait_gpu_event_ms": 979.1072998046875,
+      "compute_gpu_event_ms": 1433.66064453125
+    },
+    {
+      "layer": 44,
+      "phase": "te1",
+      "start_ns": 1760073056647,
+      "ready_host_ns": 1762645649235,
+      "enqueue_end_ns": 1762653738438,
+      "wait_gpu_event_ms": 1164.35400390625,
+      "compute_gpu_event_ms": 1512.89013671875
+    },
+    {
+      "layer": 45,
+      "phase": "te1",
+      "start_ns": 1762654718332,
+      "ready_host_ns": 1765229696294,
+      "enqueue_end_ns": 1765241951800,
+      "wait_gpu_event_ms": 1070.6241455078125,
+      "compute_gpu_event_ms": 1288.69921875
+    },
+    {
+      "layer": 46,
+      "phase": "te1",
+      "start_ns": 1765243030701,
+      "ready_host_ns": 1767969213563,
+      "enqueue_end_ns": 1767982334003,
+      "wait_gpu_event_ms": 1447.9095458984375,
+      "compute_gpu_event_ms": 1101.2711181640625
+    },
+    {
+      "layer": 47,
+      "phase": "te1",
+      "start_ns": 1767984081252,
+      "ready_host_ns": 1770515004702,
+      "enqueue_end_ns": 1770525753010,
+      "wait_gpu_event_ms": 1447.688720703125,
+      "compute_gpu_event_ms": 875.436279296875
+    },
+    {
+      "layer": 48,
+      "phase": "te1",
+      "start_ns": 1770526824347,
+      "ready_host_ns": 1773034415074,
+      "enqueue_end_ns": 1773048051129,
+      "wait_gpu_event_ms": 1645.4639892578125,
+      "compute_gpu_event_ms": 971.1957397460938
+    },
+    {
+      "layer": 49,
+      "phase": "te1",
+      "start_ns": 1773048967977,
+      "ready_host_ns": 1775600845484,
+      "enqueue_end_ns": 1775608487554,
+      "wait_gpu_event_ms": 1593.345458984375,
+      "compute_gpu_event_ms": 941.2741088867188
+    },
+    {
+      "layer": 0,
+      "phase": "te2",
+      "start_ns": 1779290035311,
+      "ready_host_ns": 1781147921430,
+      "enqueue_end_ns": 1781195844300,
+      "wait_gpu_event_ms": 1872.7008056640625,
+      "compute_gpu_event_ms": 225.5594940185547
+    },
+    {
+      "layer": 1,
+      "phase": "te2",
+      "start_ns": 1781407413858,
+      "ready_host_ns": 1781414237934,
+      "enqueue_end_ns": 1781423906687,
+      "wait_gpu_event_ms": 6.600895881652832,
+      "compute_gpu_event_ms": 90.56531524658203
+    },
+    {
+      "layer": 2,
+      "phase": "te2",
+      "start_ns": 1781511607999,
+      "ready_host_ns": 1783074583241,
+      "enqueue_end_ns": 1783083029180,
+      "wait_gpu_event_ms": 1580.2601318359375,
+      "compute_gpu_event_ms": 392.7632141113281
+    },
+    {
+      "layer": 3,
+      "phase": "te2",
+      "start_ns": 1783486081016,
+      "ready_host_ns": 1784967341534,
+      "enqueue_end_ns": 1785002373232,
+      "wait_gpu_event_ms": 1495.521240234375,
+      "compute_gpu_event_ms": 338.8786315917969
+    },
+    {
+      "layer": 4,
+      "phase": "te2",
+      "start_ns": 1785004285251,
+      "ready_host_ns": 1785010992077,
+      "enqueue_end_ns": 1785023091207,
+      "wait_gpu_event_ms": 0.004832000005990267,
+      "compute_gpu_event_ms": 79.01737976074219
+    },
+    {
+      "layer": 5,
+      "phase": "te2",
+      "start_ns": 1785023801786,
+      "ready_host_ns": 1786844684064,
+      "enqueue_end_ns": 1786866523649,
+      "wait_gpu_event_ms": 1462.19384765625,
+      "compute_gpu_event_ms": 382.9917907714844
+    },
+    {
+      "layer": 6,
+      "phase": "te2",
+      "start_ns": 1786868209752,
+      "ready_host_ns": 1786886518481,
+      "enqueue_end_ns": 1786895157583,
+      "wait_gpu_event_ms": 0.004767999984323978,
+      "compute_gpu_event_ms": 68.178466796875
+    },
+    {
+      "layer": 7,
+      "phase": "te2",
+      "start_ns": 1786912836729,
+      "ready_host_ns": 1786967480547,
+      "enqueue_end_ns": 1786976398890,
+      "wait_gpu_event_ms": 0.005024000070989132,
+      "compute_gpu_event_ms": 71.39564514160156
+    },
+    {
+      "layer": 8,
+      "phase": "te2",
+      "start_ns": 1786977207154,
+      "ready_host_ns": 1788789569690,
+      "enqueue_end_ns": 1788800765208,
+      "wait_gpu_event_ms": 1421.9630126953125,
+      "compute_gpu_event_ms": 411.1043701171875
+    },
+    {
+      "layer": 9,
+      "phase": "te2",
+      "start_ns": 1788904880403,
+      "ready_host_ns": 1788992575255,
+      "enqueue_end_ns": 1789014625396,
+      "wait_gpu_event_ms": 0.00863999966531992,
+      "compute_gpu_event_ms": 76.35113525390625
+    },
+    {
+      "layer": 10,
+      "phase": "te2",
+      "start_ns": 1789017878352,
+      "ready_host_ns": 1790692374369,
+      "enqueue_end_ns": 1790701179535,
+      "wait_gpu_event_ms": 1416.152099609375,
+      "compute_gpu_event_ms": 608.7916259765625
+    },
+    {
+      "layer": 11,
+      "phase": "te2",
+      "start_ns": 1790701896935,
+      "ready_host_ns": 1792728795021,
+      "enqueue_end_ns": 1792739552950,
+      "wait_gpu_event_ms": 1427.523681640625,
+      "compute_gpu_event_ms": 439.8361511230469
+    },
+    {
+      "layer": 12,
+      "phase": "te2",
+      "start_ns": 1792740451743,
+      "ready_host_ns": 1794652231155,
+      "enqueue_end_ns": 1794661167222,
+      "wait_gpu_event_ms": 1483.2725830078125,
+      "compute_gpu_event_ms": 460.8222351074219
+    },
+    {
+      "layer": 13,
+      "phase": "te2",
+      "start_ns": 1794661928609,
+      "ready_host_ns": 1796666065800,
+      "enqueue_end_ns": 1796674319525,
+      "wait_gpu_event_ms": 1553.057861328125,
+      "compute_gpu_event_ms": 344.80853271484375
+    },
+    {
+      "layer": 14,
+      "phase": "te2",
+      "start_ns": 1796674994514,
+      "ready_host_ns": 1798600544569,
+      "enqueue_end_ns": 1798609057167,
+      "wait_gpu_event_ms": 1590.0838623046875,
+      "compute_gpu_event_ms": 337.0285339355469
+    },
+    {
+      "layer": 15,
+      "phase": "te2",
+      "start_ns": 1798609731902,
+      "ready_host_ns": 1800525238849,
+      "enqueue_end_ns": 1800535350959,
+      "wait_gpu_event_ms": 1587.6009521484375,
+      "compute_gpu_event_ms": 388.5950927734375
+    },
+    {
+      "layer": 16,
+      "phase": "te2",
+      "start_ns": 1800536103395,
+      "ready_host_ns": 1802611430089,
+      "enqueue_end_ns": 1802626795978,
+      "wait_gpu_event_ms": 1697.43212890625,
+      "compute_gpu_event_ms": 121.844482421875
+    },
+    {
+      "layer": 17,
+      "phase": "te2",
+      "start_ns": 1802628948347,
+      "ready_host_ns": 1804557457096,
+      "enqueue_end_ns": 1804570238491,
+      "wait_gpu_event_ms": 1821.8505859375,
+      "compute_gpu_event_ms": 153.93125915527344
+    },
+    {
+      "layer": 18,
+      "phase": "te2",
+      "start_ns": 1804570930754,
+      "ready_host_ns": 1806420216043,
+      "enqueue_end_ns": 1806430429924,
+      "wait_gpu_event_ms": 1711.6815185546875,
+      "compute_gpu_event_ms": 301.6775817871094
+    },
+    {
+      "layer": 19,
+      "phase": "te2",
+      "start_ns": 1806431130049,
+      "ready_host_ns": 1808324166746,
+      "enqueue_end_ns": 1808332613944,
+      "wait_gpu_event_ms": 1602.7186279296875,
+      "compute_gpu_event_ms": 358.59722900390625
+    },
+    {
+      "layer": 20,
+      "phase": "te2",
+      "start_ns": 1808333496829,
+      "ready_host_ns": 1810239606493,
+      "enqueue_end_ns": 1810250303591,
+      "wait_gpu_event_ms": 1556.2794189453125,
+      "compute_gpu_event_ms": 375.7059020996094
+    },
+    {
+      "layer": 21,
+      "phase": "te2",
+      "start_ns": 1810251149273,
+      "ready_host_ns": 1812219393808,
+      "enqueue_end_ns": 1812229310682,
+      "wait_gpu_event_ms": 1604.721923828125,
+      "compute_gpu_event_ms": 346.0527648925781
+    },
+    {
+      "layer": 22,
+      "phase": "te2",
+      "start_ns": 1812229974890,
+      "ready_host_ns": 1814252377237,
+      "enqueue_end_ns": 1814283276488,
+      "wait_gpu_event_ms": 1684.26708984375,
+      "compute_gpu_event_ms": 188.89120483398438
+    },
+    {
+      "layer": 23,
+      "phase": "te2",
+      "start_ns": 1814297336565,
+      "ready_host_ns": 1816203152024,
+      "enqueue_end_ns": 1816221694562,
+      "wait_gpu_event_ms": 1764.2879638671875,
+      "compute_gpu_event_ms": 171.98480224609375
+    },
+    {
+      "layer": 24,
+      "phase": "te2",
+      "start_ns": 1816222793284,
+      "ready_host_ns": 1818103954854,
+      "enqueue_end_ns": 1818112865155,
+      "wait_gpu_event_ms": 1728.551513671875,
+      "compute_gpu_event_ms": 190.66085815429688
+    },
+    {
+      "layer": 25,
+      "phase": "te2",
+      "start_ns": 1818113698723,
+      "ready_host_ns": 1820025170821,
+      "enqueue_end_ns": 1820033590236,
+      "wait_gpu_event_ms": 1731.1339111328125,
+      "compute_gpu_event_ms": 152.08592224121094
+    },
+    {
+      "layer": 26,
+      "phase": "te2",
+      "start_ns": 1820034495800,
+      "ready_host_ns": 1821691696209,
+      "enqueue_end_ns": 1821725441612,
+      "wait_gpu_event_ms": 1513.0469970703125,
+      "compute_gpu_event_ms": 134.89244079589844
+    },
+    {
+      "layer": 27,
+      "phase": "te2",
+      "start_ns": 1821731651619,
+      "ready_host_ns": 1823613321496,
+      "enqueue_end_ns": 1823635208345,
+      "wait_gpu_event_ms": 1787.900634765625,
+      "compute_gpu_event_ms": 178.8654327392578
+    },
+    {
+      "layer": 28,
+      "phase": "te2",
+      "start_ns": 1823636890111,
+      "ready_host_ns": 1825451626492,
+      "enqueue_end_ns": 1825468497040,
+      "wait_gpu_event_ms": 1652.1583251953125,
+      "compute_gpu_event_ms": 103.8604507446289
+    },
+    {
+      "layer": 29,
+      "phase": "te2",
+      "start_ns": 1825469388963,
+      "ready_host_ns": 1827403177478,
+      "enqueue_end_ns": 1827412699201,
+      "wait_gpu_event_ms": 1862.1593017578125,
+      "compute_gpu_event_ms": 89.115234375
+    },
+    {
+      "layer": 30,
+      "phase": "te2",
+      "start_ns": 1827413438032,
+      "ready_host_ns": 1829302632113,
+      "enqueue_end_ns": 1829311341436,
+      "wait_gpu_event_ms": 1809.8140869140625,
+      "compute_gpu_event_ms": 70.02521514892578
+    },
+    {
+      "layer": 31,
+      "phase": "te2",
+      "start_ns": 1829312188946,
+      "ready_host_ns": 1831247603380,
+      "enqueue_end_ns": 1831264114482,
+      "wait_gpu_event_ms": 1859.8529052734375,
+      "compute_gpu_event_ms": 171.4358367919922
+    },
+    {
+      "layer": 32,
+      "phase": "te2",
+      "start_ns": 1831266938009,
+      "ready_host_ns": 1833142928645,
+      "enqueue_end_ns": 1833151892149,
+      "wait_gpu_event_ms": 1731.72265625,
+      "compute_gpu_event_ms": 67.88294219970703
+    },
+    {
+      "layer": 33,
+      "phase": "te2",
+      "start_ns": 1833152722243,
+      "ready_host_ns": 1834983198848,
+      "enqueue_end_ns": 1835009515212,
+      "wait_gpu_event_ms": 1759.7789306640625,
+      "compute_gpu_event_ms": 164.9331817626953
+    },
+    {
+      "layer": 34,
+      "phase": "te2",
+      "start_ns": 1835010588397,
+      "ready_host_ns": 1836941091815,
+      "enqueue_end_ns": 1836949051939,
+      "wait_gpu_event_ms": 1811.8992919921875,
+      "compute_gpu_event_ms": 70.6583023071289
+    },
+    {
+      "layer": 35,
+      "phase": "te2",
+      "start_ns": 1836949779180,
+      "ready_host_ns": 1838832461314,
+      "enqueue_end_ns": 1838857213706,
+      "wait_gpu_event_ms": 1817.693115234375,
+      "compute_gpu_event_ms": 89.13484954833984
+    },
+    {
+      "layer": 36,
+      "phase": "te2",
+      "start_ns": 1838858719427,
+      "ready_host_ns": 1840656441782,
+      "enqueue_end_ns": 1840666882990,
+      "wait_gpu_event_ms": 1732.2171630859375,
+      "compute_gpu_event_ms": 145.9633026123047
+    },
+    {
+      "layer": 37,
+      "phase": "te2",
+      "start_ns": 1840669577381,
+      "ready_host_ns": 1842584144848,
+      "enqueue_end_ns": 1842594771140,
+      "wait_gpu_event_ms": 1788.202392578125,
+      "compute_gpu_event_ms": 79.20105743408203
+    },
+    {
+      "layer": 38,
+      "phase": "te2",
+      "start_ns": 1842595646367,
+      "ready_host_ns": 1844124391909,
+      "enqueue_end_ns": 1844140655468,
+      "wait_gpu_event_ms": 1454.7679443359375,
+      "compute_gpu_event_ms": 84.85244750976562
+    },
+    {
+      "layer": 39,
+      "phase": "te2",
+      "start_ns": 1844143235480,
+      "ready_host_ns": 1844843673770,
+      "enqueue_end_ns": 1844853367623,
+      "wait_gpu_event_ms": 635.2464599609375,
+      "compute_gpu_event_ms": 69.85417938232422
+    },
+    {
+      "layer": 40,
+      "phase": "te2",
+      "start_ns": 1844854367640,
+      "ready_host_ns": 1846626450052,
+      "enqueue_end_ns": 1846634780078,
+      "wait_gpu_event_ms": 1718.2913818359375,
+      "compute_gpu_event_ms": 72.11532592773438
+    },
+    {
+      "layer": 41,
+      "phase": "te2",
+      "start_ns": 1846635583691,
+      "ready_host_ns": 1848474792775,
+      "enqueue_end_ns": 1848482797193,
+      "wait_gpu_event_ms": 1777.7960205078125,
+      "compute_gpu_event_ms": 68.08342742919922
+    },
+    {
+      "layer": 42,
+      "phase": "te2",
+      "start_ns": 1848483569840,
+      "ready_host_ns": 1849682161850,
+      "enqueue_end_ns": 1849690935415,
+      "wait_gpu_event_ms": 1139.4617919921875,
+      "compute_gpu_event_ms": 63.51171112060547
+    },
+    {
+      "layer": 43,
+      "phase": "te2",
+      "start_ns": 1849691751582,
+      "ready_host_ns": 1851446515831,
+      "enqueue_end_ns": 1851456759460,
+      "wait_gpu_event_ms": 1700.7628173828125,
+      "compute_gpu_event_ms": 60.937278747558594
+    },
+    {
+      "layer": 44,
+      "phase": "te2",
+      "start_ns": 1851457563841,
+      "ready_host_ns": 1853196149928,
+      "enqueue_end_ns": 1853204653835,
+      "wait_gpu_event_ms": 1688.7510986328125,
+      "compute_gpu_event_ms": 89.19487762451172
+    },
+    {
+      "layer": 45,
+      "phase": "te2",
+      "start_ns": 1853205509843,
+      "ready_host_ns": 1855011239092,
+      "enqueue_end_ns": 1855025717096,
+      "wait_gpu_event_ms": 1716.3770751953125,
+      "compute_gpu_event_ms": 89.1480941772461
+    },
+    {
+      "layer": 46,
+      "phase": "te2",
+      "start_ns": 1855026785700,
+      "ready_host_ns": 1855933619926,
+      "enqueue_end_ns": 1855952192786,
+      "wait_gpu_event_ms": 840.0078125,
+      "compute_gpu_event_ms": 89.1651840209961
+    },
+    {
+      "layer": 47,
+      "phase": "te2",
+      "start_ns": 1855953287331,
+      "ready_host_ns": 1856540236165,
+      "enqueue_end_ns": 1856558524501,
+      "wait_gpu_event_ms": 515.0982666015625,
+      "compute_gpu_event_ms": 70.58633422851562
+    },
+    {
+      "layer": 48,
+      "phase": "te2",
+      "start_ns": 1856565844233,
+      "ready_host_ns": 1857104087637,
+      "enqueue_end_ns": 1857124296955,
+      "wait_gpu_event_ms": 489.5873107910156,
+      "compute_gpu_event_ms": 65.1648941040039
+    },
+    {
+      "layer": 49,
+      "phase": "te2",
+      "start_ns": 1857125848388,
+      "ready_host_ns": 1857620780160,
+      "enqueue_end_ns": 1857628390290,
+      "wait_gpu_event_ms": 460.4251403808594,
+      "compute_gpu_event_ms": 62.93734359741211
+    }
+  ],
+  "stats": {
+    "rank": 0,
+    "calls": 0,
+    "phase": "te",
+    "bundle_offline_lora": false,
+    "bundle_preparation": {
+      "te": {
+        "prepared_blocks": 95,
+        "merged_matrices": 0,
+        "persistent_baked_bytes": 0,
+        "merge_device": "cpu"
+      }
+    },
+    "checkpoint_io": {
+      "te": {
+        "logical_read_bytes": 2746358240,
+        "source_read_bytes": null,
+        "range_read_calls": 352
+      },
+      "dit": {
+        "logical_read_bytes": 0,
+        "source_read_bytes": null,
+        "range_read_calls": 0
+      }
+    },
+    "operators": {
+      "te_attention": "kitchen_causal",
+      "dit_attention": "kitchen",
+      "row_linear_backend": "tilelang_scaled_fp16",
+      "scalar_score_workspace_mib": 96,
+      "fc2_quantizer": "fused_stored",
+      "column_linear_backend": "cuda_int8_tilelang",
+      "dit_rms_rope": "tilelang_fp32",
+      "aot_precompile": true,
+      "dit_fused_norm": true,
+      "dit_fused_gate": true,
+      "dit_fused_row_gate": true,
+      "dit_prepared_attention": true,
+      "video_attention": "kitchen",
+      "refiner_attention": "native_sdpa",
+      "audio_decode": "native_single_gpu"
+    },
+    "adaptive_lookahead": true,
+    "video_decode_reserve_bytes": 2147483648,
+    "sample_active": false,
+    "decode_complete": false,
+    "vae_phase": null,
+    "idle": {
+      "starts": 0,
+      "cancellations": 0,
+      "ticks": 0,
+      "loads": 0,
+      "errors": 0,
+      "started_ns": null,
+      "last_load_ns": null,
+      "live_bytes": 0
+    },
+    "host_cache": {
+      "preparations": 95,
+      "hits": 5,
+      "misses": 95,
+      "evictions": 82,
+      "discarded_preparations": 0,
+      "cancelled_prefetches": 43,
+      "prepare_ms": 212394.8590799996,
+      "wait_ms": 214079.02717799885,
+      "peak_cache_bytes": 3171723776,
+      "prepare_ema_ms": 1047.855127767808,
+      "preparation_counts": {
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 0, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 1, 0)": 1,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 2, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 3, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 4, 0)": 1,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 5, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 6, 0)": 1,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 7, 0)": 1,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 8, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 9, 0)": 1,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 10, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 11, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 12, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 13, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 14, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 15, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 16, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 17, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 18, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 19, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 20, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 21, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 22, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 23, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 24, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 25, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 26, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 27, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 28, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 29, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 30, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 31, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 32, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 33, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 34, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 35, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 36, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 37, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 38, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 39, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 40, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 41, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 42, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 43, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 44, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 45, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 46, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 47, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 48, 0)": 2,
+        "(((('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'h3-operators-v1', H3OperatorPolicy(te_attention='kitchen_causal', dit_attention='kitchen', row_linear_backend='tilelang_scaled_fp16', scalar_score_workspace_mib=96, fc2_quantizer='fused_stored', column_linear_backend='cuda_int8_tilelang', dit_rms_rope='tilelang_fp32', aot_precompile=True, dit_fused_norm=True, dit_fused_gate=True, dit_fused_row_gate=True, dit_prepared_attention=True)), 'h3-tensor-flow-v1', TensorFlowPolicy(mode='fp16', residual_exponent=6, vision_residual_exponent=0, video_residual_exponent=0)), 'te', 49, 0)": 2
+      },
+      "events": [],
+      "evictions_before_use": 0,
+      "pressure_yields": 0,
+      "future_wait_ms": 209721.3177949994,
+      "future_waits": 95,
+      "consumed_releases": 0,
+      "future_evictions": 0,
+      "cache_bytes": 3171723776,
+      "capacity_bytes": 3221225472,
+      "pending": 0,
+      "shared_budget": {
+        "limit_bytes": 17179869184,
+        "reserved_bytes": 7506718288,
+        "peak_reserved_bytes": 11683717200,
+        "admission_denials": 94,
+        "available_bytes": 12207185920,
+        "physical_bytes": 33658159104,
+        "pressure_aware": true,
+        "cgroup": {
+          "available": true,
+          "limit": 32212254720,
+          "current": 32212176896,
+          "file_bytes": 11908435968,
+          "nonfile_bytes": 20303740928,
+          "anon": 18705821696,
+          "kernel": 374599680,
+          "shmem": 1223245824,
+          "refault_file": 41980606,
+          "scan_kswapd": 40070714,
+          "events": {
+            "low": 0,
+            "high": 0,
+            "max": 369233,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0
+          },
+          "psi": {
+            "some_avg10": 0.18,
+            "some_avg60": 0.1,
+            "some_avg300": 0.25,
+            "some_total": 7980389.0,
+            "full_avg10": 0.18,
+            "full_avg60": 0.1,
+            "full_avg300": 0.25,
+            "full_total": 7871903.0
+          }
+        },
+        "pending_preparation_bytes": 0,
+        "preparing": 0,
+        "file_cache_reserve_bytes": 6442450944
+      },
+      "future_plan_active": false,
+      "protected_groups": 0,
+      "priority_lane": false,
+      "group_states": {}
+    },
+    "startup_cache": {
+      "preparations": 2,
+      "hits": 0,
+      "misses": 2,
+      "evictions": 0,
+      "discarded_preparations": 0,
+      "cancelled_prefetches": 0,
+      "prepare_ms": 7446.359899999834,
+      "wait_ms": 7448.8059789998715,
+      "peak_cache_bytes": 1555824640,
+      "prepare_ema_ms": 3968.133305799938,
+      "preparation_counts": {
+        "(('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'te_startup', 'vision', 0)": 1,
+        "(('tp2-bundle-v1', '/tmp/h3_te_direct_io_20261030/te_bundle.json', 310825, 1793330434134079219, '87b2815f270f1637bd4ddf1b5e78c581e6226c5fdce4695376e4426bfe22076a', 'bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923', '7f19b3394378dc831bb8a8e8d7174b56e3fa9d37c9ab7094d67102d8f4d86ab5'), 'te_startup', 'embedding', 0)": 1
+      },
+      "events": [],
+      "evictions_before_use": 0,
+      "pressure_yields": 0,
+      "future_wait_ms": 7448.700656000256,
+      "future_waits": 2,
+      "consumed_releases": 0,
+      "future_evictions": 0,
+      "cache_bytes": 0,
+      "capacity_bytes": 2779912672,
+      "pending": 0,
+      "shared_budget": {
+        "limit_bytes": 17179869184,
+        "reserved_bytes": 7506718288,
+        "peak_reserved_bytes": 11683717200,
+        "admission_denials": 94,
+        "available_bytes": 12207185920,
+        "physical_bytes": 33658159104,
+        "pressure_aware": true,
+        "cgroup": {
+          "available": true,
+          "limit": 32212254720,
+          "current": 32212176896,
+          "file_bytes": 11908435968,
+          "nonfile_bytes": 20303740928,
+          "anon": 18705821696,
+          "kernel": 374599680,
+          "shmem": 1223245824,
+          "refault_file": 41980606,
+          "scan_kswapd": 40070714,
+          "events": {
+            "low": 0,
+            "high": 0,
+            "max": 369233,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0
+          },
+          "psi": {
+            "some_avg10": 0.18,
+            "some_avg60": 0.1,
+            "some_avg300": 0.25,
+            "some_total": 7980389.0,
+            "full_avg10": 0.18,
+            "full_avg60": 0.1,
+            "full_avg300": 0.25,
+            "full_total": 7871903.0
+          }
+        },
+        "pending_preparation_bytes": 0,
+        "preparing": 0,
+        "file_cache_reserve_bytes": 6442450944
+      },
+      "future_plan_active": false,
+      "protected_groups": 0,
+      "priority_lane": false,
+      "group_states": {}
+    },
+    "events": []
+  },
+  "io_rows": 66759,
+  "dropped_io_rows": 0
+}

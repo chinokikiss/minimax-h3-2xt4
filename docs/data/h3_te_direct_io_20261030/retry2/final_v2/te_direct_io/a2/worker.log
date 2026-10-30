@@ -1,0 +1,13 @@
+WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+WARNING WARNING WARNING
+If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.
+
+WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+WARNING WARNING WARNING
+If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.
+
+WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+WARNING WARNING WARNING
+If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.
+
+NCCL version 2.31.2+cuda13.3

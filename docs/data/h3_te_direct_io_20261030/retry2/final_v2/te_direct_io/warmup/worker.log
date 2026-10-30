@@ -1,0 +1,63 @@
+WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+WARNING WARNING WARNING
+If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.
+
+WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+WARNING WARNING WARNING
+If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.
+
+WARNING:root:WARNING: You need pytorch with cu130 or higher to use optimized CUDA operations.
+WARNING WARNING WARNING
+If you are on nvidia 20 series and above it is required that you update your pytorch to cu130 or higher.
+
+2026-10-30 03:21:40  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`2026-10-30 03:21:40  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+
+2026-10-30 03:21:45  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:21:45  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:21:46  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-30 03:21:46  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-30 03:21:49  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:21:49  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:21:50  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-30 03:21:50  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-30 03:21:53  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:21:53  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:21:53  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-30 03:21:54  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-30 03:21:56  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:21:56  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:21:57  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-30 03:21:57  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-30 03:22:00  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:22:00  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:22:00  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-30 03:22:00  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-30 03:22:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:22:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:22:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1, 2]`
+2026-10-30 03:22:03  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1, 2]`
+2026-10-30 03:22:09  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:22:10  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-30 03:22:11  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:22:11  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[2, 3]`
+2026-10-30 03:22:13  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:22:13  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-30 03:22:14  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:22:14  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-30 03:22:16  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:22:16  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-30 03:22:17  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:22:17  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-30 03:22:19  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:22:20  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-30 03:22:20  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:22:20  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[1]`
+2026-10-30 03:22:23  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:22:23  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:22:23  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-30 03:22:24  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:131): TileLang begins to compile kernel `main` with `out_idx=[3]`
+2026-10-30 03:22:25  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+2026-10-30 03:22:25  [TileLang:tilelang.jit.kernel:INFO] (kernel.py:139): TileLang completes to compile kernel `main`
+NCCL version 2.31.2+cuda13.3
+/usr/lib/python3.13/multiprocessing/resource_tracker.py:479: UserWarning: resource_tracker: There appear to be 2 leaked semaphore objects to clean up at shutdown: {'/mp-0l515oy3', '/mp-366_w552'}
+  warnings.warn(
