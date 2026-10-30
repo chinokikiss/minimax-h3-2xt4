@@ -48,6 +48,13 @@
 - The user's "Submit and check H3 Dataset Read Sweep CPU 20261030" authorizes exactly one corrected upload-study CPU retry and final read-study artifact collection. Upload version 2 was submitted; it does not authorize automatic further retries or another GPU run.
 - The user subsequently reports upload-study success; collect its final artifacts once and distinguish accepted upload requests from completed processing/readback proof. Existing artifact-transfer retry permission remains in force.
 
+## Authorized TE O_DIRECT profiling — 2026-10-30
+
+- The user requests exactly one additional GPU instance to compare buffered TE weight I/O with O_DIRECT on real T4s, including I/O speed and page-cache/reclaim behavior. The follow-up explicitly requires hash-verification profiling too.
+- Run TE only, using the previous 0.85 MP prompt/reference presentation; do not run DiT, VAE encoders/decoders, sampling or LoRA baking. Keep the qualified frozen runtime/core and production defaults unchanged, and retain all TE file/tensor verification.
+- Reuse the matching already-passed CPU source/core qualification. Bind the new benchmark-only adapter/observers separately, test them locally and run a Linux alignment/byte/cache-bypass gate before TE execution. This authorizes no extra CPU instance or environment-only GPU test.
+- Use one private zero-mount submission with bounded execution, durable receipts and final artifacts only. O_DIRECT must not silently fall back to buffered weight reads. Do not alter global drop_caches, poll status/live logs, resubmit automatically or embed credentials.
+
 ## Authorized Kaggle exception — 2026-10-21
 
 - The user explicitly permits Kaggle's native Torch rather than reproducing the local Windows Torch/CUDA package stack. Keep its matching native Python/NumPy/Torchvision/Torchaudio/CUDA environment and record actual versions; do not modify the local conda environment or original snapshot.
