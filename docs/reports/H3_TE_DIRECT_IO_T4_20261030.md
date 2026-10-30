@@ -1,9 +1,69 @@
 # TE page-cache bypass and hash profiling — 2026-10-30
 
-**Kaggle accepted version 1; no T4 performance result yet.** The user requests one additional
+**Version 1 failed before model download or TE execution. The small Linux
+O_DIRECT gate passed; TE performance remains unmeasured.** The user requests one additional
 GPU instance to test whether bypassing the page cache with `O_DIRECT` reduces
 reclaim/refault activity and improves TE time. Hash verification is explicitly
 included in the profile and remains enabled in both arms.
+
+## Version 1 failure, validated scope and correction
+
+The setup worker completed successfully in **99.93 s**, retaining native
+Torch **2.11.0+cu128**, CUDA **12.8**, Kitchen **0.2.37**, TileLang **0.1.13**
+and the frozen legacy API. The experiment worker then exited after **5.08 s**:
+
+```text
+ImportError: cannot import name 'download_with_retry'
+from 'benchmarks.run_h3_l1_turbo_batch'
+```
+
+The new harness mistakenly imported a helper present in the current local
+checkout but absent from the exact frozen capsule. This is a benchmark
+integration bug, not a CUDA, kernel, precision, O_DIRECT or model failure.
+The state contains **zero TE cases, zero raw-I/O trials and zero model
+payload downloads**. There is no evidence yet about TE speed, hash overhead
+or page-cache thrashing.
+
+Before the failure, five adapter tests passed on the Linux allocation. The
+actual same-filesystem probe reported 512-byte memory/offset alignment through
+statx, an O_DIRECT descriptor, byte-exact range/SHA256 reads and **0/1,042
+resident data pages both before and after**. The host exposed two distinct
+Tesla T4 devices, SM75. This establishes the small CPU-mediated direct-I/O
+probe on `/tmp`'s overlay filesystem; no TE kernels were executed. It does not
+establish direct-read throughput or model-loading behavior.
+
+The fix puts the bounded transport retry helper inside the separately bound
+benchmark adapter. No frozen production runner, runtime, attention operator or
+dependency was updated. Retry remains limited to three transient transport/HTTP
+attempts, with 5/15-second backoff; integrity and authorization failures are not
+retried, and notices omit exception URLs.
+
+Seven local CPU tests now pass. A stronger builder gate extracts the exact
+hash-verified capsule into an isolated temporary source tree, overlays only the
+new benchmark files, disables CUDA visibility, blocks network calls and
+exercises the lazy asset-preparation imports through the auxiliary-assembly
+boundary. The submitted v1 runner reproduces the same ImportError in that
+rehearsal; the corrected runner passes, as do all seven tests. This is local
+CPU import/adapter qualification, not new Linux or physical-T4 performance
+acceptance.
+
+All **18 final files** passed size/SHA256 validation. The three executed
+supplemental modules were decoded from the returned supervisor launcher and
+matched the submission's hashes; the setup receipt matches the qualified
+capsule. Initial final-artifact collection hit TLS EOF, and the first retry
+obtained one file before another TLS EOF. A second bounded transfer retry using
+the existing certificate-verifying TLS 1.2 helper obtained all files. The
+original errors, partial manifest and retry receipts are retained. Signed
+artifact URLs remain private; public records contain only a sanitized transport
+error summary. No status/list/live-log polling or GPU resubmission occurred.
+
+Evidence:
+
+- [Failed result](../data/h3_te_direct_io_20261030/final_v1/te_direct_io/result.json)
+- [Exact failure](../data/h3_te_direct_io_20261030/final_v1/te_direct_io/exception.txt)
+- [Source and probe validation](../data/h3_te_direct_io_20261030/final_v1_validation.json)
+- [Corrected frozen-source rehearsal](../data/h3_te_direct_io_20261030/fixed_harness_cpu/rehearsal.json)
+- [Submitted-v1 negative control](../data/h3_te_direct_io_20261030/v1_frozen_regression_cpu/rehearsal.log)
 
 ## Controlled workload
 
@@ -161,5 +221,6 @@ source binding, metadata, reused core qualification and submission acknowledgeme
 The full notebook is kept locally at
 `D:\attention_eval\h3_te_direct_io_20261030\gpu_job\experiment.ipynb` and is
 excluded from public Git because it contains the private reference image.
-There has been no status/list/live-log query or final collection. Acceptance
-confirms submission, not successful execution, direct-I/O support or a speedup.
+Final artifacts have now been collected and validated as described above.
+Version 1 failed before the throughput/TE trials; it must not be reported as
+a completed performance comparison.

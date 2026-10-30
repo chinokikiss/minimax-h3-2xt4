@@ -1,0 +1,9 @@
+{
+  "kind": "final_artifact_transfer_retry",
+  "status": "transfer_failed",
+  "started_utc": "2026-10-30T03:00:21.733520+00:00",
+  "status_polling": false,
+  "error_type": "SSLError",
+  "completed_utc": "2026-10-30T03:00:32.616011+00:00",
+  "local_files": 1
+}

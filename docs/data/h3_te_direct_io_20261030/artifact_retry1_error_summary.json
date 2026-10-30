@@ -1,0 +1,7 @@
+{
+  "error_type": "SSLError",
+  "stage": "artifact_file_download",
+  "host": "www.kaggleusercontent.com",
+  "partial_files": 1,
+  "signed_url_omitted": true
+}

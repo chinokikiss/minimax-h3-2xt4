@@ -1,0 +1,37 @@
+{
+  "status": "verified",
+  "files": 18,
+  "source_capsule": "21abe7dd91f284eed9626bb018c6abf66adf1c066b2f76662d72ce53d46d41a1",
+  "benchmark_hashes": {
+    "benchmarks/te_direct_io.py": "ebf14106eea896746941fa1a1f476a98ecf66c6b27f4fe67e3577b22b3c57b98",
+    "benchmarks/test_te_direct_io.py": "c740ed42631ebf5c397a5efb458a7adb1ac286eec5e58c1994a2c6b8d9426cd5",
+    "benchmarks/run_te_direct_io.py": "ee75b4321f3819803b134e84226c2c4af1e77541736a26cd0620e5083cbe2359"
+  },
+  "direct_probe": {
+    "alignment": {
+      "statx_available": true,
+      "mask": 14143,
+      "memory_alignment": 512,
+      "offset_alignment": 512,
+      "dio_alignment_reported": true
+    },
+    "before": {
+      "file": "direct_alignment_probe.bin",
+      "pages": 1042,
+      "resident_pages": 0,
+      "resident_fraction": 0.0
+    },
+    "path": "/tmp/h3_te_direct_io_20261030/direct_alignment_probe.bin",
+    "descriptor_has_o_direct": true,
+    "after": {
+      "pages": 1042,
+      "resident_pages": 0,
+      "resident_fraction": 0.0
+    },
+    "byte_exact": true,
+    "cache_bypass_observed": true,
+    "status": "passed"
+  },
+  "te_calls": 0,
+  "model_downloads": 0
+}

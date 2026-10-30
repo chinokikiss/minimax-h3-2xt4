@@ -36,6 +36,8 @@ def main():
     assert qualification['capsule_sha256'] == pub['capsule_sha256'] == '21abe7dd91f284eed9626bb018c6abf66adf1c066b2f76662d72ce53d46d41a1'
     assert qualification['core_pins']['comfy-kitchen'] == '0.2.37'
     assert qualification['core_pins']['tilelang'] == '0.1.13'
+    from qualify_te_direct_io import qualify
+    rehearsal = qualify(args.qualified.resolve(),args.evidence.resolve()/'frozen_harness_cpu',ROOT)
     subprocess.run([sys.executable, str(ROOT/'benchmarks/build_kaggle_light_job.py'),
         '--mode','e2e','--publication',str(publication),'--qualification',str(cpu),
         '--setup-budget','600','--output',str(job)], check=True)
@@ -93,6 +95,7 @@ os.execve(sys.executable,argv,env)
     assert metadata['is_private'] and metadata['enable_gpu'] and metadata['dataset_sources'] == metadata['kernel_sources'] == []
     (job/'kernel-metadata.json').write_text(json.dumps(metadata,indent=2))
     binding = dict(source_commit=commit, benchmark_sources=hashes, publication=pub,
+        frozen_harness_rehearsal=rehearsal,
         qualification_sha256=hashlib.sha256(cpu.read_bytes()).hexdigest(),
         previous_runtime_core_qualification_reused=True, new_cpu_instance=False,
         frozen_runtime_and_operators_unchanged=True, benchmark_adaptation='TE-only unused DiT reader and aligned weight I/O observers',

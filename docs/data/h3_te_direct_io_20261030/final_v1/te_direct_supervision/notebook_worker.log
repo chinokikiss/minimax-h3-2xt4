@@ -1,0 +1,12 @@
+TE_IO_STAGE direct_support_gate {}
+TE_IO_STAGE download_te {}
+Traceback (most recent call last):
+  File "/kaggle/temp/h3_light_source/benchmarks/run_te_direct_io.py", line 497, in <module>
+    main()
+    ~~~~^^
+  File "/kaggle/temp/h3_light_source/benchmarks/run_te_direct_io.py", line 409, in main
+    state['assets'] = prepare_assets(args.source, args.scratch, mark)
+                      ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/kaggle/temp/h3_light_source/benchmarks/run_te_direct_io.py", line 275, in prepare_assets
+    from benchmarks.run_h3_l1_turbo_batch import download_with_retry
+ImportError: cannot import name 'download_with_retry' from 'benchmarks.run_h3_l1_turbo_batch' (/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_batch.py)

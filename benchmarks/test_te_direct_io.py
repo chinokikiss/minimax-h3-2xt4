@@ -12,6 +12,32 @@ from benchmarks.te_direct_io import DirectFile
 
 
 class DirectIOAdapter(unittest.TestCase):
+    def test_transport_retry_is_bounded_and_reports_no_exception_url(self):
+        from unittest.mock import Mock
+        operation = Mock(side_effect=[ConnectionError('private transport URL'),
+                                     ConnectionError('private transport URL'), 'done'])
+        notices, sleeps = [], []
+        self.assertEqual(adapter.download_with_retry(operation, 'test', notices.append, sleep=sleeps.append), 'done')
+        self.assertEqual(sleeps, [5,15])
+        self.assertEqual(operation.call_count, 3)
+        self.assertNotIn('private transport URL', str(notices))
+        operation = Mock(side_effect=ConnectionError('transport unavailable'))
+        with self.assertRaises(ConnectionError):
+            adapter.download_with_retry(operation, 'test', lambda row:None, sleep=lambda seconds:None)
+        self.assertEqual(operation.call_count, 3)
+
+    def test_integrity_and_authorization_errors_are_not_retried(self):
+        from unittest.mock import Mock
+        import requests
+        response = requests.Response()
+        response.status_code = 403
+        for error in (ValueError('checksum mismatch'), requests.HTTPError(response=response)):
+            operation = Mock(side_effect=error)
+            with self.assertRaises(type(error)):
+                adapter.download_with_retry(operation, 'test', lambda row:self.fail('No retry'),
+                                            sleep=lambda seconds:self.fail('No backoff'))
+            self.assertEqual(operation.call_count, 1)
+
     def fixture(self, path, *, fail=False, limit=None):
         calls = []
         def opener(name, flags):

@@ -1,0 +1,74 @@
+{
+  "h3-te-direct-io-t4-20261030.log": {
+    "bytes": 7815,
+    "sha256": "71f8dff217e0083c0ecb304a9a4b631125fd8ef5e8a493be37a3acbe99a56d61"
+  },
+  "light_setup/api_probe.log": {
+    "bytes": 1420,
+    "sha256": "16401c525113952b9f12881dd4803be748019d8aa892a98da31d95f79f04a26d"
+  },
+  "light_setup/bounded_worker.py": {
+    "bytes": 1925,
+    "sha256": "bea3b9742f63f13068f538c1798912bb8b693e93eb9a3ef9d2a14ecfe4c698dd"
+  },
+  "light_setup/cpu_qualification.json": {
+    "bytes": 123443,
+    "sha256": "0577fced71e7f5c85601d37bb55d5c91a975ddf886181ba3b54791d8019e7cdf"
+  },
+  "light_setup/delivery_binding.json": {
+    "bytes": 629,
+    "sha256": "d52e2a8bccc1536beb0c5b1a26ff9a4cf34f63a75f980fdab8fce3f78cba5b30"
+  },
+  "light_setup/direct-core.txt": {
+    "bytes": 5811,
+    "sha256": "f67dca5cc9543d06bcca19426bda0914306d6e143f8712037e84ee54f30e8eee"
+  },
+  "light_setup/direct_pip.log": {
+    "bytes": 15656,
+    "sha256": "48650b35435f2373efda97be2b93d7d58ca000d3e3f446178dfb5539239d83cd"
+  },
+  "light_setup/execution_env.json": {
+    "bytes": 449,
+    "sha256": "53f8cbaa42b4a30ef25583746477a1d1570f37b3f30affd13d09ffcec0dd7911"
+  },
+  "light_setup/notebook_worker.log": {
+    "bytes": 211,
+    "sha256": "a236037b442479f19c7968c83a44398e1f9c04babd0ba7e40eb7071543ebf739"
+  },
+  "light_setup/runtime_profile.json": {
+    "bytes": 27855,
+    "sha256": "fb2c2512300010c032bc9c2a3dc28f2e534102c9fb89171861508158e03af13f"
+  },
+  "light_setup/setup_receipt.json": {
+    "bytes": 132512,
+    "sha256": "48c2cbc073ac93207833dd50bbbf495655a165850373380923c7c196d6b0134e"
+  },
+  "light_setup/supervision.json": {
+    "bytes": 207,
+    "sha256": "ee030d52e1e8f88bb9176bb049eb9c28b981d3b80d4dc31002f9591ac2d3e3af"
+  },
+  "te_direct_io/adapter_cpu_tests.log": {
+    "bytes": 962,
+    "sha256": "8bdbe1dd03a6130332bb8259b9df19f70df534e9e612856ad5ecb20b4f4c21f3"
+  },
+  "te_direct_io/exception.txt": {
+    "bytes": 591,
+    "sha256": "692af02a4caf1d455c5b2fa0303964da968e732bb8acc55353236fa4e81d8d07"
+  },
+  "te_direct_io/result.json": {
+    "bytes": 7470,
+    "sha256": "21e8e558555ffa7ce4e9a94ca5fbbe4e36dd0072a537c2ba0ca222d0889a7214"
+  },
+  "te_direct_supervision/bounded_worker.py": {
+    "bytes": 56781,
+    "sha256": "c178f3d150d91ac481eb1a1e3cee36cacf154281ae33a1679dfb69ebf8bfef94"
+  },
+  "te_direct_supervision/notebook_worker.log": {
+    "bytes": 767,
+    "sha256": "32bf2acda66ca29d5929616913886c447646aa2934ae6d8953431f964e61d1b2"
+  },
+  "te_direct_supervision/supervision.json": {
+    "bytes": 209,
+    "sha256": "a18c019982ceabb783cead4fea4a8da0455157a4e9e77231bc979ba18cf31b4f"
+  }
+}

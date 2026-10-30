@@ -2,7 +2,7 @@
 
 [Documentation index](../README.md)
 
-[TE O_DIRECT and hash profiling](H3_TE_DIRECT_IO_T4_20261030.md): one TE-only T4 job accepted; aligned direct reads versus buffered I/O, file/tensor hash costs, CPU/GPU traces and reclaim counters; results pending.
+[TE O_DIRECT and hash profiling](H3_TE_DIRECT_IO_T4_20261030.md): v1 failed before model loading due to a frozen-helper import mismatch; Linux direct-I/O gate passed, TE performance unmeasured; self-contained fix and frozen-capsule CPU rehearsal complete.
 
 [Dataset CPU read and upload results](H3_DATASET_CPU_RESULTS_20261030.md): 74 read trials, shared-NFS throughput plateau, process/cache memory accounting, native private API and Hub upload acknowledgements; CLI invocation fix remains upload-untested.
 

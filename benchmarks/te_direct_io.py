@@ -14,6 +14,26 @@ from types import SimpleNamespace
 MIB = 2**20
 
 
+def download_with_retry(operation, name, on_retry, *, sleep=time.sleep):
+    """Self-contained bounded transport retry; no newer frozen-runner imports."""
+    import httpx
+    import requests
+    for attempt in range(3):
+        try:
+            return operation()
+        except Exception as error:
+            status = getattr(getattr(error, 'response', None), 'status_code', None)
+            transient = (status in (408, 429, 500, 502, 503, 504) or
+                (status is None and isinstance(error, (httpx.TransportError,
+                    requests.ConnectionError, requests.Timeout, ConnectionError, TimeoutError))))
+            if not transient or attempt == 2:
+                raise
+            delay = (5, 15)[attempt]
+            on_retry(dict(file=name, failed_attempt=attempt+1, http_status=status,
+                          error_type=type(error).__name__, backoff_seconds=delay))
+            sleep(delay)
+
+
 def alignment_info(path):
     result = dict(statx_available=False, memory_alignment=None, offset_alignment=None)
     if os.name != 'posix':

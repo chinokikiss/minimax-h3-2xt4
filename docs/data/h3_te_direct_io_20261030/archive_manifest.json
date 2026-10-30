@@ -3,17 +3,149 @@
     "bytes": 972,
     "sha256": "4754671541ae1e92ae7ae2dc3de5da2e5376c03b17fd6895550ca80238dbd713"
   },
+  "archive_manifest_submission.json": {
+    "bytes": 976,
+    "sha256": "7873101131a6d12df896c9555a89affbbcb9a1a249181322d36ce9277c99d2c4"
+  },
+  "artifact_retry1.json": {
+    "bytes": 267,
+    "sha256": "dd3b90811a6c9290a0398e3246bbba2cabfbe37ca8bfecd9e7245f6f7312dff3"
+  },
+  "artifact_retry1_error_summary.json": {
+    "bytes": 166,
+    "sha256": "ba2b678cb51eed9ffc2c13df6c9ecc14869bd7ffe627563a30c9f40d5d4cce17"
+  },
+  "artifact_retry2.json": {
+    "bytes": 259,
+    "sha256": "38fb5b8cd3a74bc43e459829747cce9caf8ffc5645222494a97d8cb4e5ba3f62"
+  },
+  "download_manifest_attempt1.json": {
+    "bytes": 2,
+    "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+  },
+  "download_manifest_attempt2.json": {
+    "bytes": 145,
+    "sha256": "580223c55f7db24cc31b4e1d243ad2f3d6d501b92685353a213590ed96b288a5"
+  },
+  "final_v1/download_manifest.json": {
+    "bytes": 2666,
+    "sha256": "132ee099b76efdcf07c6759b1c79905e9a6bd181074dd6060a335a51ab9f739d"
+  },
+  "final_v1/h3-te-direct-io-t4-20261030.log": {
+    "bytes": 7815,
+    "sha256": "71f8dff217e0083c0ecb304a9a4b631125fd8ef5e8a493be37a3acbe99a56d61"
+  },
+  "final_v1/light_setup/api_probe.log": {
+    "bytes": 1420,
+    "sha256": "16401c525113952b9f12881dd4803be748019d8aa892a98da31d95f79f04a26d"
+  },
+  "final_v1/light_setup/bounded_worker.py": {
+    "bytes": 1925,
+    "sha256": "bea3b9742f63f13068f538c1798912bb8b693e93eb9a3ef9d2a14ecfe4c698dd"
+  },
+  "final_v1/light_setup/cpu_qualification.json": {
+    "bytes": 123443,
+    "sha256": "0577fced71e7f5c85601d37bb55d5c91a975ddf886181ba3b54791d8019e7cdf"
+  },
+  "final_v1/light_setup/delivery_binding.json": {
+    "bytes": 629,
+    "sha256": "d52e2a8bccc1536beb0c5b1a26ff9a4cf34f63a75f980fdab8fce3f78cba5b30"
+  },
+  "final_v1/light_setup/direct-core.txt": {
+    "bytes": 5811,
+    "sha256": "f67dca5cc9543d06bcca19426bda0914306d6e143f8712037e84ee54f30e8eee"
+  },
+  "final_v1/light_setup/direct_pip.log": {
+    "bytes": 15656,
+    "sha256": "48650b35435f2373efda97be2b93d7d58ca000d3e3f446178dfb5539239d83cd"
+  },
+  "final_v1/light_setup/execution_env.json": {
+    "bytes": 449,
+    "sha256": "53f8cbaa42b4a30ef25583746477a1d1570f37b3f30affd13d09ffcec0dd7911"
+  },
+  "final_v1/light_setup/notebook_worker.log": {
+    "bytes": 211,
+    "sha256": "a236037b442479f19c7968c83a44398e1f9c04babd0ba7e40eb7071543ebf739"
+  },
+  "final_v1/light_setup/runtime_profile.json": {
+    "bytes": 27855,
+    "sha256": "fb2c2512300010c032bc9c2a3dc28f2e534102c9fb89171861508158e03af13f"
+  },
+  "final_v1/light_setup/setup_receipt.json": {
+    "bytes": 132512,
+    "sha256": "48c2cbc073ac93207833dd50bbbf495655a165850373380923c7c196d6b0134e"
+  },
+  "final_v1/light_setup/supervision.json": {
+    "bytes": 207,
+    "sha256": "ee030d52e1e8f88bb9176bb049eb9c28b981d3b80d4dc31002f9591ac2d3e3af"
+  },
+  "final_v1/te_direct_io/adapter_cpu_tests.log": {
+    "bytes": 962,
+    "sha256": "8bdbe1dd03a6130332bb8259b9df19f70df534e9e612856ad5ecb20b4f4c21f3"
+  },
+  "final_v1/te_direct_io/exception.txt": {
+    "bytes": 591,
+    "sha256": "692af02a4caf1d455c5b2fa0303964da968e732bb8acc55353236fa4e81d8d07"
+  },
+  "final_v1/te_direct_io/result.json": {
+    "bytes": 7470,
+    "sha256": "21e8e558555ffa7ce4e9a94ca5fbbe4e36dd0072a537c2ba0ca222d0889a7214"
+  },
+  "final_v1/te_direct_supervision/bounded_worker.py": {
+    "bytes": 56781,
+    "sha256": "c178f3d150d91ac481eb1a1e3cee36cacf154281ae33a1679dfb69ebf8bfef94"
+  },
+  "final_v1/te_direct_supervision/notebook_worker.log": {
+    "bytes": 767,
+    "sha256": "32bf2acda66ca29d5929616913886c447646aa2934ae6d8953431f964e61d1b2"
+  },
+  "final_v1/te_direct_supervision/supervision.json": {
+    "bytes": 209,
+    "sha256": "a18c019982ceabb783cead4fea4a8da0455157a4e9e77231bc979ba18cf31b4f"
+  },
+  "final_v1_validation.json": {
+    "bytes": 1191,
+    "sha256": "6914116cce32e9c90568e0391afeb01ddfa09a33e9856050cb44e77af64d5590"
+  },
+  "fixed_harness_cpu/rehearsal.json": {
+    "bytes": 633,
+    "sha256": "6857290fd90b502b128a2e04ebab319fd3acd67caad21b7122b7bff2ecc011f1"
+  },
+  "fixed_harness_cpu/rehearsal.log": {
+    "bytes": 1449,
+    "sha256": "07f2db7f3d6679daec580baab748cad2d800062903ef7dd5c8472330f71ad463"
+  },
+  "fixed_harness_cpu/rehearsal.py": {
+    "bytes": 1487,
+    "sha256": "cb62051083d59ba1075d2b229243510d57832c6a9193058dd70f4813e67014c7"
+  },
   "gpu_submission.json": {
     "bytes": 3106,
-    "sha256": "6181eb1ea8695cfe067970702d6363998d87a8464b16166f26f9a94eae26f53b"
+    "sha256": "0e44144e102252dd16c58a112fe1b5ed2e64a6091d993bdc8056013f5551094f"
   },
   "gpu_submission_cli.log": {
     "bytes": 267,
     "sha256": "9e3e6bbaa18f5e5ef9d71c51ff77274905e94328849dc46c7542c4cdd89914d6"
   },
+  "gpu_submission_collection_cli.log": {
+    "bytes": 268,
+    "sha256": "00927261fe874eb76c47f62a2e19715aab2c0c2bfef36ed8c8af0a3f08405e60"
+  },
+  "gpu_submission_collection_status.json": {
+    "bytes": 283,
+    "sha256": "a6cb0c70110a5af2574d93b932a3dbdf638a0c9b3f09c187bb9f1d4e38801c88"
+  },
   "kernel-metadata.json": {
     "bytes": 468,
     "sha256": "24fe1d1eacf9ddcf214cc5413e4483ba8b3280676fe1d7aa77562d74bdd4a055"
+  },
+  "retry_final_download.py": {
+    "bytes": 1864,
+    "sha256": "28896bb1f8a25861c2a9e2f47a64f7623b9ce0e1b6b0e48161be0b8b04265631"
+  },
+  "retry_final_download_tls12.py": {
+    "bytes": 1864,
+    "sha256": "9b5517d93a75cc1a5c927fca88f9d9cc628a682241ff59445efe9e4499ff6637"
   },
   "reused_core_cpu_qualification.json": {
     "bytes": 131301,
@@ -26,5 +158,17 @@
   "submit_prepared.py": {
     "bytes": 2895,
     "sha256": "3bac1b29125d21915b478176e79191e778da0078455ae6955cf1e8493f9f42f0"
+  },
+  "v1_frozen_regression_cpu/rehearsal.json": {
+    "bytes": 633,
+    "sha256": "c7aae4906e48d077247f31c002e92f1b1638b18c11c19a1cdc0021284844b6d4"
+  },
+  "v1_frozen_regression_cpu/rehearsal.log": {
+    "bytes": 504,
+    "sha256": "bd6f6143df8497dc9cf082e5cadcb8ab9702ca26423282f8447672e4c880fcfb"
+  },
+  "v1_frozen_regression_cpu/rehearsal.py": {
+    "bytes": 1487,
+    "sha256": "cb62051083d59ba1075d2b229243510d57832c6a9193058dd70f4813e67014c7"
   }
 }

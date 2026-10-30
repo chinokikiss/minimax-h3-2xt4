@@ -20,7 +20,7 @@ from types import SimpleNamespace
 import torch
 from patches import comfy_tp_runtime as rt
 from benchmarks import te_io_telemetry as telemetry
-from benchmarks.te_direct_io import DirectFile, IOAudit, alignment_info, install
+from benchmarks.te_direct_io import DirectFile, IOAudit, alignment_info, install, download_with_retry
 
 BASE_WORKER = rt._worker
 BASE_RANK = rt.RankRuntime
@@ -272,7 +272,6 @@ def prepare_assets(source, scratch, mark):
     for path in (source/'bundle_provenance').glob('*.json'):
         shutil.copyfile(path, root/path.name)
     from huggingface_hub import hf_hub_download
-    from benchmarks.run_h3_l1_turbo_batch import download_with_retry
     rows = []
     lock = threading.Lock()
     def download(item):

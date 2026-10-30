@@ -1,0 +1,62 @@
+[{"stream_name":"stderr","time":11.292468592,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":11.292530765,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":11.292535486,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":11.292538192,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":12.066193252,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":12.0662259,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":12.066232406,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":12.06623765,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":13.693542095,"data":"LIGHT_NOTEBOOK_START zero dataset/kernel mounts\n"}
+,{"stream_name":"stdout","time":13.694635764000001,"data":"T4_SUPERVISOR notebook_cell_started\n"}
+,{"stream_name":"stdout","time":13.791148258,"data":"LIGHT_SOURCE_DOWNLOAD_START\n"}
+,{"stream_name":"stdout","time":14.699375892,"data":"LIGHT_SOURCE_READY\n"}
+,{"stream_name":"stdout","time":14.79794697,"data":"LIGHT_SETUP_STAGE frozen_source\n"}
+,{"stream_name":"stdout","time":18.551280259,"data":"LIGHT_SETUP_STAGE direct_pip\n"}
+,{"stream_name":"stdout","time":71.969416861,"data":"LIGHT_SETUP_STAGE api_probe\n"}
+,{"stream_name":"stdout","time":74.795741085,"data":"LIGHT_SETUP_HEARTBEAT api_probe 60\n"}
+,{"stream_name":"stdout","time":113.58520715,"data":"LIGHT_SETUP_FINAL ready_for_device_gate\n"}
+,{"stream_name":"stdout","time":113.626807132,"data":"T4_SUPERVISOR_FINAL {\"status\": \"worker_exited\", \"deadline_seconds\": 600, \"scope\": \"Notebook cell execution only; provider startup/mounting excluded\", \"worker_pid\": 52, \"exit_code\": 0, \"seconds\": 99.92853643699999}\n"}
+,{"stream_name":"stdout","time":114.10718242,"data":"T4_SUPERVISOR notebook_cell_started\n"}
+,{"stream_name":"stdout","time":118.147703377,"data":"TE_IO_STAGE direct_support_gate {}\n"}
+,{"stream_name":"stdout","time":118.409779939,"data":"TE_IO_STAGE download_te {}\n"}
+,{"stream_name":"stdout","time":118.686650114,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stdout","time":118.68772943,"data":"  File \"/kaggle/temp/h3_light_source/benchmarks/run_te_direct_io.py\", line 497, in \u003cmodule\u003e\n"}
+,{"stream_name":"stdout","time":118.68886933900001,"data":"    main()\n"}
+,{"stream_name":"stdout","time":118.689994888,"data":"    ~~~~^^\n"}
+,{"stream_name":"stdout","time":118.691123612,"data":"  File \"/kaggle/temp/h3_light_source/benchmarks/run_te_direct_io.py\", line 409, in main\n"}
+,{"stream_name":"stdout","time":118.692071221,"data":"    state['assets'] = prepare_assets(args.source, args.scratch, mark)\n"}
+,{"stream_name":"stdout","time":118.692913556,"data":"                      ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stdout","time":118.693692534,"data":"  File \"/kaggle/temp/h3_light_source/benchmarks/run_te_direct_io.py\", line 275, in prepare_assets\n"}
+,{"stream_name":"stdout","time":118.694456073,"data":"    from benchmarks.run_h3_l1_turbo_batch import download_with_retry\n"}
+,{"stream_name":"stdout","time":118.695182195,"data":"ImportError: cannot import name 'download_with_retry' from 'benchmarks.run_h3_l1_turbo_batch' (/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_batch.py)\n"}
+,{"stream_name":"stdout","time":119.190535518,"data":"T4_SUPERVISOR_FINAL {\"status\": \"worker_exited\", \"deadline_seconds\": 4200, \"scope\": \"Notebook cell execution only; provider startup/mounting excluded\", \"worker_pid\": 100, \"exit_code\": 1, \"seconds\": 5.081140226000002}\n"}
+,{"stream_name":"stderr","time":119.439816292,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":119.440640043,"data":"  File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":119.440663125,"data":"    import sys;import papermill as pm;pm.execute_notebook(\"__notebook__.ipynb\",\"__notebook__.ipynb\",progress_bar=False,log_output=True,stdout_file=sys.stdout,stderr_file=sys.stderr,allow_errors=False,timeout=5100)\n"}
+,{"stream_name":"stderr","time":119.440669831,"data":"                                      ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":119.440674964,"data":"  File \"/usr/local/lib/python3.13/dist-packages/papermill/execute.py\", line 131, in execute_notebook\n"}
+,{"stream_name":"stderr","time":119.440679791,"data":"    raise_for_execution_errors(nb, output_path)\n"}
+,{"stream_name":"stderr","time":119.440683646,"data":"    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":119.44068758,"data":"  File \"/usr/local/lib/python3.13/dist-packages/papermill/execute.py\", line 251, in raise_for_execution_errors\n"}
+,{"stream_name":"stderr","time":119.440691814,"data":"    raise error\n"}
+,{"stream_name":"stderr","time":119.440695711,"data":"papermill.exceptions.PapermillExecutionError: \n"}
+,{"stream_name":"stderr","time":119.440699661,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":119.440703811,"data":"Exception encountered at \"In [1]\":\n"}
+,{"stream_name":"stderr","time":119.440707791,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":119.440711993,"data":"AssertionError                            Traceback (most recent call last)\n"}
+,{"stream_name":"stderr","time":119.440715789,"data":"/tmp/ipykernel_25/293221722.py in \u003ccell line: 0\u003e()\n"}
+,{"stream_name":"stderr","time":119.440720156,"data":"    143     print('T4_SUPERVISOR_FINAL '+json.dumps(receipt),flush=True)\n"}
+,{"stream_name":"stderr","time":119.440724563,"data":"    144 \n"}
+,{"stream_name":"stderr","time":119.440728814,"data":"--\u003e 145 assert json.loads(pathlib.Path('/kaggle/working/te_direct_io/result.json').read_text())['status']=='complete'\n"}
+,{"stream_name":"stderr","time":119.440735008,"data":"\n"}
+,{"stream_name":"stderr","time":119.440739125,"data":"AssertionError: \n"}
+,{"stream_name":"stderr","time":119.44074319,"data":"\n"}
+,{"stream_name":"stderr","time":121.823944404,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":121.823991397,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":122.034789748,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":122.034842737,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":122.861884928,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":122.944471959,"data":"[NbConvertApp] Writing 620514 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":125.385058413,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":126.033389471,"data":"[NbConvertApp] Writing 1030382 bytes to __results__.html\n"}
+]

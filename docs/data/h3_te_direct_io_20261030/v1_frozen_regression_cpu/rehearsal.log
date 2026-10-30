@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "<string>", line 16, in <module>
+  File "D:\attention_eval\h3_te_direct_io_20261030\v1_regression_cpu_attempt2\source\benchmarks\run_te_direct_io.py", line 275, in prepare_assets
+    from benchmarks.run_h3_l1_turbo_batch import download_with_retry
+ImportError: cannot import name 'download_with_retry' from 'benchmarks.run_h3_l1_turbo_batch' (D:\attention_eval\h3_te_direct_io_20261030\v1_regression_cpu_attempt2\source\benchmarks\run_h3_l1_turbo_batch.py)

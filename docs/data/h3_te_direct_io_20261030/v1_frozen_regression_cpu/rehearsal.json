@@ -1,0 +1,15 @@
+{
+  "status": "failed",
+  "returncode": 1,
+  "capsule_sha256": "21abe7dd91f284eed9626bb018c6abf66adf1c066b2f76662d72ce53d46d41a1",
+  "supplemental_sources": {
+    "te_direct_io.py": "0aaa44278b8268340f176e6879e48994f6d47798516fc7dc325a9ede17faaeba",
+    "test_te_direct_io.py": "b6086e722504032d60f5f996c72516e8d3078758ea0a67f96557301f5487e9a8",
+    "run_te_direct_io.py": "ee75b4321f3819803b134e84226c2c4af1e77541736a26cd0620e5083cbe2359"
+  },
+  "frozen_runtime_unchanged": true,
+  "environment": "Local conda CPU rehearsal, not Linux/T4 execution",
+  "gpu": false,
+  "network": false,
+  "models_downloaded": false
+}

@@ -1,0 +1,62 @@
+{
+  "status": "blocked_or_failed",
+  "full_h3_pipeline": false,
+  "te_only": true,
+  "cases": [],
+  "raw_io": [],
+  "no_global_cache_drop": true,
+  "te_hash_verification": true,
+  "production_operators_unchanged": true,
+  "direct_support": {
+    "alignment": {
+      "statx_available": true,
+      "mask": 14143,
+      "memory_alignment": 512,
+      "offset_alignment": 512,
+      "dio_alignment_reported": true
+    },
+    "before": {
+      "file": "direct_alignment_probe.bin",
+      "pages": 1042,
+      "resident_pages": 0,
+      "resident_fraction": 0.0
+    },
+    "path": "/tmp/h3_te_direct_io_20261030/direct_alignment_probe.bin",
+    "descriptor_has_o_direct": true,
+    "after": {
+      "pages": 1042,
+      "resident_pages": 0,
+      "resident_fraction": 0.0
+    },
+    "byte_exact": true,
+    "cache_bypass_observed": true,
+    "status": "passed"
+  },
+  "devices": [
+    {
+      "name": "Tesla T4",
+      "capability": [
+        7,
+        5
+      ],
+      "uuid": "943448d8-8158-61e3-1ba6-0461ee8c84fc"
+    },
+    {
+      "name": "Tesla T4",
+      "capability": [
+        7,
+        5
+      ],
+      "uuid": "27a13299-4d72-ef19-0f08-8edbac9db94f"
+    }
+  ],
+  "software": {
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "kitchen": "0.2.37",
+    "tilelang": "0.1.13",
+    "python": "3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]"
+  },
+  "mountinfo": "772 722 0:54 / / rw,relatime master:412 - overlay overlay rw,lowerdir=l/UJFCER67AYKSKE6WJKXEVSLYW5:l/KKP7JILOLJETKPE4RNT2UJI4MA:l/QSUJDTGK6VU5WKEHXTSD2PAXT4:l/AFQAKHTCQKMHVR3Y4NAPX6CTJU:l/RLUGXAU7K2UE6JOW4NTHOWKI6Q:l/OULGDIAPUTSPFM3RTX6BX3FZAD:l/JVZTP4QBR3XXDCLU5BSWZRLR3Y:l/YRAMZBGQQ2O4EAG3KA3HS22AKU:l/XRSKGFAXSWY4JASK3UNS4JKEF5:l/ZC3TIN7KEU2GV4SFBFXQE3NN6U:l/URX4CLWQCPMSB4UYO2GBJIFSLM:l/MDJ7B6A2QIJJSWZA3GG2UFXSYV:l/FS66NNBEHTJRJITMUX2GCXT2B2:l/KM7YSKZHJZQITHPGF5KEDWQJCU:l/GDGSCNZZBKAIROQJLLFW3GSHCR:l/NONZYJOHOBUWODFT3NKTQR3N5Y:l/OZFYNNW7CKUSM4XOELQK4RUOOF:l/HLLLP6FK32SIVPOUZLPAM4QJDZ:l/MRNG23YVP6OI5GTCBSGCQAFN2J:l/UYOI4BULN4D4WORXGN4IE5TL3F:l/Y25ZGYFFETKOTJRGD4TSR7MCBH:l/VLBAW4OYMEOAJZZXVPZ2Y77LCB:l/FQFCC5VU2QH55H73AZZL7YHRTR:l/X3L2SQOIFQEVDIGBNYXBSHYHT7:l/A7T7OCT7P7R6MRZV2A6IHMYMDY:l/F2B24MBZ4NJL3EKYL3AMFL3Q4H:l/GXYXLABVKNMZWLW7654ZCHQOWG:l/M775ZDVYIAYP2EA5MBJAK3SART:l/GHP5SWWP3ZVDZLF5A7KNGFV4ZQ:l/YMO4ADBPO6ZRUGTUBEPVEMMA6L:l/Y6P5UKS7WP5VEWKK5SFB6P2O6P:l/GTPJQFMVSBC45CXOHG3MXH2I7B:l/Y63ECCT5ONUPTN3XHTV76LZPJT:l/JQ652TANUYQIDJCOH7ZUYM7JZ5:l/JQ2KMPF5CGYO6URVRL35U6OYK4:l/YJQJPFAJNMVLPGSS7U3E5A5FTN:l/57RL3LN6HH5VL4PBPDE6E7M7KY:l/JUPUPGLZWDQRE522QQK7H3FAXO:l/DIX76ABYPOU4F56CUP65WGA7E4:l/CVX3PIASSKBINR25MCWKMQ76Z7:l/D4VMOWNYSJCVFYX5D4VXJWJK25:l/MHSDQ6KBNNPQVQF3LLZ66P2OH4:l/B5PLUIZ5KA5IOOHUFFIZBUX65W:l/XCX7EUAS3SFNJL2TIRZLGTEMTM:l/ZFHQMZHD6LRKLFJARUIF7K47UU:l/KUE6QFP4GXNGTP2P2VFC7Z2ZBR:l/JV3E6KDSAHOLGSDE7RVDDCOQZF:l/5XYZM6GEXYCQ2NTIE5ULEUCIWI:l/QZCQTMJKAJFLGHQWFS2Z37IARY:l/HHJPDYZVI3OZIKWXJGAW2MHKIN:l/TNBOL543FIWIKDBH2WAFO33FAI:l/FY4DFWEHMGQWPDUYSDINU3EYNU:l/IPBXMI36GDY6PNY7ICJXOOW54S:l/HHUUK6JDLKWPDBDPBTAJLCTBUB:l/W4EUO25DW74ZII2RPKMPIXGBSP:l/X4PDIANR2IMWD4YD26J2EJ3SOQ:l/CVWA2WOB4LVEABQMX2WEJXT4YC:l/FAQ5OGABC623RWYEAY36CEZXZB:l/QGUSMJPFCYNXXUUDYZN4TO6MMS:l/OYNYUZRN2KGRCYTG2PVVBEV3B6:l/VE4ZIONE3GZH272ZBXGO34DVLL:l/2MOSK2K2QJJFJDQ2FALHGVKAYP:l/TWTTEUX3Z2KYNI7FB3BCXXMLH5:l/B5BLXP3KUEINMY7XW45BO4QWHO:l/W6GBSSMSKCID4TUBXB4M5YRU3R:l/VO6E2OQG742QACVKMFBV4BG3NS:l/KSUHKO42HMDQXV3FISRHDWE7PG:l/SPV54BPFDJJSAKI4ZUFUJAG3FK:l/B53XCFNOMHPYB7THVDACBHUUOY:l/YKZGEDOQ45NO3Q2X3BNSW5FMGU:l/RWQK7I6BHBGE5S6V4RP5ZKN3MG:l/Y2ZZEVYDXZLRSXBNG2UKZKCG5U:l/BXTH33D44Z5BEQCX6YGXEG5NND:l/3AZMANNPIEMEI34UZZQOCUF4D3:l/PRSFGLX5FK4GVDYUDRVXPFEMPK:l/3EUSTD2QMYETI5C4MMGUML7R64:l/LACCHNXCY6FEOVOCPL626OMR4T:l/6SM2WBEI2A3CUVQQWD7N4OYIJF:l/A7X74Y4E66GN2L5NLVX2LLDG22:l/PXCO4T4ODSCYK4SRMIWDPGMEUU:l/WFLYOPANZDDHCJZGCGIMUXBTWC:l/4ITZANG2HKOGNTVNQNOUEONSAC:l/NJAY5Z4HIEWLTT5XOOO2OQ7NNB:l/IU7RAWPRA7YB2225S23FLT476H:l/R4N3RLGUIGIF2T4UERTPDAIJPB:l/PZDQJJTEYFATXBFOZUAKDWI7VX:l/2JVV2ZGJOIALS2HECRSXYQSQ6L:l/VUO4IQCJUFRJ32IM6QVFAHPUTF:l/G636S74OTNMIYI2XDO3BI4EPKX:l/MYV7PWXLLRHQSUE5ZQXLOKZIRY:l/6QWTB53ZVVVNPGCAQLXNRAULSU:l/AAAC4Z6SEMQNWWNKE3SAOGV2MJ:l/2TU246A2BOIE2FE6QF4J6K55YW,upperdir=0b9c6e4138294cce6558afea70129b720a6e70c4af3b2d4d4d9b4e20154d5f1a/diff,workdir=0b9c6e4138294cce6558afea70129b720a6e70c4af3b2d4d4d9b4e20154d5f1a/work\n774 772 0:72 / /proc rw,nosuid,nodev,noexec,relatime - proc proc rw\n775 772 0:73 / /dev rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n776 775 0:74 / /dev/pts rw,nosuid,noexec,relatime - devpts devpts rw,gid=5,mode=620,ptmxmode=666\n777 772 0:75 / /sys ro,nosuid,nodev,noexec,relatime - sysfs sysfs ro\n778 777 0:28 / /sys/fs/cgroup ro,nosuid,nodev,noexec,relatime - cgroup2 cgroup rw,nsdelegate,memory_recursiveprot\n779 775 0:70 / /dev/mqueue rw,nosuid,nodev,noexec,relatime - mqueue mqueue rw\n780 775 0:76 / /dev/shm rw,nosuid,nodev,noexec,relatime - tmpfs shm rw,size=14680064k\n781 772 7:2 /kaggle/working /kaggle/working rw,relatime master:405 - ext4 /dev/loop2 rw\n782 772 8:1 /var/lib/nvidia/bin /opt/bin ro,nosuid,nodev,relatime - ext4 /dev/sda1 rw,commit=30\n783 772 7:2 /kaggle/src /kaggle/src ro,relatime master:405 - ext4 /dev/loop2 rw\n784 772 7:2 /kaggle/nbdev /kaggle/nbdev rw,relatime master:405 - ext4 /dev/loop2 rw\n785 772 7:2 /kaggle/lib /kaggle/lib ro,relatime master:405 - ext4 /dev/loop2 rw\n786 772 7:2 /kaggle/input /kaggle/input ro,relatime master:405 - ext4 /dev/loop2 rw\n787 772 7:2 /kaggle/huggingface /kaggle/huggingface rw,relatime master:405 - ext4 /dev/loop2 rw\n788 772 253:2 /containers/6e21eb1caeb93764392ffaccb998f1ec691249541a1bd70fd78e4b690130ac8b/resolv.conf /etc/resolv.conf rw,relatime - ext4 /dev/mapper/snap rw,discard\n789 772 253:2 /containers/6e21eb1caeb93764392ffaccb998f1ec691249541a1bd70fd78e4b690130ac8b/hostname /etc/hostname rw,relatime - ext4 /dev/mapper/snap rw,discard\n790 772 253:2 /containers/6e21eb1caeb93764392ffaccb998f1ec691249541a1bd70fd78e4b690130ac8b/hosts /etc/hosts rw,relatime - ext4 /dev/mapper/snap rw,discard\n791 772 7:2 /etc/secrets/kaggle /etc/secrets/kaggle ro,relatime master:405 - ext4 /dev/loop2 rw\n792 772 8:1 /var/lib/nvidia/lib64 /usr/local/nvidia/lib64 ro,nosuid,nodev,relatime - ext4 /dev/sda1 rw,commit=30\n793 772 8:1 /empty-cuda-stubs-lib-dir /usr/local/cuda-12.8/targets/x86_64-linux/lib/stubs ro,relatime - ext4 /dev/sda1 rw,commit=30\n723 774 0:72 /bus /proc/bus ro,nosuid,nodev,noexec,relatime - proc proc rw\n724 774 0:72 /fs /proc/fs ro,nosuid,nodev,noexec,relatime - proc proc rw\n725 774 0:72 /irq /proc/irq ro,nosuid,nodev,noexec,relatime - proc proc rw\n726 774 0:72 /sys /proc/sys ro,nosuid,nodev,noexec,relatime - proc proc rw\n727 774 0:72 /sysrq-trigger /proc/sysrq-trigger ro,nosuid,nodev,noexec,relatime - proc proc rw\n728 774 0:77 / /proc/acpi ro,relatime - tmpfs tmpfs ro,size=4k,nr_inodes=1\n729 774 0:73 /null /proc/interrupts rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n730 774 0:73 /null /proc/kcore rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n731 774 0:73 /null /proc/keys rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n732 774 0:77 / /proc/scsi ro,relatime - tmpfs tmpfs ro,size=4k,nr_inodes=1\n733 774 0:73 /null /proc/timer_list rw,nosuid - tmpfs tmpfs rw,size=65536k,mode=755\n734 777 0:77 / /sys/firmware ro,relatime - tmpfs tmpfs ro,size=4k,nr_inodes=1\n",
+  "error": "ImportError(\"cannot import name 'download_with_retry' from 'benchmarks.run_h3_l1_turbo_batch' (/kaggle/temp/h3_light_source/benchmarks/run_h3_l1_turbo_batch.py)\")"
+}

@@ -1,0 +1,10 @@
+test_checkpoint_ranges_and_both_hashes_use_the_adapter_without_math_changes (benchmarks.test_te_direct_io.DirectIOAdapter.test_checkpoint_ranges_and_both_hashes_use_the_adapter_without_math_changes) ... ok
+test_direct_error_is_not_silently_replaced_with_buffered_read (benchmarks.test_te_direct_io.DirectIOAdapter.test_direct_error_is_not_silently_replaced_with_buffered_read) ... ok
+test_hash_file_digest_uses_bounded_readinto_and_preserves_bytes (benchmarks.test_te_direct_io.DirectIOAdapter.test_hash_file_digest_uses_bounded_readinto_and_preserves_bytes) ... ok
+test_short_aligned_reads_make_progress (benchmarks.test_te_direct_io.DirectIOAdapter.test_short_aligned_reads_make_progress) ... ok
+test_unaligned_offsets_lengths_chunk_boundaries_and_eof (benchmarks.test_te_direct_io.DirectIOAdapter.test_unaligned_offsets_lengths_chunk_boundaries_and_eof) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 1.714s
+
+OK

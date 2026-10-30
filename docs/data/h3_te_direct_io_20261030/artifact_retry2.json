@@ -1,0 +1,9 @@
+{
+  "kind": "final_artifact_transfer_retry",
+  "status": "downloaded",
+  "started_utc": "2026-10-30T03:01:31.791030+00:00",
+  "status_polling": false,
+  "returned_files": 18,
+  "completed_utc": "2026-10-30T03:02:05.766092+00:00",
+  "local_files": 18
+}

@@ -1,0 +1,30 @@
+{
+  "adapter_cpu_tests.log": {
+    "bytes": 972,
+    "sha256": "4754671541ae1e92ae7ae2dc3de5da2e5376c03b17fd6895550ca80238dbd713"
+  },
+  "gpu_submission.json": {
+    "bytes": 3106,
+    "sha256": "6181eb1ea8695cfe067970702d6363998d87a8464b16166f26f9a94eae26f53b"
+  },
+  "gpu_submission_cli.log": {
+    "bytes": 267,
+    "sha256": "9e3e6bbaa18f5e5ef9d71c51ff77274905e94328849dc46c7542c4cdd89914d6"
+  },
+  "kernel-metadata.json": {
+    "bytes": 468,
+    "sha256": "24fe1d1eacf9ddcf214cc5413e4483ba8b3280676fe1d7aa77562d74bdd4a055"
+  },
+  "reused_core_cpu_qualification.json": {
+    "bytes": 131301,
+    "sha256": "b8ad23b8d88371a9195a7e023f0c98d4fb76ea8c2dd0cca3122495bb7d978d59"
+  },
+  "source_binding.json": {
+    "bytes": 2517,
+    "sha256": "69237935cc311d4550a742db0863e5c24fb8eba4bbaf634e7532b345243a7092"
+  },
+  "submit_prepared.py": {
+    "bytes": 2895,
+    "sha256": "3bac1b29125d21915b478176e79191e778da0078455ae6955cf1e8493f9f42f0"
+  }
+}
