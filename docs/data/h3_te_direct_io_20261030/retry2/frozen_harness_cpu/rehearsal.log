@@ -1,0 +1,13 @@
+FROZEN_TE_HARNESS_REHEARSAL {"passed": true, "tests": 7, "lazy_download_imports": true, "gpu_initialized": false, "network": false}
+test_checkpoint_ranges_and_both_hashes_use_the_adapter_without_math_changes (benchmarks.test_te_direct_io.DirectIOAdapter.test_checkpoint_ranges_and_both_hashes_use_the_adapter_without_math_changes) ... ok
+test_direct_error_is_not_silently_replaced_with_buffered_read (benchmarks.test_te_direct_io.DirectIOAdapter.test_direct_error_is_not_silently_replaced_with_buffered_read) ... ok
+test_hash_file_digest_uses_bounded_readinto_and_preserves_bytes (benchmarks.test_te_direct_io.DirectIOAdapter.test_hash_file_digest_uses_bounded_readinto_and_preserves_bytes) ... ok
+test_integrity_and_authorization_errors_are_not_retried (benchmarks.test_te_direct_io.DirectIOAdapter.test_integrity_and_authorization_errors_are_not_retried) ... ok
+test_short_aligned_reads_make_progress (benchmarks.test_te_direct_io.DirectIOAdapter.test_short_aligned_reads_make_progress) ... ok
+test_transport_retry_is_bounded_and_reports_no_exception_url (benchmarks.test_te_direct_io.DirectIOAdapter.test_transport_retry_is_bounded_and_reports_no_exception_url) ... ok
+test_unaligned_offsets_lengths_chunk_boundaries_and_eof (benchmarks.test_te_direct_io.DirectIOAdapter.test_unaligned_offsets_lengths_chunk_boundaries_and_eof) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.013s
+
+OK

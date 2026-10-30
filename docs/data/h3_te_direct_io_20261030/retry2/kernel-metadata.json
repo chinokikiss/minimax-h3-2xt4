@@ -1,0 +1,17 @@
+{
+  "id": "pamcks/h3-te-direct-io-t4-20261030",
+  "title": "H3 TE Direct IO T4 20261030",
+  "code_file": "experiment.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "docker_image_pinning_type": "original",
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": [],
+  "model_sources": [],
+  "machine_shape": "NvidiaTeslaT4"
+}

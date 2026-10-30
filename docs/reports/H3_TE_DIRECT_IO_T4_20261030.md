@@ -224,3 +224,14 @@ excluded from public Git because it contains the private reference image.
 Final artifacts have now been collected and validated as described above.
 Version 1 failed before the throughput/TE trials; it must not be reported as
 a completed performance comparison.
+
+### Corrected retry prepared, not submitted
+
+A separate corrected notebook is ready at
+`D:\attention_eval\h3_te_direct_io_20261030\retry2\gpu_job\experiment.ipynb`.
+Its benchmark sources are bound to commit `5e7cebb199d78f3d468c53255bd9dc09d8532803` and notebook SHA256
+`9648f491e69fca5e154f5403cd60b25db3d5b5a5315fba3d31785c678f8af1d5`. The builder's frozen-capsule rehearsal and seven CPU tests passed.
+The workload, A/B order, TE verification, operators, core pins and time bounds
+are unchanged. [Preparation receipt](../data/h3_te_direct_io_20261030/retry2/preparation.json)
+records **prepared_not_submitted**. No second GPU job has been submitted;
+the repository's one-job/no-automatic-resubmission rule remains in force.
