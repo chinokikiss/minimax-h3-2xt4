@@ -2,6 +2,8 @@
 
 [Documentation index](../README.md)
 
+[TE O_DIRECT and hash profiling](H3_TE_DIRECT_IO_T4_20261030.md): one TE-only T4 job accepted; aligned direct reads versus buffered I/O, file/tensor hash costs, CPU/GPU traces and reclaim counters; results pending.
+
 [Dataset CPU read and upload results](H3_DATASET_CPU_RESULTS_20261030.md): 74 read trials, shared-NFS throughput plateau, process/cache memory accounting, native private API and Hub upload acknowledgements; CLI invocation fix remains upload-untested.
 
 [0.85 MP / 10-second regular Turbo E2E](H3_TURBO_085MP_10S_E2E_20261030.md) completed all eight steps on two T4s, with stage timings, memory evidence and verified media; user review reports semantic/temporal quality issues; generation quality is not qualified.

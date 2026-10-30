@@ -44,3 +44,5 @@
 
 /docs/data/h3_seed_dataset_batch_20261030/** -text whitespace=cr-at-eol
 /docs/data/h3_seed_dataset_batch_20261030/**/*.log -text -whitespace
+/docs/data/h3_te_direct_io_20261030/** -text whitespace=cr-at-eol
+/docs/data/h3_te_direct_io_20261030/**/*.log -text -whitespace

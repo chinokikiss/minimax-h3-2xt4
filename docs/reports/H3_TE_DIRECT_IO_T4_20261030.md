@@ -1,6 +1,6 @@
 # TE page-cache bypass and hash profiling — 2026-10-30
 
-**Prepared; no T4 performance result yet.** The user requests one additional
+**Kaggle accepted version 1; no T4 performance result yet.** The user requests one additional
 GPU instance to test whether bypassing the page cache with `O_DIRECT` reduces
 reclaim/refault activity and improves TE time. Hash verification is explicitly
 included in the profile and remains enabled in both arms.
@@ -150,3 +150,16 @@ TE experiment to 4,200 seconds and each fresh worker pair to 720 seconds;
 the provider cap is 5,100 seconds. Those are upper bounds, not predicted runtime.
 No status/list/live-log polling, duplicate submission or completion monitor is
 configured. Final artifacts are collected after the user reports completion.
+
+Kaggle accepted version 1 at
+[H3 TE Direct IO T4 20261030](https://www.kaggle.com/code/pamcks/h3-te-direct-io-t4-20261030).
+The submitted benchmark sources are bound to commit
+`cae62cbcfcc645a7f61d14e5b19ea138fa14313a`. The private notebook SHA256 is
+`453f73f79fb41ad9dcdcdf7dd321dc4667dec729f8400305a6b3942a0199946f`.
+[Receipts and CPU checks](../data/h3_te_direct_io_20261030/) preserve the exact
+source binding, metadata, reused core qualification and submission acknowledgement.
+The full notebook is kept locally at
+`D:\attention_eval\h3_te_direct_io_20261030\gpu_job\experiment.ipynb` and is
+excluded from public Git because it contains the private reference image.
+There has been no status/list/live-log query or final collection. Acceptance
+confirms submission, not successful execution, direct-I/O support or a speedup.
