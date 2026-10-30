@@ -1,0 +1,29 @@
+{
+  "kernel": "pamcks/h3-dataset-upload-study-cpu-20261030",
+  "status": "accepted",
+  "submitted_utc": "2026-10-30T01:48:45.552551+00:00",
+  "source_binding": {
+    "kind": "dataset_upload",
+    "source_commit": "4f1f599eea823bafc5aa10e738974d5e9b036580",
+    "source_sha256": "235ec16fc5a1bfb59c6cbf48066dc04450182b5843ef63efc208226f04454d5b",
+    "module": "kaggle_dataset_upload_study.py",
+    "cpu_only": true,
+    "installs": false,
+    "h3_runtime_loaded": false,
+    "core_libraries_unchanged": true,
+    "credential_values_embedded": false,
+    "dataset_sources": [],
+    "kernel_sources": [],
+    "scope": "Private synthetic uploads using native clients and ambient/attached-secret auth"
+  },
+  "run_timeout_seconds": 840,
+  "earliest_final_collection_seconds": 840,
+  "final_collection_count": 0,
+  "result_relative": "dataset_upload/result.json",
+  "experiment_kind": "dataset_upload",
+  "submitted_code_sha256": "029cf1732feb1a0e0e26d0cef46d54d2502ef93dca09ed115e0652ccb0a37b59",
+  "returncode": 0,
+  "version": 1,
+  "requested_kernel": "pamcks/h3-dataset-upload-study-cpu-20261030",
+  "url": "https://www.kaggle.com/code/pamcks/h3-dataset-upload-study-cpu-20261030"
+}

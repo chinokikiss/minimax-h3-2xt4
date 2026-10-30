@@ -41,3 +41,5 @@
 /patches/kitchen_attention.py -text
 
 /patches/kitchen_attention_native/** -text -whitespace
+
+/docs/data/h3_seed_dataset_batch_20261030/** -text whitespace=cr-at-eol

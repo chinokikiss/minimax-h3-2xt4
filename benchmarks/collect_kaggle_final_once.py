@@ -72,6 +72,19 @@ def collect(submission,output,*,run=subprocess.run):
             path=output/relative
             if path.exists():
                 result=read(path)
+                comparison=state['source_binding'].get('seed_comparison')
+                if comparison:
+                    generation=path.parent/'generation/result.json'
+                    if generation.exists():
+                        result=read(generation)
+                        actual=result.get('inputs',{})
+                        prior=comparison['baseline_inputs']
+                        status['seed_comparison']=dict(seed=result.get('config',{}).get('seed'),
+                            expected_seed=comparison['seed'],baseline_seed=comparison['baseline_seed'],
+                            conditioning_hash_matches=actual.get('conditioning',{}).get('sha256')==prior['conditioning']['sha256'],
+                            noise_hashes_changed={key:actual.get(key,{}).get('sha256')!=value['sha256']
+                                for key,value in prior.items() if key.startswith('noise_') and key in actual},
+                            acceptance='Seed repeat only; generation quality requires review and does not isolate TE')
                 if state.get('experiment_kind')=='review_operators':
                     status['experiment']=dict(status=result['status'],error=result.get('error'),
                         all_outputs_byte_exact=result.get('all_outputs_byte_exact'),

@@ -1,0 +1,38 @@
+{
+  "status": "prepared_and_static_verified",
+  "jobs": [
+    {
+      "kind": "gpu",
+      "kernel": "pamcks/h3-turbo-seed-20261021-t4-20261030"
+    },
+    {
+      "kind": "dataset_read",
+      "kernel": "pamcks/h3-dataset-read-sweep-cpu-20261030"
+    },
+    {
+      "kind": "dataset_upload",
+      "kernel": "pamcks/h3-dataset-upload-study-cpu-20261030"
+    }
+  ],
+  "gpu_instances": 1,
+  "cpu_instances": 2,
+  "seed": 20261021,
+  "read_dataset_counts": [
+    1,
+    2,
+    4,
+    6
+  ],
+  "reader_counts": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32,
+    64
+  ],
+  "no_embedded_credentials": true,
+  "no_new_h3_cpu_smoke_job": true,
+  "no_kaggle_polling": true
+}

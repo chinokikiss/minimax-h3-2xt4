@@ -1,0 +1,14 @@
+{
+  "kind": "dataset_upload",
+  "source_commit": "4f1f599eea823bafc5aa10e738974d5e9b036580",
+  "source_sha256": "235ec16fc5a1bfb59c6cbf48066dc04450182b5843ef63efc208226f04454d5b",
+  "module": "kaggle_dataset_upload_study.py",
+  "cpu_only": true,
+  "installs": false,
+  "h3_runtime_loaded": false,
+  "core_libraries_unchanged": true,
+  "credential_values_embedded": false,
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "scope": "Private synthetic uploads using native clients and ambient/attached-secret auth"
+}

@@ -1,0 +1,36 @@
+{
+  "kernel": "pamcks/h3-dataset-read-sweep-cpu-20261030",
+  "status": "accepted",
+  "submitted_utc": "2026-10-30T01:48:42.217686+00:00",
+  "source_binding": {
+    "kind": "dataset_read",
+    "source_commit": "4f1f599eea823bafc5aa10e738974d5e9b036580",
+    "source_sha256": "e4047d070f6486b958b002aaa17ac4a72e33b3fce7861ea021570d24953375ea",
+    "module": "kaggle_dataset_read_sweep.py",
+    "cpu_only": true,
+    "installs": false,
+    "h3_runtime_loaded": false,
+    "core_libraries_unchanged": true,
+    "credential_values_embedded": false,
+    "dataset_sources": [
+      "cdeotte/melanoma-512x512",
+      "cdeotte/melanoma-768x768",
+      "cdeotte/melanoma-1024x1024",
+      "cdeotte/melanoma-384x384",
+      "cdeotte/melanoma-256x256",
+      "cdeotte/melanoma-128x128"
+    ],
+    "kernel_sources": [],
+    "scope": "Mounted opaque binary reads"
+  },
+  "run_timeout_seconds": 1260,
+  "earliest_final_collection_seconds": 1260,
+  "final_collection_count": 0,
+  "result_relative": "dataset_read/result.json",
+  "experiment_kind": "dataset_read",
+  "submitted_code_sha256": "0ad2ba4eee16c8ae9cfe9a44f34d91a0fcf62d1dfc887fe43cd2b49e25062201",
+  "returncode": 0,
+  "version": 1,
+  "requested_kernel": "pamcks/h3-dataset-read-sweep-cpu-20261030",
+  "url": "https://www.kaggle.com/code/pamcks/h3-dataset-read-sweep-cpu-20261030"
+}
