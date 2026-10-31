@@ -1,5 +1,11 @@
 # H3 runtime preservation
 
+## Production metadata checks — 2026-10-30
+
+- The user now removes all SHA256 verification from production inference. This supersedes the earlier requirements to retain TE hashes and the runtime `verify_dit_weights=True` arm. TE, DiT, auxiliary/PTD weights, rank-block caches, and source/native-library admission use file size, nanosecond timestamps, file identity and structural/schema checks instead.
+- Production readers must explicitly select metadata checks. Keep low-level verified defaults for offline baking, source qualification, download/publication and standalone integrity tools; do not delete historical experiment records or modify their measured contracts.
+- Retired inference hash controls may be accepted for old Python/workflow callers but must not re-enable hashing. Metadata admission trusts the initial local artifact and is not cryptographic corruption detection. Preserve the validated operators, source/API and dependency versions.
+
 - Preserve validated source, attention API, operators and dependency versions by default. Do not update upstream code or dependency versions as part of adaptation or testing.
 - Local execution uses `C:\ProgramData\miniconda3\envs\comfyui\python.exe`. The experimental `D:\h3_tp2_legacy_env` is historical, not the default.
 - Retain the legacy attention API in the local `ComfyUI` checkout (`d49e888586dd8ae012c0667b33466b815fee07f7`). Do not replace it with the newer sibling `ComfyUI-master` implementation.

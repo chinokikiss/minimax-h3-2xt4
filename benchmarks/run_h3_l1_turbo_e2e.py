@@ -18,7 +18,7 @@ from patches import comfy_tp_runtime as rt
 from patches.h3_operator_policy import H3OperatorPolicy
 from patches.h3_tensor_flow import TensorFlowPolicy
 from patches.host_weight_cache import GiB
-from benchmarks.e2e_attention_validation import kitchen_denoiser_calls
+from benchmarks.e2e_attention_validation import denoiser_attention_counts,kitchen_denoiser_calls
 
 
 class CurrentRank(observation.ObservedRank):
@@ -52,6 +52,7 @@ class CurrentRank(observation.ObservedRank):
             result['benchmark']['operators']=asdict(self.config.operators)
             result['benchmark']['online_lora_attached']=False
             result['benchmark']['verify_dit_weights']=self.config.verify_dit_weights
+            result['benchmark']['te_payload_verification']=getattr(self.readers['te'],'verify_payloads',None)
             result['benchmark']['dit_payload_verification']=getattr(self.readers['dit'],'verify_payloads',None)
         return result
 
@@ -93,9 +94,23 @@ def runtime_config(config):
         raise ValueError('This long E2E requires persisted offline-baked TP2 weights')
     if config['width']%32 or config['height']%32:
         raise ValueError('Use 32-pixel-aligned dimensions')
+    requested=config.get('operators') if isinstance(config.get('operators'),dict) else {}
+    schedule=requested.get('dit_attention_schedule','')
+    from patches.attention_schedule import parse_attention_schedule
     return rt.RuntimeConfig(te_path=config['paths']['te'],dit_path=config['paths']['dit'],
         lora_stack=(),bundle_offline_lora=False,
-        operators=H3OperatorPolicy(),tensor_flow=TensorFlowPolicy('fp16'))
+        operators=H3OperatorPolicy(te_attention=requested.get('te_attention','kitchen_causal'),
+            dit_attention=requested.get('dit_attention','kitchen')),
+        dit_attention_schedule=parse_attention_schedule(schedule),
+        sol_tau=float(requested.get('sol_tau',1.0)),
+        sol_topology_v2=bool(requested.get('sol_topology_v2',True)),
+        sol_sync_free_lut=bool(requested.get('sol_sync_free_lut',True)),
+        sol_collect_route_stats=bool(requested.get('sol_collect_route_stats',False)),
+        sol_temporal_radius=int(requested.get('sol_temporal_radius',1)),
+        sol_local_radius_tokens=int(requested.get('sol_local_radius_tokens',64)),
+        sol_protect_frame_boundaries=bool(requested.get('sol_protect_frame_boundaries',True)),
+        video_attention=requested.get('video_attention','kitchen'),
+        tensor_flow=TensorFlowPolicy('fp16'))
 
 
 def main():
@@ -191,14 +206,33 @@ def main():
         state['foreground_seconds']=(time.monotonic_ns()-state['trigger_ns'])/1e9
         state['outputs']={k:observation.digest(t) for k,t in dict(video=video,audio=audio,pixels=pixels,waveform=waveform).items()}
         if not all(v['finite'] for v in state['outputs'].values()):raise FloatingPointError('Nonfinite final output')
-        state['decode']={k:dict(strategy=d.last_strategy,fallback=d.last_fallback) for k,d in decoders.items()}
+        state['decode']={k:dict(strategy=d.last_strategy,fallback=d.last_fallback,
+            attention_backend=runtime.video_attention if k=='video' else 'native') for k,d in decoders.items()}
         state['vae_events']={k:v.events for k,v in vaes.items()}
         state['ranks']=service.call('stats');state['service_calls']=service.spans
         assert len(state['sampler_steps'])==config['steps'] and len(state['denoiser_outputs'])==config['steps']
         for rank in state['ranks']:
             bench=rank['benchmark'];calls=bench['executed_backends']
             assert bench['layouts'] and calls.get('TE/kitchen_causal')
-            assert kitchen_denoiser_calls(bench) == 50*config['steps']
+            assert rank['operators']['video_attention']==runtime.video_attention
+            assert float(rank['operators']['sol_tau'])==runtime.sol_tau
+            requested=config.get('operators') if isinstance(config.get('operators'),dict) else {}
+            schedule=runtime.dit_attention_schedule
+            from patches.attention_schedule import select_attention_policy
+            expected={'kitchen':0,'sol':0,'native':0}
+            for nfe in range(1,config['steps']+1):
+                backend,_=select_attention_policy(schedule,nfe,runtime.operators.dit_attention,runtime.sol_tau)
+                expected[backend]+=50
+            kitchen=denoiser_attention_counts(bench,'kitchen/int8_attention')
+            sol=denoiser_attention_counts(bench,'DiT/sol_all_int8')
+            assert kitchen['total']==expected['kitchen'] and kitchen['outside_command']==0,(kitchen,expected)
+            assert sol['total']==expected['sol'] and sol['outside_command']==0,(sol,expected)
+            if expected['native']:raise AssertionError('This E2E observer does not qualify Native DiT attention dispatch')
+            aot=rank.get('aot_preparation',{})
+            if expected['sol'] and not aot.get('dit',{}).get('sol_precompiled'):
+                raise AssertionError('DiT Sol executed without recorded AOT precompilation')
+            state.setdefault('attention_dispatch',{})[str(rank.get('rank','unknown'))]=dict(
+                expected=expected,kitchen=kitchen,sol=sol)
             assert rank['bundle_preparation']['dit']['disk_baked']
             assert rank['bundle_preparation']['dit']['merged_matrices']==0
             assert calls.get('current/fused_swiglu_quant') and calls.get('current/scaled_fp16_epilogue')
@@ -209,6 +243,7 @@ def main():
                 assert calls.get('TE/column_view')==250, 'Expected five optimized columns in each of 50 TE layers'
             if config.get('workload_contract')=='turbo_1mp_10s':
                 assert rank['benchmark']['verify_dit_weights'] is False
+                assert rank['benchmark']['te_payload_verification'] is False
                 assert rank['benchmark']['dit_payload_verification'] is False
         state.update(status='complete',quality_acceptance='Pending visual/audio review; no dense Native comparison or generation-equivalence claim')
     except BaseException as error:

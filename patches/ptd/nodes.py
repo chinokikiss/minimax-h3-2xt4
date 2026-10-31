@@ -24,19 +24,21 @@ class MiniMaxH3TP2PTDBake:
         from patches.ptd.bank import PTDBank,bake,disk_plan
         from patches.ptd.checkpoint import download_on_t4
         from patches.tp2_bundle import BundleReader
-        base = BundleReader(base_descriptor)
+        base = BundleReader(base_descriptor,verify_payloads=False)
         if 'adaln_t_table' in base.header and not allow_pruned_adaln:
             raise ValueError('Enable the explicit pruned-AdaLN approximation switch for this bundle')
         cached = Path(output_directory) / 'bank.json'
         if cached.exists():
-            bank=PTDBank(cached)
+            bank=PTDBank(cached,verify_payloads=False)
             if bank.base != base.path:
                 raise ValueError('Cached PTD bank uses another base')
             from patches.ptd.checkpoint import RELEASE
-            from patches.tp2_bundle import sha
-            expected = RELEASE['sha256'] if checkpoint_path == 'download_on_t4' else sha(Path(checkpoint_path))
-            if expected != bank.recipe['checkpoint_sha256']:
-                raise ValueError('Cached PTD bank uses another checkpoint')
+            if checkpoint_path == 'download_on_t4':
+                if RELEASE['sha256'] != bank.recipe['checkpoint_sha256']:
+                    raise ValueError('Cached PTD bank uses another checkpoint')
+            else:
+                from patches.file_metadata import runtime_files
+                runtime_files.admit(checkpoint_path,size=bank.recipe['checkpoint_bytes'])
             return (str(cached.resolve()),)
         plan=disk_plan(base.path,output_directory,include_download=checkpoint_path=='download_on_t4')
         if plan['free_bytes'] < plan['required_free_bytes']:
@@ -73,8 +75,6 @@ class MiniMaxH3TP2PTDAdapter:
             'stream_weights':('BOOLEAN',{'default':True,
                 'tooltip':'Stream one active expert. Disabling requests resident active-expert weights and requires VRAM admission.'})},
             'optional':{
-            'expected_bank_sha256':('STRING',{'default':'',
-                'tooltip':'Trusted bank.json SHA256 from the bake receipt; empty admits the selected local manifest.'}),
             'future_cache':('BOOLEAN',{'default':True,
                 'tooltip':'Experimental known-sequence CPU reclamation; preserves CUDA lifetime fences.'}),
             'prefetch_refiner':('BOOLEAN',{'default':True,

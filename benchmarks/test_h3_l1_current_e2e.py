@@ -17,7 +17,7 @@ class LongRunGuards(unittest.TestCase):
         self.assertEqual(runtime.tensor_flow.mode,'fp16')
         self.assertEqual(runtime.tensor_flow.divisor,64)
         operators=asdict(runtime.operators)
-        self.assertEqual(operators['dit_attention'],'tilelang_scalar')
+        self.assertEqual(operators['dit_attention'],'kitchen')
         self.assertEqual(operators['row_linear_backend'],'tilelang_scaled_fp16')
         self.assertEqual(operators['fc2_quantizer'],'fused_stored')
         with self.assertRaises(ValueError):runtime_config(config|dict(offline_lora=False))

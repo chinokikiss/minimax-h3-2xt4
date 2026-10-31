@@ -1,0 +1,20 @@
+{
+  "scope": "production Sol v2 source identity; no removed math variant or backup",
+  "paths": {
+    "patches/sol_attention.py": {
+      "sha256": "49e9a090d286e8a6c9fc6fc722fa5b1fef56d1614fe4b9c12e2b1febf46c2e62"
+    },
+    "patches/sol_sm75_backend.py": {
+      "sha256": "e67cca78e9742900bc922a19ebfc03d37f7adf974f65284412012484d1e2b3dd"
+    },
+    "patches/sol_attention_native/sla_sm75_fp16_kernel.cuh": {
+      "sha256": "78da82e793cc74565485719ff9dc268c55a194d3133a7bb10a4c51fccbd90417"
+    },
+    "patches/sol_attention_native/sol_sm75_preprocess.cuh": {
+      "sha256": "040752167e0183b8fb08b1f6053b060597790c6c80be73170b5082999dbcc422"
+    },
+    "patches/sol_attention_native/sla_sm75_sparse.cu": {
+      "sha256": "a024c876462a0074846eafa8f7f8932925c7d36be1bbc2b21446fd54d1134876"
+    }
+  }
+}

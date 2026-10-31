@@ -55,7 +55,7 @@ class Phases:
         from comfy_kitchen.backends.eager import quantization as eager
         import comfy_kitchen as ck
         import tilelang
-        from patches import tilelang_grouped_tp_optimized as sparse,tilelang_attention_p2 as split
+        from patches import sol_attention
         self.wrap(tp_dit.ColumnParallelLinearINT8,'forward',
             lambda a,k:'QKV/column' if a[0].components==3 else 'FC1/column')
         self.wrap(tp_dit.RowParallelLinearINT8,'forward',
@@ -67,10 +67,7 @@ class Phases:
             (ck,'int8_attention','attention/Kitchen_fused_QK_softmax_PV'),
             (h3_operator_policy,'prepare_dit_attention','attention/Kitchen_prepare'),
             (h3_operator_policy,'execute_dit_attention','attention/Kitchen_fused_QK_softmax_PV'),
-            (sparse,'prepare','attention/sparse_quantize_and_centroids'),
-            (sparse,'routes','attention/sparse_routing'),
-            (sparse,'execute','attention/sparse_execute'),
-            (split,'execute','attention/scalar_split_execute'),
+            (sol_attention,'attention','attention/Sol_all_int8_complete'),
             (eager,'_rotate_activation','column/ConvRot'),
             (eager,'quantize_int8_rowwise','column/quantize'),
             (eager,'_int8_matmul_accumulate','column/INT8_GEMM'),

@@ -6,6 +6,7 @@ sampler interfaces. Only the already-validated TP block weights are streamed.
 from __future__ import annotations
 
 import json
+import math
 import os
 from pathlib import Path
 import struct
@@ -17,6 +18,7 @@ import torch
 from torch import nn
 
 from patches.weight_residency import WeightSpec, module_bytes
+from patches.file_metadata import FileChecks
 
 
 class CheckpointReader:
@@ -27,15 +29,54 @@ class CheckpointReader:
 
     def __init__(self, path, identity=None):
         self.path = Path(path).resolve()
+        self.file_checks = FileChecks()
+        metadata = self.file_checks.admit(self.path)
         with self.path.open('rb') as stream:
-            length = struct.unpack('<Q', stream.read(8))[0]
+            prefix = stream.read(8)
+            if len(prefix) != 8:
+                raise ValueError('Incomplete safetensors header')
+            length = struct.unpack('<Q', prefix)[0]
+            if length > min(100_000_000, metadata[0] - 8):
+                raise ValueError('Invalid safetensors header length')
             self.header = json.loads(stream.read(length))
         self.offset = 8 + length
+        self._validate_header(metadata[0] - self.offset)
+        self.file_checks.check()
         stat = self.path.stat()
         self.signature = (stat.st_size, stat.st_mtime_ns)
         self.identity = identity or (str(self.path), *self.signature)
         self.read_lock = threading.Lock()
         self.logical_read_bytes = self.range_read_calls = self.source_read_bytes = 0
+
+    def _validate_header(self, payload_bytes):
+        """Check dtype/shape/range coverage using only the small file header."""
+        if not isinstance(self.header, dict):
+            raise ValueError('Invalid safetensors header')
+        ranges = []
+        for name, info in self.header.items():
+            if name == '__metadata__':
+                continue
+            shape, offsets = info['shape'], info['data_offsets']
+            if (info['dtype'] not in self.DTYPES or not isinstance(shape, list)
+                    or any(type(n) is not int or n < 0 for n in shape)
+                    or len(offsets) != 2 or any(type(n) is not int for n in offsets)):
+                raise ValueError('Invalid safetensors tensor schema: ' + name)
+            start, end = offsets
+            element = torch.empty((), dtype=self.DTYPES[info['dtype']]).element_size()
+            if not 0 <= start <= end <= payload_bytes or end-start != math.prod(shape)*element:
+                raise ValueError('Invalid safetensors tensor range: ' + name)
+            if end > start:
+                ranges.append((start, end))
+        cursor = 0
+        for start, end in sorted(ranges):
+            if start != cursor:
+                raise ValueError('Overlapping or missing safetensors payload ranges')
+            cursor = end
+        if cursor != payload_bytes:
+            raise ValueError('Safetensors payload size mismatch')
+
+    def check(self):
+        self.file_checks.check()
 
     def read_tensor(self, name, *, rows=None, columns=None):
         """Read only owned ranges into final CPU storage, without a full tensor.
@@ -46,6 +87,7 @@ class CheckpointReader:
         bounded chunks. This is buffered filesystem I/O, not O_DIRECT.
         Logical bytes count requested payload, not physical disk traffic.
         """
+        self.check()
         stat = self.path.stat()
         if (stat.st_size, stat.st_mtime_ns) != self.signature:
             raise RuntimeError('Checkpoint changed after the request was planned')
@@ -109,6 +151,7 @@ class CheckpointReader:
                             transfer((row*width+first)*element, (last-first)*element,
                                      (output_row+row-a)*(last-first)*element)
                     output_row += b-a
+        self.check()
         with self.read_lock:
             self.logical_read_bytes += result.numel()*element
             self.source_read_bytes += count
@@ -116,6 +159,7 @@ class CheckpointReader:
         return result
 
     def read(self, prefix, exclude=()):
+        self.check()
         stat = self.path.stat()
         if (stat.st_size, stat.st_mtime_ns) != self.signature:
             raise RuntimeError('Checkpoint changed after the request was planned')
@@ -133,6 +177,7 @@ class CheckpointReader:
                     data, dtype=self.DTYPES[info['dtype']]).reshape(info['shape'])
         if not result:
             raise ValueError(f'No checkpoint tensors under {prefix}')
+        self.check()
         with self.read_lock:
             size=sum(t.numel()*t.element_size() for t in result.values())
             self.logical_read_bytes += size

@@ -73,8 +73,8 @@ def main():
     workflow.setdefault('extra',{})['minimax_tp2_note'] = (
         'Separate INT8 TP2 variant. Requires two physical CUDA GPUs and linked custom node. '
         'Default tensor flow: FP16-fix, TE/DiT divisor 64; Audio VAE remains FP32. '
-        'TE: Kitchen causal INT8; DiT: Kitchen INT8 by default, optional TileLang drop/scalar/dense; '
-        'Video attention: Kitchen INT8. FP32 fused_stored SwiGLU/ConvRot quantization for TE down/DiT FC2; '
+        'TE: Kitchen causal INT8; DiT: Kitchen INT8 by default with optional Sol All-INT8 and per-NFE scheduling; '
+        'Video attention: Kitchen INT8 by default, with opt-in Sol D64 compatibility or forced Native SDPA. FP32 fused_stored SwiGLU/ConvRot quantization for TE down/DiT FC2; '
         'scaled FP16 row SUM and fused FP32 dequantization on SM75. Approximate transport. '
         'Direct INT8 + TileLang columns on aligned SM75 DiT shapes. '
         'Default offline LoRA: TP2 bundles merge bounded blocks on CPU; safetensors inputs create a baked checkpoint. '
@@ -87,10 +87,10 @@ def main():
         'idle residency preloads only graph-required reference encoders. '
         'Component timings do not establish an integrated pipeline speedup.')
     workflow['extra']['minimax_h3_operators']={'te_attention':'kitchen_causal','dit_attention':'kitchen',
-        'video_attention':'kitchen','row_linear_backend':'tilelang_scaled_fp16',
+        'video_attention':'kitchen','sol_tau':1.0,'row_linear_backend':'tilelang_scaled_fp16',
         'fc2_quantizer':'fused_stored','tensor_flow':'fp16','residual_exponent':6,
         'column_linear_backend':'cuda_int8_tilelang','lora_mode':'offline','lora_selective_qkv_b':True,
-        'scalar_score_workspace_mib':96,'reduction':'scaled_fp16','fallback_reduction':'native_int32',
+        'dit_attention_schedule':'','reduction':'scaled_fp16','fallback_reduction':'native_int32',
         'lora_row_partial_reduce':True,'lora_hidden_sum':'fp32','vae_encoder_loading':'reference_demand'}
     nodes = {n['id']:n for n in workflow['nodes']}
     for identity,source,source_slot,dest,dest_slot,kind in workflow['links']:

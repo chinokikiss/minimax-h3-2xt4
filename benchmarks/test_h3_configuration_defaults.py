@@ -40,8 +40,15 @@ class ConfigurationDefaults(unittest.TestCase):
         for name in ('swiglu_padding', 'selective_b', 'checkpoint_read_chunk_mib', 'tp_quantization'):
             self.assertNotIn(name, inputs)
         self.assertNotIn('tilelang_exact', inputs['column_linear_backend'][0])
-        self.assertEqual(inputs['dit_attention'][0], ['kitchen', 'tilelang_drop', 'tilelang_scalar', 'tilelang_dense', 'native'])
-        self.assertEqual(inputs['te_attention'][0], ['kitchen_causal', 'tilelang_group32', 'native'])
+        self.assertEqual(inputs['dit_attention'][0], ['kitchen', 'sol', 'native'])
+        self.assertEqual(inputs['dit_attention_schedule'][1]['default'], '')
+        self.assertEqual(inputs['sol_tau'][1]['default'], 1.0)
+        self.assertEqual(inputs['video_attention'][0], ['kitchen', 'native'])
+        self.assertEqual(inputs['video_attention'][1]['default'], 'kitchen')
+        self.assertTrue(config.sol_topology_v2)
+        self.assertTrue(config.sol_sync_free_lut)
+        self.assertNotIn('scalar_score_workspace_mib', inputs)
+        self.assertEqual(inputs['te_attention'][0], ['kitchen_causal', 'native'])
 
     def test_offline_bundle_keeps_adapters_and_online_is_explicit(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -69,6 +76,7 @@ class ConfigurationDefaults(unittest.TestCase):
                 check_retired_loader_options({name: value})
         with self.assertWarns(FutureWarning):
             check_retired_loader_options(dict(swiglu_padding=False, selective_b=False, checkpoint_read_chunk_mib=8))
+        check_retired_loader_options(dict(scalar_score_workspace_mib=96))
         with self.assertRaises(TypeError):
             check_retired_loader_options(dict(misspelled_option=True))
         with self.assertRaises(TypeError):
@@ -112,13 +120,15 @@ const payload = JSON.parse(fs.readFileSync(0, 'utf8'));
 const source = fs.readFileSync(payload.script, 'utf8').replace(
   /import \{ app \} from .*?;/,
   'const app = {registerExtension(extension) { globalThis.migration = extension; }};');
-const { legacyWidgets, restoreWidgets } = await import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
+const { legacyWidgets, v2Widgets, v3Widgets, restoreWidgets } = await import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
 const names = Object.keys(payload.schema).filter(name => name !== 'lora_stack');
 const makeNode = () => ({properties:{}, widgets:names.map(name => ({name,value:'positional-junk'}))});
 const oldValues = legacyWidgets.map(name => payload.schema[name]?.[1]?.default ?? 'retired');
 oldValues[legacyWidgets.indexOf('text_encoder')] = '/user/te.json';
 oldValues[legacyWidgets.indexOf('lora_mode')] = 'online';
 oldValues[legacyWidgets.indexOf('column_linear_backend')] = 'tilelang_exact';
+oldValues[legacyWidgets.indexOf('dit_attention')] = 'tilelang_scalar';
+oldValues[legacyWidgets.indexOf('te_attention')] = 'tilelang_group32';
 const value = (node,name) => node.widgets.find(widget => widget.name === name).value;
 for (const length of [17,21,30]) {
   const node = makeNode();
@@ -129,10 +139,28 @@ for (const length of [17,21,30]) {
   assert.equal(value(node,'tensor_flow'), 'fp16');
   assert.equal(value(node,'adaptive_lookahead'), true);
   assert.equal(value(node,'column_linear_backend'), 'cuda_int8_tilelang');
-  assert.equal(node.properties.h3_configuration_version, 2);
+  assert.equal(value(node,'dit_attention'), 'kitchen');
+  assert.equal(value(node,'te_attention'), 'kitchen_causal');
+  assert.equal(value(node,'dit_attention_schedule'), '');
+  assert.equal(value(node,'sol_tau'), 1.0);
+  assert.equal(value(node,'video_attention'), 'kitchen');
+  assert.equal(node.properties.h3_configuration_version, 4);
 }
+const v2 = makeNode();
+const v2Values = v2Widgets.map(name => payload.schema[name]?.[1]?.default ?? 'legacy-v2');
+v2Values[v2Widgets.indexOf('dit_attention')] = 'tilelang_drop';
+restoreWidgets(v2, {properties:{h3_configuration_version:2},widgets_values:v2Values}, payload.schema);
+assert.equal(value(v2,'dit_attention'), 'kitchen');
+assert.equal(value(v2,'dit_attention_schedule'), '');
+assert.equal(value(v2,'sol_tau'), 1.0);
+assert.equal(value(v2,'video_attention'), 'kitchen');
+const v3 = makeNode();
+const v3Values = v3Widgets.map(name => payload.schema[name]?.[1]?.default ?? 'legacy-v3');
+restoreWidgets(v3, {properties:{h3_configuration_version:3},widgets_values:v3Values}, payload.schema);
+assert.equal(value(v3,'sol_tau'), 1.0);
+assert.equal(v3.properties.h3_configuration_version, 4);
 const current = makeNode();
-restoreWidgets(current, {properties:{h3_configuration_version:2}}, payload.schema);
+restoreWidgets(current, {properties:{h3_configuration_version:4}}, payload.schema);
 assert.equal(value(current,'text_encoder'), 'positional-junk');
 function Node() { Object.assign(this,makeNode()); }
 Node.prototype.onConfigure = function() { this.originalCalled = true; };
@@ -141,6 +169,7 @@ const restored = new Node();
 restored.onConfigure({widgets_values:oldValues});
 assert.equal(restored.originalCalled, true);
 assert.equal(value(restored,'text_encoder'), '/user/te.json');
+assert.equal(value(restored,'dit_attention'), 'kitchen');
 assert.equal(value(restored,'column_linear_backend'), 'cuda_int8_tilelang');
 console.log('Legacy widget migration passed (prefix/full/v2 and callback chain).');
 '''

@@ -114,7 +114,7 @@ import comfy.options
 comfy.options.enable_args_parsing()
 import comfy.cli_args
 sys.argv=['light-tests']
-names=['benchmarks.test_h3_row_partial_combined','benchmarks.test_h3_reference_loading',
+names=['benchmarks.test_sol_production','benchmarks.test_h3_row_partial_combined','benchmarks.test_h3_reference_loading',
  'benchmarks.test_h3_loading_stages.ComponentAndIdle','benchmarks.test_h3_l1_current_e2e',
  'benchmarks.test_t4_notebook_watchdog','benchmarks.test_direct_pip_delivery',
  'benchmarks.test_bounded_column_int8']

@@ -15,7 +15,7 @@ import time
 
 import torch
 
-BACKENDS = ('native', 'tilelang_group32', 'kitchen_causal')
+BACKENDS = ('native', 'kitchen_causal')
 LENGTHS = (128, 353, 1306, 4096)
 COLUMNS = ('q_proj', 'k_proj', 'v_proj', 'gate_proj', 'up_proj')
 ROWS = ('o_proj', 'down_proj')

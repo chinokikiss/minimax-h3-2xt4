@@ -21,8 +21,8 @@ def replace_once(text, before, after):
     return text.replace(before, after, 1)
 
 
-def derive_header(destination):
-    verify_vendor()
+def derive_header(destination, *, verify_hashes=True):
+    if verify_hashes: verify_vendor()
     text = (ROOT / 'native/vendor/qk_int_sv_i8_cuda.cuh').read_text()
     text=replace_once(text,'#include "attn_utils.cuh"',
         '#include "attn_utils.cuh"\n#include "h3_dense_utils.cuh"')

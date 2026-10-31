@@ -626,7 +626,7 @@
       ],
       "properties": {
         "Node name for S&R": "MiniMaxH3TP2Loader",
-        "h3_configuration_version": 2
+        "h3_configuration_version": 4
       },
       "widgets_values": [
         "D:/minimaxH3/qwen3vl_32b_minimax_h3_int8_convrot.safetensors",
@@ -638,8 +638,10 @@
         true,
         "kitchen_causal",
         "kitchen",
+        "",
+        1.0,
+        "kitchen",
         "tilelang_scaled_fp16",
-        96,
         true,
         "fused_stored",
         "offline",
@@ -654,7 +656,13 @@
         1500,
         "",
         true,
-        "cuda_int8_tilelang"
+        "cuda_int8_tilelang",
+        "tilelang_fp32",
+        true,
+        true,
+        true,
+        true,
+        true
       ],
       "title": "MiniMax H3 TP2 — integrated operators"
     },
@@ -1653,7 +1661,8 @@
       "lora_selective_qkv_b": true,
       "adaptive_lookahead": true,
       "prefetch_lifecycle": true,
-      "memory_pressure_aware": true
+      "memory_pressure_aware": true,
+      "sol_tau": 1.0
     },
     "minimax_h3_tensor_flow": {
       "mode": "fp16",

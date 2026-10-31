@@ -79,14 +79,14 @@ class CurrentService(observation.Service):
 
 
 def runtime_config(config):
-    """Current defaults plus the previous L1 sparse policy and bounded residency."""
+    """Current production defaults and bounded residency."""
     if not config.get('offline_lora'):raise ValueError('Long E2E requires an offline-baked checkpoint')
     if config['width']%32 or config['height']%32:raise ValueError('Use 32-pixel-aligned dimensions')
     return rt.RuntimeConfig(te_path=config['paths']['te'],dit_path=config['paths']['dit'],layers=50,
         weight_bytes=6*GiB,pinned_bytes=6*GiB,cache_bytes=3*GiB,host_bytes=16*GiB,
         reserve_bytes=9*GiB,timeout_seconds=600,prefetch_lifecycle=True,memory_pressure_aware=True,
         cross_request_te=False,cross_model_cpu=True,idle_residency=False,lora_stack=(),
-        operators=H3OperatorPolicy(dit_attention='tilelang_scalar'),tensor_flow=TensorFlowPolicy('fp16'))
+        operators=H3OperatorPolicy(),tensor_flow=TensorFlowPolicy('fp16'))
 
 
 def main():

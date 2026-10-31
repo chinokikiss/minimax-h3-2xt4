@@ -732,9 +732,9 @@ Compute query/key means over 64-token leaves, account for ragged counts, center 
 
 **Selection:** alternative.
 
-Read the current Native packed segment layout and protect every complete leaf intersecting the prefix before the final generated-video span.
+Read the current Native packed segment layout and protect every complete leaf intersecting the conditioning prefix before the final target-audio segment.
 
-**Work removed:** Apply sparsity to the intended video region while retaining text, references, conditioning and generated audio interactions.
+**Work removed:** Apply sparsity to generated target audio/video while retaining exact text, reference and conditioning interactions; the boundary is rounded outward to native routing blocks.
 
 **Contract:** Reject stale/missing layouts or ambiguous final video spans. Do not substitute a fixed historical prefix token count.
 

@@ -38,6 +38,16 @@ class QueryGate(unittest.TestCase):
         self.assertIsNone(result['native_vae_kitchen_flag'])
         self.assertEqual(result['unquantized_blocks'],[])
 
+    def test_native_does_not_require_kitchen_attention_flags(self):
+        import comfy.ldm.minimax.vae as native
+        import comfy.ldm.modules.attention as attention
+        native.COMFY_KITCHEN_INT8_ATTENTION_IS_AVAILABLE=False
+        attention.COMFY_KITCHEN_INT8_ATTENTION_IS_AVAILABLE=False
+        result=query_partitioning_status(self.model,attention_backend='native')
+        self.assertTrue(result['available'],result)
+        with self.assertRaisesRegex(ValueError,'Unknown Video VAE attention'):
+            query_partitioning_status(self.model,attention_backend='sol')
+
     def test_simple_attention_signature_fails_even_if_flag_forced_true(self):
         self.attn.forward=lambda x,rotary_pos_emb=None:None
         result=query_partitioning_status(self.model)

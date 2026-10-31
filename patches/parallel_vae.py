@@ -12,7 +12,7 @@ from torch import nn
 from patches.windowed_tp import CheckpointReader
 
 
-def query_partitioning_status(model, *, checkpoint_reader=None):
+def query_partitioning_status(model, *, checkpoint_reader=None, attention_backend='kitchen'):
     """Explain the qualified query contract without confusing ABI and build support."""
     import inspect
     import comfy.ops
@@ -41,16 +41,22 @@ def query_partitioning_status(model, *, checkpoint_reader=None):
         signatures.add(str(signature))
         if not {'pre_norm','residual','residual_scale'}.issubset(parameters):signature_mismatch.append(i)
         if not hasattr(block.attn,'qk_norm_scale'):missing_scale.append(i)
+    if attention_backend not in ('kitchen','native'):
+        raise ValueError('Unknown Video VAE attention backend')
     reasons=[]
     if not blocks:reasons.append('decoder has no transformer blocks')
-    if native_flag is None:reasons.append('Native VAE no longer exports its legacy Kitchen dispatch flag')
-    elif not native_flag:reasons.append('Native VAE Kitchen dispatch is disabled')
+    if attention_backend=='kitchen':
+        if native_flag is None:reasons.append('Native VAE no longer exports its legacy Kitchen dispatch flag')
+        elif not native_flag:reasons.append('Native VAE Kitchen dispatch is disabled')
+        if not bool(attention.COMFY_KITCHEN_INT8_ATTENTION_IS_AVAILABLE):
+            reasons.append('Kitchen attention build is unavailable')
     if unquantized:reasons.append(f'QKV weights are not QuantizedTensor in {len(unquantized)} blocks')
     if signature_mismatch:reasons.append(f'attention call signature differs in {len(signature_mismatch)} blocks')
     if missing_scale:reasons.append(f'fused qk_norm_scale is absent in {len(missing_scale)} blocks')
     return dict(available=not reasons,reason='; '.join(reasons) if reasons else None,
         block_count=len(blocks),native_vae_kitchen_flag=native_flag,
         kitchen_build_available=bool(attention.COMFY_KITCHEN_INT8_ATTENTION_IS_AVAILABLE),
+        attention_backend=attention_backend,
         native_global_attention_backend=getattr(native.optimized_attention,'__name__',type(native.optimized_attention).__name__),
         attention_signatures=sorted(signatures),unquantized_blocks=unquantized,
         validation='checkpoint_metadata' if checkpoint_reader is not None else 'constructed_weights',
@@ -91,9 +97,13 @@ def checkpoint_plan(path, kind):
 
 @torch.inference_mode(False)
 @torch.no_grad()
-def load_decode_weights(reader, names, kind, device, *, parallelism='query'):
+def load_decode_weights(reader, names, kind, device, *, parallelism='query', attention_backend='kitchen'):
     if kind != 'video':
         raise ValueError('Parallel VAE decoding is video-only; use Native single-GPU Audio VAE decoding')
+    if parallelism not in ('query', 'temporal'):
+        raise ValueError(parallelism)
+    if attention_backend not in ('kitchen','native'):
+        raise ValueError('Unknown Video VAE attention backend')
     # Module.to inside inference_mode can turn a QuantizedTensor parameter
     # into a plain Parameter, changing Native attention/operator dispatch.
     # Construct/transfer like Native loading; inference_mode resumes for decode.
@@ -104,10 +114,12 @@ def load_decode_weights(reader, names, kind, device, *, parallelism='query'):
     model = model.to(device=device, dtype=torch.float16).eval().requires_grad_(False)
     from patches.h3_tensor_flow import prepare_video,policy_for
     prepare_video(model,policy_for(reader))
-    if parallelism not in ('query', 'temporal'):
-        raise ValueError(parallelism)
+    for block in model.decoder.transformer_blocks:
+        block.attn._h3_attention_backend=attention_backend
+        if attention_backend=='native':
+            block.attn.forward=MethodType(full_video_attention,block.attn)
     if parallelism == 'query':
-        status=query_partitioning_status(model)
+        status=query_partitioning_status(model,attention_backend=attention_backend)
         if not status['available']:
             raise ValueError('Query partitioning unavailable: '+status['reason'])
     return model
@@ -187,22 +199,51 @@ class AlignedVideoDecode:
             self.buffers.clear()
 
 
-def parallel_attention(self, x, rotary_pos_emb, pre_norm, residual, residual_scale):
+def _video_qkv(self, x, rotary_pos_emb, pre_norm):
     import comfy.ops
     import comfy.quant_ops
-    run = self._query_run
-    b, s, _ = x.shape
-    with comfy.ops.CastBiasWeightContext(pre_norm, x, offloadable=True) as (weight, bias):
-        qkv = comfy.ops.linear_input_act(self.to_qkv, x, 'rms_norm', weight, pre_norm.eps)
-    q, k, v = qkv.view(b, s, -1, 3 * self.dim_head).chunk(3, -1)
-    q, k = comfy.quant_ops.ck.rms_rope_split_half_(
-        q, k, rotary_pos_emb, self.qk_norm_scale.to(q.device), epsilon=self.norm_q.eps,
-        rot_dim=rotary_pos_emb.shape[-3] * 2)
-    q, k, v = (a.transpose(1, 2) for a in (q, k, v))
-    sizes = [end - start for start, end in run.ranges]
-    full_k, full_v = run.exchange(torch.stack((k, v)), sizes, 'kv', 3).unbind(0)
-    from patches.kitchen_attention import int8_attention
-    out = int8_attention(q, full_k, full_v)
-    out = out.transpose(1, 2).reshape(b, s, -1)
-    return comfy.ops.linear_input_act(self.to_out, torch.nan_to_num(out), None,
-                                     residual=residual, residual_scale=residual_scale)
+    b,s,_=x.shape
+    with comfy.ops.CastBiasWeightContext(pre_norm,x,offloadable=True) as (weight,bias):
+        qkv=comfy.ops.linear_input_act(self.to_qkv,x,'rms_norm',weight,pre_norm.eps)
+    q,k,v=qkv.view(b,s,-1,3*self.dim_head).chunk(3,-1)
+    q,k=comfy.quant_ops.ck.rms_rope_split_half_(
+        q,k,rotary_pos_emb,self.qk_norm_scale.to(q.device),epsilon=self.norm_q.eps,
+        rot_dim=rotary_pos_emb.shape[-3]*2)
+    return tuple(a.transpose(1,2) for a in (q,k,v))
+
+
+def _video_attention(self,q,k,v):
+    backend=getattr(self,'_h3_attention_backend','kitchen')
+    if backend=='kitchen':
+        from patches.kitchen_attention import int8_attention
+        return int8_attention(q,k,v)
+    if backend=='native':
+        return torch.nn.functional.scaled_dot_product_attention(q,k,v)
+    raise ValueError('Unknown Video VAE attention backend')
+
+
+def full_video_attention(self,x,rotary_pos_emb,pre_norm,residual,residual_scale):
+    import comfy.ops
+    q,k,v=_video_qkv(self,x,rotary_pos_emb,pre_norm)
+    out=_video_attention(self,q,k,v).transpose(1,2).reshape(x.shape[0],x.shape[1],-1)
+    return comfy.ops.linear_input_act(self.to_out,torch.nan_to_num(out),None,
+        residual=residual,residual_scale=residual_scale)
+
+
+def parallel_attention(self,x,rotary_pos_emb,pre_norm,residual,residual_scale):
+    import comfy.ops
+    run=self._query_run
+    q,k,v=_video_qkv(self,x,rotary_pos_emb,pre_norm)
+    sizes=[end-start for start,end in run.ranges]
+    full_k,full_v=run.exchange(torch.stack((k,v)),sizes,'kv',3).unbind(0)
+    backend=getattr(self,'_h3_attention_backend','kitchen')
+    if backend=='kitchen':
+        from patches.kitchen_attention import int8_attention
+        out=int8_attention(q,full_k,full_v)
+    elif backend=='native':
+        out=torch.nn.functional.scaled_dot_product_attention(q,full_k,full_v)
+    else:
+        raise ValueError('Unknown Video VAE attention backend')
+    out=out.transpose(1,2).reshape(x.shape[0],x.shape[1],-1)
+    return comfy.ops.linear_input_act(self.to_out,torch.nan_to_num(out),None,
+        residual=residual,residual_scale=residual_scale)

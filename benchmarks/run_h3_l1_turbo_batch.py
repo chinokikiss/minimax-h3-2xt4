@@ -196,16 +196,36 @@ def main():
             original = assets['source_identity'][kind]
             url = 'https://huggingface.co/' + assets['model_repository'] + '/resolve/' + assets['model_revision'] + '/' + original['remote_file']
             def read(start, end):
-                with requests.get(url, params={'download':'true', 'offset':str(start)},
-                        headers={'Range':f'bytes={start}-{end-1}'}, stream=True, timeout=(15, 90)) as response:
-                    if response.status_code != 206 or response.headers.get('Content-Range') != f'bytes {start}-{end-1}/{original["bytes"]}':
-                        raise ValueError('Auxiliary immutable range mismatch')
-                    value = bytearray()
-                    for chunk in response.iter_content(4*2**20):
-                        value.extend(chunk)
-                        if len(value) > end-start:
-                            raise ValueError('Oversized auxiliary range')
-                    return value
+                expected_range=f'bytes {start}-{end-1}/{original["bytes"]}'
+                expected_bytes=end-start
+                last=None
+                for attempt in range(3):
+                    try:
+                        with requests.get(url, params={'download':'true'},
+                                headers={'Range':f'bytes={start}-{end-1}',
+                                         'Accept-Encoding':'identity'},
+                                stream=True, timeout=(15, 90)) as response:
+                            actual_range=response.headers.get('Content-Range')
+                            if response.status_code != 206 or actual_range != expected_range:
+                                raise ValueError(
+                                    f'Auxiliary immutable range mismatch: status={response.status_code} '
+                                    f'content_range={actual_range!r} expected={expected_range!r}')
+                            value=bytearray()
+                            for chunk in response.iter_content(4*2**20):
+                                value.extend(chunk)
+                                if len(value)>expected_bytes:
+                                    raise ValueError('Oversized auxiliary range')
+                            if len(value)!=expected_bytes:
+                                raise ValueError(
+                                    f'Short auxiliary range: got={len(value)} expected={expected_bytes}')
+                            return value
+                    except (requests.RequestException,ValueError) as error:
+                        last=error
+                        if attempt==2:
+                            break
+                        print('AUX_RANGE_RETRY',kind,start,end,attempt+1,type(error).__name__,str(error),flush=True)
+                        time.sleep(1<<attempt)
+                raise ValueError(f'Auxiliary immutable range failed after 3 attempts: {last}') from last
             auxiliary = scratch / (kind + '_aux.safetensors')
             assemble(aux_plan, auxiliary, read)
             from patches.tp2_bundle import DESCRIPTOR

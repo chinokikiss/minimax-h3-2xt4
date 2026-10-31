@@ -61,6 +61,15 @@ class RuntimeConfig:
     lora_signature: tuple = field(init=False,default=())
     lora_row_partial_reduce: bool = True
     operators: H3OperatorPolicy = field(default_factory=H3OperatorPolicy)
+    dit_attention_schedule: tuple = ()
+    sol_tau: float = 1.0
+    sol_topology_v2: bool = True
+    sol_sync_free_lut: bool = True
+    sol_collect_route_stats: bool = False
+    sol_temporal_radius: int = 1
+    sol_local_radius_tokens: int = 64
+    sol_protect_frame_boundaries: bool = True
+    video_attention: str = 'kitchen'
     adaptive_lookahead: bool = True
     tensor_flow: TensorFlowPolicy = field(default_factory=lambda: TensorFlowPolicy('fp16'))
     # Decode has no DiT activation window; do not inherit its sampling reserve.
@@ -71,9 +80,24 @@ class RuntimeConfig:
 
     def __post_init__(self):
         if type(self.verify_dit_weights) is not bool:raise ValueError('verify_dit_weights must be boolean')
+        # Retired workflow input: production uses metadata checks for all weights.
+        object.__setattr__(self,'verify_dit_weights',False)
         if not isinstance(self.tensor_flow,TensorFlowPolicy):raise ValueError('TensorFlowPolicy required')
         if self.tensor_flow.mode=='bf16_reference':raise ValueError('BF16 reference is a local component test mode, not a T4 deployment mode')
         if not isinstance(self.operators,H3OperatorPolicy):raise ValueError('H3OperatorPolicy required')
+        from patches.attention_schedule import validate_attention_schedule
+        object.__setattr__(self,'dit_attention_schedule',validate_attention_schedule(self.dit_attention_schedule))
+        if not math.isfinite(float(self.sol_tau)) or float(self.sol_tau)<0:raise ValueError('Sol tau must be finite and nonnegative')
+        object.__setattr__(self,'sol_tau',float(self.sol_tau))
+        for name in ('sol_topology_v2','sol_sync_free_lut','sol_collect_route_stats','sol_protect_frame_boundaries'):
+            if type(getattr(self,name)) is not bool:raise ValueError(name+' must be boolean')
+        # Production Sol is v2. Legacy false values are accepted only so old
+        # workflows deserialize; they cannot reactivate the pre-topology route.
+        object.__setattr__(self,'sol_topology_v2',True)
+        object.__setattr__(self,'sol_sync_free_lut',True)
+        if type(self.sol_temporal_radius) is not int or self.sol_temporal_radius<0:raise ValueError('sol_temporal_radius must be nonnegative int')
+        if type(self.sol_local_radius_tokens) is not int or self.sol_local_radius_tokens<0:raise ValueError('sol_local_radius_tokens must be nonnegative int')
+        if self.video_attention not in ('kitchen','native'):raise ValueError('Unknown Video VAE attention')
         object.__setattr__(self,'lora_signature',tuple((str(Path(p).resolve()),Path(p).stat().st_size,
             Path(p).stat().st_mtime_ns) for p,_ in self.lora_stack))
         if not 1 <= self.layers <= 50:
@@ -130,8 +154,11 @@ class RankRuntime:
     def __init__(self, config, rank, device, comm, budget):
         self.config, self.rank, self.device, self.comm = config, rank, torch.device(device), comm
         from patches.tp2_bundle import open_checkpoint,BundleReader
-        dit_options={} if config.verify_dit_weights else dict(verify_dit_weights=False)
-        self.readers = {'te': open_checkpoint(config.te_path), 'dit': open_checkpoint(config.dit_path,**dit_options)}
+        # Production inference admits every checkpoint through FileChecks metadata
+        # only.  The legacy verify_dit_weights flag is component-specific and
+        # would leave TE payload SHA256 enabled.
+        self.readers = {kind: open_checkpoint(path,verify_weights=False)
+            for kind,path in (('te',config.te_path),('dit',config.dit_path))}
         for reader in self.readers.values():
             reader.operator_policy=config.operators
             reader.tensor_flow=config.tensor_flow
@@ -170,7 +197,9 @@ class RankRuntime:
         self.aux_reservation = 0
         self.sample_active = False
         self.events = RecentEvents(16)
+        self.aot_receipts = {}
         self.calls = 0
+        self.sample_nfe = 0
         self.completed_decode = False
         self.decode_lookahead_started = False
         self.vae_model = None
@@ -314,9 +343,9 @@ class RankRuntime:
                     self.vae_numeric_flags.append((owner, name, getattr(owner, name)))
                     setattr(owner, name, options[key])
             if parallelism == 'query':
-                self.vae_model = load_decode_weights(reader, names, kind, self.device)
+                self.vae_model = load_decode_weights(reader, names, kind, self.device, attention_backend=self.config.video_attention)
             else:
-                self.vae_model = load_decode_weights(reader, names, kind, self.device, parallelism='temporal')
+                self.vae_model = load_decode_weights(reader, names, kind, self.device, parallelism='temporal', attention_backend=self.config.video_attention)
                 from patches.staged_vae import video_planning_template
                 from patches.video_decode_planner import make_planner
                 self.vae_temporal_planner = make_planner(video_planning_template(reader), self.vae_model._decode_pixels)
@@ -526,6 +555,7 @@ class RankRuntime:
                 if self.sample_active:
                     raise RuntimeError('Concurrent samples are unsupported')
                 self.sample_active, self.completed_decode = True, False
+                self.sample_nfe = 0
                 self.decode_lookahead_started = False
                 self._drop_vae()
                 self._drop_model()  # release TE CUDA weights before Native sampling
@@ -565,8 +595,12 @@ class RankRuntime:
                 return output
             elif command == 'prepare_dit':
                 from patches.h3_operator_aot import prepare
-                result=prepare(int(args[0]),self.rank,self.config.operators,
-                    norm_epsilon=1e-5/self.config.tensor_flow.divisor**2)
+                from patches.attention_schedule import schedule_uses_backend
+                use_sol=(self.config.operators.dit_attention=='sol' or
+                    schedule_uses_backend(self.config.dit_attention_schedule,'sol'))
+                result=dict(prepare(int(args[0]),self.rank,self.config.operators,
+                    norm_epsilon=1e-5/self.config.tensor_flow.divisor**2,sol=use_sol))
+                self.aot_receipts['dit']=result
                 self.events.append(dict(phase='dit_aot',**result))
                 return result
             elif command in ('refine', 'denoise'):
@@ -584,6 +618,20 @@ class RankRuntime:
                 keys = ([self.preprocessing.project_key]*self.preprocessing.project_uses if self.rank == 0 else []) + self.keys
                 self.window.extend_uses(keys)
                 self.calls += 1
+                self.sample_nfe += 1
+                from patches.attention_schedule import select_attention_policy
+                selected,tau=select_attention_policy(self.config.dit_attention_schedule,self.sample_nfe,self.config.operators.dit_attention,self.config.sol_tau)
+                options=dict(kwargs.get('transformer_options') or {})
+                options['_h3_dit_attention']=selected
+                options['_h3_sol_tau']=tau
+                options['_h3_nfe']=self.sample_nfe
+                options['_h3_sol_topology_v2']=self.config.sol_topology_v2
+                options['_h3_sol_sync_free_lut']=self.config.sol_sync_free_lut
+                options['_h3_sol_collect_route_stats']=self.config.sol_collect_route_stats
+                options['_h3_sol_temporal_radius']=self.config.sol_temporal_radius
+                options['_h3_sol_local_radius_tokens']=self.config.sol_local_radius_tokens
+                options['_h3_sol_protect_frame_boundaries']=self.config.sol_protect_frame_boundaries
+                kwargs['transformer_options']=options
                 return self.model(*args, **kwargs)
             elif command == 'end_sample':
                 if ptd_adapter is not None and ptd_adapter.queue is not None:
@@ -671,6 +719,9 @@ def _worker(rank, config, budget, port, connection):
         if torch.cuda.get_device_capability(rank)==(7,5):
             from patches.h3_operator_dependencies import configure_compiler
             configure_compiler(config.operators)
+            if not config.tensor_flow.enabled and (config.operators.te_attention=='kitchen_causal' or config.operators.dit_attention=='kitchen'):
+                from patches.kitchen_attention import prepare
+                prepare(arch='75')
         enable()
         store = dist.TCPStore('127.0.0.1', port, 3, False,
             timedelta(seconds=config.timeout_seconds))
@@ -683,7 +734,8 @@ def _worker(rank, config, budget, port, connection):
                 while not connection.poll(.05):
                     with torch.cuda.device(rank),torch.inference_mode():runtime.idle_tick()
             sequence, command, args, kwargs = connection.recv()
-            result = runtime.dispatch(command, args, kwargs)
+            from patches.kitchen_attention import native_scope
+            with native_scope():result = runtime.dispatch(command, args, kwargs)
             result = worker_reply(result, rank, command)
             ptd = getattr(runtime, '_ptd_adapter', None)
             queued_reply = (ptd is not None and ptd.options.hop_handoff == 'queue'

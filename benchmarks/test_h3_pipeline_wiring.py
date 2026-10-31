@@ -25,8 +25,6 @@ def main():
     args=parser.parse_args();sys.argv=sys.argv[:1]
     torch.set_grad_enabled(False);torch.backends.cuda.matmul.allow_tf32=False
     from patches import tp_dit as dit,tp_qwen3vl as te,optimized_tp
-    from patches.tilelang_grouped_tp_optimized import prepare
-    from patches.tilelang_group32_masked import execute_prepared
     comm=LogicalDualGPU(timeout=60);te.dist=dit.dist=comm
     isolate_cublas_workspaces();optimized_tp.enable()
     policy=H3OperatorPolicy()
@@ -46,21 +44,17 @@ def main():
     assert torch.isfinite(result[0]).all()
     records=[dict(name='DiT_Kitchen_and_row_call_sites',status='pass')]
     del blocks,result
+    te_policy=H3OperatorPolicy(te_attention='native')
     blocks=[configure_block(te.TPTransformerBlockINT8(hidden_size=256,intermediate_size=512,
-        num_heads=4,num_kv_heads=2,head_dim=64,rank=r,device='cuda:0'),'te',policy) for r in (0,1)]
+        num_heads=4,num_kv_heads=2,head_dim=64,rank=r,device='cuda:0'),'te',te_policy) for r in (0,1)]
     for b in blocks:b.to('cuda:0')
     initialize(blocks[0]);blocks[1].load_state_dict(blocks[0].state_dict())
     x=torch.randn(1,17,256,device='cuda');mask=torch.ones(17,17,device='cuda',dtype=torch.bool).tril()
     rope=(torch.ones(1,1,17,64,device='cuda'),torch.zeros(1,1,17,32,device='cuda'),torch.zeros(1,1,17,32,device='cuda'))
-    counts=[]
-    def explicit_preview(block,q,k,v,attention_mask):
-        counts.append((block.rank,q.shape[1],k.shape[1]))
-        return execute_prepared(prepare(q.half(),k.half(),v.half()),attention_mask,output_dtype=q.dtype,local_preview=True)
-    with patch.object(dispatch,'te_attention',side_effect=explicit_preview):
-        result=comm.run([lambda r=r:blocks[r](x.clone(),mask,rope) for r in (0,1)])
+    result=comm.run([lambda r=r:blocks[r](x.clone(),mask,rope) for r in (0,1)])
     torch.testing.assert_close(result[0],result[1],rtol=0,atol=0)
-    assert len(counts)==2 and torch.isfinite(result[0]).all()
-    records.append(dict(name='TE_Group32_GQA_mask_row_parts_call_sites',status='pass',explicit_SM120_preview=True))
+    assert torch.isfinite(result[0]).all()
+    records.append(dict(name='TE_Native_GQA_mask_row_parts_call_sites',status='pass'))
     # Exercise the actual Native refiner producer and residency copy of its wrapper.
     import comfy.ops
     from comfy.ldm.minimax.model import Attention,rope_rotation_table

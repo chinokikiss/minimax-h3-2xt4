@@ -60,7 +60,7 @@ def main():
     p.add_argument('--setup-budget',type=int,default=900)
     p.add_argument('--execution-budget',type=int)
     p.add_argument('--dit-lifetimes',action='store_true',help='Enable paired full-shape column gates before the DiT-only lifetime profile')
-    p.add_argument('--dit-attention',choices=('kitchen','tilelang_scalar'),default='kitchen')
+    p.add_argument('--dit-attention',choices=('kitchen','sol'),default='kitchen')
     args=p.parse_args()
     if args.dit_pair_retry and not args.dit_pair:p.error('--dit-pair-retry requires --dit-pair')
     if args.output.exists():raise FileExistsError('Preserve submitted notebooks')
@@ -271,8 +271,8 @@ if guard['status']!='worker_exited' or guard['exit_code']!=0:raise RuntimeError(
     ast.parse(code)
     ids={'cpu':'h3-dit-memory-cpu' if profile_files else 'h3-light-cpu','e2e':'h3-l1-current-offline-e2e','operators':'h3-rowpartial-reference-t4','dit-memory':'h3-dit-memory-51220','dit-profile':'h3-dit-single-profile'}
     titles={'cpu':'H3 DiT Memory CPU' if profile_files else 'H3 Light CPU','e2e':'H3 L1 Current Offline E2E','operators':'H3 RowPartial Reference T4','dit-memory':'H3 DiT Memory 51220','dit-profile':'H3 DiT Single Profile'}
-    if args.mode=='dit-profile' and args.dit_attention=='tilelang_scalar':
-        ids['dit-profile']='h3-dit-scalar-single-profile';titles['dit-profile']='H3 DiT Scalar Single Profile'
+    if args.mode=='dit-profile' and args.dit_attention=='sol':
+        ids['dit-profile']='h3-dit-sol-single-profile';titles['dit-profile']='H3 DiT Sol Single Profile'
     ids['review-operators']='h3-review-operators-t4-20261024';titles['review-operators']='H3 Review Operators T4 20261024'
     if args.review_suite:ids['cpu']='h3-review-operators-cpu-20261024';titles['cpu']='H3 Review Operators CPU 20261024'
     if args.turbo_e2e:ids['e2e']='h3-l1-turbo-05mp-t4';titles['e2e']='H3 L1 Turbo 0.5MP T4 Disk Bake'

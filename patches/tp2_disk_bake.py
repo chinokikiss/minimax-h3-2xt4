@@ -18,6 +18,7 @@ from safetensors.torch import save_file
 from patches.tp2_bundle import BundleReader, DIT_LINEAR, sha, signature, split_matrix
 from patches.rank_local_int8 import state_hashes
 from patches.windowed_tp import CheckpointReader
+from patches.file_metadata import FileChecks
 
 DESCRIPTOR = 'h3-tp2-disk-baked-v1'
 SHARD = 'h3-tp2-disk-baked-shard-v1'
@@ -46,22 +47,24 @@ class DiskBakedReader(BundleReader):
             raise ValueError('Unknown disk-baked descriptor')
         base = (path.parent / value['base_descriptor']).resolve()
         receipt = (path.parent / value['receipt']).resolve()
-        if sha(base) != value['base_descriptor_sha256'] or sha(receipt) != value['receipt_sha256']:
+        checks = FileChecks()
+        checks.admit(path); checks.admit(base)
+        if verify_payloads and (sha(base) != value['base_descriptor_sha256'] or sha(receipt) != value['receipt_sha256']):
             raise ValueError('Disk-baked source/receipt checksum mismatch')
         super().__init__(base,verify_payloads=verify_payloads)
         if self.kind != 'dit':
             raise ValueError('Only DiT receives offline LoRA')
-        record = json.loads(receipt.read_text())
+        record = checks.read_json(receipt)
         if (record.get('status') != 'complete' or record.get('format') != DESCRIPTOR
                 or record['recipe']['base_descriptor_sha256'] != value['base_descriptor_sha256']
-                or record['recipe']['base_bundle_sha256'] != sha(self.bundle_file)
+                or record['recipe']['base_bundle_sha256'] != self.bundle_digest
                 or record['recipe']['base_source'] != json.loads(base.read_text())['source']
                 or not record.get('native_independent_verification')):
             raise ValueError('Incomplete or mismatched disk bake')
         self.disk_path, self.disk_receipt = path, receipt
         self.disk_signatures = (signature(path), signature(receipt))
         self.recipe_sha256 = record['recipe_sha256']
-        if hashlib.sha256(json.dumps(record['recipe'], sort_keys=True).encode()).hexdigest() != self.recipe_sha256:
+        if verify_payloads and hashlib.sha256(json.dumps(record['recipe'], sort_keys=True).encode()).hexdigest() != self.recipe_sha256:
             raise ValueError('Disk bake recipe checksum mismatch')
         expected = {f'dit.block{i:02d}.rank{r}' for i in range(50) for r in (0, 1)}
         if set(record['shards']) != expected:
@@ -78,12 +81,15 @@ class DiskBakedReader(BundleReader):
         if self.verify_payloads and sha(auxiliary) != record['auxiliary_sha256']:
             raise ValueError('Baked auxiliary checksum mismatch')
         self.aux = CheckpointReader(auxiliary)
+        self.disk_checks = checks
+        self.disk_checks.check()
         self.identity = (*self.identity, DESCRIPTOR, self.recipe_sha256, value['receipt_sha256'])
         self.stats.update(persistent_baked_bytes=record['persistent_baked_bytes'], merge_device='none',
                           disk_baked=True, verified_native_targets=record['verified_native_targets'])
 
     def _check_roots(self):
         super()._check_roots()
+        self.disk_checks.check()
         if (signature(self.disk_path), signature(self.disk_receipt)) != self.disk_signatures:
             raise RuntimeError('Disk-baked descriptor/receipt changed')
 
@@ -97,13 +103,16 @@ class DiskBakedReader(BundleReader):
         row = self.baked_records[stem]
         path, manifest = self.root / (stem + '.safetensors'), self.root / (stem + '.json')
         before = (signature(path), signature(manifest))
+        self.file_checks.admit(path, size=row['bytes'])
+        self.file_checks.admit(manifest)
         for artifact, current in zip((path, manifest), before):
             if str(artifact) in self.verified and self.verified[str(artifact)] != current:
                 raise RuntimeError('Verified disk-baked shard changed')
         if str(manifest) not in self.verified:
-            if sha(manifest) != row['manifest_sha256']:
+            if self.verify_payloads and sha(manifest) != row['manifest_sha256']:
                 raise ValueError('Baked shard manifest checksum mismatch')
-            proof = json.loads(manifest.read_text())
+            proof = self.file_checks.read_json(manifest)
+            self.file_checks.admit(path, size=row['bytes'])
             if (proof['format'] != SHARD or proof['recipe_sha256'] != self.recipe_sha256
                     or proof['state_sha256'] != row['state_sha256']
                     or proof['base_state_sha256'] != row['base_state_sha256']

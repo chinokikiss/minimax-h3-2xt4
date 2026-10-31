@@ -22,20 +22,23 @@ def control_gates():
     from patches.windowed_tp import tp_specs
     p=policy.H3OperatorPolicy();assert p.te_attention=='kitchen_causal' and p.dit_attention=='kitchen'
     config=RuntimeConfig('te','dit');assert config.operators==p
-    assert replace(config,operators=replace(p,dit_attention='tilelang_scalar'))!=config
-    for kwargs in ({'dit_attention':'bad'},{'te_attention':'bad'},{'row_linear_backend':'bad'}, {'scalar_score_workspace_mib':-1}):
+    assert replace(config,operators=replace(p,dit_attention='sol'))!=config
+    for kwargs in ({'dit_attention':'bad'},{'te_attention':'bad'},{'row_linear_backend':'bad'}):
         try:policy.H3OperatorPolicy(**kwargs)
         except ValueError:pass
         else:raise AssertionError(kwargs)
+    try:policy.H3OperatorPolicy(scalar_score_workspace_mib=-1)
+    except TypeError:pass
+    else:raise AssertionError('Retired sparse workspace control was accepted by the operator policy')
     layout=SimpleNamespace(seq_len=111,segments=[(0,13,'text'),(13,47,'ref_img'),(47,51,'audio'),(51,111,'video')])
-    assert policy.packed_prefix({'minimax_h3_layout':layout},111)==51
+    assert policy.packed_prefix({'minimax_h3_layout':layout},111)==47
     try:policy.packed_prefix({'minimax_h3_layout':layout},110)
     except ValueError:pass
     else:raise AssertionError('Stale layout accepted')
     reader=SimpleNamespace(identity='checkpoint',operator_policy=p)
     with patch('patches.rank_local_int8.rank_block_bytes',return_value=1024):
         a=tp_specs(reader,'dit',0,1)[0].key
-        reader.operator_policy=replace(p,dit_attention='tilelang_drop')
+        reader.operator_policy=replace(p,dit_attention='sol')
         b=tp_specs(reader,'dit',0,1)[0].key
     assert a!=b and a[1:]==b[1:]
     from patches.weight_residency import copy_module
@@ -66,10 +69,13 @@ def control_gates():
     with patch.object(node,'_service',None),patch.object(node,'PhysicalTPService',Service), \
             patch.object(node,'create_model',return_value='MODEL'),patch.object(node,'create_clip',return_value='CLIP'):
         loader=MiniMaxH3TP2Loader()
-        _,_,first=loader.load('te','dit',dit_attention='tilelang_scalar',scalar_score_workspace_mib=0)
-        _,_,again=loader.load('te','dit',dit_attention='tilelang_scalar',scalar_score_workspace_mib=0)
-        assert first is again and first.config.operators.dit_attention=='tilelang_scalar'
-        assert first.config.operators.scalar_score_workspace_mib==0
+        _,_,first=loader.load('te','dit',dit_attention='sol',dit_attention_schedule='1-2:kitchen,3+:sol@0.75',sol_tau=1.0,video_attention='kitchen')
+        _,_,again=loader.load('te','dit',dit_attention='sol',dit_attention_schedule='1-2:kitchen,3+:sol@0.75',sol_tau=1.0,video_attention='kitchen')
+        assert first is again and first.config.operators.dit_attention=='sol'
+        assert first.config.dit_attention_schedule==((1,2,'kitchen',None),(3,None,'sol',0.75))
+        assert first.config.sol_tau==1.0
+        assert first.config.sol_topology_v2 is True and first.config.sol_sync_free_lut is True
+        assert first.config.video_attention=='kitchen'
         _,_,second=loader.load('te','dit',dit_attention='kitchen')
         assert first.closed and first is not second
     preprocessing_seam_gates()
@@ -159,73 +165,6 @@ def audio_gates():
     return dict(name='native_single_gpu_audio_no_parallel_dispatch',status='pass',checks=result.testsRun)
 
 
-def masked_reference(p,mask):
-    from patches.tilelang_group32_masked import normalize_mask
-    b,h,_,d=p.qi.shape;hk=p.ki.shape[1];n=p.queries;nk=p.keys
-    def dq(i,s,length,heads):
-        return (i[:,:,:length].float().reshape(b,heads,length,d//32,32)*s[:,:,:length,:,None]).reshape(b,heads,length,d)
-    q=dq(p.qi,p.qs,n,h);k=dq(p.ki,p.ks,nk,hk).repeat_interleave(h//hk,1)
-    v=p.v[:,:,:nk].repeat_interleave(h//hk,1).float()
-    mask=normalize_mask(mask,b,h,n,nk,q.device) if mask is not None else 0.
-    logits=q@k.transpose(-1,-2)/d**.5+mask
-    # Independent eager streaming reference retains the existing per-leaf FP16 P.
-    m=torch.full((b,h,n),-float('inf'),device=q.device);den=torch.zeros_like(m);out=torch.zeros_like(q)
-    for start in range(0,nk,64):
-        z=logits[...,start:start+64];updated=torch.maximum(m,z.amax(-1))
-        safe=torch.where(updated==-float('inf'),torch.zeros_like(updated),updated)
-        alpha=(m-safe).exp();prob=(z-safe[...,None]).exp()
-        out=out*alpha[...,None]+prob.half().float()@v[:,:,start:start+64]
-        den=den*alpha+prob.sum(-1);m=updated
-    out=torch.where(den[...,None]==0,torch.zeros_like(out),out/den[...,None]).half().float()
-    return out.transpose(1,2).reshape(b,n,h*d)
-
-
-def masked_gates(local_preview):
-    from patches import tilelang_grouped_tp_optimized as preparation
-    from patches import tilelang_group32_masked as dense
-    device=torch.device('cuda',torch.cuda.current_device());torch.manual_seed(928)
-    q=torch.randn(2,4,37,64,device=device,dtype=torch.float16)*.2
-    k=torch.randn(2,1,73,64,device=device,dtype=torch.float16)*.2;v=torch.randn_like(k)
-    # Eager preparation makes the preview architecture explicit; production uses fused SM75 preparation.
-    p=preparation.prepare(q,k,v,fused=False,mode='dense',query_tile=32)
-    masks=[None,torch.ones(37,73,device=device,dtype=torch.bool).tril(),torch.randn(2,1,1,73,device=device)*.2]
-    masks[1][3,:64]=False # Initial leaf has no mass; later leaf does.
-    masks[1][4,:]=False # Entirely masked query must be zero.
-    records=[]
-    for index,mask in enumerate(masks):
-        y=dense.execute_prepared(p,mask,local_preview=local_preview)
-        expected=masked_reference(p,mask)
-        torch.testing.assert_close(y,expected,rtol=.006,atol=.002)
-        assert torch.isfinite(y).all()
-        if index==1:assert torch.count_nonzero(y[:,4])==0
-        records.append(dict(name='masked_GQA_'+str(index),status='pass',max_abs=float((y-expected).abs().max())))
-    return records
-
-
-def t4_dispatch_gates():
-    from patches import tilelang_grouped_tp_kitchen_v2 as dense
-    from patches import tilelang_group32_masked as masked
-    device=torch.device('cuda',torch.cuda.current_device());torch.manual_seed(812)
-    q=torch.randn(1,4,65,128,device=device);k=torch.randn(1,1,65,128,device=device);v=torch.randn_like(k)
-    mask=torch.ones(65,65,device=device,dtype=torch.bool).tril()
-    block=SimpleNamespace(operator_policy=policy.H3OperatorPolicy(te_attention='tilelang_group32'))
-    y=policy.te_attention(block,q,k,v,mask)
-    expected=masked_reference(dense.prepare(q,k,v),mask)
-    torch.testing.assert_close(y,expected,rtol=.006,atol=.003)
-    q=torch.randn(1,2,321,128,device=device)*.2;k=torch.randn_like(q)*.2;v=torch.randn_like(q)
-    options={'minimax_h3_layout':SimpleNamespace(seq_len=321,segments=[(0,7,'text'),(7,321,'video')])}
-    # Exercise real dispatch and both scalar workspace branches on the target.
-    for mode in ('tilelang_drop','tilelang_scalar','tilelang_dense'):
-        block.operator_policy=replace(block.operator_policy,dit_attention=mode)
-        actual=policy.dit_attention(block,q,k,v,options)
-        assert actual.shape==(1,321,256) and torch.isfinite(actual).all()
-        if mode=='tilelang_scalar':
-            block.operator_policy=replace(block.operator_policy,scalar_score_workspace_mib=0)
-            inline=policy.dit_attention(block,q,k,v,options)
-            torch.testing.assert_close(actual,inline,rtol=.001,atol=.0005)
-    return dict(name='SM75_fused_TE_and_real_sparse_dispatch',status='pass')
-
-
 def distributed_row_gates(comm,rank):
     from patches import optimized_tp as native,parallel_int8 as original
     native.enable()
@@ -263,8 +202,6 @@ def main():
     if args.cuda_preview or args.t4:
         assert torch.cuda.get_device_capability()==((12,0) if args.cuda_preview else (7,5))
         records.append(selective_b_gates(torch.device('cuda',rank)))
-        records+=masked_gates(args.cuda_preview)
-        if args.t4:records.append(t4_dispatch_gates())
     if args.distributed:records+=distributed_row_gates(dist,rank)
     args.output.parent.mkdir(parents=True,exist_ok=True)
     output=args.output.with_name(args.output.stem+f'_rank{rank}.json') if args.distributed else args.output

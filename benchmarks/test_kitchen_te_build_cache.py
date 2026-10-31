@@ -42,7 +42,7 @@ class NativeCache(unittest.TestCase):
     def test_wait_timeout_preserves_another_builders_lock(self):
         with tempfile.TemporaryDirectory() as folder,patch.object(te,'_source_hashes',return_value=self.sources), \
                 patch.dict(os.environ,{te.LIBRARY_ENV:'','H3_KITCHEN_ATTENTION_CACHE':folder}):
-            fingerprint=hashlib.sha256(json.dumps(self.sources,sort_keys=True).encode()).hexdigest()[:24]
+            fingerprint=hashlib.sha256(json.dumps(te._source_metadata(),sort_keys=True).encode()).hexdigest()[:24]
             cache=Path(folder)/fingerprint;cache.mkdir();lock=cache/'build.lock';lock.write_text('other builder')
             with patch.object(te.time,'monotonic',side_effect=[0,331]):
                 with self.assertRaises(TimeoutError):te.prepare_native('qualified-nvcc')

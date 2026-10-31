@@ -25,7 +25,7 @@ def sha(path):
 
 
 def profile_modes(requested):
-    if requested=='tilelang_scalar':return ('tilelang_scalar','kitchen')
+    if requested=='sol':return ('sol','kitchen')
     if requested=='kitchen':return ('kitchen',)
     raise ValueError('Unsupported profile backend')
 
@@ -34,7 +34,7 @@ def main():
     parser=argparse.ArgumentParser();parser.add_argument('--source',type=Path,required=True)
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--dit-profile',action='store_true',help='Real input preparation, then exactly one profiled DiT NFE; no decoders')
-    parser.add_argument('--dit-attention',choices=('kitchen','tilelang_scalar'),default='kitchen',
+    parser.add_argument('--dit-attention',choices=('kitchen','sol'),default='kitchen',
         help='Explicit single-call profiling backend; E2E keeps its frozen plan')
     parser.add_argument('--capture-gate',type=Path)
     args=parser.parse_args()
@@ -151,7 +151,7 @@ def main():
                         comparison[mode]=dict(status='failed',error=repr(error),result_path=str(target/'result.json'))
                     (output/'comparison.json').write_text(json.dumps(comparison,indent=2))
                 if any(r['status']!='complete' for r in comparison.values()):raise RuntimeError('At least one backend profile failed; see comparison.json')
-                if len(comparison)==2 and comparison['kitchen']['inputs']!=comparison['tilelang_scalar']['inputs']:
+                if len(comparison)==2 and comparison['kitchen']['inputs']!=comparison['sol']['inputs']:
                     raise RuntimeError('Paired backend inputs changed')
                 mark('complete',denoiser_calls=len(modes),calls_per_backend=1,full_pipeline=False,
                     decoders_executed=False,persistent_baked_bytes=0,profiles=list(comparison))

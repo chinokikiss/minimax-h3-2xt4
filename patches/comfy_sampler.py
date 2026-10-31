@@ -245,8 +245,9 @@ class ParallelDecodeHandoff(DecodeHandoff):
             return self._native_decode(method, *args, **kwargs)
         if self.mode != 'temporal':
             from patches.parallel_vae import query_partitioning_status
-            self.last_query_partitioning=(query_partitioning_status(model,checkpoint_reader=self.vae.reader)
-                if _metadata_model is not None else query_partitioning_status(model))
+            backend=getattr(getattr(self.service,'config',None),'video_attention','kitchen')
+            self.last_query_partitioning=(query_partitioning_status(model,checkpoint_reader=self.vae.reader,attention_backend=backend)
+                if _metadata_model is not None else query_partitioning_status(model,attention_backend=backend))
             if not self.last_query_partitioning['available']:
                 self.last_fallback='Video VAE query-parallel unavailable: '+self.last_query_partitioning['reason']
                 logging.info('MiniMax video VAE using Native: %s',self.last_fallback)

@@ -58,7 +58,7 @@ class WorkerAdapter:
             raise ValueError('Explicit enabled PTD options required')
         self.runtime, self.options = runtime, options
         self.bank = PTDBank(path, allow_fixture=options.allow_fixture, expected_sha256=expected_bank_sha256,
-            verify_payloads=getattr(runtime.config,'verify_dit_weights',True))
+            verify_payloads=False)
         self.original = runtime.readers['dit']
         if (type(self.original) is not BundleReader or self.original.path.resolve() != self.bank.base
                 or runtime.config.lora_stack):
@@ -214,7 +214,7 @@ class Controller:
     def __init__(self, service, path, options, *, expected_bank_sha256=None):
         self.service, self.path, self.options = service, str(Path(path).resolve()), options
         self.bank = PTDBank(path, allow_fixture=options.allow_fixture, expected_sha256=expected_bank_sha256,
-            verify_payloads=getattr(service.config,'verify_dit_weights',True))
+            verify_payloads=False)
         self.sigmas = self.bank.sigmas
         self.hops = 8
         self.selection = ContextVar(f'ptd_tp2_{id(self)}', default=None)

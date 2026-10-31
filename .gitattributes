@@ -4,6 +4,7 @@
 # Their manifests and submitted source receipts hash raw bytes.
 /docs/data/kitchen*_20261025.json -text whitespace=cr-at-eol
 /docs/data/kitchen_dense_sm75_20261025/** -text whitespace=cr-at-eol
+/docs/data/kitchen_fp32_store_20261027/** -text whitespace=cr-at-eol
 /docs/data/te_causal_precision_20261026/** -text whitespace=cr-at-eol
 /docs/data/te_attention_tp2_matrix_20261027/** -text whitespace=cr-at-eol
 /docs/data/te_attention_tp2_matrix_20261027/attempt1_workers.txt -text -whitespace
@@ -17,6 +18,13 @@
 /experiments/kitchen_attention/** -text whitespace=cr-at-eol
 /experiments/kitchen_attention/native/vendor/** -text -whitespace
 /patches/kitchen_te_attention.py -text
+/patches/kitchen_attention.py -text whitespace=cr-at-eol
+/patches/kitchen_attention_native/** -text whitespace=cr-at-eol
+/patches/kitchen_attention_native/vendor/** -text -whitespace
+/docs/data/kitchen_attention_default_20261027/** -text whitespace=cr-at-eol
+/docs/data/kitchen_attention_default_20261027/submitted/** -text -whitespace
+/docs/data/kitchen_attention_default_20261027/integration/** -text -whitespace
+/docs/data/kitchen_attention_default_20261027/runtime_cpu_tests.txt -text -whitespace
 /docs/pdf/*.py text eol=lf
 /docs/data/h3_ptd_aux_split_20261029/** -text whitespace=cr-at-eol
 /docs/data/h3_ptd_aux_split_20261029/t4_v1_final/*.log -text -whitespace
@@ -37,8 +45,6 @@
 /docs/data/h3_turbo_09mp_10s_20261029/gpu_v1_final/**/exception.txt -text -whitespace
 
 /docs/data/h3_turbo_085mp_10s_20261029/gpu_v1_final/**/exception.txt -text -whitespace
-
-/patches/kitchen_attention.py -text
 
 /patches/kitchen_attention_native/** -text -whitespace
 

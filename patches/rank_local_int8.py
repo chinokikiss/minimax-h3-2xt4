@@ -121,6 +121,14 @@ def state_hashes(module):
             for k,t in module.state_dict().items()}
 
 
+def check_state_schema(state, proof):
+    """Use retained proof metadata without reading or hashing tensor contents."""
+    if set(state) != set(proof) or any(
+            str(value.dtype) != proof[name]['dtype'] or list(value.shape) != proof[name]['shape']
+            for name, value in state.items()):
+        raise ValueError('Rank tensor schema mismatch')
+
+
 def export_block(reader, kind, index, rank, directory, *, native_comparator):
     """Offline conversion requires actual Native-loaded tensor equality first."""
     from safetensors.torch import save_file
@@ -145,31 +153,37 @@ def export_block(reader, kind, index, rank, directory, *, native_comparator):
 
 def load_offline_block(source_reader, kind, index, rank, directory):
     from patches.windowed_tp import CheckpointReader
+    from patches.file_metadata import FileChecks
+    checks = getattr(source_reader, 'rank_file_checks', None)
+    if checks is None:
+        checks = source_reader.rank_file_checks = FileChecks()
+    checks.check()
     root = Path(directory).resolve(); stem = f'{kind}.block{index:02d}.rank{rank}'
     source_stat = source_reader.path.stat()
     if (source_stat.st_size,source_stat.st_mtime_ns) != source_reader.signature:
         raise RuntimeError('Source checkpoint changed since offline planning')
     manifest_path = root/(stem+'.json')
-    manifest = json.loads(manifest_path.read_text())
+    manifest = checks.read_json(manifest_path)
     if (manifest['format'] != FORMAT or manifest['configuration'] != CONFIG or
         manifest['source_identity'] != json.loads(json.dumps(source_reader.identity)) or
         (manifest['kind'],manifest['index'],manifest['rank']) != (kind,index,rank) or
         manifest['native_tensor_bit_exact'] is not True):
         raise ValueError('Offline checkpoint provenance/configuration mismatch')
     reader = CheckpointReader(root/(stem+'.safetensors'))
+    checks.admit(reader.path)
     module = shell(kind,rank)
     state = {name:reader.read_tensor(name) for name in module.state_dict()}
+    check_state_schema(state,manifest['state_sha256'])
     module.load_state_dict(state,strict=True,assign=True)
     verified = getattr(source_reader,'rank_offline_verified',{})
     signature = (*reader.signature,manifest_path.stat().st_mtime_ns,manifest_path.stat().st_size)
-    # Verify each immutable artifact once per reader lifetime. Subsequent loads
-    # use file signatures, just like the Native checkpoint reader. Verification
-    # belongs to cold/startup latency and is never silently omitted there.
+    # Offline integrity tools retain proofs; runtime readers select metadata.
     if verified.get(str(reader.path)) != signature:
-        if state_hashes(module) != manifest['state_sha256']:
+        if getattr(source_reader,'verify_payloads',True) and state_hashes(module) != manifest['state_sha256']:
             raise ValueError('Offline rank tensor checksum mismatch')
         verified[str(reader.path)] = signature
         source_reader.rank_offline_verified = verified
+    checks.check()
     module._rank_checkpoint_metadata = manifest['quant_metadata']
     module._rank_offline_read_bytes = reader.logical_read_bytes
     with source_reader.read_lock:

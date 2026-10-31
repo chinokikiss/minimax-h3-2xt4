@@ -35,10 +35,10 @@ def runtime(config,te=None):
 def validate_attention_backend(mode, counts):
     """Require 50 actual backend executions; reject silent fallback/mixed paths."""
     kitchen=counts.get('kitchen/int8_attention',0)
-    sparse=sum(counts.get(k,0) for k in ('DiT/tilelang_sparse_execute','DiT/tilelang_scalar_split_execute'))
-    if mode=='kitchen':assert kitchen==50 and sparse==0,counts
-    elif mode=='tilelang_scalar':assert sparse==50 and kitchen==0,counts
-    else:raise ValueError('Single-call comparison supports Kitchen or Scalar Sparse')
+    sol=counts.get('DiT/sol_all_int8',0)
+    if mode=='kitchen':assert kitchen==50 and sol==0,counts
+    elif mode=='sol':assert sol==50 and kitchen==0,counts
+    else:raise ValueError('Single-call comparison supports Kitchen or Sol')
 
 
 class ProfileWindow(observation.ObservedWindow):

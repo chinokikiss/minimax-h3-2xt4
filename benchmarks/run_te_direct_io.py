@@ -121,7 +121,7 @@ class ProfileRank(BASE_RANK):
         self.te_calls = 0
         start = time.monotonic_ns()
         super().__init__(*args)
-        assert self.readers['te'].verify_payloads is True
+        assert self.readers['te'].verify_payloads is False
         AUDIT.emit(dict(kind='rank_startup', start_ns=start, end_ns=time.monotonic_ns()))
 
     def dispatch(self, command, args=(), kwargs=None):
@@ -371,7 +371,7 @@ def main():
     args.output.mkdir(parents=True, exist_ok=True)
     args.scratch.mkdir(parents=True, exist_ok=False)
     state = dict(status='starting', full_h3_pipeline=False, te_only=True, cases=[], raw_io=[],
-        no_global_cache_drop=True, te_hash_verification=True, production_operators_unchanged=True)
+        no_global_cache_drop=True, te_hash_verification=False, runtime_metadata_only=True, production_operators_unchanged=True)
     def mark(stage, **fields):
         state.update(status=stage, **fields)
         save(args.output/'result.json', state)

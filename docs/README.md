@@ -20,6 +20,7 @@ manifest; measurements remain in separate reports.
 | [FP16-fix / stored fusion / scaled transport default](reports/H3_FP16_FUSED_DEFAULT_20261022.md) | Current production dispatch, preserved alternatives, real T4 evidence and remaining quality limits |
 | [Runtime setup](guides/H3_LEGACY_RUNTIME.md) | Preserved local ComfyUI and environment, launch commands, Linux qualification limits |
 | [Operator integration](guides/H3_OPERATOR_INTEGRATION.md) | Node options, attention policies, row operators, and workflow wiring |
+| [Kitchen attention default](guides/KITCHEN_ATTENTION_DEFAULT.md) | Shared causal/non-causal direct FP32 output epilogue, preserved low-precision path, Native VAE scope and build-cache contract |
 | [Operator enhancements](guides/H3_OPERATOR_ENHANCEMENTS.md) | FP16 transport, positional reads, lifetimes, adaptive lookahead, Native refiner |
 | [Loading stages](guides/H3_LOADING_STAGES.md) | Online/offline LoRA, layer-parallel baking, encoder/decoder stages, idle preloading |
 | [VAE integration](guides/PARALLEL_VAE_INTEGRATION.md) | Default Temporal Video decoding, optional Query, Native single-GPU FP32 audio |

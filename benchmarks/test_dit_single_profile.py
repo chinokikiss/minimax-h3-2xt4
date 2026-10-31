@@ -36,10 +36,10 @@ class SingleDiT(unittest.TestCase):
         self.assertEqual(config.timeout_seconds,1500)
         self.assertEqual(config.lora_stack,());self.assertTrue(config.tensor_flow.enabled)
 
-    def test_replacement_runs_scalar_and_control_once_each(self):
+    def test_replacement_runs_sol_and_control_once_each(self):
         from run_h3_l1_current_batch import profile_modes
-        modes=profile_modes('tilelang_scalar')
-        self.assertEqual(modes,('tilelang_scalar','kitchen'))
+        modes=profile_modes('sol')
+        self.assertEqual(modes,('sol','kitchen'))
         self.assertEqual(len(modes),len(set(modes)))
 
     def test_exact_native_51220_layout_without_activation_allocation(self):
@@ -48,29 +48,29 @@ class SingleDiT(unittest.TestCase):
         self.assertEqual(layout.seq_len,51220)
         self.assertEqual(layout.segments[-1],(3284,51220,'video'))
 
-    def test_scalar_policy_preserves_other_operators_and_rejects_kitchen_fallback(self):
-        config=runtime({'paths':{'te':'te','dit':'baked'},'operators':{'dit_attention':'tilelang_scalar'}})
-        self.assertEqual(config.operators.dit_attention,'tilelang_scalar')
+    def test_sol_policy_preserves_other_operators_and_rejects_kitchen_fallback(self):
+        config=runtime({'paths':{'te':'te','dit':'baked'},'operators':{'dit_attention':'sol'}})
+        self.assertEqual(config.operators.dit_attention,'sol')
         self.assertEqual(config.operators.fc2_quantizer,'fused_stored')
         self.assertEqual(config.operators.row_linear_backend,'tilelang_scaled_fp16')
-        validate_attention_backend('tilelang_scalar',{'DiT/tilelang_sparse_execute':49,'DiT/tilelang_scalar_split_execute':1})
-        with self.assertRaises(AssertionError):validate_attention_backend('tilelang_scalar',{'kitchen/int8_attention':50})
-        with self.assertRaises(AssertionError):validate_attention_backend('tilelang_scalar',{'DiT/tilelang_sparse_execute':49})
+        validate_attention_backend('sol',{'DiT/sol_all_int8':50})
+        with self.assertRaises(AssertionError):validate_attention_backend('sol',{'kitchen/int8_attention':50})
+        with self.assertRaises(AssertionError):validate_attention_backend('sol',{'DiT/sol_all_int8':49})
 
-    def test_scalar_notebook_propagates_backend_and_uses_separate_kernel(self):
+    def test_sol_notebook_propagates_backend_and_uses_separate_kernel(self):
         from build_kaggle_light_job import main
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp);pub=root/'pub.json';q=root/'cpu.json'
             pub.write_text(json.dumps(dict(published=True,capsule_sha256='abc',url='https://example.invalid/frozen',bytes=1,sha256='def')))
             q.write_text(json.dumps(dict(status='cpu_ready',capsule_sha256='abc')))
-            with patch.object(sys,'argv',['builder','--mode','dit-profile','--dit-attention','tilelang_scalar',
+            with patch.object(sys,'argv',['builder','--mode','dit-profile','--dit-attention','sol',
                     '--publication',str(pub),'--qualification',str(q),'--output',str(root/'job')]):main()
             meta=json.loads((root/'job/kernel-metadata.json').read_text())
-            self.assertEqual(meta['id'],'pamcks/h3-dit-scalar-single-profile')
+            self.assertEqual(meta['id'],'pamcks/h3-dit-sol-single-profile')
             code=''.join(json.loads((root/'job/experiment.ipynb').read_text())['cells'][0]['source'])
             workers=[base64.b64decode(ast.literal_eval(n.args[0])).decode() for n in ast.walk(ast.parse(code))
                 if isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and n.func.attr=='b64decode']
-            self.assertTrue(any("'--dit-attention','tilelang_scalar'" in w.replace(' ','').replace('\n','') for w in workers))
+            self.assertTrue(any("'--dit-attention','sol'" in w.replace(' ','').replace('\n','') for w in workers))
 
     def test_first_native_lcm_interval_calls_denoiser_once(self):
         from comfy.k_diffusion.sampling import sample_lcm

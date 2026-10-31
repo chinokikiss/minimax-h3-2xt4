@@ -110,16 +110,11 @@ class ObservedRank(BASE_RANK):
             return prepared
         policy.prepare_dit_attention=prepare_attention
         # Observe actual executed entrypoints, not the configured policy string.
-        import patches.tilelang_group32_masked as te
         import patches.kitchen_te_attention as kitchen_te
-        import patches.tilelang_grouped_tp_optimized as sparse
-        import patches.tilelang_attention_p2 as split
+        import patches.sol_attention as sol_attention
         import comfy_kitchen as ck
         import patches.h3_lora as lora
-        for module, name, label in ((te,'attention','TE/tilelang_group32'),
-                (kitchen_te,'attention','TE/kitchen_causal'),
-                (sparse,'execute','DiT/tilelang_sparse_execute'),
-                (split,'execute','DiT/tilelang_scalar_split_execute'),
+        for module, name, label in ((kitchen_te,'attention','TE/kitchen_causal'),
                 (ck,'int8_attention','kitchen/int8_attention'),
                 (policy,'execute_dit_attention','kitchen/int8_attention'),
                 (lora.NativeAlignedLoRA,'add_to','LoRA/column_or_native_bypass'),
@@ -135,6 +130,18 @@ class ObservedRank(BASE_RANK):
                     torch.cuda.nvtx.range_pop()
                     owner.gpu.append((dict(kind=_label, **owner.context), begin, event()))
             setattr(module, name, wrap)
+        sol_fn=sol_attention.attention
+        def observe_sol(*a, **kw):
+            command=owner.context.get('command')
+            label='DiT/sol_all_int8' if command=='denoise' else 'Sol/all_int8'
+            owner.backends[label]+=1
+            begin=event();torch.cuda.nvtx.range_push(label)
+            try:
+                return sol_fn(*a,**kw)
+            finally:
+                torch.cuda.nvtx.range_pop()
+                owner.gpu.append((dict(kind=label,**owner.context),begin,event()))
+        sol_attention.attention=observe_sol
         read = CheckpointReader.read
         def observed_read(reader, prefix, exclude=()):
             start, cpu = time.monotonic_ns(), time.thread_time_ns()
@@ -471,11 +478,11 @@ def main():
         for rank in state['ranks']:
             bench=rank['benchmark']
             if not bench['layouts']:raise AssertionError('No actual packed DiT layout was observed')
-            te_backend={'kitchen_causal':'TE/kitchen_causal','tilelang_group32':'TE/tilelang_group32'}.get(operators.te_attention)
+            te_backend={'kitchen_causal':'TE/kitchen_causal'}.get(operators.te_attention)
             if te_backend and not bench['executed_backends'].get(te_backend):raise AssertionError('Configured TE kernel not executed')
+            dit_backend={'kitchen':'kitchen/int8_attention','sol':'DiT/sol_all_int8'}.get(operators.dit_attention)
+            if dit_backend and not bench['executed_backends'].get(dit_backend):raise AssertionError('Configured DiT attention kernel not executed')
             if config['lora']:
-                if not any('tilelang_s' in k and v for k,v in bench['executed_backends'].items()):
-                    raise AssertionError('Scalar kernel not executed')
                 denoise=[c for c in bench['commands'] if c['command']=='denoise']
                 if max(c['peak_allocated'] for c in denoise)>=14.5*GiB:
                     raise AssertionError('L1 exceeded the allocated-memory acceptance bound')

@@ -11,7 +11,6 @@ class H3OperatorPolicy:
     te_attention: str = 'kitchen_causal'
     dit_attention: str = 'kitchen'
     row_linear_backend: str = 'tilelang_scaled_fp16'
-    scalar_score_workspace_mib: int = 96
     fc2_quantizer: str = 'fused_stored'
     column_linear_backend: str = 'cuda_int8_tilelang'
     dit_rms_rope: str = 'tilelang_fp32'
@@ -25,14 +24,11 @@ class H3OperatorPolicy:
         for name in ('dit_fused_norm','dit_fused_gate','dit_fused_row_gate','dit_prepared_attention'):
             if type(getattr(self,name)) is not bool:raise ValueError(name+' must be boolean')
         if self.dit_rms_rope not in ('native','tilelang_fp32'):raise ValueError('Unknown DiT RMS-RoPE backend')
-        if self.te_attention not in ('kitchen_causal','tilelang_group32','native'):raise ValueError('Unknown TE attention')
-        if self.dit_attention not in ('kitchen','tilelang_dense','tilelang_drop','tilelang_scalar','native'):
-            raise ValueError('Unknown DiT attention')
+        if self.te_attention not in ('kitchen_causal','native'):raise ValueError('Unknown TE attention')
+        if self.dit_attention not in ('kitchen','sol','native'):raise ValueError('Unknown DiT attention')
         if self.row_linear_backend not in ('tilelang_packed','tilelang_scaled_fp16','native'):raise ValueError('Unknown row-linear backend')
         if self.fc2_quantizer not in ('native','owned_fp32','fused_stored','fused_recompute'):
             raise ValueError('Unknown FC2 quantizer')
-        if type(self.scalar_score_workspace_mib) is not int or self.scalar_score_workspace_mib<0:
-            raise ValueError('Nonnegative scalar score workspace MiB required')
         if self.column_linear_backend not in ('preallocated','cuda_int8_tilelang'):
             raise ValueError('Unknown column linear backend')
 
@@ -67,71 +63,137 @@ def te_attention(block,q,k,v,mask):
         if not q.is_cuda:return None
         from patches.kitchen_te_attention import attention
         return attention(q,k,v,mask=mask)
-    if not sm75(q,'TE Group32 attention'):return None
-    from patches.tilelang_group32_masked import attention
-    return attention(q,k,v,mask=mask)
+    raise ValueError('Unknown TE attention')
 
 
-def packed_prefix(options,tokens):
+def protected_prefix(options,tokens):
+    """Return the exact-protected conditioning prefix before generated targets."""
     layout=options.get('minimax_h3_layout')
     segments=getattr(layout,'segments',None)
     if not segments or getattr(layout,'seq_len',None)!=tokens:
-        raise ValueError('Sparse DiT attention requires the matching Native PackedLayout')
-    video=[(a,b) for a,b,kind in segments if kind=='video']
-    if len(video)!=1 or video[0][1]!=tokens or not 0<=video[0][0]<tokens:
-        raise ValueError('Sparse attention requires one final generated-video span')
-    # All text, references, conditioning and generated audio remain in the dense prefix.
-    return video[0][0]
+        raise ValueError('Sol DiT attention requires the matching Native PackedLayout')
+    if len(segments)<2:
+        raise ValueError('Sol attention requires Native target audio/video segments')
+    audio_a,audio_b,audio_kind=segments[-2]
+    video_a,video_b,video_kind=segments[-1]
+    if (audio_kind!='audio' or video_kind!='video' or audio_b!=video_a
+            or video_b!=tokens or not 0<=audio_a<=audio_b<=video_b):
+        raise ValueError('Sol attention requires final Native audio/video target segments')
+    # Protect only conditioning/reference rows. Target audio and target video
+    # remain generated tokens and use normal Sol routing. Native Q64/K64 routing
+    # rounds the protected boundary outward to a complete block.
+    return audio_a
+
+
+def sol_v2_routing(options,tokens):
+    """Return the experimental H3-aware Sol prefix and video token topology."""
+    options=options or {}
+    layout=options.get('minimax_h3_layout')
+    segments=getattr(layout,'segments',None)
+    if not segments or getattr(layout,'seq_len',None)!=tokens or len(segments)<2:
+        raise ValueError('Sol v2 requires the matching Native PackedLayout')
+    audio_a,audio_b,audio_kind=segments[-2]
+    video_a,video_b,video_kind=segments[-1]
+    if (audio_kind!='audio' or video_kind!='video' or audio_b!=video_a
+            or video_b!=tokens or not 0<=audio_a<=audio_b<=video_b):
+        raise ValueError('Sol v2 requires final Native audio/video target segments')
+    signature=getattr(layout,'signature',None)
+    if not signature or len(signature)<2:
+        raise ValueError('Sol v2 requires PackedLayout latent geometry')
+    latent_t=int(signature[1])
+    video_tokens=video_b-video_a
+    if latent_t<=0 or video_tokens<=0 or video_tokens%latent_t:
+        raise ValueError('Sol v2 video segment is not frame-regular')
+    frame_tokens=video_tokens//latent_t
+    topology=dict(
+        kind='dit',
+        nfe=options.get('_h3_nfe'),
+        start_token=video_a,
+        end_token=video_b,
+        frame_stride_tokens=frame_tokens,
+        temporal_radius=int(options.get('_h3_sol_temporal_radius',1)),
+        local_radius_tokens=int(options.get('_h3_sol_local_radius_tokens',64)),
+        protect_frame_boundaries=bool(options.get('_h3_sol_protect_frame_boundaries',True)),
+    )
+    # Protect conditioning + generated audio. Outward Q64/K64 rounding also
+    # absorbs the mixed audio/video boundary block.
+    return video_a,topology
+
+
+# Historical name retained for archived benchmark readers.
+packed_prefix = protected_prefix
+
+
+def _dit_mode(block,options):
+    policy=getattr(block,'operator_policy',None)
+    default=policy.dit_attention if policy is not None else 'native'
+    mode=(options or {}).get('_h3_dit_attention',default)
+    if mode not in ('kitchen','sol','native'):
+        raise ValueError('Unknown DiT attention')
+    return mode
 
 
 def dit_attention(block,q,k,v,options):
-    policy=getattr(block,'operator_policy',None)
-    mode=policy.dit_attention if policy is not None else 'native'
-    if mode=='native':out=torch.nn.functional.scaled_dot_product_attention(q,k,v)
-    elif mode=='kitchen':
-        import comfy_kitchen as ck
-        out=ck.int8_attention(q,k,v)
-    elif not sm75(q,'DiT '+mode):
+    mode=_dit_mode(block,options)
+    if mode=='native':
         out=torch.nn.functional.scaled_dot_product_attention(q,k,v)
-    elif mode=='tilelang_dense':
-        from patches import tilelang_grouped_tp_kitchen_v2 as dense
-        p=dense.prepare(q,k,v,query_tile=64)
-        return dense.execute(p,cache='q',layout='BND',output_dtype=q.dtype,threads=128,warp_policy='row')
+    elif mode=='kitchen':
+        from patches.kitchen_attention import int8_attention
+        out=int8_attention(q,k,v)
     else:
-        from patches import tilelang_grouped_tp_optimized as sparse
-        prefix=packed_prefix(options,q.shape[-2])
-        p=sparse.prepare(q.half(),k.half(),v.half(),fused=True,
-            mode='drop' if mode=='tilelang_drop' else 'scalar',query_tile=64)
-        routes=sparse.routes(p,prefix_tokens=prefix,fast_tau0=True)
-        if mode=='tilelang_scalar':
-            b,h,np,d=p.q.shape;nb=p.kc.shape[2];workspace=b*h*np*nb*4
-            if workspace<=policy.scalar_score_workspace_mib*2**20:
-                from patches import tilelang_attention_p2 as split
-                scores=split.centroid_scores(b,h,np,nb,d,omitted=True)(p.q,p.kc,routes)
-                return split.execute(p,routes,output_dtype=q.dtype,centroids=scores)
-        return sparse.execute(p,routes,layout='BND',output_dtype=q.dtype)
+        from patches.sol_attention import attention
+        options=options or {}
+        if options.get('_h3_sol_topology_v2',True):
+            prefix,topology=sol_v2_routing(options,q.shape[-2])
+        else:
+            prefix,topology=protected_prefix(options,q.shape[-2]),None
+        tau=options.get('_h3_sol_tau',1.0)
+        out=attention(
+            q,k,v,protected_tokens=prefix,tau=tau,topology=topology,
+            sync_free_lut=bool(options.get('_h3_sol_sync_free_lut',True)),
+            collect_route_stats=bool(options.get('_h3_sol_collect_route_stats',False)),
+        )
     return out.transpose(1,2).reshape(q.shape[0],q.shape[2],-1)
 
 
 def prepare_dit_attention(block,q,k,v,options=None):
-    """The caller releases all floating QKV owners before consuming this value."""
+    """Prepare attention so tp_dit can release all floating QKV owners early."""
     policy=getattr(block,'operator_policy',None)
-    if (policy is None or policy.dit_attention!='kitchen'
+    mode=_dit_mode(block,options)
+    if (policy is None or mode not in ('kitchen','sol')
             or not getattr(policy,'dit_prepared_attention',False)
             or torch.is_grad_enabled() or torch.compiler.is_compiling()
             or not q.is_cuda or q.dtype!=torch.float16 or q.shape!=k.shape or q.shape!=v.shape
             or q.ndim!=4 or q.shape[0]!=1 or q.shape[1]!=28 or q.shape[-1]!=128
             or k.dtype!=q.dtype or v.dtype!=q.dtype or k.device!=q.device or v.device!=q.device
             or torch.cuda.get_device_capability(q.device)!=(7,5)):return None
-    import comfy_kitchen as ck
-    if not callable(getattr(ck,'prequantize_int8_attention',None)) or not callable(getattr(ck,'int8_attention_from_prequantized',None)):
-        return None
-    return ck.prequantize_int8_attention(q,k,v)
+    if mode=='kitchen':
+        import comfy_kitchen as ck
+        if not callable(getattr(ck,'prequantize_int8_attention',None)) or not callable(getattr(ck,'int8_attention_from_prequantized',None)):
+            return None
+        return ck.prequantize_int8_attention(q,k,v)
+
+    from patches.sol_attention import prepare_attention
+    options=options or {}
+    if options.get('_h3_sol_topology_v2',True):
+        prefix,topology=sol_v2_routing(options,q.shape[-2])
+    else:
+        prefix,topology=protected_prefix(options,q.shape[-2]),None
+    return prepare_attention(
+        q,k,v,protected_tokens=prefix,tau=options.get('_h3_sol_tau',1.0),
+        topology=topology,
+        sync_free_lut=bool(options.get('_h3_sol_sync_free_lut',True)),
+        collect_route_stats=bool(options.get('_h3_sol_collect_route_stats',False)),
+    )
 
 
 def execute_dit_attention(prepared):
-    import comfy_kitchen as ck
-    out=ck.int8_attention_from_prequantized(prepared)
+    if isinstance(prepared,dict) and prepared.get('_h3_backend')=='sol':
+        from patches.sol_attention import execute_prepared
+        out=execute_prepared(prepared)
+    else:
+        import comfy_kitchen as ck
+        out=ck.int8_attention_from_prequantized(prepared)
     return out.transpose(1,2).reshape(out.shape[0],out.shape[2],-1)
 
 

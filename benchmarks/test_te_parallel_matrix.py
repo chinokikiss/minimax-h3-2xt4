@@ -32,7 +32,7 @@ class TEParallelContracts(unittest.TestCase):
 
     def test_inventory_and_global_native_threshold(self):
         from patches.h3_operator_policy import H3OperatorPolicy
-        self.assertEqual(set(BACKENDS), {'native', 'tilelang_group32', 'kitchen_causal'})
+        self.assertEqual(set(BACKENDS), {'native', 'kitchen_causal'})
         for name in BACKENDS:self.assertEqual(H3OperatorPolicy(te_attention=name).te_attention, name)
         self.assertTrue(all(n*32*128 >= 1024*128 for n in LENGTHS))
 

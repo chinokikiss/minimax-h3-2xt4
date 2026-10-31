@@ -12,7 +12,7 @@ import sys
 from .derive import ROOT, derive_header, verify_vendor
 
 
-def build(output, *, nvcc=None, arch='75', device_only=False):
+def build(output, *, nvcc=None, arch='75', device_only=False, verify_hashes=True):
     if arch != '75':
         raise ValueError('This experiment qualifies SM75 only')
     output = Path(output).resolve()
@@ -21,7 +21,7 @@ def build(output, *, nvcc=None, arch='75', device_only=False):
     if not compiler:
         raise RuntimeError('An existing nvcc is required; no compiler is installed automatically')
     version = subprocess.check_output([str(compiler), '--version'], text=True, timeout=15)
-    derived_hash = derive_header(output / 'h3_attention.cuh')
+    derived_hash = derive_header(output / 'h3_attention.cuh',verify_hashes=verify_hashes)
     library = output / ('kitchen_sm75.cubin' if device_only else
                          ('kitchen_sm75.dll' if os.name == 'nt' else 'kitchen_sm75.so'))
     argv = [str(compiler), '-std=c++17', '-arch=sm_75', '-O3', '--expt-relaxed-constexpr',
@@ -72,9 +72,11 @@ def build(output, *, nvcc=None, arch='75', device_only=False):
     receipt = dict(scope='CPU compilation only; no CUDA module load or GPU execution',
         compiler=str(compiler), compiler_version=version, platform=sys.platform,
         target='sm_75', argv=argv, exit_code=process.returncode,
-        derived_header_sha256=derived_hash, vendor=verify_vendor(), sources=hashes,
+        derived_header_sha256=derived_hash, vendor=(verify_vendor() if verify_hashes else
+            json.loads((ROOT/'native/vendor/manifest.json').read_text())), sources=hashes,
         artifact=str(library), artifact_sha256=hashlib.sha256(library.read_bytes()).hexdigest()
             if process.returncode == 0 else None,
+        artifact_bytes=library.stat().st_size if process.returncode == 0 else None,
         resources=resources,
         note='CPU compilation is not physical T4 execution/performance evidence; platform/compiler identity is recorded above')
     (output/'build_receipt.json').write_text(json.dumps(receipt, indent=2)+'\n')

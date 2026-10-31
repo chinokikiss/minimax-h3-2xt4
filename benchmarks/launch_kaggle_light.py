@@ -23,7 +23,7 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--source',type=Path,required=True);p.add_argument('--distribution',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True);p.add_argument('--mode',choices=('e2e','operators','dit-profile'),required=True)
     p.add_argument('--private-input',type=Path)
-    p.add_argument('--dit-attention',choices=('kitchen','tilelang_scalar'),default='kitchen')
+    p.add_argument('--dit-attention',choices=('kitchen','sol'),default='kitchen')
     args=p.parse_args()
     if args.mode!='dit-profile' and args.dit_attention!='kitchen':p.error('--dit-attention requires --mode dit-profile')
     out=args.output;out.mkdir(parents=True,exist_ok=True)

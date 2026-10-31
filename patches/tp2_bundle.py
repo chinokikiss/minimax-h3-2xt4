@@ -15,7 +15,8 @@ from types import SimpleNamespace
 import torch
 
 from patches.windowed_tp import CheckpointReader
-from patches.rank_local_int8 import CONFIG, FORMAT, shell, state_hashes
+from patches.rank_local_int8 import CONFIG, FORMAT, shell, state_hashes, check_state_schema
+from patches.file_metadata import FileChecks
 
 DESCRIPTOR = 'h3-tp2-bundle-reader-v1'
 BLOCK = re.compile(r'^(model\.layers|blocks)\.(\d+)\.(.+)$')
@@ -31,15 +32,23 @@ def signature(path):
     s=Path(path).stat(); return s.st_size,s.st_mtime_ns
 
 
-def open_checkpoint(path,*,verify_dit_weights=True):
+def open_checkpoint(path,*,verify_dit_weights=True,verify_weights=None):
+    """Tooling verifies by default; inference explicitly selects metadata checks."""
+    verify = verify_dit_weights if verify_weights is None else verify_weights
     if Path(path).suffix.lower()=='.json':
-        value=json.loads(Path(path).read_text())
+        checks=FileChecks()
+        value=checks.read_json(path)
         if value.get('format')=='h3-tp2-disk-baked-v1':
             from patches.tp2_disk_bake import DiskBakedReader
-            return DiskBakedReader(path,value,verify_payloads=verify_dit_weights)
-        if value.get('format')!=DESCRIPTOR: raise ValueError('Unknown checkpoint descriptor')
-        return BundleReader(path,value,verify_payloads=verify_dit_weights if value.get('kind')=='dit' else True)
-    return CheckpointReader(path)
+            reader=DiskBakedReader(path,value,verify_payloads=verify)
+        else:
+            if value.get('format')!=DESCRIPTOR: raise ValueError('Unknown checkpoint descriptor')
+            reader=BundleReader(path,value,verify_payloads=verify if verify_weights is not None or value.get('kind')=='dit' else True)
+        checks.check()
+        return reader
+    reader = CheckpointReader(path)
+    reader.verify_payloads = verify
+    return reader
 
 
 def split_matrix(value, name, rank, *, scale=False):
@@ -68,23 +77,26 @@ def join_matrix(first, second, name, *, scale=False):
 class BundleReader:
     def __init__(self,path,descriptor=None,*,verify_payloads=True):
         self.path=Path(path).resolve(); self.signature=signature(self.path)
-        value=descriptor or json.loads(self.path.read_text())
+        self.file_checks=FileChecks()
+        value=descriptor or self.file_checks.read_json(self.path)
+        self.file_checks.admit(self.path)
         if value.get('format')!=DESCRIPTOR or value.get('kind') not in ('te','dit'): raise ValueError('Invalid bundle descriptor')
         self.kind=value['kind']; self.root=(self.path.parent/value['bundle_root']).resolve()
-        if type(verify_payloads) is not bool or (self.kind!='dit' and not verify_payloads):
-            raise ValueError('Trusted payload ablation is restricted to DiT')
+        if type(verify_payloads) is not bool:
+            raise ValueError('Explicit payload verification boolean required')
         self.verify_payloads=verify_payloads
         self.bundle_file=self.root/'bundle.json'
-        if sha(self.bundle_file)!=value['bundle_sha256']: raise ValueError('Bundle index checksum mismatch')
+        if verify_payloads and sha(self.bundle_file)!=value['bundle_sha256']: raise ValueError('Bundle index checksum mismatch')
         self.bundle_signature=signature(self.bundle_file)
-        bundle=json.loads(self.bundle_file.read_text()); self.plan=bundle['plan']
+        bundle=self.file_checks.read_json(self.bundle_file); self.plan=bundle['plan']
+        self.bundle_digest=value['bundle_sha256']  # Offline provenance label; not a runtime content proof.
         if not bundle['complete'] or self.plan['format']!=FORMAT or self.plan['configuration']!=CONFIG:
             raise ValueError('Unsupported/incomplete Native TP2 bundle')
         expected={f'{k}.block{i:02d}.rank{r}' for k in ('te','dit') for i in range(50) for r in (0,1)}
         if set(self.plan['blocks'])!=expected or set(bundle['blocks'])!=expected: raise ValueError('Incomplete TP2 layer coverage')
         if value['source']!=self.plan['sources'][self.kind]: raise ValueError('Bundle source identity mismatch')
         self.header=value['native_header']
-        if hashlib.sha256(json.dumps(self.header,sort_keys=True).encode()).hexdigest()!=value['native_header_sha256']:
+        if verify_payloads and hashlib.sha256(json.dumps(self.header,sort_keys=True).encode()).hexdigest()!=value['native_header_sha256']:
             raise ValueError('Native header checksum mismatch')
         self.aux=CheckpointReader((self.path.parent/value['auxiliary_file']).resolve())
         if verify_payloads and sha(self.aux.path)!=value['auxiliary_sha256']: raise ValueError('Auxiliary checkpoint checksum mismatch')
@@ -95,7 +107,7 @@ class BundleReader:
             if any(self.header[name][k]!=self.aux.header[name][k] for k in ('dtype','shape')):
                 raise ValueError('Auxiliary tensor schema mismatch')
         self.identity=('tp2-bundle-v1',str(self.path),*self.signature,value['bundle_sha256'],value['source']['sha256'],value['auxiliary_sha256'])
-        if not verify_payloads:self.identity=(*self.identity,'trusted-dit-payloads-v1')
+        if not verify_payloads:self.identity=(*self.identity,'metadata-checked-weights-v1')
         self.read_lock=threading.RLock(); self.prepare_lock=threading.Lock()
         self.logical_read_bytes=self.range_read_calls=0
         self.verified={}; self.state_verified={}; self.shard_readers={}
@@ -103,6 +115,9 @@ class BundleReader:
         self.stats=dict(prepared_blocks=0,merged_matrices=0,persistent_baked_bytes=0,merge_device='cpu')
 
     def _check_roots(self):
+        self.file_checks.admit(self.path)
+        self.file_checks.admit(self.bundle_file)
+        self.aux.check()
         if signature(self.path)!=self.signature or signature(self.bundle_file)!=self.bundle_signature:
             raise RuntimeError('Bundle descriptor/index changed; reload the session')
         if signature(self.aux.path)!=self.aux.signature: raise RuntimeError('Auxiliary weights changed')
@@ -111,8 +126,7 @@ class BundleReader:
     def check(self):
         """Validate the full admitted set at an explicit preparation boundary."""
         self._check_roots()
-        for path,old in list(self.verified.items()):
-            if signature(path)!=old: raise RuntimeError('Verified bundle shard/manifest changed')
+        self.file_checks.check()
 
     def set_offline_lora(self,stack):
         from patches.h3_lora import H3LoRAStore
@@ -125,11 +139,14 @@ class BundleReader:
         self._check_roots(); stem=f'{self.kind}.block{index:02d}.rank{rank}'
         expected=self.plan['blocks'][stem]; manifest_path=self.root/(stem+'.json'); path=self.root/(stem+'.safetensors')
         before=(signature(path),signature(manifest_path))
+        self.file_checks.admit(path)
+        self.file_checks.admit(manifest_path)
         for artifact,current in zip((path,manifest_path),before):
             old=self.verified.get(str(artifact))
             if old is not None and current!=old:raise RuntimeError('Verified bundle shard/manifest changed')
         if str(manifest_path) not in self.verified:
-            m=json.loads(manifest_path.read_text())
+            m=self.file_checks.read_json(manifest_path)
+            self.file_checks.admit(path, size=m.get('bytes'))
             if m['format']!=FORMAT or m['configuration']!=CONFIG or m['native_tensor_bit_exact'] is not True:
                 raise ValueError('Unqualified bundle shard')
             if any(m[k]!=expected[k] for k in ('kind','index','rank','state_sha256','quant_metadata')):
@@ -209,8 +226,9 @@ class BundleReader:
             source=self._shard(index,rank); module=shell(self.kind,rank)
             state={n:source.read_tensor(n) for n in module.state_dict()}
             expected=self.plan['blocks'][f'{self.kind}.block{index:02d}.rank{rank}']
-            # Strict schema loading is retained every time. Payload hashes are
-            # proved once per immutable file/manifest identity, before merging.
+            check_state_schema(state,expected['state_sha256'])
+            # Runtime checks schemas/metadata; offline tools additionally prove
+            # payload hashes once per immutable file identity, before merging.
             module.load_state_dict(state,strict=True,assign=True)
             stem=f'{self.kind}.block{index:02d}.rank{rank}'
             proof=(self.verified[str(source.path)],self.verified[str(self.root/(stem+'.json'))])

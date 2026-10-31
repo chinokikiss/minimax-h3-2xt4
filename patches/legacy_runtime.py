@@ -3,6 +3,7 @@ import hashlib
 import json
 from importlib.metadata import version,PackageNotFoundError
 from pathlib import Path
+from patches.file_metadata import runtime_files
 
 COMFY_REVISION='d49e888586dd8ae012c0667b33466b815fee07f7'
 # UTF-8 text with universal newlines: identical for Windows and Linux checkouts.
@@ -23,10 +24,16 @@ def runtime_manifest():
     return json.loads(path.read_text(encoding='utf-8'))
 
 
-def validate_source(root):
+def validate_source(root, *, verify_hashes=True):
     root=Path(root).resolve();mismatch=[]
     for name,expected in SOURCE_HASHES.items():
         path=root/name
+        if not verify_hashes:
+            if not path.is_file() or not path.stat().st_size:
+                mismatch.append(name)
+            else:
+                runtime_files.admit(path)
+            continue
         actual=hashlib.sha256(path.read_text(encoding='utf-8').encode()).hexdigest() if path.is_file() else 'missing'
         if actual!=expected:mismatch.append(name)
     if mismatch:
@@ -38,7 +45,7 @@ def validate_source(root):
 def validate_imported_source():
     import comfy
     import sys
-    root=Path(validate_source(Path(next(iter(comfy.__path__))).parent))
+    root=Path(validate_source(Path(next(iter(comfy.__path__))).parent,verify_hashes=False))
     for name in SOURCE_HASHES:
         module=sys.modules.get(name.removesuffix('.py').replace('/','.'))
         loaded=getattr(module,'__file__',None)

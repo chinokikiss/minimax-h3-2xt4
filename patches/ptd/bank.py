@@ -237,10 +237,15 @@ class PTDBank:
         if type(verify_payloads) is not bool:raise ValueError('Explicit payload verification boolean required')
         self.verify_payloads=verify_payloads
         self.path = Path(path).resolve()
+        from patches.file_metadata import FileChecks
+        self.file_checks = FileChecks()
+        admitted = self.file_checks.admit(self.path)
         self.signature = signature(self.path)
         raw = self.path.read_bytes()
-        self.digest = hashlib.sha256(raw).hexdigest()
-        if expected_sha256 is not None and self.digest != expected_sha256:
+        self.digest = hashlib.sha256(raw).hexdigest() if verify_payloads else ('metadata', str(self.path), *admitted)
+        if not verify_payloads and isinstance(expected_sha256,tuple) and self.digest != expected_sha256:
+            raise ValueError('PTD bank metadata differs between parent and worker')
+        if verify_payloads and expected_sha256 is not None and self.digest != expected_sha256:
             raise ValueError('PTD bank does not match the admitted manifest digest')
         if signature(self.path) != self.signature:
             raise RuntimeError('PTD manifest changed during admission')
@@ -249,7 +254,7 @@ class PTDBank:
         self.recipe_sha = value['recipe_sha256']
         if (value['format'] != FORMAT or value['status'] != 'complete' or len(value['hops']) != 8
                 or value['online_lora'] or (not value['full_model'] and not allow_fixture)
-                or hashlib.sha256(json.dumps(self.recipe, sort_keys=True).encode()).hexdigest() != self.recipe_sha):
+                or (verify_payloads and hashlib.sha256(json.dumps(self.recipe, sort_keys=True).encode()).hexdigest() != self.recipe_sha)):
             raise ValueError('Incomplete / unsupported PTD bank; fixture banks cannot be deployed')
         self.layers = int(self.recipe['layers'])
         if not 1 <= self.layers <= 50 or value['full_model'] != (self.layers == 50):
@@ -258,10 +263,11 @@ class PTDBank:
         if value['sigmas'] != self.sigmas.tolist() or self.recipe['hops'] != 8:
             raise ValueError('PTD bank schedule mismatch')
         self.base = Path(self.recipe['base'])
-        if sha(self.base) != self.recipe['base_sha256']:
+        self.file_checks.admit(self.base)
+        if verify_payloads and sha(self.base) != self.recipe['base_sha256']:
             raise ValueError('PTD base descriptor changed')
         base = BundleReader(self.base,verify_payloads=verify_payloads)
-        if sha(base.bundle_file) != self.recipe['base_bundle_sha256']:
+        if self.recipe['base_bundle_sha256'] != base.bundle_digest:
             raise ValueError('PTD base bundle changed')
         self.signatures = {self.path: self.signature, self.base: signature(self.base),
                            base.bundle_file: signature(base.bundle_file)}
@@ -271,9 +277,10 @@ class PTDBank:
             if directory.resolve().parent != self.path.parent:
                 raise ValueError('PTD expert directory escaped its bank')
             receipt = directory / 'receipt.json'
+            self.file_checks.admit(receipt)
             current = signature(receipt)
             raw_receipt = receipt.read_bytes()
-            if hashlib.sha256(raw_receipt).hexdigest() != entry['receipt_sha256']:
+            if verify_payloads and hashlib.sha256(raw_receipt).hexdigest() != entry['receipt_sha256']:
                 raise ValueError('PTD hop receipt hash mismatch')
             self.signatures[receipt] = current
             record = json.loads(raw_receipt)
@@ -289,6 +296,7 @@ class PTDBank:
         self.check()
 
     def check(self):
+        self.file_checks.check()
         if any(signature(path) != expected for path, expected in self.signatures.items()):
             raise RuntimeError('PTD bank changed during sampling')
 
@@ -312,6 +320,9 @@ class HopReader(BundleReader):
                 raise ValueError('Queued reader needs the already admitted immutable base')
             base_reader.check()
             self.__dict__.update(base_reader.__dict__)
+            from patches.file_metadata import FileChecks
+            self.file_checks = FileChecks()
+            self.file_checks.files = dict(base_reader.file_checks.files)
             self.read_lock, self.prepare_lock = threading.RLock(), threading.Lock()
             self.verified, self.state_verified, self.shard_readers = {}, {}, {}
             self.stats = dict(base_reader.stats)
@@ -330,12 +341,13 @@ class HopReader(BundleReader):
         if overlay.resolve().parent != self.root:
             raise ValueError('PTD auxiliary overlay hash mismatch')
         self.overlay = CheckpointReader(overlay)
+        self.overlay.file_checks.admit(overlay, size=receipt['auxiliary']['bytes'])
         self.overlay_sha = receipt['auxiliary']['sha256']
         self.overlay_verified = False
         self.overlay_lock = threading.Lock()
         self.refiner_enabled, self.heads_enabled = refiner, heads
         self.identity = (*self.identity, FORMAT, bank.recipe_sha, bank.digest, hop, bool(refiner), bool(heads))
-        if not self.verify_payloads:self.identity=(*self.identity,'trusted-dit-payloads-v1')
+        if not self.verify_payloads:self.identity=(*self.identity,'metadata-checked-weights-v1')
 
     def _check_roots(self):
         super()._check_roots()
@@ -343,6 +355,8 @@ class HopReader(BundleReader):
             self.bank.check()
         if hasattr(self, 'overlay') and signature(self.overlay.path) != self.overlay.signature:
             raise RuntimeError('PTD auxiliary overlay changed')
+        if hasattr(self, 'overlay'):
+            self.overlay.check()
 
     def read_tensor(self, name, *, rows=None, columns=None):
         self._check_roots()

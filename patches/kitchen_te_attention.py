@@ -14,28 +14,39 @@ import time
 import weakref
 
 import torch
+from patches.file_metadata import admit_library, file_metadata
 
 
 _mask_cache=OrderedDict()
 LIBRARY_ENV='H3_KITCHEN_ATTENTION_LIBRARY'
 
 
-def _source_hashes():
+def _source_paths():
     from experiments.kitchen_attention.derive import ROOT
     paths=[ROOT/name for name in ('attention.py','build.py','derive.py')]
     paths += [p for p in (ROOT/'native').rglob('*') if p.suffix in ('.cu','.cuh','.json')]
-    return {p.relative_to(ROOT).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(paths)}
+    return sorted(paths)
 
 
-def validate_library(path):
+def _source_hashes():
+    from experiments.kitchen_attention.derive import ROOT
+    return {p.relative_to(ROOT).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in _source_paths()}
+
+
+def _source_metadata():
+    return {str(p):file_metadata(p) for p in _source_paths()}
+
+
+def validate_library(path, *, verify_hashes=True):
     path=Path(path).resolve()
-    receipt=json.loads(path.with_name('build_receipt.json').read_text())
+    receipt=(json.loads(path.with_name('build_receipt.json').read_text()) if verify_hashes
+             else admit_library(path,_source_paths()))
     if receipt['exit_code'] or receipt['target']!='sm_75':raise RuntimeError('Unqualified Kitchen SM75 build')
     if 'V12.8.93' not in receipt['compiler_version']:raise RuntimeError('Kitchen SM75 requires the qualified CUDA 12.8.93 build')
-    if hashlib.sha256(path.read_bytes()).hexdigest()!=receipt['artifact_sha256']:
+    if verify_hashes and hashlib.sha256(path.read_bytes()).hexdigest()!=receipt['artifact_sha256']:
         raise RuntimeError('Kitchen native library hash mismatch')
     sources={n.replace('\\','/'):v for n,v in receipt['sources'].items()}
-    if any(sources.get(n)!=v for n,v in _source_hashes().items()):
+    if verify_hashes and any(sources.get(n)!=v for n,v in _source_hashes().items()):
         raise RuntimeError('Kitchen native library does not match the current retained source')
     return path
 
@@ -43,15 +54,15 @@ def validate_library(path):
 def prepare_native(nvcc):
     """CPU compilation at explicit SM75 worker startup; no package installation."""
     configured=os.environ.get(LIBRARY_ENV)
-    if configured:return validate_library(configured)
-    fingerprint=hashlib.sha256(json.dumps(_source_hashes(),sort_keys=True).encode()).hexdigest()[:24]
+    if configured:return validate_library(configured,verify_hashes=False)
+    fingerprint=hashlib.sha256(json.dumps(_source_metadata(),sort_keys=True).encode()).hexdigest()[:24]
     root=Path(os.environ.get('H3_KITCHEN_ATTENTION_CACHE',str(Path(tempfile.gettempdir())/'h3-kitchen-sm75')))/fingerprint
     root.mkdir(parents=True,exist_ok=True)
     library=root/('kitchen_sm75.dll' if os.name=='nt' else 'kitchen_sm75.so')
     lock=root/'build.lock';started=time.monotonic()
     while True:
         if library.exists() and library.with_name('build_receipt.json').exists() and not lock.exists():
-            result=validate_library(library);break
+            result=validate_library(library,verify_hashes=False);break
         try:fd=os.open(lock,os.O_CREAT|os.O_EXCL|os.O_WRONLY)
         except FileExistsError:
             if time.monotonic()-started>330:raise TimeoutError('Kitchen native CPU build lock exceeded 330 seconds')
@@ -59,7 +70,7 @@ def prepare_native(nvcc):
         os.close(fd)
         try:
             from experiments.kitchen_attention.build import build
-            result=validate_library(build(root,nvcc=nvcc))
+            result=validate_library(build(root,nvcc=nvcc,verify_hashes=False),verify_hashes=False)
         finally:lock.unlink(missing_ok=True)
         break
     os.environ[LIBRARY_ENV]=str(result)
@@ -69,7 +80,7 @@ def prepare_native(nvcc):
 @lru_cache(maxsize=4)
 def _backend(path):
     from experiments.kitchen_attention.attention import Backend
-    return Backend(validate_library(path))
+    return Backend(validate_library(path,verify_hashes=False))
 
 
 def _backend_for_device(device):

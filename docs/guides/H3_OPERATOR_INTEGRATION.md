@@ -25,6 +25,13 @@ incoming mask through Kitchen 0.2.37's masked INT8 API. It performs no mask
 classification or native extension compilation. Dense DiT/Video defaults
 remain Kitchen while additional SM75 dense candidates are evaluated.
 
+Update 2026-10-27: the existing Kitchen selections use the
+[shared corrected output adapter](KITCHEN_ATTENTION_DEFAULT.md). FP32 inference
+now stores FP32 directly for causal and non-causal calls; FP16/BF16 delegate to
+the pinned implementation. FP32 workers use a source/binary-verified native
+library cache. Mask classification remains unnecessary. Installed packages,
+the frozen ComfyUI source, legacy attention API and tensor-flow default remain.
+
 Implemented 2026-10-18. The ComfyUI loader now carries an explicit per-session
 operator policy through checkpoint preparation, host caches, GPU residency
 copies and persistent TP2 workers. This supersedes the earlier benchmark-only
@@ -32,10 +39,10 @@ status of these operator entry points. No complete H3 generation was run here.
 
 | Component | Default | Alternatives / scope |
 |---|---|---|
-| TE text decoder | Kitchen causal INT8 | Complete causal/padding/additive mask passed to the pinned API; Group32/native remain explicit overrides |
-| DiT main blocks | `comfy_kitchen.int8_attention` | `tilelang_drop`, `tilelang_scalar`, `tilelang_dense`, or `native` |
+| TE text decoder | Kitchen causal INT8 | Complete causal/padding/additive mask; Native SDPA remains the explicit override |
+| DiT main blocks | Shared Kitchen INT8 adapter | `sol` All-INT8 or `native`; optional per-NFE backend schedule |
 | DiT token refiner | Native PyTorch SDPA | All DiT modes; Native projections, RMSNorm and RoPE |
-| Video VAE | Kitchen INT8 attention | Temporal clip parallelism by default; explicit Query and Native remain |
+| Video VAE | Kitchen INT8 attention | Forced Native SDPA; Temporal default, Query explicit |
 | TP row projections | `tilelang_scaled_fp16`: approximate FP16 SUM + fused FP32 epilogue | `tilelang_packed` INT32 SUM or Native; SM75 |
 | TE down / DiT FC2 | `fused_stored`: FP32 SwiGLU / regular ConvRot256 | `fused_recompute`, prior `owned_fp32` / `native`; shared global row MAX retained |
 | LoRA B GEMM | Owned B always enabled for eligible online FC1; QKV enabled by default | Rank128 H3 guards; inactive offline; unsupported shapes retain full B |
@@ -65,17 +72,10 @@ Native fallback workflow are preserved. Restart ComfyUI to load the node and
 updated dependency, then open **video_minimax_h3_r2v_tp2_operators.json**.
 
 `MiniMaxH3TP2Loader` exposes `te_attention`, `dit_attention`,
-`row_linear_backend` and `scalar_score_workspace_mib`, plus
-`adaptive_lookahead=True`. SwiGLU padding and guarded FC1 owned B are fixed on;
-there are no disable switches. The existing memory budgets, LoRA stack and
-row-LoRA A partial-reduction setting stay separate from attention selection.
-As of 2026-10-22, `lora_row_partial_reduce=True` is the default for online
-RowParallel adapters. It computes local FP32 A projections, FP32 SUMs the
-low-rank hidden states, then applies full B before the final FP16 store.
-Explicit `False` restores full-input gathering. See the
-[combined optimization and reference-loading follow-up](../reports/H3_ROW_PARTIAL_REFERENCE_LOADING_20261022.md).
-Selective B changes neither adapter ordering nor post-B scale/add order.
-No online LoRA means owned B has no effect.
+`dit_attention_schedule`, `sol_tau`, `video_attention` and `row_linear_backend`, plus
+`adaptive_lookahead=True`. Removed attention backends cannot be re-enabled by
+retired loader options. Existing memory budgets, LoRA selection and row-LoRA
+partial reduction remain independent of attention selection.
 
 Python callers can pass the same policy:
 
@@ -83,14 +83,19 @@ Python callers can pass the same policy:
 from patches.comfy_tp_runtime import RuntimeConfig
 from patches.h3_operator_policy import H3OperatorPolicy
 
-config = RuntimeConfig(te_path, dit_path, operators=H3OperatorPolicy(
-    te_attention='kitchen_causal',
-    dit_attention='kitchen',           # or tilelang_drop / tilelang_scalar
-    row_linear_backend='tilelang_scaled_fp16',
-    fc2_quantizer='fused_stored',
-    column_linear_backend='cuda_int8_tilelang',
-    scalar_score_workspace_mib=96,
-))
+config = RuntimeConfig(
+    te_path, dit_path,
+    operators=H3OperatorPolicy(
+        te_attention='kitchen_causal',
+        dit_attention='kitchen',           # or sol / native
+        row_linear_backend='tilelang_scaled_fp16',
+        fc2_quantizer='fused_stored',
+        column_linear_backend='cuda_int8_tilelang',
+    ),
+    dit_attention_schedule=((2, 7, 'sol', 1.0),),
+    sol_tau=1.0,                           # inherited by Sol entries without an override
+    video_attention='kitchen',             # or native; Sol is DiT-only
+)
 ```
 
 For adapter-bearing TP2 JSON descriptors, direct `RuntimeConfig` callers must
@@ -124,46 +129,27 @@ alter earlier outputs, even at fixed lengths. FP32 inputs use INT8 attention
 and BF16 output storage before conversion back to FP32; the dtype does not
 imply FP32 numerical precision.
 
-The explicit `tilelang_group32` override remains available. Group32 preparation uses
-the existing fused quantizer and unweighted leaf-mean centering, retaining the
-FP32-to-FP16 input boundary and FP16-PV/output rounding. The new mask-aware main
-kernel broadcasts compact 2D/3D/4D masks without repeating KV heads or copying
-the mask to the CPU. Masked logits enter online softmax in the exp2 domain.
-Entirely boolean-masked queries produce zero; a query whose first leaf is
-masked can accumulate from later leaves. Native embeddings, vision and outer
-conditioning interfaces stay in place. This remains prefill-only; existing
-past-KV-cache rejection is unchanged.
+The retired TileLang Group32 TE path is removed. TE attention now exposes
+only `kitchen_causal` and `native`. Browser workflows that saved
+Saved workflows that contain `tilelang_group32` migrate to `kitchen_causal`;
+Python policy construction rejects the removed backend.
 
-DiT sparse modes use Group32 QK and FP16 PV with the existing tau0/leaf64
-routing. Their dense prefix comes from the current Native `PackedLayout`:
-all text, references, conditioning and generated audio before the final video
-span stay protected. A stale/missing layout raises an error rather than using
-the old 874-token benchmark constant. Both dropping and scalar pooling remain
-available. Prefix-containing leaves retain the existing whole-leaf behavior.
+DiT attention exposes `kitchen`, `sol` and `native`. Sol derives its
+protected span from the current Native `PackedLayout`; the protected prefix
+ends at the start of the final target-audio segment, so generated target audio
+and video remain normally routed. Protection is bidirectional at Q64/K64 routing
+granularity. Optional `dit_attention_schedule` selects a backend by 1-based
+denoiser NFE. A `sol@tau` schedule entry overrides the global `sol_tau` for that
+NFE range; plain `sol` inherits the global value. Kitchen and Native entries do
+not accept tau overrides.
 
-Scalar pooling uses omitted-only precomputed centroid scores when the explicit
-score tensor fits `scalar_score_workspace_mib` per rank. The measured H3 shape
-needs 82,066,432 bytes (78.3 MiB), within the default 96 MiB cap. Set the cap to
-0 to keep inline summaries; larger shapes exceeding the cap also use inline
-summaries. Allocation failures propagate; there is no fallback after a
-partially executed collective. The tensor's retained-leaf entries are not
-computed or read. This is the P2 optimization's unchanged routing method.
+Selected DiT Sol is AOT-prepared before denoising. Explicit DiT Sol
+selection is fail-closed rather than silently falling back to Kitchen.
 
-The current `ComfyUI-master` inlines DiT input packing and has no
-`_embed_and_pack` method. The runtime therefore leases/broadcasts the video and
-audio projection outputs at their module boundaries and lets Native assemble
-the packed sequence. Rank0's residency use plan accounts for both leases.
-The older pinned ComfyUI path keeps its single packed-tensor broadcast.
-Conditioning must already be refined in both paths. Proxies are restored after
-each lease and released at stage teardown; Native model source is not edited.
-
-The refiner uses a module wrapper around its Native projections/norms/RoPE,
-so streamed copies do not retain bound methods pointing at canonical CPU
-weights. Video defaults to whole Native temporal clips on two Kitchen INT8
-decoder replicas; aligned Query partitioning remains explicit. Saved `auto`
-selections follow Temporal. Native public planning and blending are retained.
-Audio always uses Native single-GPU FP32 decoding in the parent; no audio
-decoder replicas or channel/temporal collectives run in TP workers.
+Video VAE attention supports only Kitchen INT8 or Native SDPA. The Video VAE
+Sol routing, D64 adaptation and Sol AOT path have been retired. Temporal
+clip parallelism remains the default; Query partitioning remains explicit.
+Audio remains Native single-GPU FP32.
 
 ## Dependencies and deployment
 

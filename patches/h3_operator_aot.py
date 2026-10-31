@@ -18,14 +18,15 @@ import time
 import torch
 
 
-@lru_cache(maxsize=1)
-def environment():
+@lru_cache(maxsize=2)
+def environment(include_tilelang=True):
     compiler=os.environ.get('CUDACXX') or shutil.which('nvcc')
     if not compiler:raise RuntimeError('Pinned nvcc required for operator preparation')
     compiler_version=subprocess.check_output([compiler,'--version'],text=True,timeout=15)
     if 'release 12.8' not in compiler_version:raise RuntimeError('Preserved CUDA 12.8 compiler required')
     return dict(compiler=compiler,compiler_version=compiler_version,python=platform.python_version(),
-        torch=str(torch.__version__),cuda=torch.version.cuda,tilelang=version('tilelang'),arch='sm_75')
+        torch=str(torch.__version__),cuda=torch.version.cuda,
+        tilelang=version('tilelang') if include_tilelang else None,arch='sm_75')
 
 
 def plan(rows,rank,policy,stage='dit',*,norm_epsilon=1e-5/4096):
@@ -64,24 +65,36 @@ def plan(rows,rank,policy,stage='dit',*,norm_epsilon=1e-5/4096):
     return calls
 
 
-@lru_cache(maxsize=16)
-def prepare(rows,rank,policy,stage='dit',*,norm_epsilon=1e-5/4096):
+@lru_cache(maxsize=32)
+def prepare(rows,rank,policy,stage='dit',*,norm_epsilon=1e-5/4096,sol=False):
     if not torch.cuda.is_available() or torch.cuda.get_device_capability()!=(7,5):
         return dict(status='unsupported_device',rows=rows,rank=rank)
-    if version('tilelang')!='0.1.13':raise RuntimeError('Pinned TileLang required')
-    build_environment=environment();start=time.monotonic();steps=[];sources={}
-    for module,name,args in plan(rows,rank,policy,stage,norm_epsilon=norm_epsilon):
+    calls=plan(rows,rank,policy,stage,norm_epsilon=norm_epsilon)
+    if calls and version('tilelang')!='0.1.13':raise RuntimeError('Pinned TileLang required')
+    build_environment=environment(bool(calls));start=time.monotonic();steps=[];sources={}
+    for module,name,args in calls:
         mod=import_module('patches.'+module);fn=getattr(mod,name)
         before=fn.cache_info();begin=time.monotonic();fn(*args);after=fn.cache_info()
         steps.append(dict(module=module,function=name,args=args,seconds=time.monotonic()-begin,
             compiled=after.misses>before.misses))
         sources[module]=hashlib.sha256(Path(mod.__file__).read_bytes()).hexdigest()
-    key=dict(stage=stage,rows=rows,rank=rank,policy=vars(policy),sources=sources,environment=build_environment)
+    sol_library=None
+    if sol:
+        from patches import sol_attention
+        begin=time.monotonic();sol_library=sol_attention.prepare_native()
+        steps.append(dict(module='sol_attention',function='prepare_native',args=(),seconds=time.monotonic()-begin,
+            compiled_or_loaded=True,library=sol_library))
+        sources['sol_attention']=hashlib.sha256(Path(sol_attention.__file__).read_bytes()).hexdigest()
+        for path in sorted(sol_attention.NATIVE.rglob('*')):
+            if path.is_file():
+                sources['sol_native/'+path.relative_to(sol_attention.NATIVE).as_posix()]=hashlib.sha256(path.read_bytes()).hexdigest()
+    key=dict(stage=stage,rows=rows,rank=rank,policy=vars(policy),sol=bool(sol),sources=sources,environment=build_environment)
     return dict(status='prepared',stage=stage,rows=rows,rank=rank,seconds=time.monotonic()-start,steps=steps,
         identity_sha256=hashlib.sha256(json.dumps(key,sort_keys=True).encode()).hexdigest(),
         environment=key['environment'],
-        complete_default_custom_coverage=(policy.row_linear_backend=='tilelang_scaled_fp16'
+        sol_precompiled=bool(sol),sol_library=sol_library,
+        complete_default_custom_coverage=((stage=='video' or (policy.row_linear_backend=='tilelang_scaled_fp16'
             and policy.fc2_quantizer=='fused_stored' and policy.te_attention in ('kitchen_causal','native')
-            and policy.dit_attention in ('kitchen','native')),
-        prebuilt='Torch/cuBLAS/NCCL, Kitchen attention/linears/RoPE and native VAE convolution/norm are shipped compiled; first-use warmup is separate',
+            and policy.dit_attention in ('kitchen','sol','native'))) and (not sol or sol_library is not None)),
+        prebuilt='Torch/cuBLAS/NCCL and Kitchen binaries are shipped compiled; selected TileLang and Sol source operators are AOT-prepared here; first-use execution warmup is separate',
         semantics='Preparation compilation only; startup cost is reported separately')

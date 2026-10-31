@@ -28,7 +28,7 @@ def main():
     parser.add_argument('--comfy-root',type=Path,default=ROOT/'ComfyUI')
     parser.add_argument('--isolated-ui',action='store_true',help='Smoke tests only: disable partner nodes and whitelist the TP2 custom node')
     args,extra=parser.parse_known_args();extra=extra[1:] if extra[:1]==['--'] else extra
-    comfy_root=Path(validate_source(args.comfy_root))
+    comfy_root=Path(validate_source(args.comfy_root,verify_hashes=args.check))
     os.environ['COMFY_ROOT']=str(comfy_root)
     sys.path[:0]=[str(comfy_root),str(ROOT)]
     # Do not let ComfyUI's parser consume this launcher's --preview/--check.

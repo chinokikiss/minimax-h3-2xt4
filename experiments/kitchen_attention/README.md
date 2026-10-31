@@ -25,6 +25,16 @@ FP32 GQA attention, checks a CPU FP64 oracle, and records the BF16 storage
 boundary. It changes no runtime dispatch. See the
 [dual-T4 results](../../docs/reports/TE_CAUSAL_PREFIX_PRECISION_20261026.md).
 
+`fp32_store.py` derives a separate output-only experiment from the same
+hash-verified vendor header. It writes the normalized FP32 accumulators directly
+to FP32 output, bypassing the BF16 shared-memory store and subsequent conversion.
+The original quantizer, masks, QK/PV arithmetic and 16-bit control epilogues are
+retained. `fp32_store_bench.py` compares precision and paired call latency;
+`fp32_store_delivery.py` uses the passed frozen CPU bootstrap with hash-bound
+supplemental source and one bounded physical-T4 batch. This is an explicit
+experiment, with no production dispatch or installed-package changes. See the
+[output-store ablation](../../docs/reports/KITCHEN_FP32_STORE_20261027.md).
+
 The follow-up [SM75 dense experiment](../../docs/reports/KITCHEN_DENSE_SM75_20261025.md)
 adds retained n8 PV scheduling and guarded 32-bit addressing, without changing
 quantization or accumulation order. `dense_bench.py` measures matched complete

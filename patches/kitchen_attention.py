@@ -19,6 +19,7 @@ import threading
 import time
 
 import torch
+from patches.file_metadata import admit_library, file_metadata
 
 ROOT = Path(__file__).with_name('kitchen_attention_native')
 LIBRARY_ENV = 'H3_KITCHEN_FP32_LIBRARY'
@@ -54,17 +55,26 @@ DIRECT_STORE = '''  if constexpr (std::is_same<DTypeOut, float>::value) {
 '''
 
 
-def source_hashes():
+def source_paths():
+    return [Path(__file__), ROOT / 'attention.cu', ROOT / 'vendor/manifest.json',
+            *sorted((ROOT / 'vendor').glob('*.cuh'))]
+
+
+def source_metadata():
+    return {str(p):file_metadata(p) for p in source_paths()}
+
+
+def source_hashes(*, verify_hashes=True):
     manifest = json.loads((ROOT / 'vendor/manifest.json').read_text(encoding='utf-8'))
     for name, digest in manifest['files'].items():
-        if hashlib.sha256((ROOT / 'vendor' / name).read_bytes()).hexdigest() != digest:
+        if verify_hashes and hashlib.sha256((ROOT / 'vendor' / name).read_bytes()).hexdigest() != digest:
             raise RuntimeError('Pinned Kitchen source mismatch: ' + name)
     paths = [Path(__file__), ROOT / 'attention.cu', ROOT / 'vendor/manifest.json']
     return {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
 
 
-def derive_header(path):
-    source_hashes()
+def derive_header(path, *, verify_hashes=True):
+    if verify_hashes: source_hashes()
     text = (ROOT / 'vendor/qk_int_sv_i8_cuda.cuh').read_text(encoding='utf-8')
     replacements = (
         ('std::is_same<DTypeOut, nv_bfloat16>::value,\n'
@@ -81,7 +91,7 @@ def derive_header(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def build(output, *, arch, nvcc=None):
+def build(output, *, arch, nvcc=None, verify_hashes=True):
     if arch not in ('75', '120'): raise ValueError('Qualified SM75 or local SM120 required')
     output = Path(output).resolve(); output.mkdir(parents=True, exist_ok=True)
     compiler = str(nvcc or os.environ.get('CUDACXX') or shutil.which('nvcc') or '')
@@ -89,7 +99,7 @@ def build(output, *, arch, nvcc=None):
     compiler_version = subprocess.check_output([compiler, '--version'], text=True, timeout=15)
     if arch == '75' and 'V12.8.93' not in compiler_version:
         raise RuntimeError('SM75 Kitchen FP32 output requires the qualified CUDA12.8.93 compiler')
-    digest = derive_header(output / 'h3_kitchen_attention.cuh')
+    digest = derive_header(output / 'h3_kitchen_attention.cuh',verify_hashes=verify_hashes)
     library = output / ('kitchen_fp32.dll' if os.name == 'nt' else 'kitchen_fp32.so')
     argv = [compiler, '-std=c++17', '-O3', '-arch=sm_' + arch, '--expt-relaxed-constexpr',
         '-diag-suppress=177,550', '-Xptxas=-v,--warn-on-spills', '--shared',
@@ -111,21 +121,23 @@ def build(output, *, arch, nvcc=None):
     result = subprocess.run(argv, capture_output=True, timeout=300)
     (output / 'compile.log').write_bytes(result.stdout + result.stderr)
     receipt = dict(status='passed' if result.returncode == 0 else 'failed', target='sm_' + arch,
-        compiler_version=compiler_version, argv=argv, sources=source_hashes(),
+        compiler_version=compiler_version, argv=argv, sources=source_hashes(verify_hashes=verify_hashes),
         derived_header_sha256=digest, seconds=time.monotonic() - started,
-        artifact_sha256=hashlib.sha256(library.read_bytes()).hexdigest() if result.returncode == 0 else None)
+        artifact_sha256=hashlib.sha256(library.read_bytes()).hexdigest() if result.returncode == 0 else None,
+        artifact_bytes=library.stat().st_size if result.returncode == 0 else None)
     (output / 'build_receipt.json').write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8')
     if result.returncode: raise RuntimeError('Kitchen FP32 output build failed: ' + str(output / 'compile.log'))
     return library
 
 
-def validate_library(path, arch):
+def validate_library(path, arch, *, verify_hashes=True):
     path = Path(path).resolve()
-    receipt = json.loads(path.with_name('build_receipt.json').read_text(encoding='utf-8'))
+    receipt = (json.loads(path.with_name('build_receipt.json').read_text(encoding='utf-8')) if verify_hashes
+               else admit_library(path,source_paths()))
     if receipt['status'] != 'passed' or receipt['target'] != 'sm_' + arch:
         raise RuntimeError('Kitchen FP32 library target/build mismatch')
-    if receipt['sources'] != source_hashes(): raise RuntimeError('Kitchen FP32 library source mismatch')
-    if hashlib.sha256(path.read_bytes()).hexdigest() != receipt['artifact_sha256']:
+    if verify_hashes and receipt['sources'] != source_hashes(): raise RuntimeError('Kitchen FP32 library source mismatch')
+    if verify_hashes and hashlib.sha256(path.read_bytes()).hexdigest() != receipt['artifact_sha256']:
         raise RuntimeError('Kitchen FP32 library binary mismatch')
     if arch == '75' and 'V12.8.93' not in receipt['compiler_version']:
         raise RuntimeError('Kitchen FP32 library compiler mismatch')
@@ -135,21 +147,21 @@ def validate_library(path, arch):
 def prepare(*, arch='75', nvcc=None):
     if version('comfy-kitchen') != '0.2.37': raise RuntimeError('Exact Kitchen0.2.37 required')
     configured = os.environ.get(LIBRARY_ENV)
-    if configured: return validate_library(configured, arch)
-    fingerprint = hashlib.sha256(json.dumps(source_hashes(), sort_keys=True).encode()).hexdigest()[:24]
+    if configured: return validate_library(configured, arch,verify_hashes=False)
+    fingerprint = hashlib.sha256(json.dumps(source_metadata(), sort_keys=True).encode()).hexdigest()[:24]
     root = Path(os.environ.get('H3_KITCHEN_FP32_CACHE', str(Path(tempfile.gettempdir()) / 'h3-kitchen-fp32'))) / (arch + '-' + fingerprint)
     root.mkdir(parents=True, exist_ok=True)
     library = root / ('kitchen_fp32.dll' if os.name == 'nt' else 'kitchen_fp32.so')
     lock = root / 'build.lock'; started = time.monotonic()
     while True:
         if library.exists() and library.with_name('build_receipt.json').exists() and not lock.exists():
-            return validate_library(library, arch)
+            return validate_library(library, arch,verify_hashes=False)
         try: fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
         except FileExistsError:
             if time.monotonic() - started > 330: raise TimeoutError('Kitchen FP32 build lock exceeded 330 seconds')
             time.sleep(.2); continue
         os.close(fd)
-        try: return validate_library(build(root, arch=arch, nvcc=nvcc), arch)
+        try: return validate_library(build(root, arch=arch, nvcc=nvcc,verify_hashes=False), arch,verify_hashes=False)
         finally: lock.unlink(missing_ok=True)
 
 
