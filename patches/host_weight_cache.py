@@ -15,7 +15,7 @@ import psutil
 import torch
 
 from patches.weight_residency import module_bytes, module_tensors, pinned_module
-from patches.diagnostic_metrics import detail_events
+from patches.diagnostic_metrics import detail_events, diagnostics_enabled
 from patches.host_memory_pressure import CgroupMemory
 
 
@@ -130,7 +130,7 @@ class HostWeightCache:
     Pinning is charged separately by ResidencyWindow before it submits work.
     """
     def __init__(self, budget, capacity_bytes=4*GiB, background_headroom_bytes=2*GiB,
-                 reuse_aware=False):
+                 reuse_aware=False, debug=None):
         if not 0 < capacity_bytes <= budget.limit_bytes:
             raise ValueError('Cache capacity must fit the shared host budget')
         self.budget, self.capacity_bytes = budget, int(capacity_bytes)
@@ -149,11 +149,12 @@ class HostWeightCache:
         self.priority_keys = set()
         self.priority_worker = None
         self.closed = False
+        self.debug = diagnostics_enabled(debug)
         self.stats = dict(preparations=0, hits=0, misses=0, evictions=0,
                           discarded_preparations=0, cancelled_prefetches=0,
                           prepare_ms=0., wait_ms=0., peak_cache_bytes=0,
                           prepare_ema_ms=None,
-                          preparation_counts={}, events=detail_events())
+                          preparation_counts={}, events=detail_events(enabled=self.debug))
         self.stats.update(evictions_before_use=0,pressure_yields=0)
         self.stats.update(future_wait_ms=0.,future_waits=0)
         self.stats.update(consumed_releases=0, future_evictions=0)
@@ -298,7 +299,7 @@ class HostWeightCache:
                 if spec.max_bytes > self.capacity_bytes:
                     break
                 self._queue(spec, foreground=False, deadline=deadlines.get(spec.key,float('inf')))
-            self.stats['events'].append(dict(event='idle_prefetch', keys=[str(s.key) for s in specs]))
+            if self.debug:self.stats['events'].append(dict(event='idle_prefetch', keys=[str(s.key) for s in specs]))
             self.condition.notify_all()
 
     def begin_request(self, specs, discard_unwanted=False):
@@ -326,7 +327,7 @@ class HostWeightCache:
                     task['future'].cancel()
                     del self.tasks[key]
                     self.stats['cancelled_prefetches'] += 1
-            self.stats['events'].append(dict(event='begin_request'))
+            if self.debug:self.stats['events'].append(dict(event='begin_request'))
             self.condition.notify_all()
 
     def _queue(self, spec, foreground, deadline=float('inf')):
@@ -473,7 +474,7 @@ class HostWeightCache:
                         self.condition.wait(timeout=.1)
                     continue
                 task['running'] = True
-                self.stats['events'].append(dict(event='prepare_started',key=str(key),
+                if self.debug:self.stats['events'].append(dict(event='prepare_started',key=str(key),
                     monotonic=time.monotonic(),
                     deadline=task['deadline'] if math.isfinite(task['deadline']) else None,
                     foreground=task['foreground']))
@@ -489,7 +490,7 @@ class HostWeightCache:
                 with self.condition:
                     ms = (time.perf_counter()-begin)*1000
                     self.stats['preparations'] += 1
-                    self.stats['events'].append(dict(event='prepare_finished',key=str(key),
+                    if self.debug:self.stats['events'].append(dict(event='prepare_finished',key=str(key),
                         monotonic=time.monotonic(),prepare_ms=ms))
                     self.stats['prepare_ms'] += ms
                     ema = self.stats['prepare_ema_ms']

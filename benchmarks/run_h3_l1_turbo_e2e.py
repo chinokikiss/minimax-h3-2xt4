@@ -110,7 +110,8 @@ def runtime_config(config):
         sol_local_radius_tokens=int(requested.get('sol_local_radius_tokens',64)),
         sol_protect_frame_boundaries=bool(requested.get('sol_protect_frame_boundaries',True)),
         video_attention=requested.get('video_attention','kitchen'),
-        tensor_flow=TensorFlowPolicy('fp16'))
+        tensor_flow=TensorFlowPolicy('fp16',int(config.get('residual_exponent',9))),
+        debug=bool(config.get('debug',False)))
 
 
 def main():

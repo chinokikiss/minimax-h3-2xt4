@@ -14,7 +14,11 @@ class RecentEvents(list):
         super().append(item)
 
 
-def detail_events():
-    # Tracing is a separate opt-in benchmark entry point. This flag requests
-    # bounded detail metrics only; it does not start a profiler or dump tensors.
-    return RecentEvents(4096 if os.environ.get('MINIMAX_H3_PROFILE_DETAILS')=='1' else 0)
+def diagnostics_enabled(enabled=None):
+    # Explicit runtime settings override benchmark-only environment defaults.
+    return os.environ.get('MINIMAX_H3_PROFILE_DETAILS')=='1' if enabled is None else bool(enabled)
+
+
+def detail_events(*, enabled=None):
+    # Tracing is opt-in; disabled production paths also skip event construction.
+    return RecentEvents(4096 if diagnostics_enabled(enabled) else 0)

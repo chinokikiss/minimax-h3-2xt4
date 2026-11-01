@@ -16,7 +16,7 @@ from torch.nn import functional as F
 @dataclass(frozen=True)
 class TensorFlowPolicy:
     mode: str = 'legacy'
-    residual_exponent: int = 6
+    residual_exponent: int = 9
     vision_residual_exponent: int = 0
     video_residual_exponent: int = 0
 

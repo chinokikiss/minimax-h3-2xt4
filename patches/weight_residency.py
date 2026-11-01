@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from collections import Counter
 from concurrent.futures import Future, ThreadPoolExecutor, CancelledError
-from patches.diagnostic_metrics import detail_events
+from patches.diagnostic_metrics import detail_events, diagnostics_enabled
 from contextlib import contextmanager
 import copy
 from dataclasses import dataclass, fields, is_dataclass, replace
@@ -176,8 +176,9 @@ class ResidencyWindow:
     def __init__(self, specs, uses, device, *, max_weight_bytes, pinned_bytes,
                  lookahead=2, reserve_bytes=512 * 2**20, copy_stream=None,
                  adaptive=False, max_lookahead=2, host_cache=None, retain_keys=(),
-                 cpu_lookahead=16, max_cpu_lookahead=32):
+                 cpu_lookahead=16, max_cpu_lookahead=32, debug=None):
         self.device = torch.device(device)
+        self.debug = diagnostics_enabled(debug)
         if self.device.type != 'cuda' or self.device.index is None:
             raise ValueError('An explicit CUDA device is required')
         specs = tuple(specs)
@@ -226,9 +227,9 @@ class ResidencyWindow:
         self.active_budgets=None
         self.stats = {'loads': {}, 'hits': 0, 'h2d_bytes': 0, 'evictions': 0,
                       'peak_live_weight_bytes': 0, 'peak_pinned_admitted_bytes': 0,
-                      'host_wait_ms': 0., 'copies': detail_events(), 'transitions': detail_events(),
-                      'lookahead_changes': detail_events(), 'cpu_lookahead_changes': detail_events(),
-                      'cpu_plans': detail_events(), 'compute': detail_events()}
+                      'host_wait_ms': 0., 'copies': detail_events(enabled=self.debug), 'transitions': detail_events(enabled=self.debug),
+                      'lookahead_changes': detail_events(enabled=self.debug), 'cpu_lookahead_changes': detail_events(enabled=self.debug),
+                      'cpu_plans': detail_events(enabled=self.debug), 'compute': detail_events(enabled=self.debug)}
         self.stats.update(idle_loads=0,idle_h2d_bytes=0,idle_cancellations=0,
                           idle_errors=0,idle_last_error=None,idle_gpu_hits=0,idle_avoided_h2d_bytes=0)
         self.idle_loaded=set()
@@ -473,7 +474,7 @@ class ResidencyWindow:
                     entry.host_reservation = 0
             if not entry.copy_reported and entry.ready.query():
                 ms = entry.copy_start.elapsed_time(entry.ready)
-                self.stats['copies'].append({'bytes': entry.size,
+                if self.debug:self.stats['copies'].append({'bytes': entry.size,
                     'cuda_ms': ms})
                 self.copy_ms = ms if self.copy_ms is None else .8*self.copy_ms + .2*ms
                 entry.copy_reported = True
@@ -483,7 +484,7 @@ class ResidencyWindow:
                 pending.append((key, start, end))
                 continue
             ms = start.elapsed_time(end)
-            self.stats['compute'].append({'key': str(key), 'cuda_ms': ms})
+            if self.debug:self.stats['compute'].append({'key': str(key), 'cuda_ms': ms})
             self.compute_ms = ms if self.compute_ms is None else .8*self.compute_ms + .2*ms
             self.samples += 1
             if self.adaptive and self.samples % 3 == 0 and self.compute_ms > 0:
@@ -493,7 +494,7 @@ class ResidencyWindow:
                     1 + math.ceil(((cpu_prepare or 0)+(self.copy_ms or 0))/self.compute_ms)))
                 next_cpu = self.cpu_lookahead + (cpu_target > self.cpu_lookahead) - (cpu_target < self.cpu_lookahead)
                 if next_cpu != self.cpu_lookahead:
-                    self.stats['cpu_lookahead_changes'].append(dict(position=self.cursor,
+                    if self.debug:self.stats['cpu_lookahead_changes'].append(dict(position=self.cursor,
                         before=self.cpu_lookahead, after=next_cpu))
                     self.cpu_lookahead = next_cpu
         self.observations = pending
@@ -577,7 +578,7 @@ class ResidencyWindow:
         depth = (2 if len(keys)==2 and missing+self._live_bytes()<=self.max_weight_bytes
                  and free>=missing+self.reserve_bytes else 1)
         if depth != self.lookahead:
-            self.stats['lookahead_changes'].append(dict(position=self.cursor,
+            if self.debug:self.stats['lookahead_changes'].append(dict(position=self.cursor,
                 before=self.lookahead,after=depth,reason='vram_headroom',
                 free_bytes=free,missing_weight_bytes=missing))
             self.lookahead = depth
@@ -623,7 +624,7 @@ class ResidencyWindow:
                         deadlines[k] = now+(p-self.cursor)*(self.compute_ms or 100.)/1000
                         cpu_keys.append((p,k))
                 self.host_cache.prefetch([self.specs[k] for _,k in cpu_keys],deadlines=deadlines)
-                self.stats['cpu_plans'].append(dict(position=self.cursor,
+                if self.debug:self.stats['cpu_plans'].append(dict(position=self.cursor,
                     cpu_depth=len(cpu_keys),gpu_depth=self.lookahead))
             upcoming = []
             for position in range(self.cursor, len(self.uses)):
@@ -679,7 +680,7 @@ class ResidencyWindow:
         self.stats['loads'][str(key)] = self.stats['loads'].get(str(key), 0) + 1
         self.stats['h2d_bytes'] += size
         self.stats['peak_live_weight_bytes'] = max(self.stats['peak_live_weight_bytes'], self._live_bytes())
-        self.stats['transitions'].append({'position': self.cursor, 'loaded': str(key),
+        if self.debug:self.stats['transitions'].append({'position': self.cursor, 'loaded': str(key),
                                          'bytes': size, 'deadline': self._next_use(key)})
 
     @contextmanager

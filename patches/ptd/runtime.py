@@ -152,9 +152,10 @@ class WorkerAdapter:
                 self.head_hook = self.runtime.model.final_layer.audio_out.register_forward_hook(
                     lambda module, inputs, output: output * factor)
         self.calls.append(self.hop)
-        self.runtime.events.append(dict(phase='ptd_hop', hop=self.hop, sigma=expected,
-            refiner_each_hop=True, online_lora=False,hop_handoff=self.options.hop_handoff,
-            pruned_adaln_approximation=self.options.allow_pruned_adaln))
+        if self.runtime.config.debug:
+            self.runtime.events.append(dict(phase='ptd_hop', hop=self.hop, sigma=expected,
+                refiner_each_hop=True, online_lora=False,hop_handoff=self.options.hop_handoff,
+                pruned_adaln_approximation=self.options.allow_pruned_adaln))
         return args, kwargs
 
     def close(self):

@@ -428,8 +428,6 @@ __global__ void route_centroid_tiles(
       const bool neighbor = abs(q_block - k_block) <= 1;
       const bool protected_key =
           k_block >= sink_start_block && k_block < sink_end_block;
-      const bool protected_query =
-          q_block >= sink_start_block && q_block < sink_end_block;
 
       const int q_start = q_block * kBlock;
       const int q_end = min(q_start + kBlock, topology_end_token);
@@ -475,7 +473,7 @@ __global__ void route_centroid_tiles(
       }
 
       selected = score_tile[item] * scale_log2 > threshold[row] ||
-          neighbor || protected_key || protected_query || topology_neighbor;
+          neighbor || protected_key || topology_neighbor;
       exact_mask[row * k_blocks + k_block] = selected ? 1 : 0;
     }
     const unsigned votes = __ballot_sync(0xffffffff, selected);
@@ -532,8 +530,6 @@ __global__ void route_centroid_tiles_partition(
       const std::int64_t row=static_cast<std::int64_t>(bh)*q_blocks+q_block;
       const bool neighbor=abs(global_q_block-k_block)<=1;
       const bool protected_key=k_block>=sink_start_block&&k_block<sink_end_block;
-      const bool protected_query=
-          global_q_block>=sink_start_block&&global_q_block<sink_end_block;
       const int q_start=global_q_block*kBlock;
       const int k_start=k_block*kBlock;
       const bool topology_enabled=topology_start_token>=0 &&
@@ -570,7 +566,7 @@ __global__ void route_centroid_tiles_partition(
         }
       }
       selected=score_tile[item]*scale_log2>threshold[row] ||
-          neighbor||protected_key||protected_query||topology_neighbor;
+          neighbor||protected_key||topology_neighbor;
       exact_mask[row*k_blocks+k_block]=selected?1:0;
     }
     const unsigned votes=__ballot_sync(0xffffffff,selected);

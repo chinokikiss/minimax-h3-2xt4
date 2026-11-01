@@ -56,6 +56,6 @@ def rank_snapshot(runtime):
         "startup_cache": runtime.startup_cache.snapshot(),
         "aot_preparation": dict(getattr(runtime,"aot_receipts",{})),
         "sol_route_stats": __import__('patches.sol_attention',fromlist=['route_stats_snapshot']).route_stats_snapshot()
-            if getattr(config,"sol_collect_route_stats",False) else [],
+            if getattr(config,"debug",False) and getattr(config,"sol_collect_route_stats",False) else [],
         "events": runtime.events,
     }

@@ -136,9 +136,12 @@ Python policy construction rejects the removed backend.
 
 DiT attention exposes `kitchen`, `sol` and `native`. Sol derives its
 protected span from the current Native `PackedLayout`; the protected prefix
-ends at the start of the final target-audio segment, so generated target audio
-and video remain normally routed. Protection is bidirectional at Q64/K64 routing
-granularity. Optional `dit_attention_schedule` selects a backend by 1-based
+ends at the start of the final target-video segment in Sol v2, so text,
+reference and target-audio tokens are protected as keys; generated video
+remains normally routed. Protection is unidirectional by default:
+all queries attend protected keys exactly at Q64/K64 granularity, while
+protected queries route unprotected keys normally. Optional `dit_attention_schedule`
+selects a backend by 1-based
 denoiser NFE. A `sol@tau` schedule entry overrides the global `sol_tau` for that
 NFE range; plain `sol` inherits the global value. Kitchen and Native entries do
 not accept tau overrides.

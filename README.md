@@ -49,7 +49,7 @@ see the [frozen runtime record](runtime/README.md).
 
 | Component | Selection |
 |---|---|
-| Tensor flow | FP16-fix by default; TE/DiT residual divisor 64, explicit FP32 stability islands; `legacy` FP32 flow optional |
+| Tensor flow | FP16-fix by default; TE/DiT residual divisor 512, explicit FP32 stability islands; `legacy` FP32 flow optional |
 | TE / DiT / Token Refiner | Kitchen causal INT8 / Kitchen dense INT8 / Native SDPA |
 | Row projections | Scaled FP16 SUM with fused FP32 dequantization; explicit INT32 SUM alternative |
 | TE down / DiT FC2 | `fused_stored`: FP32 SwiGLU + regular ConvRot256, global row scales, original INT8 GEMM |
@@ -58,6 +58,10 @@ see the [frozen runtime record](runtime/README.md).
 | LoRA | Offline by default; prefer bounded TP2 bundle merges for long sequences. Optional short/medium online uses FP32 RowParallel A partial SUM and guarded FC1/QKV owned B |
 | Streaming | Lifecycle prefetch, host-pressure admission and adaptive depth 1–2 enabled; idle speculation off |
 | Reference VAE loading | Metadata-only shells; load Video/Audio encoders only on actual reference encoding, decoders at output |
+
+Sol v2 remains opt-in. Its current key-only protected routing has CPU contract and
+synthetic-T4 A/B evidence, but not full real-H3 E2E generation-quality approval;
+the completed 10-second all-Sol test used frozen bidirectional protection.
 
 Sparse dropping/scalar pooling, recompute preparation and idle residency remain
 explicit options. Removed controls and saved-workflow migration are documented

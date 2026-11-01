@@ -51,11 +51,11 @@ class SolProductionContracts(unittest.TestCase):
         self.assertNotIn('torch.empty_like(v)',run)
         self.assertGreaterEqual(run.count('torch.empty((batch, heads, length, head_dim)'),2)
 
-    def test_native_route_protection_is_bidirectional(self):
+    def test_native_route_protection_is_key_only_for_full_and_partitioned_q(self):
         source=(ROOT/'patches/sol_attention_native/sol_sm75_preprocess.cuh').read_text()
-        self.assertIn('protected_key',source)
-        self.assertIn('protected_query',source)
-        self.assertIn('neighbor || protected_key || protected_query',source)
+        self.assertIn('neighbor || protected_key || topology_neighbor;',source)
+        self.assertIn('neighbor||protected_key||topology_neighbor;',source)
+        self.assertNotIn('protected_query',source)
 
     def test_sol_workspace_pool_is_stream_local_and_does_not_pin_qkv_payloads(self):
         backend=(ROOT/'patches/sol_sm75_backend.py').read_text(encoding='utf-8')
@@ -276,7 +276,8 @@ class SolProductionContracts(unittest.TestCase):
         self.assertEqual((first,count,first+count-1),(10,7,16))
         source=(ROOT/'patches/sol_attention_native/sol_sm75_preprocess.cuh').read_text()
         self.assertIn("const int global_q_block=q_block_base+q_block;",source)
-        self.assertIn("global_q_block>=sink_start_block&&global_q_block<sink_end_block",source)
+        self.assertIn("const bool protected_key=k_block>=sink_start_block&&k_block<sink_end_block;",source)
+        self.assertIn("neighbor||protected_key||topology_neighbor;",source)
         kernel=(ROOT/'patches/sol_attention_native/sla_sm75_fp16_kernel.cuh').read_text()
         self.assertIn("const uint32_t storage_q_block = q_block - q_storage_block_base;",kernel)
         self.assertIn("const uint32_t route_q_block = q_block - route_block_base;",kernel)

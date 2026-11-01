@@ -116,7 +116,9 @@ class TensorFlowContracts(unittest.TestCase):
         sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'ComfyUI'))
         from patches.comfy_tp_runtime import RuntimeConfig
         config=RuntimeConfig('te','dit')
-        self.assertEqual(config.tensor_flow,TensorFlowPolicy('fp16',6))
+        self.assertEqual(config.tensor_flow,TensorFlowPolicy('fp16',9))
+        self.assertFalse(config.debug)
+        with self.assertRaises(ValueError):replace(config,debug=1)
         self.assertEqual(config.tensor_flow.vision_residual_exponent,0)
         self.assertEqual(config.tensor_flow.video_residual_exponent,0)
         legacy=replace(config,tensor_flow=TensorFlowPolicy('legacy'))
@@ -152,12 +154,28 @@ class TensorFlowContracts(unittest.TestCase):
             loader=node.MiniMaxH3TP2Loader()
             first=loader.load('te','dit')[2]
             self.assertEqual(first.config.tensor_flow.mode,'fp16')
-            self.assertEqual(first.config.tensor_flow.divisor,64)
+            self.assertEqual(first.config.tensor_flow.divisor,512)
+            self.assertFalse(first.config.debug)
             self.assertIs(loader.load('te','dit')[2],first)
             legacy=loader.load('te','dit',tensor_flow='legacy')[2]
             first.close.assert_called_once()
             self.assertFalse(legacy.config.tensor_flow.enabled)
-            self.assertEqual(create.call_count,2)
+            debugged=loader.load('te','dit',debug=True)[2]
+            self.assertTrue(debugged.config.debug)
+            self.assertEqual(debugged.config.tensor_flow.divisor,512)
+            legacy.close.assert_called_once()
+            self.assertEqual(create.call_count,3)
+
+    def test_diagnostics_explicit_off_overrides_benchmark_environment(self):
+        from unittest.mock import patch
+        from patches.diagnostic_metrics import detail_events
+        with patch.dict('os.environ', {'MINIMAX_H3_PROFILE_DETAILS':'1'}):
+            production=detail_events(enabled=False)
+            production.append({'probe':True})
+            self.assertEqual(len(production),0)
+            trace=detail_events(enabled=True)
+            trace.append({'probe':True})
+            self.assertEqual(len(trace),1)
 
     def test_public_conditioning_stays_finite_and_preserves_native_layout(self):
         from types import SimpleNamespace

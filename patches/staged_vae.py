@@ -182,8 +182,9 @@ class StagedVAE:
                 offload_device=management.vae_offload_device())
             management.archive_model_dtypes(model)
             self.vae.size=None;self.stage=stage
-            self.events.append(dict(stage=stage,read_bytes=component_payload(self.reader,names)))
-            self.events=self.events[-8:]
+            if getattr(self.service.config,'debug',False):
+                self.events.append(dict(stage=stage,read_bytes=component_payload(self.reader,names)))
+                self.events=self.events[-8:]
         except BaseException:
             self.vae.first_stage_model=None;self.vae.patcher=None
             self.service.budget.release(self.reservation);self.reservation=0

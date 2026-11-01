@@ -163,13 +163,15 @@ def main():
             boundary_key_probe=dict(q_block=far_q,k_block=boundary,
                                     old=bool(old_r['exact_mask'][0,0,far_q,boundary]),
                                     new=bool(new_r['exact_mask'][0,0,far_q,boundary])),
-            protected_prefix_bidirectional=bool(new_r['exact_mask'][...,:prefix_blocks].all() and
-                                                new_r['exact_mask'][...,:prefix_blocks,:].all()),
+            protected_prefix_keys_exact=bool(new_r['exact_mask'][...,:prefix_blocks].all()),
+            protected_prefix_queries_not_forced_dense=bool(
+                not new_r['exact_mask'][...,:prefix_blocks,:].all()),
             old_density=route_density(old_r),new_density=route_density(new_r))
         assert not state['cases']['dit_topology']['cross_frame_probe']['old']
         assert state['cases']['dit_topology']['cross_frame_probe']['new']
         assert state['cases']['dit_topology']['boundary_key_probe']['new']
-        assert state['cases']['dit_topology']['protected_prefix_bidirectional']
+        assert state['cases']['dit_topology']['protected_prefix_keys_exact']
+        assert state['cases']['dit_topology']['protected_prefix_queries_not_forced_dense']
         del q,k,v,old_r,new_r;torch.cuda.empty_cache();save()
 
         # 4b. Query-block subset launch must be exactly the same for computed
@@ -208,12 +210,14 @@ def main():
             length=length,frame_stride_tokens=256,
             cross_frame_probe=dict(q_block=qb,k_block=kb,old=bool(old_r['exact_mask'][0,0,qb,kb]),
                                    new=bool(new_r['exact_mask'][0,0,qb,kb])),
-            global_suffix_bidirectional=bool(new_r['exact_mask'][...,global_block].all() and
-                                             new_r['exact_mask'][...,global_block,:].all()),
+            global_suffix_keys_exact=bool(new_r['exact_mask'][...,global_block].all()),
+            global_suffix_queries_not_forced_dense=bool(
+                not new_r['exact_mask'][...,global_block,:].all()),
             old_density=route_density(old_r),new_density=route_density(new_r))
         assert not state['cases']['vae_topology']['cross_frame_probe']['old']
         assert state['cases']['vae_topology']['cross_frame_probe']['new']
-        assert state['cases']['vae_topology']['global_suffix_bidirectional']
+        assert state['cases']['vae_topology']['global_suffix_keys_exact']
+        assert state['cases']['vae_topology']['global_suffix_queries_not_forced_dense']
 
         # 6. True local-Q/full-KV query partitioning.
         length=1029;content=1024;cut=((length+255)//256)*128

@@ -34,15 +34,15 @@ denoiser calls, so schedules do not leak across requests.
 
 ### Condition-token protection
 
-For Sol DiT attention, the protected prefix ends at the start of the final
-target-audio segment in Native PackedLayout. Text, reference and other true
-conditioning tokens are protected; generated target audio and generated video
-remain on normal Sol routing.
+For the default Sol v2 DiT route, the protected prefix ends at the start of
+the final target-video segment in Native PackedLayout. Text, references and
+target audio are protected as keys; generated video uses normal Sol routing.
+The historical non-v2 route instead ends protection at target-audio start.
 
 Protection is exact at the native Q64/K64 routing granularity:
 
 - every query attends all protected key blocks;
-- every protected query block attends all key blocks.
+- protected queries follow ordinary Sol score/topology/neighbor routing for unprotected keys (no forced reverse-direction exactness).
 
 The protected token boundary is rounded outward to native 64-token blocks.
 This deliberately spends additional dense work around a ragged boundary to
@@ -60,8 +60,8 @@ patches/sol_attention_native/.
 
 The shared object is compiled for sm_75 with the preserved CUDA 12.8 compiler
 and cached by the exact source/compiler identity. When a session selects Sol,
-it is included in the normal AOT preparation stage before DiT execution; Video
-VAE Sol is AOT-prepared during vae_prepare before decoder weights are loaded.
+it is included in the normal AOT preparation stage before DiT execution.
+Video VAE Sol is retired and is not AOT-prepared.
 An externally supplied H3_SOL_ALL_INT8_LIBRARY does not override production
 source selection.
 
@@ -77,9 +77,9 @@ path showed the following representative speedups versus Kitchen dense INT8:
 - 16,384 tokens: approximately 2.95x
 - 51,220 tokens: approximately 2.46x
 
-The current production native source additionally enforces bidirectional
-protected-block routing and has been successfully compiled for sm_75 with
-CUDA 12.8.93.
+The production native source defaults to unidirectional (key-only)
+protected-block routing. The prior bidirectional version was compiled on
+sm_75 with CUDA 12.8.93; the new default requires fresh build qualification.
 
 The remaining DiT-specific qualification work covers protected-routing
 performance, real-H3 trajectory drift, and final-generation quality by

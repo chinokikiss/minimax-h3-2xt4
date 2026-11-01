@@ -39,7 +39,7 @@ class MiniMaxH3TP2Loader:
                         'fc2_quantizer':(['owned_fp32','native','fused_stored','fused_recompute'],{'default':'fused_stored','tooltip':'Default: FP32 SwiGLU + regular ConvRot256 fusion, retaining rotated values until shared-MAX INT8 quantization. Approximate FP32 summation order. recompute saves memory; owned_fp32/native retain prior preparation. Applies to TE down and DiT FC2.'}),
                         'lora_mode':(['offline','online'],{'default':'offline','tooltip':'Default offline: TP2 JSON merges bounded blocks on CPU; safetensors creates a baked checkpoint. Prefer TP2 bundles for long sequences. Online is for fitting short/medium requests.'}),
                         'tensor_flow':(['fp16','legacy'],{'default':'fp16','tooltip':'Default FP16-fix uses scaled residual streams and FP32 statistics/time/head islands. Audio VAE stays FP32. Select legacy for the original FP32 flow.'}),
-                        'residual_exponent':('INT',{'default':6,'min':0,'max':12,'tooltip':'TE/DiT FP16 residual divisor is 2**exponent. Default: 64.'}),
+                        'residual_exponent':('INT',{'default':9,'min':0,'max':12,'tooltip':'TE/DiT FP16 residual divisor is 2**exponent. Default: 512.'}),
                         'vision_residual_exponent':('INT',{'default':0,'min':0,'max':12,'tooltip':'Optional vision gauge. Default 0 retains the Native FP16 vision arithmetic.'}),
                         'video_residual_exponent':('INT',{'default':0,'min':0,'max':12,'tooltip':'Optional Video VAE decoder gauge. Default 0 preserves its existing FP16 arithmetic.'}),
                         'video_decode_reserve_gib':('FLOAT',{'default':2.,'min':0.,'max':12.,'step':.5,'tooltip':'Extra VRAM headroom for Video parallel-decoder admission, separate from the DiT sampling reserve.'}),
@@ -55,7 +55,8 @@ class MiniMaxH3TP2Loader:
                         'dit_fused_norm':('BOOLEAN',{'default':True,'tooltip':'T4 FP16 RMS + AdaLN fusion, with FP32 statistics. Slight reduction-order differences; disable for the original path.'}),
                         'dit_fused_gate':('BOOLEAN',{'default':True,'tooltip':'T4 FP16 gated residual fusion with FP32 FMA and FP16 storage.'}),
                         'dit_fused_row_gate':('BOOLEAN',{'default':True,'tooltip':'Fuse scaled-FP16 row epilogue and residual gate for offline/baked DiT. Online LoRA and unsupported routes retain separate operations.'}),
-                        'dit_prepared_attention':('BOOLEAN',{'default':True,'tooltip':'Prepare Kitchen INT8 attention, release floating QKV, then execute. Other attention backends remain unchanged.'})}}
+                        'dit_prepared_attention':('BOOLEAN',{'default':True,'tooltip':'Prepare Kitchen INT8 attention, release floating QKV, then execute. Other attention backends remain unchanged.'}),
+                        'debug':('BOOLEAN',{'default':False,'tooltip':'Opt in to detailed runtime diagnostics and Sol route statistics. Production inference keeps diagnostic collection disabled.'})}}
 
     RETURN_TYPES = ('MODEL', 'CLIP', 'MINIMAX_TP2_SESSION')
     FUNCTION = 'load'
@@ -70,13 +71,13 @@ class MiniMaxH3TP2Loader:
              idle_residency=False,idle_weight_gib=4.,lora_stack=(),
              lora_row_partial_reduce=True,te_attention='kitchen_causal',
              dit_attention='kitchen',dit_attention_schedule='',sol_tau=1.0,video_attention='kitchen',row_linear_backend='tilelang_scaled_fp16',
-             adaptive_lookahead=True,fc2_quantizer='fused_stored',lora_mode='offline',tensor_flow='fp16',residual_exponent=6,
+             adaptive_lookahead=True,fc2_quantizer='fused_stored',lora_mode='offline',tensor_flow='fp16',residual_exponent=9,
              vision_residual_exponent=0,video_residual_exponent=0,video_decode_reserve_gib=2.,
              prefetch_lifecycle=True,memory_pressure_aware=True,dit_reserve_gib=9.,
              command_timeout_seconds=1500,rank_checkpoint_dir='',
              lora_selective_qkv_b=True,column_linear_backend='cuda_int8_tilelang',dit_rms_rope='tilelang_fp32',aot_precompile=True,
              dit_fused_norm=True,dit_fused_gate=True,dit_fused_row_gate=True,dit_prepared_attention=True,
-             verify_dit_weights=False,**retired_options):
+             verify_dit_weights=False,debug=False,**retired_options):
         global _service
         from patches.h3_configuration import check_retired_loader_options
         check_retired_loader_options(retired_options)
@@ -107,7 +108,7 @@ class MiniMaxH3TP2Loader:
             idle_weight_bytes=int(idle_weight_gib*GiB),lora_stack=tuple(lora_stack),
             bundle_offline_lora=bundle_offline,
             lora_row_partial_reduce=bool(lora_row_partial_reduce),
-            adaptive_lookahead=bool(adaptive_lookahead),
+            adaptive_lookahead=bool(adaptive_lookahead),debug=bool(debug),
             video_decode_reserve_bytes=int(video_decode_reserve_gib*GiB),
             tensor_flow=TensorFlowPolicy(tensor_flow,int(residual_exponent),int(vision_residual_exponent),int(video_residual_exponent)),
             dit_attention_schedule=__import__('patches.attention_schedule',fromlist=['parse_attention_schedule']).parse_attention_schedule(dit_attention_schedule),

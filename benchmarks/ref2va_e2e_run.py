@@ -116,7 +116,6 @@ class ObservedRank(BASE_RANK):
         import patches.h3_lora as lora
         for module, name, label in ((kitchen_te,'attention','TE/kitchen_causal'),
                 (ck,'int8_attention','kitchen/int8_attention'),
-                (policy,'execute_dit_attention','kitchen/int8_attention'),
                 (lora.NativeAlignedLoRA,'add_to','LoRA/column_or_native_bypass'),
                 (lora.RowPartialLoRA,'add_to','LoRA/row_partial_bypass')):
             fn = getattr(module, name)
@@ -130,6 +129,21 @@ class ObservedRank(BASE_RANK):
                     torch.cuda.nvtx.range_pop()
                     owner.gpu.append((dict(kind=_label, **owner.context), begin, event()))
             setattr(module, name, wrap)
+        # Prepared QKV bypasses sol_attention.attention; count its real
+        # execution backend instead of incorrectly labeling every prepared
+        # attention as Kitchen (which made previous Sol E2E audits fail).
+        execute=policy.execute_dit_attention
+        def observe_prepared(prepared):
+            label=('DiT/sol_all_int8' if isinstance(prepared,dict)
+                and prepared.get('_h3_backend')=='sol' else 'kitchen/int8_attention')
+            owner.backends[label]+=1
+            begin=event();torch.cuda.nvtx.range_push(label)
+            try:
+                return execute(prepared)
+            finally:
+                torch.cuda.nvtx.range_pop()
+                owner.gpu.append((dict(kind=label,**owner.context),begin,event()))
+        policy.execute_dit_attention=observe_prepared
         sol_fn=sol_attention.attention
         def observe_sol(*a, **kw):
             command=owner.context.get('command')
@@ -401,7 +415,8 @@ def main():
         cross_model_cpu=True,idle_residency=config['idle'],idle_weight_bytes=4*GiB,
         lora_stack=tuple((config['paths']['lora'],1.) for _ in [0])
             if config['lora'] and not config.get('offline_lora') else (),
-        lora_row_partial_reduce=config['lora'] and not config.get('offline_lora'),operators=operators)
+        lora_row_partial_reduce=config['lora'] and not config.get('offline_lora'),operators=operators,
+        debug=os.environ.get('MINIMAX_H3_PROFILE_DETAILS')=='1')
     service=None;monitor=Monitor();vaes={};parent_memory=None
     if config.get('memory_profile'):
         from types import SimpleNamespace

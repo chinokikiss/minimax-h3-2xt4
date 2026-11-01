@@ -646,7 +646,7 @@
         "fused_stored",
         "offline",
         "fp16",
-        6,
+        9,
         0,
         0,
         2.0,
@@ -662,7 +662,8 @@
         true,
         true,
         true,
-        true
+        true,
+        false
       ],
       "title": "MiniMax H3 TP2 — integrated operators"
     },
@@ -1651,7 +1652,7 @@
       "reduction": "scaled_fp16",
       "fc2_quantizer": "fused_stored",
       "tensor_flow": "fp16",
-      "residual_exponent": 6,
+      "residual_exponent": 9,
       "fallback_reduction": "native_int32",
       "lora_row_partial_reduce": true,
       "lora_hidden_sum": "fp32",
@@ -1666,7 +1667,7 @@
     },
     "minimax_h3_tensor_flow": {
       "mode": "fp16",
-      "residual_exponent": 6,
+      "residual_exponent": 9,
       "vision_residual_exponent": 0,
       "video_residual_exponent": 0,
       "audio_vae": "unchanged FP32"

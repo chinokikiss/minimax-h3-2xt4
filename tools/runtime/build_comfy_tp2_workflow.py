@@ -88,7 +88,7 @@ def main():
         'Component timings do not establish an integrated pipeline speedup.')
     workflow['extra']['minimax_h3_operators']={'te_attention':'kitchen_causal','dit_attention':'kitchen',
         'video_attention':'kitchen','sol_tau':1.0,'row_linear_backend':'tilelang_scaled_fp16',
-        'fc2_quantizer':'fused_stored','tensor_flow':'fp16','residual_exponent':6,
+        'fc2_quantizer':'fused_stored','tensor_flow':'fp16','residual_exponent':9,'debug':False,
         'column_linear_backend':'cuda_int8_tilelang','lora_mode':'offline','lora_selective_qkv_b':True,
         'dit_attention_schedule':'','reduction':'scaled_fp16','fallback_reduction':'native_int32',
         'lora_row_partial_reduce':True,'lora_hidden_sum':'fp32','vae_encoder_loading':'reference_demand'}

@@ -77,6 +77,7 @@ class RuntimeConfig:
     bundle_offline_lora: bool = False
     lora_selective_qkv_b: bool = True
     verify_dit_weights: bool = False
+    debug: bool = False
 
     def __post_init__(self):
         if type(self.verify_dit_weights) is not bool:raise ValueError('verify_dit_weights must be boolean')
@@ -89,7 +90,7 @@ class RuntimeConfig:
         object.__setattr__(self,'dit_attention_schedule',validate_attention_schedule(self.dit_attention_schedule))
         if not math.isfinite(float(self.sol_tau)) or float(self.sol_tau)<0:raise ValueError('Sol tau must be finite and nonnegative')
         object.__setattr__(self,'sol_tau',float(self.sol_tau))
-        for name in ('sol_topology_v2','sol_sync_free_lut','sol_collect_route_stats','sol_protect_frame_boundaries'):
+        for name in ('sol_topology_v2','sol_sync_free_lut','sol_collect_route_stats','sol_protect_frame_boundaries','debug'):
             if type(getattr(self,name)) is not bool:raise ValueError(name+' must be boolean')
         # Production Sol is v2. Legacy false values are accepted only so old
         # workflows deserialize; they cannot reactivate the pre-topology route.
@@ -173,7 +174,7 @@ class RankRuntime:
         if config.rank_checkpoint_dir:
             for reader in self.readers.values():
                 reader.rank_checkpoint_dir = config.rank_checkpoint_dir
-        self.cache = HostWeightCache(budget, config.cache_bytes,reuse_aware=config.prefetch_lifecycle)
+        self.cache = HostWeightCache(budget, config.cache_bytes,reuse_aware=config.prefetch_lifecycle,debug=config.debug)
         # Separate bounded startup cache: a large front end must not consume
         # the transformer's entire preparation queue capacity.
         startup_bytes = sum(v['data_offsets'][1]-v['data_offsets'][0]
@@ -191,12 +192,12 @@ class RankRuntime:
             self.startup_specs.append(WeightSpec((reader.identity,'te_startup',label,rank),
                 lambda selected=tuple(selected):CPUStartupState(reader,selected),bound,
                 prepare_peak_bytes=bound+2**20))
-        self.startup_cache = HostWeightCache(budget,startup_bytes)
+        self.startup_cache = HostWeightCache(budget,startup_bytes,debug=config.debug)
         self.model = self.window = self.preprocessing = None
         self.kind = None
         self.aux_reservation = 0
         self.sample_active = False
-        self.events = RecentEvents(16)
+        self.events = RecentEvents(16 if config.debug else 0)
         self.aot_receipts = {}
         self.calls = 0
         self.sample_nfe = 0
@@ -242,7 +243,8 @@ class RankRuntime:
                     max_weight_bytes=self.config.te_weight_bytes or self.config.weight_bytes,
                     pinned_bytes=self.config.pinned_bytes,reserve_bytes=self.config.reserve_bytes,
                     host_cache=self.cache,adaptive=self.config.adaptive_lookahead,
-                    lookahead=self.config.gpu_lookahead,cpu_lookahead=self.config.cpu_lookahead)
+                    lookahead=self.config.gpu_lookahead,cpu_lookahead=self.config.cpu_lookahead,
+                    debug=self.config.debug)
         window=self.idle_window
         if window.idle_mode:return True
         # Normal request order protects early weights; no predicted prompt or
@@ -327,7 +329,7 @@ class RankRuntime:
                 self.cache.budget.release(reservation)
             reason = ('VRAM admission' if not gpu_ready else
                       'Host RAM admission' if not admitted else 'Admission declined on another rank')
-            self.events.append(dict(phase='vae_prepare', kind=kind, accepted=False,
+            if self.config.debug:self.events.append(dict(phase='vae_prepare', kind=kind, accepted=False,
                 reason=reason, admission=admission, monotonic=time.monotonic()))
             return {'accepted':False, 'reason':f'{reason} (rank {self.rank})', 'admission':admission}
         error = None
@@ -359,12 +361,12 @@ class RankRuntime:
         if not status.item():
             self._drop_vae()
             reason=error or 'VAE unavailable on the other rank'
-            self.events.append(dict(phase='vae_prepare',kind=kind,accepted=False,
+            if self.config.debug:self.events.append(dict(phase='vae_prepare',kind=kind,accepted=False,
                 reason=reason,admission=admission,monotonic=time.monotonic()))
             return {'accepted':False, 'reason':reason, 'admission':admission}
         self.vae_kind = kind
         self.vae_parallelism = parallelism
-        self.events.append(dict(phase='vae_prepare',kind=kind,accepted=True,
+        if self.config.debug:self.events.append(dict(phase='vae_prepare',kind=kind,accepted=True,
                                 checkpoint=reader.identity,admission=admission,monotonic=time.monotonic()))
         return {'accepted':True, 'kind':kind, 'admission':admission}
 
@@ -373,7 +375,7 @@ class RankRuntime:
             if self.window is self.idle_window:
                 self.stop_idle(keep=False);self.idle_window=None
             stats = self.window.close()
-            self.events.append({'phase':self.kind, 'calls':self.calls, 'window':stats})
+            if self.config.debug:self.events.append({'phase':self.kind, 'calls':self.calls, 'window':stats})
         if self.preprocessing is not None:
             self.preprocessing.close()
         self.window = self.model = self.preprocessing = None
@@ -501,7 +503,7 @@ class RankRuntime:
                 pinned_bytes=self.config.pinned_bytes,
                 reserve_bytes=self.config.reserve_bytes, adaptive=self.config.adaptive_lookahead, host_cache=self.cache,
                 lookahead=self.config.gpu_lookahead,cpu_lookahead=self.config.cpu_lookahead,
-                retain_keys=[s.key for s in specs] if kind == 'dit' else ())
+                retain_keys=[s.key for s in specs] if kind == 'dit' else (),debug=self.config.debug)
             attach_window(owner, kind, self.window, self.keys)
             if self.preprocessing:
                 self.preprocessing.window = self.window
@@ -601,7 +603,7 @@ class RankRuntime:
                 result=dict(prepare(int(args[0]),self.rank,self.config.operators,
                     norm_epsilon=1e-5/self.config.tensor_flow.divisor**2,sol=use_sol))
                 self.aot_receipts['dit']=result
-                self.events.append(dict(phase='dit_aot',**result))
+                if self.config.debug:self.events.append(dict(phase='dit_aot',**result))
                 return result
             elif command in ('refine', 'denoise'):
                 if not self.sample_active:
@@ -627,7 +629,7 @@ class RankRuntime:
                 options['_h3_nfe']=self.sample_nfe
                 options['_h3_sol_topology_v2']=self.config.sol_topology_v2
                 options['_h3_sol_sync_free_lut']=self.config.sol_sync_free_lut
-                options['_h3_sol_collect_route_stats']=self.config.sol_collect_route_stats
+                options['_h3_sol_collect_route_stats']=self.config.debug and self.config.sol_collect_route_stats
                 options['_h3_sol_temporal_radius']=self.config.sol_temporal_radius
                 options['_h3_sol_local_radius_tokens']=self.config.sol_local_radius_tokens
                 options['_h3_sol_protect_frame_boundaries']=self.config.sol_protect_frame_boundaries
@@ -678,7 +680,7 @@ class RankRuntime:
                     if self.config.prefetch_lifecycle:
                         self.cache.prefetch(tp_specs(self.readers['te'],'te',self.rank,
                             self.config.layers)[:self.config.decode_te_blocks])
-                    self.events.append(dict(phase='decode_start',cpu_only=True,
+                    if self.config.debug:self.events.append(dict(phase='decode_start',cpu_only=True,
                         checkpoint=str(self.readers['te'].identity),unknown_next_request=True,
                         monotonic=time.monotonic()))
             elif command == 'decode_complete':
@@ -687,7 +689,7 @@ class RankRuntime:
                 # Caller observes decode completion before sending this command;
                 # workers have already fenced and dropped GPU weights at end_sample.
                 self.completed_decode = True
-                self.events.append(dict(phase='decode_complete',monotonic=time.monotonic()))
+                if self.config.debug:self.events.append(dict(phase='decode_complete',monotonic=time.monotonic()))
                 if (self.config.cross_request_te and not self.config.prefetch_lifecycle and
                     not self.startup_cache.snapshot()['pending']):
                     self.cache.prefetch(tp_specs(self.readers['te'], 'te', self.rank, self.config.layers))

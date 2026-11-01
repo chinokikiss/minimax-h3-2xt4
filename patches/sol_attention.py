@@ -5,8 +5,8 @@ It is compiled from the vendored, source-locked files in
 patches/sol_attention_native. No fallback to another attention backend is
 performed when Sol is explicitly selected.
 
-DiT may protect a dense prefix. Protected blocks are exact in both directions:
-every query attends protected keys, and protected queries attend every key.
+DiT may protect a dense prefix in the key direction: every query attends
+protected keys exactly; protected queries use normal routing for other keys.
 The native ABI provides separate D64/D128 specializations; no D64 padding transform is used.
 """
 from __future__ import annotations
