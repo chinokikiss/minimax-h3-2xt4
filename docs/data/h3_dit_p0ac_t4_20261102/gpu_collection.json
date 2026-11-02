@@ -1,0 +1,42 @@
+{
+  "status": "complete_collected_once",
+  "date_utc": "2026-11-02",
+  "provider_url": "https://www.kaggle.com/code/pamcks/h3-dit-p0-a1-p0-c-t4-20261102",
+  "kernel_version": 1,
+  "artifact_collection_command": "kaggle kernels output pamcks/h3-dit-p0-a1-p0-c-t4-20261102/1 -p docs/data/h3_dit_p0ac_t4_20261102/gpu_final",
+  "collection_exit_code": 0,
+  "logical_collections": 1,
+  "final_batch_receipt": "gpu_final/dit_p0ac/result.json",
+  "rank_receipts": [
+    "gpu_final/dit_p0ac/tp2/rank0/result.json",
+    "gpu_final/dit_p0ac/tp2/rank1/result.json"
+  ],
+  "bounded_worker_exit_code": 0,
+  "rank_status": [
+    "complete",
+    "complete"
+  ],
+  "hardware": [
+    "Tesla T4 SM75",
+    "Tesla T4 SM75"
+  ],
+  "core_versions": {
+    "torch": "2.11.0+cu128",
+    "kitchen": "0.2.37",
+    "tilelang": "0.1.13"
+  },
+  "source_overlay_sha256": "23d83db73ad5971d9b82e50002f1e555115003f6fe6aade395a1196f700b96fc",
+  "overlay_files_verified": 99,
+  "source_binding_verified": true,
+  "exact_qualified": true,
+  "p0c_intermediate_qualified": true,
+  "phase_peak_savings_verified": true,
+  "whole_block_peak_normalization_qualified": false,
+  "formal_performance_non_regression_qualified": false,
+  "full_h3_e2e": false,
+  "report": "docs/reports/H3_DIT_P0_A1_P0_C_T4_20261102.md",
+  "analysis": "docs/data/h3_dit_p0ac_t4_20261102/t4_analysis.json",
+  "no_status_or_live_log_polling": true,
+  "no_auto_resubmission": true,
+  "production_changed": false
+}

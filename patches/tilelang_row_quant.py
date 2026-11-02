@@ -1,7 +1,8 @@
-"""Opt-in SM75 FP32 row-linear candidates with unchanged native rotation/GEMM.
+"""SM75 FP32 row quantization used by the qualified production O projection.
 
 The reduced maximum must cover the whole finite input row across TP ranks.
-These benchmark candidates are not installed in the production hook.
+The packed path is reached by tilelang_transport_p2 on T4; alternate
+benchmark quantizer variants are not selected by the normal policy.
 Kitchen 0.2.37 uses max*float32(1/127), floor 1e-30, native fast division,
 nearbyint and [-128,127] saturation. Do not substitute the attention quantizer.
 """
@@ -85,9 +86,37 @@ def quantize(rotated, maximum, width=None, start=0, division='fast'):
     return quantizer(rotated.shape[0], width, rotated.shape[1], start, division)(rotated, maximum)
 
 
-def global_row_quantize(x, comm, world_size, groupsize=256, input_act=None, variant='external'):
+def _local_o_proj_p0c(x, comm, world_size, groupsize, input_act, variant, consume_input):
+    """SM75 local ConvRot; FP32 rounding may differ from padded GEMM."""
+    if (not consume_input or variant!='packed' or input_act is not None
+            or world_size!=2 or groupsize!=256 or type(x) is not torch.Tensor
+            or not x.is_cuda or torch.cuda.get_device_capability(x.device)!=(7,5)
+            or x.dtype!=torch.float32 or x.ndim!=2 or x.shape[1]!=3584
+            or x.shape[0]<=0
+            or x._base is not None or not x.is_contiguous()
+            or torch.is_grad_enabled() or torch.compiler.is_compiling()):
+        return None
+    import comfy_kitchen as ck
+    backend=ck.backends.cuda
+    flat=backend._apply_input_act(x.reshape(-1,3584).contiguous(),None,None,0.)
+    hadamard=backend._build_hadamard(256,device=x.device,dtype=x.dtype)
+    rotated=backend._rotate_activation(flat,hadamard,256)
+    # The source's last reader completed; retained parent references are safe.
+    x.set_()
+    del flat
+    maximum=maximum_kernel(rotated.shape[0],3584,3584,0)(rotated)
+    comm.all_reduce(maximum,op=comm.ReduceOp.MAX)
+    result=quantize(rotated,maximum,3584,0)
+    del rotated,maximum
+    return result
+
+
+def global_row_quantize(x, comm, world_size, groupsize=256, input_act=None, variant='external', *, consume_input=False, local_rotation=False):
     import comfy_kitchen as ck
     if variant not in ('external', 'strided', 'packed'): raise ValueError('Unknown fusion variant')
+    if local_rotation:
+        optimized=_local_o_proj_p0c(x,comm,world_size,groupsize,input_act,variant,consume_input)
+        if optimized is not None:return optimized
     _device(x); backend = ck.backends.cuda
     flat = backend._apply_input_act(x.reshape(-1, x.shape[-1]).contiguous(), input_act, None, 0.)
     width = flat.shape[-1]; rows = flat.shape[0]; rank = comm.get_rank()
@@ -98,6 +127,10 @@ def global_row_quantize(x, comm, world_size, groupsize=256, input_act=None, vari
         else:
             padded = torch.zeros((rows, width * world_size), device=flat.device)
             padded[:, rank * width:(rank + 1) * width].copy_(flat)
+    if consume_input:
+        if variant!='packed':raise ValueError('P0-2 consumption requires packed quantization')
+        # Packing is the final reader of the FP32 projection input.
+        x.set_()
     del flat
     # Identical full-width/native FP32 GEMM geometry and input values.
     rotated = backend._rotate_activation(padded, h, groupsize)

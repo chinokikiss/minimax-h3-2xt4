@@ -1,0 +1,525 @@
+{
+  "environment": {
+    "torch": "2.12.1+cu132",
+    "kitchen": "0.2.37",
+    "gpu": "NVIDIA GeForce RTX 5060 Ti",
+    "note": "Local conda comfyui; no physical dual T4 here"
+  },
+  "p0a_static": {
+    "two_separate_fp16_output_allocations_in_turing_branch": true,
+    "preconditions_for_t4_geometry": {
+      "qkv": true,
+      "fc1": true
+    },
+    "device_capability": [
+      12,
+      0
+    ],
+    "actual_local_turing_dispatch": false,
+    "local_t4_gemm_certified": false
+  },
+  "p0a_alias_ownership": {
+    "view_set_releases_owner_storage": false,
+    "owner_set_releases_owner_storage": true,
+    "bytes_held_after_view_set": 688128,
+    "caveat": "Actual outer block and Kitchen stack still require owner-safety validation"
+  },
+  "p0a_forward_candidate": {
+    "rows": 128,
+    "local_backend": "SM120 Kitchen non-Turing fallback",
+    "checks": {
+      "qkv": {
+        "exact": true,
+        "shape": [
+          128,
+          10752
+        ]
+      },
+      "fc1": {
+        "exact": true,
+        "shape": [
+          128,
+          14336
+        ]
+      }
+    },
+    "t4_cutlass_executed": false,
+    "note": "One-line allocation movement has unchanged fallback output; T4 selected kernel still needs physical verification"
+  },
+  "p0a": [
+    {
+      "rows": 128,
+      "codes": {
+        "exact": true,
+        "shape": [
+          128,
+          5376
+        ]
+      },
+      "scale": {
+        "exact": true,
+        "shape": [
+          128,
+          1
+        ]
+      },
+      "detached_trial_storage_elements": 0,
+      "note": "Preparation-only equality; Turing GEMM and caller aliasing untested"
+    },
+    {
+      "rows": 6814,
+      "codes": {
+        "exact": true,
+        "shape": [
+          6814,
+          5376
+        ]
+      },
+      "scale": {
+        "exact": true,
+        "shape": [
+          6814,
+          1
+        ]
+      },
+      "detached_trial_storage_elements": 0,
+      "note": "Preparation-only equality; Turing GEMM and caller aliasing untested"
+    },
+    {
+      "rows": 59134,
+      "codes": {
+        "exact": true,
+        "shape": [
+          59134,
+          5376
+        ]
+      },
+      "scale": {
+        "exact": true,
+        "shape": [
+          59134,
+          1
+        ]
+      },
+      "detached_trial_storage_elements": 0,
+      "note": "Preparation-only equality; Turing GEMM and caller aliasing untested"
+    },
+    {
+      "rows": 65166,
+      "codes": {
+        "exact": true,
+        "shape": [
+          65166,
+          5376
+        ]
+      },
+      "scale": {
+        "exact": true,
+        "shape": [
+          65166,
+          1
+        ]
+      },
+      "detached_trial_storage_elements": 0,
+      "note": "Preparation-only equality; Turing GEMM and caller aliasing untested"
+    }
+  ],
+  "p0a_allocator_proxy": [
+    {
+      "rows": 128,
+      "metrics": {
+        "baseline": {
+          "incremental_allocated_peak_mib": 7.657
+        },
+        "skip_dead_output_only": {
+          "incremental_allocated_peak_mib": 4.157
+        },
+        "skip_dead_output_and_detach_input": {
+          "incremental_allocated_peak_mib": 2.844
+        },
+        "skip_dead_reduction_mib": 3.5,
+        "detach_additional_reduction_mib": 1.313,
+        "caveat": "SM120 Kitchen activation quant + torch.empty ledger; no T4 CUTLASS or TP caller lifetime"
+      }
+    },
+    {
+      "rows": 6814,
+      "metrics": {
+        "baseline": {
+          "incremental_allocated_peak_mib": 407.602
+        },
+        "skip_dead_output_only": {
+          "incremental_allocated_peak_mib": 221.282
+        },
+        "skip_dead_output_and_detach_input": {
+          "incremental_allocated_peak_mib": 151.282
+        },
+        "skip_dead_reduction_mib": 186.32,
+        "detach_additional_reduction_mib": 70.0,
+        "caveat": "SM120 Kitchen activation quant + torch.empty ledger; no T4 CUTLASS or TP caller lifetime"
+      }
+    },
+    {
+      "rows": 59134,
+      "metrics": {
+        "baseline": {
+          "incremental_allocated_peak_mib": 3538.116
+        },
+        "skip_dead_output_only": {
+          "incremental_allocated_peak_mib": 1921.171
+        },
+        "skip_dead_output_and_detach_input": {
+          "incremental_allocated_peak_mib": 1314.816
+        },
+        "skip_dead_reduction_mib": 1616.945,
+        "detach_additional_reduction_mib": 606.355,
+        "caveat": "SM120 Kitchen activation quant + torch.empty ledger; no T4 CUTLASS or TP caller lifetime"
+      }
+    },
+    {
+      "rows": 65166,
+      "metrics": {
+        "baseline": {
+          "incremental_allocated_peak_mib": 3898.352
+        },
+        "skip_dead_output_only": {
+          "incremental_allocated_peak_mib": 2116.352
+        },
+        "skip_dead_output_and_detach_input": {
+          "incremental_allocated_peak_mib": 1448.146
+        },
+        "skip_dead_reduction_mib": 1782.0,
+        "detach_additional_reduction_mib": 668.206,
+        "caveat": "SM120 Kitchen activation quant + torch.empty ledger; no T4 CUTLASS or TP caller lifetime"
+      }
+    }
+  ],
+  "p0c_exact": [
+    {
+      "rows": 128,
+      "checks": {
+        "rank0_rotation": {
+          "exact": false,
+          "shape": [
+            128,
+            3584
+          ],
+          "mismatched_elements": 408799,
+          "max_absolute_difference": 3.337860107421875e-06
+        },
+        "rank0_local_max": {
+          "exact": false,
+          "shape": [
+            128,
+            1
+          ],
+          "mismatched_elements": 103,
+          "max_absolute_difference": 2.86102294921875e-06
+        },
+        "rank1_rotation": {
+          "exact": false,
+          "shape": [
+            128,
+            3584
+          ],
+          "mismatched_elements": 409309,
+          "max_absolute_difference": 3.0994415283203125e-06
+        },
+        "rank1_local_max": {
+          "exact": false,
+          "shape": [
+            128,
+            1
+          ],
+          "mismatched_elements": 110,
+          "max_absolute_difference": 2.384185791015625e-06
+        },
+        "global_max": {
+          "exact": false,
+          "shape": [
+            128,
+            1
+          ],
+          "mismatched_elements": 104,
+          "max_absolute_difference": 2.86102294921875e-06
+        },
+        "scale": {
+          "exact": false,
+          "shape": [
+            128,
+            1
+          ],
+          "mismatched_elements": 104,
+          "max_absolute_difference": 2.2351741790771484e-08
+        },
+        "rank0_proxy_codes": {
+          "exact": false,
+          "shape": [
+            128,
+            3584
+          ],
+          "mismatched_elements": 10,
+          "max_absolute_difference": 1.0
+        },
+        "rank1_proxy_codes": {
+          "exact": false,
+          "shape": [
+            128,
+            3584
+          ],
+          "mismatched_elements": 4,
+          "max_absolute_difference": 1.0
+        }
+      },
+      "t4_tilelang_quantizer_executed": false
+    },
+    {
+      "rows": 6814,
+      "checks": {
+        "rank0_rotation": {
+          "exact": true,
+          "shape": [
+            6814,
+            3584
+          ]
+        },
+        "rank0_local_max": {
+          "exact": true,
+          "shape": [
+            6814,
+            1
+          ]
+        },
+        "rank1_rotation": {
+          "exact": true,
+          "shape": [
+            6814,
+            3584
+          ]
+        },
+        "rank1_local_max": {
+          "exact": true,
+          "shape": [
+            6814,
+            1
+          ]
+        },
+        "global_max": {
+          "exact": true,
+          "shape": [
+            6814,
+            1
+          ]
+        },
+        "scale": {
+          "exact": true,
+          "shape": [
+            6814,
+            1
+          ]
+        },
+        "rank0_proxy_codes": {
+          "exact": true,
+          "shape": [
+            6814,
+            3584
+          ]
+        },
+        "rank1_proxy_codes": {
+          "exact": true,
+          "shape": [
+            6814,
+            3584
+          ]
+        }
+      },
+      "t4_tilelang_quantizer_executed": false
+    },
+    {
+      "rows": 59134,
+      "checks": {
+        "rank0_rotation": {
+          "exact": true,
+          "shape": [
+            59134,
+            3584
+          ]
+        },
+        "rank0_local_max": {
+          "exact": true,
+          "shape": [
+            59134,
+            1
+          ]
+        },
+        "rank1_rotation": {
+          "exact": true,
+          "shape": [
+            59134,
+            3584
+          ]
+        },
+        "rank1_local_max": {
+          "exact": true,
+          "shape": [
+            59134,
+            1
+          ]
+        },
+        "global_max": {
+          "exact": true,
+          "shape": [
+            59134,
+            1
+          ]
+        },
+        "scale": {
+          "exact": true,
+          "shape": [
+            59134,
+            1
+          ]
+        },
+        "rank0_proxy_codes": {
+          "exact": true,
+          "shape": [
+            59134,
+            3584
+          ]
+        },
+        "rank1_proxy_codes": {
+          "exact": true,
+          "shape": [
+            59134,
+            3584
+          ]
+        }
+      },
+      "t4_tilelang_quantizer_executed": false
+    },
+    {
+      "rows": 65166,
+      "checks": {
+        "rank0_rotation": {
+          "exact": true,
+          "shape": [
+            65166,
+            3584
+          ]
+        },
+        "rank0_local_max": {
+          "exact": true,
+          "shape": [
+            65166,
+            1
+          ]
+        },
+        "rank1_rotation": {
+          "exact": true,
+          "shape": [
+            65166,
+            3584
+          ]
+        },
+        "rank1_local_max": {
+          "exact": true,
+          "shape": [
+            65166,
+            1
+          ]
+        },
+        "global_max": {
+          "exact": true,
+          "shape": [
+            65166,
+            1
+          ]
+        },
+        "scale": {
+          "exact": true,
+          "shape": [
+            65166,
+            1
+          ]
+        },
+        "rank0_proxy_codes": {
+          "exact": true,
+          "shape": [
+            65166,
+            3584
+          ]
+        },
+        "rank1_proxy_codes": {
+          "exact": true,
+          "shape": [
+            65166,
+            3584
+          ]
+        }
+      },
+      "t4_tilelang_quantizer_executed": false
+    }
+  ],
+  "p0c_rotation_proxy": [
+    {
+      "rows": 128,
+      "metrics": {
+        "padded": {
+          "median_ms_sm120_proxy": 0.1221,
+          "incremental_allocated_peak_mib": 5.25
+        },
+        "local": {
+          "median_ms_sm120_proxy": 0.0678,
+          "incremental_allocated_peak_mib": 1.75
+        },
+        "measured_proxy_peak_reduction_mib": 3.5,
+        "caveat": "SM120 PyTorch zero/fill and cuBLAS only; not SM75 packing/TileLang or E2E"
+      }
+    },
+    {
+      "rows": 6814,
+      "metrics": {
+        "padded": {
+          "median_ms_sm120_proxy": 2.5945,
+          "incremental_allocated_peak_mib": 278.641
+        },
+        "local": {
+          "median_ms_sm120_proxy": 0.8312,
+          "incremental_allocated_peak_mib": 93.16
+        },
+        "measured_proxy_peak_reduction_mib": 185.481,
+        "caveat": "SM120 PyTorch zero/fill and cuBLAS only; not SM75 packing/TileLang or E2E"
+      }
+    },
+    {
+      "rows": 59134,
+      "metrics": {
+        "padded": {
+          "median_ms_sm120_proxy": 25.2971,
+          "incremental_allocated_peak_mib": 2425.418
+        },
+        "local": {
+          "median_ms_sm120_proxy": 8.0456,
+          "incremental_allocated_peak_mib": 808.473
+        },
+        "measured_proxy_peak_reduction_mib": 1616.945,
+        "caveat": "SM120 PyTorch zero/fill and cuBLAS only; not SM75 packing/TileLang or E2E"
+      }
+    },
+    {
+      "rows": 65166,
+      "metrics": {
+        "padded": {
+          "median_ms_sm120_proxy": 25.3513,
+          "incremental_allocated_peak_mib": 2673.059
+        },
+        "local": {
+          "median_ms_sm120_proxy": 8.0907,
+          "incremental_allocated_peak_mib": 890.941
+        },
+        "measured_proxy_peak_reduction_mib": 1782.118,
+        "caveat": "SM120 PyTorch zero/fill and cuBLAS only; not SM75 packing/TileLang or E2E"
+      }
+    }
+  ]
+}

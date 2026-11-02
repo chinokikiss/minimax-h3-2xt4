@@ -97,7 +97,7 @@ def shared_column_linears(x,projections,*,convrot=True,convrot_groupsize=256):
 
 
 def column_linear(x, weight, weight_scale, *, convrot=True,
-                  convrot_groupsize=256, out_dtype=torch.float16, backend='preallocated'):
+                  convrot_groupsize=256, out_dtype=torch.float16, backend='preallocated', p0_a1=False):
     if backend not in ('preallocated','cuda_int8_tilelang'):
         raise ValueError('Unknown column linear backend')
     kwargs = dict(convrot=convrot, convrot_groupsize=convrot_groupsize)
@@ -109,6 +109,13 @@ def column_linear(x, weight, weight_scale, *, convrot=True,
                 input_act_eps=0., residual=None, residual_scale=None, **kwargs)
     implementation = ck.registry.get_implementation('int8_linear', kwargs=call)
     if implementation is not eager.int8_linear:
+        if p0_a1 and backend=='cuda_int8_tilelang':
+            from comfy_kitchen.backends import cuda as kitchen
+            if implementation is kitchen.int8_linear:
+                from patches.dit_kitchen_turing_a1 import turing_column_a1
+                output=turing_column_a1(x,weight,weight_scale,
+                    convrot=convrot,convrot_groupsize=convrot_groupsize,out_dtype=out_dtype)
+                if output is not None:return output
         return ck.int8_linear(x, weight, weight_scale, None, out_dtype, **kwargs)
     # Experimental routes stay scoped to the actual aligned H3 TP2 columns.
     # Other devices/shapes retain the pinned selected implementation.

@@ -1,0 +1,61 @@
+{
+  "date": "2026-11-02",
+  "kernel": "pamcks/h3-1mp-fp16-512-sol-v2-8nfe-10s-p0-20261102",
+  "version": 2,
+  "user_completion_signal": true,
+  "collection_type": "one_version_bound_final_collection",
+  "final_collection_count": 1,
+  "transfer_attempts": 2,
+  "transfer_notes": [
+    {
+      "attempt": 1,
+      "action": "download version-2 final artifacts",
+      "result": "partial_files_downloaded_then_kaggle_cdn_tls_eof",
+      "not_execution_failure": true
+    },
+    {
+      "attempt": 2,
+      "action": "version-2 missing-file-only bounded retry using file pattern",
+      "result": "success",
+      "not_resubmission": true
+    }
+  ],
+  "status_polling": false,
+  "live_log_polling": false,
+  "notebook_resubmission": false,
+  "relative_archive": "gpu_final_v2/",
+  "artifact_files": 28,
+  "artifact_bytes": 50412627,
+  "outcome": {
+    "status": "complete",
+    "physical_dual_t4_verified": true,
+    "completed_nfe": 8,
+    "requested_nfe": 8,
+    "offline_bake_exit_code": 0,
+    "e2e_exit_code": 0,
+    "e2e_command_seconds": 1918.628081758,
+    "supervisor_exit_code": 0,
+    "supervisor_seconds": 2814.325014357
+  },
+  "backend_dispatch": {
+    "per_rank_sol_calls": 400,
+    "per_rank_kitchen_dit_calls": 0,
+    "per_rank_sol_per_nfe": 50,
+    "per_rank_scaled_fp16_epilogue_calls": 900,
+    "per_rank_fused_swiglu_prepare_calls": 450,
+    "video_decode_fallback": null,
+    "audio_decode_fallback": null,
+    "p0_individual_branch_hit_counts_recorded": false
+  },
+  "evidence_summary": {
+    "global_max_pytorch_allocated_gib": 12.605559349060059,
+    "rank0_max_reserved_gib": 13.705078125,
+    "rank1_max_reserved_gib": 14.306640625,
+    "rank0_max_nvml_device_used_gib": 14.939,
+    "rank1_max_nvml_device_used_gib": 14.982,
+    "finite_intermediate_summaries": 48,
+    "finite_intermediate_passes": 48,
+    "media_decode_exit_code": 0
+  },
+  "report": "../../reports/H3_1MP_P0_SIXROW_E2E_T4_V2_RESULTS_20261102.md"
+}

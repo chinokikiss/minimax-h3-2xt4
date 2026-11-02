@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-02",
+  "status": "accepted",
+  "kernel": "pamcks/h3-1mp-fp16-512-sol-v2-8nfe-10s-p0-20261102",
+  "url": "https://www.kaggle.com/code/pamcks/h3-1mp-fp16-512-sol-v2-8nfe-10s-p0-20261102",
+  "version": 1,
+  "requested_gpu_count": 2,
+  "attempt": 2,
+  "first_attempt": "gpu_push_attempt1.json",
+  "user_authorized_retry": true,
+  "cli_exit_code": 0,
+  "cli_response": "Kernel version 1 successfully pushed.",
+  "notebook_bytes": 499160,
+  "overlay_count": 95,
+  "local_delivery_tests_passed": 5,
+  "local_regression_tests_passed": 44,
+  "status_polling": false,
+  "live_log_polling": false,
+  "final_collection_count": 1,
+  "physical_gpu_execution_verified": true,
+  "final_execution_status": "failed_cuda_oom_first_dit_o_proj",
+  "final_archive": "gpu_final_v1",
+  "failure_report": "../../reports/H3_1MP_P0_E2E_T4_FAILURE_20261102.md",
+  "production_p0_defaults": true,
+  "residual_exponent": 9,
+  "dit_attention_schedule": "1-8:sol@1.0",
+  "canvas": [
+    1344,
+    768
+  ],
+  "steps": 8
+}

@@ -1,0 +1,683 @@
+{
+  "study": "Local non-qualified P0-C sequence-length numerical proxy",
+  "date": "2026-11-02",
+  "environment": {
+    "conda": "comfyui",
+    "gpu": "NVIDIA RTX 5060 Ti",
+    "sm": "sm_120",
+    "physical_t4": false,
+    "actual_sm75_tilelang_quantizer": false
+  },
+  "method": "Compare Kitchen FP32 full TP2 packed rotation and local-width rotation for two deterministic synthetic ranks; global max/scale and PyTorch INT8 proxy. This does not execute actual physical T4 or full trained block.",
+  "reference": "benchmarks.verify_dit_p0a_p0c_local.p0c_exact",
+  "rows_tested": [
+    1,
+    127,
+    129,
+    256,
+    1024,
+    4096,
+    6815,
+    8192,
+    32768,
+    59135
+  ],
+  "results": [
+    {
+      "rows": 1,
+      "checks": {
+        "rank0_rotation": {
+          "exact": false,
+          "shape": [
+            1,
+            3584
+          ],
+          "mismatched_elements": 2895,
+          "max_absolute_difference": 7.152557373046875e-7
+        },
+        "rank0_local_max": {
+          "exact": true,
+          "shape": [
+            1,
+            1
+          ]
+        },
+        "rank1_rotation": {
+          "exact": false,
+          "shape": [
+            1,
+            3584
+          ],
+          "mismatched_elements": 2877,
+          "max_absolute_difference": 7.152557373046875e-7
+        },
+        "rank1_local_max": {
+          "exact": false,
+          "shape": [
+            1,
+            1
+          ],
+          "mismatched_elements": 1,
+          "max_absolute_difference": 2.384185791015625e-7
+        },
+        "global_max": {
+          "exact": true,
+          "shape": [
+            1,
+            1
+          ]
+        },
+        "scale": {
+          "exact": true,
+          "shape": [
+            1,
+            1
+          ]
+        },
+        "rank0_proxy_codes": {
+          "exact": true,
+          "shape": [
+            1,
+            3584
+          ]
+        },
+        "rank1_proxy_codes": {
+          "exact": true,
+          "shape": [
+            1,
+            3584
+          ]
+        }
+      },
+      "t4_tilelang_quantizer_executed": false
+    },
+    {
+      "rows": 127,
+      "checks": {
+        "rank0_rotation": {
+          "exact": false,
+          "shape": [
+            127,
+            3584
+          ],
+          "mismatched_elements": 406259,
+          "max_absolute_difference": 0.00000286102294921875
+        },
+        "rank0_local_max": {
+          "exact": false,
+          "shape": [
+            127,
+            1
+          ],
+          "mismatched_elements": 97,
+          "max_absolute_difference": 0.000002384185791015625
+        },
+        "rank1_rotation": {
+          "exact": false,
+          "shape": [
+            127,
+            3584
+          ],
+          "mismatched_elements": 405565,
+          "max_absolute_difference": 0.000003337860107421875
+        },
+        "rank1_local_max": {
+          "exact": false,
+          "shape": [
+            127,
+            1
+          ],
+          "mismatched_elements": 102,
+          "max_absolute_difference": 0.00000286102294921875
+        },
+        "global_max": {
+          "exact": false,
+          "shape": [
+            127,
+            1
+          ],
+          "mismatched_elements": 101,
+          "max_absolute_difference": 0.000002384185791015625
+        },
+        "scale": {
+          "exact": false,
+          "shape": [
+            127,
+            1
+          ],
+          "mismatched_elements": 101,
+          "max_absolute_difference": 1.862645149230957e-8
+        },
+        "rank0_proxy_codes": {
+          "exact": false,
+          "shape": [
+            127,
+            3584
+          ],
+          "mismatched_elements": 2,
+          "max_absolute_difference": 1
+        },
+        "rank1_proxy_codes": {
+          "exact": false,
+          "shape": [
+            127,
+            3584
+          ],
+          "mismatched_elements": 9,
+          "max_absolute_difference": 1
+        }
+      },
+      "t4_tilelang_quantizer_executed": false
+    },
+    {
+      "rows": 129,
+      "checks": {
+        "rank0_rotation": {
+          "exact": false,
+          "shape": [
+            129,
+            3584
+          ],
+          "mismatched_elements": 412508,
+          "max_absolute_difference": 0.0000030994415283203125
+        },
+        "rank0_local_max": {
+          "exact": false,
+          "shape": [
+            129,
+            1
+          ],
+          "mismatched_elements": 111,
+          "max_absolute_difference": 0.000002384185791015625
+        },
+        "rank1_rotation": {
+          "exact": false,
+          "shape": [
+            129,
+            3584
+          ],
+          "mismatched_elements": 412254,
+          "max_absolute_difference": 0.00000286102294921875
+        },
+        "rank1_local_max": {
+          "exact": false,
+          "shape": [
+            129,
+            1
+          ],
+          "mismatched_elements": 115,
+          "max_absolute_difference": 0.0000026226043701171875
+        },
+        "global_max": {
+          "exact": false,
+          "shape": [
+            129,
+            1
+          ],
+          "mismatched_elements": 115,
+          "max_absolute_difference": 0.0000026226043701171875
+        },
+        "scale": {
+          "exact": false,
+          "shape": [
+            129,
+            1
+          ],
+          "mismatched_elements": 114,
+          "max_absolute_difference": 2.0489096641540527e-8
+        },
+        "rank0_proxy_codes": {
+          "exact": false,
+          "shape": [
+            129,
+            3584
+          ],
+          "mismatched_elements": 6,
+          "max_absolute_difference": 1
+        },
+        "rank1_proxy_codes": {
+          "exact": true,
+          "shape": [
+            129,
+            3584
+          ]
+        }
+      },
+      "t4_tilelang_quantizer_executed": false
+    },
+    {
+      "rows": 256,
+      "checks": {
+        "rank0_rotation": {
+          "exact": true,
+          "shape": [
+            256,
+            3584
+          ]
+        },
+        "rank0_local_max": {
+          "exact": true,
+          "shape": [
+            256,
+            1
+          ]
+        },
+        "rank1_rotation": {
+          "exact": true,
+          "shape": [
+            256,
+            3584
+          ]
+        },
+        "rank1_local_max": {
+          "exact": true,
+          "shape": [
+            256,
+            1
+          ]
+        },
+        "global_max": {
+          "exact": true,
+          "shape": [
+            256,
+            1
+          ]
+        },
+        "scale": {
+          "exact": true,
+          "shape": [
+            256,
+            1
+          ]
+        },
+        "rank0_proxy_codes": {
+          "exact": true,
+          "shape": [
+            256,
+            3584
+          ]
+        },
+        "rank1_proxy_codes": {
+          "exact": true,
+          "shape": [
+            256,
+            3584
+          ]
+        }
+      },
+      "t4_tilelang_quantizer_executed": false
+    },
+    {
+      "rows": 1024,
+      "checks": {
+        "rank0_rotation": {
+          "exact": true,
+          "shape": [
+            1024,
+            3584
+          ]
+        },
+        "rank0_local_max": {
+          "exact": true,
+          "shape": [
+            1024,
+            1
+          ]
+        },
+        "rank1_rotation": {
+          "exact": true,
+          "shape": [
+            1024,
+            3584
+          ]
+        },
+        "rank1_local_max": {
+          "exact": true,
+          "shape": [
+            1024,
+            1
+          ]
+        },
+        "global_max": {
+          "exact": true,
+          "shape": [
+            1024,
+            1
+          ]
+        },
+        "scale": {
+          "exact": true,
+          "shape": [
+            1024,
+            1
+          ]
+        },
+        "rank0_proxy_codes": {
+          "exact": true,
+          "shape": [
+            1024,
+            3584
+          ]
+        },
+        "rank1_proxy_codes": {
+          "exact": true,
+          "shape": [
+            1024,
+            3584
+          ]
+        }
+      },
+      "t4_tilelang_quantizer_executed": false
+    },
+    {
+      "rows": 4096,
+      "checks": {
+        "rank0_rotation": {
+          "exact": true,
+          "shape": [
+            4096,
+            3584
+          ]
+        },
+        "rank0_local_max": {
+          "exact": true,
+          "shape": [
+            4096,
+            1
+          ]
+        },
+        "rank1_rotation": {
+          "exact": true,
+          "shape": [
+            4096,
+            3584
+          ]
+        },
+        "rank1_local_max": {
+          "exact": true,
+          "shape": [
+            4096,
+            1
+          ]
+        },
+        "global_max": {
+          "exact": true,
+          "shape": [
+            4096,
+            1
+          ]
+        },
+        "scale": {
+          "exact": true,
+          "shape": [
+            4096,
+            1
+          ]
+        },
+        "rank0_proxy_codes": {
+          "exact": true,
+          "shape": [
+            4096,
+            3584
+          ]
+        },
+        "rank1_proxy_codes": {
+          "exact": true,
+          "shape": [
+            4096,
+            3584
+          ]
+        }
+      },
+      "t4_tilelang_quantizer_executed": false
+    },
+    {
+      "rows": 6815,
+      "checks": {
+        "rank0_rotation": {
+          "exact": true,
+          "shape": [
+            6815,
+            3584
+          ]
+        },
+        "rank0_local_max": {
+          "exact": true,
+          "shape": [
+            6815,
+            1
+          ]
+        },
+        "rank1_rotation": {
+          "exact": true,
+          "shape": [
+            6815,
+            3584
+          ]
+        },
+        "rank1_local_max": {
+          "exact": true,
+          "shape": [
+            6815,
+            1
+          ]
+        },
+        "global_max": {
+          "exact": true,
+          "shape": [
+            6815,
+            1
+          ]
+        },
+        "scale": {
+          "exact": true,
+          "shape": [
+            6815,
+            1
+          ]
+        },
+        "rank0_proxy_codes": {
+          "exact": true,
+          "shape": [
+            6815,
+            3584
+          ]
+        },
+        "rank1_proxy_codes": {
+          "exact": true,
+          "shape": [
+            6815,
+            3584
+          ]
+        }
+      },
+      "t4_tilelang_quantizer_executed": false
+    },
+    {
+      "rows": 8192,
+      "checks": {
+        "rank0_rotation": {
+          "exact": true,
+          "shape": [
+            8192,
+            3584
+          ]
+        },
+        "rank0_local_max": {
+          "exact": true,
+          "shape": [
+            8192,
+            1
+          ]
+        },
+        "rank1_rotation": {
+          "exact": true,
+          "shape": [
+            8192,
+            3584
+          ]
+        },
+        "rank1_local_max": {
+          "exact": true,
+          "shape": [
+            8192,
+            1
+          ]
+        },
+        "global_max": {
+          "exact": true,
+          "shape": [
+            8192,
+            1
+          ]
+        },
+        "scale": {
+          "exact": true,
+          "shape": [
+            8192,
+            1
+          ]
+        },
+        "rank0_proxy_codes": {
+          "exact": true,
+          "shape": [
+            8192,
+            3584
+          ]
+        },
+        "rank1_proxy_codes": {
+          "exact": true,
+          "shape": [
+            8192,
+            3584
+          ]
+        }
+      },
+      "t4_tilelang_quantizer_executed": false
+    },
+    {
+      "rows": 32768,
+      "checks": {
+        "rank0_rotation": {
+          "exact": true,
+          "shape": [
+            32768,
+            3584
+          ]
+        },
+        "rank0_local_max": {
+          "exact": true,
+          "shape": [
+            32768,
+            1
+          ]
+        },
+        "rank1_rotation": {
+          "exact": true,
+          "shape": [
+            32768,
+            3584
+          ]
+        },
+        "rank1_local_max": {
+          "exact": true,
+          "shape": [
+            32768,
+            1
+          ]
+        },
+        "global_max": {
+          "exact": true,
+          "shape": [
+            32768,
+            1
+          ]
+        },
+        "scale": {
+          "exact": true,
+          "shape": [
+            32768,
+            1
+          ]
+        },
+        "rank0_proxy_codes": {
+          "exact": true,
+          "shape": [
+            32768,
+            3584
+          ]
+        },
+        "rank1_proxy_codes": {
+          "exact": true,
+          "shape": [
+            32768,
+            3584
+          ]
+        }
+      },
+      "t4_tilelang_quantizer_executed": false
+    },
+    {
+      "rows": 59135,
+      "checks": {
+        "rank0_rotation": {
+          "exact": true,
+          "shape": [
+            59135,
+            3584
+          ]
+        },
+        "rank0_local_max": {
+          "exact": true,
+          "shape": [
+            59135,
+            1
+          ]
+        },
+        "rank1_rotation": {
+          "exact": true,
+          "shape": [
+            59135,
+            3584
+          ]
+        },
+        "rank1_local_max": {
+          "exact": true,
+          "shape": [
+            59135,
+            1
+          ]
+        },
+        "global_max": {
+          "exact": true,
+          "shape": [
+            59135,
+            1
+          ]
+        },
+        "scale": {
+          "exact": true,
+          "shape": [
+            59135,
+            1
+          ]
+        },
+        "rank0_proxy_codes": {
+          "exact": true,
+          "shape": [
+            59135,
+            3584
+          ]
+        },
+        "rank1_proxy_codes": {
+          "exact": true,
+          "shape": [
+            59135,
+            3584
+          ]
+        }
+      },
+      "t4_tilelang_quantizer_executed": false
+    }
+  ]
+}

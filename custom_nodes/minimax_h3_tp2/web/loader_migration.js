@@ -41,10 +41,34 @@ export const v3Widgets = [
     "dit_prepared_attention",
 ];
 
+// Version 4 is the current pinned Loader widget layout before the two lifetime
+// switches were added. It must be migrated by name; otherwise a saved debug
+// value can occupy the P0-2 slot when widgets_values is positional.
+export const v4Widgets = [
+    "text_encoder", "diffusion_model", "gpu_weight_window_gib", "ram_cache_per_rank_gib",
+    "idle_residency", "idle_weight_gib", "lora_row_partial_reduce",
+    "te_attention", "dit_attention", "dit_attention_schedule", "sol_tau",
+    "video_attention", "row_linear_backend", "adaptive_lookahead", "fc2_quantizer",
+    "lora_mode", "tensor_flow", "residual_exponent", "vision_residual_exponent",
+    "video_residual_exponent", "video_decode_reserve_gib", "prefetch_lifecycle",
+    "memory_pressure_aware", "dit_reserve_gib", "command_timeout_seconds",
+    "rank_checkpoint_dir", "lora_selective_qkv_b", "column_linear_backend",
+    "dit_rms_rope", "aot_precompile", "dit_fused_norm", "dit_fused_gate",
+    "dit_fused_row_gate", "dit_prepared_attention", "debug",
+];
+
+// Version 5 added P0-2/P0-3; v6 added P0-A1/P0-C; v7 adds P0-B.
+export const v5Widgets = [...v4Widgets.slice(0, -1),
+    'dit_p0_2_lifetime', 'dit_p0_3_lifetime', 'debug'];
+export const v6Widgets = [...v5Widgets.slice(0, -1),
+    'dit_p0_a1_turing', 'dit_p0_c_local_rotation', 'debug'];
+
 export function restoreWidgets(node, info, schema) {
     const version = info.properties?.h3_configuration_version ?? 1;
-    if (version >= 4) return;
-    const ordered = version === 3 ? v3Widgets : (version === 2 ? v2Widgets : legacyWidgets);
+    if (version >= 7) return;
+    const ordered = version === 6 ? v6Widgets : (version === 5 ? v5Widgets :
+        (version === 4 ? v4Widgets : (version === 3 ? v3Widgets :
+        (version === 2 ? v2Widgets : legacyWidgets))));
     const saved = Object.fromEntries(ordered.slice(0, info.widgets_values?.length ?? 0)
         .map((name, i) => [name, info.widgets_values[i]]));
     Object.assign(saved, info.widgets_values_named ?? {});
@@ -67,7 +91,7 @@ export function restoreWidgets(node, info, schema) {
         widget.value = value;
     }
     node.properties ??= {};
-    node.properties.h3_configuration_version = 4;
+    node.properties.h3_configuration_version = 7;
 }
 
 app.registerExtension({
@@ -79,7 +103,7 @@ app.registerExtension({
         nodeType.prototype.onNodeCreated = function (...args) {
             const result = created?.apply(this, args);
             this.properties ??= {};
-            this.properties.h3_configuration_version = 4;
+            this.properties.h3_configuration_version = 7;
             return result;
         };
         const configure = nodeType.prototype.onConfigure;

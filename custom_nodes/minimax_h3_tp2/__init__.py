@@ -56,6 +56,11 @@ class MiniMaxH3TP2Loader:
                         'dit_fused_gate':('BOOLEAN',{'default':True,'tooltip':'T4 FP16 gated residual fusion with FP32 FMA and FP16 storage.'}),
                         'dit_fused_row_gate':('BOOLEAN',{'default':True,'tooltip':'Fuse scaled-FP16 row epilogue and residual gate for offline/baked DiT. Online LoRA and unsupported routes retain separate operations.'}),
                         'dit_prepared_attention':('BOOLEAN',{'default':True,'tooltip':'Prepare Kitchen INT8 attention, release floating QKV, then execute. Other attention backends remain unchanged.'}),
+                        'dit_p0_2_lifetime':('BOOLEAN',{'default':True,'tooltip':'Default on: release the owned attention output and FP32 preparation during fused DiT O projection. Requires SM75 TP2 FP16 tensor flow, fused row-gate and no online LoRA.'}),
+                        'dit_p0_3_lifetime':('BOOLEAN',{'default':True,'tooltip':'Default on: release the owned FC1 output after fused_stored SwiGLU preparation in DiT FC2. Requires SM75 TP2 FP16 tensor flow, fused row-gate and no online LoRA.'}),
+                        'dit_p0_b_inplace':('BOOLEAN',{'default':True,'tooltip':'Default on: reuse the owned FC1 FP16 allocation for in-place FP32 FC2 rotation on qualified SM75 fused_stored DiT only. Requires P0-3, no online LoRA and an unaliased contiguous source. Other paths retain P0-3.'}),
+                        'dit_p0_a1_turing':('BOOLEAN',{'default':True,'tooltip':'Default on: omit Kitchen 0.2.37 unused Turing FP16 QKV/FC1 buffer; other backends preserve the original implementation.'}),
+                        'dit_p0_c_local_rotation':('BOOLEAN',{'default':True,'tooltip':'Default on: local FP32 ConvRot for all positive sequence lengths on eligible SM75 TP2 DiT O projection. Small FP32 rounding/INT8 code differences are accepted. Unsupported devices, ownership, LoRA or mode retain P0-2 packed.'}),
                         'debug':('BOOLEAN',{'default':False,'tooltip':'Opt in to detailed runtime diagnostics and Sol route statistics. Production inference keeps diagnostic collection disabled.'})}}
 
     RETURN_TYPES = ('MODEL', 'CLIP', 'MINIMAX_TP2_SESSION')
@@ -77,6 +82,8 @@ class MiniMaxH3TP2Loader:
              command_timeout_seconds=1500,rank_checkpoint_dir='',
              lora_selective_qkv_b=True,column_linear_backend='cuda_int8_tilelang',dit_rms_rope='tilelang_fp32',aot_precompile=True,
              dit_fused_norm=True,dit_fused_gate=True,dit_fused_row_gate=True,dit_prepared_attention=True,
+             dit_p0_2_lifetime=True,dit_p0_3_lifetime=True,dit_p0_b_inplace=True,
+             dit_p0_a1_turing=True,dit_p0_c_local_rotation=True,
              verify_dit_weights=False,debug=False,**retired_options):
         global _service
         from patches.h3_configuration import check_retired_loader_options
@@ -121,7 +128,10 @@ class MiniMaxH3TP2Loader:
                 fc2_quantizer=fc2_quantizer,column_linear_backend=column_linear_backend,
                 dit_rms_rope=dit_rms_rope,aot_precompile=aot_precompile,
                 dit_fused_norm=dit_fused_norm,dit_fused_gate=dit_fused_gate,
-                dit_fused_row_gate=dit_fused_row_gate,dit_prepared_attention=dit_prepared_attention))
+                dit_fused_row_gate=dit_fused_row_gate,dit_prepared_attention=dit_prepared_attention,
+                dit_p0_2_lifetime=dit_p0_2_lifetime,dit_p0_3_lifetime=dit_p0_3_lifetime,
+                dit_p0_b_inplace=dit_p0_b_inplace,
+                dit_p0_a1_turing=dit_p0_a1_turing,dit_p0_c_local_rotation=dit_p0_c_local_rotation))
         with _lock:
             if _service is None or _service.closed or _service.config != config:
                 if _service is not None:

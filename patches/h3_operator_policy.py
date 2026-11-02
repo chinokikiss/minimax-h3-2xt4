@@ -19,9 +19,17 @@ class H3OperatorPolicy:
     dit_fused_gate: bool = True
     dit_fused_row_gate: bool = True
     dit_prepared_attention: bool = True
+    # Production inference lifetime optimizations; per-block gates still apply.
+    dit_p0_2_lifetime: bool = True
+    dit_p0_3_lifetime: bool = True
+    dit_p0_b_inplace: bool = True
+    dit_p0_a1_turing: bool = True
+    dit_p0_c_local_rotation: bool = True
 
     def __post_init__(self):
-        for name in ('dit_fused_norm','dit_fused_gate','dit_fused_row_gate','dit_prepared_attention'):
+        for name in ('dit_fused_norm','dit_fused_gate','dit_fused_row_gate','dit_prepared_attention',
+                     'dit_p0_2_lifetime','dit_p0_3_lifetime','dit_p0_b_inplace',
+                      'dit_p0_a1_turing','dit_p0_c_local_rotation'):
             if type(getattr(self,name)) is not bool:raise ValueError(name+' must be boolean')
         if self.dit_rms_rope not in ('native','tilelang_fp32'):raise ValueError('Unknown DiT RMS-RoPE backend')
         if self.te_attention not in ('kitchen_causal','native'):raise ValueError('Unknown TE attention')
@@ -52,7 +60,18 @@ def configure_block(block,kind,policy):
     if kind=='dit':
         for name in ('qkv_proj','fc1'):
             column=getattr(block,name,None)
-            if column is not None:column.operator_policy=policy
+            if column is not None:
+                column.operator_policy=policy
+                column._vram_p0_a1=policy.dit_p0_a1_turing
+        # Only the two selected DiT row projections consume their input.
+        # The FC1 producer must preserve the storage owner (not a view) so
+        # that FC2's set_() actually releases it. QKV and TE are untouched.
+        block.out_proj._vram_p0_2=policy.dit_p0_2_lifetime
+        block.out_proj._vram_p0_c=policy.dit_p0_c_local_rotation
+        block.fc2._vram_p0_3=policy.dit_p0_3_lifetime
+        block.fc2._vram_p0_b=policy.dit_p0_b_inplace
+        if getattr(block,'fc1',None) is not None:
+            block.fc1._vram_p0_3_producer=policy.dit_p0_3_lifetime
     return block
 
 

@@ -64,15 +64,25 @@ def fused_kernel(rows,width,dtype,arch,phase='stored'):
     return tilelang.compile(quant,out_idx=[2,3],target={'kind':'cuda','arch':arch},pass_configs={'tl.enable_async_copy':False})
 
 
-def prepare(x,comm,mode='fused_stored',*,arch='sm_75'):
+def prepare(x,comm,mode='fused_stored',*,arch='sm_75',consume_input=False,p0_b=False):
+    if p0_b:
+        from patches.tilelang_swiglu_inplace import prepare as prepare_inplace
+        result=prepare_inplace(x,comm,mode=mode,arch=arch,consume_input=consume_input)
+        if result is not None:return result
     width=x.shape[-1]//2;flat=x.reshape(-1,2*width).contiguous()
     if mode=='control':
         from patches import tilelang_swiglu_pad as previous
         return previous.global_row_quantize(flat.float(),comm,2,256,'swiglu','packed','owned_fp32')
     if mode not in ('fused_stored','fused_recompute'):raise ValueError(mode)
+    if consume_input and mode!='fused_stored':raise ValueError('P0-3 consumption requires fused_stored')
     dtype={torch.float16:'float16',torch.float32:'float32'}[flat.dtype]
     phase='stored' if mode=='fused_stored' else 'maximum'
     rotated,groups=fused_kernel(flat.shape[0],width,dtype,arch,phase)(flat)
+    if consume_input:
+        # The stored kernel is the last reader. Detach every live input view
+        # before maximum/quantization allocate their own output storage.
+        del flat
+        x.set_()
     maximum=groups.amax(-1,keepdim=True);del groups
     comm.all_reduce(maximum,op=comm.ReduceOp.MAX)
     if mode=='fused_recompute':
@@ -95,13 +105,13 @@ def supported(x,weight,weight_scale,world_size,groupsize):
         and torch.cuda.get_device_capability(x.device)==(7,5))
 
 
-def row_linear(x,weight,weight_scale,comm,*,mode,scaled_transport,finish_fn=None):
+def row_linear(x,weight,weight_scale,comm,*,mode,scaled_transport,finish_fn=None,consume_input=False,p0_b=False):
     """Return FP32 through the caller's LoRA addition, then store only once."""
     from patches import parallel_int8 as original,tilelang_transport_p2 as codec
     from patches.tilelang_row_quant import label
     if finish_fn is not None and not scaled_transport:raise ValueError('Fused row-gate requires scaled FP16 transport')
-    with label('fp32_swiglu_convrot_quantize'):q,scale=prepare(x,comm,mode)
     shape=x.shape
+    with label('fp32_swiglu_convrot_quantize'):q,scale=prepare(x,comm,mode,consume_input=consume_input,p0_b=p0_b)
     del x
     local_k=q.shape[-1]
     with label('int8_gemm'):partial=original.int_mm(q,weight)

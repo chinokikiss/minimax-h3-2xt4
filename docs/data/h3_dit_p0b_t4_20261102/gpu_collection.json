@@ -1,0 +1,42 @@
+{
+  "status": "final_artifacts_collected_and_audited",
+  "date_utc": "2026-11-02",
+  "provider_url": "https://www.kaggle.com/code/pamcks/h3-dit-p0-b-t4-20261102",
+  "version": 1,
+  "collection_command": "C:\\ProgramData\\miniconda3\\envs\\comfyui\\python.exe -m kaggle kernels output pamcks/h3-dit-p0-b-t4-20261102/1 -p docs/data/h3_dit_p0b_t4_20261102/gpu_final",
+  "collection_exit_code": 0,
+  "single_logical_final_download": true,
+  "worker_status": "complete",
+  "worker_exit_code": 0,
+  "supervisor_exit_code": 0,
+  "ranks_complete": [
+    true,
+    true
+  ],
+  "hardware": "2 x Tesla T4 SM75",
+  "source_manifest_files": 106,
+  "source_manifest_sha256": "af147d56c50f2c48dee013a9b2e9325a95c6bf80cf4672158769a98219356aa6",
+  "source_binding_matched": true,
+  "all_int8_code_scale_bit_exact": true,
+  "trained_block_final_output_bit_exact": true,
+  "fc2_reduction_gib_by_rows": {
+    "59134": 1.1900138854980469,
+    "65166": 1.3115158081054688
+  },
+  "block_reduction_gib_by_rows": {
+    "59134": 0.5966911315917969,
+    "65166": 0.5030231475830078
+  },
+  "slower_rank_median_percent_by_rows": {
+    "59134": 0.9291682745385499,
+    "65166": -0.7884108491717168
+  },
+  "performance_gate": "not_certified_fixed_within_pair_order_and_59k_slower",
+  "full_h3_e2e_qualified": false,
+  "production_p0b_enabled": false,
+  "report": "docs/reports/H3_DIT_P0_B_T4_20261102.md",
+  "analysis": "docs/data/h3_dit_p0b_t4_20261102/t4_analysis.json",
+  "no_kaggle_status_polling": true,
+  "no_live_log_polling": true,
+  "no_auto_retry": true
+}

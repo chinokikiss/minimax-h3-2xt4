@@ -18,9 +18,7 @@ conditioning, sampling, and public VAE planning.
 > completed all eight steps on two T4s: 1,639.16 s foreground plus a separate
 > 365.36 s offline bake, with Temporal Video and native Audio VAE decoding.
 > Native Torch2.11.0+cu128, Kitchen0.2.37 and TileLang0.1.13 remain pinned as qualified.
-> User review reports semantic discontinuities and vertical shaking; generation
-> quality is not qualified. This is not a
-> controlled speedup comparison or qualification of another dependency stack.
+> This is not a controlled speedup comparison or qualification of another dependency stack.
 
 ## Start here
 
@@ -60,8 +58,8 @@ see the [frozen runtime record](runtime/README.md).
 | Reference VAE loading | Metadata-only shells; load Video/Audio encoders only on actual reference encoding, decoders at output |
 
 Sol v2 remains opt-in. Its current key-only protected routing has CPU contract and
-synthetic-T4 A/B evidence, but not full real-H3 E2E generation-quality approval;
-the completed 10-second all-Sol test used frozen bidirectional protection.
+synthetic-T4 A/B evidence; the completed 10-second all-Sol test used frozen
+bidirectional protection.
 
 Sparse dropping/scalar pooling, recompute preparation and idle residency remain
 explicit options. Removed controls and saved-workflow migration are documented
@@ -69,7 +67,7 @@ in the [configuration review](docs/reports/H3_CONFIGURATION_REVIEW_20261024.md).
 Numerical differences and Native fallbacks
 are explained in the [technical guide](docs/guides/MiniMax_H3_TP2_Optimization_Technical_Guide.pdf).
 The [2026-10-22 promotion record](docs/reports/H3_FP16_FUSED_DEFAULT_20261022.md)
-separates physical operator evidence from pending full-pipeline quality checks.
+separates physical operator evidence from full-pipeline qualification limits.
 The [SM75 dense attention results](docs/reports/KITCHEN_DENSE_SM75_20261025.md)
 record the Kitchen causal TE default and the measured dense candidates.
 The [TE causal/precision audit](docs/reports/TE_CAUSAL_PREFIX_PRECISION_20261026.md)

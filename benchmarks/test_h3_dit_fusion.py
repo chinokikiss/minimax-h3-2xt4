@@ -178,4 +178,93 @@ class ProductionFusion(unittest.TestCase):
             self.assertNotIn('from benchmarks', (root/'patches'/f'{name}.py').read_text())
 
 
+    @torch.no_grad()
+    def test_first_nfe_six_row_ref2va_gate_enables_p02_p0c(self):
+        # At sigma=1, audio and video timesteps coincide; two image references
+        # add the visual conditioning timestep but no conditioned-audio row.
+        sigma_v=1.
+        base=sigma_v/(6.+sigma_v*(1.-6.))
+        sigma_a=3.*base/(1.+(3.-1.)*base)
+        times={1.-sigma_v,1.-sigma_a,max(1.-sigma_v,.999)}
+        self.assertEqual(len(times)*3,6)
+        segments=[(0,1,0),(1,2,5)]
+        self.assertEqual(fusion.segment_key(2,segments,6),tuple(segments))
+        self.assertIsNone(fusion.segment_key(2,[(0,2,6)],6))
+        self.assertIsNone(fusion.segment_key(2,[(0,2,torch.tensor([0,1]))],6))
+
+        from patches import tilelang_transport_p2 as transport
+        source=torch.randn(2,3584,dtype=torch.float16)
+        original=source.float().clone()
+        residual=torch.randn(2,5376,dtype=torch.float16)
+        gate=torch.randn(6,5376,dtype=torch.float32)
+        from patches.tp_dit import RowParallelLinearINT8
+        module=RowParallelLinearINT8(7168,5376,device='cpu')
+        module.operator_policy=H3OperatorPolicy()
+        module._vram_p0_2=True;module._vram_p0_c=True
+        sentinel=object()
+        with patch.object(fusion,'supported',return_value=True), \
+                patch.object(fusion,'labels_for',return_value=torch.tensor([0,5],dtype=torch.int32)) as labels, \
+                patch.object(transport,'row_linear',return_value=sentinel) as run:
+            result=module(source,residual=residual,gate=gate,segments=segments)
+        self.assertIs(result,sentinel)
+        labels.assert_called_once_with(residual,segments,6)
+        run.assert_called_once()
+        args,kwargs=run.call_args
+        self.assertTrue(torch.equal(args[0],original))
+        self.assertEqual(args[0].dtype,torch.float32)
+        self.assertTrue(kwargs['consume_input'])
+        self.assertTrue(kwargs['p0_c'])
+        self.assertTrue(callable(kwargs['finish_fn']))
+        self.assertEqual(source.numel(),0)
+
+    @torch.no_grad()
+    def test_six_row_fc2_retains_p03_p0b_dispatch(self):
+        from patches.tp_dit import RowParallelLinearINT8
+        from patches import tilelang_swiglu_quant as swiglu
+        module=RowParallelLinearINT8(14336,5376,device='cpu')
+        module.operator_policy=H3OperatorPolicy()
+        module._vram_p0_3=True;module._vram_p0_b=True
+        source=torch.randn(2,14336,dtype=torch.float16)
+        residual=torch.randn(2,5376,dtype=torch.float16)
+        gate=torch.randn(6,5376)
+        segments=[(0,2,5)]
+        sentinel=object()
+        with patch.object(fusion,'supported',return_value=True), \
+                patch.object(fusion,'labels_for',return_value=torch.tensor([5,5],dtype=torch.int32)) as labels, \
+                patch.object(swiglu,'row_linear',return_value=sentinel) as run:
+            result=module(source,input_act='swiglu',residual=residual,gate=gate,segments=segments)
+        self.assertIs(result,sentinel)
+        labels.assert_called_once_with(residual,segments,6)
+        run.assert_called_once()
+        self.assertIs(run.call_args.args[0],source)
+        self.assertTrue(run.call_args.kwargs['consume_input'])
+        self.assertTrue(run.call_args.kwargs['p0_b'])
+        self.assertEqual(source.numel(),2*14336)
+
+    @torch.no_grad()
+    def test_six_row_norm_gate_factories_and_mismatched_table_rejection(self):
+        x=torch.ones(2,5376,dtype=torch.float16)
+        norm=nn.RMSNorm(5376,eps=1e-5)
+        shift=torch.zeros(6,5376)
+        scale=torch.ones(6,5376)
+        gate=torch.ones(6,5376)
+        segments=[(0,2,5)]
+        labels=torch.tensor([5,5],dtype=torch.int32)
+        with patch.object(fusion,'supported',return_value=True), \
+                patch.object(fusion,'labels_for',return_value=labels) as labels_for, \
+                patch.object(fusion,'norm_kernel',return_value=lambda *args:x.clone()) as factory:
+            self.assertIsNotNone(fusion.modulated_norm(norm,x,shift,scale,segments))
+        factory.assert_called_once_with(2,5376,6,float(norm.eps))
+        labels_for.assert_called_once_with(x,segments,6)
+        with patch.object(fusion,'supported',return_value=True), \
+                patch.object(fusion,'norm_kernel',side_effect=AssertionError('Mismatched modulation tables')):
+            self.assertIsNone(fusion.modulated_norm(norm,x,shift,torch.ones(9,5376),segments))
+        with patch.object(fusion,'supported',return_value=True), \
+                patch.object(fusion,'labels_for',return_value=labels) as labels_for, \
+                patch.object(fusion,'gate_kernel',return_value=lambda *args:None) as factory:
+            self.assertIs(fusion.gated_add(x,gate,x.clone(),segments),x)
+        factory.assert_called_once_with(2,5376,6)
+        labels_for.assert_called_once_with(x,segments,6)
+
+
 if __name__=='__main__':unittest.main(verbosity=2)

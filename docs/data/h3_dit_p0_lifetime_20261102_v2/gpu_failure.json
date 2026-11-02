@@ -1,0 +1,40 @@
+{
+  "status": "failed",
+  "kernel": "pamcks/h3-dit-p0-lifetime-t4-v2-20261102",
+  "version": 1,
+  "final_artifacts_collected": true,
+  "collection_count": 1,
+  "hardware": {
+    "devices": [
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ]
+      },
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ]
+      }
+    ],
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8"
+  },
+  "worker_exit_code": 1,
+  "worker_seconds": 8.734619215,
+  "rank_errors": {
+    "rank0": "ValueError('Unknown DiT attention') at H3OperatorPolicy(dit_attention='sol')",
+    "rank1": "ValueError('Unknown DiT attention') at H3OperatorPolicy(dit_attention='sol')"
+  },
+  "root_cause": "The P0 notebook applied only the six candidate patches; it omitted the E2E source overlay closure containing current patches/h3_operator_policy.py, so the frozen bootstrap's older H3OperatorPolicy rejected 'sol'.",
+  "p0_kernel_test_started": false,
+  "precision_measured": false,
+  "peak_memory_measured": false,
+  "latency_measured": false,
+  "automatic_gpu_retry": false,
+  "next_action": "Prepare closed-source v3 notebook locally; require user approval before re-submitting GPU."
+}

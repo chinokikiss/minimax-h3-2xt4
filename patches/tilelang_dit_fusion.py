@@ -84,17 +84,18 @@ def supported(x):
         and torch.cuda.get_device_capability(x.device)==(7,5))
 
 
-def _table(value,x):
-    return (value.ndim==2 and value.shape==(9,x.shape[1]) and value.dtype==torch.float32
-            and value.device==x.device)
+def _table(value,x,rows=None):
+    return (value.ndim==2 and value.shape[0]>=3 and value.shape[0]%3==0
+            and value.shape[1]==x.shape[1] and (rows is None or value.shape[0]==rows)
+            and value.dtype==torch.float32 and value.device==x.device)
 
 
-def segment_key(rows,segments):
+def segment_key(rows,segments,modulation_rows=9):
     key=tuple(tuple(s) for s in segments)
     cursor=0
     for a,b,row in sorted(key):
         if (any(type(v) is not int for v in (a,b,row)) or a!=cursor
-                or not a<b<=rows or not 0<=row<9):return None
+                or not a<b<=rows or not 0<=row<modulation_rows):return None
         cursor=b
     return key if cursor==rows else None
 
@@ -111,8 +112,8 @@ def _labels(rows,segments,device):
     return labels,ready
 
 
-def labels_for(x,segments):
-    key=segment_key(x.shape[0],segments)
+def labels_for(x,segments,modulation_rows=9):
+    key=segment_key(x.shape[0],segments,modulation_rows)
     if key is None:return None
     # The immutable cache is bounded; record_stream protects an evicted tensor
     # when another request/stream is still consuming it asynchronously.
@@ -124,27 +125,27 @@ def labels_for(x,segments):
 
 
 def modulated_norm(norm,x,shift,scale,segments):
-    if (not supported(x) or not _table(shift,x) or not _table(scale,x)
+    if (not supported(x) or not _table(shift,x) or not _table(scale,x,shift.shape[0])
             or getattr(norm,'layer_norm',False) or tuple(norm.normalized_shape)!=(5376,)
             or norm.weight.dtype!=torch.float32 or norm.weight.device!=x.device):return None
-    labels=labels_for(x,segments)
+    labels=labels_for(x,segments,shift.shape[0])
     if labels is None:return None
-    return norm_kernel(*x.shape,9,float(norm.eps))(
+    return norm_kernel(*x.shape,shift.shape[0],float(norm.eps))(
         x,norm.weight.contiguous(),shift.contiguous(),scale.contiguous(),labels)
 
 
 def gated_add(x,gate,branch,segments):
     if (not supported(x) or not _table(gate,x) or branch.shape!=x.shape
             or branch.dtype!=x.dtype or branch.device!=x.device or not branch.is_contiguous()):return None
-    labels=labels_for(x,segments)
+    labels=labels_for(x,segments,gate.shape[0])
     if labels is None:return None
-    gate_kernel(*x.shape,9)(x,branch,gate.contiguous(),labels)
+    gate_kernel(*x.shape,gate.shape[0])(x,branch,gate.contiguous(),labels)
     return x
 
 
 def finish_row(payload,scale,weights,residual,gate,labels,local_k):
     from patches.tilelang_transport_tradeoffs import shift_for
-    row_gate_kernel(*residual.shape,9,shift_for(local_k))(
+    row_gate_kernel(*residual.shape,gate.shape[0],shift_for(local_k))(
         payload,scale,weights.reshape(-1),residual,gate,labels)
     return residual
 
@@ -165,14 +166,26 @@ def row_gated(module,value,residual,gate,segments,comm,input_act=None):
             or module.weight_scale.shape!=(5376,1) or module.weight_scale.dtype!=torch.float32
             or module.weight_scale.device!=value.device or not module.weight_scale.is_contiguous()):return None
     if input_act and policy.fc2_quantizer not in ('fused_stored','fused_recompute'):return None
-    labels=labels_for(residual,segments)
+    labels=labels_for(residual,segments,gate.shape[0])
     if labels is None:return None
     gates=gate.contiguous()
     def finish(payload,scale,weights,local_k):
         return finish_row(payload,scale,weights,residual,gates,labels,local_k)
     if input_act:
         from patches.tilelang_swiglu_quant import row_linear
+        consume=bool(getattr(module,'_vram_p0_3',False) and policy.fc2_quantizer=='fused_stored'
+            and not torch.is_grad_enabled() and not torch.compiler.is_compiling() and type(value) is torch.Tensor)
+        p0_b=bool(consume and getattr(module,'_vram_p0_b',False))
         return row_linear(value,module.weight,module.weight_scale,comm,
-            mode=policy.fc2_quantizer,scaled_transport=True,finish_fn=finish)
+            mode=policy.fc2_quantizer,scaled_transport=True,finish_fn=finish,
+            consume_input=consume,p0_b=p0_b)
     from patches.tilelang_transport_p2 import row_linear
-    return row_linear(value.float(),module.weight,module.weight_scale,comm,2,256,finish_fn=finish)
+    consume=bool(getattr(module,'_vram_p0_2',False) and not torch.is_grad_enabled()
+        and not torch.compiler.is_compiling() and type(value) is torch.Tensor)
+    prepared=value.float()
+    if consume:
+        # The FP32 copy owns the data needed by subsequent quantization.
+        value.set_()
+    local_rotation=bool(consume and getattr(module,'_vram_p0_c',False))
+    return row_linear(prepared,module.weight,module.weight_scale,comm,2,256,
+        finish_fn=finish,consume_input=consume,p0_c=local_rotation)

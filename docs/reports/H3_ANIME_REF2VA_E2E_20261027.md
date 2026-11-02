@@ -51,7 +51,7 @@ is substituted for this new workload.
 
 ## Reference provenance
 
-1. Character: [MediBang, 花未眠 by Shiori](https://medibang.com/picture/1h2106242105027740014340778/).
+1. Character: [MediBang, illustration by Shiori](https://medibang.com/picture/1h2106242105027740014340778/).
    The page's displayed artwork resolves to a 1280×905 JPEG, 317,018 bytes;
    SHA256 `e5b1710572f2587f7927e65b9e5f8f742bc435ca388ae23a16880fa6bf542383`.
 2. Environment: [Wikimedia shrine artwork](https://commons.wikimedia.org/wiki/File:Algorithmically-generated_landscape_artwork_of_forest_with_Shinto_shrine.png).
@@ -188,8 +188,8 @@ point; the later user-authorized saved-source check is recorded below.
 
 ### User-authorized local-input retry: accepted version 3
 
-The user supplied the character JPEG and a PNG named
-`屏幕截图 2026-10-27 211852.png`. Inspection confirms that the latter is the full
+The user supplied the character JPEG and a screenshot PNG captured on
+2026-10-27 at 21:18:52 (the original filename is preserved in the evidence). Inspection confirms that the latter is the full
 4096×2048, 7,703,256-byte original PNG with the original SHA256; its filename
 does not indicate any pixel or encoding difference. Both supplied files were
 verified and copied into a new evidence directory without replacing historical

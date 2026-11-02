@@ -17,10 +17,10 @@ from typing import Optional, Dict, Any, List
 
 import comfy_kitchen
 
-def run_int8_linear_forward(x, weight, weight_scale, convrot=True, convrot_groupsize=256, out_dtype=torch.float16,backend='preallocated'):
+def run_int8_linear_forward(x, weight, weight_scale, convrot=True, convrot_groupsize=256, out_dtype=torch.float16,backend='preallocated',p0_a1=False):
     from patches.dit_column_linear import column_linear
     return column_linear(x, weight, weight_scale, out_dtype=out_dtype,
-        convrot=convrot, convrot_groupsize=convrot_groupsize,backend=backend)
+        convrot=convrot, convrot_groupsize=convrot_groupsize,backend=backend,p0_a1=p0_a1)
 
 class ColumnParallelLinearINT8(nn.Module):
     """
@@ -70,14 +70,29 @@ class ColumnParallelLinearINT8(nn.Module):
         orig_shape = x.shape
         x_2d = x.view(-1, self.in_features)
         policy=getattr(self,'operator_policy',None)
+        adapter=getattr(self,'lora_adapter',None)
+        can_consume=(adapter is None and not torch.is_grad_enabled()
+            and not torch.compiler.is_compiling() and type(x) is torch.Tensor)
         options={} if policy is None or policy.column_linear_backend=='preallocated' else dict(backend=policy.column_linear_backend)
+        options['p0_a1']=bool(can_consume and getattr(self,'_vram_p0_a1',False))
         out = run_int8_linear_forward(
             x_2d, self.weight, self.weight_scale,
             convrot=self.convrot, convrot_groupsize=self.convrot_groupsize,
             out_dtype=x.dtype,**options
         )
-        out=out.view(*orig_shape[:-1], self.out_features_per_rank)
-        adapter=getattr(self,'lora_adapter',None)
+        shape=(*orig_shape[:-1],self.out_features_per_rank)
+        preserve=bool(can_consume and len(orig_shape)==2 and getattr(self,'_vram_p0_3_producer',False))
+        if preserve and out.is_contiguous() and out.storage_offset()==0:
+            # The column epilogue may wrap its fresh output in a same-storage
+            # reshape/view. FC2's set_() cannot free such a view's live _base.
+            owner=out
+            while owner._base is not None and owner._base.is_contiguous() and owner._base.numel()==out.numel():
+                owner=owner._base
+            if owner._base is None and owner.numel()==out.numel():
+                owner.resize_(shape)
+                out=owner
+            else:out=out.view(*shape)
+        else:out=out.view(*shape)
         return adapter.add_to(x,out) if adapter is not None else out
 
 class RowParallelLinearINT8(nn.Module):
@@ -308,7 +323,14 @@ class TPDiTBlockINT8(nn.Module):
         else:
             attn_out=dit_attention(self,q_heads,k_heads,v_heads,transformer_options)
             del qkv,q,k,v,q_heads,k_heads,v_heads
-        attn_out = attn_out.reshape(S,self.inner_per_rank)
+        if (flow is not None and getattr(self.out_proj,'_vram_p0_2',False)
+                and type(attn_out) is torch.Tensor and attn_out._base is None
+                and attn_out.is_contiguous() and attn_out.numel()==S*self.inner_per_rank
+                and not torch.is_grad_enabled() and not torch.compiler.is_compiling()):
+            # Avoid creating a view with a live _base: set_() on such a view
+            # does not release the Attention output's original Storage.
+            attn_out.resize_(S,self.inner_per_rank)
+        else:attn_out = attn_out.reshape(S,self.inner_per_rank)
 
         # RowParallel Out + AllReduce #1 (native INT32 SUM by default)
         if flow is not None:

@@ -1,0 +1,58 @@
+{
+  "status": "complete",
+  "kernel": "pamcks/h3-dit-p0-lifetime-t4-v3-20261102",
+  "version": 1,
+  "final_collected_utc": "2026-11-02T03:37:07.163Z",
+  "final_collection_count": 1,
+  "worker_exit_code": 0,
+  "worker_seconds": 528.181676816,
+  "hardware": {
+    "devices": [
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ]
+      },
+      {
+        "name": "Tesla T4",
+        "capability": [
+          7,
+          5
+        ]
+      }
+    ],
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8"
+  },
+  "shapes": [
+    {
+      "tokens": 59134,
+      "attention": "kitchen"
+    },
+    {
+      "tokens": 65166,
+      "attention": "sol_v2"
+    }
+  ],
+  "rank_results": [
+    "gpu_final/dit_p0/tp2/rank0/result.json",
+    "gpu_final/dit_p0/tp2/rank1/result.json"
+  ],
+  "numeric_output_equal_all_candidates": true,
+  "all_finite": true,
+  "strict_raw_byte_check": false,
+  "strict_no_latency_regression_certified": false,
+  "phase_local_peak_savings_gib": {
+    "S59134_all_p0": 0.296,
+    "S65166_all_p0": 0.3262
+  },
+  "balance_raw_global_peak_qualified": false,
+  "full_H3_pipeline": false,
+  "production_promoted": false,
+  "no_status_polling": true,
+  "no_live_log_polling": true,
+  "no_new_gpu_submission": true,
+  "report": "T4_P0_AUDIT_REPORT.md"
+}
