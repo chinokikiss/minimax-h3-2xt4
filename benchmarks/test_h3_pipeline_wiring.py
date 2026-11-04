@@ -74,14 +74,14 @@ def main():
             assert sdpa.call_count==1
         assert torch.equal(y,expected) and torch.isfinite(y).all()
     records.append(dict(name='Native_refiner_SDPA_legacy_wrapper_alias_after_residency_copy',status='pass'))
-    # Current ComfyUI has inline input projections, unlike the pinned T4 source.
-    # Compare its real zero-block Native forward before/after the TP bridge.
+    # Pinned MiniMaxH3Model exposes _embed_and_pack; compare its zero-block
+    # Native forward before and after the TP bridge.
     from comfy.ldm.minimax.model import MiniMaxH3Model
     from patches.windowed_tp import DiTPreprocessing
     cpu=MiniMaxH3Model(hidden_size=256,num_layers=0,token_refiner_num_layers=0,
         num_attention_heads=4,attention_head_dim=64,ffn_hidden_size=512,text_dim=256,
         time_embed_dim=8,adaln_curve_grid=1025,dtype=torch.float32,device='cpu',operations=comfy.ops.disable_weight_init)
-    packed_preprocessing=hasattr(cpu,'_embed_and_pack')
+    assert callable(getattr(cpu,'_embed_and_pack',None))
     initialize(cpu)
     for buffer in cpu.buffers():
         if buffer.is_floating_point():buffer.fill_(.01)
@@ -109,10 +109,10 @@ def main():
     result=comm.run([lambda r=r:models[r]._forward(sample,timestep,context,transformer_options={}) for r in (0,1)])
     for output in result:
         for got,want in zip(output,reference):torch.testing.assert_close(got,want,rtol=0,atol=0)
-    assert owners[0].window.calls==owners[0].project_uses==(1 if packed_preprocessing else 2)
+    assert owners[0].window.calls==owners[0].project_uses==1
     for owner in owners:owner.close()
     records.append(dict(name='Native_preprocessing_bridge_zero_block_forward',status='bitwise_pass',
-        packed_preprocessing=packed_preprocessing,projection_leases=owners[0].project_uses))
+        packed_preprocessing=True,projection_leases=owners[0].project_uses))
     out=args.output;out.parent.mkdir(parents=True,exist_ok=True)
     out.write_text(json.dumps(dict(scope='Tiny seeded blocks on one SM120 GPU, two logical owners. No full pipeline or target performance claim.',
         torch=torch.__version__,comfy_kitchen=version('comfy-kitchen'),tilelang=version('tilelang'),hardware=torch.cuda.get_device_name(),

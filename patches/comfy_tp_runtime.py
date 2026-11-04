@@ -75,12 +75,27 @@ class RuntimeConfig:
     # Decode has no DiT activation window; do not inherit its sampling reserve.
     video_decode_reserve_bytes: int = 2 * GiB
     bundle_offline_lora: bool = False
+    ptd_part_roots: tuple = ()  # Opt-in Bank v2 mounts; ordinary loaders keep an empty tuple.
+    ptd_allow_fixture: bool = False  # Internal two-block GPU qualification only; never a public Loader option.
+    ptd_io_workers: int = 1  # v2-only CPU shard-read threads per rank.
+    ptd_retire_page_cache: bool = False  # v2-only post-shard advisory DONTNEED.
     lora_selective_qkv_b: bool = True
     verify_dit_weights: bool = False
     debug: bool = False
 
     def __post_init__(self):
         if type(self.verify_dit_weights) is not bool:raise ValueError('verify_dit_weights must be boolean')
+        if not isinstance(self.ptd_part_roots, tuple) or any(
+                not isinstance(pair, tuple) or len(pair) != 2
+                or any(not isinstance(piece, str) or not piece for piece in pair)
+                for pair in self.ptd_part_roots):
+            raise ValueError('Bank v2 part mounts must be explicit ID/path pairs')
+        if type(self.ptd_allow_fixture) is not bool:
+            raise ValueError('PTD fixture admission must be explicitly boolean')
+        if type(self.ptd_io_workers) is not int or not 1 <= self.ptd_io_workers <= 8:
+            raise ValueError('PTD v2 I/O workers must be 1..8 per rank')
+        if type(self.ptd_retire_page_cache) is not bool:
+            raise ValueError('PTD v2 page-cache retirement must be boolean')
         # Retired workflow input: production uses metadata checks for all weights.
         object.__setattr__(self,'verify_dit_weights',False)
         if not isinstance(self.tensor_flow,TensorFlowPolicy):raise ValueError('TensorFlowPolicy required')
@@ -158,8 +173,16 @@ class RankRuntime:
         # Production inference admits every checkpoint through FileChecks metadata
         # only.  The legacy verify_dit_weights flag is component-specific and
         # would leave TE payload SHA256 enabled.
-        self.readers = {kind: open_checkpoint(path,verify_weights=False)
+        self.readers = {kind: open_checkpoint(path,verify_weights=False,
+            **(dict(ptd_part_roots=config.ptd_part_roots,
+                    ptd_allow_fixture=config.ptd_allow_fixture)
+               if kind == 'dit' and (config.ptd_part_roots or config.ptd_allow_fixture) else {}))
             for kind,path in (('te',config.te_path),('dit',config.dit_path))}
+        if getattr(self.readers['dit'], 'bank', None) is not None:
+            from patches.ptd.bank_v2 import HopReaderV2
+            if isinstance(self.readers['dit'], HopReaderV2):
+                self.readers['dit'].bank.configure_io(config.ptd_io_workers,
+                                                       config.ptd_retire_page_cache)
         for reader in self.readers.values():
             reader.operator_policy=config.operators
             reader.tensor_flow=config.tensor_flow
@@ -196,6 +219,7 @@ class RankRuntime:
         self.model = self.window = self.preprocessing = None
         self.kind = None
         self.aux_reservation = 0
+        self._ptd_initial_heads = None
         self.sample_active = False
         self.events = RecentEvents(16 if config.debug else 0)
         self.aot_receipts = {}
@@ -379,6 +403,7 @@ class RankRuntime:
         if self.preprocessing is not None:
             self.preprocessing.close()
         self.window = self.model = self.preprocessing = None
+        self._ptd_initial_heads = None
         gc.collect()  # Native bound-method/module cycles, only at stage boundaries
         if self.aux_reservation:
             self.cache.budget.release(self.aux_reservation)
@@ -386,6 +411,11 @@ class RankRuntime:
         self.kind = None
         torch.cuda.synchronize(self.device)
         if self.idle_window is not None:self.idle_window._reap()
+        if self.config.debug and self.config.sol_collect_route_stats:
+            from patches.sol_attention import route_stats_snapshot
+            # Preserve the just-finished request's diagnostics on CPU while
+            # dropping every GPU-side stats owner before empty_cache().
+            self._sol_route_stats_last=route_stats_snapshot(clear=True)
         torch.cuda.empty_cache()
         # Retired pin buffers remain in PyTorch's host cache unless purged.
         # Reclaim inactive blocks at stage boundaries, after copy/use fences;
@@ -477,9 +507,26 @@ class RankRuntime:
                 # wholesale would resurrect duplicate refiner/projection weights.
                 names = set(self.preprocessing.canonical) | {'condition_proj','token_refiner',
                     'video_patch_proj','audio_patch_proj'}
+                ptd = getattr(self, '_ptd_adapter', None)
+                queue_heads = ptd is not None and ptd.options.hop_handoff == 'queue'
                 for name, child in list(self.model.named_children()):
-                    if name not in names:
-                        setattr(self.model, name, copy_module(child, lambda t: t.to(self.device)))
+                    if name in names:
+                        continue
+                    if name == 'final_layer' and queue_heads:
+                        # Native already read Hop 0 output heads on CPU. Preserve
+                        # their exact tensors for the queue's first lease; only
+                        # move the shared final norm/AdaLN shell to CUDA.
+                        initial = {key:getattr(child,key) for key in ('video_out','audio_out')}
+                        for key in initial:setattr(child,key,nn.Identity())
+                        try:
+                            gpu_child = copy_module(child, lambda t:t.to(self.device))
+                        finally:
+                            for key,value in initial.items():setattr(child,key,value)
+                        for key,value in initial.items():setattr(gpu_child,key,value)
+                        self._ptd_initial_heads = nn.ModuleDict(initial)
+                        setattr(self.model,name,gpu_child)
+                    else:
+                        setattr(self.model,name,copy_module(child,lambda t:t.to(self.device)))
                 for name, value in list(self.model._parameters.items()):
                     if value is not None:
                         self.model._parameters[name] = nn.Parameter(value.to(self.device), requires_grad=False)
@@ -487,6 +534,8 @@ class RankRuntime:
                     if value is not None:
                         self.model._buffers[name] = value.to(self.device)
                 retained = sum(module_bytes(m) for m in self.preprocessing.canonical.values())
+                if self._ptd_initial_heads is not None:
+                    retained += module_bytes(self._ptd_initial_heads)
                 owner = self.model
             self.cache.budget.finish_staging(auxiliary_pending)
             auxiliary_pending = 0
@@ -556,6 +605,7 @@ class RankRuntime:
             if command == 'begin_sample':
                 if self.sample_active:
                     raise RuntimeError('Concurrent samples are unsupported')
+                self._sol_route_stats_last=[]
                 self.sample_active, self.completed_decode = True, False
                 self.sample_nfe = 0
                 self.decode_lookahead_started = False
@@ -627,8 +677,6 @@ class RankRuntime:
                 options['_h3_dit_attention']=selected
                 options['_h3_sol_tau']=tau
                 options['_h3_nfe']=self.sample_nfe
-                options['_h3_sol_topology_v2']=self.config.sol_topology_v2
-                options['_h3_sol_sync_free_lut']=self.config.sol_sync_free_lut
                 options['_h3_sol_collect_route_stats']=self.config.debug and self.config.sol_collect_route_stats
                 options['_h3_sol_temporal_radius']=self.config.sol_temporal_radius
                 options['_h3_sol_local_radius_tokens']=self.config.sol_local_radius_tokens
@@ -702,6 +750,11 @@ class RankRuntime:
                     self.idle_window.close();self.idle_window=None
                 self.cache.close()
                 self.startup_cache.close()
+                banks = [getattr(reader, 'bank', None) for reader in self.readers.values()]
+                adapter = getattr(self, '_ptd_adapter', None)
+                if adapter is not None:banks.append(adapter.bank)
+                for bank in banks:
+                    if bank is not None and hasattr(bank, 'close_io'):bank.close_io()
             else:
                 raise ValueError(command)
 
@@ -849,35 +902,57 @@ class PhysicalTPService:
 
     def _preload_idle_vaes(self,vaes,cancel):
         from concurrent.futures import CancelledError
-        with self.lock:
-            try:
-                for vae in vaes:
-                    if cancel.is_set() or self.closed:return
-                    if vae.preload_idle(cancel):self.idle_vae_stats['loads']+=1
-                if not cancel.is_set() and not self.closed:
-                    result=self.call('idle_begin');self.idle_held=bool(result['accepted'])
-            except CancelledError:pass
-            except Exception as exc:
-                self.idle_vae_stats.update(errors=self.idle_vae_stats['errors']+1,
-                    last_error=(type(exc).__name__+': '+str(exc))[:256])
-                # Encoder speculation must not disable the existing TE prefetch.
-                if not cancel.is_set() and not self.closed:
-                    result=self.call('idle_begin');self.idle_held=bool(result['accepted'])
-            finally:
-                if cancel.is_set() or self.closed:
-                    for vae in vaes:vae.release()
-                    if not self.closed:self.call('idle_stop',keep=False)
-                    self.idle_held=False
+        # Disk reads and staged VAE construction are cancellable work, not a
+        # service-wide RPC critical section. StagedVAE protects its own state.
+        try:
+            for vae in vaes:
+                if cancel.is_set() or self.closed:return
+                if vae.preload_idle(cancel):self.idle_vae_stats['loads']+=1
+            if not cancel.is_set() and not self.closed:
+                result=self.call('idle_begin');self.idle_held=bool(result['accepted'])
+        except CancelledError:pass
+        except Exception as exc:
+            self.idle_vae_stats.update(errors=self.idle_vae_stats['errors']+1,
+                last_error=(type(exc).__name__+': '+str(exc))[:256])
+            # Encoder speculation must not disable the existing TE prefetch.
+            if not cancel.is_set() and not self.closed:
+                result=self.call('idle_begin');self.idle_held=bool(result['accepted'])
+        finally:
+            if cancel.is_set() or self.closed:
+                for vae in vaes:vae.release()
+                if not self.closed:
+                    self.call('idle_stop',keep=bool(getattr(cancel,'_h3_keep',False)))
+                self.idle_held=False
 
     def pause_idle(self,*,keep=True,pressure=False):
-        if hasattr(self,'idle_vae_cancel'):self.idle_vae_cancel.set()
+        cancel=getattr(self,'idle_vae_cancel',None)
+        if cancel is not None:
+            cancel._h3_keep=bool(keep and not pressure)
+            cancel.set()
         if not self.config.idle_residency or self.closed:return False
-        vae_held=any(v.stage is not None for v in getattr(self,'staged_vaes',()))
-        if not self.idle_held and not ((pressure or not keep) and vae_held):return False
-        if not self.lock.acquire(blocking=False):return False
+        urgent=pressure or not keep
+        worker=getattr(self,'idle_vae_thread',None)
+        running=worker is not None and worker.is_alive()
+        if urgent and running:
+            # Never join ourselves or join while owning the service RPC lock.
+            # In particular, ComfyUI may invoke pressure callbacks recursively.
+            if worker is threading.current_thread() or getattr(self.lock,'_is_owned',lambda:False)():
+                return False
+            worker.join(timeout=min(10.,float(getattr(self.config,'timeout_seconds',10.))))
+            if worker.is_alive():return False
+        # A pressure callback may already hold ComfyUI's model-management lock;
+        # bound the RPC-lock wait rather than creating a cross-lock deadlock.
+        acquired=(self.lock.acquire(timeout=min(10.,float(getattr(self.config,'timeout_seconds',10.))))
+            if urgent else self.lock.acquire(blocking=False))
+        if not acquired:return False
         try:
+            vae_held=any(v.stage is not None for v in getattr(self,'staged_vaes',()))
+            if not self.idle_held and not (urgent and (vae_held or running)):
+                return False
+            # Pressure release fences worker copy streams even if the canceled
+            # speculative thread already sent idle_stop(keep=False).
             self.call('idle_release' if pressure else 'idle_stop',keep=keep)
-            if pressure or not keep:
+            if urgent:
                 for vae in tuple(getattr(self,'staged_vaes',())):vae.release()
             self.idle_held=keep and not pressure
             return True

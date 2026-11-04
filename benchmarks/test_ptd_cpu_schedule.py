@@ -187,7 +187,10 @@ class ScheduleContracts(unittest.TestCase):
         window.host_cache=cache
         header={f'final_layer.{name}.{attribute}':{'shape':list(getattr(getattr(model.final_layer,name),attribute).shape)}
             for name in ('video_out','audio_out') for attribute in ('weight','bias')}
-        def reader(hop,**kw):return SimpleNamespace(identity=('hop',hop),header=header)
+        targets=[f'token_refiner.blocks.{i}.{p}' for i in range(2)
+            for p in ('attn.qkv_proj','attn.out_proj','mlp.fc1','mlp.fc2')]
+        bank=SimpleNamespace(hops=[(None,{'auxiliary':{'verified_targets':targets}})]*8)
+        def reader(hop,**kw):return SimpleNamespace(identity=('hop',hop),header=header,bank=bank,hop=hop)
         preprocessing=SimpleNamespace(canonical={name:getattr(model,name) for name in
             ('condition_proj','token_refiner','video_patch_proj','audio_patch_proj')},refine_key='ref0',
             project_key='project',project_uses=1)

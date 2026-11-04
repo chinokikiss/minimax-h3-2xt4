@@ -17,7 +17,7 @@ import time
 from retest import (ROOT, GATES, environment, load_video_native, measure, metrics,
                     passes, validate_runtime, write_json)
 import torch
-from patches.slab_video_vae import TwoSlabDecoder
+from benchmarks.legacy.slab_video_vae import TwoSlabDecoder
 from test_slab_semantics import kernel_probe, sequential_oracle
 
 
@@ -109,7 +109,7 @@ def main():
         result["checkpoint_sha256"] = checkpoint_hash
         args.suite, args.round, args.allow_non_t4 = "video_slab", 0, False
         environment(args.output, args, str(args.checkpoint))
-        source_files = [Path(__file__), ROOT / "patches/slab_video_vae.py",
+        source_files = [Path(__file__), ROOT / "benchmarks/legacy/slab_video_vae.py",
                         ROOT / "benchmarks/test_slab_semantics.py", ROOT / "benchmarks/retest.py"]
         write_json(args.output / "source_hashes.json", {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in source_files})
         history = json.loads(args.historical.read_text())

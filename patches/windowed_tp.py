@@ -282,23 +282,19 @@ class DiTPreprocessing:
         self.canonical = {name: getattr(model, name).cpu() for name in names} if rank == 0 else {}
         self.original_refine = model.preprocess_text_embeds
         self.original_pack = getattr(model,'_embed_and_pack',None)
-        self.project_uses = 1 if self.original_pack is not None else 2
-        self.proxies={}
+        if not callable(self.original_pack):
+            raise RuntimeError('Pinned MiniMaxH3Model must expose _embed_and_pack')
+        self.project_uses = 1
+        self.ptd_refiner_context = None
         if rank != 0:
             # These are never executed on this rank; release duplicate backing.
             for name in names:
                 setattr(model, name, nn.Identity())
         model.preprocess_text_embeds = types.MethodType(lambda owner, text: self.refine(text), model)
-        if self.original_pack is not None:
-            model._embed_and_pack = types.MethodType(
-                lambda owner, video, audio, context, layout, payload, options:
-                    self.pack(video, audio, context, layout, payload, options), model)
-        else:
-            # Current ComfyUI inlines packing in _forward. Keep that code intact
-            # and broadcast the two projection outputs at their module boundary.
-            for name in ('video_patch_proj','audio_patch_proj'):
-                proxy=InlineDiTProjection(self,name);self.proxies[name]=proxy
-                setattr(model,name,proxy)
+        # The pinned ComfyUI model invokes _embed_and_pack from _forward.
+        model._embed_and_pack = types.MethodType(
+            lambda owner, video, audio, context, layout, payload, options:
+                self.pack(video, audio, context, layout, payload, options), model)
 
     def specs(self):
         if self.rank != 0:
@@ -318,11 +314,8 @@ class DiTPreprocessing:
     def close(self):
         """Break bound-method cycles before releasing auxiliary reservations."""
         del self.model.preprocess_text_embeds
-        if self.original_pack is not None:del self.model._embed_and_pack
-        else:
-            for name in self.proxies:setattr(self.model,name,self.canonical.get(name,nn.Identity()))
-            self.proxies.clear()
-        self.original_refine = self.original_pack = self.window = None
+        del self.model._embed_and_pack
+        self.original_refine = self.original_pack = self.window = self.ptd_refiner_context = None
         self.canonical.clear()
 
     @contextmanager
@@ -344,7 +337,10 @@ class DiTPreprocessing:
         if text.shape[-1] == self.model.hidden_size:
             return text.to(flow.dtype) if flow is not None else text
         if self.rank == 0:
-            with self._modules(self.refine_key):
+            # PTD leases the shared GPU refiner shell and selected projections.
+            context = (self.ptd_refiner_context() if self.ptd_refiner_context is not None
+                       else self._modules(self.refine_key))
+            with context:
                 refined = self.original_refine(text)
         else:
             # Native MiniMax refiner currently consumes text_states[0].
@@ -366,19 +362,3 @@ class DiTPreprocessing:
                                  dtype=context.dtype, device=self.device)
         self.comm.broadcast(packed, src=0)
         return packed
-
-    def project(self,name,x):
-        if self.rank==0:
-            with self._modules(self.project_key):out=getattr(self.model,name)(x)
-            if out.shape!=(*x.shape[:-1],self.model.hidden_size) or out.dtype!=x.dtype:
-                raise ValueError('Unqualified inline H3 projection shape/dtype')
-            out=out.contiguous()
-        else:out=torch.empty((*x.shape[:-1],self.model.hidden_size),dtype=x.dtype,device=self.device)
-        self.comm.broadcast(out,src=0)
-        return out
-
-
-class InlineDiTProjection(nn.Module):
-    """Weightless outer-model proxy; canonical projection weights stay streamed."""
-    def __init__(self,owner,name):super().__init__();self.owner=owner;self.name=name
-    def forward(self,x):return self.owner.project(self.name,x)

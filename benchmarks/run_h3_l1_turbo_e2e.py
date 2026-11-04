@@ -123,6 +123,9 @@ def main():
     elif config.get('workload_contract')=='turbo_1mp_10s':
         from benchmarks.turbo_challenge_contract import validate
         validate(config)
+    if config.get('workload_contract')=='turbo_long_15s':
+        from benchmarks.turbo_long_15s_contract import validate
+        validate(config)
     output=Path(config['output']);output.mkdir(parents=True,exist_ok=True)
     state=dict(status='starting',config=config,stages={},denoiser_outputs=[],sampler_steps=[])
     def save():(output/'result.json').write_text(json.dumps(state,indent=2,default=str))
@@ -192,13 +195,16 @@ def main():
         pixels=stage('video_decode',lambda:decoders['video'].decode(video).cpu())
         waveform=stage('audio_decode',lambda:decoders['audio'].decode(audio).cpu())
         assert decoders['audio'].last_strategy=='native'
-        if config.get('workload_contract') in ('anime_ref2va_8step','turbo_1mp_10s'):
+        if config.get('workload_contract') in ('anime_ref2va_8step','turbo_1mp_10s','turbo_long_15s'):
             shape=list(pixels.shape[-4:])
             assert shape[:3]==[config['frames'],config['height'],config['width']], 'Requested video shape changed'
         state['decoded_shapes']=dict(pixels=list(pixels.shape),waveform=list(waveform.shape))
         export_pixels,export_audio=pixels,waveform
-        if config.get('workload_contract')=='turbo_1mp_10s':
-            from benchmarks.turbo_challenge_contract import export_views
+        if config.get('workload_contract') in ('turbo_1mp_10s','turbo_long_15s'):
+            if config['workload_contract']=='turbo_long_15s':
+                from benchmarks.turbo_long_15s_contract import export_views
+            else:
+                from benchmarks.turbo_challenge_contract import export_views
             export_pixels,export_audio=export_views(pixels,waveform,config)
             state['export_shapes']=dict(pixels=list(export_pixels.shape),waveform=list(export_audio.shape))
             state['export_duration_seconds']=config['export_duration_seconds']
@@ -238,11 +244,11 @@ def main():
             assert rank['bundle_preparation']['dit']['merged_matrices']==0
             assert calls.get('current/fused_swiglu_quant') and calls.get('current/scaled_fp16_epilogue')
             assert not any(v for k,v in calls.items() if k.startswith('LoRA/'))
-            if config.get('workload_contract')!='turbo_1mp_10s':
+            if config.get('workload_contract') not in ('turbo_1mp_10s','turbo_long_15s'):
                 assert max(c['peak_allocated'] for c in bench['commands'] if c['command']=='denoise')<14.5*GiB
-            if config.get('workload_contract') in ('anime_ref2va_8step','turbo_1mp_10s'):
+            if config.get('workload_contract') in ('anime_ref2va_8step','turbo_1mp_10s','turbo_long_15s'):
                 assert calls.get('TE/column_view')==250, 'Expected five optimized columns in each of 50 TE layers'
-            if config.get('workload_contract')=='turbo_1mp_10s':
+            if config.get('workload_contract') in ('turbo_1mp_10s','turbo_long_15s'):
                 assert rank['benchmark']['verify_dit_weights'] is False
                 assert rank['benchmark']['te_payload_verification'] is False
                 assert rank['benchmark']['dit_payload_verification'] is False

@@ -48,7 +48,7 @@ def main():
                 if not row['byte_exact'] or not row['finite'] or row['strategy']!='native':raise AssertionError(row)
                 if 'decode' in vae.first_stage_model.__dict__:raise AssertionError('Native decode was overridden')
                 report['cases'].append(row)
-        if any(name in sys.modules for name in ('patches.audio_channel_decode','patches.multi_gpu_audio_vae')):
+        if any(name in sys.modules for name in ('benchmarks.legacy.audio_channel_decode','benchmarks.legacy.multi_gpu_audio_vae')):
             raise AssertionError('Historical audio parallel module was imported')
         report['worker_commands']=commands
         report['audio_worker_dispatch']=False

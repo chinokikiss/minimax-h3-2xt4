@@ -24,6 +24,11 @@ def rank_snapshot(runtime):
         "bundle_preparation": {k:dict(r.stats) for k,r in runtime.readers.items() if hasattr(r,'offline_targets')},
         "checkpoint_io": {k:{name:getattr(r,name,None) for name in
             ('logical_read_bytes','source_read_bytes','range_read_calls')} for k,r in runtime.readers.items()},
+        "ptd_http_range2": (runtime._ptd_adapter.bank.http2_state()
+            if getattr(runtime,'_ptd_adapter',None) is not None
+            and getattr(runtime._ptd_adapter.bank,'http_range2_debug',False)
+            and hasattr(runtime._ptd_adapter.bank,'http2_state')
+            else getattr(runtime,'_ptd_last_http_range2',None)),
         "checkpoint_admission": {k:{
             "verify_payloads": getattr(r,"verify_payloads",None),
             "metadata_only": getattr(r,"verify_payloads",None) is False,
@@ -55,7 +60,8 @@ def rank_snapshot(runtime):
         "host_cache": runtime.cache.snapshot(),
         "startup_cache": runtime.startup_cache.snapshot(),
         "aot_preparation": dict(getattr(runtime,"aot_receipts",{})),
-        "sol_route_stats": __import__('patches.sol_attention',fromlist=['route_stats_snapshot']).route_stats_snapshot()
+        "sol_route_stats": (__import__('patches.sol_attention',fromlist=['route_stats_snapshot']).route_stats_snapshot()
+            or getattr(runtime,'_sol_route_stats_last',[]))
             if getattr(config,"debug",False) and getattr(config,"sol_collect_route_stats",False) else [],
         "events": runtime.events,
     }

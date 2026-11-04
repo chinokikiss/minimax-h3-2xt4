@@ -18,7 +18,7 @@ sys.path.insert(0, str(ROOT / "ComfyUI"))
 sys.path.insert(0, str(ROOT / ".retest-deps"))
 
 import torch
-from patches.slab_video_vae import SlabPlan, TwoSlabDecoder, stitch_slabs
+from benchmarks.legacy.slab_video_vae import SlabPlan, TwoSlabDecoder, stitch_slabs
 
 
 def accuracy(a, b):
@@ -196,7 +196,7 @@ def main():
               "cpu_geometry": coordinate_checks(), "torch": torch.__version__,
               "comfy_kitchen": importlib.metadata.version("comfy-kitchen"),
               "source_sha256": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
-                                for p in [Path(__file__), ROOT / "patches/slab_video_vae.py"]},
+                                for p in [Path(__file__), ROOT / "benchmarks/legacy/slab_video_vae.py"]},
               "gpu": torch.cuda.get_device_name(0), "physical_gpu_count": 1,
               "cases": [], "trained_checkpoint": bool(args.checkpoint)}
     args.output.parent.mkdir(parents=True, exist_ok=True)

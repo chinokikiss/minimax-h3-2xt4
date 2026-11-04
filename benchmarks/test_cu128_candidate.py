@@ -1,7 +1,7 @@
 """CPU contracts: explicit alias is isolated from existing global dispatch."""
 import unittest
 from types import SimpleNamespace
-from patches.kitchen_cu128_candidate import _register,ALIAS,Candidate
+from benchmarks.legacy.kitchen_cu128_candidate import _register,ALIAS,Candidate
 
 
 class CandidateContract(unittest.TestCase):

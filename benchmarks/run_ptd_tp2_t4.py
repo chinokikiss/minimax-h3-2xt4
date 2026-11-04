@@ -32,7 +32,8 @@ def resource_plan(base=None, *, header=None):
         host_bytes=20*2**30,reserve_bytes=4*2**30)
 
 
-def smoke(base, bank, output, handoff, resources, cpu_options=None,*,verify_dit_weights=True):
+def smoke(base, bank, output, handoff, resources, cpu_options=None,*,verify_dit_weights=True,
+          bank_v2=False):
     # Controls must remain explicit after promoting P1 as the runtime default.
     cpu_options=dict(future_cache=False,prefetch_refiner=False)|dict(cpu_options or {})
     import torch
@@ -45,7 +46,8 @@ def smoke(base, bank, output, handoff, resources, cpu_options=None,*,verify_dit_
     # The TE is deliberately never executed. An empty, valid file satisfies
     # the service's metadata contract without downloading another model.
     te = output/'unused_te.safetensors'; save_file({}, str(te))
-    config = RuntimeConfig(str(te), str(base), layers=2,
+    config = RuntimeConfig(str(te), str(bank) if bank_v2 else str(base), layers=2,
+        ptd_allow_fixture=bank_v2,
         **{key:value for key,value in resources.items() if key.endswith('_bytes')},
         cross_request_te=False,cross_model_cpu=False,timeout_seconds=420,
         verify_dit_weights=verify_dit_weights)
@@ -128,6 +130,7 @@ def smoke(base, bank, output, handoff, resources, cpu_options=None,*,verify_dit_
         aot_wall_seconds=preparation,aot_rank0=aot,rank_stats=stats,restored_stats=restored,
         final_shapes=[list(v.shape) for v in final.unbind()],finite=True,
         real_trained_layers=2,seeded_operator_inputs=True,raw_te_fp32_payload=True,
+        bank_v2=bank_v2,
         pruned_adaln_approximation=True,full_pipeline=False,quality_qualified=False)
 
 

@@ -39,7 +39,7 @@ tech('SYS05','Stable collective topology',
     'Use NCCL with peer-to-peer disabled and four minimum/maximum channels; retain automatic protocol selection. Run corresponding collectives in the same order on both owners.',
     'Bound the communication configuration for the two-device deployment and avoid depending on unavailable peer-copy topology.',
     'Actual distributed collectives remain necessary. Logical-rank execution on one GPU is not a replacement for this topology.',
-    'patches/comfy_tp_runtime.py|patches/quantized_collectives.py','NCCL')
+    'patches/comfy_tp_runtime.py|benchmarks/legacy/quantized_collectives.py','NCCL')
 tech('SYS06','Policy-keyed prepared module reuse',
     'Attach an immutable operator and numerical-flow policy to prepared modules, streamed specifications and cache identities. Recreate the service when loader choices change.',
     'Reuse prepared representations without applying a second fold or serving weights prepared under a different backend or LoRA stack.',
@@ -619,22 +619,22 @@ tech('VAE10','Overlapping spatial slab decoding',
     'Decode two independently loaded spatial slabs with explicit latent overlap, map them to output coordinates and blend the overlap.',
     'Bound each decoder spatial workload and distribute independent slab work.',
     'Cropping changes global attention context and is an approximation. Keep latent/output scale ratios and fade coordinates explicit; this is not the current query-parallel route.',
-    'patches/slab_video_vae.py|patches/multi_gpu_video_vae.py','',status='historical')
+    'benchmarks/legacy/slab_video_vae.py|benchmarks/legacy/multi_gpu_video_vae.py','',status='historical')
 tech('VAE11','Video tensor/sequence-parallel block alternatives',
     'Partition decoder projection weights and row partials, or partition token-boundary work while gathering the global context needed by the block.',
     'Distribute learned matrix work or activations instead of replicating every decoder block.',
     'Keep quantizer grouping, global norm/attention context and legacy block arguments. These retained adapters are distinct from the active replicated-decoder query split.',
-    'patches/tp_video_vae.py','',status='historical')
+    'benchmarks/legacy/tp_video_vae.py','',status='historical')
 tech('VAE12','Stereo channel-parallel Audio decoding',
     'Assign one stereo latent channel to each persistent rank decoder, decode its mono view in FP32 and gather the resulting channels in original order.',
     'Distribute left/right learned decode work and output storage.',
     'Require stereo geometry and account for shape-dependent normalization/GEMM rounding. This retained technique is removed from normal runtime dispatch.',
-    'patches/audio_channel_decode.py|patches/multi_gpu_audio_vae.py','AUDIO',status='retired')
+    'benchmarks/legacy/audio_channel_decode.py|benchmarks/legacy/multi_gpu_audio_vae.py','AUDIO',status='retired')
 tech('VAE13','Temporal and hybrid Audio tiling',
     'Distribute overlapping temporal chunks across decoders, cross-fade reconstructed waveforms, and optionally combine temporal ownership with stereo-channel ownership.',
     'Parallelize chunked audio work and bound each chunk activation footprint.',
     'Preserve temporal context, normalization and sample-aligned fades. These historical manager paths are not the Native audio default.',
-    'patches/multi_gpu_audio_vae.py','',status='historical')
+    'benchmarks/legacy/multi_gpu_audio_vae.py','',status='historical')
 
 chapter('ALT','Retained alternative optimization methods',
     'Retired and experimental methods remain part of the technique inventory. Their mechanisms are described here without treating an old result or a surviving function as a current deployment selection.',
@@ -643,17 +643,17 @@ tech('ALT01','Two-stage layer pipeline parallelism',
     'Place contiguous layer ranges on two GPUs and transfer the boundary activation once per model pass. Preserve mask, positions, KV/intermediate state and Native model ordering across the boundary.',
     'Fit separate layer weight sets without a collective at every row projection.',
     'A single stream traverses stages serially; this is a different weight/communication schedule from TP2, not simultaneous execution of both layer halves.',
-    'patches/pp_dit.py|patches/pp_qwen3vl.py','',status='historical')
+    'benchmarks/legacy/pp_dit.py|benchmarks/legacy/pp_qwen3vl.py','',status='historical')
 tech('ALT02','Sequence-sharded block boundaries',
     'Gather Native floating activations from local token ranges, execute the repaired tensor-parallel block with global RoPE/modulation/masks, then return the owner token slice.',
     'Store only local sequence slices at block boundaries while retaining the existing TP arithmetic inside.',
     'The repaired adapters gather activations, not legacy INT8 sequence payloads. Global attention context and modulation cannot be inferred from one local slice.',
-    'patches/sp_int8_dit.py|patches/sp_int8_qwen3vl.py','',status='historical')
+    'benchmarks/legacy/sp_int8_dit.py|benchmarks/legacy/sp_int8_qwen3vl.py','',status='historical')
 tech('ALT03','Groupwise packed INT8 partial transport',
     'Quantize groups of INT32 partial outputs to signed byte codes plus serialized FP32 group scales, gather owner payloads and reconstruct/add them before the output epilogue.',
     'Trade a smaller byte payload for group metadata and encode/decode work.',
     'Separate rank scales require reconstruction before addition; byte-code SUM would overflow or apply incompatible scales. This is approximate and not default transport.',
-    'patches/tilelang_transport_tradeoffs.py|patches/quantized_collectives.py','',status='experimental')
+    'patches/tilelang_transport_tradeoffs.py|benchmarks/legacy/quantized_collectives.py','',status='experimental')
 tech('ALT04','Floating partial reduction alternative',
     'Convert integer GEMM partials to floating point before distributed SUM instead of preserving the exact INT32 collective or the bounded scaled-FP16 codec.',
     'Permit a floating collective representation and different communication kernel selection.',
@@ -705,7 +705,7 @@ tech('ALT13','Quantized sequence activation exchange',
     'Exchange INT8 activation codes together with the scales and ownership metadata needed to reconstruct a global sequence representation before the consuming operation.',
     'Reduce exchanged activation payload relative to a full floating-point gather.',
     'Quantizer domains, global normalization and rotary context must remain coherent. The old sequence-payload variant is not the repaired adapter that gathers Native activations.',
-    'docs/reports/TEXT_ENCODER_SP_INT8_REPORT.md|patches/sp_int8_qwen3vl.py','',status='historical')
+    'docs/reports/TEXT_ENCODER_SP_INT8_REPORT.md|benchmarks/legacy/sp_int8_qwen3vl.py','',status='historical')
 
 
 DEFAULTS=[

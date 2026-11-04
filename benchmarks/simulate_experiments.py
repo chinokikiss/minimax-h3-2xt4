@@ -20,10 +20,10 @@ from comfy.text_encoders.llama import Qwen3VL_32BConfig, TransformerBlock, preco
 from comfy.ldm.minimax.model import DiTBlock
 from comfy.ldm.modules.attention import optimized_attention_for_device
 import patches.tp_qwen3vl as te_tp
-import patches.sp_int8_qwen3vl as te_sp
+import benchmarks.legacy.sp_int8_qwen3vl as te_sp
 import patches.tp_dit as dit_tp
-import patches.sp_int8_dit as dit_sp
-import patches.tp_video_vae as video_parallel
+import benchmarks.legacy.sp_int8_dit as dit_sp
+import benchmarks.legacy.tp_video_vae as video_parallel
 
 
 def quant_state(shapes, scale):
@@ -221,7 +221,7 @@ def main():
             record(f'dit_{strategy}_checkpoint_dimensions_S17', torch.cat(outputs, 0) if strategy == 'sp' else outputs[0], ref, .00001)
             del native, ranks
         from comfy.text_encoders.llama import Llama2_
-        from patches.pp_qwen3vl import PipelineParallelQwen3VL
+        from benchmarks.legacy.pp_qwen3vl import PipelineParallelQwen3VL
         torch.manual_seed(949)
         te_block, unused, config = make_te(te_tp.TPTransformerBlockINT8)
         del unused
@@ -295,7 +295,7 @@ def main():
                 outputs = comm.run([lambda r=r: ranks[r](chunks[r].clone(), t, segments, rope) for r in range(2)])
                 out = torch.cat(outputs, 0) if strategy == 'sp' else outputs[0]
                 record(f'dit_{strategy}_S{sequence}', out, ref, .00001)
-            from patches.pp_dit import PipelineParallelDiT
+            from benchmarks.legacy.pp_dit import PipelineParallelDiT
             stages = [DiTBlock(512, 8, 64, 1024, 8, 1e-5, 1e-5, apply_silu=False,
                 adaln_dtype=torch.float32, device='cpu', dtype=torch.float32,
                 operations=comfy.ops.mixed_precision_ops({'mixed_ops': True}, torch.float32)) for _ in range(2)]

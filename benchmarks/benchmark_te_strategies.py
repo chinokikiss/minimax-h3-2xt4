@@ -26,7 +26,7 @@ from typing import Dict, List, Tuple, Any
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from patches.tp_qwen3vl import TPTransformerBlockINT8
-from patches.sp_int8_qwen3vl import SPTransformerBlockINT8
+from benchmarks.legacy.sp_int8_qwen3vl import SPTransformerBlockINT8
 
 def measure_pcie_bandwidth(dev0: torch.device, dev1: torch.device, tensor_sizes_mb: List[float] = [16, 64, 128, 256]) -> Dict[str, float]:
     """

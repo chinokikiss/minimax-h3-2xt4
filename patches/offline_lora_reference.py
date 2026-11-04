@@ -3,6 +3,33 @@ import json
 import torch
 
 
+def verify_cached_weight(target,actual,actual_scale,reference):
+    """Check exported Native bytes against the *same* composed FP32 weight.
+
+    This checks the deterministic full-width quantization/dtype conversion
+    without re-reading, dequantizing, or re-applying LoRA. Unlike verify_weight,
+    it is not an independent A/B merge check; retain that for strict audits.
+    """
+    from comfy_kitchen.tensor.int8 import TensorWiseINT8Layout as Layout
+    # merged_weight already checked isfinite(reference) before quantization.
+    # Do not add a second GPU-wide reduction / host synchronization here.
+    if reference.dtype != torch.float32:
+        raise ValueError('Invalid cached FP32 Native reference dtype: ' + target)
+    if actual.dtype == torch.int8:
+        if actual_scale is None:
+            raise ValueError('Missing Native INT8 scale: ' + target)
+        expected, params = Layout.quantize(reference, per_channel=True, convrot=True,
+            convrot_groupsize=256, stochastic_rounding=0)
+        matches = (torch.equal(expected.cpu(), actual)
+                   and torch.equal(params.scale.cpu(), actual_scale))
+    else:
+        matches = (actual_scale is None
+                   and torch.equal(reference.to(actual.dtype).cpu(), actual))
+    if not matches:
+        raise AssertionError('Native output differs from cached reference: ' + target)
+    return True
+
+
 def verify_weight(reader,store,target,actual,actual_scale,device='cuda:0'):
     from comfy_kitchen.tensor.int8 import TensorWiseINT8Layout as Layout
     q=reader.read_tensor(target+'.weight').to(device)

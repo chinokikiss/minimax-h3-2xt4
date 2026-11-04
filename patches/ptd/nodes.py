@@ -2,60 +2,6 @@
 from pathlib import Path
 
 
-class MiniMaxH3TP2PTDBake:
-    CATEGORY = 'MiniMax H3/TP2/PTD'
-    FUNCTION = 'prepare'
-    RETURN_TYPES = ('H3_PTD_BANK',)
-
-    @classmethod
-    def INPUT_TYPES(cls):
-        return {'required':{
-            'enabled':('BOOLEAN',{'default':False}),
-            'base_descriptor':('STRING',{'default':'/tmp/h3_base/dit_reader.json'}),
-            'checkpoint_path':('STRING',{'default':'download_on_t4'}),
-            'output_directory':('STRING',{'default':'/tmp/h3_ptd_refasymopd'}),
-            'allow_pruned_adaln':('BOOLEAN',{'default':False,
-                'tooltip':'Explicitly allow the current pruned AdaLN bundle as an unqualified PTD approximation.'})},
-            'optional':{'session':('MINIMAX_TP2_SESSION',)}}
-
-    def prepare(self,enabled,base_descriptor,checkpoint_path,output_directory,allow_pruned_adaln=False,session=None):
-        if not enabled:
-            return (None,)
-        from patches.ptd.bank import PTDBank,bake,disk_plan
-        from patches.ptd.checkpoint import download_on_t4
-        from patches.tp2_bundle import BundleReader
-        base = BundleReader(base_descriptor,verify_payloads=False)
-        if 'adaln_t_table' in base.header and not allow_pruned_adaln:
-            raise ValueError('Enable the explicit pruned-AdaLN approximation switch for this bundle')
-        cached = Path(output_directory) / 'bank.json'
-        if cached.exists():
-            bank=PTDBank(cached,verify_payloads=False)
-            if bank.base != base.path:
-                raise ValueError('Cached PTD bank uses another base')
-            from patches.ptd.checkpoint import RELEASE
-            if checkpoint_path == 'download_on_t4':
-                if RELEASE['sha256'] != bank.recipe['checkpoint_sha256']:
-                    raise ValueError('Cached PTD bank uses another checkpoint')
-            else:
-                from patches.file_metadata import runtime_files
-                runtime_files.admit(checkpoint_path,size=bank.recipe['checkpoint_bytes'])
-            return (str(cached.resolve()),)
-        plan=disk_plan(base.path,output_directory,include_download=checkpoint_path=='download_on_t4')
-        if plan['free_bytes'] < plan['required_free_bytes']:
-            raise OSError(f"Eight PTD experts need {plan['required_free_bytes']/2**30:.1f} GiB free; only {plan['free_bytes']/2**30:.1f} GiB available")
-        def run():
-            checkpoint=(download_on_t4(Path(output_directory).parent/'ptd_download')
-                        if checkpoint_path=='download_on_t4' else Path(checkpoint_path))
-            return bake(base.path,checkpoint,output_directory,allow_pruned_adaln=allow_pruned_adaln)
-        if session is None:
-            return (str(run()),)
-        with session.lock:
-            session.release_staged_encoders()
-            session.call('end_sample')  # release the existing TE/DiT GPU window
-            session.call('vae_release')
-            return (str(run()),)
-
-
 class MiniMaxH3TP2PTDAdapter:
     CATEGORY = 'MiniMax H3/TP2/PTD'
     FUNCTION = 'apply'
@@ -91,6 +37,57 @@ class MiniMaxH3TP2PTDAdapter:
         return adapt_model(model,session,bank,options,expected_bank_sha256=expected_bank_sha256 or None)
 
 
+class MiniMaxH3TP2PTDBankLoader:
+    """Explicit Base-free Bank v2 entry. The ordinary Loader is unchanged."""
+    CATEGORY = 'MiniMax H3/TP2/PTD'
+    FUNCTION = 'load'
+    RETURN_TYPES = ('MODEL', 'CLIP', 'MINIMAX_TP2_SESSION', 'H3_PTD_BANK')
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        from custom_nodes.minimax_h3_tp2 import MiniMaxH3TP2Loader
+        original = MiniMaxH3TP2Loader.INPUT_TYPES()
+        required = dict(original['required'])
+        required.pop('diffusion_model')
+        required['bank_manifest'] = ('STRING', {'default': '/kaggle/input/h3-ptd-bank-v2/bank_v2.json'})
+        optional = dict(original['optional'])
+        optional.pop('lora_stack', None)
+        optional.pop('lora_mode', None)
+        optional['part_roots_json'] = ('STRING', {'default': '{}',
+            'tooltip': 'Explicit immutable part-id to mounted directory map. Relative roots in the manifest need no override.'})
+        optional['ptd_io_workers'] = ('INT', {'default': 1, 'min': 1, 'max': 8, 'step': 1,
+            'tooltip': 'Experimental v2-only CPU reader threads per rank. Four/rank means eight total readers.'})
+        optional['ptd_retire_page_cache'] = ('BOOLEAN', {'default': False,
+            'tooltip': 'Experimental Linux posix_fadvise DONTNEED after complete v2 rank reads; no inference data change.'})
+        return {'required': required, 'optional': optional}
+
+    def load(self, text_encoder, bank_manifest, part_roots_json='{}',
+             ptd_io_workers=1, ptd_retire_page_cache=False, **options):
+        import json
+        from custom_nodes.minimax_h3_tp2 import MiniMaxH3TP2Loader
+        from patches.ptd.bank_v2 import PTDBankV2
+        if options.pop('lora_stack', ()):
+            raise ValueError('Bank v2 already includes all PTD and ordinary LoRA merges')
+        if options.pop('lora_mode', 'offline') != 'offline':
+            raise ValueError('Bank v2 forbids online LoRA; prepare another offline Bank instead')
+        mounts = json.loads(part_roots_json)
+        if (not isinstance(mounts, dict)
+                or any(not isinstance(k, str) or not isinstance(v, str) or not v
+                       for k, v in mounts.items())):
+            raise ValueError('Bank v2 part roots must be a JSON object of ID/path strings')
+        path = Path(bank_manifest).resolve()
+        PTDBankV2(path, part_roots=tuple(sorted(mounts.items())), verify_payloads=False).configure_io(
+            ptd_io_workers, ptd_retire_page_cache)
+        # 'online' here only suppresses the legacy Loader's JSON-based offline
+        # LoRA installation. No runtime adapters exist in this v2 session.
+        model, clip, service = MiniMaxH3TP2Loader().load(
+            text_encoder, str(path), lora_mode='online',
+            ptd_part_roots=tuple(sorted(mounts.items())),
+            ptd_io_workers=ptd_io_workers, ptd_retire_page_cache=ptd_retire_page_cache,
+            **options)
+        return model, clip, service, str(path)
+
+
 class MiniMaxH3TP2PTDSampler:
     CATEGORY = 'MiniMax H3/TP2/PTD'
     FUNCTION = 'sampler'
@@ -111,4 +108,4 @@ class MiniMaxH3TP2PTDSampler:
 
 
 NODE_CLASS_MAPPINGS={cls.__name__:cls for cls in
-    (MiniMaxH3TP2PTDBake,MiniMaxH3TP2PTDAdapter,MiniMaxH3TP2PTDSampler)}
+    (MiniMaxH3TP2PTDBankLoader,MiniMaxH3TP2PTDAdapter,MiniMaxH3TP2PTDSampler)}

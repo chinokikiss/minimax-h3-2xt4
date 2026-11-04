@@ -20,7 +20,7 @@ assert version('comfy-kitchen')=='0.2.37'
 
 paths=['patches/h3_operator_policy.py','patches/h3_operator_dependencies.py','patches/tilelang_group32_masked.py',
     'patches/comfy_tp_runtime.py','patches/windowed_tp.py','patches/tp_qwen3vl.py','patches/tp_dit.py',
-    'patches/h3_lora.py','patches/multi_gpu_audio_vae.py','patches/parallel_vae.py',
+    'patches/h3_lora.py','benchmarks/legacy/multi_gpu_audio_vae.py','patches/parallel_vae.py',
     'patches/tilelang_row_quant.py','patches/tilelang_swiglu_pad.py','patches/tilelang_attention_p2.py',
     'custom_nodes/minimax_h3_tp2/__init__.py','tools/runtime/build_comfy_tp2_workflow.py','tools/experiments/build_h3_operator_integration_job.py',
     'benchmarks/test_h3_operator_integration.py','benchmarks/test_h3_pipeline_wiring.py',

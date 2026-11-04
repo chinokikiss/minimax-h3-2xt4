@@ -34,7 +34,10 @@ def _check_cancel():
     if management is not None:management.throw_exception_if_processing_interrupted()
 
 
-def merged_weight(reader,store,target,device='cuda:0'):
+def merged_weight(reader,store,target,device='cuda:0',*,return_reference=False):
+    # return_reference retains the already-composed FP32 weight for PTD v2.
+    # It avoids reconstructing the base and LoRA deltas during quantization
+    # verification; it does NOT independently verify the Native A/B formula.
     from comfy_kitchen.tensor.int8 import TensorWiseINT8Layout as Layout
     from comfy.weight_adapter.lora import LoRAAdapter
     source=reader.read_tensor(target+'.weight').to(device)
@@ -60,12 +63,15 @@ def merged_weight(reader,store,target,device='cuda:0'):
         if applied!=[True]:raise RuntimeError('Native LoRA merge did not apply the adapter')
         del down,up,adapter
     if not torch.isfinite(value).all():raise ValueError('Nonfinite offline merged weights')
-    if original_dtype!=torch.int8:return value.to(original_dtype).cpu().contiguous(),None
+    if original_dtype!=torch.int8:
+        result=value.to(original_dtype).cpu().contiguous()
+        return (result,None,value) if return_reference else (result,None)
     # Quantize the full input width BEFORE splitting into TP ranks. Each row
     # shard must use the same Native weight scale, not an independent half max.
     q,params=Layout.quantize(value,per_channel=True,convrot=True,convrot_groupsize=256,
                              stochastic_rounding=0)
-    return q.cpu().contiguous(),params.scale.cpu().contiguous()
+    result=q.cpu().contiguous(),params.scale.cpu().contiguous()
+    return (*result,value) if return_reference else result
 
 
 def layer_partitions(reader,targets,count):

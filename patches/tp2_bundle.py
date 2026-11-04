@@ -32,13 +32,19 @@ def signature(path):
     s=Path(path).stat(); return s.st_size,s.st_mtime_ns
 
 
-def open_checkpoint(path,*,verify_dit_weights=True,verify_weights=None):
+def open_checkpoint(path,*,verify_dit_weights=True,verify_weights=None,ptd_part_roots=(),
+                    ptd_allow_fixture=False):
     """Tooling verifies by default; inference explicitly selects metadata checks."""
     verify = verify_dit_weights if verify_weights is None else verify_weights
     if Path(path).suffix.lower()=='.json':
         checks=FileChecks()
         value=checks.read_json(path)
-        if value.get('format')=='h3-tp2-disk-baked-v1':
+        if value.get('format')=='h3-ptd-tp2-bank-v2':
+            from patches.ptd.bank_v2 import PTDBankV2
+            bank=PTDBankV2(path,part_roots=ptd_part_roots,verify_payloads=verify,
+                           allow_fixture=ptd_allow_fixture)
+            reader=bank.reader(0)
+        elif value.get('format')=='h3-tp2-disk-baked-v1':
             from patches.tp2_disk_bake import DiskBakedReader
             reader=DiskBakedReader(path,value,verify_payloads=verify)
         else:

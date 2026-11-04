@@ -84,13 +84,13 @@ def control_gates():
 
 def preprocessing_seam_gates():
     from patches.windowed_tp import DiTPreprocessing
-    class Model(nn.Module):
+    class UnsupportedModel(nn.Module):
         hidden_size=8
         def __init__(self):
             super().__init__();self.video_patch_proj=nn.Linear(6,8);self.audio_patch_proj=nn.Linear(4,8)
             self.condition_proj=nn.Linear(12,8);self.token_refiner=nn.Identity()
         def preprocess_text_embeds(self,x):return x
-    class OldModel(Model):
+    class PinnedModel(UnsupportedModel):
         def _embed_and_pack(self,v,a,c,layout,payload,options):
             return torch.cat((c[0],self.video_patch_proj(v),self.audio_patch_proj(a)),0)
     class Comm:
@@ -98,26 +98,27 @@ def preprocessing_seam_gates():
         def broadcast(self,x,src):
             if self.rank==0:self.values.append(x.clone())
             else:x.copy_(self.values[self.cursor]);self.cursor+=1
-    for old in (False,True):
-        cls=OldModel if old else Model
-        torch.manual_seed(819);models=[cls(),cls()];models[1].load_state_dict(models[0].state_dict())
-        v=torch.randn(5,6);a=torch.randn(3,4);c=torch.randn(1,2,8)
-        reference=torch.cat((c[0],models[0].video_patch_proj(v),models[0].audio_patch_proj(a)),0)
-        comm=Comm();owners=[DiTPreprocessing(m,r,'cpu',comm,'identity') for r,m in enumerate(models)]
-        class Window:
-            calls=0
-            @contextmanager
-            def use(self,key):
-                self.calls+=1
-                yield nn.ModuleDict({name:owners[0].canonical[name] for name in ('video_patch_proj','audio_patch_proj')})
-        owners[0].window=Window()
-        for rank in (0,1):
-            comm.rank=rank
-            if old:y=models[rank]._embed_and_pack(v,a,c,SimpleNamespace(seq_len=10),{}, {})
-            else:y=torch.cat((c[0],models[rank].video_patch_proj(v),models[rank].audio_patch_proj(a)),0)
-            torch.testing.assert_close(y,reference,rtol=0,atol=0)
-        assert owners[0].window.calls==owners[0].project_uses==(1 if old else 2)
-        for owner in owners:owner.close()
+    try:DiTPreprocessing(UnsupportedModel(),0,'cpu',Comm(),'unsupported')
+    except RuntimeError as error:assert '_embed_and_pack' in str(error)
+    else:raise AssertionError('Unsupported inline packing must fail closed')
+    torch.manual_seed(819);models=[PinnedModel(),PinnedModel()]
+    models[1].load_state_dict(models[0].state_dict())
+    v=torch.randn(5,6);a=torch.randn(3,4);c=torch.randn(1,2,8)
+    reference=torch.cat((c[0],models[0].video_patch_proj(v),models[0].audio_patch_proj(a)),0)
+    comm=Comm();owners=[DiTPreprocessing(m,r,'cpu',comm,'identity') for r,m in enumerate(models)]
+    class Window:
+        calls=0
+        @contextmanager
+        def use(self,key):
+            self.calls+=1
+            yield nn.ModuleDict({name:owners[0].canonical[name] for name in ('video_patch_proj','audio_patch_proj')})
+    owners[0].window=Window()
+    for rank in (0,1):
+        comm.rank=rank
+        y=models[rank]._embed_and_pack(v,a,c,SimpleNamespace(seq_len=10),{}, {})
+        torch.testing.assert_close(y,reference,rtol=0,atol=0)
+    assert owners[0].window.calls==owners[0].project_uses==1
+    for owner in owners:owner.close()
 
 
 def selective_b_gates(device):

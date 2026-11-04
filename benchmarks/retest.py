@@ -287,7 +287,7 @@ def _native_call(kind, block, x, t_emb=None, segments=None, rope=None):
 def load_proposal(kind, strategy, path, rank):
     if kind == "te":
         from patches.tp_qwen3vl import TPTransformerBlockINT8
-        from patches.sp_int8_qwen3vl import SPTransformerBlockINT8
+        from benchmarks.legacy.sp_int8_qwen3vl import SPTransformerBlockINT8
         cls = TPTransformerBlockINT8 if strategy == "tp" else SPTransformerBlockINT8
         block = cls(rank=rank, world_size=2, device=torch.device(f"cuda:{rank}"))
         sd = state(path, "model.layers.0.")
@@ -298,7 +298,7 @@ def load_proposal(kind, strategy, path, rank):
         rows = {"o_proj": "self_attn.o_proj", "down_proj": "mlp.down_proj"}
     else:
         from patches.tp_dit import TPDiTBlockINT8
-        from patches.sp_int8_dit import SPDiTBlockINT8
+        from benchmarks.legacy.sp_int8_dit import SPDiTBlockINT8
         cls = TPDiTBlockINT8 if strategy == "tp" else SPDiTBlockINT8
         block = cls(rank=rank, world_size=2)
         sd = state(path, "blocks.0.")
@@ -322,7 +322,7 @@ def _worker(rank, mode, kind, path, inputs_dir, output_dir, port, warmups, itera
     result = {}
     try:
         if kind == "video":
-            from patches.tp_video_vae import patch_video_vae_tp, patch_video_vae_sp
+            from benchmarks.legacy.tp_video_vae import patch_video_vae_tp, patch_video_vae_sp
             model, sd = load_video_native(path, device=device)
             patcher = patch_video_vae_tp if mode == "tp" else patch_video_vae_sp
             model = patcher(model, sd, rank, 2, device)
@@ -505,7 +505,7 @@ def run_video(path, output, args):
 def run_tiling(kind, path, output, args):
     if kind == "audio":
         from comfy.ldm.minimax.audio_vae import MiniMaxH3AudioVAE
-        from patches.multi_gpu_audio_vae import MultiGPUAudioVAEDecoder
+        from benchmarks.legacy.multi_gpu_audio_vae import MultiGPUAudioVAEDecoder
         model = MiniMaxH3AudioVAE()
         model.load_state_dict(state(path), strict=True)
         decoder = MultiGPUAudioVAEDecoder(base_vae=model, dev1="cuda:0", dtype=torch.float32)
@@ -515,7 +515,7 @@ def run_tiling(kind, path, output, args):
         workloads = {f"{seconds}s": (1, 32, 2, seconds * 40) for seconds in [5, 10, 20]}
         dtype = torch.float32
     else:
-        from patches.multi_gpu_video_vae import MultiGPUVideoVAEDecoder
+        from benchmarks.legacy.multi_gpu_video_vae import MultiGPUVideoVAEDecoder
         model, sd = load_video_native(path)
         del sd
         decoder = MultiGPUVideoVAEDecoder(base_vae=model, dev1="cuda:0", dtype=torch.float16)

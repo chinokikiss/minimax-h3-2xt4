@@ -18,7 +18,7 @@ import comfy.quant_ops
 from comfy.ldm.minimax.vae import create_token_ids
 from logical_dual_gpu import LogicalDualGPU,isolate_cublas_workspaces
 from patches.parallel_int8 import gather
-from patches.slab_video_vae import SlabPlan,stitch_slabs
+from benchmarks.legacy.slab_video_vae import SlabPlan,stitch_slabs
 from retest import load_video_native
 
 
@@ -142,7 +142,7 @@ def main():
         physical_gpu_count=1,gpu=torch.cuda.get_device_name(0),torch=torch.__version__,
         comfy_kitchen=importlib.metadata.version('comfy-kitchen'),checkpoint_sha256=sha,
         source_sha256={p.relative_to(ROOT).as_posix():hashlib.sha256(p.read_bytes()).hexdigest()
-                       for p in (Path(__file__),ROOT/'ComfyUI/comfy/ldm/minimax/vae.py',ROOT/'patches/slab_video_vae.py')},
+                       for p in (Path(__file__),ROOT/'ComfyUI/comfy/ldm/minimax/vae.py',ROOT/'benchmarks/legacy/slab_video_vae.py')},
         cases=[])
     options.output.parent.mkdir(parents=True,exist_ok=True)
     def save():options.output.write_text(json.dumps(result,indent=2))

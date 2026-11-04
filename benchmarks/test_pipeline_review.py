@@ -35,8 +35,8 @@ from patches.comfy_sampler import ParallelDecodeHandoff
 from patches.comfy_tp_runtime import RankRuntime
 result=RankRuntime.__new__(RankRuntime)._prepare_vae('unused','audio',0)
 assert not result['accepted']
-assert 'patches.multi_gpu_audio_vae' not in sys.modules
-assert 'patches.audio_channel_decode' not in sys.modules
+assert 'benchmarks.legacy.multi_gpu_audio_vae' not in sys.modules
+assert 'benchmarks.legacy.audio_channel_decode' not in sys.modules
 assert not any(n=='benchmarks' or n.startswith('benchmarks.') for n in sys.modules)
 '''
         result=subprocess.run([sys.executable,'-c',code],cwd=ROOT,capture_output=True,text=True)

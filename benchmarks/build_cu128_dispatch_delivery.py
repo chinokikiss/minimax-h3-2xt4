@@ -9,7 +9,7 @@ import tarfile
 from build_kaggle_light_delivery import payload_from_distribution,write_distribution
 
 ROOT=Path(__file__).resolve().parents[1]
-FILES=('patches/kitchen_cu128_candidate.py','benchmarks/test_cu128_candidate.py',
+FILES=('benchmarks/legacy/kitchen_cu128_candidate.py','benchmarks/test_cu128_candidate.py',
        'benchmarks/case_cu128_dispatch.py','benchmarks/run_cu128_dispatch.py')
 
 

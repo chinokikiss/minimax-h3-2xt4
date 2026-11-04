@@ -32,7 +32,7 @@ for p in [PROJECT_ROOT, COMFY_ROOT, "/tmp/minimax_repo", "/tmp/ComfyUI"]:
     if os.path.exists(p) and p not in sys.path:
         sys.path.insert(0, p)
 
-from patches.tp_video_vae import (
+from benchmarks.legacy.tp_video_vae import (
     quantize_int8_rowwise_convrot,
     w8a8_gemm,
     create_tp_block_from_sd,

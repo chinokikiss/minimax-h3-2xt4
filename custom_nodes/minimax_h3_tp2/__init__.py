@@ -84,7 +84,8 @@ class MiniMaxH3TP2Loader:
              dit_fused_norm=True,dit_fused_gate=True,dit_fused_row_gate=True,dit_prepared_attention=True,
              dit_p0_2_lifetime=True,dit_p0_3_lifetime=True,dit_p0_b_inplace=True,
              dit_p0_a1_turing=True,dit_p0_c_local_rotation=True,
-             verify_dit_weights=False,debug=False,**retired_options):
+             verify_dit_weights=False,debug=False,ptd_part_roots=(),
+             ptd_io_workers=1,ptd_retire_page_cache=False,**retired_options):
         global _service
         from patches.h3_configuration import check_retired_loader_options
         check_retired_loader_options(retired_options)
@@ -114,6 +115,9 @@ class MiniMaxH3TP2Loader:
             # Legacy verify_dit_weights is accepted, but inference never hashes.
             idle_weight_bytes=int(idle_weight_gib*GiB),lora_stack=tuple(lora_stack),
             bundle_offline_lora=bundle_offline,
+            ptd_part_roots=tuple(ptd_part_roots),
+            ptd_io_workers=ptd_io_workers,
+            ptd_retire_page_cache=ptd_retire_page_cache,
             lora_row_partial_reduce=bool(lora_row_partial_reduce),
             adaptive_lookahead=bool(adaptive_lookahead),debug=bool(debug),
             video_decode_reserve_bytes=int(video_decode_reserve_gib*GiB),

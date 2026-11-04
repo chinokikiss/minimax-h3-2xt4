@@ -195,8 +195,12 @@ class AdapterContracts(unittest.TestCase):
             config=SimpleNamespace(lora_stack=(),layers=2,operators=operations,tensor_flow=flow),
             _drop_model=lambda:dropped.append(True),
             cache=SimpleNamespace(begin_request=lambda *a,**k:cache_calls.append((a,k))))
+        reader_calls=[]
+        def reader(hop,**kwargs):
+            reader_calls.append((hop,kwargs))
+            return SimpleNamespace(identity=('fixture',hop))
         bank=SimpleNamespace(base=base.path,layers=2,sigmas=hop_sigmas(8),check=lambda:None,
-            reader=lambda hop,**kwargs:SimpleNamespace(identity=('fixture',hop)))
+            reader=reader)
         with patch('patches.ptd.runtime.PTDBank',return_value=bank), \
                 patch('patches.ptd.runtime.tp_specs',side_effect=lambda reader,*a:[reader.identity]):
             adapter=WorkerAdapter(runtime,'unused',PTDOptions(enabled=True,allow_pruned_adaln=True,
@@ -208,6 +212,8 @@ class AdapterContracts(unittest.TestCase):
             with self.assertRaises(ValueError):adapter.select(2,float(bank.sigmas[2]))
             adapter.select(1,float(bank.sigmas[1]))
             self.assertEqual(runtime.readers['dit'].identity,('fixture',1))
+            self.assertEqual([hop for hop,_ in reader_calls],[0,1])
+            self.assertTrue(all(kwargs['base_reader'] is base for _,kwargs in reader_calls))
             self.assertTrue(cache_calls[-1][1]['discard_unwanted'])
             adapter.close()
             self.assertIs(runtime.readers['dit'],base)

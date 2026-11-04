@@ -26,7 +26,7 @@ from retest import load_video_native
 import comfy.ops
 import comfy.quant_ops
 from comfy.ldm.minimax.vae import create_token_ids
-from patches.slab_video_vae import SlabPlan, stitch_slabs
+from benchmarks.legacy.slab_video_vae import SlabPlan, stitch_slabs
 from logical_dual_gpu import LogicalDualGPU, isolate_cublas_workspaces
 
 MODES = ('native', 'independent', 'global_rope', 'shared_kv_global',

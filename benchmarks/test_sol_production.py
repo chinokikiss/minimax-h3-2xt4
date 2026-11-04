@@ -17,6 +17,40 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 class SolProductionContracts(unittest.TestCase):
+    def test_route_stats_are_bounded_and_explicitly_clearable(self):
+        sol_attention.clear_route_stats()
+        self.addCleanup(sol_attention.clear_route_stats)
+        for _ in range(1030):
+            sol_attention._defer_route_stats(dict(
+                route_stats_gpu=torch.tensor([1,2,3],dtype=torch.int64),
+                route_stats_denominator=4,topology={'kind':'fixture'}),1.,128)
+        self.assertEqual(len(sol_attention._ROUTE_STATS),1024)
+        row=sol_attention.route_stats_snapshot(clear=True)[0]
+        self.assertEqual(row['calls'],1024)
+        self.assertEqual(row['density'],3/4)
+        self.assertFalse(sol_attention._ROUTE_STATS)
+
+    def test_one_shot_sol_wrappers_release_on_exception(self):
+        class Prepared(dict):
+            def __init__(self):
+                super().__init__(q_int8=torch.empty((1,1,2,64),dtype=torch.int8),
+                                 q_block_base=0)
+                self.releases=0
+            def release(self):self.releases+=1
+        q=torch.empty((1,1,2,64),dtype=torch.float16)
+        for entry,prepare in (
+                (lambda:sol_attention.attention_partition(q,q,q,q_token_offset=0),
+                 'prepare_attention_partition'),
+                (lambda:sol_attention._native(q,q,q,protected_tokens=0,
+                    protected_start=0,tau=1.),'prepare_attention')):
+            prepared=Prepared()
+            with self.subTest(prepare=prepare), patch.object(sol_attention,prepare,
+                    return_value=prepared), patch.object(sol_attention,'execute_prepared',
+                    side_effect=RuntimeError('injected execution failure')):
+                with self.assertRaisesRegex(RuntimeError,'injected execution failure'):
+                    entry()
+            self.assertEqual(prepared.releases,1)
+
     def test_nfe_schedule_is_one_based_sparse_and_uses_default_for_gaps(self):
         schedule=parse_attention_schedule("1-2:kitchen,4:sol@0.75,6+:native")
         self.assertEqual(schedule,((1,2,'kitchen',None),(4,4,'sol',0.75),(6,None,'native',None)))
@@ -310,8 +344,9 @@ class SolProductionContracts(unittest.TestCase):
 
     def test_sol_prepared_and_fallback_defaults_match_v2(self):
         source=(ROOT/'patches/h3_operator_policy.py').read_text()
-        self.assertGreaterEqual(source.count("options.get('_h3_sol_topology_v2',True)"),2)
-        self.assertGreaterEqual(source.count("options.get('_h3_sol_sync_free_lut',True)"),2)
+        self.assertEqual(source.count('prefix,topology=sol_v2_routing(options,q.shape[-2])'),2)
+        self.assertNotIn('_h3_sol_topology_v2',source)
+        self.assertNotIn('_h3_sol_sync_free_lut',source)
         self.assertGreaterEqual(source.count("options.get('_h3_sol_collect_route_stats',False)"),2)
 
     def test_runtime_routes_sol_through_aot_prepare(self):

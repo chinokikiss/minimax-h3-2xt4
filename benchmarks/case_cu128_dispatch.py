@@ -88,7 +88,7 @@ def profile(function,path):
 
 def execute(case,out):
     import torch,comfy_kitchen as ck
-    from patches.kitchen_cu128_candidate import Candidate
+    from benchmarks.legacy.kitchen_cu128_candidate import Candidate
     torch.set_grad_enabled(False);torch.backends.cuda.matmul.allow_tf32=False
     torch.manual_seed(20261028)
     before_cuda=ck.registry.list_backends().get('cuda')

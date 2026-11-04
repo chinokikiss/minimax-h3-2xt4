@@ -25,7 +25,7 @@ def main():
         'benchmarks/fetch_h3_physical_fixtures.py','benchmarks/checkpoint_ranges.py','benchmarks/retest.py',
         'benchmarks/fixture_inputs.py','benchmarks/merge_h3_lora.py','patches/windowed_tp.py','patches/weight_residency.py',
         'patches/host_weight_cache.py','patches/host_memory_pressure.py','patches/diagnostic_metrics.py',
-        'patches/tp_dit.py','patches/tp_qwen3vl.py','patches/parallel_int8.py','patches/quantized_collectives.py',
+        'patches/tp_dit.py','patches/tp_qwen3vl.py','patches/parallel_int8.py','benchmarks/legacy/quantized_collectives.py',
         'patches/rank_local_int8.py','patches/h3_operator_policy.py']
     sources={name:(ROOT/name).read_text(encoding='utf8') for name in dict.fromkeys(names)}
     for name,source in sources.items():ast.parse(source,filename=name)

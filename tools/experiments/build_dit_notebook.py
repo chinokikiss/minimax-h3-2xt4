@@ -114,7 +114,7 @@ nb = {
             "source": [
                 "# Cell 4: Execute Unified Benchmark Across All Three Strategies\n",
                 "from patches.tp_dit import TPDiTBlockINT8\n",
-                "from patches.sp_int8_dit import SPDiTBlockINT8\n",
+                "from benchmarks.legacy.sp_int8_dit import SPDiTBlockINT8\n",
                 "\n",
                 "def compute_numerical_similarity(pred: torch.Tensor, ref: torch.Tensor):\n",
                 "    pred_f = pred.detach().cpu().to(torch.float32).flatten()\n",

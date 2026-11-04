@@ -29,8 +29,8 @@ from typing import Dict, List, Tuple, Any
 # Ensure project root is in sys.path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from patches.multi_gpu_video_vae import MultiGPUVideoVAEDecoder
-from patches.multi_gpu_audio_vae import MultiGPUAudioVAEDecoder
+from benchmarks.legacy.multi_gpu_video_vae import MultiGPUVideoVAEDecoder
+from benchmarks.legacy.multi_gpu_audio_vae import MultiGPUAudioVAEDecoder
 
 def compute_numerical_diff(pred: torch.Tensor, ref: torch.Tensor) -> Dict[str, float]:
     """Computes Max Abs Error, Relative L2 Error, and Cosine Similarity."""

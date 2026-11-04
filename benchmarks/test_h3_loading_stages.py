@@ -156,6 +156,35 @@ class ComponentAndIdle(unittest.TestCase):
         self.assertNotIn('idle_begin',s.commands);self.assertIn('idle_stop',s.commands)
         self.assertFalse(s.idle_held)
 
+    def test_pressure_during_preload_waits_for_full_cleanup(self):
+        s=self.service();entered=threading.Event();cancelled=threading.Event()
+        def preload(cancel):
+            entered.set()
+            self.assertTrue(cancel.wait(3))
+            cancelled.set()
+            raise CancelledError()
+        v=self.vae(s,preload=preload)
+        self.assertTrue(s.request_idle())
+        self.assertTrue(entered.wait(3))
+        self.assertTrue(s.pause_idle(keep=False,pressure=True))
+        self.assertTrue(cancelled.is_set())
+        self.assertFalse(s.idle_vae_thread.is_alive())
+        self.assertIsNone(v.stage)
+        self.assertEqual(s.commands[-1],'idle_release')
+
+    def test_urgent_pause_does_not_join_while_owning_rpc_lock(self):
+        s=self.service();entered=threading.Event()
+        def preload(cancel):
+            entered.set();cancel.wait(3)
+            raise CancelledError()
+        v=self.vae(s,preload=preload)
+        self.assertTrue(s.request_idle());self.assertTrue(entered.wait(3))
+        with s.lock:
+            self.assertFalse(s.pause_idle(keep=False,pressure=True))
+        s.idle_vae_thread.join(3)
+        self.assertFalse(s.idle_vae_thread.is_alive())
+        self.assertIsNone(v.stage)
+
     def test_preload_failure_keeps_te_prefetch_and_filters_current_graph(self):
         s=self.service()
         def fail(cancel):raise MemoryError('fixture admission')
@@ -176,6 +205,19 @@ class ComponentAndIdle(unittest.TestCase):
     def test_pressure_can_release_vae_after_te_consumed_idle_window(self):
         s=self.service();v=self.vae(s);s.idle_held=False
         self.assertTrue(s.pause_idle(keep=False,pressure=True));self.assertIsNone(v.stage)
+
+    def test_staged_preload_does_not_hold_service_lock_during_checkpoint_io(self):
+        s=self.service()
+        v=staged.StagedVAE.__new__(staged.StagedVAE)
+        v.service=s;v.lock=threading.RLock();v.stage=None
+        v.vae=SimpleNamespace(device='cpu')
+        def ensure(stage,cancel):
+            self.assertEqual(stage,'encode')
+            self.assertFalse(s.lock._is_owned())
+            v.stage='encode'
+        v._ensure=ensure
+        self.assertFalse(v.preload_idle(threading.Event()))
+        v.stage=None
 
     def test_abort_reconciles_parent_vae_lease(self):
         from patches.host_weight_cache import HostBudget

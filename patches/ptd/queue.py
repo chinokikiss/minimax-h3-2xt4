@@ -1,10 +1,11 @@
 """One bounded residency queue across PTD experts; Native math stays intact."""
-from dataclasses import replace
+from contextlib import contextmanager
 import math
 
+import torch
 from torch import nn
 
-from patches.weight_residency import WeightSpec, copy_module
+from patches.weight_residency import WeightSpec, copy_module, module_bytes
 from patches.windowed_tp import tp_specs
 
 
@@ -36,12 +37,55 @@ def refiner_group(canonical, reader, flow):
     return group
 
 
+def _refiner_targets(reader):
+    targets = tuple(sorted(reader.bank.hops[reader.hop][1]['auxiliary']['verified_targets']))
+    if len(targets) != 8 or any(not name.startswith('token_refiner.blocks.') for name in targets):
+        raise ValueError('PTD queue requires exactly eight baked refiner projections per hop')
+    return targets
+
+
+def refiner_static_group(canonical, targets):
+    """One GPU shell for immutable refiner tensors, excluding all hop projections."""
+    group = copy_module(nn.ModuleDict({name: canonical[name]
+        for name in ('condition_proj', 'token_refiner')}), lambda tensor: tensor)
+    for target in targets:
+        weight = _projection(group['token_refiner'], target.removeprefix('token_refiner.'))
+        if getattr(weight, 'bias', None) is not None:
+            raise ValueError('Queued refiner requires frozen bias-free projections')
+        weight.weight = nn.Parameter(torch.empty(0, dtype=weight.weight.dtype), requires_grad=False)
+    return group
+
+
+def refiner_projection_group(canonical, reader, flow, targets):
+    """Only the eight changing FP32 projection weights; no duplicated static CPU backing."""
+    weights = []
+    batch = (reader.read_tensors(tuple(target+'.weight' for target in targets))
+             if reader.hop > 0 and reader.bank.http_range2_enabled else {})
+    for target in targets:
+        projection = _projection(canonical['token_refiner'], target.removeprefix('token_refiner.'))
+        if reader.hop == 0:
+            # Hop 0 was already decoded, folded and retained by Native _phase.
+            value = projection.weight.detach()
+        else:
+            value = (batch[target+'.weight'] if batch else reader.read_tensor(target+'.weight')).to(dtype=projection.weight.dtype)
+            if flow.enabled and target.endswith(('attn.out_proj', 'mlp.fc2')):
+                value = value / flow.divisor
+        if value.shape != projection.weight.shape:
+            raise ValueError('PTD projection does not match canonical refiner shape')
+        weights.append(nn.Parameter(value.contiguous(), requires_grad=False))
+    return nn.ParameterList(weights)
+
+
 def head_group(templates, reader):
     result = nn.ModuleDict()
+    batch = (reader.read_tensors(tuple(f'final_layer.{name}.{attribute}'
+             for name in templates for attribute in ('weight', 'bias')))
+             if reader.bank.http_range2_enabled else {})
     for name, template in templates.items():
         head = copy_module(template, lambda tensor:tensor)
         for attribute in ('weight', 'bias'):
-            value = reader.read_tensor(f'final_layer.{name}.{attribute}')
+            key = f'final_layer.{name}.{attribute}'
+            value = batch[key] if batch else reader.read_tensor(key)
             setattr(head, attribute, nn.Parameter(value.to(dtype=getattr(template,attribute).dtype),
                                                  requires_grad=False))
         result[name] = head
@@ -93,30 +137,70 @@ class ExpertQueue:
         self.canonical = self.preprocessing.canonical
         self.refine_spec = self.window.specs.get(self.preprocessing.refine_key)
         self.project_spec = self.window.specs.get(self.preprocessing.project_key)
+        self.split_refiner = runtime.rank == 0 and adapter.options.use_hop_refiner
+        self.static_refine_spec = None
+        if self.split_refiner:
+            self.refiner_targets = _refiner_targets(runtime.readers['dit'])
+            static_bound = module_bytes(refiner_static_group(self.preprocessing.canonical,
+                self.refiner_targets)) + 2**20
+            self.static_refine_spec = WeightSpec((self.refine_spec.key, 'ptd_static'),
+                lambda: refiner_static_group(self.canonical, self.refiner_targets),
+                static_bound, prepare_peak_bytes=static_bound, resident_backing=True)
         self.initial_blocks = tuple(self.window.specs[key] for key in runtime.keys)
         self.readers = {0:runtime.readers['dit']}
         self.plans, self.starts, self.block_keys, self.refine_keys, self.head_keys = {}, {}, {}, {}, {}
         native_final = runtime.model.final_layer
+        self.initial_heads = getattr(runtime, '_ptd_initial_heads', None)
         self.head_templates = {name:copy_module(getattr(native_final,name),lambda tensor:tensor.to('meta'))
                                for name in ('video_out','audio_out')}
         self.final = QueuedFinalLayer(native_final, self.view)
+        if self.split_refiner:
+            self.preprocessing.ptd_refiner_context = self._refine_context
         runtime.model.final_layer = self.final
         runtime.window = self.view
         self.preprocessing.window = self.view
         # Every expert's unique groups retire at their last recorded use.
         # Shared Native input projection stays reusable under the same guards.
         keep = {self.project_spec.key} if self.project_spec is not None else set()
-        if self.refine_spec is not None and not adapter.options.use_hop_refiner:
+        if self.split_refiner:
+            keep.add(self.static_refine_spec.key)
+        elif self.refine_spec is not None and not adapter.options.use_hop_refiner:
             keep.add(self.refine_spec.key)
         self.window.retain_keys = frozenset(keep)
         self._append(0)
+        if not adapter.options.use_pdd_heads:
+            self.window.retain_keys |= {self.head_keys[0]}
         self._append(1)
         if adapter.options.future_cache:
             for hop in range(2, 8): self._append(hop)
-            priorities = ({self.starts[hop]:self.refine_keys[hop] for hop in range(1,8)}
+            priorities = ({self.starts[hop]+int(self.split_refiner):self.refine_keys[hop] for hop in range(1,8)}
                 if runtime.rank == 0 and adapter.options.prefetch_refiner else {})
             self.window.configure_cpu_schedule(refiner_by_use=priorities)
         self.select(0)
+
+    @contextmanager
+    def _refine_context(self):
+        """Lease retained static refiner, then bind the selected GPU projections."""
+        # WeightWindow advances its ordered cursor when a lease exits, not
+        # when it enters. The static group remains resident via retain_keys.
+        with self.view.use(self.static_refine_spec.key) as shared:
+            pass
+        with self.view.use(self.preprocessing.refine_key) as weights:
+            if len(weights) != len(self.refiner_targets):
+                raise RuntimeError('Queued PTD projection count changed')
+            previous, model = [], self.runtime.model
+            original = {name:getattr(model,name) for name in shared}
+            try:
+                for target, weight in zip(self.refiner_targets, weights):
+                    projection = _projection(shared['token_refiner'],
+                        target.removeprefix('token_refiner.'))
+                    previous.append((projection, projection.weight))
+                    projection.weight = weight
+                for name,module in shared.items():setattr(model,name,module)
+                yield
+            finally:
+                for projection,weight in reversed(previous):projection.weight = weight
+                for name,module in original.items():setattr(model,name,module)
 
     def reader(self, hop):
         if hop not in self.readers:
@@ -133,27 +217,41 @@ class ExpertQueue:
         blocks = self.initial_blocks if hop == 0 else tuple(tp_specs(reader, 'dit', runtime.rank, runtime.config.layers))
         specs, uses = list(blocks), []
         if runtime.rank == 0:
-            refiner = self.refine_spec
-            if hop and self.adapter.options.use_hop_refiner:
-                # Native auxiliary construction is not repeated. This one
-                # pageable group transfers its existing cache reservation to
-                # the GPU window until its H2D ready event completes.
-                largest = max((math.prod(info['shape']) * 4
-                    for name,info in reader.header.items() if name.startswith('token_refiner.blocks.')
-                    and name.endswith('.weight')), default=0)
-                refiner = replace(refiner, key=((reader.identity,runtime.config.tensor_flow),'ptd_refiner',runtime.rank),
-                    prepare=lambda reader=reader:refiner_group(self.canonical, reader, runtime.config.tensor_flow),
-                    prepare_peak_bytes=refiner.max_bytes+largest+16*2**20,
-                    resident_backing=False, pin_backing=False)
+            if self.split_refiner:
+                targets = _refiner_targets(reader)
+                if targets != self.refiner_targets:
+                    raise ValueError('PTD refiner projection layout differs between hops')
+                dynamic_bytes = sum(math.prod(_projection(self.canonical['token_refiner'],
+                    target.removeprefix('token_refiner.')).weight.shape) * 4 for target in targets)
+                largest = max((math.prod(_projection(self.canonical['token_refiner'],
+                    target.removeprefix('token_refiner.')).weight.shape) * 4 for target in targets))
+                refiner = WeightSpec(((reader.identity,runtime.config.tensor_flow),'ptd_refiner',runtime.rank),
+                    lambda reader=reader: refiner_projection_group(self.canonical, reader,
+                        runtime.config.tensor_flow, self.refiner_targets),
+                    dynamic_bytes + 2**20, prepare_peak_bytes=dynamic_bytes + largest + 16*2**20,
+                    resident_backing=hop == 0, pin_backing=False)
+                specs += [self.static_refine_spec, refiner, self.project_spec]
+                uses += [self.static_refine_spec.key,refiner.key]
+            else:
+                refiner = self.refine_spec
+                specs += [refiner, self.project_spec]
+                uses += [refiner.key]
             self.refine_keys[hop] = refiner.key
-            specs += [refiner, self.project_spec]
-            uses += [refiner.key] + [self.project_spec.key]*self.preprocessing.project_uses
+            uses += [self.project_spec.key]*self.preprocessing.project_uses
         uses += [spec.key for spec in blocks]
-        head_key = (reader.identity,'ptd_heads',runtime.rank)
-        head_bytes = sum(math.prod(reader.header[f'final_layer.{name}.{attribute}']['shape'])*4
-                         for name in ('video_out','audio_out') for attribute in ('weight','bias'))
-        heads = WeightSpec(head_key, lambda reader=reader:head_group(self.head_templates,reader),
-            head_bytes+2**20, prepare_peak_bytes=2*head_bytes+2**20)
+        if hop and not self.adapter.options.use_pdd_heads:
+            head_key = self.head_keys[0]
+            heads = self.window.specs[head_key]
+        else:
+            head_key = (reader.identity,'ptd_heads',runtime.rank)
+            head_bytes = sum(math.prod(reader.header[f'final_layer.{name}.{attribute}']['shape'])*4
+                             for name in ('video_out','audio_out') for attribute in ('weight','bias'))
+            if hop == 0 and self.initial_heads is not None:
+                heads = WeightSpec(head_key, lambda: self.initial_heads,
+                    head_bytes+2**20, prepare_peak_bytes=head_bytes+2**20, resident_backing=True)
+            else:
+                heads = WeightSpec(head_key, lambda reader=reader:head_group(self.head_templates,reader),
+                    head_bytes+2**20, prepare_peak_bytes=2*head_bytes+2**20)
         specs.append(heads); uses.append(head_key)
         self.starts[hop] = len(self.window.uses)
         self.window.append_plan(tuple({spec.key:spec for spec in specs}.values()),uses)
@@ -168,7 +266,10 @@ class ExpertQueue:
         runtime.readers['dit'] = self.reader(hop)
         runtime.keys = self.block_keys[hop]
         for block,key in zip(runtime.model.blocks,runtime.keys): block.key = key
-        if runtime.rank == 0: self.preprocessing.refine_key = self.refine_keys[hop]
+        if runtime.rank == 0:
+            self.preprocessing.refine_key = self.refine_keys[hop]
+            self.preprocessing.refine_uses = ((self.static_refine_spec.key,self.refine_keys[hop])
+                if self.split_refiner else (self.refine_keys[hop],))
         self.final.head_key = self.head_keys[hop]
         # No trim, close, GC, global CUDA sync or allocator flush at a hop.
         runtime.cache.begin_request([self.window.specs[key] for key in
@@ -197,6 +298,10 @@ class ExpertQueue:
         # before Native stage teardown releases its auxiliary reservation.
         self.window.specs.clear()
         self.head_templates.clear()
+        if hasattr(self.preprocessing, 'ptd_refiner_context'):
+            self.preprocessing.ptd_refiner_context = None
+            self.preprocessing.refine_uses = ()
+        self.initial_heads = None
         self.canonical = self.preprocessing = self.final = None
         self.readers.clear()
         self.finished = True

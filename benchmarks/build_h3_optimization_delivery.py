@@ -15,7 +15,7 @@ DIRTY=('patches/h3_operator_policy.py','patches/comfy_tp_runtime.py','patches/co
        'custom_nodes/minimax_h3_tp2/__init__.py')
 FILES=('patches/dit_column_linear.py','patches/h3_tensor_flow.py','patches/h3_vae_operators.py',
     'patches/tp2_disk_bake.py','patches/tp_dit.py','patches/tp_qwen3vl.py',
-    'patches/tilelang_fp32_rms_rope.py','patches/h3_operator_aot.py','patches/h3_operator_dependencies.py','patches/kitchen_cu128_candidate.py',
+    'patches/tilelang_fp32_rms_rope.py','patches/h3_operator_aot.py','patches/h3_operator_dependencies.py','benchmarks/legacy/kitchen_cu128_candidate.py',
     'benchmarks/test_cu128_candidate.py','benchmarks/test_h3_optimization_batch.py',
     'benchmarks/case_cu128_dispatch.py','benchmarks/case_h3_optimization.py',
     'benchmarks/profile_bake_pipeline.py','benchmarks/run_h3_optimization_batch.py',

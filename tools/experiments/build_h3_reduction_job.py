@@ -72,7 +72,7 @@ def main(native_order=False,storage=False,a_options=False,row_memory=False):
         'minimax_h3/dmad_minimax_h3_4step_full_critic_comfyui.safetensors',lambda k:k.startswith(lora_prefixes)))
     names=['benchmarks/physical_h3_reduction.py','benchmarks/fetch_h3_physical_fixtures.py','benchmarks/checkpoint_ranges.py',
            'benchmarks/fixture_inputs.py','benchmarks/retest.py','benchmarks/merge_h3_lora.py',
-           'patches/optimized_tp.py','patches/parallel_int8.py','patches/quantized_collectives.py','patches/h3_lora.py',
+           'patches/optimized_tp.py','patches/parallel_int8.py','benchmarks/legacy/quantized_collectives.py','patches/h3_lora.py',
            'patches/windowed_tp.py','patches/weight_residency.py','patches/diagnostic_metrics.py',
            'patches/tp_dit.py','patches/tp_qwen3vl.py','patches/rank_local_int8.py']
     if native_order:names.append('benchmarks/physical_h3_lora_repair.py')

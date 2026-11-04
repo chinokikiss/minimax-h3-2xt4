@@ -53,7 +53,7 @@ def worker(rank,mode,path,output,port):
     os.environ['MASTER_PORT']=str(port)
     torch.cuda.set_device(rank)
     dist.init_process_group('nccl',rank=rank,world_size=2,device_id=torch.device(f'cuda:{rank}'))
-    from patches.tp_video_vae import patch_video_vae_tp,patch_video_vae_sp
+    from benchmarks.legacy.tp_video_vae import patch_video_vae_tp,patch_video_vae_sp
     try:
         model,sd=load_video_native(path,f'cuda:{rank}')
         model=(patch_video_vae_tp if mode=='tp' else patch_video_vae_sp)(model,sd,rank,2,torch.device(f'cuda:{rank}'))

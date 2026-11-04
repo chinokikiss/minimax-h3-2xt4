@@ -198,7 +198,10 @@ class H3LoRAStore:
                 targets[target]=(a,b,scale)
             unknown=set(reader.header)-known-{'__metadata__'}
             if unknown or not targets:raise ValueError('Unconsumed LoRA keys: '+str(sorted(unknown)[:8]))
-            self.sources.append((reader,float(strength),targets));self.targets.update(targets)
+            self.sources.append((reader,float(strength),targets))
+            # Keep zero-strength sources for schema validation and identity,
+            # but never advertise targets with no active A/B contribution.
+            self.targets.update(t for t,(_,_,scale) in targets.items() if scale)
         identity=['native-default-row-partial-selective-b-v6',self.row_partial,self.selective_b,[(r.identity,s) for r,s,_ in self.sources]]
         if self.selective_qkv_b:identity.append('experimental-owned-qkv-b-v1')
         self.identity=hashlib.sha256(json.dumps(identity,sort_keys=True).encode()).hexdigest()

@@ -9,7 +9,8 @@ import torch
 from torch import nn
 
 from patches.weight_residency import ResidencyWindow, WeightSpec, _Entry, module_bytes, copy_module
-from patches.ptd.queue import ExpertQueue, PlannedWindow, QueuedFinalLayer, refiner_group
+from patches.ptd.queue import (ExpertQueue, PlannedWindow, QueuedFinalLayer, refiner_group,
+                               refiner_static_group, refiner_projection_group)
 from patches.h3_tensor_flow import TensorFlowPolicy, prepare_dit
 
 
@@ -93,14 +94,76 @@ class QueueContracts(unittest.TestCase):
                 with torch.no_grad():projection.weight.copy_(value)
         flow=TensorFlowPolicy('fp16')
         prepare_dit(source,flow,rank=0);prepare_dit(oracle,flow,rank=0)
-        reader=SimpleNamespace(hop=1,bank=SimpleNamespace(hops=[None,(None,{
+        reader=SimpleNamespace(hop=1,bank=SimpleNamespace(http_range2_enabled=False,hops=[None,(None,{
             'auxiliary':{'verified_targets':[key.removesuffix('.weight') for key in values]}})]),
             read_tensor=lambda name:values[name].clone())
         group=refiner_group({'condition_proj':source.condition_proj,'token_refiner':source.token_refiner},reader,flow)
         expected=nn.ModuleDict({'condition_proj':oracle.condition_proj,'token_refiner':oracle.token_refiner})
         self.assertEqual(set(group.state_dict()),set(expected.state_dict()))
         for name,value in expected.state_dict().items():self.assertTrue(torch.equal(group.state_dict()[name],value),name)
+        targets=tuple(sorted(key.removesuffix('.weight') for key in values))
+        static=refiner_static_group({'condition_proj':source.condition_proj,'token_refiner':source.token_refiner},targets)
+        overlay=refiner_projection_group({'token_refiner':source.token_refiner},reader,flow,targets)
+        self.assertEqual(len(overlay),8)
+        self.assertLess(module_bytes(static),module_bytes(group))
+        self.assertEqual(module_bytes(overlay),sum(value.numel()*4 for value in values.values()))
+        self.assertEqual(module_bytes(static)+module_bytes(overlay),module_bytes(group))
+        for target,weight in zip(targets,overlay):
+            parent=static['token_refiner'].get_submodule(target.removeprefix('token_refiner.').rpartition('.')[0])
+            projection=getattr(getattr(parent,'base',parent),target.rpartition('.')[2])
+            projection.weight=weight
+        for name,value in expected.state_dict().items():self.assertTrue(torch.equal(static.state_dict()[name],value),name)
         self.assertEqual(group['token_refiner'].blocks[0].norm1.eps,oracle.token_refiner.blocks[0].norm1.eps)
+
+    def test_split_refiner_is_bitwise_equal_to_full_refiner_on_cpu(self):
+        model=native_tiny()
+        targets=tuple(sorted(f'token_refiner.blocks.{i}.{name}' for i in range(2)
+            for name in ('attn.qkv_proj','attn.out_proj','mlp.fc1','mlp.fc2')))
+        values={}
+        for i,target in enumerate(targets):
+            from patches.ptd.queue import _projection
+            projection=_projection(model.token_refiner,target.removeprefix('token_refiner.'))
+            values[target+'.weight']=torch.full_like(projection.weight,.03+i*.003)
+        reader=SimpleNamespace(hop=1,bank=SimpleNamespace(http_range2_enabled=False,hops=[
+            (None,{'auxiliary':{'verified_targets':targets}})]*8),
+            read_tensor=lambda name:values[name].clone())
+        flow=TensorFlowPolicy('legacy')
+        canonical={'condition_proj':model.condition_proj,'token_refiner':model.token_refiner}
+        complete=refiner_group(canonical,reader,flow)
+        shared=refiner_static_group(canonical,targets)
+        weights=refiner_projection_group(canonical,reader,flow,targets)
+        text=torch.full((1,4,6),.125)
+        old={name:getattr(model,name) for name in complete}
+        for name,module in complete.items():setattr(model,name,module)
+        try:expected=model.preprocess_text_embeds(text)
+        finally:
+            for name,module in old.items():setattr(model,name,module)
+        class HostWindow:
+            """Mirror ResidencyWindow's exit-time cursor advancement."""
+            def __init__(self):
+                self.uses=('shared','weights')
+                self.cursor=0
+            @contextmanager
+            def use(self,key):
+                if self.cursor>=len(self.uses) or self.uses[self.cursor]!=key:
+                    raise RuntimeError(f'Unexpected weight use at {self.cursor}: {key}')
+                try:
+                    yield shared if key=='shared' else weights
+                finally:
+                    self.cursor+=1
+        queue=object.__new__(ExpertQueue)
+        window=HostWindow()
+        queue.view=window
+        queue.static_refine_spec=SimpleNamespace(key='shared')
+        queue.preprocessing=SimpleNamespace(refine_key='weights')
+        queue.refiner_targets=targets
+        queue.runtime=SimpleNamespace(model=model)
+        with queue._refine_context():actual=model.preprocess_text_embeds(text)
+        self.assertEqual(window.cursor,2)
+        self.assertTrue(torch.equal(actual,expected))
+        self.assertTrue(all(_projection(shared['token_refiner'],
+            target.removeprefix('token_refiner.')).weight.numel()==0 for target in targets))
+        self.assertIs(model.token_refiner,canonical['token_refiner'])
 
     def test_final_layer_uses_native_math_and_restores_heads_after_failure(self):
         native=native_tiny().final_layer
@@ -136,11 +199,16 @@ class QueueContracts(unittest.TestCase):
         window.pinned_bytes=4*2**30
         header={f'final_layer.{name}.{attribute}':{'shape':list(getattr(getattr(model.final_layer,name),attribute).shape)}
             for name in ('video_out','audio_out') for attribute in ('weight','bias')}
-        def reader(hop,**kwargs):return SimpleNamespace(identity=('hop',hop),header=header)
+        targets=[f'token_refiner.blocks.{i}.{p}' for i in range(2)
+            for p in ('attn.qkv_proj','attn.out_proj','mlp.fc1','mlp.fc2')]
+        bank=SimpleNamespace(http_range2_enabled=False,hops=[(None,{'auxiliary':{'verified_targets':targets}})]*8)
+        def reader(hop,**kwargs):return SimpleNamespace(identity=('hop',hop),header=header,bank=bank,hop=hop)
         cache=SimpleNamespace(begin_request=Mock())
         preprocessing=SimpleNamespace(canonical=canonical,refine_key='ref0',project_key='project',project_uses=1)
+        initial_heads=nn.ModuleDict({name:copy_module(getattr(model.final_layer,name),lambda t:t.clone())
+            for name in ('video_out','audio_out')})
         runtime=SimpleNamespace(window=window,preprocessing=preprocessing,keys=[spec.key for spec in blocks],
-            model=model,rank=0,readers={'dit':reader(0)},cache=cache,
+            model=model,rank=0,readers={'dit':reader(0)},cache=cache,_ptd_initial_heads=initial_heads,
             config=SimpleNamespace(layers=2,operators=object(),tensor_flow=flow))
         adapter=SimpleNamespace(runtime=runtime,original=object(),bank=SimpleNamespace(reader=reader),
             options=SimpleNamespace(use_hop_refiner=True,use_pdd_heads=True,future_cache=False))
@@ -150,15 +218,53 @@ class QueueContracts(unittest.TestCase):
             queue=ExpertQueue(adapter)
             shell_id=id(runtime.model);window_id=id(queue.window)
             self.assertEqual(set(queue.plans),{0,1})
+            first_head=window.specs[queue.head_keys[0]]
+            self.assertTrue(first_head.resident_backing)
+            self.assertIs(first_head.prepare(),initial_heads)
+            self.assertEqual(window.uses[:2],(queue.static_refine_spec.key,queue.refine_keys[0]))
             window.cursor=queue.starts[1];queue.select(1)
             self.assertEqual(set(queue.plans),{0,1,2})
             self.assertEqual(id(runtime.model),shell_id);self.assertEqual(id(queue.window),window_id)
             self.assertEqual([block.key for block in model.blocks],['b1_0','b1_1'])
             self.assertFalse(cache.begin_request.call_args.kwargs['discard_unwanted'])
             old_plan=window.uses
-            queue.view.extend_uses((queue.refine_keys[1],))
+            queue.view.extend_uses((queue.static_refine_spec.key,queue.refine_keys[1]))
             self.assertEqual(window.uses,old_plan)
             with self.assertRaises(RuntimeError):queue.view.extend_uses(('wrong',))
+
+    def test_static_base_heads_are_one_lease_across_all_hops(self):
+        model=native_tiny();model.blocks=nn.ModuleList([nn.Identity()])
+        canonical={name:getattr(model,name) for name in
+            ('condition_proj','token_refiner','video_patch_proj','audio_patch_proj')}
+        ref=WeightSpec('ref',lambda:nn.ModuleDict(),1024,resident_backing=True)
+        project=WeightSpec('proj',lambda:nn.ModuleDict(),128,resident_backing=True)
+        block=WeightSpec('block',lambda:nn.Identity(),64)
+        window=empty_window((ref,project,block))
+        header={f'final_layer.{name}.{attribute}':{'shape':list(getattr(
+            getattr(model.final_layer,name),attribute).shape)}
+            for name in ('video_out','audio_out') for attribute in ('weight','bias')}
+        def reader(hop,**kwargs):return SimpleNamespace(identity=('hop',hop),header=header)
+        preprocessing=SimpleNamespace(canonical=canonical,refine_key='ref',project_key='proj',
+            project_uses=1)
+        initial_heads=nn.ModuleDict({name:getattr(model.final_layer,name)
+            for name in ('video_out','audio_out')})
+        runtime=SimpleNamespace(window=window,preprocessing=preprocessing,keys=['block'],
+            model=model,rank=0,readers={'dit':reader(0)},_ptd_initial_heads=initial_heads,
+            cache=SimpleNamespace(begin_request=Mock()),
+            config=SimpleNamespace(layers=1,operators=None,tensor_flow=None))
+        options=SimpleNamespace(use_hop_refiner=False,use_pdd_heads=False,future_cache=False)
+        adapter=SimpleNamespace(runtime=runtime,original=None,bank=SimpleNamespace(reader=reader),
+            options=options)
+        with patch('patches.ptd.queue.tp_specs',
+                   side_effect=lambda r,*args:[WeightSpec(('block',r.identity[1]),
+                       lambda:nn.Identity(),64)]):
+            queue=ExpertQueue(adapter)
+            for hop in range(2,8):queue._append(hop)
+        self.assertEqual(len(set(queue.head_keys.values())),1)
+        self.assertTrue(window.specs[queue.head_keys[0]].resident_backing)
+        self.assertIs(window.specs[queue.head_keys[0]].prepare(),initial_heads)
+        self.assertEqual(window.uses.count(queue.head_keys[0]),8)
+        self.assertIn(queue.head_keys[0],window.retain_keys)
 
     def test_finish_drains_once_before_releasing_auxiliary_owners(self):
         order=[];queue=object.__new__(ExpertQueue);queue.finished=False

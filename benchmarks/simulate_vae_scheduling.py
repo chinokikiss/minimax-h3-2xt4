@@ -13,8 +13,8 @@ import torch
 
 def main():
     checks = []
-    from patches.multi_gpu_video_vae import MultiGPUVideoVAEDecoder
-    from patches.multi_gpu_audio_vae import MultiGPUAudioVAEDecoder
+    from benchmarks.legacy.multi_gpu_video_vae import MultiGPUVideoVAEDecoder
+    from benchmarks.legacy.multi_gpu_audio_vae import MultiGPUAudioVAEDecoder
     from comfy.ldm.minimax.vae import MiniMaxH3VideoVAE
     class VideoOracle(torch.nn.Module):
         vae_ratio = 16

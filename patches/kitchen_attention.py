@@ -97,8 +97,9 @@ def build(output, *, arch, nvcc=None, verify_hashes=True):
     compiler = str(nvcc or os.environ.get('CUDACXX') or shutil.which('nvcc') or '')
     if not compiler: raise RuntimeError('Direct FP32 Kitchen attention requires an existing CUDA compiler')
     compiler_version = subprocess.check_output([compiler, '--version'], text=True, timeout=15)
-    if arch == '75' and 'V12.8.93' not in compiler_version:
-        raise RuntimeError('SM75 Kitchen FP32 output requires the qualified CUDA12.8.93 compiler')
+    if arch == '75':
+        from patches.h3_operator_dependencies import sm75_native_compiler_qualification
+        sm75_native_compiler_qualification(compiler_version, torch_cuda=torch.version.cuda)
     digest = derive_header(output / 'h3_kitchen_attention.cuh',verify_hashes=verify_hashes)
     library = output / ('kitchen_fp32.dll' if os.name == 'nt' else 'kitchen_fp32.so')
     argv = [compiler, '-std=c++17', '-O3', '-arch=sm_' + arch, '--expt-relaxed-constexpr',
@@ -139,8 +140,10 @@ def validate_library(path, arch, *, verify_hashes=True):
     if verify_hashes and receipt['sources'] != source_hashes(): raise RuntimeError('Kitchen FP32 library source mismatch')
     if verify_hashes and hashlib.sha256(path.read_bytes()).hexdigest() != receipt['artifact_sha256']:
         raise RuntimeError('Kitchen FP32 library binary mismatch')
-    if arch == '75' and 'V12.8.93' not in receipt['compiler_version']:
-        raise RuntimeError('Kitchen FP32 library compiler mismatch')
+    if arch == '75':
+        from patches.h3_operator_dependencies import sm75_native_compiler_qualification
+        sm75_native_compiler_qualification(receipt['compiler_version'],
+                                            torch_cuda=torch.version.cuda)
     return path
 
 

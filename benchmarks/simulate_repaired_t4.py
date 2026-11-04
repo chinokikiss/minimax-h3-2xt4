@@ -12,10 +12,10 @@ from benchmarks.logical_dual_gpu import LogicalDualGPU, isolate_cublas_workspace
 from benchmarks.retest import load_native_block, load_video_native, metrics, native_call, passes, write_json
 from comfy.text_encoders.llama import Qwen3VL_32BConfig, precompute_freqs_cis
 import patches.tp_qwen3vl as te_tp
-import patches.sp_int8_qwen3vl as te_sp
+import benchmarks.legacy.sp_int8_qwen3vl as te_sp
 import patches.tp_dit as dit_tp
-import patches.sp_int8_dit as dit_sp
-import patches.tp_video_vae as video_parallel
+import benchmarks.legacy.sp_int8_dit as dit_sp
+import benchmarks.legacy.tp_video_vae as video_parallel
 
 
 def main():

@@ -9,7 +9,7 @@ from logical_dual_gpu import LogicalDualGPU,isolate_cublas_workspaces
 from patches.parallel_int8 import quantize,dequantize
 from patches.windowed_tp import CheckpointReader
 from patches.optimized_tp import enable,disable
-from patches.quantized_collectives import int8_sum
+from benchmarks.legacy.quantized_collectives import int8_sum
 import retest
 
 
@@ -55,7 +55,7 @@ def main():
     result=dict(passed=all(c['passed'] for c in cases if c.get('required',True)),physical_t4=False,
         scope='Learned Native H3 block0 FC1→SwiGLU→FC2, logical ranks on 5060 Ti. No T4 latency claim.',
         cases=cases,source_sha256={p:hashlib.sha256((root/p).read_bytes()).hexdigest() for p in
-            ('patches/optimized_tp.py','patches/quantized_collectives.py','benchmarks/qualify_h3_reduction.py')})
+            ('patches/optimized_tp.py','benchmarks/legacy/quantized_collectives.py','benchmarks/qualify_h3_reduction.py')})
     (root/'semantic_results/h3_optional_reduction.json').write_text(json.dumps(result,indent=2))
     if not result['passed']:raise RuntimeError('Native or overflow check failed')
 

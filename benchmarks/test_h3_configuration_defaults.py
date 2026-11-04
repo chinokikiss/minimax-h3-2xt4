@@ -144,7 +144,7 @@ for (const length of [17,21,30]) {
   assert.equal(value(node,'dit_attention_schedule'), '');
   assert.equal(value(node,'sol_tau'), 1.0);
   assert.equal(value(node,'video_attention'), 'kitchen');
-  assert.equal(node.properties.h3_configuration_version, 4);
+  assert.equal(node.properties.h3_configuration_version, 7);
 }
 const v2 = makeNode();
 const v2Values = v2Widgets.map(name => payload.schema[name]?.[1]?.default ?? 'legacy-v2');
@@ -158,9 +158,9 @@ const v3 = makeNode();
 const v3Values = v3Widgets.map(name => payload.schema[name]?.[1]?.default ?? 'legacy-v3');
 restoreWidgets(v3, {properties:{h3_configuration_version:3},widgets_values:v3Values}, payload.schema);
 assert.equal(value(v3,'sol_tau'), 1.0);
-assert.equal(v3.properties.h3_configuration_version, 4);
+assert.equal(v3.properties.h3_configuration_version, 7);
 const current = makeNode();
-restoreWidgets(current, {properties:{h3_configuration_version:4}}, payload.schema);
+restoreWidgets(current, {properties:{h3_configuration_version:7}}, payload.schema);
 assert.equal(value(current,'text_encoder'), 'positional-junk');
 function Node() { Object.assign(this,makeNode()); }
 Node.prototype.onConfigure = function() { this.originalCalled = true; };

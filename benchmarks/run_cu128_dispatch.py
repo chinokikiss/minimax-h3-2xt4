@@ -32,7 +32,7 @@ def main():
             result=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromName('benchmarks.test_cu128_candidate'))
             assert result.wasSuccessful()
             import comfy_kitchen as ck
-            from patches.kitchen_cu128_candidate import OPERATIONS
+            from benchmarks.legacy.kitchen_cu128_candidate import OPERATIONS
             assert all(hasattr(ck.backends.cuda,name) and callable(getattr(ck,name)) for name in OPERATIONS)
             state.update(status='cu128_dispatch_cpu_ready',tests=result.testsRun,cases=len(cases()));return
         devices=[dict(name=torch.cuda.get_device_name(i),capability=list(torch.cuda.get_device_capability(i)),uuid=str(torch.cuda.get_device_properties(i).uuid)) for i in range(torch.cuda.device_count())]

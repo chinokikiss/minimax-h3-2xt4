@@ -218,9 +218,19 @@ class StagedVAE:
     def decode_tiled(self,*args,**kwargs):return self._run('decode','decode_tiled',*args,**kwargs)
 
     def preload_idle(self,cancel):
-        with self.service.lock,self.lock:
+        # The potentially long checkpoint read is VAE-local. A pressure
+        # callback must be able to cancel this speculative work without
+        # waiting for the global service RPC lock.
+        with self.lock:
+            if cancel.is_set():raise CancelledError('VAE preload cancelled')
             self._ensure('encode',cancel)
             if cancel.is_set():raise CancelledError('VAE preload cancelled')
+        # Device/model-manager operations still serialize with normal service
+        # calls. Recheck cancellation after reacquiring both locks: a foreground
+        # request may have released this staged encoder while we waited.
+        with self.service.lock,self.lock:
+            if cancel.is_set() or self.stage!='encode':
+                raise CancelledError('VAE preload cancelled')
             import comfy.model_management as management
             device=torch.device(self.vae.device)
             if device.type!='cuda':return False

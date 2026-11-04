@@ -118,20 +118,48 @@ def main():
         if (len(devices) != 2 or len({d['uuid'] for d in devices}) != 2
                 or not all(d['capability'] == [7, 5] and 'T4' in d['name'] for d in devices)):
             raise RuntimeError('Two actual SM75 Tesla T4 GPUs required')
-        compiler = Path(shutil.which('nvcc') or '')
-        if not compiler.is_file() or 'release 12.8' not in subprocess.check_output([str(compiler), '--version'], text=True):
-            raise RuntimeError('Validated preinstalled CUDA12.8 nvcc required')
-        os.environ.update(CUDACXX=str(compiler.resolve()), CUDA_HOME=str(compiler.resolve().parent.parent),
-            CUDA_PATH=str(compiler.resolve().parent.parent), HF_HUB_DISABLE_XET='1',
+        plan = json.loads((args.plan or source/'turbo_plan.json').read_text())
+        if plan.get('workload_contract') == 'turbo_long_15s':
+            # Benchmark-only toolchain selection: prefer pinned CUDA 12.8,
+            # otherwise require the explicit 15s experiment flag and Torch cu130.
+            from patches.h3_operator_dependencies import configure_compiler
+            from patches.h3_operator_policy import H3OperatorPolicy
+            compiler_info = configure_compiler(H3OperatorPolicy())
+            if compiler_info is None:
+                raise RuntimeError('Turbo 15s requires the TileLang CUDA compiler')
+            state['compiler'] = compiler_info
+        else:
+            if os.environ.get('H3_TURBO_15S_ALLOW_UNVALIDATED_CUDA13') == '1':
+                raise RuntimeError('Turbo 15s CUDA13 opt-in used outside its benchmark contract')
+            compiler = Path(shutil.which('nvcc') or '')
+            if not compiler.is_file() or 'release 12.8' not in subprocess.check_output([str(compiler), '--version'], text=True):
+                raise RuntimeError('Validated preinstalled CUDA12.8 nvcc required')
+            os.environ.update(CUDACXX=str(compiler.resolve()), CUDA_HOME=str(compiler.resolve().parent.parent),
+                CUDA_PATH=str(compiler.resolve().parent.parent))
+        os.environ.update(HF_HUB_DISABLE_XET='1',
             HF_HUB_DISABLE_PROGRESS_BARS='1', HF_HUB_DOWNLOAD_TIMEOUT='90',
             OMP_NUM_THREADS='2', MKL_NUM_THREADS='2', OPENBLAS_NUM_THREADS='2',
             MALLOC_ARENA_MAX='2', MALLOC_TRIM_THRESHOLD_='67108864')
         state['hardware'] = dict(devices=devices, torch=torch.__version__, cuda=torch.version.cuda,
             kitchen=md.version('comfy-kitchen'), tilelang=md.version('tilelang'))
-        plan = json.loads((args.plan or source/'turbo_plan.json').read_text())
-        if plan.get('workload_contract')=='turbo_1mp_10s':
-            from benchmarks.turbo_challenge_contract import validate
+        if plan.get('workload_contract') in ('turbo_1mp_10s','turbo_long_15s'):
+            if plan['workload_contract']=='turbo_long_15s':
+                from benchmarks.turbo_long_15s_contract import validate
+            else:
+                from benchmarks.turbo_challenge_contract import validate
             validate(plan)
+        if (plan.get('workload_contract') == 'turbo_long_15s'
+                and plan['operators'].get('dit_attention') == 'sol'):
+            # Compile and load the selected Sol ABI before any large downloads.
+            # This catches toolkit incompatibility in the bounded benchmark
+            # instead of after 40+ GB of staged weights and offline baking.
+            from patches import sol_attention
+            sol_library = sol_attention.prepare_native()
+            state['sol_native_preflight'] = dict(
+                status='loaded', library=str(sol_library),
+                sha256=sha(sol_library),
+                qualification=state['compiler']['qualification'])
+            save()
         assets = json.loads((source / 'bundle_assets.json').read_text())
         identity = json.loads((source / 'l1_model_identity.json').read_text())
         references = json.loads((source / 'l1_assets_identity.json').read_text())['images']

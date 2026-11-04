@@ -23,8 +23,9 @@ def environment(include_tilelang=True):
     compiler=os.environ.get('CUDACXX') or shutil.which('nvcc')
     if not compiler:raise RuntimeError('Pinned nvcc required for operator preparation')
     compiler_version=subprocess.check_output([compiler,'--version'],text=True,timeout=15)
-    if 'release 12.8' not in compiler_version:raise RuntimeError('Preserved CUDA 12.8 compiler required')
-    return dict(compiler=compiler,compiler_version=compiler_version,python=platform.python_version(),
+    from patches.h3_operator_dependencies import compiler_qualification
+    qualification=compiler_qualification(compiler_version,torch_cuda=torch.version.cuda)
+    return dict(compiler=compiler,compiler_version=compiler_version,compiler_qualification=qualification,python=platform.python_version(),
         torch=str(torch.__version__),cuda=torch.version.cuda,
         tilelang=version('tilelang') if include_tilelang else None,arch='sm_75')
 

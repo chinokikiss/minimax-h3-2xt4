@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import torch
 from diagnose_audio_channels import ROOT,MiniMaxH3AudioVAE,load_file,metric
-from patches.multi_gpu_audio_vae import MultiGPUAudioVAEDecoder
+from benchmarks.legacy.multi_gpu_audio_vae import MultiGPUAudioVAEDecoder
 
 
 def main():
@@ -22,7 +22,7 @@ def main():
     wrapper.stream0=torch.cuda.Stream();wrapper.stream1=torch.cuda.Stream()
     result=dict(scope='two trained replicas, original channel wrapper, two logical CUDA ranks; no T4 latency claim',
                 physical_gpu_count=1,logical_ranks=2,cases=[],
-                source_sha256={f.relative_to(ROOT).as_posix():hashlib.sha256(f.read_bytes()).hexdigest() for f in (Path(__file__),ROOT/'patches/multi_gpu_audio_vae.py')})
+                source_sha256={f.relative_to(ROOT).as_posix():hashlib.sha256(f.read_bytes()).hexdigest() for f in (Path(__file__),ROOT/'benchmarks/legacy/multi_gpu_audio_vae.py')})
     for seconds in (5,10,20):
         cpu=torch.load(ROOT/f'semantic_results/audio_saved_references/input_{seconds}s.pt',weights_only=True)
         z=cpu.cuda()

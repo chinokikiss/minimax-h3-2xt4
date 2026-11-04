@@ -9,9 +9,13 @@ import torch
 
 from patches.comfy_sampler import RemoteDenoiser, create_model
 from patches.windowed_tp import tp_specs
-from patches.tp2_bundle import BundleReader
-from .bank import PTDBank
+from .bank_v2 import HopReaderV2, PTDBankV2
 from .schedule import T_MAX
+
+
+def _open_bank(path, *, part_roots=(), **kwargs):
+    """Only self-contained Bank v2 manifests are accepted for PTD runtime."""
+    return PTDBankV2(Path(path), part_roots=part_roots, **kwargs)
 
 
 @dataclass(frozen=True)
@@ -57,12 +61,19 @@ class WorkerAdapter:
         if not isinstance(options, PTDOptions) or not options.enabled:
             raise ValueError('Explicit enabled PTD options required')
         self.runtime, self.options = runtime, options
-        self.bank = PTDBank(path, allow_fixture=options.allow_fixture, expected_sha256=expected_bank_sha256,
+        self.bank = _open_bank(path, part_roots=getattr(runtime.config, 'ptd_part_roots', ()),
+            allow_fixture=options.allow_fixture, expected_sha256=expected_bank_sha256,
             verify_payloads=False)
         self.original = runtime.readers['dit']
-        if (type(self.original) is not BundleReader or self.original.path.resolve() != self.bank.base
-                or runtime.config.lora_stack):
-            raise ValueError('PTD requires its original TP2 base, without a second Turbo/online LoRA')
+        # General runtime debug also enables HTTP transport diagnostics.
+        self.bank.http_range2_debug |= bool(runtime.config.debug)
+        self.bank.configure_io(runtime.config.ptd_io_workers,
+                               runtime.config.ptd_retire_page_cache)
+        if (not isinstance(self.original, HopReaderV2)
+                or self.original.bank.path != self.bank.path or runtime.config.lora_stack):
+            raise ValueError('Bank v2 requires its own base-free Loader with no runtime LoRA')
+        if not options.use_hop_refiner or not options.use_pdd_heads:
+            raise ValueError('Base-free Bank v2 cannot disable its baked refiner or PDD heads')
         if self.bank.layers != runtime.config.layers:
             raise ValueError('Runtime layer count differs from the baked PTD bank')
         if 'adaln_t_table' in self.original.header and not options.allow_pruned_adaln:
@@ -105,7 +116,8 @@ class WorkerAdapter:
                 if self.head_hook is not None:
                     self.head_hook.remove(); self.head_hook = None
                 self.runtime._drop_model()
-                reader = self.bank.reader(hop, refiner=self.options.use_hop_refiner, heads=self.options.use_pdd_heads)
+                reader = self.bank.reader(hop, refiner=self.options.use_hop_refiner,
+                    heads=self.options.use_pdd_heads, base_reader=self.original)
                 reader.operator_policy = self.runtime.config.operators
                 reader.tensor_flow = self.runtime.config.tensor_flow
                 self.runtime.readers['dit'] = reader
@@ -133,7 +145,8 @@ class WorkerAdapter:
             raise ValueError('PTD needs raw TE conditioning; per-hop refiner cannot reuse a previous hop')
         from patches.comfy_tp_runtime import packet
         context = packet(context, self.runtime.device)
-        self.runtime.window.extend_uses([self.runtime.preprocessing.refine_key] if self.runtime.rank == 0 else [])
+        self.runtime.window.extend_uses(getattr(self.runtime.preprocessing, 'refine_uses',
+            (self.runtime.preprocessing.refine_key,)) if self.runtime.rank == 0 else ())
         kwargs = dict(kwargs, context=self.runtime.model.preprocess_text_embeds(context))
         options = dict(kwargs.get('transformer_options') or {})
         ratio = self.bank.recipe['audio_shift'] / self.bank.recipe['video_shift']
@@ -170,6 +183,10 @@ class WorkerAdapter:
         if hasattr(self, 'original_config'):
             self.runtime.config = self.original_config
         self.runtime.cache.begin_request((), discard_unwanted=True)
+        if (self.bank.http_range2_enabled
+                and self.bank.http_range2_debug):
+            # Snapshot after queued background preparations have settled.
+            self.runtime._ptd_last_http_range2 = self.bank.http2_state()
 
 
 def control(runtime, command, args):
@@ -186,7 +203,8 @@ def control(runtime, command, args):
         return adapter.select(*args)
     if command == 'ptd_state':
         return dict(hop=adapter.hop, calls=adapter.calls,
-                    queue=adapter.queue.state() if adapter.queue is not None else None)
+                    queue=adapter.queue.state() if adapter.queue is not None else None,
+                    http_range2=adapter.bank.http2_state())
     if command == 'ptd_release':
         if runtime.sample_active:
             raise ValueError('End the sample before releasing its PTD adapter')
@@ -214,7 +232,8 @@ class PTDRemoteDenoiser(RemoteDenoiser):
 class Controller:
     def __init__(self, service, path, options, *, expected_bank_sha256=None):
         self.service, self.path, self.options = service, str(Path(path).resolve()), options
-        self.bank = PTDBank(path, allow_fixture=options.allow_fixture, expected_sha256=expected_bank_sha256,
+        self.bank = _open_bank(path, part_roots=getattr(service.config, 'ptd_part_roots', ()),
+            allow_fixture=options.allow_fixture, expected_sha256=expected_bank_sha256,
             verify_payloads=False)
         self.sigmas = self.bank.sigmas
         self.hops = 8

@@ -42,7 +42,9 @@ def validate_library(path, *, verify_hashes=True):
     receipt=(json.loads(path.with_name('build_receipt.json').read_text()) if verify_hashes
              else admit_library(path,_source_paths()))
     if receipt['exit_code'] or receipt['target']!='sm_75':raise RuntimeError('Unqualified Kitchen SM75 build')
-    if 'V12.8.93' not in receipt['compiler_version']:raise RuntimeError('Kitchen SM75 requires the qualified CUDA 12.8.93 build')
+    from patches.h3_operator_dependencies import sm75_native_compiler_qualification
+    sm75_native_compiler_qualification(receipt['compiler_version'],
+                                        torch_cuda=torch.version.cuda)
     if verify_hashes and hashlib.sha256(path.read_bytes()).hexdigest()!=receipt['artifact_sha256']:
         raise RuntimeError('Kitchen native library hash mismatch')
     sources={n.replace('\\','/'):v for n,v in receipt['sources'].items()}

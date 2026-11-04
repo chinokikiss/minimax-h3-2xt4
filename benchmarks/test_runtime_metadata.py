@@ -12,7 +12,6 @@ from unittest.mock import patch
 import torch
 from safetensors.torch import save_file
 from benchmarks import test_tp2_bundle as fixtures
-from benchmarks import test_ptd_overlay as overlays
 from patches.tp2_bundle import BundleReader, open_checkpoint
 from patches.windowed_tp import CheckpointReader
 
@@ -26,7 +25,7 @@ class RuntimeMetadata(unittest.TestCase):
     def forbid_hashes(self):
         stack = ExitStack()
         for name in ('patches.tp2_bundle.sha','patches.tp2_disk_bake.sha',
-                     'patches.ptd.bank.sha','patches.tp2_bundle.state_hashes',
+                     'patches.tp2_bundle.state_hashes',
                      'patches.rank_local_int8.state_hashes','hashlib.sha256','hashlib.file_digest'):
             stack.enter_context(patch(name,side_effect=AssertionError('Runtime content hash: '+name)))
         stack.enter_context(patch('patches.tp2_bundle.shell',side_effect=lambda kind,rank:fixtures.block(self.fixture.local[rank])))
@@ -138,50 +137,25 @@ class RuntimeMetadata(unittest.TestCase):
             runtime.cache.close();runtime.startup_cache.close()
         self.assertEqual(readers,[{'verify_weights':False},{'verify_weights':False}])
         for cls in (WorkerAdapter,Controller):
-            with patch('patches.ptd.runtime.PTDBank',side_effect=RuntimeError('stop before GPU')) as bank:
+            with patch('patches.ptd.runtime.PTDBankV2',side_effect=RuntimeError('stop before GPU')) as bank:
                 with self.assertRaisesRegex(RuntimeError,'stop before GPU'):
                     cls(SimpleNamespace(config=config),'bank',PTDOptions(enabled=True))
                 self.assertIs(bank.call_args.kwargs['verify_payloads'],False)
 
 
 class PTDMetadata(unittest.TestCase):
-    def test_cached_bake_node_does_not_rehash_base_bank_or_checkpoint(self):
-        from patches.ptd.nodes import MiniMaxH3TP2PTDBake
-        with tempfile.TemporaryDirectory() as folder:
-            root=Path(folder);(root/'bank.json').write_text('{}')
-            checkpoint=root/'adapter.safetensors';checkpoint.write_bytes(b'existing adapter')
-            bank=SimpleNamespace(base=root/'base.json',recipe={'checkpoint_bytes':checkpoint.stat().st_size})
-            base=SimpleNamespace(path=bank.base,header={})
-            with patch('patches.tp2_bundle.BundleReader',return_value=base) as base_reader, \
-                    patch('patches.ptd.bank.PTDBank',return_value=bank) as bank_reader, \
-                    patch('hashlib.sha256',side_effect=AssertionError('Cache hit hash')):
-                result=MiniMaxH3TP2PTDBake().prepare(True,bank.base,str(checkpoint),str(root))
-                self.assertEqual(result,(str((root/'bank.json').resolve()),))
-                self.assertIs(base_reader.call_args.kwargs['verify_payloads'],False)
-                self.assertIs(bank_reader.call_args.kwargs['verify_payloads'],False)
-
-    def test_all_hops_and_auxiliary_match_without_any_hashes(self):
-        fixture = overlays.OverlayContracts(methodName='runTest');fixture.setUp()
+    def test_v2_hops_admit_without_rehashing_payloads(self):
+        from benchmarks.test_ptd_bank_v2 import SelfContainedV2
+        from patches.ptd.bank_v2 import PTDBankV2
+        fixture = SelfContainedV2('runTest')
+        fixture.setUp()
         self.addCleanup(fixture.doCleanups)
-        from patches.ptd.bank import PTDBank
-        with ExitStack() as stack:
-            for name in ('patches.tp2_bundle.sha','patches.tp2_disk_bake.sha','patches.ptd.bank.sha',
-                         'patches.tp2_bundle.state_hashes','hashlib.sha256','hashlib.file_digest'):
-                stack.enter_context(patch(name,side_effect=AssertionError('Runtime hash: '+name)))
-            stack.enter_context(patch('patches.tp2_bundle.shell',side_effect=lambda kind,rank:fixtures.block(fixture.fixture.local[rank])))
-            bank = PTDBank(fixture.path,allow_fixture=True,verify_payloads=False)
-            peer = PTDBank(fixture.path,allow_fixture=True,verify_payloads=False,expected_sha256=bank.digest)
-            self.assertEqual(bank.digest,peer.digest)
-            base = BundleReader(fixture.fixture.descriptor,verify_payloads=False)
+        with patch('patches.ptd.bank_v2.sha', side_effect=AssertionError('Runtime payload hash')):
+            bank = PTDBankV2(fixture.v2_manifest(), allow_fixture=True, verify_payloads=False)
             for hop in range(8):
-                reader = bank.reader(hop,base_reader=base)
-                self.assertIsNot(reader.file_checks,base.file_checks)
-                for rank in (0,1):
-                    state = reader.load_rank(0,rank).state_dict()
-                    for name,value in fixture.fixture.local[rank].items():self.assertTrue(torch.equal(state[name],value))
-                for name,value in fixture.values.items():self.assertTrue(torch.equal(reader.read_tensor(name),value))
-            with self.assertRaisesRegex(ValueError,'metadata differs'):
-                PTDBank(fixture.path,allow_fixture=True,verify_payloads=False,expected_sha256=('metadata','wrong'))
+                reader = bank.reader(hop)
+                self.assertTrue(torch.equal(reader.read_tensor(fixture.overlay_name),
+                                            fixture.overlays[hop][fixture.overlay_name]))
 
 
 class RuntimeArtifacts(unittest.TestCase):
@@ -189,7 +163,7 @@ class RuntimeArtifacts(unittest.TestCase):
         from patches import kitchen_attention as kitchen,kitchen_te_attention as te,legacy_runtime
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder);binary=root/'fixture.so';binary.write_bytes(b'library')
-            receipt=dict(status='passed',target='sm_75',compiler_version='V12.8.93',exit_code=0,
+            receipt=dict(status='passed',target='sm_75',compiler_version='Cuda compilation tools, release 12.8, V12.8.93',exit_code=0,
                          sources={},artifact_sha256='unused',artifact_bytes=7)
             binary.with_name('build_receipt.json').write_text(json.dumps(receipt))
             with patch('hashlib.sha256',side_effect=AssertionError('Runtime hash')):

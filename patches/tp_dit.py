@@ -318,8 +318,12 @@ class TPDiTBlockINT8(nn.Module):
         prepared=prepare_dit_attention(self,q_heads,k_heads,v_heads,transformer_options) if flow is not None else None
         if prepared is not None:
             del qkv,q,k,v,q_heads,k_heads,v_heads
-            attn_out=execute_dit_attention(prepared)
-            del prepared
+            try:
+                attn_out=execute_dit_attention(prepared)
+            finally:
+                release=getattr(prepared,'release',None)
+                if release is not None:release()
+                del prepared
         else:
             attn_out=dit_attention(self,q_heads,k_heads,v_heads,transformer_options)
             del qkv,q,k,v,q_heads,k_heads,v_heads

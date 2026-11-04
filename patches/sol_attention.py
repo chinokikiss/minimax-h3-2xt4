@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections import deque
 from functools import lru_cache
 import math
 import os
@@ -41,9 +42,19 @@ def _compiler():
     if not compiler:
         raise RuntimeError("Sol requires the preserved CUDA 12.8 nvcc")
     version = subprocess.check_output([compiler, "--version"], text=True, timeout=15)
-    if "release 12.8" not in version:
-        raise RuntimeError("Sol requires the preserved CUDA 12.8 compiler")
-    return Path(compiler).resolve(), version
+    if "release 12.8" in version:
+        return Path(compiler).resolve(), version
+    # Only the existing Turbo trial and dedicated all-operators physical T4
+    # trial may select this native CUDA 13.0 binary; PTD-only flags cannot.
+    from patches.h3_operator_dependencies import (ALL_OPS_CUDA13_T4_TRIAL,
+                                                    TURBO_15S_CUDA13_TRIAL)
+    if ("release 13.0" in version and torch.version.cuda == "13.0"
+            and (os.environ.get(TURBO_15S_CUDA13_TRIAL) == "1"
+                 or os.environ.get(ALL_OPS_CUDA13_T4_TRIAL) == "1")):
+        return Path(compiler).resolve(), version
+    raise RuntimeError("Sol requires the preserved CUDA 12.8 compiler; "
+                       "only scoped Turbo 15s or all-operators T4 experiments "
+                       "may test CUDA 13.0 with native Torch cu130")
 
 
 def _cache_key(compiler_version):
@@ -116,13 +127,18 @@ def _sm75(q):
         raise RuntimeError("Sol is an explicit SM75/T4 backend; no fallback was attempted")
 
 
-_ROUTE_STATS = []
+_ROUTE_STATS = deque(maxlen=1024)  # Bound diagnostic GPU tensor ownership.
 
 
-def route_stats_snapshot():
+def clear_route_stats():
+    """Release deferred route-stat tensor owners at a request/model boundary."""
+    _ROUTE_STATS.clear()
+
+
+def route_stats_snapshot(*, clear=False):
     """Materialize deferred Sol routing statistics after timed inference is complete."""
     grouped={}
-    for record in _ROUTE_STATS:
+    for record in tuple(_ROUTE_STATS):
         minimum,maximum,total=record['stats'].detach().cpu().tolist()
         denominator=int(record['denominator'])
         key=(record['kind'],record['head_dim'],record['tau'])
@@ -138,6 +154,7 @@ def route_stats_snapshot():
     for bucket in grouped.values():
         bucket['density']=bucket['total_exact']/bucket['total_pairs'] if bucket['total_pairs'] else None
         result.append(bucket)
+    if clear:clear_route_stats()
     return sorted(result,key=lambda row:(row['kind'],row['head_dim'],row['tau']))
 
 
@@ -180,7 +197,7 @@ class _PreparedSol(dict):
 
 def prepare_attention(
     q, k, v, *, protected_tokens=0, protected_start=0, tau=TAU,
-    allow_d64=False, topology=None, sync_free_lut=False, collect_route_stats=True,
+    allow_d64=False, topology=None, sync_free_lut=False, collect_route_stats=False,
     q_block_base=0, q_block_count=None,
 ):
     """Prepare every Sol input that depends on floating Q/K/V."""
@@ -317,10 +334,13 @@ def attention_partition(
         q,k,v,q_token_offset=q_token_offset,protected_tokens=protected_tokens,
         protected_start=protected_start,tau=tau,topology=topology,
         sync_free_lut=sync_free_lut,collect_route_stats=collect_route_stats)
-    return execute_prepared(
-        prepared,q_block_base=prepared["q_block_base"],
-        q_block_count=prepared["q_int8"].shape[-2]//SOL_BLOCK +
-            (1 if prepared["q_int8"].shape[-2]%SOL_BLOCK else 0))
+    try:
+        return execute_prepared(
+            prepared,q_block_base=prepared["q_block_base"],
+            q_block_count=prepared["q_int8"].shape[-2]//SOL_BLOCK +
+                (1 if prepared["q_int8"].shape[-2]%SOL_BLOCK else 0))
+    finally:
+        prepared.release()
 
 
 def execute_prepared(prepared, *, q_block_base=None, q_block_count=None):
@@ -351,19 +371,23 @@ def execute_prepared(prepared, *, q_block_base=None, q_block_count=None):
 
 
 def _native(q, k, v, *, protected_tokens, protected_start, tau, topology=None,
-            sync_free_lut=False, collect_route_stats=True,
+            sync_free_lut=False, collect_route_stats=False,
             q_block_base=0, q_block_count=None):
-    return execute_prepared(prepare_attention(
+    prepared=prepare_attention(
         q,k,v,protected_tokens=protected_tokens,protected_start=protected_start,
         tau=tau,topology=topology,sync_free_lut=sync_free_lut,
         collect_route_stats=collect_route_stats,
         allow_d64=q.shape[-1]==64,
-    ),q_block_base=q_block_base,q_block_count=q_block_count)
+    )
+    try:
+        return execute_prepared(prepared,q_block_base=q_block_base,q_block_count=q_block_count)
+    finally:
+        prepared.release()
 
 
 def attention(
     q, k, v, *, protected_tokens=0, protected_start=0, tau=TAU,
-    allow_d64=False, topology=None, sync_free_lut=False, collect_route_stats=True,
+    allow_d64=False, topology=None, sync_free_lut=False, collect_route_stats=False,
     q_block_base=0, q_block_count=None,
 ):
     """Complete Sol All-INT8 attention with native D64/D128 specializations.

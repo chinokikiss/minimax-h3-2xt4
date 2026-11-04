@@ -8,7 +8,7 @@ Supports:
 
 import os
 import torch
-from .pp_qwen3vl import PipelineParallelQwen3VL
+from benchmarks.legacy.pp_qwen3vl import PipelineParallelQwen3VL
 from .tp_qwen3vl import TPTransformerBlockINT8
 
 def load_sharded_text_encoder(checkpoint_path, strategy="pp", device_ids=(0, 1)):

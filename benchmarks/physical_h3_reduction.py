@@ -29,7 +29,7 @@ from patches.h3_lora import H3LoRAStore,NativeLoraLinear,NativeLoraMLP
 from patches.optimized_tp import enable
 import patches.optimized_tp as tp
 from patches.parallel_int8 import quantize,dequantize
-from patches.quantized_collectives import int8_sum
+from benchmarks.legacy.quantized_collectives import int8_sum
 
 MODES=[('scalemax','native_int32'),('scalemax_streamed','native_int32'),
        ('scalemax_streamed','fp32'),('scalemax_streamed','int8')]
@@ -189,7 +189,7 @@ def main():
         gate=GATE,projection_cases=[],native_ffn_cases=[],block_cases=[],safety=[],profiles=[],
         memory_scope='Per-rank absolute peaks include resident full Native reference weights and TP shards. Temporary deltas isolate execution; not full-model residency.',
         source_sha256={p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in
-            ('patches/optimized_tp.py','patches/quantized_collectives.py','patches/h3_lora.py','patches/tp_dit.py','benchmarks/physical_h3_reduction.py')})
+            ('patches/optimized_tp.py','benchmarks/legacy/quantized_collectives.py','patches/h3_lora.py','patches/tp_dit.py','benchmarks/physical_h3_reduction.py')})
     def save(**kwargs):
         state.update(kwargs)
         if rank==0:retest.write_json(args.output/'results.json',state)

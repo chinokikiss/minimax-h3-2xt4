@@ -26,7 +26,7 @@ if TYPE_CHECKING:
 
 # Historical callers keep the same function object without loading the old
 # benchmark manager in the production pipeline.
-from patches.audio_channel_decode import channel_decode
+from benchmarks.legacy.audio_channel_decode import channel_decode
 
 
 class MultiGPUAudioVAEDecoder:

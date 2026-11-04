@@ -162,14 +162,11 @@ def dit_attention(block,q,k,v,options):
     else:
         from patches.sol_attention import attention
         options=options or {}
-        if options.get('_h3_sol_topology_v2',True):
-            prefix,topology=sol_v2_routing(options,q.shape[-2])
-        else:
-            prefix,topology=protected_prefix(options,q.shape[-2]),None
+        prefix,topology=sol_v2_routing(options,q.shape[-2])
         tau=options.get('_h3_sol_tau',1.0)
         out=attention(
             q,k,v,protected_tokens=prefix,tau=tau,topology=topology,
-            sync_free_lut=bool(options.get('_h3_sol_sync_free_lut',True)),
+            sync_free_lut=True,
             collect_route_stats=bool(options.get('_h3_sol_collect_route_stats',False)),
         )
     return out.transpose(1,2).reshape(q.shape[0],q.shape[2],-1)
@@ -194,14 +191,11 @@ def prepare_dit_attention(block,q,k,v,options=None):
 
     from patches.sol_attention import prepare_attention
     options=options or {}
-    if options.get('_h3_sol_topology_v2',True):
-        prefix,topology=sol_v2_routing(options,q.shape[-2])
-    else:
-        prefix,topology=protected_prefix(options,q.shape[-2]),None
+    prefix,topology=sol_v2_routing(options,q.shape[-2])
     return prepare_attention(
         q,k,v,protected_tokens=prefix,tau=options.get('_h3_sol_tau',1.0),
         topology=topology,
-        sync_free_lut=bool(options.get('_h3_sol_sync_free_lut',True)),
+        sync_free_lut=True,
         collect_route_stats=bool(options.get('_h3_sol_collect_route_stats',False)),
     )
 
